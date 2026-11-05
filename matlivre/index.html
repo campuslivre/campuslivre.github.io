@@ -12,6 +12,7 @@
   <meta property="og:description" content="A free live script editor and runtime for MATLAB code. Made in Brazil.">
   <meta property="og:type" content="website">
   <script src="../assets/site.js" defer></script>
+  <script src="../assets/install.js" defer></script>
 </head>
 <body>
 
@@ -23,6 +24,7 @@
     </a>
     <nav aria-label="Main">
       <a class="hide-sm" href="#speed"><span lang="en">Speed</span><span lang="pt-BR">Velocidade</span></a>
+      <a class="hide-sm" href="#compare"><span lang="en">Compare</span><span lang="pt-BR">Comparar</span></a>
       <a class="hide-sm" href="#app"><span lang="en">The app</span><span lang="pt-BR">O app</span></a>
       <a class="hide-sm" href="#limits"><span lang="en">Limits</span><span lang="pt-BR">Limites</span></a>
       <a href="./" aria-current="page">MatLivre</a>
@@ -54,14 +56,13 @@
     <p class="callout" lang="pt-BR"><strong>Código aberto, licença MIT.</strong> O código está no <a href="https://github.com/campuslivre/matlivre">GitHub</a> para qualquer pessoa ler, usar e melhorar. Issues e pull requests são bem-vindos.</p>
 
     <div class="btn-row">
-      <a class="btn primary" href="https://github.com/campuslivre/matlivre/releases/latest">
+      <a class="btn primary" data-install="hero" data-source-href="#get" href="https://github.com/campuslivre/matlivre/releases/latest">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 3v10M5.5 9 10 13.5 14.5 9M4 17h12"/></svg>
-        <span lang="en">Download for Windows</span><span lang="pt-BR">Baixar para Windows</span>
+        <span data-install-label><span lang="en">Install for Windows</span><span lang="pt-BR">Instalar no Windows</span></span>
       </a>
       <a class="btn" href="https://github.com/campuslivre/matlivre"><span lang="en">Source code</span><span lang="pt-BR">Código-fonte</span></a>
     </div>
-    <p class="note" lang="en">Windows 10 and 11. Installer or portable ZIP. Free, no account. Windows is the only platform tested so far.</p>
-    <p class="note" lang="pt-BR">Windows 10 e 11. Instalador ou ZIP portátil. Gratuito, sem conta. O Windows é, até agora, a única plataforma testada.</p>
+    <p class="note" data-install-note="hero"><span lang="en">Windows 10 and 11. Installer or portable ZIP. Free, no account. Windows is the only platform tested so far.</span><span lang="pt-BR">Windows 10 e 11. Instalador ou ZIP portátil. Gratuito, sem conta. O Windows é, até agora, a única plataforma testada.</span></p>
   </div>
 </section>
 
@@ -135,27 +136,83 @@
     <p class="note" lang="en">A notebook with eight sections (matrix algebra, a loop, statistics, a table, string processing) and four figures. MatLivre does not yet write outputs back into the file. The benchmark script is in the repository.</p>
     <p class="note" lang="pt-BR">Um notebook com oito seções (álgebra matricial, um laço, estatística, uma tabela, processamento de texto) e quatro figuras. O MatLivre ainda não grava as saídas de volta no arquivo. O script do benchmark está no repositório.</p>
 
-    <h3 style="margin-top:2.6rem" lang="en">Running code (selected cases, milliseconds, lower is better)</h3>
-    <h3 style="margin-top:2.6rem" lang="pt-BR">Executando código (casos selecionados, em milissegundos, menor é melhor)</h3>
+    <h3 style="margin-top:2.6rem" lang="en">Running code (all 12 cases, milliseconds, lower is better; green is fastest)</h3>
+    <h3 style="margin-top:2.6rem" lang="pt-BR">Executando código (os 12 casos, em milissegundos, menor é melhor; verde é o mais rápido)</h3>
     <div class="table-wrap">
       <table>
         <thead><tr>
           <th><span lang="en">Case</span><span lang="pt-BR">Caso</span></th>
           <th>MATLAB</th><th>Octave</th><th>MatLivre</th>
           <th><span lang="en">vs MATLAB</span><span lang="pt-BR">vs MATLAB</span></th>
+          <th><span lang="en">vs Octave</span><span lang="pt-BR">vs Octave</span></th>
         </tr></thead>
         <tbody>
-          <tr><td>while_branch (Collatz)</td><td>102.22</td><td>11,742.56</td><td class="win">13.86</td><td class="win">7.4×</td></tr>
-          <tr><td>fib_recursive (fib 20)</td><td>0.66</td><td>128.88</td><td class="win">0.06</td><td class="win">11.3×</td></tr>
-          <tr><td>sort_1e6</td><td>58.93</td><td>17.77</td><td class="win">9.36</td><td class="win">6.3×</td></tr>
-          <tr><td>string_build</td><td>201.63</td><td>264.22</td><td class="win">29.53</td><td class="win">6.8×</td></tr>
-          <tr><td>struct_fields</td><td>170.42</td><td>4,568.02</td><td class="win">0.68</td><td class="win">252×</td></tr>
-          <tr><td>linsolve_300</td><td>0.61</td><td>1.85</td><td>0.73</td><td><span lang="en">1.2× slower</span><span lang="pt-BR">1,2× mais lento</span></td></tr>
+          <tr><td>scalar_loop (2M iterations)</td><td>4.92</td><td>2,265.87</td><td class="win">2.62</td><td class="win">1.9×</td><td class="win">865×</td></tr>
+          <tr><td>while_branch (Collatz, 2.9M steps)</td><td>102.22</td><td>11,742.56</td><td class="win">13.86</td><td class="win">7.4×</td><td class="win">847×</td></tr>
+          <tr><td>fib_recursive (fib 20)</td><td>0.66</td><td>128.88</td><td class="win">0.06</td><td class="win">11.3×</td><td class="win">2,148×</td></tr>
+          <tr><td>array_growth (100k appends)</td><td>8.43</td><td>402.17</td><td class="win">1.42</td><td class="win">5.9×</td><td class="win">283×</td></tr>
+          <tr><td>indexed_assign (1M writes)</td><td>4.01</td><td>2,115.03</td><td class="win">3.15</td><td class="win">1.3×</td><td class="win">671×</td></tr>
+          <tr><td>vector_math (2M elements)</td><td>121.78</td><td>127.25</td><td class="win">86.36</td><td class="win">1.4×</td><td class="win">1.5×</td></tr>
+          <tr><td>matmul_300</td><td>1.81</td><td>0.51</td><td class="win">0.41</td><td class="win">4.5×</td><td class="win">1.2×</td></tr>
+          <tr><td>linsolve_300</td><td class="win">0.61</td><td>1.85</td><td>0.73</td><td><span lang="en">1.2× slower</span><span lang="pt-BR">1,2× mais lento</span></td><td class="win">2.5×</td></tr>
+          <tr><td>sort_1e6</td><td>58.93</td><td>17.77</td><td class="win">9.36</td><td class="win">6.3×</td><td class="win">1.9×</td></tr>
+          <tr><td>string_build (20k appends)</td><td>201.63</td><td>264.22</td><td class="win">29.53</td><td class="win">6.8×</td><td class="win">8.9×</td></tr>
+          <tr><td>struct_fields (500k updates)</td><td>170.42</td><td>4,568.02</td><td class="win">0.68</td><td class="win">252×</td><td class="win">6,718×</td></tr>
+          <tr><td>cell_ops (100k writes + reads)</td><td>31.25</td><td>581.45</td><td class="win">17.70</td><td class="win">1.8×</td><td class="win">33×</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note" lang="en">Across all 12 cases the geometric mean is 4.7× faster than MATLAB and 65× faster than Octave, with identical checksums in all three. MatLivre is slower in one case, shown above. Full results are in <a href="https://github.com/campuslivre/matlivre/blob/main/benchmarks/RESULTS.md">benchmarks/RESULTS.md</a>.</p>
-    <p class="note" lang="pt-BR">Nos 12 casos, a média geométrica é 4,7× mais rápida que o MATLAB e 65× mais rápida que o Octave, com checksums idênticos nos três. O MatLivre é mais lento em um caso, mostrado acima. Os resultados completos estão em <a href="https://github.com/campuslivre/matlivre/blob/main/benchmarks/RESULTS.md">benchmarks/RESULTS.md</a>.</p>
+    <p class="note" lang="en">Across all 12 cases the geometric mean is 4.7× faster than MATLAB and 65× faster than Octave, with identical checksums in all three. MatLivre is slower than MATLAB in one case (<code>linsolve_300</code>) and faster than Octave in all twelve. The “vs Octave” column is computed from the table. Full results are in <a href="https://github.com/campuslivre/matlivre/blob/main/benchmarks/RESULTS.md">benchmarks/RESULTS.md</a>.</p>
+    <p class="note" lang="pt-BR">Nos 12 casos, a média geométrica é 4,7× mais rápida que o MATLAB e 65× mais rápida que o Octave, com checksums idênticos nos três. O MatLivre é mais lento que o MATLAB em um caso (<code>linsolve_300</code>) e mais rápido que o Octave em todos os doze. A coluna “vs Octave” é calculada a partir da tabela. Os resultados completos estão em <a href="https://github.com/campuslivre/matlivre/blob/main/benchmarks/RESULTS.md">benchmarks/RESULTS.md</a>.</p>
+
+    <h3 style="margin-top:2.6rem"><span lang="en">Starting up</span><span lang="pt-BR">Tempo de abertura</span></h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th><span lang="en">Program</span><span lang="pt-BR">Programa</span></th><th><span lang="en">First launch</span><span lang="pt-BR">Primeira abertura</span></th><th><span lang="en">Warm launch</span><span lang="pt-BR">Abertura seguinte</span></th></tr></thead>
+        <tbody>
+          <tr><td><strong>MatLivre</strong> <span lang="en">app (window ready)</span><span lang="pt-BR">app (janela pronta)</span></td><td class="win">0.97 s</td><td class="win">0.31 s</td></tr>
+          <tr><td><strong>MatLivre</strong> CLI</td><td class="win">0.03 s</td><td class="win">0.07 s</td></tr>
+          <tr><td>GNU Octave CLI</td><td>2.56 s</td><td>0.35 s</td></tr>
+          <tr><td>MATLAB desktop</td><td>—</td><td>3.90 s</td></tr>
+          <tr><td>MATLAB <code>-batch</code></td><td>24.30 s</td><td>6.84 s</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note"><span lang="en">Time until the program has run a line of code, or until you can work in it. MATLAB’s first launch was a true cold start. The Octave GUI is not shown: its first start stops at a setup wizard.</span><span lang="pt-BR">Tempo até o programa executar uma linha de código, ou até você poder trabalhar nele. A primeira abertura do MATLAB foi uma partida realmente a frio. A interface gráfica do Octave não aparece: a primeira abertura para num assistente de configuração.</span></p>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span lang="en">Side by side</span><span lang="pt-BR">Lado a lado</span></div>
+      <h2 lang="en">MatLivre, MATLAB and Octave.</h2>
+      <h2 lang="pt-BR">MatLivre, MATLAB e Octave.</h2>
+      <p class="lead" lang="en">GNU Octave is a long-standing free alternative and MATLAB is the reference. Each has strengths, so here is an honest comparison.</p>
+      <p class="lead" lang="pt-BR">O GNU Octave é uma alternativa livre consolidada e o MATLAB é a referência. Cada um tem pontos fortes, então aqui vai uma comparação honesta.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="compare">
+        <thead><tr><th></th><th>MatLivre</th><th>MATLAB</th><th>Octave</th></tr></thead>
+        <tbody>
+          <tr><td><span lang="en">Price</span><span lang="pt-BR">Preço</span></td><td><span lang="en">Free</span><span lang="pt-BR">Gratuito</span></td><td><span lang="en">Paid licence</span><span lang="pt-BR">Licença paga</span></td><td><span lang="en">Free</span><span lang="pt-BR">Gratuito</span></td></tr>
+          <tr><td><span lang="en">Licence</span><span lang="pt-BR">Licença</span></td><td>MIT</td><td><span lang="en">Proprietary</span><span lang="pt-BR">Proprietária</span></td><td>GPL</td></tr>
+          <tr><td><span lang="en">Source code</span><span lang="pt-BR">Código-fonte</span></td><td><span lang="en">Open</span><span lang="pt-BR">Aberto</span></td><td><span lang="en">Closed</span><span lang="pt-BR">Fechado</span></td><td><span lang="en">Open</span><span lang="pt-BR">Aberto</span></td></tr>
+          <tr><td><span lang="en">Needs a licence server or a MATLAB install</span><span lang="pt-BR">Exige servidor de licenças ou instalar o MATLAB</span></td><td><span lang="en">No</span><span lang="pt-BR">Não</span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td><td><span lang="en">No</span><span lang="pt-BR">Não</span></td></tr>
+          <tr><td><span lang="en">Live scripts (<code>.mlx</code>) with inline results</span><span lang="pt-BR">Live scripts (<code>.mlx</code>) com resultados na página</span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td><td><span lang="en">No</span><span lang="pt-BR">Não</span></td></tr>
+          <tr><td><span lang="en">Runs <code>.m</code> scripts</span><span lang="pt-BR">Executa scripts <code>.m</code></span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td><td><span lang="en">Yes</span><span lang="pt-BR">Sim</span></td></tr>
+          <tr><td><span lang="en">Speed on language benchmarks</span><span lang="pt-BR">Velocidade nos benchmarks de linguagem</span></td><td><span lang="en">Fastest in 11 of 12 cases</span><span lang="pt-BR">Mais rápido em 11 de 12 casos</span></td><td><span lang="en">Reference</span><span lang="pt-BR">Referência</span></td><td><span lang="en">Slower in all 12 than MatLivre</span><span lang="pt-BR">Mais lento que o MatLivre nos 12</span></td></tr>
+          <tr><td><span lang="en">Startup (warm)</span><span lang="pt-BR">Abertura (a quente)</span></td><td>0.31 s</td><td>3.90 s</td><td>0.35 s</td></tr>
+          <tr><td><span lang="en">Compatibility with MATLAB</span><span lang="pt-BR">Compatibilidade com o MATLAB</span></td><td><span lang="en">Targets R2023b semantics, display and errors</span><span lang="pt-BR">Segue semântica, exibição e erros do R2023b</span></td><td><span lang="en">Reference</span><span lang="pt-BR">Referência</span></td><td><span lang="en">Largely compatible, with known differences</span><span lang="pt-BR">Em grande parte compatível, com diferenças conhecidas</span></td></tr>
+          <tr><td><span lang="en">Toolboxes and Simulink</span><span lang="pt-BR">Toolboxes e Simulink</span></td><td><span lang="en">Symbolic Math only</span><span lang="pt-BR">Apenas Symbolic Math</span></td><td><span lang="en">Extensive</span><span lang="pt-BR">Extensivos</span></td><td><span lang="en">Packages from Octave Forge</span><span lang="pt-BR">Pacotes do Octave Forge</span></td></tr>
+          <tr><td><span lang="en">Platforms</span><span lang="pt-BR">Plataformas</span></td><td><span lang="en">Windows (the only one tested)</span><span lang="pt-BR">Windows (a única testada)</span></td><td>Windows, macOS, Linux</td><td>Windows, macOS, Linux</td></tr>
+          <tr><td><span lang="en">Maturity</span><span lang="pt-BR">Maturidade</span></td><td><span lang="en">Young (0.1.x)</span><span lang="pt-BR">Jovem (0.1.x)</span></td><td><span lang="en">Decades</span><span lang="pt-BR">Décadas</span></td><td><span lang="en">Decades</span><span lang="pt-BR">Décadas</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" lang="en">Choose MATLAB if you need Simulink or toolboxes MatLivre does not cover. Choose Octave if you need Linux or macOS today. Choose MatLivre if you want a free, open, fast live-script environment on Windows for the MATLAB code you already have. Octave details are from public documentation and the benchmarks above; check each project for the latest.</p>
+    <p class="note" lang="pt-BR">Escolha o MATLAB se precisar do Simulink ou de toolboxes que o MatLivre não cobre. Escolha o Octave se precisar de Linux ou macOS hoje. Escolha o MatLivre se quiser um ambiente de live scripts livre, aberto e rápido no Windows para o código MATLAB que você já tem. Os detalhes do Octave vêm da documentação pública e dos benchmarks acima; consulte cada projeto para a informação mais recente.</p>
   </div>
 </section>
 
@@ -275,7 +332,7 @@
 </section>
 
 <!-- GET -->
-<section>
+<section id="get">
   <div class="wrap">
     <div class="grid two">
       <div>
@@ -341,8 +398,8 @@ matlivre-cli script.m</code></pre>
         </ul>
       </div>
     </div>
-    <p class="fine" lang="en">This site sets no cookies, loads no third-party fonts or scripts, and tracks no one. MATLAB is a registered trademark of The MathWorks, Inc. Campus Livre and MatLivre are independent and not affiliated with, endorsed by or sponsored by The MathWorks. Benchmark figures are from the MatLivre README, measured on a single machine; your results will vary.</p>
-    <p class="fine" lang="pt-BR">Este site não usa cookies, não carrega fontes nem scripts de terceiros e não rastreia ninguém. MATLAB é marca registrada da The MathWorks, Inc. A Campus Livre e o MatLivre são independentes e não têm afiliação, endosso ou patrocínio da The MathWorks. Os números de benchmark vêm do README do MatLivre, medidos numa única máquina; seus resultados podem variar.</p>
+    <p class="fine" lang="en">This site sets no cookies, loads no third-party fonts or scripts, and tracks no one. The only outside request is the install button asking GitHub’s public API for the latest release. MATLAB is a registered trademark of The MathWorks, Inc. Campus Livre and MatLivre are independent and not affiliated with, endorsed by or sponsored by The MathWorks. Benchmark figures are from the MatLivre README, measured on a single machine; your results will vary.</p>
+    <p class="fine" lang="pt-BR">Este site não usa cookies, não carrega fontes nem scripts de terceiros e não rastreia ninguém. O único pedido externo é o botão de instalar consultando a API pública do GitHub para achar a versão mais recente. MATLAB é marca registrada da The MathWorks, Inc. A Campus Livre e o MatLivre são independentes e não têm afiliação, endosso ou patrocínio da The MathWorks. Os números de benchmark vêm do README do MatLivre, medidos numa única máquina; seus resultados podem variar.</p>
   </div>
 </footer>
 
