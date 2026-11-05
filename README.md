@@ -31,3 +31,15 @@ Every translatable element comes as an `lang="en"` / `lang="pt-BR"` pair; `asset
 one that matches the visitor's choice (browser language by default). Edit both when you change copy.
 Benchmark numbers and limits on the MatLivre page come from the MatLivre README; update them when the
 README changes.
+
+## Metadata and link previews
+
+Each page has a canonical URL, Open Graph and Twitter card tags, and JSON-LD (`Organization` and
+`WebSite` on the home page, `SoftwareApplication` on MatLivre). Social previews are
+`assets/img/og-campuslivre.png` and `assets/img/og-matlivre.png` (1200x630). `robots.txt` and
+`sitemap.xml` are at the root, and `404.html` is the not-found page.
+
+The absolute URLs assume the site is published at `https://campuslivre.github.io/`. If it lives
+somewhere else (a custom domain, or a project path), replace that base URL in the `seo` block of each
+page's `<head>`, in `robots.txt` and in `sitemap.xml`. Social networks need absolute image URLs, and
+they cache previews, so test with each network's debugger after the first deploy.

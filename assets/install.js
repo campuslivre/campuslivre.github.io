@@ -36,6 +36,20 @@
     return "unknown";
   }
 
+  // Simple filled marks drawn for this site (20x20, currentColor).
+  var ICONS = {
+    windows: '<path d="M2 3.6 8.6 2.7v6.5H2zM9.5 2.6 18 1.4v7.8H9.5zM2 10.1h6.6v6.5L2 15.7zM9.5 10.1H18v8.5l-8.5-1.2z"/>',
+    linux: '<path fill-rule="evenodd" d="M10 1.2c-2.5 0-3.9 2-3.9 4.3 0 1.1-.5 2-1.2 3.2C4 10.2 3.2 12 3.6 14.2c.2 1 .7 1.7 1.4 2.1-.3.6-.1 1.4.7 1.6.9.2 2.1 0 3-.3.4.1.9.2 1.3.2s.9-.1 1.3-.2c.9.3 2.1.5 3 .3.8-.2 1-1 .7-1.6.7-.4 1.2-1.1 1.4-2.1.4-2.2-.4-4-1.3-5.5-.7-1.2-1.2-2.1-1.2-3.2C13.9 3.2 12.5 1.2 10 1.2ZM8.4 4.6a.9 1 0 1 1 0 2 .9 1 0 0 1 0-2Zm3.2 0a.9 1 0 1 1 0 2 .9 1 0 0 1 0-2ZM10 8.6c-1.6 0-2.8 1.8-2.8 4 0 1.9 1.1 3.1 2.8 3.1s2.8-1.2 2.8-3.1c0-2.2-1.2-4-2.8-4Z"/>',
+    download: '<path d="M10 3v10M5.5 9 10 13.5 14.5 9M4 17h12" fill="none" stroke="currentColor" stroke-width="2"/>'
+  };
+  function setIcon(btn, name) {
+    var old = btn.querySelector("svg");
+    var svg = '<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">' + ICONS[name] + "</svg>";
+    if (old) old.outerHTML = svg; else btn.insertAdjacentHTML("afterbegin", svg);
+    var el = btn.querySelector("svg");
+    el.style.cssText = "width:18px;height:18px;flex:none";
+  }
+
   function bytes(n) {
     return n >= 1048576 ? Math.round(n / 1048576) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB";
   }
@@ -60,11 +74,13 @@
         }
         // Same rule as the Modding Tool site: the installer first, then any .exe/.msi.
         var win = find(/-Setup\.exe$/i) || find(/\.(exe|msi)$/i);
+        var linux = find(/\.AppImage$/i);
         var value = {
           version: "v" + String(data.tag_name || "").replace(/^[vV]/, ""),
           date: String(data.published_at || "").slice(0, 10),
           page: data.html_url || LATEST_PAGE,
-          windows: win ? { url: win.browser_download_url, file: win.name, size: win.size } : null
+          windows: win ? { url: win.browser_download_url, file: win.name, size: win.size } : null,
+          linux: linux ? { url: linux.browser_download_url, file: linux.name, size: linux.size } : null
         };
         try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), v: value })); } catch (e) {}
         return value;
@@ -88,6 +104,7 @@
     var sourceHref = btn.getAttribute("data-source-href") || LATEST_PAGE;
 
     if (os === "windows" || os === "unknown") {
+      setIcon(btn, "windows");
       setLabel(btn, bi("Install for Windows", "Instalar no Windows"));
       btn.setAttribute("href", LATEST_PAGE);
       getRelease().then(function (rel) {
@@ -104,6 +121,7 @@
     } else if (os === "phone") {
       // Like the Modding Tool site: installing happens on a PC, so offer to carry the link there.
       btn.setAttribute("href", location.href);
+      setIcon(btn, "download");
       setLabel(btn, bi("Copy link to install on your PC", "Copiar link para instalar no seu PC"));
       setNote(btn, bi("MatLivre is a Windows desktop app. Open this page on your Windows PC to install it.",
                       "O MatLivre é um app de desktop para Windows. Abra esta página no seu PC com Windows para instalar."));
@@ -115,11 +133,24 @@
     } else {
       // macOS / Linux: no installer yet, so point at building from source.
       btn.setAttribute("href", sourceHref);
+      setIcon(btn, os === "linux" ? "linux" : "download");
       setLabel(btn, bi("Build from source", "Compilar do código-fonte"));
       setNote(btn, bi("The installer is for Windows 10 and 11. Linux and macOS are not tested yet, but you can build from source. " +
                       '<a href="' + LATEST_PAGE + '">Get the Windows installer</a> for another computer.',
                       "O instalador é para Windows 10 e 11. Linux e macOS ainda não foram testados, mas você pode compilar do código-fonte. " +
                       '<a href="' + LATEST_PAGE + '">Baixe o instalador do Windows</a> para outro computador.'));
+      if (os === "linux") {
+        // As soon as a release ships an AppImage, Linux visitors get a real Install button.
+        getRelease().then(function (rel) {
+          if (!rel.linux) return;
+          btn.setAttribute("href", rel.linux.url);
+          btn.setAttribute("download", "");
+          setLabel(btn, bi("Install for Linux", "Instalar no Linux") +
+            (short ? "" : ' <small style="opacity:.8;font-weight:500">' + rel.version + "</small>"));
+          var meta = rel.version + " · " + rel.linux.file + " · " + bytes(rel.linux.size);
+          setNote(btn, bi(meta + ". Free, no account.", meta + ". Gratuito, sem conta."));
+        }).catch(function () {});
+      }
     }
   });
 })();
