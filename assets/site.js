@@ -17,7 +17,8 @@
   var tz = "";
   try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
   var BR = /^America\/(Sao_Paulo|Manaus|Belem|Fortaleza|Recife|Bahia|Cuiaba|Campo_Grande|Porto_Velho|Rio_Branco|Boa_Vista|Araguaina|Maceio|Noronha|Santarem|Eirunepe)$/;
-  if (BR.test(tz)) guess = "pt-BR";
+  var brRegion = prefs.some(function (p) { return /-br$/i.test(String(p)); });
+  if (BR.test(tz) || brRegion) guess = "pt-BR";
 
   function apply(lang) {
     root.setAttribute("data-lang", lang);
