@@ -4,8 +4,20 @@
   var root = document.documentElement;
   var saved = null;
   try { saved = localStorage.getItem("campuslivre-lang"); } catch (e) {}
-  var guess = (navigator.language || "en").toLowerCase().indexOf("pt") === 0 ? "pt-BR" : "en";
-  var titles = {};
+  // Walk the visitor's ordered language preferences; the first one we support wins.
+  var prefs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || "en"];
+  var guess = "en";
+  for (var i = 0; i < prefs.length; i++) {
+    var l = String(prefs[i]).toLowerCase();
+    if (l.indexOf("pt") === 0) { guess = "pt-BR"; break; }
+    if (l.indexOf("en") === 0) { guess = "en"; break; }
+  }
+  // A Brazilian timezone also means Portuguese, even if the browser is set to English.
+  // The timezone is read locally in the browser; nothing is sent anywhere.
+  var tz = "";
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) {}
+  var BR = /^America\/(Sao_Paulo|Manaus|Belem|Fortaleza|Recife|Bahia|Cuiaba|Campo_Grande|Porto_Velho|Rio_Branco|Boa_Vista|Araguaina|Maceio|Noronha|Santarem|Eirunepe)$/;
+  if (BR.test(tz)) guess = "pt-BR";
 
   function apply(lang) {
     root.setAttribute("data-lang", lang);
