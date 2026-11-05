@@ -114,9 +114,12 @@
         var meta = rel.version + " · " + rel.windows.file + " · " + bytes(rel.windows.size);
         setLabel(btn, bi("Install for Windows", "Instalar no Windows") +
           (short ? "" : ' <small style="opacity:.8;font-weight:500">' + rel.version + "</small>"));
+        var ss = btn.getAttribute("data-smartscreen-href") || "#smartscreen";
         setNote(btn, bi(meta + " · Windows 10 and 11. Free, no account.",
                         meta + " · Windows 10 e 11. Gratuito, sem conta.") +
-          ' ' + bi('<a href="' + rel.page + '">Release notes</a>', '<a href="' + rel.page + '">Notas da versão</a>'));
+          ' ' + bi('<a href="' + rel.page + '">Release notes</a>', '<a href="' + rel.page + '">Notas da versão</a>') +
+          '<br>' + bi('Windows warns about unsigned apps: <a href="' + ss + '">how to install anyway</a>.',
+                      'O Windows avisa sobre apps sem assinatura: <a href="' + ss + '">como instalar mesmo assim</a>.'));
       }).catch(function () { /* keep the plain link to the releases page */ });
     } else if (os === "phone") {
       // Like the Modding Tool site: installing happens on a PC, so offer to carry the link there.
