@@ -44,6 +44,22 @@ somewhere else (a custom domain, or a project path), replace that base URL in th
 page's `<head>`, in `robots.txt` and in `sitemap.xml`. Social networks need absolute image URLs, and
 they cache previews, so test with each network's debugger after the first deploy.
 
+## Languages
+
+English lives at the normal URLs and Brazilian Portuguese at the same path under `/pt/` (`/pt/matlivre/wiki/fn/abs/`), so
+search engines and LLM crawlers see one language per URL, with `hreflang` alternates and a sitemap that lists both. The
+EN/PT toggle is a pair of real links; `assets/lang-redirect.js` sends a visitor to the language they chose, or, with no
+choice yet, from an English page to Portuguese when the browser language, region or timezone says Brazil (never the
+other way on its own).
+
+Pages are written once, bilingual (paired elements `lang="en"` / `lang="pt-BR"`), and split by `tools/langsplit.py`:
+
+- `tools/src/index.html` and `tools/src/matlivre.html` are the sources of the home page and the MatLivre page. **Edit
+  these, not `index.html` / `matlivre/index.html` / `pt/...`, which are generated.** Put each language's description and
+  title in `content="EN" data-pt="PT"` attributes (`<title data-en data-pt>`).
+- `python tools/build_wiki.py ...` (below) regenerates every page in both languages, `assets/wiki-search.json` and
+  `sitemap.xml`. `404.html` is the one page that still holds both languages (GitHub Pages serves a single 404).
+
 ## Wiki
 
 `matlivre/wiki/` is one wiki: a guide (hand-written, `tools/wiki_guide.py`) and one page per MatLivre function

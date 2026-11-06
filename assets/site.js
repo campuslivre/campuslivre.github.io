@@ -1,7 +1,18 @@
-// Language switch (EN / PT-BR). Default: the visitor's browser language, remembered locally.
+// Language switch (EN / PT-BR).
+// Pages with data-static (almost all of them) are single-language: English at the normal URL and Portuguese under
+// /pt/, and the EN/PT toggle is a pair of links (see lang-redirect.js). This script only remembers the choice there.
+// Pages without it (404.html) hold both languages and are switched in place, as below.
 // No cookies, no network requests, no analytics.
 (function () {
   var root = document.documentElement;
+  if (root.hasAttribute("data-static")) {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest(".lang-toggle a[data-set]");
+      if (!a) return;
+      try { localStorage.setItem("campuslivre-lang", a.dataset.set); } catch (err) {}
+    });
+    return;
+  }
   var saved = null;
   try { saved = localStorage.getItem("campuslivre-lang"); } catch (e) {}
   // Walk the visitor's ordered language preferences; the first one we support wins.

@@ -33,6 +33,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import langsplit as LS  # noqa: E402
 import wiki_guide as G  # noqa: E402
 from wiki_guide import L, esc, slug  # noqa: E402
 
@@ -225,7 +226,7 @@ def shell(ctx, *, title_en, title_pt, desc_en, desc_pt, keywords, body, topics, 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title data-en="{html.escape(title_en)}" data-pt="{html.escape(title_pt)}">{esc(title_en)}</title>
-  <meta name="description" content="{html.escape(desc)}">
+  <meta name="description" content="{html.escape(desc_en)}" data-pt="{html.escape(desc_pt)}">
   <meta name="keywords" content="{html.escape(keywords)}">
   <meta name="theme-color" content="#00693e">
   <link rel="icon" href="{r}assets/icons/matlivre-16.svg" type="image/svg+xml">
@@ -238,20 +239,20 @@ def shell(ctx, *, title_en, title_pt, desc_en, desc_pt, keywords, body, topics, 
   <meta property="og:site_name" content="Campus Livre">
   <meta property="og:type" content="{otype}">
   <meta property="og:url" content="{ctx.url}">
-  <meta property="og:title" content="{html.escape(title_en)}">
-  <meta property="og:description" content="{html.escape(desc_en)}">
+  <meta property="og:title" content="{html.escape(title_en)}" data-pt="{html.escape(title_pt)}">
+  <meta property="og:description" content="{html.escape(desc_en)}" data-pt="{html.escape(desc_pt)}">
   <meta property="og:image" content="{og}">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="MatLivre showing a live script with code, results and a plot. Free MATLAB and Octave alternative.">
+  <meta property="og:image:alt" content="MatLivre showing a live script with code, results and a plot. Free MATLAB and Octave alternative." data-pt="MatLivre mostrando um live script com código, resultados e um gráfico. Alternativa gratuita ao MATLAB e ao Octave.">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="pt_BR">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{html.escape(title_en)}">
-  <meta name="twitter:description" content="{html.escape(desc_en)}">
+  <meta name="twitter:title" content="{html.escape(title_en)}" data-pt="{html.escape(title_pt)}">
+  <meta name="twitter:description" content="{html.escape(desc_en)}" data-pt="{html.escape(desc_pt)}">
   <meta name="twitter:image" content="{og}">
-  <meta name="twitter:image:alt" content="MatLivre showing a live script with code, results and a plot. Free MATLAB and Octave alternative.">
+  <meta name="twitter:image:alt" content="MatLivre showing a live script with code, results and a plot. Free MATLAB and Octave alternative." data-pt="MatLivre mostrando um live script com código, resultados e um gráfico. Alternativa gratuita ao MATLAB e ao Octave.">
   <script type="application/ld+json">{ld}</script>
   <!-- seo:end -->
   <link rel="stylesheet" href="{r}assets/style.css">
@@ -349,9 +350,17 @@ def footer(ctx):
 
 # ------------------------------------------------------------------ page builders
 def write(rel, content):
-    p = os.path.join(WIKI, *rel.split('/')) if rel else WIKI
-    os.makedirs(p, exist_ok=True)
-    open(os.path.join(p, 'index.html'), 'w', encoding='utf-8', newline='\n').write(content)
+    """Writes the bilingual page `content` as an English page and a Portuguese page (under /pt/)."""
+    full = 'matlivre/wiki/' + (rel + '/' if rel else '')
+    emit(full, content)
+
+
+def emit(full, content):
+    for lang, prefix in (('en', ''), ('pt-BR', 'pt/')):
+        out = LS.render(content, full, lang)
+        d = os.path.join(SITE, *(prefix + full).split('/'))
+        os.makedirs(d, exist_ok=True)
+        open(os.path.join(d, 'index.html'), 'w', encoding='utf-8', newline='\n').write(out)
 
 
 def guide_pages(topics_full):
@@ -415,8 +424,9 @@ def build(release_md, master_md, repo, cli):
             name_cat[n] = k
 
     # clean old output
-    if os.path.isdir(WIKI):
-        shutil.rmtree(WIKI)
+    for d in (WIKI, os.path.join(SITE, 'pt')):
+        if os.path.isdir(d):
+            shutil.rmtree(d)
     for old in ('docs', 'functions'):
         shutil.rmtree(os.path.join(SITE, 'matlivre', old), ignore_errors=True)
     os.makedirs(WIKI)
@@ -464,12 +474,23 @@ def build(release_md, master_md, repo, cli):
     json.dump({'cats': [pretty(c.split(' > ', 1)[1] if ' > ' in c else c) for c in cat_list], 'f': idx},
               open(os.path.join(SITE, 'assets', 'wiki-search.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 
-    # ---- sitemap
+    # ---- home and product page (sources in tools/src, bilingual like the wiki pages)
+    for src, rel in (('index.html', ''), ('matlivre.html', 'matlivre/')):
+        emit(rel, open(os.path.join(SITE, 'tools', 'src', src), encoding='utf-8').read())
+
+    # ---- sitemap: every page in both languages, with hreflang alternates
     urls = [('', '1.0'), ('matlivre/', '0.9')] + sitemap
+
+    def entry(u, p, prefix):
+        en, pt = f'{BASE}/{u}', f'{BASE}/pt/{u}'
+        loc = pt if prefix else en
+        alts = (f'<xhtml:link rel="alternate" hreflang="en" href="{en}"/><xhtml:link rel="alternate" hreflang="pt-BR" href="{pt}"/>'
+                f'<xhtml:link rel="alternate" hreflang="x-default" href="{en}"/>')
+        return f'  <url><loc>{loc}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority>{alts}</url>\n'
+
     open(os.path.join(SITE, 'sitemap.xml'), 'w', encoding='utf-8', newline='\n').write(
-        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-        ''.join(f'  <url><loc>{BASE}/{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) +
-        '</urlset>\n')
+        '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+        + ''.join(entry(u, p, '') + entry(u, p, 'pt') for u, p in urls) + '</urlset>\n')
 
     os.makedirs(os.path.dirname(CACHE), exist_ok=True)
     json.dump(cache, open(CACHE, 'w', encoding='utf-8'), ensure_ascii=False, indent=0, sort_keys=True)
