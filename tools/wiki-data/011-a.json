@@ -1,0 +1,1202 @@
+{
+  "functions": {
+    "namedPattern": {
+      "summary": {
+        "en": "Labels a pattern with a name so the text it matches can be identified.",
+        "pt": "Dá um nome a um padrão, para identificar o texto que ele casa."
+      },
+      "syntax": [
+        {
+          "code": "p = namedPattern(pat, name)",
+          "en": "Returns `pat` tagged with the identifier `name`.",
+          "pt": "Retorna `pat` marcado com o identificador `name`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "pat",
+          "en": "A pattern, or text that is converted to a pattern.",
+          "pt": "Um padrão, ou um texto que é convertido em padrão."
+        },
+        {
+          "name": "name",
+          "en": "Text that is a valid MATLAB identifier.",
+          "pt": "Texto que seja um identificador válido do MATLAB."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "A pattern that matches exactly what `pat` matches.",
+          "pt": "Um padrão que casa exatamente o que `pat` casa."
+        }
+      ],
+      "description": {
+        "en": "The name does not change what the pattern matches. It is stored in the pattern and shown when the pattern is displayed, which makes long compound patterns easier to read and debug.\n\nThe name must follow the rules for variable names: letters, digits and underscores, starting with a letter. Anything else raises an error.",
+        "pt": "O nome não altera o que o padrão casa. Ele fica guardado no padrão e aparece quando o padrão é exibido, o que facilita ler e depurar padrões compostos longos.\n\nO nome deve seguir as regras de nomes de variáveis: letras, dígitos e sublinhados, começando por letra. Qualquer outra coisa gera um erro."
+      },
+      "examples": [
+        {
+          "code": "np = namedPattern(digitsPattern, \"num\")\nextract(\"ab12cd\", \"b\" + np)"
+        }
+      ],
+      "see": [
+        "pattern",
+        "digitsPattern",
+        "extract",
+        "contains",
+        "regexpPattern"
+      ]
+    },
+    "NaN": {
+      "summary": {
+        "en": "Not-a-Number: the value produced by undefined operations such as 0/0, and a way to create arrays filled with it.",
+        "pt": "Not-a-Number: o valor produzido por operações indefinidas como 0/0, e um modo de criar arrays preenchidos com ele."
+      },
+      "syntax": [
+        {
+          "code": "NaN",
+          "en": "The scalar NaN.",
+          "pt": "O escalar NaN."
+        },
+        {
+          "code": "X = NaN(n)",
+          "en": "An `n`-by-`n` matrix of NaN.",
+          "pt": "Uma matriz `n`-por-`n` de NaN."
+        },
+        {
+          "code": "X = NaN(sz1, sz2, ...)",
+          "en": "An array with the given dimensions.",
+          "pt": "Um array com as dimensões dadas."
+        },
+        {
+          "code": "X = NaN(___, classname)",
+          "en": "Creates the array as `'double'` or `'single'`.",
+          "pt": "Cria o array como `'double'` ou `'single'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, sz1, sz2, ...",
+          "en": "Non-negative integers giving the size.",
+          "pt": "Inteiros não negativos que dão o tamanho."
+        },
+        {
+          "name": "classname",
+          "en": "`'double'` (default) or `'single'`.",
+          "pt": "`'double'` (padrão) ou `'single'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Array of NaN values.",
+          "pt": "Array de valores NaN."
+        }
+      ],
+      "description": {
+        "en": "NaN is a floating-point value that means a result is not a number. Any arithmetic with NaN gives NaN, and NaN is not equal to anything, itself included, so `NaN == NaN` is false. Test for it with `isnan`.\n\nFunctions such as `max`, `min`, `sum` and `mean` handle NaN in different ways: `max` and `min` skip it, while `sum` and `mean` propagate it unless an `'omitnan'` flag is given. NaN exists only for floating-point types; integer types have no NaN.",
+        "pt": "NaN é um valor de ponto flutuante que indica que o resultado não é um número. Qualquer aritmética com NaN resulta em NaN, e NaN não é igual a nada, nem a si mesmo, então `NaN == NaN` é falso. Para testá-lo use `isnan`.\n\nFunções como `max`, `min`, `sum` e `mean` tratam NaN de formas diferentes: `max` e `min` o ignoram, enquanto `sum` e `mean` o propagam, a menos que se passe a opção `'omitnan'`. NaN existe apenas em tipos de ponto flutuante; tipos inteiros não têm NaN."
+      },
+      "examples": [
+        {
+          "code": "x = 0/0\nNaN(1, 3)\nNaN == NaN\nisnan([1 NaN 3])\nclass(NaN(2, 'single'))"
+        }
+      ],
+      "see": [
+        "isnan",
+        "Inf",
+        "nan",
+        "rmmissing",
+        "fillmissing"
+      ]
+    },
+    "NaT": {
+      "summary": {
+        "en": "Not-a-Time: the missing value of datetime arrays.",
+        "pt": "Not-a-Time: o valor ausente de arrays datetime."
+      },
+      "syntax": [
+        {
+          "code": "t = NaT",
+          "en": "A scalar missing datetime.",
+          "pt": "Um datetime ausente escalar."
+        },
+        {
+          "code": "t = NaT(sz1, ..., szN)",
+          "en": "An array of missing datetimes with the given size.",
+          "pt": "Um array de datetimes ausentes com o tamanho dado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sz1, ..., szN",
+          "en": "Non-negative integers giving the size.",
+          "pt": "Inteiros não negativos que dão o tamanho."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Array of class `datetime` whose elements are all `NaT`.",
+          "pt": "Array da classe `datetime` cujos elementos são todos `NaT`."
+        }
+      ],
+      "description": {
+        "en": "`NaT` plays for datetime values the role that `NaN` plays for numbers. It is displayed as `NaT`, propagates through arithmetic, and is unequal to everything. Every comparison with a `NaT` is false, except `~=`.\n\nUse `isnat` to find the missing elements, since `t == NaT` is always false.",
+        "pt": "`NaT` faz para datetime o papel que `NaN` faz para números. É exibido como `NaT`, propaga-se na aritmética e é diferente de tudo. Toda comparação com `NaT` é falsa, exceto `~=`.\n\nUse `isnat` para achar os elementos ausentes, pois `t == NaT` é sempre falso."
+      },
+      "examples": [
+        {
+          "code": "NaT(1, 2)\nisnat([NaT datetime(2024,1,1)])\ndatetime(2024,1,1) > NaT"
+        }
+      ],
+      "see": [
+        "isnat",
+        "datetime",
+        "NaN",
+        "ismissing",
+        "rmmissing"
+      ]
+    },
+    "native2unicode": {
+      "summary": {
+        "en": "Converts bytes in a given character encoding to a MATLAB character vector.",
+        "pt": "Converte bytes de uma codificação de caracteres dada em um vetor de caracteres do MATLAB."
+      },
+      "syntax": [
+        {
+          "code": "str = native2unicode(bytes)",
+          "en": "Interprets `bytes` in the default encoding.",
+          "pt": "Interpreta `bytes` na codificação padrão."
+        },
+        {
+          "code": "str = native2unicode(bytes, charset)",
+          "en": "Interprets `bytes` using the named encoding.",
+          "pt": "Interpreta `bytes` usando a codificação indicada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "bytes",
+          "en": "Numeric vector (for example `uint8`) or char vector holding encoded bytes.",
+          "pt": "Vetor numérico (por exemplo `uint8`) ou vetor de char com bytes codificados."
+        },
+        {
+          "name": "charset",
+          "en": "Encoding name such as `'UTF-8'` or `'ISO-8859-1'`.",
+          "pt": "Nome da codificação, como `'UTF-8'` ou `'ISO-8859-1'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "str",
+          "en": "Char row vector with the decoded text.",
+          "pt": "Vetor linha de char com o texto decodificado."
+        }
+      ],
+      "description": {
+        "en": "Text read from files or the network often arrives as raw bytes. `native2unicode` decodes those bytes according to an encoding, so multi-byte sequences become single characters. In UTF-8, for example, the two bytes `195 169` are one character, the letter e with an acute accent (code 233).\n\nThe inverse operation is `unicode2native`.",
+        "pt": "Texto lido de arquivos ou da rede costuma chegar como bytes brutos. `native2unicode` decodifica esses bytes conforme uma codificação, de modo que sequências de vários bytes viram um único caractere. Em UTF-8, por exemplo, os dois bytes `195 169` formam um caractere, a letra e com acento agudo (código 233).\n\nA operação inversa é `unicode2native`."
+      },
+      "examples": [
+        {
+          "code": "native2unicode(uint8([72 101 108 108 111]))\ndouble(native2unicode(uint8([195 169]), 'UTF-8'))",
+          "note": {
+            "en": "The second line shows the code point of the decoded character.",
+            "pt": "A segunda linha mostra o ponto de código do caractere decodificado."
+          }
+        }
+      ],
+      "see": [
+        "unicode2native",
+        "char",
+        "double",
+        "string"
+      ]
+    },
+    "newline": {
+      "summary": {
+        "en": "The newline character, `char(10)`.",
+        "pt": "O caractere de nova linha, `char(10)`."
+      },
+      "syntax": [
+        {
+          "code": "c = newline",
+          "en": "Returns the newline character.",
+          "pt": "Retorna o caractere de nova linha."
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "A 1-by-1 char array holding code 10.",
+          "pt": "Um array char 1-por-1 com o código 10."
+        }
+      ],
+      "description": {
+        "en": "`newline` is a readable way to put a line break inside text without writing `char(10)` or relying on escape sequences. Escapes such as `\\n` only work in the format of `sprintf` and `fprintf`, not in ordinary quoted strings, so `newline` is the way to build multi-line text by concatenation.",
+        "pt": "`newline` é um modo legível de colocar uma quebra de linha dentro de um texto sem escrever `char(10)` nem depender de sequências de escape. Escapes como `\\n` só funcionam no formato de `sprintf` e `fprintf`, não em textos comuns entre aspas, então `newline` serve para montar texto de várias linhas por concatenação."
+      },
+      "examples": [
+        {
+          "code": "s = \"first\" + newline + \"second\";\nsplitlines(s)\ndouble(newline)"
+        }
+      ],
+      "see": [
+        "splitlines",
+        "sprintf",
+        "char",
+        "strsplit",
+        "join"
+      ]
+    },
+    "now": {
+      "summary": {
+        "en": "Current date and time as a serial date number.",
+        "pt": "Data e hora atuais como número serial de data."
+      },
+      "syntax": [
+        {
+          "code": "t = now",
+          "en": "Returns the current local date and time as days since year 0.",
+          "pt": "Retorna a data e hora locais atuais como dias desde o ano 0."
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Double scalar: the integer part is the day, the fractional part the time of day.",
+          "pt": "Escalar double: a parte inteira é o dia, a parte fracionária é a hora do dia."
+        }
+      ],
+      "description": {
+        "en": "`now` returns a datenum, the same kind of value `datenum` produces. Because each call reads the clock, the result differs every time, so it is not suited for code that must give reproducible results. For new code `datetime('now')` is usually preferred, since it works with the modern date and time functions.\n\nConvert the number to text with `datestr(now)`.",
+        "pt": "`now` retorna um datenum, o mesmo tipo de valor que `datenum` produz. Como cada chamada lê o relógio, o resultado muda sempre, então não serve para código que precisa ser reproduzível. Em código novo costuma-se preferir `datetime('now')`, que funciona com as funções modernas de data e hora.\n\nConverta o número em texto com `datestr(now)`."
+      },
+      "examples": [
+        {
+          "code": "t = now;\nclass(t)\nt > datenum(2020, 1, 1)",
+          "note": {
+            "en": "The value of `now` changes at every run, so the example tests it instead of printing it.",
+            "pt": "O valor de `now` muda a cada execução, por isso o exemplo o testa em vez de imprimi-lo."
+          }
+        }
+      ],
+      "see": [
+        "datetime",
+        "datenum",
+        "datestr",
+        "clock",
+        "tic"
+      ]
+    },
+    "num2cell": {
+      "summary": {
+        "en": "Puts each element of an array in its own cell.",
+        "pt": "Coloca cada elemento de um array em sua própria célula."
+      },
+      "syntax": [
+        {
+          "code": "C = num2cell(A)",
+          "en": "Returns a cell array the same size as `A`, each cell holding one element.",
+          "pt": "Retorna um cell array do mesmo tamanho de `A`, cada célula com um elemento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type: numeric, logical, char, string, cell or struct.",
+          "pt": "Array de qualquer tipo: numérico, lógico, char, string, cell ou struct."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Cell array with `numel(A)` cells and the same size as `A`.",
+          "pt": "Cell array com `numel(A)` células e o mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "Each element becomes a 1-by-1 piece of content, with the class of `A` preserved. The result is handy for feeding a comma-separated list to a function, as in `x = num2cell(v); f(x{:})`, or for building a cell array from a matrix before editing individual cells.\n\nThe opposite conversion, from cells holding scalars back to a matrix, is `cell2mat`.",
+        "pt": "Cada elemento vira um pedaço de conteúdo 1-por-1, preservando a classe de `A`. O resultado é útil para passar uma lista separada por vírgulas a uma função, como em `x = num2cell(v); f(x{:})`, ou para montar um cell array a partir de uma matriz antes de editar células individuais.\n\nA conversão inversa, de células com escalares de volta a uma matriz, é `cell2mat`."
+      },
+      "examples": [
+        {
+          "code": "C = num2cell([1 2; 3 4])\nnum2cell([\"a\", \"b\"])"
+        }
+      ],
+      "see": [
+        "cell2mat",
+        "mat2cell",
+        "cell",
+        "struct2cell",
+        "cellfun"
+      ]
+    },
+    "num2hex": {
+      "summary": {
+        "en": "Hexadecimal text of the IEEE 754 bit pattern of a number.",
+        "pt": "Texto hexadecimal do padrão de bits IEEE 754 de um número."
+      },
+      "syntax": [
+        {
+          "code": "S = num2hex(X)",
+          "en": "Returns one row of hexadecimal digits for each element of `X`.",
+          "pt": "Retorna uma linha de dígitos hexadecimais para cada elemento de `X`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Array of class `double` or `single`.",
+          "pt": "Array da classe `double` ou `single`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "S",
+          "en": "Char matrix with one row per element: 16 digits for `double`, 8 for `single`.",
+          "pt": "Matriz de char com uma linha por elemento: 16 dígitos para `double`, 8 para `single`."
+        }
+      ],
+      "description": {
+        "en": "The digits show how the number is stored in memory: a sign bit, an exponent field and the fraction bits. `1` in double precision is `3ff0000000000000`, and `-2` in single precision is `c0000000`. It is useful to inspect rounding behavior and special values such as NaN and Inf.\n\nThe inverse operation is `hex2num`.",
+        "pt": "Os dígitos mostram como o número é armazenado na memória: um bit de sinal, um campo de expoente e os bits da fração. O `1` em precisão dupla é `3ff0000000000000`, e o `-2` em precisão simples é `c0000000`. É útil para inspecionar arredondamentos e valores especiais como NaN e Inf.\n\nA operação inversa é `hex2num`."
+      },
+      "examples": [
+        {
+          "code": "num2hex(1)\nnum2hex(single(-2))\nnum2hex([1 2])"
+        }
+      ],
+      "see": [
+        "hex2num",
+        "dec2hex",
+        "dec2bin",
+        "typecast",
+        "eps"
+      ]
+    },
+    "num2str": {
+      "summary": {
+        "en": "Converts numbers to a character array.",
+        "pt": "Converte números em um array de caracteres."
+      },
+      "syntax": [
+        {
+          "code": "s = num2str(A)",
+          "en": "Converts using a precision chosen from the magnitude of the values (about five significant digits).",
+          "pt": "Converte com uma precisão escolhida a partir da magnitude dos valores (cerca de cinco dígitos significativos)."
+        },
+        {
+          "code": "s = num2str(A, precision)",
+          "en": "Uses the given number of significant digits.",
+          "pt": "Usa o número de dígitos significativos dado."
+        },
+        {
+          "code": "s = num2str(A, formatSpec)",
+          "en": "Formats each element with a `sprintf`-style format.",
+          "pt": "Formata cada elemento com um formato no estilo de `sprintf`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou char."
+        },
+        {
+          "name": "precision",
+          "en": "Number of significant digits.",
+          "pt": "Número de dígitos significativos."
+        },
+        {
+          "name": "formatSpec",
+          "en": "Format such as `'%8.3f'`.",
+          "pt": "Formato como `'%8.3f'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Char array. A matrix input gives one row of text per row of `A`.",
+          "pt": "Array de char. Uma matriz de entrada gera uma linha de texto por linha de `A`."
+        }
+      ],
+      "description": {
+        "en": "Integers print without a decimal point. For non-integers the default keeps four digits after the leading digit, so `pi` becomes `'3.1416'`; the `precision` argument changes that, and `formatSpec` gives full control. Complex values print as `3+4i`.\n\nFor a vector or matrix, the elements are laid out in aligned columns separated by two spaces. To combine numbers with other text, `sprintf` or `string(x)` are more flexible.",
+        "pt": "Inteiros são impressos sem ponto decimal. Para não inteiros, o padrão mantém quatro dígitos após o primeiro, então `pi` vira `'3.1416'`; o argumento `precision` muda isso, e `formatSpec` dá controle total. Valores complexos saem como `3+4i`.\n\nPara um vetor ou matriz, os elementos são dispostos em colunas alinhadas, separadas por dois espaços. Para combinar números com outros textos, `sprintf` ou `string(x)` são mais flexíveis."
+      },
+      "examples": [
+        {
+          "code": "num2str(pi)\nnum2str(pi, 8)\nnum2str([1 2 3])\nnum2str(3.14159, '%8.3f')"
+        }
+      ],
+      "see": [
+        "sprintf",
+        "str2num",
+        "str2double",
+        "string",
+        "mat2str",
+        "disp"
+      ]
+    },
+    "numEntries": {
+      "summary": {
+        "en": "Number of key-value entries in a dictionary.",
+        "pt": "Número de entradas chave-valor em um dictionary."
+      },
+      "syntax": [
+        {
+          "code": "n = numEntries(D)",
+          "en": "Returns the number of entries stored in dictionary `D`.",
+          "pt": "Retorna o número de entradas guardadas no dictionary `D`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "D",
+          "en": "A `dictionary` object.",
+          "pt": "Um objeto `dictionary`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Non-negative integer: how many keys `D` holds.",
+          "pt": "Inteiro não negativo: quantas chaves `D` contém."
+        }
+      ],
+      "description": {
+        "en": "A dictionary maps unique keys to values. `numEntries` counts the keys, so an empty dictionary gives `0`. It is the dictionary counterpart of `numel` for ordinary arrays and of the `Count` property of `containers.Map`.",
+        "pt": "Um dictionary associa chaves únicas a valores. `numEntries` conta as chaves, então um dictionary vazio resulta em `0`. É o equivalente, para dictionary, de `numel` em arrays comuns e da propriedade `Count` de `containers.Map`."
+      },
+      "examples": [
+        {
+          "code": "d = dictionary([\"a\" \"b\"], [1 2]);\nnumEntries(d)\nnumEntries(dictionary)"
+        }
+      ],
+      "see": [
+        "dictionary",
+        "keys",
+        "values",
+        "isKey",
+        "remove",
+        "containers.Map"
+      ]
+    },
+    "nweekdate": {
+      "summary": {
+        "en": "Date of the n-th occurrence of a weekday in a given month.",
+        "pt": "Data da n-ésima ocorrência de um dia da semana em um mês."
+      },
+      "syntax": [
+        {
+          "code": "d = nweekdate(n, weekday, year, month)",
+          "en": "Returns the serial date number of the `n`-th `weekday` of the month.",
+          "pt": "Retorna o número serial de data do `n`-ésimo `weekday` do mês."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Occurrence number, 1 to 5.",
+          "pt": "Número da ocorrência, de 1 a 5."
+        },
+        {
+          "name": "weekday",
+          "en": "1 for Sunday through 7 for Saturday.",
+          "pt": "1 para domingo até 7 para sábado."
+        },
+        {
+          "name": "year, month",
+          "en": "Calendar year and month number (1 to 12).",
+          "pt": "Ano do calendário e número do mês (1 a 12)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Serial date number, or `0` if the month has no such occurrence (for example a fifth Tuesday that does not exist).",
+          "pt": "Número serial de data, ou `0` se o mês não tiver tal ocorrência (por exemplo, uma quinta terça que não existe)."
+        }
+      ],
+      "description": {
+        "en": "The function is useful for holidays defined by rule. Thanksgiving in the United States is the fourth Thursday of November, so `nweekdate(4, 5, 2024, 11)` finds it. Pass the result to `datestr` or `datetime(d, 'ConvertFrom', 'datenum')` to display it.",
+        "pt": "A função é útil para feriados definidos por regra. O Dia de Ação de Graças nos Estados Unidos é a quarta quinta-feira de novembro, então `nweekdate(4, 5, 2024, 11)` o encontra. Passe o resultado a `datestr` ou `datetime(d, 'ConvertFrom', 'datenum')` para exibi-lo."
+      },
+      "examples": [
+        {
+          "code": "d = nweekdate(4, 5, 2024, 11)\ndatestr(d)",
+          "note": {
+            "en": "The fourth Thursday of November 2024.",
+            "pt": "A quarta quinta-feira de novembro de 2024."
+          }
+        }
+      ],
+      "see": [
+        "lweekdate",
+        "weekday",
+        "datenum",
+        "datestr",
+        "eomday"
+      ]
+    },
+    "optionalPattern": {
+      "summary": {
+        "en": "Pattern that matches the given pattern zero or one time.",
+        "pt": "Padrão que casa o padrão dado zero ou uma vez."
+      },
+      "syntax": [
+        {
+          "code": "p = optionalPattern(pat)",
+          "en": "Matches `pat` if it is present, and the empty text otherwise.",
+          "pt": "Casa `pat` se estiver presente, e o texto vazio caso contrário."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "pat",
+          "en": "A pattern or text.",
+          "pt": "Um padrão ou texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "A `pattern` object.",
+          "pt": "Um objeto `pattern`."
+        }
+      ],
+      "description": {
+        "en": "The pattern is greedy: where `pat` could match, it does. It is the pattern-object counterpart of the `?` quantifier in a regular expression. Combine it with other patterns using `+`, for instance to accept an optional sign before digits.",
+        "pt": "O padrão é guloso: onde `pat` pode casar, ele casa. É o equivalente em objeto pattern do quantificador `?` de uma expressão regular. Combine-o com outros padrões usando `+`, por exemplo para aceitar um sinal opcional antes de dígitos."
+      },
+      "examples": [
+        {
+          "code": "p = \"id\" + optionalPattern(\"-\") + digitsPattern;\nmatches([\"id12\", \"id-7\", \"id\"], p)"
+        }
+      ],
+      "see": [
+        "pattern",
+        "digitsPattern",
+        "possessivePattern",
+        "matches",
+        "asManyOfPattern"
+      ]
+    },
+    "orderfields": {
+      "summary": {
+        "en": "Reorders the fields of a structure.",
+        "pt": "Reordena os campos de uma struct."
+      },
+      "syntax": [
+        {
+          "code": "sOut = orderfields(s)",
+          "en": "Sorts the fields alphabetically.",
+          "pt": "Ordena os campos em ordem alfabética."
+        },
+        {
+          "code": "sOut = orderfields(s, s2)",
+          "en": "Uses the field order of structure `s2`, which must have the same field names.",
+          "pt": "Usa a ordem de campos da struct `s2`, que deve ter os mesmos nomes de campo."
+        },
+        {
+          "code": "sOut = orderfields(s, perm)",
+          "en": "Reorders by the permutation vector `perm`.",
+          "pt": "Reordena pelo vetor de permutação `perm`."
+        },
+        {
+          "code": "[sOut, p] = orderfields(___)",
+          "en": "Also returns the permutation vector.",
+          "pt": "Também retorna o vetor de permutação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Structure or structure array.",
+          "pt": "Struct ou array de structs."
+        },
+        {
+          "name": "s2 / c / perm",
+          "en": "Another structure, a cell array of field names, or a vector of indices giving the new order.",
+          "pt": "Outra struct, um cell array de nomes de campos ou um vetor de índices com a nova ordem."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sOut",
+          "en": "Structure with the same data and the new field order.",
+          "pt": "Struct com os mesmos dados e a nova ordem de campos."
+        },
+        {
+          "name": "p",
+          "en": "Column vector: the permutation applied to the original order.",
+          "pt": "Vetor coluna: a permutação aplicada à ordem original."
+        }
+      ],
+      "description": {
+        "en": "Only the order changes; values and field names stay the same. Alphabetical sorting is useful before comparing or displaying structures, and matching another structure's order lets you concatenate structure arrays that were built in different orders.",
+        "pt": "Só a ordem muda; valores e nomes dos campos permanecem. A ordenação alfabética é útil antes de comparar ou exibir structs, e igualar a ordem de outra struct permite concatenar arrays de structs criados em ordens diferentes."
+      },
+      "examples": [
+        {
+          "code": "s = struct('z', 1, 'a', 2, 'm', 3);\norderfields(s)\n[~, p] = orderfields(s);\np'\norderfields(s, [3 1 2])"
+        }
+      ],
+      "see": [
+        "fieldnames",
+        "struct",
+        "rmfield",
+        "setfield",
+        "isfield"
+      ]
+    },
+    "outerjoin": {
+      "summary": {
+        "en": "Joins two tables keeping rows that have no match.",
+        "pt": "Une duas tabelas mantendo as linhas sem correspondência."
+      },
+      "syntax": [
+        {
+          "code": "C = outerjoin(A, B)",
+          "en": "Joins on the variables the two tables share, keeping unmatched rows from both.",
+          "pt": "Une pelas variáveis comuns às duas tabelas, mantendo as linhas sem par de ambas."
+        },
+        {
+          "code": "C = outerjoin(A, B, 'Keys', keys)",
+          "en": "Joins on the named key variables.",
+          "pt": "Une pelas variáveis-chave indicadas."
+        },
+        {
+          "code": "C = outerjoin(___, 'Type', t)",
+          "en": "`t` is `'full'` (default), `'left'` or `'right'`.",
+          "pt": "`t` é `'full'` (padrão), `'left'` ou `'right'`."
+        },
+        {
+          "code": "C = outerjoin(___, 'MergeKeys', true)",
+          "en": "Merges the key columns of `A` and `B` into one.",
+          "pt": "Mescla as colunas-chave de `A` e `B` em uma só."
+        },
+        {
+          "code": "[C, ia, ib] = outerjoin(___)",
+          "en": "Also returns the row indices taken from `A` and `B`.",
+          "pt": "Também retorna os índices das linhas tomadas de `A` e `B`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Tables or timetables.",
+          "pt": "Tabelas ou timetables."
+        },
+        {
+          "name": "'Keys'",
+          "en": "Variable name(s) or indices used to match rows.",
+          "pt": "Nome(s) ou índices de variáveis usados para casar linhas."
+        },
+        {
+          "name": "'Type'",
+          "en": "Which unmatched rows to keep.",
+          "pt": "Quais linhas sem par manter."
+        },
+        {
+          "name": "'MergeKeys'",
+          "en": "If true, a single key variable holds the key from whichever table has it.",
+          "pt": "Se verdadeiro, uma única variável-chave guarda a chave da tabela que a tiver."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Joined table. Where a row has no partner, the other table's variables hold missing values (`NaN`, `<missing>`).",
+          "pt": "Tabela unida. Quando uma linha não tem par, as variáveis da outra tabela recebem valores ausentes (`NaN`, `<missing>`)."
+        },
+        {
+          "name": "ia, ib",
+          "en": "Column vectors of row indices into `A` and `B`; `0` marks rows with no source.",
+          "pt": "Vetores coluna de índices de linha de `A` e `B`; `0` marca linhas sem origem."
+        }
+      ],
+      "description": {
+        "en": "An outer join is the union of the matches and the leftovers: every row of the chosen side appears once, paired with the matching row of the other table if there is one. Unlike `innerjoin`, which drops unmatched rows, `outerjoin` pads them with missing values.\n\nWithout `'MergeKeys'` the key columns stay separate, with suffixes taken from the names of the input tables, so the result shows both keys side by side. Rows come out sorted by key.",
+        "pt": "Uma junção externa é a união dos pares com as sobras: toda linha do lado escolhido aparece uma vez, emparelhada com a linha correspondente da outra tabela se houver. Ao contrário de `innerjoin`, que descarta linhas sem par, `outerjoin` as preenche com valores ausentes.\n\nSem `'MergeKeys'`, as colunas-chave ficam separadas, com sufixos tirados dos nomes das tabelas de entrada, de modo que o resultado mostra as duas chaves lado a lado. As linhas saem ordenadas pela chave."
+      },
+      "examples": [
+        {
+          "code": "a = table([1;2], [\"x\";\"y\"], 'VariableNames', {'K','V'});\nb = table([2;3], [\"p\";\"q\"], 'VariableNames', {'K','W'});\nouterjoin(a, b, 'Keys', 'K', 'MergeKeys', true)"
+        }
+      ],
+      "see": [
+        "innerjoin",
+        "join",
+        "table",
+        "ismember"
+      ]
+    },
+    "overlapsrange": {
+      "summary": {
+        "en": "Tests whether the time span of a timetable overlaps a time range.",
+        "pt": "Testa se o intervalo de tempo de um timetable se sobrepõe a uma faixa de tempo."
+      },
+      "syntax": [
+        {
+          "code": "tf = overlapsrange(TT, R)",
+          "en": "Returns true if the row times of `TT` overlap the range `R`.",
+          "pt": "Retorna verdadeiro se os tempos das linhas de `TT` se sobrepõem à faixa `R`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "TT",
+          "en": "A timetable.",
+          "pt": "Um timetable."
+        },
+        {
+          "name": "R",
+          "en": "A `timerange`, or a two-element datetime or duration vector.",
+          "pt": "Um `timerange`, ou um vetor de dois elementos datetime ou duration."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "The result is true when some row time falls inside the range, or when the span of the timetable (earliest to latest row time) covers the whole range. Open or closed ends of a `timerange` are respected. The related tests `containsrange` and `withinrange` ask whether the timetable span contains the range, or lies inside it.",
+        "pt": "O resultado é verdadeiro quando algum tempo de linha cai dentro da faixa, ou quando o intervalo do timetable (do menor ao maior tempo de linha) cobre a faixa inteira. Extremidades abertas ou fechadas de um `timerange` são respeitadas. Os testes relacionados `containsrange` e `withinrange` perguntam se o intervalo do timetable contém a faixa, ou está dentro dela."
+      },
+      "examples": [
+        {
+          "code": "TT = timetable(seconds([1;2;3]), [1;2;3]);\noverlapsrange(TT, timerange(seconds(2), seconds(10)))\noverlapsrange(TT, timerange(seconds(5), seconds(10)))"
+        }
+      ],
+      "see": [
+        "timerange",
+        "timetable",
+        "withinrange",
+        "containsrange",
+        "isregular"
+      ]
+    },
+    "pad": {
+      "summary": {
+        "en": "Adds leading or trailing spaces to text.",
+        "pt": "Acrescenta espaços no início ou no fim de um texto."
+      },
+      "syntax": [
+        {
+          "code": "newStr = pad(str)",
+          "en": "Pads every element on the right to the length of the longest one.",
+          "pt": "Preenche cada elemento à direita até o comprimento do maior."
+        },
+        {
+          "code": "newStr = pad(str, n)",
+          "en": "Pads to at least `n` characters.",
+          "pt": "Preenche até pelo menos `n` caracteres."
+        },
+        {
+          "code": "newStr = pad(str, side)",
+          "en": "Pads on the `side` given: `'left'`, `'right'` (default) or `'both'`.",
+          "pt": "Preenche no lado indicado: `'left'`, `'right'` (padrão) ou `'both'`."
+        },
+        {
+          "code": "newStr = pad(str, n, side)",
+          "en": "Combines both.",
+          "pt": "Combina os dois."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "String array, character vector or cell array of character vectors.",
+          "pt": "String array, vetor de caracteres ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "n",
+          "en": "Target length in characters.",
+          "pt": "Comprimento desejado em caracteres."
+        },
+        {
+          "name": "side",
+          "en": "`'left'`, `'right'` or `'both'`.",
+          "pt": "`'left'`, `'right'` ou `'both'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "Text of the same type as `str`. Elements already long enough are unchanged.",
+          "pt": "Texto do mesmo tipo de `str`. Elementos já longos o bastante ficam inalterados."
+        }
+      ],
+      "description": {
+        "en": "`pad` only lengthens text; it never truncates. With no length argument it makes all elements of a string array the same width, which is handy for aligned output.",
+        "pt": "`pad` só aumenta o texto; nunca o trunca. Sem o argumento de comprimento, deixa todos os elementos de um string array com a mesma largura, o que ajuda a alinhar a saída."
+      },
+      "examples": [
+        {
+          "code": "pad(\"abc\", 6) + \"|\"\npad(\"abc\", 6, 'left') + \"|\"\npad([\"a\", \"bbb\"]) + \"|\""
+        }
+      ],
+      "see": [
+        "strtrim",
+        "strjust",
+        "blanks",
+        "extractBefore",
+        "sprintf"
+      ]
+    },
+    "pattern": {
+      "summary": {
+        "en": "Class of objects that describe text patterns for searching and matching.",
+        "pt": "Classe de objetos que descrevem padrões de texto para busca e correspondência."
+      },
+      "syntax": [
+        {
+          "code": "p = pattern(txt)",
+          "en": "Creates a pattern that matches the text `txt`.",
+          "pt": "Cria um padrão que casa o texto `txt`."
+        },
+        {
+          "code": "p = p1 + p2",
+          "en": "Matches `p1` followed by `p2`.",
+          "pt": "Casa `p1` seguido de `p2`."
+        },
+        {
+          "code": "p = p1 | p2",
+          "en": "Matches either `p1` or `p2`.",
+          "pt": "Casa `p1` ou `p2`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "txt",
+          "en": "String or character vector.",
+          "pt": "String ou vetor de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "A `pattern` object, usable wherever text patterns are accepted.",
+          "pt": "Um objeto `pattern`, usável onde padrões de texto são aceitos."
+        }
+      ],
+      "description": {
+        "en": "A pattern is a readable alternative to a regular expression. Building blocks such as `digitsPattern`, `lettersPattern`, `optionalPattern` or `asManyOfPattern` are combined with `+` (sequence) and `|` (alternative). Text values on either side of `+` are converted automatically.\n\nPatterns are accepted by `contains`, `startsWith`, `endsWith`, `matches`, `extract`, `replace`, `split`, `strfind`, `count` and others. Use `matches` to test a whole string against a pattern.",
+        "pt": "Um padrão é uma alternativa legível a uma expressão regular. Blocos como `digitsPattern`, `lettersPattern`, `optionalPattern` ou `asManyOfPattern` são combinados com `+` (sequência) e `|` (alternativa). Textos de qualquer lado de `+` são convertidos automaticamente.\n\nPadrões são aceitos por `contains`, `startsWith`, `endsWith`, `matches`, `extract`, `replace`, `split`, `strfind`, `count` e outras. Use `matches` para testar uma string inteira contra um padrão."
+      },
+      "examples": [
+        {
+          "code": "p = pattern(\"ab\") + digitsPattern\nclass(p)\nmatches([\"ab7\", \"ab\", \"7\"], p)"
+        }
+      ],
+      "see": [
+        "digitsPattern",
+        "lettersPattern",
+        "optionalPattern",
+        "regexpPattern",
+        "matches",
+        "contains"
+      ]
+    },
+    "pivot": {
+      "summary": {
+        "en": "Summarizes a table into a pivot table, with grouped rows and columns.",
+        "pt": "Resume uma tabela em uma tabela dinâmica, com linhas e colunas agrupadas."
+      },
+      "syntax": [
+        {
+          "code": "P = pivot(T, Rows=r, Columns=c, DataVariable=v)",
+          "en": "Groups by the row and column variables and aggregates `v` in each cell.",
+          "pt": "Agrupa pelas variáveis de linha e coluna e agrega `v` em cada célula."
+        },
+        {
+          "code": "P = pivot(___, Method=m)",
+          "en": "Chooses the aggregation, for example `\"sum\"` or `\"mean\"`.",
+          "pt": "Escolhe a agregação, por exemplo `\"sum\"` ou `\"mean\"`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Input table.",
+          "pt": "Tabela de entrada."
+        },
+        {
+          "name": "Rows",
+          "en": "Variable(s) whose values label the output rows.",
+          "pt": "Variável(is) cujos valores nomeiam as linhas de saída."
+        },
+        {
+          "name": "Columns",
+          "en": "Variable whose values become output columns.",
+          "pt": "Variável cujos valores viram colunas de saída."
+        },
+        {
+          "name": "DataVariable",
+          "en": "Variable to aggregate.",
+          "pt": "Variável a agregar."
+        },
+        {
+          "name": "Method",
+          "en": "Aggregation method such as `\"sum\"`, `\"mean\"` or `\"count\"`.",
+          "pt": "Método de agregação, como `\"sum\"`, `\"mean\"` ou `\"count\"`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "P",
+          "en": "Table with one row per distinct row value and one column per distinct column value. Empty combinations hold `0`.",
+          "pt": "Tabela com uma linha por valor distinto de linha e uma coluna por valor distinto de coluna. Combinações vazias valem `0`."
+        }
+      ],
+      "description": {
+        "en": "A pivot table cross-tabulates a long table. In the example, `R` gives the rows, `C` gives the columns and the entries of `V` are added in each cell. If you leave out `Columns`, the result has one aggregated column, named after the method and the data variable, such as `mean_V`.",
+        "pt": "Uma tabela dinâmica faz o cruzamento de uma tabela longa. No exemplo, `R` dá as linhas, `C` dá as colunas e os valores de `V` são somados em cada célula. Se omitir `Columns`, o resultado tem uma única coluna agregada, nomeada pelo método e pela variável de dados, como `mean_V`."
+      },
+      "examples": [
+        {
+          "code": "T = table([\"a\";\"b\";\"a\";\"b\"], [1;1;2;2], [10;20;30;40], 'VariableNames', {'R','C','V'});\npivot(T, Rows=\"R\", Columns=\"C\", DataVariable=\"V\", Method=\"sum\")\npivot(T, Rows=\"R\", DataVariable=\"V\", Method=\"mean\")"
+        }
+      ],
+      "see": [
+        "groupsummary",
+        "unstack",
+        "stack",
+        "varfun",
+        "splitapply",
+        "findgroups"
+      ]
+    },
+    "plus": {
+      "summary": {
+        "en": "Function form of the addition operator `+`.",
+        "pt": "Forma de função do operador de adição `+`."
+      },
+      "syntax": [
+        {
+          "code": "C = plus(A, B)",
+          "en": "Adds `A` and `B` element by element. Same as `A + B`.",
+          "pt": "Soma `A` e `B` elemento a elemento. Equivale a `A + B`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays, duration or datetime values, or objects that define `plus`. Sizes must be compatible.",
+          "pt": "Arrays numéricos, lógicos ou char, valores duration ou datetime, ou objetos que definem `plus`. Os tamanhos devem ser compatíveis."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The sum, with the size produced by implicit expansion.",
+          "pt": "A soma, com o tamanho produzido pela expansão implícita."
+        }
+      ],
+      "description": {
+        "en": "`plus(A, B)` is exactly what the `+` operator calls. It is useful where a function handle is needed, as in `arrayfun(@plus, a, b)`, and it is the name a class overloads to define addition for its own objects.\n\nImplicit expansion applies: a column plus a row gives a matrix. Integer types saturate rather than wrap around.",
+        "pt": "`plus(A, B)` é exatamente o que o operador `+` chama. É útil onde se precisa de um function handle, como em `arrayfun(@plus, a, b)`, e é o nome que uma classe sobrecarrega para definir a adição de seus próprios objetos.\n\nA expansão implícita vale: uma coluna mais uma linha dá uma matriz. Tipos inteiros saturam em vez de dar a volta."
+      },
+      "examples": [
+        {
+          "code": "plus(1, 2)\nplus([1 2], [10; 20])\nplus(int8(100), int8(100))"
+        }
+      ],
+      "see": [
+        "+",
+        "minus",
+        "times",
+        "sum",
+        "cumsum"
+      ]
+    },
+    "posixtime": {
+      "summary": {
+        "en": "Converts datetime values to POSIX (Unix) time in seconds.",
+        "pt": "Converte valores datetime em tempo POSIX (Unix) em segundos."
+      },
+      "syntax": [
+        {
+          "code": "p = posixtime(t)",
+          "en": "Returns the seconds elapsed since 1970-01-01 00:00:00 UTC.",
+          "pt": "Retorna os segundos decorridos desde 1970-01-01 00:00:00 UTC."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Datetime array. If it has no time zone, it is taken as UTC.",
+          "pt": "Array datetime. Se não tiver fuso horário, é tomado como UTC."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Double array of the same size as `t`.",
+          "pt": "Array double do mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "POSIX time counts seconds from the Unix epoch, ignoring leap seconds. It is the common interchange format for timestamps in files, logs and web APIs. Fractions of a second are kept as fractions of the result.\n\nThe opposite conversion is `datetime(p, 'ConvertFrom', 'posixtime')`.",
+        "pt": "O tempo POSIX conta segundos desde a época Unix, ignorando segundos bissextos. É o formato comum de troca de marcas de tempo em arquivos, logs e APIs web. Frações de segundo são mantidas como frações do resultado.\n\nA conversão inversa é `datetime(p, 'ConvertFrom', 'posixtime')`."
+      },
+      "examples": [
+        {
+          "code": "posixtime(datetime(1970, 1, 2, 'TimeZone', 'UTC'))\ndatetime(86400, 'ConvertFrom', 'posixtime')"
+        }
+      ],
+      "see": [
+        "datetime",
+        "datenum",
+        "now",
+        "juliandate"
+      ]
+    },
+    "possessivePattern": {
+      "summary": {
+        "en": "Pattern that matches as much as possible and never gives characters back.",
+        "pt": "Padrão que casa o máximo possível e nunca devolve caracteres."
+      },
+      "syntax": [
+        {
+          "code": "p = possessivePattern(pat)",
+          "en": "Matches `pat` greedily with no backtracking.",
+          "pt": "Casa `pat` de forma gulosa, sem retroceder."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "pat",
+          "en": "A pattern or text.",
+          "pt": "Um padrão ou texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "A `pattern` object.",
+          "pt": "Um objeto `pattern`."
+        }
+      ],
+      "description": {
+        "en": "Ordinary repeating patterns can back off: in `lettersPattern + \"b\"`, the letters part gives up the final `b` so that the whole pattern can match. A possessive pattern keeps everything it took. As a result `possessivePattern(lettersPattern) + \"b\"` can never match, because the letters already consumed the `b`.\n\nPossessive matching is mostly useful for speed and for forbidding unwanted alternative matches. It is the counterpart of the possessive quantifiers (`*+`, `++`) of regular expressions.",
+        "pt": "Padrões repetitivos comuns podem recuar: em `lettersPattern + \"b\"`, a parte das letras abre mão do `b` final para que o padrão inteiro case. Um padrão possessivo mantém tudo o que tomou. Por isso `possessivePattern(lettersPattern) + \"b\"` nunca casa, pois as letras já consumiram o `b`.\n\nA correspondência possessiva serve principalmente para ganhar velocidade e proibir casamentos alternativos indesejados. É o equivalente dos quantificadores possessivos (`*+`, `++`) das expressões regulares."
+      },
+      "examples": [
+        {
+          "code": "matches(\"aab\", lettersPattern + \"b\")\nmatches(\"aab\", possessivePattern(lettersPattern) + \"b\")"
+        }
+      ],
+      "see": [
+        "pattern",
+        "lettersPattern",
+        "optionalPattern",
+        "regexpPattern",
+        "matches"
+      ]
+    },
+    "preview": {
+      "summary": {
+        "en": "Reads the first rows of a data file using import options.",
+        "pt": "Lê as primeiras linhas de um arquivo de dados usando opções de importação."
+      },
+      "syntax": [
+        {
+          "code": "T = preview(filename, opts)",
+          "en": "Returns a table with the first rows that `readtable(filename, opts)` would read.",
+          "pt": "Retorna uma tabela com as primeiras linhas que `readtable(filename, opts)` leria."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "filename",
+          "en": "Name of a text or spreadsheet file.",
+          "pt": "Nome de um arquivo de texto ou de planilha."
+        },
+        {
+          "name": "opts",
+          "en": "Import options object, for example from `detectImportOptions`.",
+          "pt": "Objeto de opções de importação, por exemplo de `detectImportOptions`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "Table with at most eight rows.",
+          "pt": "Tabela com no máximo oito linhas."
+        }
+      ],
+      "description": {
+        "en": "`preview` is a cheap way to check that the import options select the right variables and types before reading a large file in full. Only a few lines are read, so it stays fast even for files with millions of rows.",
+        "pt": "`preview` é um modo barato de conferir se as opções de importação escolhem as variáveis e tipos certos antes de ler por inteiro um arquivo grande. Poucas linhas são lidas, então continua rápido mesmo em arquivos com milhões de linhas."
+      },
+      "notes": {
+        "en": "In MatLivre the import options argument is required.",
+        "pt": "No MatLivre o argumento de opções de importação é obrigatório."
+      },
+      "examples": [
+        {
+          "code": "fid = fopen('scores.csv', 'w');\nfprintf(fid, 'id,score\\n1,2.5\\n2,3.5\\n3,4.5\\n');\nfclose(fid);\nopts = detectImportOptions('scores.csv');\npreview('scores.csv', opts)"
+        }
+      ],
+      "see": [
+        "readtable",
+        "detectImportOptions",
+        "setvartype",
+        "setvaropts",
+        "head"
+      ]
+    },
+    "quarter": {
+      "summary": {
+        "en": "Quarter of the year (1 to 4) of a datetime.",
+        "pt": "Trimestre do ano (1 a 4) de um datetime."
+      },
+      "syntax": [
+        {
+          "code": "q = quarter(t)",
+          "en": "Returns the quarter that each element of `t` falls in.",
+          "pt": "Retorna o trimestre em que cai cada elemento de `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Datetime array.",
+          "pt": "Array datetime."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "q",
+          "en": "Array of the same size as `t` with values 1, 2, 3 or 4.",
+          "pt": "Array do mesmo tamanho de `t` com valores 1, 2, 3 ou 4."
+        }
+      ],
+      "description": {
+        "en": "Quarters follow the calendar year: January to March is 1, April to June is 2, July to September is 3 and October to December is 4. Fiscal quarters that start in other months must be computed by shifting the date first.",
+        "pt": "Os trimestres seguem o ano civil: janeiro a março é 1, abril a junho é 2, julho a setembro é 3 e outubro a dezembro é 4. Trimestres fiscais que começam em outros meses precisam ser calculados deslocando-se antes a data."
+      },
+      "examples": [
+        {
+          "code": "quarter(datetime(2024, [1 4 8 12], 1))"
+        }
+      ],
+      "see": [
+        "month",
+        "year",
+        "datetime",
+        "dateshift"
+      ]
+    }
+  }
+}

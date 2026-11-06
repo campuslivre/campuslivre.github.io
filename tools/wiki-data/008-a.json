@@ -1,0 +1,1303 @@
+{
+ "functions": {
+  "asFewOfPattern": {
+   "summary": {
+    "en": "Pattern that matches another pattern repeatedly, taking as few repetitions as possible.",
+    "pt": "Padrão que casa outro padrão repetidamente, usando o mínimo de repetições possível."
+   },
+   "syntax": [
+    {
+     "code": "newPat = asFewOfPattern(pat)",
+     "en": "Matches `pat` one or more times, lazily.",
+     "pt": "Casa `pat` uma ou mais vezes, de forma preguiçosa (lazy)."
+    },
+    {
+     "code": "newPat = asFewOfPattern(pat, minLength)",
+     "en": "Requires at least `minLength` repetitions.",
+     "pt": "Exige pelo menos `minLength` repetições."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "pat",
+     "en": "A pattern, or text that is converted to a pattern.",
+     "pt": "Um padrão, ou texto convertido em padrão."
+    },
+    {
+     "name": "minLength",
+     "en": "Minimum number of repetitions.",
+     "pt": "Número mínimo de repetições."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newPat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "The result repeats `pat`, but when it is part of a larger pattern it stops as soon as the rest of the pattern can match. It is the lazy counterpart of `asManyOfPattern`, which takes as much text as it can.\n\nOn its own, with nothing after it, the match is the shortest allowed one, so `minLength` decides how much text is taken each time. Combine it with other patterns using `+`.",
+    "pt": "O resultado repete `pat`, mas, quando faz parte de um padrão maior, para assim que o restante do padrão consegue casar. É a versão preguiçosa de `asManyOfPattern`, que consome o máximo de texto possível.\n\nSozinho, sem nada depois, o casamento é o menor permitido, então `minLength` define quanto texto é consumido a cada vez. Combine com outros padrões usando `+`."
+   },
+   "notes": {
+    "en": "Used alone or at the end of a pattern without `minLength`, MatLivre may match fewer repetitions than expected, so place it before another pattern or pass `minLength`.",
+    "pt": "Usada sozinha ou no fim de um padrão sem `minLength`, o MatLivre pode casar menos repetições do que o esperado; coloque-a antes de outro padrão ou passe `minLength`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Greedy and lazy in context",
+      "pt": "Guloso e preguiçoso em contexto"
+     },
+     "code": "extract('xabbby', 'a' + asManyOfPattern('b'))\nextract('xabbby', 'a' + asFewOfPattern('b') + 'y')",
+     "note": {
+      "en": "The lazy part still has to reach the `y`, so it takes all three `b` characters.",
+      "pt": "A parte preguiçosa ainda precisa alcançar o `y`, então consome os três `b`."
+     }
+    }
+   ],
+   "see": [
+    "asManyOfPattern",
+    "wildcardPattern",
+    "optionalPattern",
+    "extract",
+    "pattern"
+   ]
+  },
+  "asManyOfPattern": {
+   "summary": {
+    "en": "Pattern that matches another pattern repeatedly, taking as many repetitions as possible.",
+    "pt": "Padrão que casa outro padrão repetidamente, usando o máximo de repetições possível."
+   },
+   "syntax": [
+    {
+     "code": "newPat = asManyOfPattern(pat)",
+     "en": "Matches `pat` one or more times, greedily.",
+     "pt": "Casa `pat` uma ou mais vezes, de forma gulosa (greedy)."
+    },
+    {
+     "code": "newPat = asManyOfPattern(pat, minLength)",
+     "en": "Requires at least `minLength` repetitions.",
+     "pt": "Exige pelo menos `minLength` repetições."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "pat",
+     "en": "A pattern, or text that is converted to a pattern.",
+     "pt": "Um padrão, ou texto convertido em padrão."
+    },
+    {
+     "name": "minLength",
+     "en": "Minimum number of repetitions.",
+     "pt": "Número mínimo de repetições."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newPat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "The pattern consumes as many consecutive repetitions of `pat` as it finds, then lets the rest of a larger pattern continue from there. If a later part fails, it gives repetitions back until a match is possible.\n\nIt is the pattern-object equivalent of the `+` quantifier in a regular expression. A run shorter than `minLength` is not matched.",
+    "pt": "O padrão consome quantas repetições consecutivas de `pat` encontrar e depois deixa o restante de um padrão maior continuar dali. Se uma parte posterior falha, devolve repetições até que um casamento seja possível.\n\nÉ o equivalente em objeto pattern do quantificador `+` de uma expressão regular. Uma sequência menor que `minLength` não casa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Runs of a letter",
+      "pt": "Sequências de uma letra"
+     },
+     "code": "extract('aaabaa', asManyOfPattern('a'))\nextract('aaabaa', asManyOfPattern('a', 3))"
+    }
+   ],
+   "see": [
+    "asFewOfPattern",
+    "optionalPattern",
+    "lettersPattern",
+    "extract",
+    "pattern"
+   ]
+  },
+  "base2dec": {
+   "summary": {
+    "en": "Converts text in a given base (2 to 36) to a decimal number.",
+    "pt": "Converte texto escrito numa base dada (2 a 36) para número decimal."
+   },
+   "syntax": [
+    {
+     "code": "d = base2dec(s, base)",
+     "en": "Interprets `s` as digits in `base` and returns the value.",
+     "pt": "Interpreta `s` como dígitos na base `base` e retorna o valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Character vector, string, or cell array of character vectors holding the digits. Letters stand for digits above 9, in either case.",
+     "pt": "Vetor de caracteres, string ou cell array de vetores de caracteres com os dígitos. Letras representam dígitos acima de 9, maiúsculas ou minúsculas."
+    },
+    {
+     "name": "base",
+     "en": "Integer from 2 to 36.",
+     "pt": "Inteiro de 2 a 36."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Double column vector with one value per input row or cell, or a scalar for a single piece of text.",
+     "pt": "Vetor coluna double com um valor por linha ou célula da entrada, ou um escalar para um único texto."
+    }
+   ],
+   "description": {
+    "en": "Each character is looked up among the digits `0-9` and `A-Z`, and the value is accumulated as `d*base + digit`. A character that is not a valid digit for the base causes an error. Spaces inside the text are ignored.\n\nThe inverse operation is `dec2base`. For the common bases there are the shortcuts `bin2dec` and `hex2dec`.",
+    "pt": "Cada caractere é procurado entre os dígitos `0-9` e `A-Z`, e o valor é acumulado como `d*base + dígito`. Um caractere que não é dígito válido para a base provoca erro. Espaços dentro do texto são ignorados.\n\nA operação inversa é `dec2base`. Para as bases comuns existem os atalhos `bin2dec` e `hex2dec`."
+   },
+   "notes": {
+    "en": "MatLivre accepts only a numeric base; the form with a custom string of symbols as the base is not supported.",
+    "pt": "O MatLivre aceita apenas base numérica; a forma com uma string de símbolos personalizados como base não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Different bases",
+      "pt": "Bases diferentes"
+     },
+     "code": "base2dec('11120', 3)\nbase2dec('zz', 36)\nbase2dec({'11','zz'}, 36)"
+    }
+   ],
+   "see": [
+    "dec2base",
+    "bin2dec",
+    "hex2dec",
+    "dec2bin"
+   ]
+  },
+  "between": {
+   "summary": {
+    "en": "Calendar difference between two datetime values, as a calendarDuration.",
+    "pt": "Diferença de calendário entre dois valores datetime, como calendarDuration."
+   },
+   "syntax": [
+    {
+     "code": "dt = between(t1, t2)",
+     "en": "Returns the calendar duration that, added to `t1`, gives `t2`, in years, months and days (plus time of day when needed).",
+     "pt": "Retorna a duração de calendário que, somada a `t1`, resulta em `t2`, em anos, meses e dias (e horário quando necessário)."
+    },
+    {
+     "code": "dt = between(t1, t2, components)",
+     "en": "Restricts the result to the given components, such as `'days'` or `'months'`.",
+     "pt": "Restringe o resultado aos componentes indicados, como `'days'` ou `'months'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t1, t2",
+     "en": "datetime arrays of the same size, or one scalar.",
+     "pt": "Arrays datetime do mesmo tamanho, ou um deles escalar."
+    },
+    {
+     "name": "components",
+     "en": "Text naming which units to use: `'years'`, `'quarters'`, `'months'`, `'weeks'`, `'days'` or `'time'`, or a cell array of them.",
+     "pt": "Texto com as unidades a usar: `'years'`, `'quarters'`, `'months'`, `'weeks'`, `'days'` ou `'time'`, ou um cell array delas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "dt",
+     "en": "calendarDuration array with the same size as the inputs.",
+     "pt": "Array calendarDuration com o mesmo tamanho das entradas."
+    }
+   ],
+   "description": {
+    "en": "Unlike plain subtraction, which gives a fixed-length `duration` in hours, `between` counts whole calendar units first: years, then months, then days. The result depends on the dates, because months have different lengths, so `t1 + between(t1, t2)` reproduces `t2`.\n\nIf `t2` is earlier than `t1` the components are negative.",
+    "pt": "Diferente da subtração simples, que dá uma `duration` de tamanho fixo em horas, `between` conta primeiro unidades inteiras de calendário: anos, depois meses, depois dias. O resultado depende das datas, pois os meses têm durações diferentes, de modo que `t1 + between(t1, t2)` reproduz `t2`.\n\nSe `t2` for anterior a `t1`, os componentes são negativos."
+   },
+   "notes": {
+    "en": "In MatLivre `'days'` gives a pure day count, but `'months'` still splits the result into years, months and days instead of a single month count.",
+    "pt": "No MatLivre, `'days'` dá uma contagem pura de dias, mas `'months'` ainda divide o resultado em anos, meses e dias em vez de uma única contagem de meses."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Between two dates",
+      "pt": "Entre duas datas"
+     },
+     "code": "t1 = datetime(2020,1,15);\nt2 = datetime(2021,3,20);\nbetween(t1, t2)"
+    }
+   ],
+   "see": [
+    "caldiff",
+    "datetime",
+    "calendarDuration",
+    "days",
+    "dateshift"
+   ]
+  },
+  "bin2dec": {
+   "summary": {
+    "en": "Converts binary text to a decimal number.",
+    "pt": "Converte texto binário em número decimal."
+   },
+   "syntax": [
+    {
+     "code": "d = bin2dec(b)",
+     "en": "Reads `b` as a binary number and returns its value.",
+     "pt": "Lê `b` como número binário e retorna seu valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "b",
+     "en": "Character vector, string, char matrix with one number per row, or cell array of character vectors, made of `0` and `1`.",
+     "pt": "Vetor de caracteres, string, matriz de caracteres com um número por linha, ou cell array de vetores de caracteres, formados por `0` e `1`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Double scalar or column vector with one value per number.",
+     "pt": "Escalar ou vetor coluna double com um valor por número."
+    }
+   ],
+   "description": {
+    "en": "The digits are weighted by powers of two, so `'1011'` is `8 + 0 + 2 + 1 = 11`. Spaces in the text are ignored, which allows grouped digits such as `'1010 0101'`. Any other character is an error.\n\nBecause the result is a double, only values up to `flintmax` are represented exactly. Use `dec2bin` for the opposite direction.",
+    "pt": "Os dígitos são ponderados por potências de dois, então `'1011'` vale `8 + 0 + 2 + 1 = 11`. Espaços no texto são ignorados, o que permite dígitos agrupados como `'1010 0101'`. Qualquer outro caractere é erro.\n\nComo o resultado é double, só valores até `flintmax` são representados exatamente. Use `dec2bin` para o sentido oposto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Single and several numbers",
+      "pt": "Um e vários números"
+     },
+     "code": "bin2dec('1011')\nbin2dec({'101','11'})\nbin2dec('1010 0101')"
+    }
+   ],
+   "see": [
+    "dec2bin",
+    "base2dec",
+    "hex2dec",
+    "bitand"
+   ]
+  },
+  "blanks": {
+   "summary": {
+    "en": "Character vector made of space characters.",
+    "pt": "Vetor de caracteres formado por espaços."
+   },
+   "syntax": [
+    {
+     "code": "s = blanks(n)",
+     "en": "Returns a 1-by-`n` char array of spaces.",
+     "pt": "Retorna um char 1 por `n` de espaços."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Nonnegative integer scalar.",
+     "pt": "Escalar inteiro não negativo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Char row vector of `n` spaces; `blanks(0)` is empty.",
+     "pt": "Vetor linha de `n` espaços; `blanks(0)` é vazio."
+    }
+   ],
+   "description": {
+    "en": "`blanks` is a convenient way to build padding or separators when assembling text by concatenation, as in `['Name:' blanks(4) 'Ana']`. It is equivalent to `repmat(' ', 1, n)`.\n\nA negative or non-integer `n` is an error.",
+    "pt": "`blanks` é uma forma prática de criar preenchimento ou separadores ao montar texto por concatenação, como em `['Nome:' blanks(4) 'Ana']`. É equivalente a `repmat(' ', 1, n)`.\n\nUm `n` negativo ou não inteiro é erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Padding text",
+      "pt": "Preenchendo texto"
+     },
+     "code": "s = ['[' blanks(3) ']']\nlength(s)"
+    }
+   ],
+   "see": [
+    "deblank",
+    "repmat",
+    "strtrim",
+    "pad"
+   ]
+  },
+  "caldays": {
+   "summary": {
+    "en": "Calendar days, for date arithmetic that respects the calendar.",
+    "pt": "Dias de calendário, para aritmética de datas que respeita o calendário."
+   },
+   "syntax": [
+    {
+     "code": "d = caldays(n)",
+     "en": "Creates a calendarDuration of `n` calendar days.",
+     "pt": "Cria uma calendarDuration de `n` dias de calendário."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of day counts (integers for exact calendar behavior).",
+     "pt": "Array numérico com quantidades de dias (inteiros para comportamento exato de calendário)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array, same size as `n`.",
+     "pt": "Array calendarDuration, do mesmo tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "A calendar day moves the date forward by one civil day, keeping the clock time, even across a daylight-saving change where a day is not 24 hours long. For that reason it differs from `days`, which is a fixed 24-hour `duration`.\n\nAdd the result to a `datetime`: `t + caldays(3)`. Several calendar units can be added together, as in `calmonths(1) + caldays(2)`.",
+    "pt": "Um dia de calendário avança a data em um dia civil, mantendo o horário, mesmo numa mudança de horário de verão em que o dia não tem 24 horas. Por isso difere de `days`, que é uma `duration` fixa de 24 horas.\n\nSome o resultado a um `datetime`: `t + caldays(3)`. Várias unidades de calendário podem ser somadas, como em `calmonths(1) + caldays(2)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Adding days",
+      "pt": "Somando dias"
+     },
+     "code": "t = datetime(2024,1,31);\nt + caldays(1)\ncaldays(3)"
+    }
+   ],
+   "see": [
+    "days",
+    "calweeks",
+    "calmonths",
+    "calendarDuration",
+    "datetime"
+   ]
+  },
+  "caldiff": {
+   "summary": {
+    "en": "Differences between consecutive datetime values, as calendar durations.",
+    "pt": "Diferenças entre valores datetime consecutivos, como durações de calendário."
+   },
+   "syntax": [
+    {
+     "code": "d = caldiff(t)",
+     "en": "Returns the calendar differences between consecutive elements of `t`.",
+     "pt": "Retorna as diferenças de calendário entre elementos consecutivos de `t`."
+    },
+    {
+     "code": "d = caldiff(t, components)",
+     "en": "Expresses the differences in the given units, such as `'days'` or `'months'`.",
+     "pt": "Expressa as diferenças nas unidades indicadas, como `'days'` ou `'months'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime vector or array.",
+     "pt": "Vetor ou array datetime."
+    },
+    {
+     "name": "components",
+     "en": "Units to use, for example `'days'`, `'months'`, `'years'`.",
+     "pt": "Unidades a usar, por exemplo `'days'`, `'months'`, `'years'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array with one fewer element along the working dimension.",
+     "pt": "Array calendarDuration com um elemento a menos na dimensão de trabalho."
+    }
+   ],
+   "description": {
+    "en": "`caldiff(t)` is to `between` what `diff` is to subtraction: it applies `between(t(k), t(k+1))` to each neighbouring pair. Working along the first non-singleton dimension, a vector of `n` dates gives `n-1` differences.\n\nWith no `components`, each difference is split into months and days. Passing `'days'` forces a pure day count.",
+    "pt": "`caldiff(t)` está para `between` como `diff` está para a subtração: aplica `between(t(k), t(k+1))` a cada par vizinho. Trabalhando na primeira dimensão não singleton, um vetor de `n` datas gera `n-1` diferenças.\n\nSem `components`, cada diferença é dividida em meses e dias. Passar `'days'` força uma contagem pura de dias."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Gaps between dates",
+      "pt": "Intervalos entre datas"
+     },
+     "code": "t = [datetime(2024,1,1) datetime(2024,3,5) datetime(2024,3,6)];\ncaldiff(t)\ncaldiff(t(1:2), 'days')"
+    }
+   ],
+   "see": [
+    "between",
+    "diff",
+    "datetime",
+    "calendarDuration"
+   ]
+  },
+  "calendar": {
+   "summary": {
+    "en": "Calendar matrix for a month.",
+    "pt": "Matriz de calendário de um mês."
+   },
+   "syntax": [
+    {
+     "code": "c = calendar",
+     "en": "Calendar of the current month.",
+     "pt": "Calendário do mês atual."
+    },
+    {
+     "code": "c = calendar(y, m)",
+     "en": "Calendar for year `y` and month `m`.",
+     "pt": "Calendário do ano `y` e mês `m`."
+    },
+    {
+     "code": "c = calendar(d)",
+     "en": "Calendar for the month containing the datenum `d`.",
+     "pt": "Calendário do mês que contém o datenum `d`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y, m",
+     "en": "Year and month numbers.",
+     "pt": "Números do ano e do mês."
+    },
+    {
+     "name": "d",
+     "en": "Serial date number from `datenum`.",
+     "pt": "Número serial de data de `datenum`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "6-by-7 matrix. Columns run Sunday to Saturday; each entry is the day of the month, or `0` for blank cells.",
+     "pt": "Matriz 6 por 7. As colunas vão de domingo a sábado; cada entrada é o dia do mês, ou `0` para células vazias."
+    }
+   ],
+   "description": {
+    "en": "The first row contains the first of the month in the column of its weekday. Days follow row by row, and cells before the 1st and after the last day hold zero. Six rows are always returned, so some months leave the last row empty.\n\nIn MATLAB, calling `calendar` without an output argument draws a text calendar in the Command Window. Request the matrix when you need to process it.",
+    "pt": "A primeira linha contém o dia 1 na coluna do respectivo dia da semana. Os dias seguem linha a linha, e as células antes do dia 1 e depois do último dia guardam zero. Sempre são retornadas seis linhas, então alguns meses deixam a última vazia.\n\nNo MATLAB, chamar `calendar` sem argumento de saída desenha um calendário em texto na Janela de Comandos. Peça a matriz quando precisar processá-la."
+   },
+   "notes": {
+    "en": "Use the output form `c = calendar(...)`; the printed text calendar is not drawn in MatLivre.",
+    "pt": "Use a forma com saída `c = calendar(...)`; o calendário impresso em texto não é desenhado no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "February 2024",
+      "pt": "Fevereiro de 2024"
+     },
+     "code": "c = calendar(2024, 2)\nc(1, 5)",
+     "note": {
+      "en": "Feb 1, 2024 is a Thursday, the fifth column.",
+      "pt": "1 de fevereiro de 2024 é quinta-feira, a quinta coluna."
+     }
+    }
+   ],
+   "see": [
+    "datenum",
+    "eomday",
+    "weekday",
+    "datetime"
+   ]
+  },
+  "calendarDuration": {
+   "summary": {
+    "en": "Lengths of time in calendar units: years, months, days and a time of day.",
+    "pt": "Intervalos de tempo em unidades de calendário: anos, meses, dias e horário."
+   },
+   "syntax": [
+    {
+     "code": "d = calendarDuration(y, m, d)",
+     "en": "Builds a duration of `y` years, `m` months and `d` days.",
+     "pt": "Cria uma duração de `y` anos, `m` meses e `d` dias."
+    },
+    {
+     "code": "d = calendarDuration(y, m, d, h, mi, s)",
+     "en": "Also includes hours, minutes and seconds.",
+     "pt": "Inclui também horas, minutos e segundos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y, m, d",
+     "en": "Years, months and days (integers).",
+     "pt": "Anos, meses e dias (inteiros)."
+    },
+    {
+     "name": "h, mi, s",
+     "en": "Hours, minutes and seconds.",
+     "pt": "Horas, minutos e segundos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration object. Its actual length in days depends on the date it is added to.",
+     "pt": "Objeto calendarDuration. Seu comprimento real em dias depende da data a que é somado."
+    }
+   ],
+   "description": {
+    "en": "A calendarDuration keeps years, months, days and time of day as separate components. `calendarDuration(1,2,3)` therefore means one year, two months and three days, not a fixed number of seconds. Its effect is decided when it is added to a `datetime`.\n\nThe shortcut constructors `calyears`, `calmonths`, `calweeks` and `caldays` create a single component, and these can be added: `calyears(1) + calmonths(2)`.",
+    "pt": "Uma calendarDuration guarda anos, meses, dias e horário como componentes separados. `calendarDuration(1,2,3)` significa portanto um ano, dois meses e três dias, e não um número fixo de segundos. Seu efeito é definido quando é somada a um `datetime`.\n\nOs construtores `calyears`, `calmonths`, `calweeks` e `caldays` criam um único componente e podem ser somados: `calyears(1) + calmonths(2)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build and add",
+      "pt": "Criar e somar"
+     },
+     "code": "d = calendarDuration(1,2,3)\ndatetime(2020,1,31) + d"
+    }
+   ],
+   "see": [
+    "caldays",
+    "calmonths",
+    "calyears",
+    "between",
+    "datetime"
+   ]
+  },
+  "calmonths": {
+   "summary": {
+    "en": "Calendar months, for date arithmetic that respects month lengths.",
+    "pt": "Meses de calendário, para aritmética de datas que respeita a duração dos meses."
+   },
+   "syntax": [
+    {
+     "code": "d = calmonths(n)",
+     "en": "Creates a calendarDuration of `n` calendar months.",
+     "pt": "Cria uma calendarDuration de `n` meses de calendário."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of month counts.",
+     "pt": "Array numérico com quantidades de meses."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array, same size as `n`.",
+     "pt": "Array calendarDuration, do mesmo tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "Adding `calmonths(1)` to a date advances the month number by one and keeps the day. If the target month is shorter, the result is clamped to its last day, so January 31 plus one month is February 29 in a leap year.\n\nA month is not a fixed number of days, so there is no equivalent in `duration`.",
+    "pt": "Somar `calmonths(1)` a uma data avança o número do mês em um e mantém o dia. Se o mês de destino for mais curto, o resultado é limitado ao seu último dia, então 31 de janeiro mais um mês dá 29 de fevereiro em ano bissexto.\n\nUm mês não tem número fixo de dias, então não há equivalente em `duration`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Month-end clamping",
+      "pt": "Limite no fim do mês"
+     },
+     "code": "datetime(2024,1,31) + calmonths(1)\ncalmonths(1:3)"
+    }
+   ],
+   "see": [
+    "calyears",
+    "calquarters",
+    "caldays",
+    "calendarDuration",
+    "eomday"
+   ]
+  },
+  "calquarters": {
+   "summary": {
+    "en": "Calendar quarters, each equal to three calendar months.",
+    "pt": "Trimestres de calendário, cada um igual a três meses de calendário."
+   },
+   "syntax": [
+    {
+     "code": "d = calquarters(n)",
+     "en": "Creates a calendarDuration of `n` quarters.",
+     "pt": "Cria uma calendarDuration de `n` trimestres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of quarter counts.",
+     "pt": "Array numérico com quantidades de trimestres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array, same size as `n`.",
+     "pt": "Array calendarDuration, do mesmo tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "`calquarters(n)` is the same as `calmonths(3*n)`, and it is displayed in months. It is useful when stepping through financial or academic periods.",
+    "pt": "`calquarters(n)` equivale a `calmonths(3*n)` e é exibido em meses. É útil para percorrer períodos financeiros ou acadêmicos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two quarters later",
+      "pt": "Dois trimestres depois"
+     },
+     "code": "calquarters(1)\ndatetime(2024,1,1) + calquarters(2)"
+    }
+   ],
+   "see": [
+    "calmonths",
+    "calyears",
+    "calweeks",
+    "calendarDuration"
+   ]
+  },
+  "calweeks": {
+   "summary": {
+    "en": "Calendar weeks, each equal to seven calendar days.",
+    "pt": "Semanas de calendário, cada uma igual a sete dias de calendário."
+   },
+   "syntax": [
+    {
+     "code": "d = calweeks(n)",
+     "en": "Creates a calendarDuration of `n` weeks.",
+     "pt": "Cria uma calendarDuration de `n` semanas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of week counts.",
+     "pt": "Array numérico com quantidades de semanas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array, same size as `n`.",
+     "pt": "Array calendarDuration, do mesmo tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "`calweeks(n)` equals `caldays(7*n)`, so it is shown as a number of days. Unlike `days(7*n)`, it follows the calendar through daylight-saving changes.",
+    "pt": "`calweeks(n)` equivale a `caldays(7*n)`, portanto é exibido como número de dias. Diferente de `days(7*n)`, acompanha o calendário nas mudanças de horário de verão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One week later",
+      "pt": "Uma semana depois"
+     },
+     "code": "calweeks(2)\ndatetime(2024,3,1) + calweeks(1)"
+    }
+   ],
+   "see": [
+    "caldays",
+    "calmonths",
+    "days",
+    "calendarDuration"
+   ]
+  },
+  "calyears": {
+   "summary": {
+    "en": "Calendar years, for date arithmetic that follows leap years.",
+    "pt": "Anos de calendário, para aritmética de datas que acompanha os anos bissextos."
+   },
+   "syntax": [
+    {
+     "code": "d = calyears(n)",
+     "en": "Creates a calendarDuration of `n` calendar years.",
+     "pt": "Cria uma calendarDuration de `n` anos de calendário."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of year counts.",
+     "pt": "Array numérico com quantidades de anos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "calendarDuration array, same size as `n`.",
+     "pt": "Array calendarDuration, do mesmo tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "A calendar year keeps the month and day and increases the year, so it is always a true anniversary, whether the year has 365 or 366 days. February 29 plus one calendar year becomes February 28.\n\nCalendar durations can be combined: `calyears(2) + calmonths(3)` is shown as `2y 3mo`.",
+    "pt": "Um ano de calendário mantém mês e dia e aumenta o ano, sendo sempre um aniversário exato, quer o ano tenha 365 ou 366 dias. 29 de fevereiro mais um ano de calendário vira 28 de fevereiro.\n\nDurações de calendário podem ser combinadas: `calyears(2) + calmonths(3)` aparece como `2y 3mo`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Anniversary and combination",
+      "pt": "Aniversário e combinação"
+     },
+     "code": "datetime(2024,2,29) + calyears(1)\ncalyears(2) + calmonths(3)"
+    }
+   ],
+   "see": [
+    "calmonths",
+    "caldays",
+    "years",
+    "calendarDuration"
+   ]
+  },
+  "caseInsensitivePattern": {
+   "summary": {
+    "en": "Pattern that ignores letter case when matching.",
+    "pt": "Padrão que ignora maiúsculas e minúsculas ao casar."
+   },
+   "syntax": [
+    {
+     "code": "newPat = caseInsensitivePattern(pat)",
+     "en": "Makes `pat` match regardless of case.",
+     "pt": "Faz `pat` casar independentemente de maiúsculas e minúsculas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "pat",
+     "en": "A pattern or text.",
+     "pt": "Um padrão ou texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newPat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "Pattern matching is case sensitive by default. Wrapping a pattern in `caseInsensitivePattern` changes only that part, so it can be combined with case-sensitive parts through `+` or `|`.\n\nIt is an alternative to the `'IgnoreCase'` option of functions such as `contains` and `startsWith`, useful when only one piece of a larger pattern should ignore case.",
+    "pt": "O casamento de padrões diferencia maiúsculas de minúsculas por padrão. Envolver um padrão em `caseInsensitivePattern` altera só aquela parte, que pode então ser combinada com partes sensíveis a caixa via `+` ou `|`.\n\nÉ uma alternativa à opção `'IgnoreCase'` de funções como `contains` e `startsWith`, útil quando só um trecho de um padrão maior deve ignorar a caixa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ignoring case",
+      "pt": "Ignorando a caixa"
+     },
+     "code": "extract('abAB', caseInsensitivePattern('a'))\ncontains('ABC', caseInsensitivePattern('b'))"
+    }
+   ],
+   "see": [
+    "caseSensitivePattern",
+    "contains",
+    "startsWith",
+    "pattern"
+   ]
+  },
+  "caseSensitivePattern": {
+   "summary": {
+    "en": "Pattern that distinguishes upper and lower case when matching.",
+    "pt": "Padrão que distingue maiúsculas de minúsculas ao casar."
+   },
+   "syntax": [
+    {
+     "code": "newPat = caseSensitivePattern(pat)",
+     "en": "Makes `pat` match only with the exact case.",
+     "pt": "Faz `pat` casar apenas com a caixa exata."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "pat",
+     "en": "A pattern or text.",
+     "pt": "Um padrão ou texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newPat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "This is the default behaviour of patterns, so the function matters when it is used inside a search that was told to ignore case, for example with `'IgnoreCase', true`. The wrapped part still requires the exact letters while the rest of the pattern ignores case.",
+    "pt": "Esse é o comportamento padrão dos padrões, então a função importa quando usada dentro de uma busca que foi instruída a ignorar a caixa, por exemplo com `'IgnoreCase', true`. A parte envolvida continua exigindo as letras exatas, enquanto o resto do padrão ignora a caixa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Exact case required",
+      "pt": "Caixa exata exigida"
+     },
+     "code": "contains('ABC', caseSensitivePattern('b'))\ncontains('ABC', caseSensitivePattern('B'))"
+    }
+   ],
+   "see": [
+    "caseInsensitivePattern",
+    "contains",
+    "extract",
+    "pattern"
+   ]
+  },
+  "cast": {
+   "summary": {
+    "en": "Converts a value to another numeric or char class by name.",
+    "pt": "Converte um valor para outra classe numérica ou char, pelo nome."
+   },
+   "syntax": [
+    {
+     "code": "B = cast(A, newclass)",
+     "en": "Returns `A` converted to the class named `newclass`.",
+     "pt": "Retorna `A` convertido para a classe de nome `newclass`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array.",
+     "pt": "Array numérico, lógico ou char."
+    },
+    {
+     "name": "newclass",
+     "en": "Class name as text: `'double'`, `'single'`, `'int8'` to `'int64'`, `'uint8'` to `'uint64'`, `'logical'` or `'char'`.",
+     "pt": "Nome da classe como texto: `'double'`, `'single'`, `'int8'` a `'int64'`, `'uint8'` a `'uint64'`, `'logical'` ou `'char'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of the same size as `A`, with class `newclass`.",
+     "pt": "Array do mesmo tamanho de `A`, com a classe `newclass`."
+    }
+   ],
+   "description": {
+    "en": "`cast(A, 'int8')` behaves like calling `int8(A)`: the result is rounded to the nearest integer and values outside the range saturate, so `cast(300, 'uint8')` is `255`.\n\nThe point of `cast` is that the class is a variable, which helps in generic code that must produce the type of some other array.",
+    "pt": "`cast(A, 'int8')` se comporta como chamar `int8(A)`: o resultado é arredondado para o inteiro mais próximo e valores fora do intervalo saturam, então `cast(300, 'uint8')` é `255`.\n\nA utilidade de `cast` é que a classe é uma variável, o que ajuda em código genérico que precisa produzir o tipo de outro array."
+   },
+   "notes": {
+    "en": "The `'like'` form, `cast(A, 'like', P)`, is not available in MatLivre.",
+    "pt": "A forma `'like'`, `cast(A, 'like', P)`, não está disponível no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Choosing the class by name",
+      "pt": "Escolhendo a classe pelo nome"
+     },
+     "code": "cast(3.7, 'int8')\ncast(300, 'uint8')\ncls = 'single';\nclass(cast(1, cls))"
+    }
+   ],
+   "see": [
+    "double",
+    "int8",
+    "single",
+    "class",
+    "typecast"
+   ]
+  },
+  "categorical": {
+   "summary": {
+    "en": "Array of values from a fixed set of categories, stored as labels.",
+    "pt": "Array de valores de um conjunto fixo de categorias, armazenados como rótulos."
+   },
+   "syntax": [
+    {
+     "code": "C = categorical(A)",
+     "en": "Creates categories from the unique values of `A`, sorted.",
+     "pt": "Cria categorias a partir dos valores únicos de `A`, em ordem."
+    },
+    {
+     "code": "C = categorical(A, valueset)",
+     "en": "Uses the listed values as the categories, in that order.",
+     "pt": "Usa os valores listados como categorias, nessa ordem."
+    },
+    {
+     "code": "C = categorical(A, valueset, catnames)",
+     "en": "Also renames the categories.",
+     "pt": "Também renomeia as categorias."
+    },
+    {
+     "code": "C = categorical(___, 'Ordinal', true)",
+     "en": "Makes the categories ordered so they can be compared with `<` and `>`.",
+     "pt": "Torna as categorias ordenadas, permitindo comparar com `<` e `>`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical, string, char cell array or categorical data.",
+     "pt": "Dados numéricos, lógicos, string, cell array de char ou categorical."
+    },
+    {
+     "name": "valueset",
+     "en": "Values to treat as categories; values of `A` not in the list become undefined.",
+     "pt": "Valores a tratar como categorias; valores de `A` fora da lista ficam indefinidos."
+    },
+    {
+     "name": "catnames",
+     "en": "Names for the categories, one per value in `valueset`.",
+     "pt": "Nomes das categorias, um por valor em `valueset`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "categorical array of the same size as `A`.",
+     "pt": "Array categorical do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "A categorical array stores a small integer code per element plus a list of category names, so repeated labels use little memory and comparisons are fast. Values can be tested with `==` against a category name, and `categories`, `countcats` and `summary` describe the contents.\n\nElements that do not belong to any category are `<undefined>`. When `'Ordinal'` is true, the order of `valueset` defines the ranking.",
+    "pt": "Um array categorical guarda um pequeno código inteiro por elemento mais a lista de nomes das categorias, de modo que rótulos repetidos usam pouca memória e as comparações são rápidas. Os valores podem ser testados com `==` contra o nome de uma categoria, e `categories`, `countcats` e `summary` descrevem o conteúdo.\n\nElementos que não pertencem a nenhuma categoria ficam `<undefined>`. Com `'Ordinal'` verdadeiro, a ordem de `valueset` define a hierarquia."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Labels and category list",
+      "pt": "Rótulos e lista de categorias"
+     },
+     "code": "c = categorical({'lo','hi','lo','mid'}, {'lo','mid','hi'}, 'Ordinal', true)\ncategories(c)\ncountcats(c)"
+    }
+   ],
+   "see": [
+    "categories",
+    "countcats",
+    "summary",
+    "discretize",
+    "unique"
+   ]
+  },
+  "categories": {
+   "summary": {
+    "en": "Names of the categories of a categorical array.",
+    "pt": "Nomes das categorias de um array categorical."
+   },
+   "syntax": [
+    {
+     "code": "cats = categories(C)",
+     "en": "Returns the category names as a cell array of character vectors.",
+     "pt": "Retorna os nomes das categorias como cell array de vetores de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "categorical array.",
+     "pt": "Array categorical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "cats",
+     "en": "Column cell array, one name per category, in category order.",
+     "pt": "Cell array coluna, um nome por categoria, na ordem das categorias."
+    }
+   ],
+   "description": {
+    "en": "The list includes every category, even those that no element currently uses. The order is the category order, which for ordinal data is the ranking. Use `countcats` to see how many elements fall in each one.",
+    "pt": "A lista inclui todas as categorias, mesmo as que nenhum elemento usa no momento. A ordem é a das categorias, que em dados ordinais é a hierarquia. Use `countcats` para ver quantos elementos há em cada uma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listing categories",
+      "pt": "Listando categorias"
+     },
+     "code": "c = categorical({'x','y','x'});\ncategories(c)"
+    }
+   ],
+   "see": [
+    "categorical",
+    "countcats",
+    "summary",
+    "unique"
+   ]
+  },
+  "cell": {
+   "summary": {
+    "en": "Creates a cell array filled with empty arrays.",
+    "pt": "Cria um cell array preenchido com arrays vazios."
+   },
+   "syntax": [
+    {
+     "code": "C = cell(n)",
+     "en": "Creates an `n`-by-`n` cell array.",
+     "pt": "Cria um cell array `n` por `n`."
+    },
+    {
+     "code": "C = cell(m, n, ...)",
+     "en": "Creates a cell array with the given sizes.",
+     "pt": "Cria um cell array com os tamanhos dados."
+    },
+    {
+     "code": "C = cell(sz)",
+     "en": "Takes the sizes from the vector `sz`.",
+     "pt": "Toma os tamanhos do vetor `sz`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n, m, ...",
+     "en": "Nonnegative integer dimensions.",
+     "pt": "Dimensões inteiras não negativas."
+    },
+    {
+     "name": "sz",
+     "en": "Vector of dimensions.",
+     "pt": "Vetor de dimensões."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array whose elements are all `[]`.",
+     "pt": "Cell array cujos elementos são todos `[]`."
+    }
+   ],
+   "description": {
+    "en": "A cell array holds values of any type, one per cell. `cell` is mainly used to preallocate, which avoids the array growing inside a loop: `c = cell(1, 5); c{k} = ...`.\n\nContents are read with braces, `c{2}`, and the cell itself with parentheses, `c(2)`. `cell(0)` gives an empty cell array.",
+    "pt": "Um cell array guarda valores de qualquer tipo, um por célula. `cell` é usado sobretudo para pré-alocar, evitando que o array cresça dentro de um laço: `c = cell(1, 5); c{k} = ...`.\n\nO conteúdo é lido com chaves, `c{2}`, e a célula em si com parênteses, `c(2)`. `cell(0)` produz um cell array vazio."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Preallocate and fill",
+      "pt": "Pré-alocar e preencher"
+     },
+     "code": "c = cell(1, 3);\nfor k = 1:3\n  c{k} = k^2;\nend\nc"
+    }
+   ],
+   "see": [
+    "cellfun",
+    "cell2mat",
+    "iscell",
+    "struct",
+    "repmat"
+   ]
+  },
+  "cell2mat": {
+   "summary": {
+    "en": "Joins the contents of a cell array into one ordinary array.",
+    "pt": "Junta o conteúdo de um cell array em um único array comum."
+   },
+   "syntax": [
+    {
+     "code": "M = cell2mat(C)",
+     "en": "Concatenates the cell contents, rows and columns in cell order.",
+     "pt": "Concatena o conteúdo das células, linhas e colunas na ordem das células."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "Cell array whose contents are numeric, logical, char or struct, all of one class, with sizes that fit together.",
+     "pt": "Cell array cujo conteúdo é numérico, lógico, char ou struct, todos de uma mesma classe, com tamanhos compatíveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The concatenated array.",
+     "pt": "O array concatenado."
+    }
+   ],
+   "description": {
+    "en": "Each row of cells is concatenated horizontally and the resulting rows are stacked vertically, so the pieces in a row must have the same number of rows and the pieces in a column the same number of columns.\n\nContents must all be of the same class and cannot be cell arrays. An empty cell array gives `[]`.",
+    "pt": "Cada linha de células é concatenada na horizontal e as linhas resultantes são empilhadas na vertical, então as peças de uma linha devem ter o mesmo número de linhas e as de uma coluna o mesmo número de colunas.\n\nTodo o conteúdo deve ser de uma mesma classe e não pode ser cell array. Um cell array vazio resulta em `[]`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Blocks into a matrix",
+      "pt": "Blocos em uma matriz"
+     },
+     "code": "C = {[1 2], 3; [4 5], 6};\nM = cell2mat(C)"
+    }
+   ],
+   "see": [
+    "num2cell",
+    "cell",
+    "cat",
+    "horzcat",
+    "vertcat"
+   ]
+  },
+  "cell2struct": {
+   "summary": {
+    "en": "Converts a cell array into a structure array.",
+    "pt": "Converte um cell array em um array de structs."
+   },
+   "syntax": [
+    {
+     "code": "s = cell2struct(c, fields, dim)",
+     "en": "Builds a structure from `c`, taking field values along dimension `dim`.",
+     "pt": "Cria uma struct a partir de `c`, tomando os valores dos campos ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "c",
+     "en": "Cell array of field values.",
+     "pt": "Cell array de valores dos campos."
+    },
+    {
+     "name": "fields",
+     "en": "Field names: a cell array of character vectors, a char matrix, or a string array.",
+     "pt": "Nomes dos campos: cell array de vetores de caracteres, matriz char ou array de strings."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension of `c` that runs through the fields. Its length must equal the number of field names.",
+     "pt": "Dimensão de `c` que percorre os campos. Seu comprimento deve ser igual ao número de nomes de campos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Structure array. The other dimension of `c` becomes the structure array dimension.",
+     "pt": "Array de structs. A outra dimensão de `c` vira a dimensão do array de structs."
+    }
+   ],
+   "description": {
+    "en": "When `dim` is 1, each column of `c` supplies the values of one structure and the rows correspond to the fields; with `dim` 2 it is the other way round. A 2-by-1 cell with `dim` 1 therefore gives a single structure of two fields.\n\nThe inverse is `struct2cell`. A mismatch between the number of field names and the length of `dim` is an error.",
+    "pt": "Com `dim` igual a 1, cada coluna de `c` fornece os valores de uma struct e as linhas correspondem aos campos; com `dim` 2 é o contrário. Um cell 2 por 1 com `dim` 1 gera portanto uma única struct de dois campos.\n\nA inversa é `struct2cell`. Divergência entre o número de nomes e o comprimento de `dim` é erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One record",
+      "pt": "Um registro"
+     },
+     "code": "s = cell2struct({'Bob'; 42}, {'name'; 'age'}, 1)"
+    },
+    {
+     "title": {
+      "en": "Several records",
+      "pt": "Vários registros"
+     },
+     "code": "t = cell2struct({1 2; 3 4}, {'a','b'}, 2);\nsize(t)\nt(2)"
+    }
+   ],
+   "see": [
+    "struct2cell",
+    "struct",
+    "fieldnames",
+    "cell2table"
+   ]
+  },
+  "cell2table": {
+   "summary": {
+    "en": "Converts a cell array into a table, one column per cell column.",
+    "pt": "Converte um cell array em uma tabela, uma coluna por coluna de células."
+   },
+   "syntax": [
+    {
+     "code": "T = cell2table(C)",
+     "en": "Creates a table with variables named `Var1`, `Var2`, ....",
+     "pt": "Cria uma tabela com variáveis chamadas `Var1`, `Var2`, ...."
+    },
+    {
+     "code": "T = cell2table(C, 'VariableNames', names)",
+     "en": "Names the variables.",
+     "pt": "Nomeia as variáveis."
+    },
+    {
+     "code": "T = cell2table(C, 'RowNames', names)",
+     "en": "Names the rows.",
+     "pt": "Nomeia as linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "2-D cell array. Each column becomes a variable.",
+     "pt": "Cell array 2-D. Cada coluna vira uma variável."
+    },
+    {
+     "name": "'VariableNames'",
+     "en": "Cell array of names, one per column.",
+     "pt": "Cell array de nomes, um por coluna."
+    },
+    {
+     "name": "'RowNames'",
+     "en": "Cell array of row names, one per row.",
+     "pt": "Cell array de nomes de linha, um por linha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "table with the same number of rows as `C`.",
+     "pt": "Tabela com o mesmo número de linhas de `C`."
+    }
+   ],
+   "description": {
+    "en": "Columns of the cell array that contain only numbers become numeric variables. Columns of text stay as cell columns of character vectors. Use `convertvars` afterwards to change a variable to string or categorical.\n\nThe inverse is `table2cell`.",
+    "pt": "Colunas do cell array que contêm apenas números viram variáveis numéricas. Colunas de texto permanecem como colunas de cell com vetores de caracteres. Use `convertvars` depois para mudar uma variável para string ou categorical.\n\nA inversa é `table2cell`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Named columns",
+      "pt": "Colunas nomeadas"
+     },
+     "code": "C = {1, 'a'; 2, 'b'};\nT = cell2table(C, 'VariableNames', {'n','s'})"
+    }
+   ],
+   "see": [
+    "table2cell",
+    "array2table",
+    "struct2table",
+    "convertvars",
+    "table"
+   ]
+  },
+  "celldisp": {
+   "summary": {
+    "en": "Displays the contents of every cell of a cell array.",
+    "pt": "Exibe o conteúdo de cada célula de um cell array."
+   },
+   "syntax": [
+    {
+     "code": "celldisp(c)",
+     "en": "Prints each cell, labeled with the variable name or `ans`.",
+     "pt": "Imprime cada célula, rotulada com o nome da variável ou `ans`."
+    },
+    {
+     "code": "celldisp(c, name)",
+     "en": "Uses `name` as the label.",
+     "pt": "Usa `name` como rótulo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "c",
+     "en": "Cell array.",
+     "pt": "Cell array."
+    },
+    {
+     "name": "name",
+     "en": "Text used in the labels such as `name{2}`.",
+     "pt": "Texto usado nos rótulos, como `name{2}`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`celldisp` walks through the cells in column-major order and prints each as `name{k} = value`, using a linear index for vectors and `name{i,j}` for matrices. Nested cells are shown as a compact cell, not expanded further.\n\nIt prints to the screen only; use `c{k}` to get a value.",
+    "pt": "`celldisp` percorre as células em ordem de colunas e imprime cada uma como `nome{k} = valor`, com índice linear para vetores e `nome{i,j}` para matrizes. Células aninhadas aparecem como cell compacto, sem expansão adicional.\n\nSó imprime na tela; use `c{k}` para obter um valor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Labeled output",
+      "pt": "Saída rotulada"
+     },
+     "code": "celldisp({[1 2; 3 4], 'text'}, 'c')"
+    }
+   ],
+   "see": [
+    "disp",
+    "cellfun",
+    "cell2mat",
+    "iscell"
+   ]
+  }
+ }
+}

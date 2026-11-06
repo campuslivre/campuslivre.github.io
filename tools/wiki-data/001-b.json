@@ -1,0 +1,1121 @@
+{
+ "functions": {
+  "fprintf": {
+   "summary": {
+    "en": "Writes formatted text to the command window or to a file.",
+    "pt": "Grava texto formatado na janela de comandos ou em um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "fprintf(formatSpec, A1, ..., An)",
+     "en": "Prints to the command window.",
+     "pt": "Imprime na janela de comandos."
+    },
+    {
+     "code": "fprintf(fid, formatSpec, A1, ..., An)",
+     "en": "Writes to the open file `fid`. Identifier `1` is the command window.",
+     "pt": "Grava no arquivo aberto `fid`. O identificador `1` é a janela de comandos."
+    },
+    {
+     "code": "nbytes = fprintf(...)",
+     "en": "Returns the number of bytes written.",
+     "pt": "Retorna o número de bytes gravados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "formatSpec",
+     "en": "Format text with conversions such as `%d` (integer), `%f` and `%.2f` (fixed point), `%e` (exponent), `%g` (shortest), `%s` (text), `%c` (character) and `%%`. Escapes like `\\n` and `\\t` are interpreted.",
+     "pt": "Texto de formato com conversões como `%d` (inteiro), `%f` e `%.2f` (ponto fixo), `%e` (expoente), `%g` (mais curto), `%s` (texto), `%c` (caractere) e `%%`. Escapes como `\\n` e `\\t` são interpretados."
+    },
+    {
+     "name": "A1, ..., An",
+     "en": "Values to insert. Arrays are consumed element by element, in column order.",
+     "pt": "Valores a inserir. Arrays são consumidos elemento a elemento, em ordem de colunas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "nbytes",
+     "en": "Number of bytes written.",
+     "pt": "Número de bytes gravados."
+    }
+   ],
+   "description": {
+    "en": "The format is applied repeatedly until all values are used, so `fprintf('%d, ', v)` prints a whole vector. If the values run out in the middle of a format, output stops just before the first conversion that has no data. A `%d` given a non-integer value switches to exponent notation instead of truncating.\n\n`fprintf` does not add a newline: end the format with `\\n` when you want one.",
+    "pt": "O formato é aplicado repetidamente até todos os valores serem usados, então `fprintf('%d, ', v)` imprime um vetor inteiro. Se os valores acabam no meio de um formato, a saída para logo antes da primeira conversão sem dado. Um `%d` com valor não inteiro passa para notação exponencial em vez de truncar.\n\n`fprintf` não acrescenta quebra de linha: termine o formato com `\\n` quando quiser uma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Formats and recycling",
+      "pt": "Formatos e reaproveitamento"
+     },
+     "code": "fprintf('%5.2f|%d|%s\\n', pi, 42, 'abc');\nfprintf('%d, ', [1 2 3]); fprintf('\\n');\nfprintf('%d %s\\n', 1, 'a', 2, 'b');\nfprintf('%x %o %c %%\\n', 255, 8, 'A');\nfprintf('%-6d|%+d\\n', 5, 5);"
+    }
+   ],
+   "see": [
+    "sprintf",
+    "disp",
+    "fwrite",
+    "num2str",
+    "fopen"
+   ]
+  },
+  "fread": {
+   "summary": {
+    "en": "Reads binary data from a file.",
+    "pt": "Lê dados binários de um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "A = fread(fid)",
+     "en": "Reads the rest of the file as unsigned bytes into a column of doubles.",
+     "pt": "Lê o restante do arquivo como bytes sem sinal, em uma coluna de doubles."
+    },
+    {
+     "code": "A = fread(fid, sizeA, precision)",
+     "en": "Reads `sizeA` values of the given type.",
+     "pt": "Lê `sizeA` valores do tipo indicado."
+    },
+    {
+     "code": "A = fread(fid, sizeA, precision, skip, machinefmt)",
+     "en": "Skips bytes between values and sets the byte order.",
+     "pt": "Pula bytes entre os valores e define a ordem dos bytes."
+    },
+    {
+     "code": "[A, count] = fread(...)",
+     "en": "Also returns the number of values read.",
+     "pt": "Retorna também o número de valores lidos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "sizeA",
+     "en": "`n` for a column of up to `n` values, `Inf` for all, or `[m n]` to fill an `m`-by-`n` matrix column by column.",
+     "pt": "`n` para uma coluna de até `n` valores, `Inf` para todos, ou `[m n]` para preencher uma matriz `m`-por-`n` por colunas."
+    },
+    {
+     "name": "precision",
+     "en": "Type in the file, such as `'uint8'`, `'int16'`, `'single'`, `'double'`, `'char'`. Write `'uint8=>char'` to also convert the output, or `'*char'` as a shorthand for the same type in and out.",
+     "pt": "Tipo no arquivo, como `'uint8'`, `'int16'`, `'single'`, `'double'`, `'char'`. Use `'uint8=>char'` para converter também a saída, ou `'*char'` como atalho para o mesmo tipo na entrada e na saída."
+    },
+    {
+     "name": "machinefmt",
+     "en": "Byte order: `'l'` little-endian, `'b'` big-endian.",
+     "pt": "Ordem dos bytes: `'l'` little-endian, `'b'` big-endian."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Data read. The class is double unless the precision uses `=>` or `*`.",
+     "pt": "Dados lidos. A classe é double, a menos que a precisão use `=>` ou `*`."
+    },
+    {
+     "name": "count",
+     "en": "Number of values read.",
+     "pt": "Número de valores lidos."
+    }
+   ],
+   "description": {
+    "en": "Reading starts at the current file position and moves it forward, so successive calls walk through the file. Open the file in binary mode for non-text data. To read a text file as characters in one call, `fread(fid, Inf, '*char')'` returns the whole content.",
+    "pt": "A leitura começa na posição atual do arquivo e a avança, de modo que chamadas sucessivas percorrem o arquivo. Abra o arquivo em modo binário para dados que não são texto. Para ler um arquivo de texto como caracteres em uma chamada, `fread(fid, Inf, '*char')'` devolve todo o conteúdo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed binary record",
+      "pt": "Registro binário misto"
+     },
+     "code": "fid = fopen('f.bin', 'w');\nfwrite(fid, 'ABC');\nfwrite(fid, pi, 'double');\nfwrite(fid, [1 2], 'int16', 'b');\nfclose(fid);\nfid = fopen('f.bin');\ntxt = fread(fid, 3, '*char')'\nx = fread(fid, 1, 'double')\nv = fread(fid, 2, 'int16', 0, 'b')'\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fwrite",
+    "fopen",
+    "fscanf",
+    "fseek",
+    "ftell"
+   ]
+  },
+  "frewind": {
+   "summary": {
+    "en": "Moves the read position of a file back to its beginning.",
+    "pt": "Move a posição de leitura de um arquivo de volta ao início."
+   },
+   "syntax": [
+    {
+     "code": "frewind(fid)",
+     "en": "Sets the file position to the first byte.",
+     "pt": "Coloca a posição do arquivo no primeiro byte."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`frewind` is shorthand for `fseek(fid, 0, 'bof')`. It also clears the end-of-file indicator, so a file that has been read to the end can be read again.",
+    "pt": "`frewind` é uma abreviação de `fseek(fid, 0, 'bof')`. Também limpa o indicador de fim de arquivo, então um arquivo lido até o fim pode ser lido de novo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read twice",
+      "pt": "Ler duas vezes"
+     },
+     "code": "fid = fopen('r.txt', 'w'); fprintf(fid, 'abc'); fclose(fid);\nfid = fopen('r.txt');\ns1 = fread(fid, Inf, '*char')'\nfeof(fid)\nfrewind(fid);\ns2 = fread(fid, 2, '*char')'\nftell(fid)\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fseek",
+    "ftell",
+    "feof",
+    "fopen"
+   ]
+  },
+  "fscanf": {
+   "summary": {
+    "en": "Reads formatted data from a text file.",
+    "pt": "Lê dados formatados de um arquivo de texto."
+   },
+   "syntax": [
+    {
+     "code": "A = fscanf(fid, formatSpec)",
+     "en": "Reads values matching the format until the end of the file, into a column.",
+     "pt": "Lê valores que casam com o formato até o fim do arquivo, em uma coluna."
+    },
+    {
+     "code": "A = fscanf(fid, formatSpec, sizeA)",
+     "en": "Limits or shapes the result: `n`, `Inf` or `[m n]`.",
+     "pt": "Limita ou dá forma ao resultado: `n`, `Inf` ou `[m n]`."
+    },
+    {
+     "code": "[A, count] = fscanf(...)",
+     "en": "Also returns the number of values read.",
+     "pt": "Retorna também o número de valores lidos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "formatSpec",
+     "en": "Conversions such as `%d`, `%f`, `%g`, `%s`, `%c`. The format is reused until the data or the size is exhausted.",
+     "pt": "Conversões como `%d`, `%f`, `%g`, `%s`, `%c`. O formato é reaproveitado até acabarem os dados ou o tamanho."
+    },
+    {
+     "name": "sizeA",
+     "en": "`[m Inf]` reads as many columns as the data provides. Values fill the matrix column by column.",
+     "pt": "`[m Inf]` lê quantas colunas os dados fornecerem. Os valores preenchem a matriz por colunas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Numeric column vector or matrix; text conversions give character codes mixed in unless all conversions are text.",
+     "pt": "Vetor coluna ou matriz numérica; conversões de texto entram como códigos de caracteres, a menos que todas as conversões sejam de texto."
+    },
+    {
+     "name": "count",
+     "en": "Number of elements read.",
+     "pt": "Número de elementos lidos."
+    }
+   ],
+   "description": {
+    "en": "Because matrices are filled by columns, reading a file written row by row into a matrix needs a transpose: `fscanf(fid, '%d', [3 Inf])'` for rows of three numbers.\n\nReading stops at the first piece of text that does not match the format. For mixed text and numbers, `textscan` is more flexible.",
+    "pt": "Como as matrizes são preenchidas por colunas, ler para uma matriz um arquivo gravado linha a linha exige transpor: `fscanf(fid, '%d', [3 Inf])'` para linhas de três números.\n\nA leitura para no primeiro trecho que não casa com o formato. Para texto misturado com números, `textscan` é mais flexível."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rows of numbers",
+      "pt": "Linhas de números"
+     },
+     "code": "fid = fopen('n.txt', 'w');\nfprintf(fid, '1 2 3\\n4 5 6\\n');\nfclose(fid);\nfid = fopen('n.txt');\nA = fscanf(fid, '%d', [3 Inf])'\nfclose(fid);\nfid = fopen('n.txt');\n[B, count] = fscanf(fid, '%f');\nfclose(fid);\nB', count"
+    }
+   ],
+   "see": [
+    "textscan",
+    "fgetl",
+    "fread",
+    "sscanf",
+    "readmatrix"
+   ]
+  },
+  "fseek": {
+   "summary": {
+    "en": "Moves the file position to a given byte offset.",
+    "pt": "Move a posição do arquivo para um deslocamento em bytes."
+   },
+   "syntax": [
+    {
+     "code": "status = fseek(fid, offset, origin)",
+     "en": "Moves `offset` bytes relative to `origin`.",
+     "pt": "Move `offset` bytes em relação a `origin`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "offset",
+     "en": "Number of bytes to move; may be negative.",
+     "pt": "Número de bytes a mover; pode ser negativo."
+    },
+    {
+     "name": "origin",
+     "en": "`'bof'` start of file, `'cof'` current position, `'eof'` end of file.",
+     "pt": "`'bof'` início do arquivo, `'cof'` posição atual, `'eof'` fim do arquivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`0` on success, `-1` on failure.",
+     "pt": "`0` em caso de sucesso, `-1` em caso de falha."
+    }
+   ],
+   "description": {
+    "en": "The next read or write starts at the new position. `fseek(fid, 0, 'eof')` followed by `ftell` gives the file size in bytes. Use a negative offset with `'eof'` to look at the end of a file, such as the last few characters.",
+    "pt": "A próxima leitura ou gravação começa na nova posição. `fseek(fid, 0, 'eof')` seguido de `ftell` dá o tamanho do arquivo em bytes. Use um deslocamento negativo com `'eof'` para olhar o fim de um arquivo, como os últimos caracteres."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "File size and the last bytes",
+      "pt": "Tamanho do arquivo e últimos bytes"
+     },
+     "code": "fid = fopen('w.txt', 'w'); fprintf(fid, 'alpha beta gamma'); fclose(fid);\nfid = fopen('w.txt');\nfseek(fid, 0, 'eof');\nsz = ftell(fid)\nfseek(fid, -5, 'eof');\ntail = fread(fid, 5, '*char')'\nfseek(fid, 6, 'bof');\nword = fread(fid, 4, '*char')'\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "ftell",
+    "frewind",
+    "fread",
+    "fopen"
+   ]
+  },
+  "ftell": {
+   "summary": {
+    "en": "Returns the current byte position in a file.",
+    "pt": "Retorna a posição atual, em bytes, em um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "position = ftell(fid)",
+     "en": "Returns the offset from the start of the file.",
+     "pt": "Retorna o deslocamento a partir do início do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "position",
+     "en": "Zero-based byte offset, or `-1` on error.",
+     "pt": "Deslocamento em bytes, começando em zero, ou `-1` em caso de erro."
+    }
+   ],
+   "description": {
+    "en": "A newly opened file is at position `0`. Reads, writes and `fseek` move it. You can save a position with `ftell` and return to it later with `fseek(fid, pos, 'bof')`.",
+    "pt": "Um arquivo recém-aberto está na posição `0`. Leituras, gravações e `fseek` a movem. É possível guardar uma posição com `ftell` e voltar a ela depois com `fseek(fid, pos, 'bof')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mark and return",
+      "pt": "Marcar e voltar"
+     },
+     "code": "fid = fopen('t.txt', 'w'); fprintf(fid, 'abcdef'); fclose(fid);\nfid = fopen('t.txt');\nfread(fid, 2);\nmark = ftell(fid)\nfread(fid, 3);\nftell(fid)\nfseek(fid, mark, 'bof');\nchar(fread(fid, 1))\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fseek",
+    "frewind",
+    "fread",
+    "fopen"
+   ]
+  },
+  "fwrite": {
+   "summary": {
+    "en": "Writes binary data to a file.",
+    "pt": "Grava dados binários em um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "count = fwrite(fid, A)",
+     "en": "Writes the elements of `A` as unsigned bytes.",
+     "pt": "Grava os elementos de `A` como bytes sem sinal."
+    },
+    {
+     "code": "count = fwrite(fid, A, precision)",
+     "en": "Writes in the given type, such as `'int16'` or `'double'`.",
+     "pt": "Grava no tipo indicado, como `'int16'` ou `'double'`."
+    },
+    {
+     "code": "count = fwrite(fid, A, precision, skip, machinefmt)",
+     "en": "Skips bytes between values and sets the byte order.",
+     "pt": "Pula bytes entre os valores e define a ordem dos bytes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or character data, written in column order.",
+     "pt": "Dados numéricos ou de caracteres, gravados em ordem de colunas."
+    },
+    {
+     "name": "precision",
+     "en": "Output type: `'uint8'` (default), `'int8'`, `'uint16'`, `'int16'`, `'uint32'`, `'int32'`, `'single'`, `'double'`, `'char'`.",
+     "pt": "Tipo de saída: `'uint8'` (padrão), `'int8'`, `'uint16'`, `'int16'`, `'uint32'`, `'int32'`, `'single'`, `'double'`, `'char'`."
+    },
+    {
+     "name": "machinefmt",
+     "en": "`'l'` for little-endian or `'b'` for big-endian.",
+     "pt": "`'l'` para little-endian ou `'b'` para big-endian."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "count",
+     "en": "Number of elements written.",
+     "pt": "Número de elementos gravados."
+    }
+   ],
+   "description": {
+    "en": "Values are converted to the requested type before writing, saturating at its limits. The result is a raw byte stream with no header, so whoever reads it must know the type and byte order. Pair it with `fread` using the same precision.",
+    "pt": "Os valores são convertidos para o tipo pedido antes da gravação, saturando em seus limites. O resultado é um fluxo bruto de bytes sem cabeçalho, de modo que quem lê precisa conhecer o tipo e a ordem dos bytes. Combine-o com `fread` usando a mesma precisão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Bytes and 16-bit values",
+      "pt": "Bytes e valores de 16 bits"
+     },
+     "code": "fid = fopen('b.bin', 'w');\nn1 = fwrite(fid, [1 2 3])\nn2 = fwrite(fid, [1 300], 'uint16')\nfclose(fid);\nd = dir('b.bin'); d.bytes\nfid = fopen('b.bin');\nfread(fid, 3)'\nfread(fid, 2, 'uint16')'\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fread",
+    "fprintf",
+    "fopen",
+    "fclose"
+   ]
+  },
+  "get": {
+   "summary": {
+    "en": "Reads a property of a graphics object.",
+    "pt": "Lê uma propriedade de um objeto gráfico."
+   },
+   "syntax": [
+    {
+     "code": "v = get(h, 'PropertyName')",
+     "en": "Returns the value of one property of the object with handle `h`.",
+     "pt": "Retorna o valor de uma propriedade do objeto com handle `h`."
+    },
+    {
+     "code": "s = get(h)",
+     "en": "Returns a struct with all properties.",
+     "pt": "Retorna uma struct com todas as propriedades."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Handle of a figure, axes, line or other graphics object. An array of handles returns a cell array of values.",
+     "pt": "Handle de uma figura, eixos, linha ou outro objeto gráfico. Um array de handles retorna um cell array de valores."
+    },
+    {
+     "name": "'PropertyName'",
+     "en": "Name of the property, such as `'XLim'`, `'LineWidth'`, `'Color'`.",
+     "pt": "Nome da propriedade, como `'XLim'`, `'LineWidth'`, `'Color'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Value of the property.",
+     "pt": "Valor da propriedade."
+    }
+   ],
+   "description": {
+    "en": "`get` is the older, function-style way to read properties; dot notation such as `h.LineWidth` does the same. The handle `0` is the root object, and `gcf` and `gca` return the current figure and axes.\n\nChange a property with `set`.",
+    "pt": "`get` é a forma mais antiga, em estilo de função, de ler propriedades; a notação de ponto como `h.LineWidth` faz o mesmo. O handle `0` é o objeto raiz, e `gcf` e `gca` retornam a figura e os eixos atuais.\n\nAltere uma propriedade com `set`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read line and axes properties",
+      "pt": "Ler propriedades de linha e eixos"
+     },
+     "code": "fig = figure('Visible', 'off');\nax = axes;\np = plot(1:3, [2 4 8], 'r--');\nget(p, 'Color')\nget(p, 'LineStyle')\nget(ax, 'XLim')",
+     "note": {
+      "en": "Graphics here is created off screen, so only the property values are printed.",
+      "pt": "Os gráficos aqui são criados fora da tela, então apenas os valores das propriedades são impressos."
+     }
+    }
+   ],
+   "see": [
+    "set",
+    "gca",
+    "gcf",
+    "plot",
+    "findobj"
+   ]
+  },
+  "imfinfo": {
+   "summary": {
+    "en": "Returns information about an image file.",
+    "pt": "Retorna informações sobre um arquivo de imagem."
+   },
+   "syntax": [
+    {
+     "code": "info = imfinfo(filename)",
+     "en": "Returns a struct describing the image in the file.",
+     "pt": "Retorna uma struct que descreve a imagem do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Image file name.",
+     "pt": "Nome do arquivo de imagem."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "info",
+     "en": "Struct with fields including `Filename`, `Format`, `Width`, `Height`, `BitDepth` and `ColorType`.",
+     "pt": "Struct com campos como `Filename`, `Format`, `Width`, `Height`, `BitDepth` e `ColorType`."
+    }
+   ],
+   "description": {
+    "en": "`imfinfo` reads only the file header, so it can be used to check the size of an image before loading it with `imread`. `ColorType` is one of `'grayscale'`, `'truecolor'` or `'indexed'`, and `BitDepth` counts the bits per pixel, across all channels.",
+    "pt": "`imfinfo` lê apenas o cabeçalho do arquivo, então serve para conferir o tamanho de uma imagem antes de carregá-la com `imread`. `ColorType` é `'grayscale'`, `'truecolor'` ou `'indexed'`, e `BitDepth` conta os bits por pixel, somando todos os canais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Grayscale and color images",
+      "pt": "Imagens em tons de cinza e coloridas"
+     },
+     "code": "imwrite(uint8([0 50; 100 255]), 'g.png');\nimwrite(zeros(3, 4, 3, 'uint8'), 'c.png');\na = imfinfo('g.png');\nb = imfinfo('c.png');\nfprintf('%s %dx%d %d-bit %s\\n', a.Format, a.Width, a.Height, a.BitDepth, a.ColorType);\nfprintf('%s %dx%d %d-bit %s\\n', b.Format, b.Width, b.Height, b.BitDepth, b.ColorType);"
+    }
+   ],
+   "see": [
+    "imread",
+    "imwrite",
+    "size",
+    "audioinfo"
+   ]
+  },
+  "importdata": {
+   "summary": {
+    "en": "Loads data from a file, choosing the loader by file type.",
+    "pt": "Carrega dados de um arquivo, escolhendo o leitor pelo tipo do arquivo."
+   },
+   "syntax": [
+    {
+     "code": "A = importdata(filename)",
+     "en": "Returns the numeric data when the file holds only numbers.",
+     "pt": "Retorna os dados numéricos quando o arquivo contém só números."
+    },
+    {
+     "code": "[A, delimiter, nheaderlines] = importdata(...)",
+     "en": "Also returns the detected delimiter and header line count.",
+     "pt": "Retorna também o delimitador detectado e o número de linhas de cabeçalho."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of a text, CSV, image, audio or MAT file.",
+     "pt": "Nome de um arquivo de texto, CSV, imagem, áudio ou MAT."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "A numeric matrix, or a struct with `data`, `textdata` and `colheaders` when the file has headers.",
+     "pt": "Uma matriz numérica, ou uma struct com `data`, `textdata` e `colheaders` quando o arquivo tem cabeçalhos."
+    }
+   ],
+   "description": {
+    "en": "`importdata` is a convenience wrapper: it looks at the file, finds the delimiter and the header lines, and returns the numbers. It is handy for a quick look at a data file; for repeatable scripts, `readmatrix` or `readtable` give you explicit control.",
+    "pt": "`importdata` é um atalho: examina o arquivo, encontra o delimitador e as linhas de cabeçalho e retorna os números. É prático para olhar rapidamente um arquivo de dados; para scripts repetíveis, `readmatrix` ou `readtable` dão controle explícito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers with and without a header",
+      "pt": "Números com e sem cabeçalho"
+     },
+     "code": "fid = fopen('n2.txt', 'w'); fprintf(fid, '1 2 3\\n4 5 6\\n'); fclose(fid);\nA = importdata('n2.txt')\nfid = fopen('h.csv', 'w'); fprintf(fid, 'name,age\\nAnn,30\\nBob,25\\n'); fclose(fid);\nD = importdata('h.csv')"
+    }
+   ],
+   "see": [
+    "readmatrix",
+    "readtable",
+    "load",
+    "textscan"
+   ]
+  },
+  "imread": {
+   "summary": {
+    "en": "Reads an image file into an array.",
+    "pt": "Lê um arquivo de imagem em um array."
+   },
+   "syntax": [
+    {
+     "code": "A = imread(filename)",
+     "en": "Reads the image. Grayscale gives an `m`-by-`n` array, color an `m`-by-`n`-by-3 array.",
+     "pt": "Lê a imagem. Tons de cinza geram um array `m`-por-`n`, cor gera um array `m`-por-`n`-por-3."
+    },
+    {
+     "code": "[A, map] = imread(filename)",
+     "en": "Also returns the colormap of an indexed image.",
+     "pt": "Retorna também o mapa de cores de uma imagem indexada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Image file name. PNG, JPEG, BMP and TIFF files are supported.",
+     "pt": "Nome do arquivo de imagem. Arquivos PNG, JPEG, BMP e TIFF são suportados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Pixel data, usually `uint8`, or `uint16` for 16-bit files; `logical` for binary images.",
+     "pt": "Dados dos pixels, normalmente `uint8`, ou `uint16` para arquivos de 16 bits; `logical` para imagens binárias."
+    },
+    {
+     "name": "map",
+     "en": "Colormap of an indexed image, empty otherwise.",
+     "pt": "Mapa de cores de uma imagem indexada, vazio nos demais casos."
+    }
+   ],
+   "description": {
+    "en": "The class of `A` follows the bit depth of the file, so convert with `im2double` before arithmetic that expects values in 0 to 1. Rows run from top to bottom and the first color plane is red.\n\nUse `imshow` to display the array and `imfinfo` to inspect the file without loading it.",
+    "pt": "A classe de `A` segue a profundidade de bits do arquivo, então converta com `im2double` antes de contas que esperam valores entre 0 e 1. As linhas vão de cima para baixo e o primeiro plano de cor é o vermelho.\n\nUse `imshow` para exibir o array e `imfinfo` para inspecionar o arquivo sem carregá-lo."
+   },
+   "notes": {
+    "en": "For an indexed PNG written with a colormap, MatLivre returns the expanded RGB image and an empty `map`, rather than the index matrix and the colormap.",
+    "pt": "Para um PNG indexado gravado com mapa de cores, o MatLivre devolve a imagem RGB expandida e um `map` vazio, em vez da matriz de índices e do mapa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip through PNG",
+      "pt": "Ida e volta por um PNG"
+     },
+     "code": "RGB = zeros(2, 2, 3, 'uint8');\nRGB(:, :, 1) = 255;\nRGB(1, 1, :) = [0 255 0];\nimwrite(RGB, 'c.png');\nK = imread('c.png');\nsize(K)\nclass(K)\nisequal(K, RGB)\nsqueeze(K(1, 1, :))'"
+    }
+   ],
+   "see": [
+    "imwrite",
+    "imfinfo",
+    "imshow",
+    "im2double"
+   ]
+  },
+  "imwrite": {
+   "summary": {
+    "en": "Writes an array to an image file.",
+    "pt": "Grava um array em um arquivo de imagem."
+   },
+   "syntax": [
+    {
+     "code": "imwrite(A, filename)",
+     "en": "Writes `A`; the format comes from the file extension.",
+     "pt": "Grava `A`; o formato vem da extensão do arquivo."
+    },
+    {
+     "code": "imwrite(A, map, filename)",
+     "en": "Writes an indexed image with its colormap.",
+     "pt": "Grava uma imagem indexada com o seu mapa de cores."
+    },
+    {
+     "code": "imwrite(..., Name, Value)",
+     "en": "Sets format options such as `'Quality'` for JPEG.",
+     "pt": "Define opções de formato, como `'Quality'` para JPEG."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Grayscale (`m`-by-`n`) or truecolor (`m`-by-`n`-by-3) array. Doubles are taken to span 0 to 1; `uint8` spans 0 to 255.",
+     "pt": "Array em tons de cinza (`m`-por-`n`) ou colorido (`m`-por-`n`-por-3). Doubles são tomados no intervalo de 0 a 1; `uint8` vai de 0 a 255."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name with extension such as `.png`, `.jpg`, `.bmp` or `.tif`.",
+     "pt": "Nome do arquivo de saída com extensão como `.png`, `.jpg`, `.bmp` ou `.tif`."
+    },
+    {
+     "name": "'Quality'",
+     "en": "JPEG quality from 0 to 100.",
+     "pt": "Qualidade JPEG de 0 a 100."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Arrays of class `double` or `single` are scaled to 8 bits, so `0.5` is written as `128`. Logical arrays are written as black and white, and `uint16` data is stored with 16 bits in PNG files. PNG is lossless, while JPEG is lossy and will not return the exact pixels you wrote.",
+    "pt": "Arrays de classe `double` ou `single` são escalados para 8 bits, então `0.5` é gravado como `128`. Arrays lógicos são gravados em preto e branco, e dados `uint16` são guardados com 16 bits em arquivos PNG. O PNG é sem perdas, enquanto o JPEG tem perdas e não devolve exatamente os pixels gravados."
+   },
+   "notes": {
+    "en": "An indexed image written with `imwrite(X, map, file)` is read back as RGB, and GIF output is not available for plain grayscale data.",
+    "pt": "Uma imagem indexada gravada com `imwrite(X, map, file)` é relida como RGB, e a saída GIF não está disponível para dados simples em tons de cinza."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scaling of doubles",
+      "pt": "Escala de doubles"
+     },
+     "code": "imwrite([0 0.5; 1 0.25], 'd.png');\nimread('d.png')\nimwrite(uint16([0 65535; 1000 2000]), 'w.png');\nclass(imread('w.png'))"
+    }
+   ],
+   "see": [
+    "imread",
+    "imfinfo",
+    "imshow",
+    "exportgraphics"
+   ]
+  },
+  "jsondecode": {
+   "summary": {
+    "en": "Converts JSON text into MATLAB values.",
+    "pt": "Converte texto JSON em valores do MATLAB."
+   },
+   "syntax": [
+    {
+     "code": "value = jsondecode(jsonText)",
+     "en": "Parses the text and returns a struct, array, cell array or scalar.",
+     "pt": "Interpreta o texto e retorna uma struct, array, cell array ou escalar."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "jsonText",
+     "en": "JSON as a character vector or string.",
+     "pt": "JSON como vetor de caracteres ou string."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "value",
+     "en": "The decoded value; the type depends on the JSON content.",
+     "pt": "O valor decodificado; o tipo depende do conteúdo do JSON."
+    }
+   ],
+   "description": {
+    "en": "The mapping follows JSON structure: objects become scalar structs; arrays of numbers become column vectors; arrays of equal-length number arrays become matrices; arrays of objects with the same fields become a struct array; mixed arrays become cell arrays. `true` and `false` become logical, strings become character vectors, and `null` inside a numeric array becomes `NaN`.\n\nObject keys that are not valid variable names are changed to valid ones, so `\"1bad\"` becomes `x1bad`.",
+    "pt": "O mapeamento segue a estrutura do JSON: objetos viram structs escalares; arrays de números viram vetores coluna; arrays de arrays numéricos de mesmo tamanho viram matrizes; arrays de objetos com os mesmos campos viram um array de structs; arrays mistos viram cell arrays. `true` e `false` viram lógicos, strings viram vetores de caracteres, e `null` dentro de um array numérico vira `NaN`.\n\nChaves de objeto que não são nomes de variável válidos são alteradas, então `\"1bad\"` vira `x1bad`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Objects, arrays and null",
+      "pt": "Objetos, arrays e null"
+     },
+     "code": "s = jsondecode('{\"name\":\"Ann\",\"scores\":[90,85],\"ok\":true}')\njsondecode('[1,2,null]')'\njsondecode('[[1,2],[3,4]]')\nr = jsondecode('[{\"a\":1},{\"a\":2}]');\nsize(r), r(2).a"
+    }
+   ],
+   "see": [
+    "jsonencode",
+    "fileread",
+    "struct",
+    "webread"
+   ]
+  },
+  "jsonencode": {
+   "summary": {
+    "en": "Converts MATLAB values into JSON text.",
+    "pt": "Converte valores do MATLAB em texto JSON."
+   },
+   "syntax": [
+    {
+     "code": "jsonText = jsonencode(value)",
+     "en": "Returns the JSON text for a struct, array, cell array, string or scalar.",
+     "pt": "Retorna o texto JSON de uma struct, array, cell array, string ou escalar."
+    },
+    {
+     "code": "jsonText = jsonencode(value, 'PrettyPrint', true)",
+     "en": "Adds line breaks and indentation.",
+     "pt": "Adiciona quebras de linha e indentação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "value",
+     "en": "Value to encode.",
+     "pt": "Valor a codificar."
+    },
+    {
+     "name": "'PrettyPrint'",
+     "en": "Logical flag for readable, indented output.",
+     "pt": "Flag lógica para uma saída legível e indentada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "jsonText",
+     "en": "Character vector holding the JSON.",
+     "pt": "Vetor de caracteres com o JSON."
+    }
+   ],
+   "description": {
+    "en": "Scalars become numbers, vectors become arrays, matrices become arrays of row arrays, and structs become objects. A struct array becomes an array of objects, and a cell array becomes an array of its elements. Logical values become `true` or `false`, `NaN` becomes `null`, and an empty array becomes `[]`. Numbers are written with 15 significant digits.",
+    "pt": "Escalares viram números, vetores viram arrays, matrizes viram arrays de arrays-linha e structs viram objetos. Um array de structs vira um array de objetos, e um cell array vira um array dos seus elementos. Valores lógicos viram `true` ou `false`, `NaN` vira `null` e um array vazio vira `[]`. Os números são escritos com 15 algarismos significativos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Encode structs and arrays",
+      "pt": "Codificar structs e arrays"
+     },
+     "code": "jsonencode(struct('a', 1, 'b', [1 2 3]))\njsonencode(struct('n', [1 2; 3 4], 's', 'x', 'e', []))\njsonencode({1, 'a', true})\njsonencode(struct('a', {1, 2}))\njsonencode(pi)"
+    }
+   ],
+   "see": [
+    "jsondecode",
+    "struct",
+    "fprintf",
+    "disp"
+   ]
+  },
+  "lin2mu": {
+   "summary": {
+    "en": "Converts linear audio samples to 8-bit mu-law.",
+    "pt": "Converte amostras de áudio lineares para mu-law de 8 bits."
+   },
+   "syntax": [
+    {
+     "code": "mu = lin2mu(y)",
+     "en": "Encodes samples in the range -1 to 1 as mu-law values from 0 to 255.",
+     "pt": "Codifica amostras no intervalo de -1 a 1 como valores mu-law de 0 a 255."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y",
+     "en": "Linear samples, normally between -1 and 1.",
+     "pt": "Amostras lineares, normalmente entre -1 e 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "mu",
+     "en": "Mu-law codes, as integers from 0 to 255.",
+     "pt": "Códigos mu-law, como inteiros de 0 a 255."
+    }
+   ],
+   "description": {
+    "en": "Mu-law companding squeezes the dynamic range so that quiet sounds keep more resolution than loud ones, which is why it is used in telephony. Eight bits per sample are enough for speech quality that would otherwise need 13 or more linear bits. Decode with `mu2lin`; the round trip is lossy.",
+    "pt": "A compressão mu-law comprime a faixa dinâmica de modo que os sons fracos mantenham mais resolução que os fortes, e por isso é usada em telefonia. Oito bits por amostra bastam para uma qualidade de voz que, em linear, exigiria 13 bits ou mais. Decodifique com `mu2lin`; a ida e volta tem perdas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Encode and decode",
+      "pt": "Codificar e decodificar"
+     },
+     "code": "y = [-1 -0.5 0 0.5 1];\nmu = lin2mu(y)\nmu2lin(mu)"
+    }
+   ],
+   "see": [
+    "mu2lin",
+    "audioread",
+    "audiowrite"
+   ]
+  },
+  "load": {
+   "summary": {
+    "en": "Loads variables from a MAT-file or numeric data from a text file.",
+    "pt": "Carrega variáveis de um arquivo MAT ou dados numéricos de um arquivo de texto."
+   },
+   "syntax": [
+    {
+     "code": "load(filename)",
+     "en": "Loads all variables of a MAT-file into the workspace.",
+     "pt": "Carrega todas as variáveis de um arquivo MAT no workspace."
+    },
+    {
+     "code": "load(filename, var1, var2)",
+     "en": "Loads only the named variables.",
+     "pt": "Carrega apenas as variáveis indicadas."
+    },
+    {
+     "code": "S = load(filename)",
+     "en": "Returns the contents in a struct instead of creating variables.",
+     "pt": "Retorna o conteúdo em uma struct em vez de criar variáveis."
+    },
+    {
+     "code": "load(filename, '-ascii')",
+     "en": "Reads a numeric text file; the variable is named after the file.",
+     "pt": "Lê um arquivo de texto numérico; a variável recebe o nome do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "File name. `.mat` is assumed when there is no extension.",
+     "pt": "Nome do arquivo. `.mat` é assumido quando não há extensão."
+    },
+    {
+     "name": "var1, ...",
+     "en": "Names of variables to load.",
+     "pt": "Nomes das variáveis a carregar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Struct with one field per loaded variable; for a numeric text file, the matrix itself.",
+     "pt": "Struct com um campo por variável carregada; para um arquivo de texto numérico, a própria matriz."
+    }
+   ],
+   "description": {
+    "en": "Prefer the form with an output, `S = load(...)`: it never overwrites existing variables and makes it clear where a name came from. Loading a text file requires that every line has the same number of numbers.",
+    "pt": "Prefira a forma com saída, `S = load(...)`: ela nunca sobrescreve variáveis existentes e deixa claro de onde vem um nome. Carregar um arquivo de texto exige que todas as linhas tenham a mesma quantidade de números."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Save, clear and load back",
+      "pt": "Salvar, limpar e carregar de volta"
+     },
+     "code": "x = 1:3; s = 'hi';\nsave('v.mat', 'x', 's');\nclear x s\nS = load('v.mat')\nload('v.mat', 'x');\nx"
+    }
+   ],
+   "see": [
+    "save",
+    "matfile",
+    "importdata",
+    "readmatrix",
+    "fileread"
+   ]
+  },
+  "matfile": {
+   "summary": {
+    "en": "Accesses variables in a MAT-file without loading the whole file.",
+    "pt": "Acessa variáveis de um arquivo MAT sem carregar o arquivo inteiro."
+   },
+   "syntax": [
+    {
+     "code": "m = matfile(filename)",
+     "en": "Creates a read-only object for an existing MAT-file.",
+     "pt": "Cria um objeto somente de leitura para um arquivo MAT existente."
+    },
+    {
+     "code": "m = matfile(filename, 'Writable', true)",
+     "en": "Allows writing to the file.",
+     "pt": "Permite gravar no arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "MAT-file name.",
+     "pt": "Nome do arquivo MAT."
+    },
+    {
+     "name": "'Writable'",
+     "en": "Set to `true` to allow changes.",
+     "pt": "Use `true` para permitir alterações."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Object whose properties are the variables in the file. Indexing such as `m.x(2, :)` reads part of a variable.",
+     "pt": "Objeto cujas propriedades são as variáveis do arquivo. Uma indexação como `m.x(2, :)` lê parte de uma variável."
+    }
+   ],
+   "description": {
+    "en": "A `matfile` object behaves like a struct whose fields are read from disk when you use them. That lets you pull a row or a slice out of a large variable without holding the entire array in memory.",
+    "pt": "Um objeto `matfile` se comporta como uma struct cujos campos são lidos do disco quando usados. Isso permite extrair uma linha ou fatia de uma variável grande sem manter o array inteiro na memória."
+   },
+   "notes": {
+    "en": "Writing through the object (`m.q = ...` or `m.x(1,1) = ...`) does not update the file in MatLivre, so use `save` to write, and `matfile` to read.",
+    "pt": "Gravar pelo objeto (`m.q = ...` ou `m.x(1,1) = ...`) não atualiza o arquivo no MatLivre; use `save` para gravar e `matfile` para ler."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read part of a variable",
+      "pt": "Ler parte de uma variável"
+     },
+     "code": "x = magic(3); y = 'abc';\nsave('mf.mat', 'x', 'y');\nm = matfile('mf.mat');\nm.x(2, :)\nm.y\nm.Properties.Writable"
+    }
+   ],
+   "see": [
+    "load",
+    "save",
+    "whos",
+    "fopen"
+   ]
+  },
+  "mu2lin": {
+   "summary": {
+    "en": "Converts 8-bit mu-law codes back to linear audio samples.",
+    "pt": "Converte códigos mu-law de 8 bits de volta para amostras de áudio lineares."
+   },
+   "syntax": [
+    {
+     "code": "y = mu2lin(mu)",
+     "en": "Decodes mu-law values from 0 to 255 into samples in the range -1 to 1.",
+     "pt": "Decodifica valores mu-law de 0 a 255 em amostras no intervalo de -1 a 1."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "mu",
+     "en": "Mu-law codes, integers from 0 to 255.",
+     "pt": "Códigos mu-law, inteiros de 0 a 255."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Linear samples, of the same size as `mu`.",
+     "pt": "Amostras lineares, do mesmo tamanho de `mu`."
+    }
+   ],
+   "description": {
+    "en": "This is the inverse of `lin2mu`, up to the quantization error. Small amplitudes are reproduced with finer steps than large ones, so the error grows with the signal level.",
+    "pt": "É a inversa de `lin2mu`, a menos do erro de quantização. Amplitudes pequenas são reproduzidas com passos mais finos que as grandes, de modo que o erro cresce com o nível do sinal."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quantization error",
+      "pt": "Erro de quantização"
+     },
+     "code": "y = [-0.9 -0.1 0 0.1 0.9];\nz = mu2lin(lin2mu(y))\nerr = abs(z - y)"
+    }
+   ],
+   "see": [
+    "lin2mu",
+    "audioread",
+    "audiowrite"
+   ]
+  },
+  "readcell": {
+   "summary": {
+    "en": "Reads a spreadsheet or delimited text file into a cell array.",
+    "pt": "Lê uma planilha ou arquivo de texto delimitado em um cell array."
+   },
+   "syntax": [
+    {
+     "code": "C = readcell(filename)",
+     "en": "Reads every cell, keeping numbers as numbers and text as text.",
+     "pt": "Lê todas as células, mantendo números como números e texto como texto."
+    },
+    {
+     "code": "C = readcell(filename, opts)",
+     "en": "Uses import options.",
+     "pt": "Usa opções de importação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Text, CSV or spreadsheet file name.",
+     "pt": "Nome de um arquivo de texto, CSV ou planilha."
+    },
+    {
+     "name": "opts",
+     "en": "Optional import options object.",
+     "pt": "Objeto opcional de opções de importação."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array with one element per cell of the file.",
+     "pt": "Cell array com um elemento por célula do arquivo."
+    }
+   ],
+   "description": {
+    "en": "Use `readcell` for data with mixed types in one block, where `readmatrix` would turn the text into `NaN`. Header rows are read as data, just like any other row. Empty cells are returned as a `missing` value.",
+    "pt": "Use `readcell` para dados de tipos mistos no mesmo bloco, onde `readmatrix` transformaria o texto em `NaN`. Linhas de cabeçalho são lidas como dados, como qualquer outra. Células vazias são devolvidas como um valor `missing`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed text and numbers",
+      "pt": "Texto e números misturados"
+     },
+     "code": "fid = fopen('m.csv', 'w'); fprintf(fid, 'name,age\\nAnn,30\\nBob,25\\n'); fclose(fid);\nC = readcell('m.csv')\nclass(C{2, 1}), class(C{2, 2})"
+    }
+   ],
+   "see": [
+    "readmatrix",
+    "readtable",
+    "writecell",
+    "textscan"
+   ]
+  },
+  "readlines": {
+   "summary": {
+    "en": "Reads the lines of a text file into a string array.",
+    "pt": "Lê as linhas de um arquivo de texto em um array de strings."
+   },
+   "syntax": [
+    {
+     "code": "lines = readlines(filename)",
+     "en": "Returns one string per line, as a column.",
+     "pt": "Retorna uma string por linha, em uma coluna."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of a text file.",
+     "pt": "Nome de um arquivo de texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lines",
+     "en": "Column string array, one element per line, without line terminators.",
+     "pt": "Array de strings em coluna, um elemento por linha, sem terminadores de linha."
+    }
+   ],
+   "description": {
+    "en": "This is the shortest way to loop over the lines of a file: `for ln = readlines(f)'`. Because the result is a string array, you can use `contains`, `startsWith`, `split` and `str2double` on all lines at once.",
+    "pt": "É a maneira mais curta de percorrer as linhas de um arquivo: `for ln = readlines(f)'`. Como o resultado é um array de strings, é possível usar `contains`, `startsWith`, `split` e `str2double` em todas as linhas de uma vez."
+   },
+   "notes": {
+    "en": "When the file ends with a newline, MatLivre includes a final empty string in the result.",
+    "pt": "Quando o arquivo termina com quebra de linha, o MatLivre inclui uma string vazia no fim do resultado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Filter lines",
+      "pt": "Filtrar linhas"
+     },
+     "code": "fid = fopen('log.txt', 'w');\nfprintf(fid, 'ok 1\\nerror 2\\nok 3\\nerror 4');\nfclose(fid);\nL = readlines('log.txt')\nL(startsWith(L, 'error'))"
+    }
+   ],
+   "see": [
+    "fileread",
+    "fgetl",
+    "splitlines",
+    "readcell",
+    "startsWith"
+   ]
+  }
+ }
+}

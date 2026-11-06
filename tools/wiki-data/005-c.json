@@ -1,0 +1,1189 @@
+{
+ "functions": {
+  "abyss": {
+   "summary": {
+    "en": "Returns the abyss colormap, which runs from dark navy to a bright blue.",
+    "pt": "Retorna o colormap abyss, que vai de azul-marinho escuro a um azul vivo."
+   },
+   "syntax": [
+    {
+     "code": "map = abyss",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = abyss(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row is one color, ordered from the lowest to the highest data value. Apply the map with `colormap(abyss(64))`. All colors are blue-dominant, so it suits data where a dark-to-light progression is enough and warm hues would distract.",
+    "pt": "Cada linha é uma cor, ordenada do menor ao maior valor dos dados. Aplique o mapa com `colormap(abyss(64))`. Todas as cores têm predominância de azul, o que serve a dados em que basta uma progressão de escuro a claro e tons quentes distrairiam."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Four colors",
+      "pt": "Quatro cores"
+     },
+     "code": "c = abyss(4)\nsize(abyss)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "bone"
+   ]
+  },
+  "alim": {
+   "summary": {
+    "en": "Gets or sets the alpha (transparency) limits of the current axes.",
+    "pt": "Obtém ou define os limites de alfa (transparência) dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "alim([amin amax])",
+     "en": "Sets the alpha limits.",
+     "pt": "Define os limites de alfa."
+    },
+    {
+     "code": "lims = alim",
+     "en": "Returns the current limits.",
+     "pt": "Retorna os limites atuais."
+    },
+    {
+     "code": "alim auto",
+     "en": "Chooses limits from the data.",
+     "pt": "Escolhe os limites a partir dos dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[amin amax]",
+     "en": "Two-element vector. Data at or below `amin` is fully transparent and at or above `amax` is fully opaque, when the object maps its `AlphaData` through the alphamap.",
+     "pt": "Vetor de dois elementos. Dados em `amin` ou abaixo ficam totalmente transparentes, e em `amax` ou acima totalmente opacos, quando o objeto mapeia seu `AlphaData` pelo alphamap."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Current alpha limits.",
+     "pt": "Limites atuais de alfa."
+    }
+   ],
+   "description": {
+    "en": "The limits matter for objects whose transparency comes from per-point `AlphaData` with scaled mapping. They play the same role for transparency as `clim` does for color.",
+    "pt": "Os limites importam para objetos cuja transparência vem de `AlphaData` por ponto com mapeamento escalado. Fazem para a transparência o mesmo papel que `clim` faz para a cor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the limits",
+      "pt": "Definindo os limites"
+     },
+     "code": "[X, Y, Z] = peaks(20);\nsurf(X, Y, Z, 'FaceAlpha', 'flat', 'AlphaData', Z);\nalim([-5 5])\ndisp(alim)"
+    }
+   ],
+   "see": [
+    "alpha",
+    "alphamap",
+    "clim",
+    "surf"
+   ]
+  },
+  "alpha": {
+   "summary": {
+    "en": "Sets the transparency of faces of surfaces, patches and images in the current axes.",
+    "pt": "Define a transparência das faces de superfícies, patches e imagens nos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "alpha(value)",
+     "en": "Sets a uniform transparency for all such objects.",
+     "pt": "Define uma transparência uniforme para todos esses objetos."
+    },
+    {
+     "code": "alpha(object, value)",
+     "en": "Applies only to the given object.",
+     "pt": "Aplica-se só ao objeto dado."
+    },
+    {
+     "code": "alpha('flat')",
+     "en": "Uses per-face `AlphaData`.",
+     "pt": "Usa o `AlphaData` por face."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "value",
+     "en": "Scalar from 0 (fully transparent) to 1 (fully opaque), or an array of the same size as the data.",
+     "pt": "Escalar de 0 (totalmente transparente) a 1 (totalmente opaco), ou array do mesmo tamanho dos dados."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A value of 0.5 makes the surface see-through, so objects behind it are visible. Transparency is a property of the object, so `alpha` is a shortcut for setting `FaceAlpha` (or `AlphaData` for images).",
+    "pt": "O valor 0,5 deixa a superfície translúcida, permitindo ver objetos atrás dela. A transparência é uma propriedade do objeto, então `alpha` é um atalho para definir `FaceAlpha` (ou `AlphaData` em imagens)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Half-transparent surface",
+      "pt": "Superfície meio transparente"
+     },
+     "code": "surf(peaks(20))\nalpha(0.5)\nh = findobj(gca, 'Type', 'surface');\ndisp(h.FaceAlpha)"
+    }
+   ],
+   "see": [
+    "alim",
+    "alphamap",
+    "surf",
+    "patch"
+   ]
+  },
+  "alphamap": {
+   "summary": {
+    "en": "Gets or sets the alphamap, the table that turns data values into transparency.",
+    "pt": "Obtém ou define o alphamap, a tabela que converte valores de dados em transparência."
+   },
+   "syntax": [
+    {
+     "code": "alphamap(name)",
+     "en": "Sets a predefined map such as `'rampup'`, `'rampdown'`, `'vup'`, `'vdown'`, `'increase'`, `'decrease'`, `'opaque'`.",
+     "pt": "Define um mapa predefinido, como `'rampup'`, `'rampdown'`, `'vup'`, `'vdown'`, `'increase'`, `'decrease'`, `'opaque'`."
+    },
+    {
+     "code": "alphamap(A)",
+     "en": "Sets a custom map from a vector of values between 0 and 1.",
+     "pt": "Define um mapa personalizado a partir de um vetor de valores entre 0 e 1."
+    },
+    {
+     "code": "A = alphamap",
+     "en": "Returns the current alphamap.",
+     "pt": "Retorna o alphamap atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of a predefined shape.",
+     "pt": "Nome de um formato predefinido."
+    },
+    {
+     "name": "A",
+     "en": "Vector of alpha values between 0 and 1.",
+     "pt": "Vetor de valores de alfa entre 0 e 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Column vector with the current alphamap.",
+     "pt": "Vetor coluna com o alphamap atual."
+    }
+   ],
+   "description": {
+    "en": "The alphamap is to transparency what the colormap is to color: each entry corresponds to a range of data values (set by `alim`) and gives the opacity for it. `'rampup'` goes from transparent to opaque over 64 entries.",
+    "pt": "O alphamap está para a transparência assim como o colormap está para a cor: cada entrada corresponde a uma faixa de valores dos dados (definida por `alim`) e dá a opacidade dela. `'rampup'` vai de transparente a opaco em 64 entradas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A rising ramp",
+      "pt": "Uma rampa crescente"
+     },
+     "code": "alphamap('rampup')\nm = alphamap;\ndisp(size(m))\ndisp(m(1:3)')"
+    }
+   ],
+   "see": [
+    "alim",
+    "alpha",
+    "colormap"
+   ]
+  },
+  "annotation": {
+   "summary": {
+    "en": "Adds shapes and text, such as arrows and text boxes, to a figure.",
+    "pt": "Adiciona formas e texto, como setas e caixas de texto, a uma figura."
+   },
+   "syntax": [
+    {
+     "code": "annotation(type)",
+     "en": "Creates an annotation of the given type with default position.",
+     "pt": "Cria uma anotação do tipo dado, na posição padrão."
+    },
+    {
+     "code": "annotation(type, position)",
+     "en": "Places it at `[x y w h]` or, for lines and arrows, at `x` and `y` endpoints.",
+     "pt": "Posiciona em `[x y w h]` ou, para linhas e setas, nos extremos `x` e `y`."
+    },
+    {
+     "code": "annotation(___, Name, Value)",
+     "en": "Sets properties such as `'String'`.",
+     "pt": "Define propriedades como `'String'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "type",
+     "en": "`'line'`, `'arrow'`, `'doublearrow'`, `'textarrow'`, `'textbox'`, `'rectangle'` or `'ellipse'`.",
+     "pt": "`'line'`, `'arrow'`, `'doublearrow'`, `'textarrow'`, `'textbox'`, `'rectangle'` ou `'ellipse'`."
+    },
+    {
+     "name": "position",
+     "en": "Normalized figure units, from 0 to 1, measured from the lower-left corner of the figure.",
+     "pt": "Unidades normalizadas da figura, de 0 a 1, medidas a partir do canto inferior esquerdo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the annotation object.",
+     "pt": "Handle do objeto de anotação."
+    }
+   ],
+   "description": {
+    "en": "Annotations belong to the figure, not to the axes, so they stay put when the data limits change. Positions are in the figure's normalized coordinates rather than in data units.",
+    "pt": "As anotações pertencem à figura, não aos eixos, então permanecem no lugar quando os limites dos dados mudam. As posições estão em coordenadas normalizadas da figura, e não em unidades dos dados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A text box and an arrow",
+      "pt": "Uma caixa de texto e uma seta"
+     },
+     "code": "plot(1:5)\nannotation('textbox', [0.3 0.6 0.2 0.1], 'String', 'Note');\nannotation('arrow', [0.3 0.5], [0.3 0.5]);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "text",
+    "title",
+    "legend",
+    "xline"
+   ]
+  },
+  "autumn": {
+   "summary": {
+    "en": "Returns the autumn colormap, a ramp from red through orange to yellow.",
+    "pt": "Retorna o colormap autumn, uma rampa do vermelho ao amarelo passando pelo laranja."
+   },
+   "syntax": [
+    {
+     "code": "map = autumn",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = autumn(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row of the result is one color, ordered from the lowest to the highest data value. Pass the matrix to `colormap` to apply it, as in `colormap(autumn(64))`. A smaller `m` gives visibly distinct bands, which suits contour-like displays.",
+    "pt": "Cada linha do resultado é uma cor, ordenada do menor ao maior valor dos dados. Passe a matriz a `colormap` para aplicá-la, como em `colormap(autumn(64))`. Um `m` menor dá faixas bem distintas, o que combina com exibições do tipo contorno."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three colors",
+      "pt": "Três cores"
+     },
+     "code": "autumn(3)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "jet",
+    "spring",
+    "summer"
+   ]
+  },
+  "axes": {
+   "summary": {
+    "en": "Creates axes in the current figure and can make existing axes current.",
+    "pt": "Cria eixos na figura atual e pode tornar eixos existentes os atuais."
+   },
+   "syntax": [
+    {
+     "code": "axes",
+     "en": "Creates default axes and makes them current.",
+     "pt": "Cria eixos padrão e os torna atuais."
+    },
+    {
+     "code": "axes('Position', pos)",
+     "en": "Creates axes at `[left bottom width height]` in normalized units.",
+     "pt": "Cria eixos em `[esquerda base largura altura]` em unidades normalizadas."
+    },
+    {
+     "code": "axes(ax)",
+     "en": "Makes the existing axes `ax` current.",
+     "pt": "Torna atuais os eixos `ax` já existentes."
+    },
+    {
+     "code": "ax = axes(___)",
+     "en": "Also returns the axes handle.",
+     "pt": "Também retorna o handle dos eixos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'Position'",
+     "en": "Four-element vector of normalized units, between 0 and 1.",
+     "pt": "Vetor de quatro elementos em unidades normalizadas, entre 0 e 1."
+    },
+    {
+     "name": "ax",
+     "en": "Handle of an existing axes object.",
+     "pt": "Handle de um objeto de eixos existente."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ax",
+     "en": "Handle of the axes.",
+     "pt": "Handle dos eixos."
+    }
+   ],
+   "description": {
+    "en": "Plotting commands draw in the current axes. Creating several axes at chosen positions lets you place plots freely, including an inset inside a larger plot. To pass a target to plotting functions without changing the current axes, give the handle as their first argument, as in `plot(ax, x, y)`.",
+    "pt": "Os comandos de plotagem desenham nos eixos atuais. Criar vários eixos em posições escolhidas permite dispor gráficos livremente, inclusive um gráfico menor dentro de outro maior. Para direcionar uma função de plotagem sem mudar os eixos atuais, passe o handle como primeiro argumento, como em `plot(ax, x, y)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Axes in a chosen position",
+      "pt": "Eixos em posição escolhida"
+     },
+     "code": "ax = axes('Position', [0.1 0.1 0.5 0.5]);\nplot(ax, 1:5)\ndisp(ax.Position)"
+    }
+   ],
+   "see": [
+    "subplot",
+    "gca",
+    "figure",
+    "tiledlayout"
+   ]
+  },
+  "axis": {
+   "summary": {
+    "en": "Sets axis limits and scaling, or gets the current limits.",
+    "pt": "Define limites e escala dos eixos, ou obtém os limites atuais."
+   },
+   "syntax": [
+    {
+     "code": "axis([xmin xmax ymin ymax])",
+     "en": "Sets the x and y limits (add `zmin zmax` for 3-D).",
+     "pt": "Define os limites de x e y (acrescente `zmin zmax` em 3-D)."
+    },
+    {
+     "code": "lims = axis",
+     "en": "Returns the current limits.",
+     "pt": "Retorna os limites atuais."
+    },
+    {
+     "code": "axis style",
+     "en": "Applies a style such as `tight`, `equal`, `square`, `image`, `padded`, `ij`, `xy`, `auto`, `manual`.",
+     "pt": "Aplica um estilo como `tight`, `equal`, `square`, `image`, `padded`, `ij`, `xy`, `auto`, `manual`."
+    },
+    {
+     "code": "axis on / axis off",
+     "en": "Shows or hides the axis lines, ticks and labels.",
+     "pt": "Mostra ou oculta linhas, marcas e rótulos dos eixos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "limits",
+     "en": "Vector of limits. Use `-inf` or `inf` to leave a bound automatic.",
+     "pt": "Vetor de limites. Use `-inf` ou `inf` para manter um limite automático."
+    },
+    {
+     "name": "style",
+     "en": "Option word, given in command form: `axis equal`.",
+     "pt": "Palavra de opção, em forma de comando: `axis equal`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Row vector `[xmin xmax ymin ymax]`, with the z limits added for 3-D axes.",
+     "pt": "Vetor linha `[xmin xmax ymin ymax]`, com os limites de z acrescentados em eixos 3-D."
+    }
+   ],
+   "description": {
+    "en": "`axis tight` fits the limits to the data, `axis equal` gives all axes the same unit length so circles look round, and `axis square` makes the axes box square. `axis ij` puts the origin at the upper left, as for matrices and images.\n\nThe individual limits are also available through `xlim`, `ylim` and `zlim`.",
+    "pt": "`axis tight` ajusta os limites aos dados, `axis equal` dá o mesmo comprimento unitário a todos os eixos para que círculos pareçam redondos, e `axis square` torna a caixa dos eixos quadrada. `axis ij` coloca a origem no canto superior esquerdo, como em matrizes e imagens.\n\nOs limites individuais também estão disponíveis por `xlim`, `ylim` e `zlim`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting and reading the limits",
+      "pt": "Definindo e lendo os limites"
+     },
+     "code": "plot(1:10)\naxis([0 5 0 20])\ndisp(axis)"
+    }
+   ],
+   "see": [
+    "xlim",
+    "ylim",
+    "daspect",
+    "grid"
+   ]
+  },
+  "bone": {
+   "summary": {
+    "en": "Returns the bone colormap, a gray scale with a slight blue tint.",
+    "pt": "Retorna o colormap bone, uma escala de cinza com leve tom azulado."
+   },
+   "syntax": [
+    {
+     "code": "map = bone",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = bone(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row of the result is one color, ordered from the lowest to the highest data value. Pass the matrix to `colormap` to apply it, as in `colormap(bone(64))`. A smaller `m` gives visibly distinct bands, which suits contour-like displays.",
+    "pt": "Cada linha do resultado é uma cor, ordenada do menor ao maior valor dos dados. Passe a matriz a `colormap` para aplicá-la, como em `colormap(bone(64))`. Um `m` menor dá faixas bem distintas, o que combina com exibições do tipo contorno."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three colors",
+      "pt": "Três cores"
+     },
+     "code": "bone(3)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "jet",
+    "gray",
+    "hot"
+   ]
+  },
+  "box": {
+   "summary": {
+    "en": "Shows or hides the outline around the current axes.",
+    "pt": "Mostra ou oculta o contorno em volta dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "box on",
+     "en": "Draws the box.",
+     "pt": "Desenha a caixa."
+    },
+    {
+     "code": "box off",
+     "en": "Removes it.",
+     "pt": "Remove-a."
+    },
+    {
+     "code": "box",
+     "en": "Toggles the state.",
+     "pt": "Alterna o estado."
+    },
+    {
+     "code": "box(ax, ___)",
+     "en": "Applies to the axes `ax`.",
+     "pt": "Aplica-se aos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ax",
+     "en": "Optional axes handle.",
+     "pt": "Handle de eixos opcional."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The box is the outline of the plot region. With `box on`, the top and right edges get lines and tick marks, which is useful for figures meant for print. The state is held in the `Box` property of the axes.",
+    "pt": "A caixa é o contorno da região do gráfico. Com `box on`, as bordas superior e direita recebem linhas e marcas, o que é útil em figuras para impressão. O estado fica na propriedade `Box` dos eixos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Turning the box on",
+      "pt": "Ligando a caixa"
+     },
+     "code": "plot(1:5)\nbox on\ndisp(get(gca, 'Box'))"
+    }
+   ],
+   "see": [
+    "axis",
+    "grid",
+    "axes"
+   ]
+  },
+  "brighten": {
+   "summary": {
+    "en": "Makes a colormap brighter or darker.",
+    "pt": "Torna um colormap mais claro ou mais escuro."
+   },
+   "syntax": [
+    {
+     "code": "brighten(beta)",
+     "en": "Changes the current colormap.",
+     "pt": "Altera o colormap atual."
+    },
+    {
+     "code": "newmap = brighten(map, beta)",
+     "en": "Returns a modified copy of `map`.",
+     "pt": "Retorna uma cópia modificada de `map`."
+    },
+    {
+     "code": "brighten(fig, beta)",
+     "en": "Changes the colormap of a figure.",
+     "pt": "Altera o colormap de uma figura."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "map",
+     "en": "Colormap matrix.",
+     "pt": "Matriz de colormap."
+    },
+    {
+     "name": "beta",
+     "en": "Number in the open range from -1 to 1. Positive values brighten, negative values darken. Values near 1 or -1 are extreme.",
+     "pt": "Número entre -1 e 1, exclusive. Valores positivos clareiam e negativos escurecem. Valores próximos de 1 ou -1 são extremos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newmap",
+     "en": "Adjusted colormap with the same size as `map`.",
+     "pt": "Colormap ajustado, do mesmo tamanho de `map`."
+    }
+   ],
+   "description": {
+    "en": "The colors are moved by a power-law curve, so black and white stay fixed while the mid-tones shift. Repeated calls compound the change.",
+    "pt": "As cores são deslocadas por uma curva do tipo potência, então preto e branco permanecem fixos enquanto os tons intermediários se movem. Chamadas repetidas acumulam a mudança."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Brightening a gray map",
+      "pt": "Clareando um mapa de cinzas"
+     },
+     "code": "c = brighten(gray(3), 0.5)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "contrast",
+    "gray"
+   ]
+  },
+  "camdolly": {
+   "summary": {
+    "en": "Moves the camera position and target together, as a camera would on a dolly.",
+    "pt": "Move juntos a posição e o alvo da câmera, como uma câmera sobre um carrinho."
+   },
+   "syntax": [
+    {
+     "code": "camdolly(dx, dy, dz)",
+     "en": "Moves the camera and its target by the given amounts, in camera coordinates.",
+     "pt": "Move a câmera e seu alvo pelas quantidades dadas, em coordenadas da câmera."
+    },
+    {
+     "code": "camdolly(dx, dy, dz, 'fixtarget')",
+     "en": "Moves only the camera; the target stays.",
+     "pt": "Move só a câmera; o alvo permanece."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "dx, dy, dz",
+     "en": "Distances to move to the right, up and toward the target.",
+     "pt": "Distâncias a mover para a direita, para cima e em direção ao alvo."
+    },
+    {
+     "name": "'fixtarget'",
+     "en": "Optional: keep the target in place.",
+     "pt": "Opcional: mantém o alvo no lugar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A dolly shift changes the viewpoint without rotating the line of sight. With `'fixtarget'`, only the camera moves, so the view direction changes to keep looking at the same point.",
+    "pt": "Um deslocamento de dolly muda o ponto de vista sem girar a linha de visada. Com `'fixtarget'`, só a câmera se move, e a direção da vista muda para continuar olhando o mesmo ponto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Move the camera up",
+      "pt": "Subindo a câmera"
+     },
+     "code": "surf(peaks(20))\ncamdolly(0, 2, 0)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "campos",
+    "camtarget",
+    "camorbit",
+    "campan",
+    "camzoom"
+   ]
+  },
+  "camlight": {
+   "summary": {
+    "en": "Creates or moves a light source relative to the camera.",
+    "pt": "Cria ou move uma fonte de luz em relação à câmera."
+   },
+   "syntax": [
+    {
+     "code": "camlight",
+     "en": "Creates a light to the right of and above the camera.",
+     "pt": "Cria uma luz à direita e acima da câmera."
+    },
+    {
+     "code": "camlight(direction)",
+     "en": "Places it at `'headlight'`, `'right'`, `'left'`, with `'right'` as the default.",
+     "pt": "Posiciona em `'headlight'`, `'right'` ou `'left'`, sendo `'right'` o padrão."
+    },
+    {
+     "code": "camlight(az, el)",
+     "en": "Places it at the given azimuth and elevation, in degrees, relative to the camera.",
+     "pt": "Posiciona no azimute e elevação dados, em graus, em relação à câmera."
+    },
+    {
+     "code": "h = camlight(___)",
+     "en": "Also returns the light handle.",
+     "pt": "Também retorna o handle da luz."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "direction",
+     "en": "Placement name.",
+     "pt": "Nome da posição."
+    },
+    {
+     "name": "az, el",
+     "en": "Angles in degrees.",
+     "pt": "Ângulos em graus."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the light object.",
+     "pt": "Handle do objeto de luz."
+    }
+   ],
+   "description": {
+    "en": "The light is positioned relative to the camera, so it follows the view as you rotate the plot, unless you call `camlight` again. Lighting has a visible effect only on surfaces and patches with `lighting` set to `gouraud` or `flat`.",
+    "pt": "A luz é posicionada em relação à câmera, então acompanha a vista quando o gráfico é girado, a menos que `camlight` seja chamada de novo. A iluminação só tem efeito visível em superfícies e patches com `lighting` definido como `gouraud` ou `flat`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A light on a surface",
+      "pt": "Uma luz sobre uma superfície"
+     },
+     "code": "surf(peaks(30))\nshading interp\nlighting gouraud\nh = camlight('right');\ndisp(class(h))"
+    }
+   ],
+   "see": [
+    "light",
+    "lighting",
+    "surfl",
+    "material"
+   ]
+  },
+  "camlookat": {
+   "summary": {
+    "en": "Moves the camera and target so that given objects fill the view.",
+    "pt": "Move a câmera e o alvo para que os objetos dados preencham a vista."
+   },
+   "syntax": [
+    {
+     "code": "camlookat",
+     "en": "Frames the objects in the current axes.",
+     "pt": "Enquadra os objetos dos eixos atuais."
+    },
+    {
+     "code": "camlookat(obj)",
+     "en": "Frames the object or axes `obj`.",
+     "pt": "Enquadra o objeto ou os eixos `obj`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Handle of a graphics object, or of axes.",
+     "pt": "Handle de um objeto gráfico ou de eixos."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The camera target moves to the center of the objects and the camera is moved along the view direction, keeping the same orientation, until the objects fit. It is handy after changing the camera so much that the plot is out of view.",
+    "pt": "O alvo da câmera vai para o centro dos objetos e a câmera é movida ao longo da direção de visada, mantendo a orientação, até os objetos caberem. É útil depois de mexer tanto na câmera que o gráfico sai da vista."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Framing a surface",
+      "pt": "Enquadrando uma superfície"
+     },
+     "code": "h = surf(peaks(10));\ncamlookat(h)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "camtarget",
+    "campos",
+    "camzoom",
+    "camdolly"
+   ]
+  },
+  "camorbit": {
+   "summary": {
+    "en": "Rotates the camera around the camera target.",
+    "pt": "Gira a câmera em torno do alvo da câmera."
+   },
+   "syntax": [
+    {
+     "code": "camorbit(dtheta, dphi)",
+     "en": "Rotates by `dtheta` degrees horizontally and `dphi` degrees vertically.",
+     "pt": "Gira `dtheta` graus na horizontal e `dphi` graus na vertical."
+    },
+    {
+     "code": "camorbit(dtheta, dphi, 'data', axis)",
+     "en": "Rotates around the given axis, in data coordinates.",
+     "pt": "Gira em torno do eixo dado, em coordenadas de dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "dtheta",
+     "en": "Horizontal rotation in degrees.",
+     "pt": "Rotação horizontal em graus."
+    },
+    {
+     "name": "dphi",
+     "en": "Vertical rotation in degrees.",
+     "pt": "Rotação vertical em graus."
+    },
+    {
+     "name": "axis",
+     "en": "Rotation axis as a 3-element vector.",
+     "pt": "Eixo de rotação como vetor de 3 elementos."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The camera moves along a sphere around the target while still looking at it, so the object appears to turn. A pair of calls with opposite angles returns to the starting view.",
+    "pt": "A câmera se move sobre uma esfera em torno do alvo sem deixar de olhá-lo, e o objeto parece girar. Um par de chamadas com ângulos opostos retorna à vista inicial."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Turning the view",
+      "pt": "Girando a vista"
+     },
+     "code": "surf(peaks(20))\ncamorbit(45, 0)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "campos",
+    "camtarget",
+    "campan",
+    "camroll",
+    "view"
+   ]
+  },
+  "campan": {
+   "summary": {
+    "en": "Rotates the camera target around the camera position.",
+    "pt": "Gira o alvo da câmera em torno da posição da câmera."
+   },
+   "syntax": [
+    {
+     "code": "campan(dtheta, dphi)",
+     "en": "Pans the view by `dtheta` degrees horizontally and `dphi` degrees vertically.",
+     "pt": "Panoramiza a vista `dtheta` graus na horizontal e `dphi` graus na vertical."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "dtheta",
+     "en": "Horizontal rotation in degrees.",
+     "pt": "Rotação horizontal em graus."
+    },
+    {
+     "name": "dphi",
+     "en": "Vertical rotation in degrees.",
+     "pt": "Rotação vertical em graus."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "This is the opposite of `camorbit`: the camera stays where it is and turns, like a person looking around, so the target moves.",
+    "pt": "É o oposto de `camorbit`: a câmera fica onde está e gira, como uma pessoa olhando ao redor, de modo que o alvo se move."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Looking to the side",
+      "pt": "Olhando para o lado"
+     },
+     "code": "surf(peaks(20))\ncampan(10, 0)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "camorbit",
+    "camtarget",
+    "camdolly",
+    "campos"
+   ]
+  },
+  "campos": {
+   "summary": {
+    "en": "Gets or sets the camera position of the current axes.",
+    "pt": "Obtém ou define a posição da câmera dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "campos([x y z])",
+     "en": "Sets the camera position, in data coordinates.",
+     "pt": "Define a posição da câmera, em coordenadas de dados."
+    },
+    {
+     "code": "pos = campos",
+     "en": "Returns the current position.",
+     "pt": "Retorna a posição atual."
+    },
+    {
+     "code": "campos('auto')",
+     "en": "Restores the automatic position.",
+     "pt": "Restaura a posição automática."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[x y z]",
+     "en": "Three-element vector.",
+     "pt": "Vetor de três elementos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pos",
+     "en": "Row vector with the camera position.",
+     "pt": "Vetor linha com a posição da câmera."
+    }
+   ],
+   "description": {
+    "en": "The camera looks from this point toward the camera target, so moving it changes the viewing angle. Together with `camtarget`, `camup` and `camva`, it defines the whole view of a 3-D plot.",
+    "pt": "A câmera olha deste ponto para o alvo da câmera, então movê-la muda o ângulo de visão. Junto com `camtarget`, `camup` e `camva`, define toda a vista de um gráfico 3-D."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the position",
+      "pt": "Definindo a posição"
+     },
+     "code": "surf(peaks(10))\ncampos([20 -20 15])\ndisp(campos)"
+    }
+   ],
+   "see": [
+    "camtarget",
+    "camup",
+    "camva",
+    "view"
+   ]
+  },
+  "camproj": {
+   "summary": {
+    "en": "Gets or sets the projection type of the camera.",
+    "pt": "Obtém ou define o tipo de projeção da câmera."
+   },
+   "syntax": [
+    {
+     "code": "camproj('orthographic')",
+     "en": "Uses parallel projection.",
+     "pt": "Usa projeção paralela."
+    },
+    {
+     "code": "camproj('perspective')",
+     "en": "Uses perspective projection, where distant parts look smaller.",
+     "pt": "Usa projeção em perspectiva, em que partes distantes parecem menores."
+    },
+    {
+     "code": "proj = camproj",
+     "en": "Returns the current projection.",
+     "pt": "Retorna a projeção atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "type",
+     "en": "`'orthographic'` or `'perspective'`.",
+     "pt": "`'orthographic'` ou `'perspective'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "proj",
+     "en": "Character vector with the current projection.",
+     "pt": "Vetor de caracteres com a projeção atual."
+    }
+   ],
+   "description": {
+    "en": "Orthographic projection keeps parallel lines parallel and sizes independent of distance, which is typical for technical plots. Perspective gives a more natural look for scenes.",
+    "pt": "A projeção ortográfica mantém retas paralelas e tamanhos independentes da distância, o que é típico de gráficos técnicos. A perspectiva dá um aspecto mais natural a cenas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Switching projection",
+      "pt": "Trocando a projeção"
+     },
+     "code": "surf(peaks(10))\ncamproj('orthographic')\ndisp(camproj)"
+    }
+   ],
+   "see": [
+    "campos",
+    "camva",
+    "view"
+   ]
+  },
+  "camroll": {
+   "summary": {
+    "en": "Rotates the camera around the line of sight.",
+    "pt": "Gira a câmera em torno da linha de visada."
+   },
+   "syntax": [
+    {
+     "code": "camroll(dtheta)",
+     "en": "Rolls the camera by `dtheta` degrees.",
+     "pt": "Faz a câmera rolar `dtheta` graus."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "dtheta",
+     "en": "Roll angle in degrees.",
+     "pt": "Ângulo de rolagem em graus."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The camera keeps its position and target but turns around the axis that points at the target, which tilts the image like a tilted head. It changes the up vector, the one read by `camup`.",
+    "pt": "A câmera mantém posição e alvo, mas gira em torno do eixo que aponta para o alvo, o que inclina a imagem como uma cabeça inclinada. Isso altera o vetor para cima, aquele lido por `camup`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tilting the view",
+      "pt": "Inclinando a vista"
+     },
+     "code": "surf(peaks(20))\ncamroll(30)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "camup",
+    "camorbit",
+    "campan"
+   ]
+  },
+  "camtarget": {
+   "summary": {
+    "en": "Gets or sets the point the camera looks at.",
+    "pt": "Obtém ou define o ponto para o qual a câmera olha."
+   },
+   "syntax": [
+    {
+     "code": "camtarget([x y z])",
+     "en": "Sets the target, in data coordinates.",
+     "pt": "Define o alvo, em coordenadas de dados."
+    },
+    {
+     "code": "t = camtarget",
+     "en": "Returns the current target.",
+     "pt": "Retorna o alvo atual."
+    },
+    {
+     "code": "camtarget('auto')",
+     "en": "Restores the automatic target.",
+     "pt": "Restaura o alvo automático."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[x y z]",
+     "en": "Three-element vector.",
+     "pt": "Vetor de três elementos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Row vector with the target.",
+     "pt": "Vetor linha com o alvo."
+    }
+   ],
+   "description": {
+    "en": "The target is the point at the center of the view. Changing it turns the camera toward another place without moving the camera itself. By default it is the center of the axes box.",
+    "pt": "O alvo é o ponto no centro da vista. Mudá-lo vira a câmera para outro lugar sem mover a câmera em si. Por padrão é o centro da caixa dos eixos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the target",
+      "pt": "Definindo o alvo"
+     },
+     "code": "surf(peaks(10))\ncamtarget([5 5 0])\ndisp(camtarget)"
+    }
+   ],
+   "see": [
+    "campos",
+    "camup",
+    "campan",
+    "camlookat"
+   ]
+  },
+  "camup": {
+   "summary": {
+    "en": "Gets or sets the up direction of the camera.",
+    "pt": "Obtém ou define a direção para cima da câmera."
+   },
+   "syntax": [
+    {
+     "code": "camup([x y z])",
+     "en": "Sets the up vector.",
+     "pt": "Define o vetor para cima."
+    },
+    {
+     "code": "v = camup",
+     "en": "Returns the current up vector.",
+     "pt": "Retorna o vetor para cima atual."
+    },
+    {
+     "code": "camup('auto')",
+     "en": "Restores the automatic up vector.",
+     "pt": "Restaura o vetor para cima automático."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[x y z]",
+     "en": "Three-element vector. Only its direction matters.",
+     "pt": "Vetor de três elementos. Só a direção importa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Row vector with the up direction.",
+     "pt": "Vetor linha com a direção para cima."
+    }
+   ],
+   "description": {
+    "en": "The up vector decides which direction in the data appears vertical on the screen. For example, `[0 0 1]` keeps the z axis pointing up. Setting it is the same as rolling the camera.",
+    "pt": "O vetor para cima decide qual direção dos dados aparece na vertical da tela. Por exemplo, `[0 0 1]` mantém o eixo z apontando para cima. Defini-lo equivale a rolar a câmera."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the up vector",
+      "pt": "Definindo o vetor para cima"
+     },
+     "code": "surf(peaks(10))\ncamup([0 1 0])\ndisp(camup)"
+    }
+   ],
+   "see": [
+    "camroll",
+    "campos",
+    "camtarget",
+    "camva"
+   ]
+  }
+ }
+}

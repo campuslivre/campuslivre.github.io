@@ -1,0 +1,559 @@
+{
+  "functions": {
+    "ezcontour": {
+      "summary": {"en": "Contour plot of a function of two variables given as a handle or expression, without building a grid.", "pt": "Gráfico de contorno de uma função de duas variáveis dada como handle ou expressão, sem montar uma grade."},
+      "syntax": [
+        {"code": "ezcontour(f)", "en": "Draws contour lines of `f(x,y)` over the default domain, `-2*pi < x < 2*pi` and `-2*pi < y < 2*pi`.", "pt": "Desenha as curvas de nível de `f(x,y)` no domínio padrão, `-2*pi < x < 2*pi` e `-2*pi < y < 2*pi`."},
+        {"code": "ezcontour(f, domain)", "en": "Uses `[min max]` for both variables, or `[xmin xmax ymin ymax]`.", "pt": "Usa `[min max]` para as duas variáveis, ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezcontour(___)", "en": "Also returns the graphics handle.", "pt": "Também retorna o handle gráfico."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector that depends on `x` and `y`. It must accept arrays.", "pt": "Handle de função ou vetor de caracteres que depende de `x` e `y`. Deve aceitar arrays."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the contour object.", "pt": "Handle do objeto de contorno."}
+      ],
+      "description": {
+        "en": "`ezcontour` evaluates the function on an internal grid and draws its level curves, so there is no need to call `meshgrid` first. It is an older convenience function; `fcontour` does the same job with a different default domain and more options.",
+        "pt": "`ezcontour` avalia a função em uma grade interna e desenha suas curvas de nível, sem necessidade de chamar `meshgrid` antes. É uma função de conveniência antiga; `fcontour` faz o mesmo trabalho, com outro domínio padrão e mais opções."
+      },
+      "examples": [
+        {"title": {"en": "Saddle surface", "pt": "Superfície de sela"}, "silent": true, "code": "ezcontour(@(x,y) x.^2 - y.^2, [-2 2])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezcontourf", "fcontour", "contour", "ezsurf", "meshgrid"]
+    },
+    "ezcontourf": {
+      "summary": {"en": "Filled contour plot of a function of two variables given as a handle or expression.", "pt": "Gráfico de contorno preenchido de uma função de duas variáveis dada como handle ou expressão."},
+      "syntax": [
+        {"code": "ezcontourf(f)", "en": "Draws filled contours of `f(x,y)` over the default domain, `-2*pi` to `2*pi` in both variables.", "pt": "Desenha contornos preenchidos de `f(x,y)` no domínio padrão, de `-2*pi` a `2*pi` nas duas variáveis."},
+        {"code": "ezcontourf(f, domain)", "en": "Restricts the plot to `[min max]` or `[xmin xmax ymin ymax]`.", "pt": "Restringe o gráfico a `[min max]` ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezcontourf(___)", "en": "Also returns the graphics handle.", "pt": "Também retorna o handle gráfico."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x` and `y`, written with element-wise operators.", "pt": "Handle de função ou vetor de caracteres em `x` e `y`, escrito com operadores elemento a elemento."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the contour object.", "pt": "Handle do objeto de contorno."}
+      ],
+      "description": {
+        "en": "The function is sampled on an automatic grid and the regions between level curves are filled with colors from the current colormap. It is the filled counterpart of `ezcontour`; `fcontour` with `'Fill','on'` is the modern equivalent.",
+        "pt": "A função é amostrada em uma grade automática e as regiões entre as curvas de nível são preenchidas com cores do colormap atual. É a versão preenchida de `ezcontour`; `fcontour` com `'Fill','on'` é o equivalente moderno."
+      },
+      "examples": [
+        {"title": {"en": "Filled saddle", "pt": "Sela preenchida"}, "silent": true, "code": "ezcontourf(@(x,y) x.^2 - y.^2, [-2 2])\ncolorbar", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezcontour", "fcontour", "contourf", "colorbar"]
+    },
+    "ezmesh": {
+      "summary": {"en": "Mesh surface plot of a function of two variables given as a handle or expression.", "pt": "Gráfico de malha de uma função de duas variáveis dada como handle ou expressão."},
+      "syntax": [
+        {"code": "ezmesh(f)", "en": "Draws the surface `z = f(x,y)` as a mesh over the default domain, `-2*pi` to `2*pi` in both variables.", "pt": "Desenha a superfície `z = f(x,y)` como malha no domínio padrão, de `-2*pi` a `2*pi` nas duas variáveis."},
+        {"code": "ezmesh(f, domain)", "en": "Restricts the plot to `[min max]` or `[xmin xmax ymin ymax]`.", "pt": "Restringe o gráfico a `[min max]` ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezmesh(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x` and `y`.", "pt": "Handle de função ou vetor de caracteres em `x` e `y`."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "description": {
+        "en": "`ezmesh` builds the grid itself and draws the wireframe, so only the function is needed. `fmesh` is the current replacement, with options for the number of points and for parametric surfaces.",
+        "pt": "`ezmesh` monta a grade sozinha e desenha a malha de arame, então basta informar a função. `fmesh` é a substituta atual, com opções para o número de pontos e para superfícies paramétricas."
+      },
+      "examples": [
+        {"title": {"en": "Product surface", "pt": "Superfície do produto"}, "silent": true, "code": "ezmesh(@(x,y) x.*exp(-x.^2 - y.^2), [-2 2])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezmeshc", "fmesh", "mesh", "ezsurf"]
+    },
+    "ezmeshc": {
+      "summary": {"en": "Mesh surface plot with a contour plot underneath, from a function handle or expression.", "pt": "Gráfico de malha com um gráfico de contorno embaixo, a partir de um handle de função ou expressão."},
+      "syntax": [
+        {"code": "ezmeshc(f)", "en": "Draws `z = f(x,y)` as a mesh with its contour lines projected below, over the default domain `-2*pi` to `2*pi`.", "pt": "Desenha `z = f(x,y)` como malha com as curvas de nível projetadas abaixo, no domínio padrão de `-2*pi` a `2*pi`."},
+        {"code": "ezmeshc(f, domain)", "en": "Restricts the plot to `[min max]` or `[xmin xmax ymin ymax]`.", "pt": "Restringe o gráfico a `[min max]` ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezmeshc(___)", "en": "Also returns the handles of the surface and the contour.", "pt": "Também retorna os handles da superfície e do contorno."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x` and `y`.", "pt": "Handle de função ou vetor de caracteres em `x` e `y`."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Array of two graphics handles: the mesh and the contour.", "pt": "Array de dois handles gráficos: a malha e o contorno."}
+      ],
+      "description": {
+        "en": "It is `ezmesh` plus a contour drawn on the floor of the axes, which helps to read heights off the surface. The equivalent call with current functions is `meshc` on a grid built with `meshgrid`.",
+        "pt": "É `ezmesh` mais um contorno desenhado no piso dos eixos, o que ajuda a ler as alturas da superfície. A chamada equivalente com funções atuais é `meshc` sobre uma grade criada com `meshgrid`."
+      },
+      "examples": [
+        {"title": {"en": "Mesh with contours", "pt": "Malha com contornos"}, "silent": true, "code": "ezmeshc(@(x,y) sin(x).*cos(y), [-pi pi])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezmesh", "meshc", "ezsurfc", "fmesh"]
+    },
+    "ezplot": {
+      "summary": {"en": "Plots a function of one variable, or an implicit or parametric curve, from a handle or expression.", "pt": "Plota uma função de uma variável, ou uma curva implícita ou paramétrica, a partir de um handle ou expressão."},
+      "syntax": [
+        {"code": "ezplot(f)", "en": "Plots `f(x)` over the default interval `-2*pi < x < 2*pi`.", "pt": "Plota `f(x)` no intervalo padrão `-2*pi < x < 2*pi`."},
+        {"code": "ezplot(f, [xmin xmax])", "en": "Plots over the given interval.", "pt": "Plota no intervalo informado."},
+        {"code": "ezplot(x, y)", "en": "Plots the parametric curve `x(t)`, `y(t)` for `0 < t < 2*pi`.", "pt": "Plota a curva paramétrica `x(t)`, `y(t)` para `0 < t < 2*pi`."},
+        {"code": "h = ezplot(___)", "en": "Also returns the line handle.", "pt": "Também retorna o handle da linha."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x`. With two variables it is an implicit curve `f(x,y) = 0`.", "pt": "Handle de função ou vetor de caracteres em `x`. Com duas variáveis, é uma curva implícita `f(x,y) = 0`."},
+        {"name": "x, y", "en": "Handles for the two coordinate functions of a parametric curve.", "pt": "Handles das duas funções de coordenada de uma curva paramétrica."},
+        {"name": "[xmin xmax]", "en": "Interval to plot.", "pt": "Intervalo a plotar."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the line.", "pt": "Handle da linha."}
+      ],
+      "description": {
+        "en": "`ezplot` samples the function automatically and draws it with the title set from the expression. It is kept for older code; `fplot` (explicit and parametric) and `fimplicit` (implicit) are the current functions.",
+        "pt": "`ezplot` amostra a função automaticamente e a desenha com o título obtido da expressão. É mantida para código antigo; `fplot` (explícita e paramétrica) e `fimplicit` (implícita) são as funções atuais."
+      },
+      "examples": [
+        {"title": {"en": "A function on an interval", "pt": "Uma função em um intervalo"}, "silent": true, "code": "ezplot(@(x) sin(x).*exp(-x/4), [0 4*pi])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fplot", "fimplicit", "ezplot3", "ezpolar", "plot"]
+    },
+    "ezplot3": {
+      "summary": {"en": "Plots a 3-D parametric curve from three coordinate functions of a parameter.", "pt": "Plota uma curva paramétrica 3-D a partir de três funções de coordenada de um parâmetro."},
+      "syntax": [
+        {"code": "ezplot3(x, y, z)", "en": "Plots the curve `(x(t), y(t), z(t))` for `0 < t < 2*pi`.", "pt": "Plota a curva `(x(t), y(t), z(t))` para `0 < t < 2*pi`."},
+        {"code": "ezplot3(x, y, z, [tmin tmax])", "en": "Uses the given range of the parameter.", "pt": "Usa o intervalo informado para o parâmetro."},
+        {"code": "h = ezplot3(___)", "en": "Also returns the line handle.", "pt": "Também retorna o handle da linha."}
+      ],
+      "inputs": [
+        {"name": "x, y, z", "en": "Function handles or character vectors that depend on `t`.", "pt": "Handles de função ou vetores de caracteres que dependem de `t`."},
+        {"name": "[tmin tmax]", "en": "Range of the parameter `t`.", "pt": "Intervalo do parâmetro `t`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the 3-D line.", "pt": "Handle da linha 3-D."}
+      ],
+      "description": {
+        "en": "The three functions are sampled together over the parameter range and drawn as one space curve. This is the older interface; `fplot3` is the current one.",
+        "pt": "As três funções são amostradas juntas no intervalo do parâmetro e desenhadas como uma única curva no espaço. Esta é a interface antiga; `fplot3` é a atual."
+      },
+      "examples": [
+        {"title": {"en": "Helix", "pt": "Hélice"}, "silent": true, "code": "ezplot3(@(t) cos(t), @(t) sin(t), @(t) t, [0 6*pi])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fplot3", "plot3", "ezplot", "ezsurf"]
+    },
+    "ezpolar": {
+      "summary": {"en": "Plots a function given in polar form, radius as a function of angle.", "pt": "Plota uma função em forma polar, com o raio em função do ângulo."},
+      "syntax": [
+        {"code": "ezpolar(f)", "en": "Plots `r = f(theta)` for `0 < theta < 2*pi`.", "pt": "Plota `r = f(theta)` para `0 < theta < 2*pi`."},
+        {"code": "ezpolar(f, [a b])", "en": "Uses the angle range `[a b]`.", "pt": "Usa o intervalo de ângulos `[a b]`."},
+        {"code": "h = ezpolar(___)", "en": "Also returns the line handle.", "pt": "Também retorna o handle da linha."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `theta`, giving the radius.", "pt": "Handle de função ou vetor de caracteres em `theta`, que dá o raio."},
+        {"name": "[a b]", "en": "Angle range in radians.", "pt": "Intervalo de ângulos em radianos."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the line.", "pt": "Handle da linha."}
+      ],
+      "description": {
+        "en": "The function is sampled over the angle range and drawn on polar axes with circles and angle labels. Use `polarplot` when you already have vectors of angles and radii.",
+        "pt": "A função é amostrada no intervalo de ângulos e desenhada em eixos polares com círculos e rótulos de ângulo. Use `polarplot` quando já houver vetores de ângulos e raios."
+      },
+      "examples": [
+        {"title": {"en": "Cardioid", "pt": "Cardioide"}, "silent": true, "code": "ezpolar(@(t) 1 + cos(t))", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["polarplot", "polar", "ezplot", "rose"]
+    },
+    "ezsurf": {
+      "summary": {"en": "Shaded surface plot of a function of two variables given as a handle or expression.", "pt": "Gráfico de superfície sombreada de uma função de duas variáveis dada como handle ou expressão."},
+      "syntax": [
+        {"code": "ezsurf(f)", "en": "Draws `z = f(x,y)` as a colored surface over the default domain, `-2*pi` to `2*pi` in both variables.", "pt": "Desenha `z = f(x,y)` como superfície colorida no domínio padrão, de `-2*pi` a `2*pi` nas duas variáveis."},
+        {"code": "ezsurf(f, domain)", "en": "Restricts the plot to `[min max]` or `[xmin xmax ymin ymax]`.", "pt": "Restringe o gráfico a `[min max]` ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezsurf(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x` and `y`.", "pt": "Handle de função ou vetor de caracteres em `x` e `y`."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "description": {
+        "en": "`ezsurf` creates the grid, evaluates the function and draws the surface with colors that follow the height. It predates `fsurf`, which is the recommended function today.",
+        "pt": "`ezsurf` cria a grade, avalia a função e desenha a superfície com cores que acompanham a altura. É anterior a `fsurf`, que é a função recomendada hoje."
+      },
+      "examples": [
+        {"title": {"en": "Paraboloid", "pt": "Paraboloide"}, "silent": true, "code": "ezsurf(@(x,y) x.^2 + y.^2, [-2 2])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezsurfc", "fsurf", "surf", "ezmesh"]
+    },
+    "ezsurfc": {
+      "summary": {"en": "Shaded surface plot with a contour plot underneath, from a function handle or expression.", "pt": "Gráfico de superfície sombreada com um gráfico de contorno embaixo, a partir de um handle de função ou expressão."},
+      "syntax": [
+        {"code": "ezsurfc(f)", "en": "Draws `z = f(x,y)` as a surface with its contour lines below, over the default domain `-2*pi` to `2*pi`.", "pt": "Desenha `z = f(x,y)` como superfície com as curvas de nível abaixo, no domínio padrão de `-2*pi` a `2*pi`."},
+        {"code": "ezsurfc(f, domain)", "en": "Restricts the plot to `[min max]` or `[xmin xmax ymin ymax]`.", "pt": "Restringe o gráfico a `[min max]` ou `[xmin xmax ymin ymax]`."},
+        {"code": "h = ezsurfc(___)", "en": "Also returns the handles of the surface and the contour.", "pt": "Também retorna os handles da superfície e do contorno."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle or character vector in `x` and `y`.", "pt": "Handle de função ou vetor de caracteres em `x` e `y`."},
+        {"name": "domain", "en": "Two or four numbers that set the plotting region.", "pt": "Dois ou quatro números que definem a região do gráfico."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Array of two graphics handles: the surface and the contour.", "pt": "Array de dois handles gráficos: a superfície e o contorno."}
+      ],
+      "description": {
+        "en": "It combines `ezsurf` with a contour projected on the floor of the plot. The same picture can be built with `surfc` after `meshgrid`.",
+        "pt": "Combina `ezsurf` com um contorno projetado no piso do gráfico. A mesma figura pode ser feita com `surfc` depois de `meshgrid`."
+      },
+      "examples": [
+        {"title": {"en": "Surface with contours", "pt": "Superfície com contornos"}, "silent": true, "code": "ezsurfc(@(x,y) x.*exp(-x.^2 - y.^2), [-2 2])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["ezsurf", "surfc", "ezmeshc", "fsurf"]
+    },
+    "fcontour": {
+      "summary": {"en": "Contour plot of a function of two variables, given as a handle.", "pt": "Gráfico de contorno de uma função de duas variáveis, dada como handle."},
+      "syntax": [
+        {"code": "fcontour(f)", "en": "Draws contour lines of `f(x,y)` over the default domain `-5 < x < 5`, `-5 < y < 5`.", "pt": "Desenha curvas de nível de `f(x,y)` no domínio padrão `-5 < x < 5`, `-5 < y < 5`."},
+        {"code": "fcontour(f, [min max])", "en": "Uses the same interval for both variables.", "pt": "Usa o mesmo intervalo para as duas variáveis."},
+        {"code": "fcontour(f, [xmin xmax ymin ymax])", "en": "Sets the interval of each variable.", "pt": "Define o intervalo de cada variável."},
+        {"code": "fcontour(___, Name, Value)", "en": "Sets options such as `'Fill'`, `'LevelList'` or `'MeshDensity'`.", "pt": "Define opções como `'Fill'`, `'LevelList'` ou `'MeshDensity'`."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle that takes `x` and `y` arrays and returns an array of the same size.", "pt": "Handle de função que recebe arrays `x` e `y` e retorna um array do mesmo tamanho."},
+        {"name": "'Fill'", "en": "`'on'` fills the regions between levels.", "pt": "`'on'` preenche as regiões entre os níveis."},
+        {"name": "'LevelList'", "en": "Vector of the contour levels to draw.", "pt": "Vetor dos níveis de contorno a desenhar."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`fcontour` samples `f` on a grid and draws the level curves in the current axes. Because it takes a function rather than data, the plot always covers exactly the requested domain.",
+        "pt": "`fcontour` amostra `f` em uma grade e desenha as curvas de nível nos eixos atuais. Como recebe uma função e não dados, o gráfico sempre cobre exatamente o domínio pedido."
+      },
+      "notes": {
+        "en": "In MatLivre, calling `fcontour` with an output argument returns the numeric contour matrix instead of a graphics handle.",
+        "pt": "No MatLivre, chamar `fcontour` com um argumento de saída retorna a matriz numérica de contorno, e não um handle gráfico."
+      },
+      "examples": [
+        {"title": {"en": "Filled levels", "pt": "Níveis preenchidos"}, "silent": true, "code": "fcontour(@(x,y) sin(x).*cos(y), [-pi pi], 'Fill', 'on')\ncolorbar", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["contour", "ezcontour", "fsurf", "fimplicit", "meshgrid"]
+    },
+    "feather": {
+      "summary": {"en": "Plots vectors as arrows that start from equally spaced points on a horizontal line.", "pt": "Plota vetores como setas que partem de pontos igualmente espaçados em uma linha horizontal."},
+      "syntax": [
+        {"code": "feather(U, V)", "en": "Draws one arrow per element, with horizontal component `U(k)` and vertical component `V(k)`, starting at `x = k`.", "pt": "Desenha uma seta por elemento, com componente horizontal `U(k)` e vertical `V(k)`, partindo de `x = k`."},
+        {"code": "feather(Z)", "en": "For complex `Z`, uses `real(Z)` and `imag(Z)` as the components.", "pt": "Para `Z` complexo, usa `real(Z)` e `imag(Z)` como componentes."},
+        {"code": "h = feather(___)", "en": "Also returns the graphics handles.", "pt": "Também retorna os handles gráficos."}
+      ],
+      "inputs": [
+        {"name": "U, V", "en": "Vectors of the same length with the horizontal and vertical components.", "pt": "Vetores de mesmo comprimento com as componentes horizontal e vertical."},
+        {"name": "Z", "en": "Complex vector, one arrow per element.", "pt": "Vetor complexo, uma seta por elemento."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handles of the graphics objects created.", "pt": "Handles dos objetos gráficos criados."}
+      ],
+      "description": {
+        "en": "A feather plot shows how a quantity with direction changes along a sequence, such as wind or the phase of a series of phasors. Every arrow has its tail on the baseline, so the arrows show direction and magnitude but not position.",
+        "pt": "Um gráfico feather mostra como uma grandeza com direção varia ao longo de uma sequência, como o vento ou a fase de uma série de fasores. Toda seta tem a base na linha de referência, então as setas mostram direção e módulo, mas não posição."
+      },
+      "examples": [
+        {"title": {"en": "Complex phasors", "pt": "Fasores complexos"}, "silent": true, "code": "z = [1+1i, 2, 1.5-1i, -1+0.5i, 0.5i];\nfeather(z)", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["quiver", "compass", "polarplot", "plot"]
+    },
+    "fewerbins": {
+      "summary": {"en": "Reduces the number of bins of an existing histogram object.", "pt": "Reduz o número de bins de um objeto de histograma existente."},
+      "syntax": [
+        {"code": "fewerbins(h)", "en": "Makes the histogram `h` use fewer, wider bins.", "pt": "Faz o histograma `h` usar menos bins, mais largos."},
+        {"code": "n = fewerbins(h)", "en": "Also returns the new number of bins.", "pt": "Também retorna o novo número de bins."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Histogram object created by `histogram`.", "pt": "Objeto de histograma criado por `histogram`."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Number of bins after the change.", "pt": "Número de bins depois da alteração."}
+      ],
+      "description": {
+        "en": "The function changes the binning of `h` in place and the figure is redrawn with coarser bins. Each call lowers the bin count by one step; calling it repeatedly keeps coarsening. `morebins` does the opposite.",
+        "pt": "A função altera os bins de `h` no próprio objeto e a figura é redesenhada com bins mais grossos. Cada chamada reduz o número de bins em um passo; chamadas repetidas continuam reduzindo. `morebins` faz o oposto."
+      },
+      "examples": [
+        {"title": {"en": "Coarser bins", "pt": "Bins mais grossos"}, "code": "h = histogram(1:100);\nbefore = h.NumBins\nafter = fewerbins(h)"}
+      ],
+      "see": ["morebins", "histogram", "histcounts", "hist"]
+    },
+    "fill": {
+      "summary": {"en": "Draws filled 2-D polygons from vertex coordinates.", "pt": "Desenha polígonos 2-D preenchidos a partir das coordenadas dos vértices."},
+      "syntax": [
+        {"code": "fill(X, Y, C)", "en": "Fills the polygon with vertices `(X(k), Y(k))` using the color `C`.", "pt": "Preenche o polígono de vértices `(X(k), Y(k))` com a cor `C`."},
+        {"code": "fill(X, Y, ColorSpec)", "en": "Uses a color letter such as `'r'` or an RGB triplet.", "pt": "Usa uma letra de cor como `'r'` ou um trio RGB."},
+        {"code": "fill(___, Name, Value)", "en": "Sets patch properties such as `'FaceAlpha'` or `'EdgeColor'`.", "pt": "Define propriedades do patch, como `'FaceAlpha'` ou `'EdgeColor'`."},
+        {"code": "h = fill(___)", "en": "Also returns the patch handles.", "pt": "Também retorna os handles dos patches."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Vertex coordinates. If they are matrices, each column is a separate polygon.", "pt": "Coordenadas dos vértices. Se forem matrizes, cada coluna é um polígono separado."},
+        {"name": "C", "en": "Color: a color letter, an RGB triplet, or one value per vertex to be mapped through the colormap.", "pt": "Cor: uma letra de cor, um trio RGB, ou um valor por vértice a ser mapeado pelo colormap."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Patch handles, one per polygon.", "pt": "Handles dos patches, um por polígono."}
+      ],
+      "description": {
+        "en": "The polygon is closed automatically by joining the last vertex to the first. Use `fill` to shade the area between curves or to draw simple shapes; to shade under a single curve `area` is shorter.",
+        "pt": "O polígono é fechado automaticamente ligando o último vértice ao primeiro. Use `fill` para sombrear a área entre curvas ou desenhar formas simples; para sombrear sob uma única curva, `area` é mais curto."
+      },
+      "examples": [
+        {"title": {"en": "Area between two curves", "pt": "Área entre duas curvas"}, "silent": true, "code": "x = linspace(0, pi, 50);\nfill([x fliplr(x)], [sin(x) fliplr(0.5*sin(x))], [0.6 0.8 1])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fill3", "patch", "area", "plot"]
+    },
+    "fill3": {
+      "summary": {"en": "Draws filled polygons in 3-D space from vertex coordinates.", "pt": "Desenha polígonos preenchidos no espaço 3-D a partir das coordenadas dos vértices."},
+      "syntax": [
+        {"code": "fill3(X, Y, Z, C)", "en": "Fills the polygon with vertices `(X(k), Y(k), Z(k))` using the color `C`.", "pt": "Preenche o polígono de vértices `(X(k), Y(k), Z(k))` com a cor `C`."},
+        {"code": "fill3(___, Name, Value)", "en": "Sets patch properties such as `'FaceAlpha'`.", "pt": "Define propriedades do patch, como `'FaceAlpha'`."},
+        {"code": "h = fill3(___)", "en": "Also returns the patch handles.", "pt": "Também retorna os handles dos patches."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Vertex coordinates of equal size. For matrices, each column is a polygon.", "pt": "Coordenadas dos vértices, de mesmo tamanho. Para matrizes, cada coluna é um polígono."},
+        {"name": "C", "en": "Color letter, RGB triplet, or one value per vertex.", "pt": "Letra de cor, trio RGB, ou um valor por vértice."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Patch handles.", "pt": "Handles dos patches."}
+      ],
+      "description": {
+        "en": "It is the 3-D version of `fill`. The vertices need not be coplanar, but a flat polygon renders cleanly. Rotate the view with `view` to inspect the shape.",
+        "pt": "É a versão 3-D de `fill`. Os vértices não precisam ser coplanares, mas um polígono plano é desenhado de forma mais limpa. Gire a vista com `view` para examinar a forma."
+      },
+      "examples": [
+        {"title": {"en": "Two triangles", "pt": "Dois triângulos"}, "silent": true, "code": "fill3([0 1 0.5], [0 0 1], [0 0 0], 'r')\nhold on\nfill3([0 1 0.5], [0 0 1], [1 1 1], 'b')\nhold off\nview(3)", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fill", "patch", "surf", "view"]
+    },
+    "fimplicit": {
+      "summary": {"en": "Plots an implicit curve defined by f(x,y) = 0.", "pt": "Plota uma curva implícita definida por f(x,y) = 0."},
+      "syntax": [
+        {"code": "fimplicit(f)", "en": "Plots the set where `f(x,y) = 0` over the default region `-5 < x < 5`, `-5 < y < 5`.", "pt": "Plota o conjunto em que `f(x,y) = 0` na região padrão `-5 < x < 5`, `-5 < y < 5`."},
+        {"code": "fimplicit(f, [min max])", "en": "Uses the same interval for `x` and `y`.", "pt": "Usa o mesmo intervalo para `x` e `y`."},
+        {"code": "fimplicit(f, [xmin xmax ymin ymax])", "en": "Sets each interval.", "pt": "Define cada intervalo."},
+        {"code": "h = fimplicit(___)", "en": "Also returns the line handle.", "pt": "Também retorna o handle da linha."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle of `x` and `y`. The curve is where its value is zero.", "pt": "Handle de função de `x` e `y`. A curva é onde seu valor é zero."},
+        {"name": "interval", "en": "Two or four numbers that set the region.", "pt": "Dois ou quatro números que definem a região."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the implicit function line.", "pt": "Handle da linha da função implícita."}
+      ],
+      "description": {
+        "en": "Curves that cannot be solved for `y`, such as a circle or an ellipse, can be drawn directly. To plot `g(x,y) = c`, pass `@(x,y) g(x,y) - c`.",
+        "pt": "Curvas que não podem ser resolvidas para `y`, como um círculo ou uma elipse, podem ser desenhadas diretamente. Para plotar `g(x,y) = c`, passe `@(x,y) g(x,y) - c`."
+      },
+      "examples": [
+        {"title": {"en": "Circle and ellipse", "pt": "Círculo e elipse"}, "silent": true, "code": "fimplicit(@(x,y) x.^2 + y.^2 - 1, [-2 2])\nhold on\nfimplicit(@(x,y) x.^2/4 + y.^2 - 1)\nhold off\naxis equal", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fplot", "fcontour", "ezplot", "contour"]
+    },
+    "fmesh": {
+      "summary": {"en": "Mesh surface plot of a function of two variables, given as a handle.", "pt": "Gráfico de malha de uma função de duas variáveis, dada como handle."},
+      "syntax": [
+        {"code": "fmesh(f)", "en": "Draws `z = f(x,y)` as a mesh over the default domain `-5 < x < 5`, `-5 < y < 5`.", "pt": "Desenha `z = f(x,y)` como malha no domínio padrão `-5 < x < 5`, `-5 < y < 5`."},
+        {"code": "fmesh(f, [min max])", "en": "Uses the same interval for `x` and `y`.", "pt": "Usa o mesmo intervalo para `x` e `y`."},
+        {"code": "fmesh(f, [xmin xmax ymin ymax])", "en": "Sets each interval.", "pt": "Define cada intervalo."},
+        {"code": "fmesh(funx, funy, funz)", "en": "Plots a parametric surface in `u` and `v`.", "pt": "Plota uma superfície paramétrica em `u` e `v`."},
+        {"code": "h = fmesh(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle of `x` and `y` that accepts arrays.", "pt": "Handle de função de `x` e `y` que aceita arrays."},
+        {"name": "funx, funy, funz", "en": "Handles of `u` and `v` for a parametric surface.", "pt": "Handles de `u` e `v` para uma superfície paramétrica."},
+        {"name": "interval", "en": "Two or four numbers that set the domain.", "pt": "Dois ou quatro números que definem o domínio."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "notes": {"en": "The parametric form with three function handles is not supported yet in MatLivre.", "pt": "A forma paramétrica com três handles ainda não é suportada no MatLivre."},
+      "description": {
+        "en": "`fmesh` builds the grid, evaluates the function and draws a wireframe surface with transparent faces. Use `fsurf` for the filled look.",
+        "pt": "`fmesh` monta a grade, avalia a função e desenha uma superfície de arame com faces transparentes. Use `fsurf` para o visual preenchido."
+      },
+      "examples": [
+        {"title": {"en": "Ripple", "pt": "Ondulação"}, "silent": true, "code": "fmesh(@(x,y) sin(sqrt(x.^2 + y.^2)), [-8 8])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fsurf", "mesh", "ezmesh", "fcontour"]
+    },
+    "fplot": {
+      "summary": {"en": "Plots a function of one variable, or a parametric curve, from a handle over an interval.", "pt": "Plota uma função de uma variável, ou uma curva paramétrica, a partir de um handle em um intervalo."},
+      "syntax": [
+        {"code": "fplot(f)", "en": "Plots `y = f(x)` over the default interval `[-5 5]`.", "pt": "Plota `y = f(x)` no intervalo padrão `[-5 5]`."},
+        {"code": "fplot(f, [xmin xmax])", "en": "Plots over the given interval.", "pt": "Plota no intervalo informado."},
+        {"code": "fplot(funx, funy, [tmin tmax])", "en": "Plots the parametric curve `x = funx(t)`, `y = funy(t)`.", "pt": "Plota a curva paramétrica `x = funx(t)`, `y = funy(t)`."},
+        {"code": "fplot(___, LineSpec)", "en": "Sets color, line style and marker, as in `plot`.", "pt": "Define cor, estilo de linha e marcador, como em `plot`."},
+        {"code": "fplot(___, Name, Value)", "en": "Sets line properties such as `'LineWidth'` or `'MeshDensity'`.", "pt": "Define propriedades da linha, como `'LineWidth'` ou `'MeshDensity'`."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle that accepts a vector and returns a vector of the same size.", "pt": "Handle de função que aceita um vetor e retorna um vetor do mesmo tamanho."},
+        {"name": "[xmin xmax]", "en": "Interval to plot.", "pt": "Intervalo a plotar."},
+        {"name": "'MeshDensity'", "en": "Number of initial sample points; the function adds points where the curve bends.", "pt": "Número de pontos de amostragem iniciais; a função acrescenta pontos onde a curva muda de direção."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`fplot` chooses its own sample points and adds more where the curve changes quickly, so sharp features are drawn smoothly without picking a step size. The function must work element by element, so write `x.^2` and not `x^2`.\n\nThe axes limits follow the interval, which makes `fplot` handy for looking at a formula before sampling it yourself.",
+        "pt": "`fplot` escolhe seus próprios pontos de amostragem e acrescenta mais onde a curva muda rápido, de modo que detalhes bruscos saem suaves sem precisar escolher um passo. A função deve operar elemento a elemento, então escreva `x.^2` e não `x^2`.\n\nOs limites dos eixos seguem o intervalo, o que torna `fplot` útil para olhar uma fórmula antes de amostrá-la por conta própria."
+      },
+      "notes": {
+        "en": "In MatLivre, `fplot` does not return a line handle: calling it with an output argument is an error. The parametric form with two function handles is not supported yet.",
+        "pt": "No MatLivre, `fplot` não retorna handle de linha: chamá-la com argumento de saída gera erro. A forma paramétrica com dois handles ainda não é suportada."
+      },
+      "examples": [
+        {"title": {"en": "Two functions", "pt": "Duas funções"}, "silent": true, "code": "fplot(@(x) sin(x)./x, [-20 20])\nhold on\nfplot(@(x) 1./x, [1 20], '--')\nhold off", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["plot", "fplot3", "fimplicit", "ezplot", "linspace"]
+    },
+    "fplot3": {
+      "summary": {"en": "Plots a 3-D parametric curve from three coordinate functions given as handles.", "pt": "Plota uma curva paramétrica 3-D a partir de três funções de coordenada dadas como handles."},
+      "syntax": [
+        {"code": "fplot3(funx, funy, funz)", "en": "Plots `(funx(t), funy(t), funz(t))` over the default range `[-5 5]` of `t`.", "pt": "Plota `(funx(t), funy(t), funz(t))` no intervalo padrão `[-5 5]` de `t`."},
+        {"code": "fplot3(funx, funy, funz, [tmin tmax])", "en": "Uses the given range of `t`.", "pt": "Usa o intervalo de `t` informado."},
+        {"code": "fplot3(___, LineSpec)", "en": "Sets color, style and marker.", "pt": "Define cor, estilo e marcador."},
+        {"code": "h = fplot3(___)", "en": "Also returns the line handle.", "pt": "Também retorna o handle da linha."}
+      ],
+      "inputs": [
+        {"name": "funx, funy, funz", "en": "Function handles of `t` that accept vectors.", "pt": "Handles de função de `t` que aceitam vetores."},
+        {"name": "[tmin tmax]", "en": "Range of the parameter.", "pt": "Intervalo do parâmetro."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the 3-D line.", "pt": "Handle da linha 3-D."}
+      ],
+      "description": {
+        "en": "Like `fplot`, it adds sample points where the curve bends, so you do not have to choose a step. It is the function-handle counterpart of `plot3` and replaces `ezplot3`.",
+        "pt": "Como `fplot`, acrescenta pontos de amostragem onde a curva muda de direção, sem precisar escolher um passo. É a contrapartida de `plot3` para handles de função e substitui `ezplot3`."
+      },
+      "examples": [
+        {"title": {"en": "Conical spiral", "pt": "Espiral cônica"}, "silent": true, "code": "fplot3(@(t) t.*cos(t), @(t) t.*sin(t), @(t) t, [0 10*pi])\ngrid on", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fplot", "plot3", "ezplot3", "fsurf"]
+    },
+    "frame2im": {
+      "summary": {"en": "Converts a movie frame into image data and a colormap.", "pt": "Converte um quadro de filme em dados de imagem e um colormap."},
+      "syntax": [
+        {"code": "im = frame2im(F)", "en": "Returns the image stored in the frame `F`.", "pt": "Retorna a imagem guardada no quadro `F`."},
+        {"code": "[X, map] = frame2im(F)", "en": "Returns an indexed image and its colormap when the frame holds one.", "pt": "Retorna uma imagem indexada e seu colormap quando o quadro contém uma."}
+      ],
+      "inputs": [
+        {"name": "F", "en": "Frame structure with the fields `cdata` and `colormap`, as made by `getframe` or `im2frame`.", "pt": "Estrutura de quadro com os campos `cdata` e `colormap`, como a criada por `getframe` ou `im2frame`."}
+      ],
+      "outputs": [
+        {"name": "im", "en": "Image array: `m`-by-`n`-by-3 truecolor data, or `m`-by-`n` indices if the frame has a colormap.", "pt": "Array de imagem: dados truecolor `m`-por-`n`-por-3, ou índices `m`-por-`n` se o quadro tiver colormap."},
+        {"name": "map", "en": "Colormap of the frame, empty for a truecolor frame.", "pt": "Colormap do quadro, vazio para um quadro truecolor."}
+      ],
+      "description": {
+        "en": "A movie frame is a structure; `frame2im` just unpacks it so the picture can be shown with `imshow`, saved with `imwrite` or processed. It is the inverse of `im2frame`.",
+        "pt": "Um quadro de filme é uma estrutura; `frame2im` apenas a desembala para que a imagem possa ser mostrada com `imshow`, salva com `imwrite` ou processada. É o inverso de `im2frame`."
+      },
+      "examples": [
+        {"title": {"en": "Indexed frame", "pt": "Quadro indexado"}, "code": "F = im2frame(uint8([0 1; 2 3]), gray(4));\n[X, map] = frame2im(F);\nX\nsize(map)"}
+      ],
+      "see": ["im2frame", "getframe", "movie", "imshow", "imwrite"]
+    },
+    "fsurf": {
+      "summary": {"en": "Shaded surface plot of a function of two variables, given as a handle.", "pt": "Gráfico de superfície sombreada de uma função de duas variáveis, dada como handle."},
+      "syntax": [
+        {"code": "fsurf(f)", "en": "Draws `z = f(x,y)` as a surface over the default domain `-5 < x < 5`, `-5 < y < 5`.", "pt": "Desenha `z = f(x,y)` como superfície no domínio padrão `-5 < x < 5`, `-5 < y < 5`."},
+        {"code": "fsurf(f, [min max])", "en": "Uses the same interval for `x` and `y`.", "pt": "Usa o mesmo intervalo para `x` e `y`."},
+        {"code": "fsurf(f, [xmin xmax ymin ymax])", "en": "Sets each interval.", "pt": "Define cada intervalo."},
+        {"code": "fsurf(funx, funy, funz)", "en": "Plots a parametric surface in `u` and `v`.", "pt": "Plota uma superfície paramétrica em `u` e `v`."},
+        {"code": "h = fsurf(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "f", "en": "Function handle of `x` and `y` that accepts arrays.", "pt": "Handle de função de `x` e `y` que aceita arrays."},
+        {"name": "funx, funy, funz", "en": "Handles of `u` and `v` for a parametric surface.", "pt": "Handles de `u` e `v` para uma superfície paramétrica."},
+        {"name": "'MeshDensity'", "en": "Number of sample points along each direction.", "pt": "Número de pontos de amostragem em cada direção."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "notes": {"en": "The parametric form with three function handles is not supported yet in MatLivre.", "pt": "A forma paramétrica com três handles ainda não é suportada no MatLivre."},
+      "description": {
+        "en": "`fsurf` evaluates the function on its own grid and draws a colored surface. It replaces `ezsurf`. For data you already hold in matrices use `surf`.",
+        "pt": "`fsurf` avalia a função em sua própria grade e desenha uma superfície colorida. Substitui `ezsurf`. Para dados que já estão em matrizes, use `surf`."
+      },
+      "examples": [
+        {"title": {"en": "Gaussian bump", "pt": "Pico gaussiano"}, "silent": true, "code": "fsurf(@(x,y) x.*exp(-x.^2 - y.^2), [-2 2])", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fmesh", "surf", "ezsurf", "fcontour"]
+    },
+    "geobubble": {
+      "summary": {"en": "Bubble chart of data located by latitude and longitude on a map.", "pt": "Gráfico de bolhas de dados localizados por latitude e longitude em um mapa."},
+      "syntax": [
+        {"code": "geobubble(lat, lon)", "en": "Draws a bubble at each coordinate; repeated locations make larger bubbles.", "pt": "Desenha uma bolha em cada coordenada; locais repetidos geram bolhas maiores."},
+        {"code": "geobubble(lat, lon, sizedata)", "en": "Sets the bubble size from the values in `sizedata`.", "pt": "Define o tamanho da bolha a partir dos valores de `sizedata`."},
+        {"code": "geobubble(___, Name, Value)", "en": "Sets chart properties such as `'Title'` or `'Basemap'`.", "pt": "Define propriedades do gráfico, como `'Title'` ou `'Basemap'`."},
+        {"code": "gb = geobubble(___)", "en": "Also returns the chart object.", "pt": "Também retorna o objeto do gráfico."}
+      ],
+      "inputs": [
+        {"name": "lat, lon", "en": "Vectors of latitudes and longitudes in degrees, of the same length.", "pt": "Vetores de latitudes e longitudes em graus, de mesmo comprimento."},
+        {"name": "sizedata", "en": "Vector with one value per point that sets the bubble area.", "pt": "Vetor com um valor por ponto que define a área da bolha."}
+      ],
+      "outputs": [
+        {"name": "gb", "en": "GeographicBubbleChart object.", "pt": "Objeto GeographicBubbleChart."}
+      ],
+      "description": {
+        "en": "`geobubble` places bubbles over a geographic map so that a count or measurement can be compared across places. Points with identical coordinates are combined into one bubble.",
+        "pt": "`geobubble` coloca bolhas sobre um mapa geográfico para que uma contagem ou medida possa ser comparada entre lugares. Pontos com coordenadas idênticas são combinados em uma bolha."
+      },
+      "notes": {
+        "en": "MatLivre draws the bubbles without a basemap.",
+        "pt": "O MatLivre desenha as bolhas sem mapa de fundo."
+      },
+      "examples": [
+        {"title": {"en": "Three cities", "pt": "Três cidades"}, "silent": true, "code": "lat = [-23.55 -22.91 -15.78];\nlon = [-46.63 -43.17 -47.93];\npop = [12.3 6.7 3.1];\ngeobubble(lat, lon, pop)", "note": {"en": "In the app, the chart is drawn below the code.", "pt": "No app, o gráfico é desenhado abaixo do código."}}
+      ],
+      "see": ["scatter", "bubblechart", "heatmap", "plot"]
+    },
+    "getframe": {
+      "summary": {"en": "Captures the current axes or figure as a movie frame.", "pt": "Captura os eixos ou a figura atuais como um quadro de filme."},
+      "syntax": [
+        {"code": "F = getframe", "en": "Captures the current axes.", "pt": "Captura os eixos atuais."},
+        {"code": "F = getframe(ax)", "en": "Captures the axes `ax`.", "pt": "Captura os eixos `ax`."},
+        {"code": "F = getframe(fig)", "en": "Captures the whole figure `fig`.", "pt": "Captura a figura inteira `fig`."}
+      ],
+      "inputs": [
+        {"name": "ax", "en": "Axes handle to capture.", "pt": "Handle dos eixos a capturar."},
+        {"name": "fig", "en": "Figure handle to capture.", "pt": "Handle da figura a capturar."}
+      ],
+      "outputs": [
+        {"name": "F", "en": "Structure with the fields `cdata`, the captured pixels as an `m`-by-`n`-by-3 `uint8` array, and `colormap`, which is empty.", "pt": "Estrutura com os campos `cdata`, os pixels capturados como array `uint8` `m`-por-`n`-por-3, e `colormap`, que é vazio."}
+      ],
+      "description": {
+        "en": "`getframe` renders what is on screen into pixels. Collect the frames of an animation in a struct array, then play them with `movie` or turn one into an image with `frame2im`.",
+        "pt": "`getframe` renderiza o que está na tela em pixels. Reúna os quadros de uma animação em um array de structs e depois reproduza-os com `movie` ou converta um deles em imagem com `frame2im`."
+      },
+      "notes": {
+        "en": "It needs the renderer of the MatLivre app. In the headless command-line runner there is no renderer, so `getframe` fails there with an error.",
+        "pt": "Precisa do renderizador do app MatLivre. No executor de linha de comando, sem interface, não há renderizador, e `getframe` falha com erro."
+      },
+      "examples": [
+        {"title": {"en": "Capture a plot", "pt": "Capturar um gráfico"}, "silent": true, "code": "plot(1:5, [2 4 1 5 3])\ntry\n    F = getframe;\n    disp(fieldnames(F))\ncatch\nend", "note": {"en": "In the app the field names `cdata` and `colormap` are listed.", "pt": "No app, os nomes de campo `cdata` e `colormap` são listados."}}
+      ],
+      "see": ["frame2im", "im2frame", "movie", "print", "exportgraphics"]
+    },
+    "getpoints": {
+      "summary": {"en": "Returns the coordinates of the points stored in an animated line.", "pt": "Retorna as coordenadas dos pontos guardados em uma linha animada."},
+      "syntax": [
+        {"code": "[x, y] = getpoints(h)", "en": "Returns the x and y coordinates of the animated line `h`.", "pt": "Retorna as coordenadas x e y da linha animada `h`."},
+        {"code": "[x, y, z] = getpoints(h)", "en": "Also returns the z coordinates of a 3-D animated line.", "pt": "Também retorna as coordenadas z de uma linha animada 3-D."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Handle created by `animatedline`.", "pt": "Handle criado por `animatedline`."}
+      ],
+      "outputs": [
+        {"name": "x, y, z", "en": "Coordinates of the points added so far with `addpoints`.", "pt": "Coordenadas dos pontos acrescentados até agora com `addpoints`."}
+      ],
+      "description": {
+        "en": "An animated line grows as points are added to it with `addpoints`. `getpoints` reads the points back, which is useful when the data was produced inside a loop and not kept in a variable. `clearpoints` empties the line.",
+        "pt": "Uma linha animada cresce conforme pontos são acrescentados com `addpoints`. `getpoints` lê esses pontos de volta, o que é útil quando os dados foram produzidos dentro de um laço e não ficaram em uma variável. `clearpoints` esvazia a linha."
+      },
+      "examples": [
+        {"title": {"en": "Read back the points", "pt": "Ler os pontos de volta"}, "code": "h = animatedline;\naddpoints(h, [1 2 3], [4 5 6]);\n[x, y] = getpoints(h)"}
+      ],
+      "see": ["animatedline", "addpoints", "clearpoints", "plot"]
+    }
+  }
+}

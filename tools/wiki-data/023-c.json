@@ -1,0 +1,1163 @@
+{
+ "functions": {
+  "addCause": {
+   "summary": {
+    "en": "Attaches an underlying exception to an MException as one of its causes.",
+    "pt": "Anexa uma exceção subjacente a uma MException como uma de suas causas."
+   },
+   "syntax": [
+    {
+     "code": "baseME = addCause(baseME, cause)",
+     "en": "Returns a copy of `baseME` whose `cause` list also holds the exception `cause`.",
+     "pt": "Retorna uma cópia de `baseME` cuja lista `cause` também contém a exceção `cause`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "baseME",
+     "en": "The high-level `MException` that describes the failure.",
+     "pt": "A `MException` de alto nível que descreve a falha."
+    },
+    {
+     "name": "cause",
+     "en": "An `MException` describing a lower-level reason.",
+     "pt": "Uma `MException` que descreve um motivo de nível mais baixo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "baseME",
+     "en": "The updated exception. Assign it back; the original object is not modified.",
+     "pt": "A exceção atualizada. Atribua-a de volta; o objeto original não é modificado."
+    }
+   ],
+   "description": {
+    "en": "Errors often have a chain of reasons: a report could not be built because a file could not be read, which failed because a folder was missing. `addCause` records each lower-level exception in the `cause` property of the top-level one, a cell array, so the full chain travels together when the exception is thrown and can be inspected after it is caught.",
+    "pt": "Erros costumam ter uma cadeia de motivos: um relatório não pôde ser montado porque um arquivo não pôde ser lido, o que falhou porque faltava uma pasta. `addCause` registra cada exceção de nível mais baixo na propriedade `cause` da exceção de nível superior, um cell array, de modo que a cadeia completa viaja junto quando a exceção é lançada e pode ser examinada depois de capturada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Recording a cause",
+      "pt": "Registrando uma causa"
+     },
+     "code": "ME = MException('app:load', 'Could not load data');\ncause = MException('io:missing', 'File not found');\nME = addCause(ME, cause);\ndisp(numel(ME.cause))\ndisp(ME.cause{1}.message)"
+    }
+   ],
+   "see": [
+    "MException",
+    "throw",
+    "getReport",
+    "addCorrection",
+    "try, catch"
+   ]
+  },
+  "addCorrection": {
+   "summary": {
+    "en": "Attaches a suggested fix to an MException.",
+    "pt": "Anexa uma sugestão de correção a uma MException."
+   },
+   "syntax": [
+    {
+     "code": "baseME = addCorrection(baseME, correction)",
+     "en": "Returns a copy of `baseME` carrying the given correction object.",
+     "pt": "Retorna uma cópia de `baseME` com o objeto de correção fornecido."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "baseME",
+     "en": "The `MException` that reports the problem.",
+     "pt": "A `MException` que relata o problema."
+    },
+    {
+     "name": "correction",
+     "en": "A correction object that describes how the problem could be fixed.",
+     "pt": "Um objeto de correção que descreve como o problema poderia ser resolvido."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "baseME",
+     "en": "The updated exception, with the `Correction` property set.",
+     "pt": "A exceção atualizada, com a propriedade `Correction` definida."
+    }
+   ],
+   "description": {
+    "en": "A correction is a hint that an environment can offer to the user as a one-click fix next to the error. `addCorrection` stores it in the `Correction` property of the exception and leaves the message and identifier unchanged. The original object is not modified, so assign the result back.",
+    "pt": "Uma correção é uma dica que um ambiente pode oferecer ao usuário como conserto de um clique ao lado do erro. `addCorrection` a guarda na propriedade `Correction` da exceção e mantém a mensagem e o identificador. O objeto original não é modificado, então atribua o resultado de volta."
+   },
+   "notes": {
+    "en": "MatLivre stores whatever object it receives in `Correction` and never offers it as an interactive fix.",
+    "pt": "O MatLivre guarda qualquer objeto recebido em `Correction` e nunca o oferece como correção interativa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the Correction property",
+      "pt": "Definindo a propriedade Correction"
+     },
+     "code": "ME = MException('app:cfg', 'Missing option');\nME2 = addCorrection(ME, 1);\ndisp(ME2.message)\ndisp(isempty(ME.Correction))\ndisp(isempty(ME2.Correction))"
+    }
+   ],
+   "see": [
+    "MException",
+    "addCause",
+    "throw",
+    "getReport"
+   ]
+  },
+  "canUseGPU": {
+   "summary": {
+    "en": "Tells whether a supported GPU is available for computation.",
+    "pt": "Informa se há uma GPU compatível disponível para cálculo."
+   },
+   "syntax": [
+    {
+     "code": "tf = canUseGPU",
+     "en": "Returns `true` if a usable GPU is present, `false` otherwise.",
+     "pt": "Retorna `true` se há uma GPU utilizável, `false` caso contrário."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Code that can run on either the CPU or a GPU uses this as a guard: move data to the GPU only when the answer is true, and fall back to ordinary arrays otherwise. The call does not allocate anything or start the GPU.",
+    "pt": "Código que pode rodar na CPU ou em uma GPU usa isto como condição: mover os dados para a GPU somente quando a resposta for verdadeira, e usar arrays comuns caso contrário. A chamada não aloca nada nem inicia a GPU."
+   },
+   "notes": {
+    "en": "MatLivre has no GPU support, so `canUseGPU` always returns `false`.",
+    "pt": "O MatLivre não tem suporte a GPU, então `canUseGPU` sempre retorna `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Choosing a code path",
+      "pt": "Escolhendo o caminho do código"
+     },
+     "code": "if canUseGPU\n    disp('GPU available')\nelse\n    disp('using the CPU')\nend"
+    }
+   ],
+   "see": [
+    "canUseParallelPool",
+    "maxNumCompThreads",
+    "class"
+   ]
+  },
+  "canUseParallelPool": {
+   "summary": {
+    "en": "Tells whether a parallel pool can be used.",
+    "pt": "Informa se um pool paralelo pode ser usado."
+   },
+   "syntax": [
+    {
+     "code": "tf = canUseParallelPool",
+     "en": "Returns `true` if parallel features such as `parfor` can run on a pool, `false` otherwise.",
+     "pt": "Retorna `true` se recursos paralelos como `parfor` podem rodar em um pool, `false` caso contrário."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Use it to decide between a parallel and a serial implementation without triggering an error or starting a pool. The result describes availability only; it does not say whether a pool is currently open.",
+    "pt": "Use para decidir entre uma implementação paralela e uma serial sem provocar erro nem iniciar um pool. O resultado descreve apenas a disponibilidade; não diz se um pool está aberto no momento."
+   },
+   "notes": {
+    "en": "MatLivre has no parallel pool, so `canUseParallelPool` always returns `false`.",
+    "pt": "O MatLivre não tem pool paralelo, então `canUseParallelPool` sempre retorna `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Serial fallback",
+      "pt": "Alternativa serial"
+     },
+     "code": "if canUseParallelPool\n    disp('parallel pool available')\nelse\n    disp('running serially')\nend"
+    }
+   ],
+   "see": [
+    "canUseGPU",
+    "maxNumCompThreads",
+    "parfor"
+   ]
+  },
+  "eval": {
+   "summary": {
+    "en": "Evaluates MATLAB code held in a character vector.",
+    "pt": "Avalia código MATLAB guardado em um vetor de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "eval(expression)",
+     "en": "Runs the code in `expression` as if it had been typed at that point.",
+     "pt": "Executa o código de `expression` como se tivesse sido digitado naquele ponto."
+    },
+    {
+     "code": "eval(expression, catchExpr)",
+     "en": "Runs `catchExpr` instead if `expression` raises an error.",
+     "pt": "Executa `catchExpr` no lugar se `expression` gerar um erro."
+    },
+    {
+     "code": "[a, b] = eval(expression)",
+     "en": "Captures the outputs of an expression that returns values.",
+     "pt": "Captura as saídas de uma expressão que retorna valores."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expression",
+     "en": "Text holding one or more statements or an expression.",
+     "pt": "Texto com um ou mais comandos ou uma expressão."
+    },
+    {
+     "name": "catchExpr",
+     "en": "Text with code to run if `expression` fails; the error can be read with `lasterr` or `MException.last`.",
+     "pt": "Texto com código a executar se `expression` falhar; o erro pode ser lido com `lasterr` ou `MException.last`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "a, b",
+     "en": "Values returned by the evaluated expression.",
+     "pt": "Valores retornados pela expressão avaliada."
+    }
+   ],
+   "description": {
+    "en": "The text is parsed and executed in the workspace of the caller, so variables it creates or changes are visible afterwards, and results of statements without a semicolon are displayed as usual. This makes `eval` flexible but hard to read and debug; indexing with dynamic field names, cell arrays or function handles is usually a better design than building variable names as text.\n\nWith two arguments, a syntax error or run-time error in the first is caught and the second is evaluated instead.",
+    "pt": "O texto é analisado e executado no workspace de quem chamou, então as variáveis que ele cria ou altera ficam visíveis depois, e resultados de comandos sem ponto e vírgula são exibidos normalmente. Isso torna `eval` flexível, porém difícil de ler e depurar; indexar com nomes dinâmicos de campos, cell arrays ou function handles costuma ser melhor do que montar nomes de variáveis como texto.\n\nCom dois argumentos, um erro de sintaxe ou de execução no primeiro é capturado e o segundo é avaliado no lugar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Evaluating text, with a fallback",
+      "pt": "Avaliando texto, com alternativa"
+     },
+     "code": "eval('a = 3 + 4')\neval('bad syntax here(', 'disp(''caught'')')\nv = eval('2^5')"
+    }
+   ],
+   "see": [
+    "evalc",
+    "evalin",
+    "feval",
+    "str2func",
+    "run"
+   ]
+  },
+  "evalc": {
+   "summary": {
+    "en": "Evaluates code and returns its printed output as text instead of showing it.",
+    "pt": "Avalia código e retorna sua saída impressa como texto em vez de exibi-la."
+   },
+   "syntax": [
+    {
+     "code": "T = evalc(expression)",
+     "en": "Runs `expression` and returns everything it would have printed as a character vector.",
+     "pt": "Executa `expression` e retorna tudo que ele imprimiria como vetor de caracteres."
+    },
+    {
+     "code": "T = evalc(expression, catchExpr)",
+     "en": "Runs `catchExpr` if `expression` raises an error, and captures its output too.",
+     "pt": "Executa `catchExpr` se `expression` gerar erro, e captura também a saída dele."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expression",
+     "en": "Text with the code to run.",
+     "pt": "Texto com o código a executar."
+    },
+    {
+     "name": "catchExpr",
+     "en": "Text with code to run if `expression` fails.",
+     "pt": "Texto com código a executar se `expression` falhar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Character vector with the captured output, including line breaks.",
+     "pt": "Vetor de caracteres com a saída capturada, incluindo quebras de linha."
+    }
+   ],
+   "description": {
+    "en": "Everything that would appear in the command window, such as `disp` output, unsuppressed results and warnings, is collected into `T`. Variables created by the code still land in the caller's workspace. Typical uses are capturing the display of an object to put it in a label or a log, and testing what a function prints.\n\nThe captured text ends with a newline for each printed line, so apply `strtrim` when comparing.",
+    "pt": "Tudo que apareceria na janela de comandos, como a saída de `disp`, resultados sem ponto e vírgula e avisos, é reunido em `T`. As variáveis criadas pelo código continuam indo para o workspace de quem chamou. Usos típicos são capturar a exibição de um objeto para colocá-la em um rótulo ou log e testar o que uma função imprime.\n\nO texto capturado termina com uma quebra de linha para cada linha impressa, então use `strtrim` ao comparar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capturing printed output",
+      "pt": "Capturando a saída impressa"
+     },
+     "code": "s = evalc('disp(pi); x = 3')\nt = strtrim(evalc('disp(1); disp(2);'));\nfprintf('[%s]\\n', t)"
+    }
+   ],
+   "see": [
+    "eval",
+    "evalin",
+    "disp",
+    "strtrim",
+    "sprintf"
+   ]
+  },
+  "evalin": {
+   "summary": {
+    "en": "Evaluates code in the base workspace or in the workspace of the caller.",
+    "pt": "Avalia código no workspace base ou no workspace de quem chamou."
+   },
+   "syntax": [
+    {
+     "code": "evalin(ws, expression)",
+     "en": "Runs `expression` in the workspace named by `ws`.",
+     "pt": "Executa `expression` no workspace indicado por `ws`."
+    },
+    {
+     "code": "evalin(ws, expression, catchExpr)",
+     "en": "Runs `catchExpr` in the same workspace if `expression` fails.",
+     "pt": "Executa `catchExpr` no mesmo workspace se `expression` falhar."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ws",
+     "en": "`'base'` for the base workspace or `'caller'` for the workspace of the function that called the current one.",
+     "pt": "`'base'` para o workspace base ou `'caller'` para o workspace da função que chamou a atual."
+    },
+    {
+     "name": "expression",
+     "en": "Text with the code to run.",
+     "pt": "Texto com o código a executar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Inside a function, variables of other workspaces are not visible. `evalin` reaches into the base workspace or the caller to read or set them. Because it hides data flow between functions, it is best kept for debugging helpers and framework code.",
+    "pt": "Dentro de uma função, as variáveis de outros workspaces não são visíveis. `evalin` alcança o workspace base ou o de quem chamou para lê-las ou defini-las. Como esconde o fluxo de dados entre funções, é melhor reservá-la a ferramentas de depuração e código de infraestrutura."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading from base and from the caller",
+      "pt": "Lendo do base e de quem chamou"
+     },
+     "code": "function inner()\n    evalin('caller', 'disp(secret)');\nend\nfunction outer()\n    secret = 9;\n    inner();\nend\nx = 10;\nevalin('base', 'disp(x)')\nouter()"
+    }
+   ],
+   "see": [
+    "eval",
+    "assignin",
+    "exist",
+    "who"
+   ]
+  },
+  "getReport": {
+   "summary": {
+    "en": "Returns the text describing an exception.",
+    "pt": "Retorna o texto que descreve uma exceção."
+   },
+   "syntax": [
+    {
+     "code": "report = getReport(ME)",
+     "en": "Returns the error report of the exception `ME` as a character vector.",
+     "pt": "Retorna o relatório de erro da exceção `ME` como vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ME",
+     "en": "An `MException` object, typically caught with `catch ME`.",
+     "pt": "Um objeto `MException`, normalmente capturado com `catch ME`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "report",
+     "en": "Character vector with the error text.",
+     "pt": "Vetor de caracteres com o texto do erro."
+    }
+   ],
+   "description": {
+    "en": "The report is what the command window would print for an uncaught error, which makes it a convenient string to log or show in a dialog. In MATLAB it can include the location of the error and the causes attached with `addCause`.",
+    "pt": "O relatório é o que a janela de comandos imprimiria para um erro não capturado, o que o torna uma string conveniente para registrar em log ou mostrar em uma caixa de diálogo. No MATLAB, ele pode incluir o local do erro e as causas anexadas com `addCause`."
+   },
+   "notes": {
+    "en": "MatLivre returns only the message text of the exception, without location or cause information.",
+    "pt": "O MatLivre retorna apenas o texto da mensagem da exceção, sem informações de local ou de causas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reporting a caught error",
+      "pt": "Relatando um erro capturado"
+     },
+     "code": "try\n    error('data:range', 'Value %d is out of range', 12)\ncatch ME\n    r = getReport(ME)\nend"
+    }
+   ],
+   "see": [
+    "MException",
+    "try, catch",
+    "addCause",
+    "error",
+    "lasterr"
+   ]
+  },
+  "isvalid": {
+   "summary": {
+    "en": "Tells whether a handle-type object, such as a timer, is still valid.",
+    "pt": "Informa se um objeto do tipo handle, como um timer, ainda é válido."
+   },
+   "syntax": [
+    {
+     "code": "tf = isvalid(obj)",
+     "en": "Returns `true` for each element of `obj` that refers to an existing object, `false` for deleted ones.",
+     "pt": "Retorna `true` para cada elemento de `obj` que se refere a um objeto existente, `false` para os apagados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A timer object or an array of them. Other values give `false`.",
+     "pt": "Um objeto timer ou um array deles. Outros valores dão `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the size of `obj`.",
+     "pt": "Array lógico do tamanho de `obj`."
+    }
+   ],
+   "description": {
+    "en": "A timer variable keeps existing after `delete(t)`, but it no longer refers to a usable object. `isvalid` is the safe way to tell the two states apart before calling `start` or reading properties.",
+    "pt": "Uma variável timer continua existindo depois de `delete(t)`, mas deixa de se referir a um objeto utilizável. `isvalid` é a forma segura de distinguir os dois estados antes de chamar `start` ou ler propriedades."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Before and after delete",
+      "pt": "Antes e depois de delete"
+     },
+     "code": "t = timer('TimerFcn', @(~,~) disp('tick'));\ndisp(isvalid(t))\ndelete(t)\ndisp(isvalid(t))\ndisp(isvalid(5))"
+    }
+   ],
+   "see": [
+    "timer",
+    "delete",
+    "timerfind",
+    "start"
+   ]
+  },
+  "maxNumCompThreads": {
+   "summary": {
+    "en": "Returns the number of computational threads available to MatLivre.",
+    "pt": "Retorna o número de threads de cálculo disponíveis para o MatLivre."
+   },
+   "syntax": [
+    {
+     "code": "N = maxNumCompThreads",
+     "en": "Returns the maximum number of threads used for computation.",
+     "pt": "Retorna o número máximo de threads usadas para cálculo."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "N",
+     "en": "Positive integer scalar.",
+     "pt": "Escalar inteiro positivo."
+    }
+   ],
+   "description": {
+    "en": "Some operations, such as large matrix products, can split their work over several threads. The value is a property of the machine and the session, so it differs between computers; do not depend on a specific number in tests.",
+    "pt": "Algumas operações, como produtos de matrizes grandes, podem dividir o trabalho entre várias threads. O valor é uma propriedade da máquina e da sessão, portanto difere entre computadores; não dependa de um número específico em testes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Querying the thread count",
+      "pt": "Consultando o número de threads"
+     },
+     "code": "N = maxNumCompThreads;\ndisp(N >= 1)"
+    }
+   ],
+   "see": [
+    "canUseParallelPool",
+    "canUseGPU",
+    "parfor"
+   ]
+  },
+  "MException": {
+   "summary": {
+    "en": "Creates an exception object that carries an identifier and a message.",
+    "pt": "Cria um objeto de exceção que carrega um identificador e uma mensagem."
+   },
+   "syntax": [
+    {
+     "code": "ME = MException(errID, msg)",
+     "en": "Builds an exception with the identifier `errID` and the message `msg`.",
+     "pt": "Cria uma exceção com o identificador `errID` e a mensagem `msg`."
+    },
+    {
+     "code": "ME = MException(errID, msg, A1, ..., An)",
+     "en": "Formats the message like `sprintf` with the extra arguments.",
+     "pt": "Formata a mensagem como `sprintf` com os argumentos extras."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "errID",
+     "en": "Identifier of the form `component:mnemonic`, with no spaces.",
+     "pt": "Identificador no formato `componente:mnemonico`, sem espaços."
+    },
+    {
+     "name": "msg",
+     "en": "Message text, possibly with conversions such as `%d` and `%s`.",
+     "pt": "Texto da mensagem, possivelmente com conversões como `%d` e `%s`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ME",
+     "en": "An `MException` object with properties `identifier`, `message`, `cause`, `stack` and `Correction`.",
+     "pt": "Um objeto `MException` com as propriedades `identifier`, `message`, `cause`, `stack` e `Correction`."
+    }
+   ],
+   "description": {
+    "en": "Creating the object does not raise an error; use `throw(ME)` for that. Building an exception separately is useful to prepare it, add causes, or store it for later. Exceptions caught by `catch ME` are the same kind of object, so code can inspect `ME.identifier` to decide what to do and `ME.message` to show the user.",
+    "pt": "Criar o objeto não gera erro; use `throw(ME)` para isso. Montar a exceção separadamente é útil para prepará-la, adicionar causas ou guardá-la para depois. Exceções capturadas por `catch ME` são o mesmo tipo de objeto, então o código pode inspecionar `ME.identifier` para decidir o que fazer e `ME.message` para mostrar ao usuário."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Building and throwing an exception",
+      "pt": "Criando e lançando uma exceção"
+     },
+     "code": "ME = MException('app:range', 'Value %d is too large', 99);\ntry\n    throw(ME)\ncatch e\n    disp(e.identifier)\n    disp(e.message)\nend"
+    }
+   ],
+   "see": [
+    "throw",
+    "rethrow",
+    "error",
+    "try, catch",
+    "addCause"
+   ]
+  },
+  "MException.last": {
+   "summary": {
+    "en": "Returns the most recent exception that was raised.",
+    "pt": "Retorna a exceção mais recente que foi lançada."
+   },
+   "syntax": [
+    {
+     "code": "ME = MException.last",
+     "en": "Returns the last exception object recorded in the session.",
+     "pt": "Retorna o último objeto de exceção registrado na sessão."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "ME",
+     "en": "An `MException`. Before any error has occurred its `message` and `identifier` are empty.",
+     "pt": "Uma `MException`. Antes de qualquer erro ocorrer, seu `message` e `identifier` ficam vazios."
+    }
+   ],
+   "description": {
+    "en": "This is a static method of the `MException` class. It records the latest error even when it was caught, so it lets a script look back at a failure after the `catch` block has ended. Reading it does not change it.",
+    "pt": "É um método estático da classe `MException`. Ele registra o erro mais recente mesmo quando foi capturado, permitindo que um script olhe para trás depois que o bloco `catch` terminou. Lê-lo não o altera."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Looking back at the last error",
+      "pt": "Olhando para o último erro"
+     },
+     "code": "try\n    error('a:b', 'oops')\ncatch\nend\nME = MException.last;\ndisp(ME.message)\ndisp(ME.identifier)"
+    }
+   ],
+   "see": [
+    "MException",
+    "lasterr",
+    "try, catch",
+    "getReport"
+   ]
+  },
+  "rethrow": {
+   "summary": {
+    "en": "Raises an exception again, usually from inside a catch block.",
+    "pt": "Lança novamente uma exceção, normalmente de dentro de um bloco catch."
+   },
+   "syntax": [
+    {
+     "code": "rethrow(ME)",
+     "en": "Throws the exception `ME` with its original identifier and message.",
+     "pt": "Lança a exceção `ME` com seu identificador e mensagem originais."
+    },
+    {
+     "code": "rethrow(errStruct)",
+     "en": "Throws an error described by a structure with `message` and `identifier` fields.",
+     "pt": "Lança um erro descrito por um struct com os campos `message` e `identifier`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ME",
+     "en": "An `MException` object.",
+     "pt": "Um objeto `MException`."
+    },
+    {
+     "name": "errStruct",
+     "en": "Structure with at least the fields `message` and `identifier`.",
+     "pt": "Struct com pelo menos os campos `message` e `identifier`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A `catch` block that handles part of a problem, such as releasing a resource, can pass the error on to its caller with `rethrow(ME)` instead of hiding it. The caller then sees the original identifier and message.",
+    "pt": "Um bloco `catch` que trata parte de um problema, como liberar um recurso, pode repassar o erro a quem chamou com `rethrow(ME)` em vez de escondê-lo. Quem chamou vê então o identificador e a mensagem originais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cleaning up, then passing the error on",
+      "pt": "Limpando e repassando o erro"
+     },
+     "code": "try\n    try\n        error('io:fail', 'disk error')\n    catch inner\n        disp('cleaning up')\n        rethrow(inner)\n    end\ncatch outer\n    disp(outer.identifier)\nend"
+    }
+   ],
+   "see": [
+    "throw",
+    "error",
+    "MException",
+    "try, catch",
+    "throwAsCaller"
+   ]
+  },
+  "run": {
+   "summary": {
+    "en": "Runs a script file given by its path or name.",
+    "pt": "Executa um arquivo de script dado pelo caminho ou nome."
+   },
+   "syntax": [
+    {
+     "code": "run(scriptname)",
+     "en": "Runs the script in the current workspace.",
+     "pt": "Executa o script no workspace atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "scriptname",
+     "en": "Name or path of the script file, with or without the `.m` extension.",
+     "pt": "Nome ou caminho do arquivo de script, com ou sem a extensão `.m`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A script shares the workspace of the caller: variables it creates remain available, and it can read and change the caller's variables. `run` accepts a full or relative path, which the plain name form needs a folder on the search path for. The command form `run name` works as well.",
+    "pt": "Um script compartilha o workspace de quem o chama: as variáveis que cria continuam disponíveis, e ele pode ler e alterar as variáveis do chamador. `run` aceita um caminho completo ou relativo, enquanto a forma só com o nome exige uma pasta no caminho de busca. A forma de comando `run nome` também funciona."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Writing and running a script",
+      "pt": "Escrevendo e executando um script"
+     },
+     "code": "fid = fopen('demo_script.m', 'w');\nfprintf(fid, 'msg = ''ran script'';\\ndisp(msg)\\n');\nfclose(fid);\nrun('demo_script.m')\nrun demo_script\ndisp(msg)\ndelete('demo_script.m')"
+    }
+   ],
+   "see": [
+    "eval",
+    "evalin",
+    "feval",
+    "exist",
+    "addpath"
+   ]
+  },
+  "start": {
+   "summary": {
+    "en": "Method of timer objects: starts the timer.",
+    "pt": "Método de objetos timer: inicia o timer."
+   },
+   "syntax": [
+    {
+     "code": "start(t)",
+     "en": "Starts the timer `t`; it waits `StartDelay` seconds, then begins calling `TimerFcn`.",
+     "pt": "Inicia o timer `t`; ele espera `StartDelay` segundos e então começa a chamar `TimerFcn`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A timer object, or an array of timers.",
+     "pt": "Um objeto timer, ou um array de timers."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`start` acts on timer objects created with `timer`. After it returns, the timer's `Running` property is `'on'` and the callbacks fire in the background while the script continues. Use `wait` to block until the timer finishes, or `stop` to cancel it. Starting a timer that is already running has no effect.",
+    "pt": "`start` atua em objetos timer criados com `timer`. Depois que retorna, a propriedade `Running` do timer é `'on'` e os callbacks disparam em segundo plano enquanto o script continua. Use `wait` para bloquear até o timer terminar, ou `stop` para cancelá-lo. Iniciar um timer que já está em execução não tem efeito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Starting a one-shot timer",
+      "pt": "Iniciando um timer de disparo único"
+     },
+     "code": "t = timer('StartDelay', 0.01, 'TimerFcn', @(~,~) disp('fired'));\nstart(t)\nwait(t)\ndisp(t.Running)\ndelete(t)"
+    }
+   ],
+   "see": [
+    "timer",
+    "stop",
+    "wait",
+    "startat"
+   ]
+  },
+  "startat": {
+   "summary": {
+    "en": "Method of timer objects: starts the timer at a given date and time.",
+    "pt": "Método de objetos timer: inicia o timer em uma data e hora indicadas."
+   },
+   "syntax": [
+    {
+     "code": "startat(t, time)",
+     "en": "Starts `t` so that it first fires at `time`.",
+     "pt": "Inicia `t` de modo que ele dispare pela primeira vez em `time`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A timer object.",
+     "pt": "Um objeto timer."
+    },
+    {
+     "name": "time",
+     "en": "The moment of the first call, as a date number from `datenum` or `now`, or a date string.",
+     "pt": "O momento da primeira chamada, como um número de data de `datenum` ou `now`, ou uma string de data."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`startat` replaces the relative `StartDelay` by an absolute moment, which suits tasks planned for a time of day. If the moment is already past, the timer is not started.",
+    "pt": "`startat` substitui o `StartDelay` relativo por um momento absoluto, o que serve para tarefas planejadas para um horário do dia. Se o momento já passou, o timer não é iniciado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Starting a moment from now",
+      "pt": "Iniciando daqui a um instante"
+     },
+     "code": "t = timer('TimerFcn', @(~,~) disp('fired on time'));\nstartat(t, now + 0.02 / 86400)\nwait(t)\ndelete(t)"
+    }
+   ],
+   "see": [
+    "timer",
+    "start",
+    "stop",
+    "now",
+    "datenum"
+   ]
+  },
+  "stop": {
+   "summary": {
+    "en": "Method of timer objects: stops a running timer.",
+    "pt": "Método de objetos timer: para um timer em execução."
+   },
+   "syntax": [
+    {
+     "code": "stop(t)",
+     "en": "Stops the timer `t` so that no further callbacks are made.",
+     "pt": "Para o timer `t` de modo que nenhum outro callback seja feito."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A timer object, or an array of timers.",
+     "pt": "Um objeto timer, ou um array de timers."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "After `stop`, the `Running` property of the timer returns to `'off'`. Stopping a timer does not delete it; it can be started again with `start`. Stopping a timer that is not running does nothing.",
+    "pt": "Depois de `stop`, a propriedade `Running` do timer volta a `'off'`. Parar um timer não o apaga; ele pode ser iniciado de novo com `start`. Parar um timer que não está em execução não faz nada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cancelling before it fires",
+      "pt": "Cancelando antes de disparar"
+     },
+     "code": "t = timer('StartDelay', 5, 'TimerFcn', @(~,~) disp('never printed'));\nstart(t)\ndisp(t.Running)\nstop(t)\ndisp(t.Running)\ndelete(t)"
+    }
+   ],
+   "see": [
+    "timer",
+    "start",
+    "wait",
+    "delete"
+   ]
+  },
+  "throw": {
+   "summary": {
+    "en": "Raises an MException object as an error.",
+    "pt": "Lança um objeto MException como um erro."
+   },
+   "syntax": [
+    {
+     "code": "throw(ME)",
+     "en": "Stops execution with the exception `ME`, as if `error` had been called.",
+     "pt": "Interrompe a execução com a exceção `ME`, como se `error` tivesse sido chamada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ME",
+     "en": "An `MException` object.",
+     "pt": "Um objeto `MException`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`throw` is the way to raise an exception that was built ahead of time with `MException` and possibly extended with `addCause`. The error propagates up the call stack until a `try`/`catch` handles it.",
+    "pt": "`throw` é a forma de lançar uma exceção construída antes com `MException` e possivelmente ampliada com `addCause`. O erro sobe pela pilha de chamadas até que um `try`/`catch` o trate."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Throwing a prepared exception",
+      "pt": "Lançando uma exceção preparada"
+     },
+     "code": "ME = MException('check:neg', 'Negative value: %d', -4);\ntry\n    throw(ME)\ncatch err\n    fprintf('%s | %s\\n', err.identifier, err.message)\nend"
+    }
+   ],
+   "see": [
+    "MException",
+    "rethrow",
+    "error",
+    "throwAsCaller",
+    "try, catch"
+   ]
+  },
+  "throwAsCaller": {
+   "summary": {
+    "en": "Raises an exception as if it came from the calling function.",
+    "pt": "Lança uma exceção como se viesse da função chamadora."
+   },
+   "syntax": [
+    {
+     "code": "throwAsCaller(ME)",
+     "en": "Throws `ME` with the call stack trimmed so the error appears to originate in the caller.",
+     "pt": "Lança `ME` com a pilha de chamadas reduzida, de modo que o erro pareça se originar em quem chamou."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ME",
+     "en": "An `MException` object.",
+     "pt": "Um objeto `MException`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A function that validates its inputs usually wants the error attributed to the call that made the mistake, not to an internal helper. `throwAsCaller` removes the current function from the reported stack for that purpose. The identifier and message are unchanged.",
+    "pt": "Uma função que valida suas entradas costuma querer que o erro seja atribuído à chamada que cometeu o engano, e não a um auxiliar interno. `throwAsCaller` remove a função atual da pilha relatada para esse fim. O identificador e a mensagem não mudam."
+   },
+   "notes": {
+    "en": "MatLivre raises the error normally, so the reported location is not adjusted.",
+    "pt": "O MatLivre lança o erro normalmente, então o local relatado não é ajustado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reporting a bad argument to the caller",
+      "pt": "Relatando um argumento inválido a quem chamou"
+     },
+     "code": "function r = safeSqrt(x)\n    if x < 0\n        throwAsCaller(MException('safe:neg', 'x must be nonnegative'));\n    end\n    r = sqrt(x);\nend\ndisp(safeSqrt(16))\ntry\n    safeSqrt(-1)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "throw",
+    "rethrow",
+    "MException",
+    "error"
+   ]
+  },
+  "timer": {
+   "summary": {
+    "en": "Creates a timer object that runs a function after a delay or repeatedly.",
+    "pt": "Cria um objeto timer que executa uma função após um atraso ou repetidamente."
+   },
+   "syntax": [
+    {
+     "code": "t = timer",
+     "en": "Creates a timer with default settings.",
+     "pt": "Cria um timer com as configurações padrão."
+    },
+    {
+     "code": "t = timer(Name, Value, ...)",
+     "en": "Creates a timer and sets properties such as `'TimerFcn'`, `'StartDelay'`, `'Period'`, `'ExecutionMode'`, `'TasksToExecute'` or `'Name'`.",
+     "pt": "Cria um timer e define propriedades como `'TimerFcn'`, `'StartDelay'`, `'Period'`, `'ExecutionMode'`, `'TasksToExecute'` ou `'Name'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TimerFcn",
+     "en": "Function handle called each time the timer fires. It receives the timer object and an event structure.",
+     "pt": "Function handle chamado cada vez que o timer dispara. Recebe o objeto timer e um struct de evento."
+    },
+    {
+     "name": "StartDelay",
+     "en": "Seconds to wait after `start` before the first call. Default `0`.",
+     "pt": "Segundos de espera após `start` antes da primeira chamada. Padrão `0`."
+    },
+    {
+     "name": "Period",
+     "en": "Seconds between calls for repeating modes. Default `1`.",
+     "pt": "Segundos entre chamadas nos modos repetitivos. Padrão `1`."
+    },
+    {
+     "name": "ExecutionMode",
+     "en": "`'singleShot'` (default), `'fixedRate'`, `'fixedDelay'` or `'fixedSpacing'`.",
+     "pt": "`'singleShot'` (padrão), `'fixedRate'`, `'fixedDelay'` ou `'fixedSpacing'`."
+    },
+    {
+     "name": "TasksToExecute",
+     "en": "Number of times to fire in repeating modes. Default `Inf`.",
+     "pt": "Número de disparos nos modos repetitivos. Padrão `Inf`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Timer object. It is a handle: copies refer to the same timer.",
+     "pt": "Objeto timer. É um handle: cópias se referem ao mesmo timer."
+    }
+   ],
+   "description": {
+    "en": "Creating a timer does nothing by itself; `start` arms it and `stop` disarms it. The timer calls `TimerFcn` in the background of the session, which makes it useful for polling, animations and delayed actions. Properties can be read and set with dot notation, for example `t.Period = 0.5`, and `TasksExecuted` counts how many times it fired.\n\nA timer that is no longer needed should be removed with `delete(t)`.",
+    "pt": "Criar um timer não faz nada por si só; `start` o arma e `stop` o desarma. O timer chama `TimerFcn` em segundo plano na sessão, o que o torna útil para consulta periódica, animações e ações atrasadas. As propriedades podem ser lidas e definidas com notação de ponto, por exemplo `t.Period = 0.5`, e `TasksExecuted` conta quantas vezes disparou.\n\nUm timer que não é mais necessário deve ser removido com `delete(t)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three beats at a fixed rate",
+      "pt": "Três batidas em taxa fixa"
+     },
+     "code": "t = timer('ExecutionMode', 'fixedRate', 'Period', 0.01, ...\n          'TasksToExecute', 3, 'TimerFcn', @(~,~) disp('beat'));\nstart(t)\nwait(t)\ndisp(t.TasksExecuted)\ndelete(t)"
+    }
+   ],
+   "see": [
+    "start",
+    "stop",
+    "wait",
+    "timerfind",
+    "delete",
+    "pause"
+   ]
+  },
+  "timerfind": {
+   "summary": {
+    "en": "Finds valid timer objects, optionally filtered by property values.",
+    "pt": "Encontra objetos timer válidos, opcionalmente filtrados por valores de propriedades."
+   },
+   "syntax": [
+    {
+     "code": "out = timerfind",
+     "en": "Returns all timer objects that are valid.",
+     "pt": "Retorna todos os objetos timer válidos."
+    },
+    {
+     "code": "out = timerfind(Name, Value, ...)",
+     "en": "Returns only the timers whose properties match the given values.",
+     "pt": "Retorna apenas os timers cujas propriedades correspondem aos valores dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Name, Value",
+     "en": "Property name and the value to match, such as `'Name', 'mytimer'`.",
+     "pt": "Nome da propriedade e o valor a casar, como `'Name', 'mytimer'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "out",
+     "en": "Array of matching timers, or an empty value if there are none.",
+     "pt": "Array de timers correspondentes, ou um valor vazio se não houver nenhum."
+    }
+   ],
+   "description": {
+    "en": "Timers belong to the session, not to a variable, so a timer whose variable was cleared can still be running. `timerfind` locates it again, typically to stop and delete it. Giving the `Name` property when creating timers makes them easy to pick out later.",
+    "pt": "Timers pertencem à sessão, e não a uma variável, então um timer cuja variável foi limpa ainda pode estar em execução. `timerfind` o localiza de novo, normalmente para parar e apagá-lo. Dar a propriedade `Name` ao criar timers facilita escolhê-los depois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Looking up a timer by name",
+      "pt": "Procurando um timer pelo nome"
+     },
+     "code": "t = timer('Name', 'mytimer', 'TimerFcn', @(~,~) disp('x'));\nf = timerfind('Name', 'mytimer');\ndisp(numel(f))\ndisp(f.Name)\ndelete(t)"
+    }
+   ],
+   "see": [
+    "timerfindall",
+    "timer",
+    "isvalid",
+    "delete"
+   ]
+  },
+  "timerfindall": {
+   "summary": {
+    "en": "Finds all timer objects, including those hidden from timerfind.",
+    "pt": "Encontra todos os objetos timer, inclusive os ocultos de timerfind."
+   },
+   "syntax": [
+    {
+     "code": "out = timerfindall",
+     "en": "Returns every timer object that exists.",
+     "pt": "Retorna todos os objetos timer existentes."
+    },
+    {
+     "code": "out = timerfindall(Name, Value, ...)",
+     "en": "Returns the timers whose properties match the given values.",
+     "pt": "Retorna os timers cujas propriedades correspondem aos valores dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Name, Value",
+     "en": "Property name and the value to match.",
+     "pt": "Nome da propriedade e o valor a casar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "out",
+     "en": "Array of timers, or an empty value if there are none.",
+     "pt": "Array de timers, ou um valor vazio se não houver nenhum."
+    }
+   ],
+   "description": {
+    "en": "Timers can be created with the `ObjectVisibility` property set to `'off'`, which hides them from `timerfind`. `timerfindall` ignores that setting, so it is the call to use when cleaning up every timer, for example `delete(timerfindall)`.",
+    "pt": "Timers podem ser criados com a propriedade `ObjectVisibility` em `'off'`, o que os oculta de `timerfind`. `timerfindall` ignora essa configuração, então é a chamada indicada para limpar todos os timers, por exemplo `delete(timerfindall)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Counting timers",
+      "pt": "Contando timers"
+     },
+     "code": "t1 = timer('TimerFcn', @(~,~) disp('a'));\nt2 = timer('TimerFcn', @(~,~) disp('b'));\ndisp(numel(timerfindall))\ndelete(timerfindall)\ndisp(isvalid(t1))"
+    }
+   ],
+   "see": [
+    "timerfind",
+    "timer",
+    "delete",
+    "isvalid"
+   ]
+  },
+  "try, catch": {
+   "summary": {
+    "en": "Runs code and handles any error it raises instead of stopping the program.",
+    "pt": "Executa código e trata qualquer erro lançado em vez de interromper o programa."
+   },
+   "syntax": [
+    {
+     "code": "try, statements, catch, handler, end",
+     "en": "Runs `statements`; if an error occurs, runs `handler` and then continues after `end`.",
+     "pt": "Executa `statements`; se ocorrer um erro, executa `handler` e continua após `end`."
+    },
+    {
+     "code": "try, statements, catch ME, handler, end",
+     "en": "Also stores the error as an `MException` in the variable `ME` for the handler to inspect.",
+     "pt": "Também guarda o erro como `MException` na variável `ME` para o handler inspecionar."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ME",
+     "en": "Name of the variable that receives the exception: its `identifier`, `message` and other properties describe the error.",
+     "pt": "Nome da variável que recebe a exceção: seu `identifier`, `message` e outras propriedades descrevem o erro."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Execution of the `try` block stops at the first error, skips the rest of that block and jumps to the `catch` block. If no error occurs, the `catch` block is skipped. The statements in each block may be on separate lines; `try` and `catch` may also be written with commas on a single line.\n\nInside the handler, the identifier tells which kind of problem occurred, so `switch ME.identifier` can handle expected ones and `rethrow(ME)` can pass on the others.",
+    "pt": "A execução do bloco `try` para no primeiro erro, ignora o restante do bloco e salta para o bloco `catch`. Se nenhum erro ocorre, o bloco `catch` é ignorado. Os comandos de cada bloco podem estar em linhas separadas; `try` e `catch` também podem ser escritos com vírgulas em uma única linha.\n\nDentro do handler, o identificador indica que tipo de problema ocorreu, então `switch ME.identifier` pode tratar os esperados e `rethrow(ME)` pode repassar os demais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Catching an indexing error",
+      "pt": "Capturando um erro de indexação"
+     },
+     "code": "x = [1 2 3];\ntry\n    y = x(5);\ncatch ME\n    disp(ME.identifier)\n    disp(ME.message)\nend\ndisp('program continues')"
+    }
+   ],
+   "see": [
+    "error",
+    "MException",
+    "rethrow",
+    "lasterr",
+    "onCleanup"
+   ]
+  },
+  "wait": {
+   "summary": {
+    "en": "Method of timer objects: blocks until the timer has finished running.",
+    "pt": "Método de objetos timer: bloqueia até o timer terminar de executar."
+   },
+   "syntax": [
+    {
+     "code": "wait(t)",
+     "en": "Pauses the script until the timer `t` is no longer running.",
+     "pt": "Pausa o script até o timer `t` deixar de estar em execução."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A timer object.",
+     "pt": "Um objeto timer."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A started timer runs in the background, so a script that ends right after `start` may finish before the callback ever runs. `wait` makes the script block until all the timer's tasks are done, or until it is stopped. A repeating timer with `TasksToExecute` left at `Inf` never finishes by itself, so `wait` would block until `stop` is called elsewhere.",
+    "pt": "Um timer iniciado roda em segundo plano, então um script que termina logo após `start` pode acabar antes de o callback rodar. `wait` faz o script bloquear até que todas as tarefas do timer terminem, ou até que ele seja parado. Um timer repetitivo com `TasksToExecute` em `Inf` nunca termina sozinho, então `wait` bloquearia até que `stop` seja chamado em outro lugar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Waiting for two repetitions",
+      "pt": "Esperando duas repetições"
+     },
+     "code": "t = timer('ExecutionMode', 'fixedRate', 'Period', 0.01, ...\n          'TasksToExecute', 2, 'TimerFcn', @(~,~) disp('tick'));\nstart(t)\nwait(t)\ndisp('finished')\ndelete(t)"
+    }
+   ],
+   "see": [
+    "timer",
+    "start",
+    "stop",
+    "pause"
+   ]
+  }
+ }
+}

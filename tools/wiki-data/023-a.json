@@ -1,0 +1,907 @@
+{
+ "functions": {
+  "munlock": {
+   "summary": {
+    "en": "Allows a locked function or script file to be cleared from memory again.",
+    "pt": "Permite que um arquivo de função ou script bloqueado volte a ser removido da memória."
+   },
+   "syntax": [
+    {
+     "code": "munlock",
+     "en": "Unlocks the file that is currently running, normally called from inside the file.",
+     "pt": "Desbloqueia o arquivo em execução, normalmente chamado de dentro dele."
+    },
+    {
+     "code": "munlock(fun)",
+     "en": "Unlocks the function named by the text `fun`.",
+     "pt": "Desbloqueia a função cujo nome é o texto `fun`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Name of a function, as a character vector or string.",
+     "pt": "Nome de uma função, como vetor de caracteres ou string."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mlock` pins a function in memory so that `clear` does not discard it along with its persistent variables. `munlock` reverses that, making the file eligible to be cleared again. Calling it on a file that is not locked does nothing.",
+    "pt": "`mlock` mantém uma função fixa na memória, de modo que `clear` não a descarta junto com suas variáveis persistentes. `munlock` desfaz isso, tornando o arquivo novamente elegível para ser limpo. Chamá-la para um arquivo que não está bloqueado não tem efeito."
+   },
+   "notes": {
+    "en": "In MatLivre `munlock` is accepted and does nothing, and `mislocked` always reports `0`. Locking has no effect on how `clear` behaves.",
+    "pt": "No MatLivre, `munlock` é aceita e não faz nada, e `mislocked` sempre retorna `0`. O bloqueio não altera o comportamento de `clear`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Unlocking a function by name",
+      "pt": "Desbloqueando uma função pelo nome"
+     },
+     "code": "munlock('sin');\ndisp(mislocked('sin'))"
+    }
+   ],
+   "see": [
+    "mlock",
+    "mislocked",
+    "clear",
+    "persistent"
+   ]
+  },
+  "mustBeA": {
+   "summary": {
+    "en": "Checks that a value belongs to one of the given classes.",
+    "pt": "Verifica se um valor pertence a uma das classes indicadas."
+   },
+   "syntax": [
+    {
+     "code": "mustBeA(A, classname)",
+     "en": "Checks that `A` is of the given class or inherits from it. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` é da classe indicada ou herda dela. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "classname",
+     "en": "Class name as text, or a cell array or string array of names. The value passes if it matches any of them.",
+     "pt": "Nome da classe como texto, ou cell array ou array de strings com nomes. O valor passa se corresponder a algum deles."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeA` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeA`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nThe test is `isa(A, classname)`, so a subclass of the named class passes as well. With several names, the value is accepted if it is of any of them.",
+    "pt": "`mustBeA` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeA`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nO teste é `isa(A, classname)`, então uma subclasse da classe indicada também passa. Com vários nomes, o valor é aceito se for de qualquer um deles."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeA(5, 'double');\ndisp('passed')\ntry\n    mustBeA(5, 'char')\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "isa",
+    "class",
+    "mustBeNumeric",
+    "mustBeText"
+   ]
+  },
+  "mustBeFile": {
+   "summary": {
+    "en": "Checks that text names existing files.",
+    "pt": "Verifica se o texto nomeia arquivos existentes."
+   },
+   "syntax": [
+    {
+     "code": "mustBeFile(A)",
+     "en": "Checks that every path in `A` refers to an existing file. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os caminhos em `A` se referem a arquivos existentes. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeFile` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeFile`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\n`A` can be a character vector, a string array or a cell array of character vectors. A path that names a folder does not pass, since the check is for files. Relative paths are resolved against the current folder.",
+    "pt": "`mustBeFile` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeFile`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\n`A` pode ser um vetor de caracteres, um array de strings ou um cell array de vetores de caracteres. Um caminho que nomeia uma pasta não passa, pois a verificação é de arquivos. Caminhos relativos são resolvidos a partir da pasta atual."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "fid = fopen('check.txt', 'w'); fclose(fid);\nmustBeFile('check.txt');\ndisp('passed')\ntry\n    mustBeFile('nofile.xyz')\ncatch err\n    disp(err.message)\nend\ndelete('check.txt')"
+    }
+   ],
+   "see": [
+    "mustBeFolder",
+    "isfile",
+    "exist",
+    "mustBeText"
+   ]
+  },
+  "mustBeFinite": {
+   "summary": {
+    "en": "Checks that no element is Inf, -Inf or NaN.",
+    "pt": "Verifica se nenhum elemento é Inf, -Inf ou NaN."
+   },
+   "syntax": [
+    {
+     "code": "mustBeFinite(A)",
+     "en": "Checks that every element of `A` is finite. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são finitos. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeFinite` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeFinite`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nLogical and integer inputs always pass, since they cannot hold `Inf` or `NaN`. An empty array passes.",
+    "pt": "`mustBeFinite` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeFinite`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nEntradas lógicas e inteiras sempre passam, pois não podem conter `Inf` nem `NaN`. Um array vazio passa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeFinite([1 2 3]);\ndisp('passed')\ntry\n    mustBeFinite([1 Inf 3])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "isfinite",
+    "mustBeNonNan",
+    "mustBeReal",
+    "mustBeNumeric"
+   ]
+  },
+  "mustBeFloat": {
+   "summary": {
+    "en": "Checks that a value is of class double or single.",
+    "pt": "Verifica se um valor é da classe double ou single."
+   },
+   "syntax": [
+    {
+     "code": "mustBeFloat(A)",
+     "en": "Checks that `A` is a floating-point array. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` é um array de ponto flutuante. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeFloat` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeFloat`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nOnly `double` and `single` arrays pass. Integer types, logicals and characters fail even though they can be converted to floating point.",
+    "pt": "`mustBeFloat` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeFloat`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nSomente arrays `double` e `single` passam. Tipos inteiros, lógicos e caracteres falham, embora possam ser convertidos para ponto flutuante."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeFloat(single(2.5));\ndisp('passed')\ntry\n    mustBeFloat(int8(1))\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "isfloat",
+    "mustBeInteger",
+    "mustBeNumeric",
+    "mustBeA"
+   ]
+  },
+  "mustBeFolder": {
+   "summary": {
+    "en": "Checks that text names existing folders.",
+    "pt": "Verifica se o texto nomeia pastas existentes."
+   },
+   "syntax": [
+    {
+     "code": "mustBeFolder(A)",
+     "en": "Checks that every path in `A` refers to an existing folder. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os caminhos em `A` se referem a pastas existentes. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeFolder` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeFolder`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\n`A` can be a character vector, a string array or a cell array of character vectors. The error message lists the folders that were not found.",
+    "pt": "`mustBeFolder` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeFolder`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\n`A` pode ser um vetor de caracteres, um array de strings ou um cell array de vetores de caracteres. A mensagem de erro lista as pastas que não foram encontradas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeFolder(pwd);\ndisp('passed')\ntry\n    mustBeFolder('nofolder')\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeFile",
+    "isfolder",
+    "exist",
+    "mustBeText"
+   ]
+  },
+  "mustBeGreaterThan": {
+   "summary": {
+    "en": "Checks that every element is strictly greater than a bound.",
+    "pt": "Verifica se todos os elementos são estritamente maiores que um limite."
+   },
+   "syntax": [
+    {
+     "code": "mustBeGreaterThan(A, c)",
+     "en": "Checks that every element of `A` is strictly greater than `c`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são estritamente maiores que `c`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "c",
+     "en": "Scalar bound to compare against.",
+     "pt": "Limite escalar para comparação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeGreaterThan` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeGreaterThan`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nEach element is compared with the scalar `c` using `>`. Any element that fails the comparison makes the whole call error.",
+    "pt": "`mustBeGreaterThan` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeGreaterThan`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nCada elemento é comparado com o escalar `c` usando `>`. Qualquer elemento que falhe na comparação faz a chamada inteira gerar erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeGreaterThan([4 5 6], 3);\ndisp('passed')\ntry\n    mustBeGreaterThan([1 5 2], 3)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeGreaterThanOrEqual",
+    "mustBeLessThan",
+    "mustBePositive",
+    "mustBeInRange"
+   ]
+  },
+  "mustBeGreaterThanOrEqual": {
+   "summary": {
+    "en": "Checks that every element is greater than or equal to a bound.",
+    "pt": "Verifica se todos os elementos são maiores ou iguais a um limite."
+   },
+   "syntax": [
+    {
+     "code": "mustBeGreaterThanOrEqual(A, c)",
+     "en": "Checks that every element of `A` is greater than or equal to `c`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são maiores ou iguais a `c`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "c",
+     "en": "Scalar bound to compare against.",
+     "pt": "Limite escalar para comparação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeGreaterThanOrEqual` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeGreaterThanOrEqual`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nEach element is compared with the scalar `c` using `>=`. Any element that fails the comparison makes the whole call error.",
+    "pt": "`mustBeGreaterThanOrEqual` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeGreaterThanOrEqual`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nCada elemento é comparado com o escalar `c` usando `>=`. Qualquer elemento que falhe na comparação faz a chamada inteira gerar erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeGreaterThanOrEqual([3 5 6], 3);\ndisp('passed')\ntry\n    mustBeGreaterThanOrEqual([1 5 2], 3)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeGreaterThan",
+    "mustBeLessThanOrEqual",
+    "mustBeNonnegative",
+    "mustBeInRange"
+   ]
+  },
+  "mustBeLessThan": {
+   "summary": {
+    "en": "Checks that every element is strictly less than a bound.",
+    "pt": "Verifica se todos os elementos são estritamente menores que um limite."
+   },
+   "syntax": [
+    {
+     "code": "mustBeLessThan(A, c)",
+     "en": "Checks that every element of `A` is strictly less than `c`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são estritamente menores que `c`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "c",
+     "en": "Scalar bound to compare against.",
+     "pt": "Limite escalar para comparação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeLessThan` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeLessThan`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nEach element is compared with the scalar `c` using `<`. Any element that fails the comparison makes the whole call error.",
+    "pt": "`mustBeLessThan` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeLessThan`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nCada elemento é comparado com o escalar `c` usando `<`. Qualquer elemento que falhe na comparação faz a chamada inteira gerar erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeLessThan([1 2 3], 5);\ndisp('passed')\ntry\n    mustBeLessThan([1 9 2], 5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeLessThanOrEqual",
+    "mustBeGreaterThan",
+    "mustBeNegative",
+    "mustBeInRange"
+   ]
+  },
+  "mustBeLessThanOrEqual": {
+   "summary": {
+    "en": "Checks that every element is less than or equal to a bound.",
+    "pt": "Verifica se todos os elementos são menores ou iguais a um limite."
+   },
+   "syntax": [
+    {
+     "code": "mustBeLessThanOrEqual(A, c)",
+     "en": "Checks that every element of `A` is less than or equal to `c`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são menores ou iguais a `c`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "c",
+     "en": "Scalar bound to compare against.",
+     "pt": "Limite escalar para comparação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeLessThanOrEqual` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeLessThanOrEqual`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nEach element is compared with the scalar `c` using `<=`. Any element that fails the comparison makes the whole call error.",
+    "pt": "`mustBeLessThanOrEqual` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeLessThanOrEqual`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nCada elemento é comparado com o escalar `c` usando `<=`. Qualquer elemento que falhe na comparação faz a chamada inteira gerar erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeLessThanOrEqual([1 2 5], 5);\ndisp('passed')\ntry\n    mustBeLessThanOrEqual([1 9 2], 5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeLessThan",
+    "mustBeGreaterThanOrEqual",
+    "mustBeNonpositive",
+    "mustBeInRange"
+   ]
+  },
+  "mustBeInRange": {
+   "summary": {
+    "en": "Checks that every element lies between two bounds.",
+    "pt": "Verifica se todos os elementos estão entre dois limites."
+   },
+   "syntax": [
+    {
+     "code": "mustBeInRange(A, lower, upper)",
+     "en": "Checks that every element of `A` lies within the interval from `lower` to `upper`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` estão no intervalo de `lower` a `upper`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    },
+    {
+     "code": "mustBeInRange(A, lower, upper, boundflag)",
+     "en": "Excludes the lower bound, the upper bound or both from the range, according to `boundflag`.",
+     "pt": "Exclui da faixa o limite inferior, o superior ou ambos, conforme `boundflag`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "lower",
+     "en": "Lower bound, a real scalar.",
+     "pt": "Limite inferior, um escalar real."
+    },
+    {
+     "name": "upper",
+     "en": "Upper bound, a real scalar not smaller than `lower`.",
+     "pt": "Limite superior, um escalar real não menor que `lower`."
+    },
+    {
+     "name": "boundflag",
+     "en": "Optional: `'exclusive'`, `'exclude-lower'` or `'exclude-upper'` to leave one or both bounds out of the allowed range.",
+     "pt": "Opcional: `'exclusive'`, `'exclude-lower'` ou `'exclude-upper'` para deixar um ou ambos os limites fora da faixa permitida."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeInRange` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeInRange`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nBy default both bounds are allowed, so the range is the closed interval. The message tells which side is open, for example that values must be greater than or equal to the lower bound and less than the upper one.",
+    "pt": "`mustBeInRange` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeInRange`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nPor padrão ambos os limites são permitidos, ou seja, a faixa é o intervalo fechado. A mensagem indica qual lado é aberto, por exemplo que os valores devem ser maiores ou iguais ao limite inferior e menores que o superior."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeInRange([1 3 5], 1, 5);\ndisp('passed')\ntry\n    mustBeInRange(7, 1, 5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeGreaterThan",
+    "mustBeLessThan",
+    "mustBeNonnegative",
+    "mustBeMember"
+   ]
+  },
+  "mustBeInteger": {
+   "summary": {
+    "en": "Checks that every element is a whole number.",
+    "pt": "Verifica se todos os elementos são números inteiros."
+   },
+   "syntax": [
+    {
+     "code": "mustBeInteger(A)",
+     "en": "Checks that every element of `A` has an integer value. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` têm valor inteiro. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeInteger` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeInteger`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nThe test is about the value, not the class: `3.0` of class double passes, and so do integer-class arrays and logicals. A value such as `1.5` fails.",
+    "pt": "`mustBeInteger` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeInteger`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nO teste é sobre o valor, não sobre a classe: `3.0` da classe double passa, assim como arrays de classe inteira e lógicos. Um valor como `1.5` falha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeInteger([1 2 3]);\ndisp('passed')\ntry\n    mustBeInteger(1.5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeNumeric",
+    "mustBeFinite",
+    "mustBePositive",
+    "round"
+   ]
+  },
+  "mustBeMember": {
+   "summary": {
+    "en": "Checks that a value is one of the elements of a set.",
+    "pt": "Verifica se um valor é um dos elementos de um conjunto."
+   },
+   "syntax": [
+    {
+     "code": "mustBeMember(A, S)",
+     "en": "Checks that `A` is a member of the set `S`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` é membro do conjunto `S`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    },
+    {
+     "name": "S",
+     "en": "The allowed values: a numeric array, a character vector or a cell array of character vectors.",
+     "pt": "Os valores permitidos: um array numérico, um vetor de caracteres ou um cell array de vetores de caracteres."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeMember` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeMember`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nThe test is `all(ismember(A, S))`. On failure the message prints the whole set, one value per line, which makes it easy to see the permitted choices.",
+    "pt": "`mustBeMember` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeMember`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nO teste é `all(ismember(A, S))`. Em caso de falha, a mensagem imprime o conjunto inteiro, um valor por linha, o que facilita ver as opções permitidas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeMember('b', {'a', 'b'});\ndisp('passed')\ntry\n    mustBeMember(4, [1 2 3])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "ismember",
+    "validatestring",
+    "mustBeInRange",
+    "mustBeA"
+   ]
+  },
+  "mustBeNegative": {
+   "summary": {
+    "en": "Checks that every element is less than zero.",
+    "pt": "Verifica se todos os elementos são menores que zero."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNegative(A)",
+     "en": "Checks that every element of `A` is negative. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são negativos. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNegative` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNegative`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nZero is not negative, so it fails. Use `mustBeNonpositive` to accept zero as well.",
+    "pt": "`mustBeNegative` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNegative`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nZero não é negativo, portanto falha. Use `mustBeNonpositive` para aceitar também o zero."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNegative([-3 -1]);\ndisp('passed')\ntry\n    mustBeNegative([-3 0])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeNonpositive",
+    "mustBePositive",
+    "mustBeLessThan",
+    "mustBeNonzero"
+   ]
+  },
+  "mustBeNonempty": {
+   "summary": {
+    "en": "Checks that an array has at least one element.",
+    "pt": "Verifica se um array tem pelo menos um elemento."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonempty(A)",
+     "en": "Checks that `A` is not empty. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` não está vazio. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonempty` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonempty`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nAn array is empty when any of its dimensions is zero, so `zeros(0, 3)` and `''` both fail.",
+    "pt": "`mustBeNonempty` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonempty`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nUm array é vazio quando alguma de suas dimensões é zero, então `zeros(0, 3)` e `''` falham."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonempty([1 2]);\ndisp('passed')\ntry\n    mustBeNonempty([])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "isempty",
+    "mustBeNonzeroLengthText",
+    "mustBeScalarOrEmpty",
+    "mustBeVector"
+   ]
+  },
+  "mustBeNonmissing": {
+   "summary": {
+    "en": "Checks that the input has no missing values.",
+    "pt": "Verifica se a entrada não tem valores ausentes."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonmissing(A)",
+     "en": "Checks that `A` contains no missing values. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` não contém valores ausentes. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonmissing` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonmissing`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nMissing means `NaN` for numeric arrays and `<missing>` for strings. Ordinary text in a character array is never missing. Unlike `mustBeFinite`, an `Inf` value is accepted.",
+    "pt": "`mustBeNonmissing` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonmissing`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nAusente significa `NaN` em arrays numéricos e `<missing>` em strings. Texto comum em um array de caracteres nunca é ausente. Diferente de `mustBeFinite`, um valor `Inf` é aceito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonmissing([1 2 3]);\ndisp('passed')\ntry\n    mustBeNonmissing([1 NaN])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "ismissing",
+    "mustBeNonNan",
+    "mustBeFinite",
+    "rmmissing"
+   ]
+  },
+  "mustBeNonNan": {
+   "summary": {
+    "en": "Checks that no element is NaN.",
+    "pt": "Verifica se nenhum elemento é NaN."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonNan(A)",
+     "en": "Checks that no element of `A` is `NaN`. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se nenhum elemento de `A` é `NaN`. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonNan` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonNan`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nOnly `NaN` is rejected, so `Inf` and `-Inf` pass. Use `mustBeFinite` to reject those too.",
+    "pt": "`mustBeNonNan` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonNan`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nSomente `NaN` é rejeitado, então `Inf` e `-Inf` passam. Use `mustBeFinite` para rejeitá-los também."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonNan([1 Inf]);\ndisp('passed')\ntry\n    mustBeNonNan([1 NaN])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "isnan",
+    "mustBeFinite",
+    "mustBeNonmissing",
+    "mustBeReal"
+   ]
+  },
+  "mustBeNonnegative": {
+   "summary": {
+    "en": "Checks that every element is zero or greater.",
+    "pt": "Verifica se todos os elementos são maiores ou iguais a zero."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonnegative(A)",
+     "en": "Checks that every element of `A` is greater than or equal to zero. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são maiores ou iguais a zero. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonnegative` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonnegative`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nZero passes. Use `mustBePositive` when zero must be excluded.",
+    "pt": "`mustBeNonnegative` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonnegative`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nO zero passa. Use `mustBePositive` quando o zero precisar ser excluído."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonnegative([0 2 5]);\ndisp('passed')\ntry\n    mustBeNonnegative(-1)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBePositive",
+    "mustBeNonpositive",
+    "mustBeGreaterThanOrEqual",
+    "mustBeInteger"
+   ]
+  },
+  "mustBeNonpositive": {
+   "summary": {
+    "en": "Checks that every element is zero or less.",
+    "pt": "Verifica se todos os elementos são menores ou iguais a zero."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonpositive(A)",
+     "en": "Checks that every element of `A` is less than or equal to zero. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se todos os elementos de `A` são menores ou iguais a zero. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonpositive` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonpositive`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nZero passes. Use `mustBeNegative` when zero must be excluded.",
+    "pt": "`mustBeNonpositive` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonpositive`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nO zero passa. Use `mustBeNegative` quando o zero precisar ser excluído."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonpositive([-2 0]);\ndisp('passed')\ntry\n    mustBeNonpositive(1)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeNegative",
+    "mustBeNonnegative",
+    "mustBeLessThanOrEqual",
+    "mustBeNumeric"
+   ]
+  },
+  "mustBeNonsparse": {
+   "summary": {
+    "en": "Checks that an array is stored in full, not sparse, form.",
+    "pt": "Verifica se um array está armazenado na forma cheia, não esparsa."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonsparse(A)",
+     "en": "Checks that `A` is not a sparse array. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se `A` não é um array esparso. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonsparse` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonsparse`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nOrdinary dense arrays pass. A sparse array would fail with a message saying the value must not be sparse.",
+    "pt": "`mustBeNonsparse` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonsparse`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nArrays densos comuns passam. Um array esparso falharia com uma mensagem dizendo que o valor não pode ser esparso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dense input passes",
+      "pt": "Entrada densa passa"
+     },
+     "code": "mustBeNonsparse([1 0 0 2]);\ndisp('passed')\ntry\n    mustBeSparse([1 0 0 2])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBeSparse",
+    "issparse",
+    "full",
+    "sparse"
+   ],
+   "notes": {
+    "en": "MatLivre has no real sparse storage, so no value fails this check.",
+    "pt": "O MatLivre não tem armazenamento esparso real, então nenhum valor falha nesta verificação."
+   }
+  },
+  "mustBeNonzero": {
+   "summary": {
+    "en": "Checks that no element is zero.",
+    "pt": "Verifica se nenhum elemento é zero."
+   },
+   "syntax": [
+    {
+     "code": "mustBeNonzero(A)",
+     "en": "Checks that no element of `A` is zero. Returns nothing if the check passes and throws an error if not.",
+     "pt": "Verifica se nenhum elemento de `A` é zero. Não retorna nada se a verificação passa e lança um erro se não passa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The value to check. Any array of the class the validator accepts.",
+     "pt": "O valor a verificar. Qualquer array da classe que o validador aceita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`mustBeNonzero` is a validator: it inspects its input and either returns silently or raises an error with the identifier `MATLAB:validators:mustBeNonzero`. The error message states the requirement that was violated, so the caller sees what was expected rather than a generic failure.\n\nPositive and negative values both pass. It is useful for arguments that will be used as divisors.",
+    "pt": "`mustBeNonzero` é um validador: examina a entrada e retorna em silêncio ou lança um erro com o identificador `MATLAB:validators:mustBeNonzero`. A mensagem de erro informa o requisito violado, de modo que quem chama vê o que era esperado em vez de uma falha genérica.\n\nValores positivos e negativos passam. É útil para argumentos que serão usados como divisores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Passing and failing input",
+      "pt": "Entrada válida e inválida"
+     },
+     "code": "mustBeNonzero([1 -2 3]);\ndisp('passed')\ntry\n    mustBeNonzero([1 0])\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "mustBePositive",
+    "mustBeNegative",
+    "mustBeNonempty",
+    "nnz"
+   ]
+  }
+ }
+}

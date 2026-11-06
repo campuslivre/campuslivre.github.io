@@ -1,0 +1,1414 @@
+{
+ "functions": {
+  "bernoulli": {
+   "summary": {
+    "en": "Bernoulli numbers, and Bernoulli polynomials.",
+    "pt": "Números de Bernoulli e polinômios de Bernoulli."
+   },
+   "syntax": [
+    {
+     "code": "B = bernoulli(n)",
+     "en": "Bernoulli number `B_n`.",
+     "pt": "Número de Bernoulli `B_n`."
+    },
+    {
+     "code": "B = bernoulli(n, x)",
+     "en": "Bernoulli polynomial `B_n(x)`.",
+     "pt": "Polinômio de Bernoulli `B_n(x)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Nonnegative integer index, scalar or array.",
+     "pt": "Índice inteiro não negativo, escalar ou array."
+    },
+    {
+     "name": "x",
+     "en": "Argument of the polynomial form; usually a symbolic variable.",
+     "pt": "Argumento da forma polinomial; normalmente uma variável simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Bernoulli numbers as doubles, or exact rationals when `n` is symbolic. The odd-index numbers beyond `B_1 = -1/2` are zero.",
+     "pt": "Números de Bernoulli como double, ou racionais exatos quando `n` é simbólico. Os números de índice ímpar além de `B_1 = -1/2` são nulos."
+    }
+   ],
+   "description": {
+    "en": "The Bernoulli numbers `B_0 = 1`, `B_1 = -1/2`, `B_2 = 1/6`, `B_4 = -1/30`, ... arise in the Euler-Maclaurin formula and in the sums of powers of integers. They are the coefficients in the series `x/(exp(x) - 1) = sum(B_n*x^n/n!)`, and they connect to the zeta function through `zeta(1 - n) = -B_n/n` for `n >= 2`.\n\nPass a symbolic `n` such as `sym(10)` to get an exact fraction instead of a floating-point value.",
+    "pt": "Os números de Bernoulli `B_0 = 1`, `B_1 = -1/2`, `B_2 = 1/6`, `B_4 = -1/30`, ... aparecem na fórmula de Euler-Maclaurin e nas somas de potências de inteiros. São os coeficientes da série `x/(exp(x) - 1) = sum(B_n*x^n/n!)` e se ligam à função zeta por `zeta(1 - n) = -B_n/n` para `n >= 2`.\n\nPasse um `n` simbólico, como `sym(10)`, para obter uma fração exata em vez de ponto flutuante."
+   },
+   "notes": {
+    "en": "Use the polynomial form with caution: with a symbolic `x` MatLivre does not currently return the polynomial.",
+    "pt": "Use a forma polinomial com cautela: com `x` simbólico, o MatLivre ainda não retorna o polinômio."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric and exact values",
+      "pt": "Valores numéricos e exatos"
+     },
+     "code": "bernoulli(0:2:6)\nbernoulli(sym(10))\nbernoulli(sym(1))"
+    }
+   ],
+   "see": [
+    "euler",
+    "zeta",
+    "factorial",
+    "nchoosek"
+   ]
+  },
+  "euler": {
+   "summary": {
+    "en": "Euler numbers, and Euler polynomials.",
+    "pt": "Números de Euler e polinômios de Euler."
+   },
+   "syntax": [
+    {
+     "code": "E = euler(n)",
+     "en": "Euler number `E_n`.",
+     "pt": "Número de Euler `E_n`."
+    },
+    {
+     "code": "E = euler(n, x)",
+     "en": "Euler polynomial `E_n(x)`.",
+     "pt": "Polinômio de Euler `E_n(x)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Nonnegative integer index, scalar or array.",
+     "pt": "Índice inteiro não negativo, escalar ou array."
+    },
+    {
+     "name": "x",
+     "en": "Argument of the polynomial; number or symbolic variable.",
+     "pt": "Argumento do polinômio; número ou variável simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "The Euler number or polynomial value. The odd-index Euler numbers are zero.",
+     "pt": "O número ou o valor do polinômio de Euler. Os números de Euler de índice ímpar são nulos."
+    }
+   ],
+   "description": {
+    "en": "The Euler numbers are the integers `1, 0, -1, 0, 5, 0, -61, ...` that appear in the series `sech(x) = sum(E_n*x^n/n!)`. The signs alternate on the even indices and the magnitudes grow quickly.\n\nThe Euler polynomials satisfy `E_n(x + 1) + E_n(x) = 2*x^n`. They are different from the Euler numbers, which are not the same as Euler's constant `e` or the Euler-Mascheroni constant.",
+    "pt": "Os números de Euler são os inteiros `1, 0, -1, 0, 5, 0, -61, ...` que aparecem na série `sech(x) = sum(E_n*x^n/n!)`. Os sinais se alternam nos índices pares e as magnitudes crescem rápido.\n\nOs polinômios de Euler satisfazem `E_n(x + 1) + E_n(x) = 2*x^n`. Não devem ser confundidos com os números de Euler, nem com o número `e` ou a constante de Euler-Mascheroni."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers and a polynomial",
+      "pt": "Números e um polinômio"
+     },
+     "code": "euler(0:6)\nsyms x\neuler(2, x)"
+    }
+   ],
+   "see": [
+    "bernoulli",
+    "fibonacci",
+    "factorial",
+    "sech"
+   ]
+  },
+  "eulerPhi": {
+   "summary": {
+    "en": "Euler's totient function: how many integers up to n are coprime to n.",
+    "pt": "Função totiente de Euler: quantos inteiros até n são primos com n."
+   },
+   "syntax": [
+    {
+     "code": "p = eulerPhi(n)",
+     "en": "Returns the number of integers `k` with `1 <= k <= n` and `gcd(k, n) = 1`.",
+     "pt": "Retorna a quantidade de inteiros `k` com `1 <= k <= n` e `gcd(k, n) = 1`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array, double or symbolic.",
+     "pt": "Inteiro escalar ou array, double ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Array of the same size as `n` with the totient values.",
+     "pt": "Array do mesmo tamanho de `n` com os valores do totiente."
+    }
+   ],
+   "description": {
+    "en": "Euler's totient `phi(n)` is computed from the prime factorization: if `n = p1^a1 * ... * pk^ak`, then `phi(n) = n*(1 - 1/p1)*...*(1 - 1/pk)`. For a prime `p` the value is `p - 1`, and `phi(1) = 1`.\n\nIt gives the order of the group of units modulo `n`, which is why `a^phi(n) = 1 (mod n)` when `gcd(a, n) = 1` (Euler's theorem). Non-integer input is an error.",
+    "pt": "O totiente de Euler `phi(n)` é calculado a partir da fatoração em primos: se `n = p1^a1 * ... * pk^ak`, então `phi(n) = n*(1 - 1/p1)*...*(1 - 1/pk)`. Para um primo `p` o valor é `p - 1`, e `phi(1) = 1`.\n\nDá a ordem do grupo das unidades módulo `n`, e por isso `a^phi(n) = 1 (mod n)` quando `gcd(a, n) = 1` (teorema de Euler). Entrada não inteira é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Totients of 1 to 6 and of 36",
+      "pt": "Totientes de 1 a 6 e de 36"
+     },
+     "code": "eulerPhi(1:6)\neulerPhi(36)\neulerPhi(sym(97))"
+    }
+   ],
+   "see": [
+    "factor",
+    "primes",
+    "isprime",
+    "gcd",
+    "isPrimitiveRoot"
+   ]
+  },
+  "factorIntegerPower": {
+   "summary": {
+    "en": "Writes an integer as a perfect power b^e with the largest possible exponent.",
+    "pt": "Escreve um inteiro como potência perfeita b^e com o maior expoente possível."
+   },
+   "syntax": [
+    {
+     "code": "b = factorIntegerPower(n)",
+     "en": "Returns the base `b`.",
+     "pt": "Retorna a base `b`."
+    },
+    {
+     "code": "[b, e] = factorIntegerPower(n)",
+     "en": "Returns the base and the exponent, with `n = b^e`.",
+     "pt": "Retorna a base e o expoente, com `n = b^e`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array.",
+     "pt": "Inteiro escalar ou array."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Base, with the same size as `n`.",
+     "pt": "Base, com o mesmo tamanho de `n`."
+    },
+    {
+     "name": "e",
+     "en": "Exponent, with the same size as `n`. It is `1` when `n` is not a perfect power.",
+     "pt": "Expoente, com o mesmo tamanho de `n`. Vale `1` quando `n` não é uma potência perfeita."
+    }
+   ],
+   "description": {
+    "en": "The function looks for the largest exponent `e` for which `n` is an exact `e`-th power. For `n = 64` this gives `b = 2` and `e = 6`, not `8^2`. An integer that is not a perfect power, such as `360`, returns itself with `e = 1`.\n\nNegative inputs with an odd exponent give a negative base, since `(-2)^3 = -8`.",
+    "pt": "A função procura o maior expoente `e` para o qual `n` é uma potência `e`-ésima exata. Para `n = 64` resulta `b = 2` e `e = 6`, e não `8^2`. Um inteiro que não é potência perfeita, como `360`, retorna a si mesmo com `e = 1`.\n\nEntradas negativas com expoente ímpar dão base negativa, pois `(-2)^3 = -8`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Perfect powers and a non-power",
+      "pt": "Potências perfeitas e um não potência"
+     },
+     "code": "[b, e] = factorIntegerPower(64)\n[b, e] = factorIntegerPower(100)\n[b, e] = factorIntegerPower(360)"
+    }
+   ],
+   "see": [
+    "factor",
+    "isprime",
+    "nthroot",
+    "eulerPhi"
+   ]
+  },
+  "fibonacci": {
+   "summary": {
+    "en": "Fibonacci numbers.",
+    "pt": "Números de Fibonacci."
+   },
+   "syntax": [
+    {
+     "code": "F = fibonacci(n)",
+     "en": "Returns the `n`-th Fibonacci number, with `F_0 = 0` and `F_1 = 1`.",
+     "pt": "Retorna o `n`-ésimo número de Fibonacci, com `F_0 = 0` e `F_1 = 1`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array. Use `sym(n)` for exact values of large indices.",
+     "pt": "Inteiro escalar ou array. Use `sym(n)` para valores exatos de índices grandes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Fibonacci numbers: doubles for numeric input, exact integers for symbolic input.",
+     "pt": "Números de Fibonacci: double para entrada numérica, inteiros exatos para entrada simbólica."
+    }
+   ],
+   "description": {
+    "en": "Each Fibonacci number is the sum of the two before it: `F_n = F_(n-1) + F_(n-2)`. The ratio of consecutive terms tends to the golden ratio. Doubles hold the numbers exactly only up to about `F_78`, after which they are rounded.\n\nFor large indices use a symbolic argument: `fibonacci(sym(100))` returns the exact 21-digit integer.",
+    "pt": "Cada número de Fibonacci é a soma dos dois anteriores: `F_n = F_(n-1) + F_(n-2)`. A razão entre termos consecutivos tende à razão áurea. Os doubles guardam os números de forma exata só até cerca de `F_78`; depois disso são arredondados.\n\nPara índices grandes use um argumento simbólico: `fibonacci(sym(100))` retorna o inteiro exato de 21 dígitos."
+   },
+   "notes": {
+    "en": "Negative indices are not handled like MATLAB, which follows `F(-n) = (-1)^(n+1)*F(n)`; MatLivre returns `0`. The two-argument polynomial form is not supported either.",
+    "pt": "Índices negativos não são tratados como no MATLAB, que segue `F(-n) = (-1)^(n+1)*F(n)`; o MatLivre retorna `0`. A forma polinomial com dois argumentos também não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First terms and an exact large one",
+      "pt": "Primeiros termos e um termo grande exato"
+     },
+     "code": "fibonacci(0:10)\nfibonacci(sym(100))"
+    }
+   ],
+   "see": [
+    "bernoulli",
+    "euler",
+    "factorial",
+    "nchoosek"
+   ]
+  },
+  "harmonic": {
+   "summary": {
+    "en": "Harmonic numbers H_n = 1 + 1/2 + ... + 1/n.",
+    "pt": "Números harmônicos H_n = 1 + 1/2 + ... + 1/n."
+   },
+   "syntax": [
+    {
+     "code": "H = harmonic(n)",
+     "en": "Returns the `n`-th harmonic number.",
+     "pt": "Retorna o `n`-ésimo número harmônico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array, double or symbolic.",
+     "pt": "Inteiro escalar ou array, double ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "H",
+     "en": "Harmonic numbers, with the size of `n`. Exact fractions for symbolic input.",
+     "pt": "Números harmônicos, com o tamanho de `n`. Frações exatas para entrada simbólica."
+    }
+   ],
+   "description": {
+    "en": "The harmonic number is the partial sum of the harmonic series. It grows without bound but very slowly, like `log(n) + 0.5772...`, where the constant is the Euler-Mascheroni constant. `harmonic(0)` is `0`.\n\nWith a symbolic integer, for example `sym(10)`, the result is the exact fraction `7381/2520`.",
+    "pt": "O número harmônico é a soma parcial da série harmônica. Cresce sem limite, mas muito devagar, como `log(n) + 0.5772...`, em que a constante é a de Euler-Mascheroni. `harmonic(0)` vale `0`.\n\nCom um inteiro simbólico, por exemplo `sym(10)`, o resultado é a fração exata `7381/2520`."
+   },
+   "notes": {
+    "en": "Only integer arguments are accepted. MATLAB also defines `harmonic` for non-integer and symbolic non-integer arguments, which MatLivre rejects with an error.",
+    "pt": "Só argumentos inteiros são aceitos. O MATLAB também define `harmonic` para argumentos não inteiros, o que o MatLivre rejeita com erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric and exact",
+      "pt": "Numérico e exato"
+     },
+     "code": "harmonic(1:5)\nharmonic(sym(10))\nharmonic(100)"
+    }
+   ],
+   "see": [
+    "zeta",
+    "bernoulli",
+    "cumsum",
+    "sum"
+   ]
+  },
+  "isPrimitiveRoot": {
+   "summary": {
+    "en": "Tests whether a is a primitive root modulo n.",
+    "pt": "Testa se a é raiz primitiva módulo n."
+   },
+   "syntax": [
+    {
+     "code": "tf = isPrimitiveRoot(a, n)",
+     "en": "Returns logical `true` where `a` is a primitive root modulo `n`.",
+     "pt": "Retorna `true` (lógico) onde `a` é raiz primitiva módulo `n`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Integer scalar or array of candidates.",
+     "pt": "Inteiro escalar ou array de candidatos."
+    },
+    {
+     "name": "n",
+     "en": "Positive integer modulus.",
+     "pt": "Módulo inteiro positivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array of the size of `a`.",
+     "pt": "Array lógico do tamanho de `a`."
+    }
+   ],
+   "description": {
+    "en": "An integer `a` coprime to `n` is a primitive root modulo `n` when its powers run through every residue coprime to `n`, that is when the multiplicative order of `a` equals `eulerPhi(n)`. Primitive roots exist only for `n` equal to `1`, `2`, `4`, `p^k` or `2*p^k` with `p` an odd prime.\n\nModulo 7 the primitive roots are `3` and `5`.",
+    "pt": "Um inteiro `a` primo com `n` é raiz primitiva módulo `n` quando suas potências percorrem todos os resíduos primos com `n`, isto é, quando a ordem multiplicativa de `a` é igual a `eulerPhi(n)`. Existem raízes primitivas apenas para `n` igual a `1`, `2`, `4`, `p^k` ou `2*p^k`, com `p` primo ímpar.\n\nMódulo 7, as raízes primitivas são `3` e `5`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Candidates modulo 7",
+      "pt": "Candidatos módulo 7"
+     },
+     "code": "isPrimitiveRoot(1:6, 7)\nisPrimitiveRoot(2, 7)"
+    }
+   ],
+   "see": [
+    "eulerPhi",
+    "jacobiSymbol",
+    "mod",
+    "isprime"
+   ]
+  },
+  "jacobiSymbol": {
+   "summary": {
+    "en": "Jacobi symbol (a/n), a generalization of the Legendre symbol.",
+    "pt": "Símbolo de Jacobi (a/n), generalização do símbolo de Legendre."
+   },
+   "syntax": [
+    {
+     "code": "J = jacobiSymbol(a, n)",
+     "en": "Returns `-1`, `0` or `1`.",
+     "pt": "Retorna `-1`, `0` ou `1`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Integer scalar or array.",
+     "pt": "Inteiro escalar ou array."
+    },
+    {
+     "name": "n",
+     "en": "Odd positive integer.",
+     "pt": "Inteiro ímpar positivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "J",
+     "en": "`0` if `a` and `n` share a factor; otherwise `1` or `-1`.",
+     "pt": "`0` se `a` e `n` têm fator comum; caso contrário `1` ou `-1`."
+    }
+   ],
+   "description": {
+    "en": "The Jacobi symbol is the product of Legendre symbols over the prime factors of `n`. For a prime `n` it tells whether `a` is a quadratic residue: `1` if it is, `-1` if it is not, `0` if `n` divides `a`. For composite `n` a value of `1` does not guarantee that `a` is a square modulo `n`, but `-1` does prove it is not.\n\nThe symbol follows quadratic reciprocity, which allows a fast computation without factoring. An even `n` raises an error.",
+    "pt": "O símbolo de Jacobi é o produto dos símbolos de Legendre sobre os fatores primos de `n`. Para `n` primo indica se `a` é resíduo quadrático: `1` se for, `-1` se não for, `0` se `n` divide `a`. Para `n` composto, o valor `1` não garante que `a` seja um quadrado módulo `n`, mas `-1` prova que não é.\n\nO símbolo segue a reciprocidade quadrática, o que permite um cálculo rápido sem fatorar. Um `n` par gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Residues modulo 7 and 15",
+      "pt": "Resíduos módulo 7 e 15"
+     },
+     "code": "jacobiSymbol(1:6, 7)\njacobiSymbol(7, 7)\njacobiSymbol(2, 15)"
+    }
+   ],
+   "see": [
+    "isPrimitiveRoot",
+    "eulerPhi",
+    "mod",
+    "isprime"
+   ]
+  },
+  "nextprime": {
+   "summary": {
+    "en": "Smallest prime greater than or equal to n.",
+    "pt": "Menor primo maior ou igual a n."
+   },
+   "syntax": [
+    {
+     "code": "p = nextprime(n)",
+     "en": "Returns the smallest prime `p >= n`.",
+     "pt": "Retorna o menor primo `p >= n`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array, double or symbolic.",
+     "pt": "Inteiro escalar ou array, double ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Primes with the size of `n`.",
+     "pt": "Primos com o tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "If `n` is itself prime, it is returned unchanged; otherwise the function walks up to the next prime. Any `n` below 2 gives `2`.\n\nUse it to pick a prime table size, a hash modulus, or a test modulus just above a given bound.",
+    "pt": "Se `n` já é primo, é retornado sem alteração; caso contrário a função avança até o próximo primo. Qualquer `n` menor que 2 resulta em `2`.\n\nServe para escolher o tamanho primo de uma tabela, um módulo de hash ou um módulo de teste logo acima de um limite."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Next primes",
+      "pt": "Próximos primos"
+     },
+     "code": "nextprime(14)\nnextprime(97)\nnextprime([10 20 1000000])"
+    }
+   ],
+   "see": [
+    "prevprime",
+    "nthprime",
+    "isprime",
+    "primes"
+   ]
+  },
+  "prevprime": {
+   "summary": {
+    "en": "Largest prime less than or equal to n.",
+    "pt": "Maior primo menor ou igual a n."
+   },
+   "syntax": [
+    {
+     "code": "p = prevprime(n)",
+     "en": "Returns the largest prime `p <= n`.",
+     "pt": "Retorna o maior primo `p <= n`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer scalar or array, double or symbolic, at least 2.",
+     "pt": "Inteiro escalar ou array, double ou simbólico, no mínimo 2."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Primes with the size of `n`.",
+     "pt": "Primos com o tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "If `n` is prime it is returned unchanged; otherwise the function walks down to the nearest smaller prime. There is no prime below 2, so `prevprime(1)` is an error.",
+    "pt": "Se `n` é primo, é retornado sem alteração; caso contrário a função desce até o primo menor mais próximo. Não existe primo abaixo de 2, então `prevprime(1)` é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Previous primes",
+      "pt": "Primos anteriores"
+     },
+     "code": "prevprime(100)\nprevprime(97)\nprevprime(sym(1000))"
+    }
+   ],
+   "see": [
+    "nextprime",
+    "nthprime",
+    "isprime",
+    "primes"
+   ]
+  },
+  "nthprime": {
+   "summary": {
+    "en": "The n-th prime number.",
+    "pt": "O n-ésimo número primo."
+   },
+   "syntax": [
+    {
+     "code": "p = nthprime(n)",
+     "en": "Returns the `n`-th prime, so `nthprime(1)` is `2`.",
+     "pt": "Retorna o `n`-ésimo primo; assim `nthprime(1)` vale `2`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Positive integer scalar or array.",
+     "pt": "Inteiro positivo escalar ou array."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Primes with the size of `n`.",
+     "pt": "Primos com o tamanho de `n`."
+    }
+   ],
+   "description": {
+    "en": "The primes are counted from 2: 2, 3, 5, 7, 11, ... For large `n` the answer is close to `n*log(n)`. It is the inverse of the prime counting function.",
+    "pt": "Os primos são contados a partir de 2: 2, 3, 5, 7, 11, ... Para `n` grande a resposta fica próxima de `n*log(n)`. É a inversa da função de contagem de primos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First primes and a larger one",
+      "pt": "Primeiros primos e um maior"
+     },
+     "code": "nthprime(1:5)\nnthprime(100)\nnthprime(1000)"
+    }
+   ],
+   "see": [
+    "nextprime",
+    "prevprime",
+    "primes",
+    "isprime"
+   ]
+  },
+  "digits": {
+   "summary": {
+    "en": "Sets or reports the precision, in decimal digits, used by vpa.",
+    "pt": "Define ou informa a precisão, em dígitos decimais, usada por vpa."
+   },
+   "syntax": [
+    {
+     "code": "digits",
+     "en": "Prints the current precision (32 by default).",
+     "pt": "Exibe a precisão atual (32 por padrão)."
+    },
+    {
+     "code": "digits(d)",
+     "en": "Sets the precision to `d` decimal digits.",
+     "pt": "Define a precisão como `d` dígitos decimais."
+    },
+    {
+     "code": "d = digits",
+     "en": "Returns the current precision as a double.",
+     "pt": "Retorna a precisão atual como double."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Positive integer number of significant decimal digits.",
+     "pt": "Número inteiro positivo de dígitos decimais significativos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "The current number of digits, as a double.",
+     "pt": "O número atual de dígitos, como double."
+    }
+   ],
+   "description": {
+    "en": "`digits` controls how many significant digits `vpa` uses for variable-precision arithmetic. The setting is global for the session, so changing it affects every later `vpa` call that does not give its own precision. A larger value gives more accurate results at the cost of speed.\n\nThe precision of `vpa(x, d)` with an explicit `d` overrides the global value for that call only. An argument that is not a positive integer is an error.",
+    "pt": "`digits` controla quantos dígitos significativos `vpa` usa na aritmética de precisão variável. A configuração é global para a sessão, então alterá-la afeta toda chamada posterior de `vpa` sem precisão própria. Um valor maior dá resultados mais precisos ao custo de velocidade.\n\nA precisão de `vpa(x, d)` com `d` explícito prevalece sobre o valor global apenas naquela chamada. Um argumento que não seja inteiro positivo é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Change the precision",
+      "pt": "Mudança da precisão"
+     },
+     "code": "digits(10);\nvpa(sym(pi))\nd = digits\ndigits(32);\nvpa(sym(pi))"
+    }
+   ],
+   "see": [
+    "vpa",
+    "sym",
+    "double",
+    "format"
+   ]
+  },
+  "bernstein": {
+   "summary": {
+    "en": "Bernstein polynomial approximation of a function on [0, 1].",
+    "pt": "Aproximação de uma função em [0, 1] pelo polinômio de Bernstein."
+   },
+   "syntax": [
+    {
+     "code": "B = bernstein(f, n, t)",
+     "en": "Evaluates the degree-`n` Bernstein polynomial of `f` at `t`.",
+     "pt": "Avalia em `t` o polinômio de Bernstein de grau `n` de `f`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Function handle of one variable, or a symbolic expression (a number is a constant).",
+     "pt": "Function handle de uma variável, ou expressão simbólica (um número é uma constante)."
+    },
+    {
+     "name": "n",
+     "en": "Degree of the polynomial, a nonnegative integer.",
+     "pt": "Grau do polinômio, um inteiro não negativo."
+    },
+    {
+     "name": "t",
+     "en": "Point or points of evaluation, or a symbolic variable for the polynomial itself.",
+     "pt": "Ponto ou pontos de avaliação, ou uma variável simbólica para obter o próprio polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Numeric values, or a symbolic polynomial in `t`.",
+     "pt": "Valores numéricos, ou um polinômio simbólico em `t`."
+    }
+   ],
+   "description": {
+    "en": "The Bernstein polynomial of `f` is `B_n(t) = sum over k of f(k/n)*nchoosek(n,k)*t^k*(1 - t)^(n - k)`. It samples `f` at the points `k/n` of `[0, 1]` and blends the samples with binomial weights. As `n` grows, `B_n` converges uniformly to `f` for any continuous `f` on `[0, 1]`, which gives a constructive proof of the Weierstrass approximation theorem.\n\nIt always reproduces `f` exactly at `t = 0` and `t = 1`, and it reproduces constants and linear functions exactly for every `n`.",
+    "pt": "O polinômio de Bernstein de `f` é `B_n(t) = sum sobre k de f(k/n)*nchoosek(n,k)*t^k*(1 - t)^(n - k)`. Ele amostra `f` nos pontos `k/n` de `[0, 1]` e combina as amostras com pesos binomiais. Quando `n` cresce, `B_n` converge uniformemente para `f` em qualquer `f` contínua em `[0, 1]`, o que dá uma prova construtiva do teorema de aproximação de Weierstrass.\n\nEle reproduz `f` exatamente em `t = 0` e `t = 1`, e reproduz constantes e funções lineares de forma exata para todo `n`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Approximate t^2 and sin",
+      "pt": "Aproximação de t^2 e sin"
+     },
+     "code": "bernstein(@(t) t^2, 2, [0 0.5 1])\nbernstein(@(t) sin(t), 3, 0.5)\nsin(0.5)"
+    },
+    {
+     "title": {
+      "en": "The polynomial itself",
+      "pt": "O polinômio em si"
+     },
+     "code": "syms x\nbernstein(@(t) t^2, 3, x)"
+    }
+   ],
+   "see": [
+    "polyfit",
+    "interp1",
+    "nchoosek",
+    "poly2sym"
+   ]
+  },
+  "chebyshevT": {
+   "summary": {
+    "en": "Chebyshev polynomial of the first kind.",
+    "pt": "Polinômio de Chebyshev de primeira espécie."
+   },
+   "syntax": [
+    {
+     "code": "P = chebyshevT(n, x)",
+     "en": "Evaluates the Chebyshev polynomial of the first kind of degree `n` at `x`.",
+     "pt": "Avalia o polinômio de Chebyshev de primeira espécie de grau `n` em `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer or a symbolic variable.",
+     "pt": "Grau, um inteiro não negativo ou uma variável simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation, or a symbolic variable to get the polynomial.",
+     "pt": "Ponto(s) de avaliação, ou uma variável simbólica para obter o polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "`T_n(x)` is defined by `T_n(cos(theta)) = cos(n*theta)`. It satisfies the recurrence `T_(n+1) = 2*x*T_n - T_(n-1)` with `T_0 = 1` and `T_1 = x`. On `[-1, 1]` it oscillates between `-1` and `1` with `n + 1` extrema, which makes it the basis of minimax polynomial approximation.\n\nThe zeros of `T_n` are the Chebyshev nodes, a good choice of interpolation points.",
+    "pt": "`T_n(x)` é definido por `T_n(cos(theta)) = cos(n*theta)`. Satisfaz a recorrência `T_(n+1) = 2*x*T_n - T_(n-1)` com `T_0 = 1` e `T_1 = x`. Em `[-1, 1]` oscila entre `-1` e `1` com `n + 1` extremos, o que o torna a base da aproximação polinomial minimax.\n\nOs zeros de `T_n` são os nós de Chebyshev, uma boa escolha de pontos de interpolação."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Polynomials and values",
+      "pt": "Polinômios e valores"
+     },
+     "code": "syms x\nchebyshevT(0:3, x)\nchebyshevT(3, [0 0.5 1])"
+    }
+   ],
+   "see": [
+    "chebyshevU",
+    "legendreP",
+    "gegenbauerC",
+    "hermiteH"
+   ]
+  },
+  "chebyshevU": {
+   "summary": {
+    "en": "Chebyshev polynomial of the second kind.",
+    "pt": "Polinômio de Chebyshev de segunda espécie."
+   },
+   "syntax": [
+    {
+     "code": "P = chebyshevU(n, x)",
+     "en": "Evaluates the Chebyshev polynomial of the second kind of degree `n` at `x`.",
+     "pt": "Avalia o polinômio de Chebyshev de segunda espécie de grau `n` em `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer or a symbolic variable.",
+     "pt": "Grau, um inteiro não negativo ou uma variável simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation, or a symbolic variable to get the polynomial.",
+     "pt": "Ponto(s) de avaliação, ou uma variável simbólica para obter o polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "`U_n(x)` is defined by `U_n(cos(theta)) = sin((n + 1)*theta)/sin(theta)`. It obeys the same recurrence as `T_n`, `U_(n+1) = 2*x*U_n - U_(n-1)`, but starts from `U_0 = 1` and `U_1 = 2*x`. It is orthogonal on `[-1, 1]` with the weight `sqrt(1 - x^2)`.\n\nThe two kinds are linked by `T_n'(x) = n*U_(n-1)(x)`.",
+    "pt": "`U_n(x)` é definido por `U_n(cos(theta)) = sin((n + 1)*theta)/sin(theta)`. Obedece à mesma recorrência de `T_n`, `U_(n+1) = 2*x*U_n - U_(n-1)`, mas parte de `U_0 = 1` e `U_1 = 2*x`. É ortogonal em `[-1, 1]` com peso `sqrt(1 - x^2)`.\n\nAs duas espécies se ligam por `T_n'(x) = n*U_(n-1)(x)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Degree 2 to 4",
+      "pt": "Graus 2 a 4"
+     },
+     "code": "syms x\nchebyshevU(2:4, x)\nchebyshevU(2, 0.5)"
+    }
+   ],
+   "see": [
+    "chebyshevT",
+    "legendreP",
+    "gegenbauerC",
+    "hermiteH"
+   ]
+  },
+  "hermiteH": {
+   "summary": {
+    "en": "Hermite polynomial.",
+    "pt": "Polinômio de Hermite."
+   },
+   "syntax": [
+    {
+     "code": "P = hermiteH(n, x)",
+     "en": "Evaluates the Hermite polynomial of degree `n` at `x`.",
+     "pt": "Avalia o polinômio de Hermite de grau `n` em `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer or a symbolic variable.",
+     "pt": "Grau, um inteiro não negativo ou uma variável simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation, or a symbolic variable to get the polynomial.",
+     "pt": "Ponto(s) de avaliação, ou uma variável simbólica para obter o polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "`H_n(x)` is the physicists' Hermite polynomial, orthogonal on the whole real line with weight `exp(-x^2)`. It satisfies `H_(n+1) = 2*x*H_n - 2*n*H_(n-1)` with `H_0 = 1` and `H_1 = 2*x`.\n\nThese polynomials give the wave functions of the quantum harmonic oscillator. The probabilists' version, with weight `exp(-x^2/2)`, is a rescaled form of the same family.",
+    "pt": "`H_n(x)` é o polinômio de Hermite dos físicos, ortogonal em toda a reta real com peso `exp(-x^2)`. Satisfaz `H_(n+1) = 2*x*H_n - 2*n*H_(n-1)` com `H_0 = 1` e `H_1 = 2*x`.\n\nEsses polinômios formam as funções de onda do oscilador harmônico quântico. A versão dos probabilistas, com peso `exp(-x^2/2)`, é uma forma reescalada da mesma família."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Polynomials and a value",
+      "pt": "Polinômios e um valor"
+     },
+     "code": "syms x\nhermiteH(2:4, x)\nhermiteH(3, 2)"
+    }
+   ],
+   "see": [
+    "chebyshevT",
+    "laguerreL",
+    "legendreP",
+    "gegenbauerC"
+   ]
+  },
+  "legendreP": {
+   "summary": {
+    "en": "Legendre polynomial.",
+    "pt": "Polinômio de Legendre."
+   },
+   "syntax": [
+    {
+     "code": "P = legendreP(n, x)",
+     "en": "Evaluates the Legendre polynomial of degree `n` at `x`.",
+     "pt": "Avalia o polinômio de Legendre de grau `n` em `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer or a symbolic variable.",
+     "pt": "Grau, um inteiro não negativo ou uma variável simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation, or a symbolic variable to get the polynomial.",
+     "pt": "Ponto(s) de avaliação, ou uma variável simbólica para obter o polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "`P_n(x)` is orthogonal on `[-1, 1]` with weight 1. It satisfies `(n + 1)*P_(n+1) = (2*n + 1)*x*P_n - n*P_(n-1)` with `P_0 = 1` and `P_1 = x`, and it takes the values `P_n(1) = 1` and `P_n(-1) = (-1)^n`.\n\nIt appears in the multipole expansion of potentials and in Gauss-Legendre quadrature, whose nodes are its zeros. This is the ordinary polynomial; the associated Legendre functions are a separate family.",
+    "pt": "`P_n(x)` é ortogonal em `[-1, 1]` com peso 1. Satisfaz `(n + 1)*P_(n+1) = (2*n + 1)*x*P_n - n*P_(n-1)` com `P_0 = 1` e `P_1 = x`, e assume os valores `P_n(1) = 1` e `P_n(-1) = (-1)^n`.\n\nAparece na expansão multipolar de potenciais e na quadratura de Gauss-Legendre, cujos nós são seus zeros. Este é o polinômio comum; as funções de Legendre associadas formam outra família."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Polynomials and exact values",
+      "pt": "Polinômios e valores exatos"
+     },
+     "code": "syms x\nlegendreP(0:3, x)\nlegendreP(3, sym(1)/2)"
+    }
+   ],
+   "see": [
+    "legendre",
+    "chebyshevT",
+    "jacobiP",
+    "gegenbauerC"
+   ]
+  },
+  "laguerreL": {
+   "summary": {
+    "en": "Laguerre polynomial, plain or generalized.",
+    "pt": "Polinômio de Laguerre, simples ou generalizado."
+   },
+   "syntax": [
+    {
+     "code": "L = laguerreL(n, x)",
+     "en": "Laguerre polynomial `L_n(x)`.",
+     "pt": "Polinômio de Laguerre `L_n(x)`."
+    },
+    {
+     "code": "L = laguerreL(n, a, x)",
+     "en": "Generalized Laguerre polynomial `L_n^a(x)`.",
+     "pt": "Polinômio de Laguerre generalizado `L_n^a(x)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer.",
+     "pt": "Grau, um inteiro não negativo."
+    },
+    {
+     "name": "a",
+     "en": "Parameter of the generalized polynomial.",
+     "pt": "Parâmetro do polinômio generalizado."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation or a symbolic variable.",
+     "pt": "Ponto(s) de avaliação ou uma variável simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "The Laguerre polynomials are orthogonal on `[0, Inf)` with weight `exp(-x)`. The plain family starts with `L_0 = 1`, `L_1 = 1 - x`, and obeys `(n + 1)*L_(n+1) = (2*n + 1 - x)*L_n - n*L_(n-1)`. The generalized family with parameter `a` has weight `x^a*exp(-x)`, and `laguerreL(n, 0, x)` is the plain one.\n\nThey describe the radial part of the hydrogen atom wave functions and are used in Gauss-Laguerre quadrature.",
+    "pt": "Os polinômios de Laguerre são ortogonais em `[0, Inf)` com peso `exp(-x)`. A família simples começa com `L_0 = 1`, `L_1 = 1 - x` e obedece a `(n + 1)*L_(n+1) = (2*n + 1 - x)*L_n - n*L_(n-1)`. A família generalizada, com parâmetro `a`, tem peso `x^a*exp(-x)`, e `laguerreL(n, 0, x)` é a simples.\n\nDescrevem a parte radial das funções de onda do átomo de hidrogênio e são usados na quadratura de Gauss-Laguerre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Plain and generalized",
+      "pt": "Simples e generalizado"
+     },
+     "code": "syms x\nlaguerreL(2, x)\nlaguerreL(2, 1, x)\nlaguerreL(3, 0.5)"
+    }
+   ],
+   "see": [
+    "hermiteH",
+    "legendreP",
+    "chebyshevT",
+    "jacobiP"
+   ]
+  },
+  "gegenbauerC": {
+   "summary": {
+    "en": "Gegenbauer (ultraspherical) polynomial.",
+    "pt": "Polinômio de Gegenbauer (ultraesférico)."
+   },
+   "syntax": [
+    {
+     "code": "C = gegenbauerC(n, a, x)",
+     "en": "Gegenbauer polynomial `C_n^(a)(x)`.",
+     "pt": "Polinômio de Gegenbauer `C_n^(a)(x)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer.",
+     "pt": "Grau, um inteiro não negativo."
+    },
+    {
+     "name": "a",
+     "en": "Parameter of the family; may be symbolic.",
+     "pt": "Parâmetro da família; pode ser simbólico."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation or a symbolic variable.",
+     "pt": "Ponto(s) de avaliação ou uma variável simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "The Gegenbauer polynomials are orthogonal on `[-1, 1]` with weight `(1 - x^2)^(a - 1/2)`. They generalize two classic families: `a = 1` gives the Chebyshev polynomials of the second kind and `a = 1/2` gives the Legendre polynomials.\n\nThe first terms are `C_0 = 1` and `C_1 = 2*a*x`, with the three-term recurrence `n*C_n = 2*(n + a - 1)*x*C_(n-1) - (n + 2*a - 2)*C_(n-2)`.",
+    "pt": "Os polinômios de Gegenbauer são ortogonais em `[-1, 1]` com peso `(1 - x^2)^(a - 1/2)`. Generalizam duas famílias clássicas: `a = 1` dá os polinômios de Chebyshev de segunda espécie e `a = 1/2` dá os de Legendre.\n\nOs primeiros termos são `C_0 = 1` e `C_1 = 2*a*x`, com a recorrência de três termos `n*C_n = 2*(n + a - 1)*x*C_(n-1) - (n + 2*a - 2)*C_(n-2)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Special cases",
+      "pt": "Casos particulares"
+     },
+     "code": "syms x\ngegenbauerC(3, 1, x)\ngegenbauerC(2, 0.5, x)\ngegenbauerC(2, 1, [0 0.5 1])"
+    }
+   ],
+   "see": [
+    "chebyshevU",
+    "legendreP",
+    "jacobiP",
+    "hermiteH"
+   ]
+  },
+  "jacobiP": {
+   "summary": {
+    "en": "Jacobi polynomial P_n^(a,b)(x).",
+    "pt": "Polinômio de Jacobi P_n^(a,b)(x)."
+   },
+   "syntax": [
+    {
+     "code": "P = jacobiP(n, a, b, x)",
+     "en": "Jacobi polynomial of degree `n` with parameters `a` and `b`.",
+     "pt": "Polinômio de Jacobi de grau `n` com parâmetros `a` e `b`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Degree, a nonnegative integer.",
+     "pt": "Grau, um inteiro não negativo."
+    },
+    {
+     "name": "a, b",
+     "en": "Parameters of the weight function; may be symbolic.",
+     "pt": "Parâmetros da função peso; podem ser simbólicos."
+    },
+    {
+     "name": "x",
+     "en": "Point(s) of evaluation or a symbolic variable.",
+     "pt": "Ponto(s) de avaliação ou uma variável simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Numbers with the size of `x`, or a symbolic polynomial.",
+     "pt": "Números com o tamanho de `x`, ou um polinômio simbólico."
+    }
+   ],
+   "description": {
+    "en": "The Jacobi polynomials are orthogonal on `[-1, 1]` with weight `(1 - x)^a*(1 + x)^b`. They contain most classical families as special cases: `a = b = 0` gives the Legendre polynomials, `a = b = -1/2` gives a multiple of the Chebyshev polynomials of the first kind, and `a = b` gives the Gegenbauer polynomials up to scaling.\n\nThe first terms are `P_0 = 1` and `P_1 = (a - b)/2 + (a + b + 2)*x/2`.",
+    "pt": "Os polinômios de Jacobi são ortogonais em `[-1, 1]` com peso `(1 - x)^a*(1 + x)^b`. Contêm a maioria das famílias clássicas como casos particulares: `a = b = 0` dá os polinômios de Legendre, `a = b = -1/2` dá um múltiplo dos de Chebyshev de primeira espécie, e `a = b` dá os de Gegenbauer, a menos de escala.\n\nOs primeiros termos são `P_0 = 1` e `P_1 = (a - b)/2 + (a + b + 2)*x/2`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Special case and values",
+      "pt": "Caso particular e valores"
+     },
+     "code": "syms x\njacobiP(2, 0, 0, x)\njacobiP(2, 1, 1, x)\njacobiP(3, 1, 2, 0.5)"
+    }
+   ],
+   "see": [
+    "legendreP",
+    "gegenbauerC",
+    "chebyshevT",
+    "laguerreL"
+   ]
+  },
+  "gbasis": {
+   "summary": {
+    "en": "Groebner basis of a set of polynomials.",
+    "pt": "Base de Groebner de um conjunto de polinômios."
+   },
+   "syntax": [
+    {
+     "code": "G = gbasis(P, vars)",
+     "en": "Groebner basis of the polynomials `P` in the variables `vars`.",
+     "pt": "Base de Groebner dos polinômios `P` nas variáveis `vars`."
+    },
+    {
+     "code": "G = gbasis(P, vars, 'MonomialOrder', order)",
+     "en": "Uses the given monomial ordering.",
+     "pt": "Usa a ordenação de monômios indicada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "P",
+     "en": "Vector of symbolic polynomials.",
+     "pt": "Vetor de polinômios simbólicos."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of the variables, in order of priority.",
+     "pt": "Vetor das variáveis, em ordem de prioridade."
+    },
+    {
+     "name": "'MonomialOrder'",
+     "en": "`'lexicographic'`, `'degreeLexicographic'` or `'degreeInverseLexicographic'` (the default).",
+     "pt": "`'lexicographic'`, `'degreeLexicographic'` ou `'degreeInverseLexicographic'` (o padrão)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Row vector of polynomials that generate the same ideal as `P` and form a Groebner basis for the chosen ordering.",
+     "pt": "Vetor linha de polinômios que geram o mesmo ideal que `P` e formam uma base de Groebner para a ordenação escolhida."
+    }
+   ],
+   "description": {
+    "en": "A Groebner basis is a canonical generating set for the ideal spanned by the polynomials. It allows a division algorithm whose remainder does not depend on the order of division, so it decides ideal membership and underlies elimination. With the lexicographic ordering the basis is triangular in the variables, which solves polynomial systems: the last element depends on one variable only.\n\nThe variable order matters. In the example below the lexicographic basis ends in a polynomial of `y` alone.",
+    "pt": "Uma base de Groebner é um conjunto gerador canônico do ideal definido pelos polinômios. Permite um algoritmo de divisão cujo resto não depende da ordem das divisões, e por isso decide a pertinência ao ideal e fundamenta a eliminação. Com a ordenação lexicográfica a base é triangular nas variáveis, o que resolve sistemas polinomiais: o último elemento depende de uma só variável.\n\nA ordem das variáveis importa. No exemplo abaixo a base lexicográfica termina em um polinômio só de `y`."
+   },
+   "notes": {
+    "en": "MatLivre returns only the basis (one output).",
+    "pt": "O MatLivre retorna apenas a base (uma única saída)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Default ordering and lexicographic",
+      "pt": "Ordenação padrão e lexicográfica"
+     },
+     "code": "syms x y\ngbasis([x^2 - y, x*y - 1], [x y])\ngbasis([x*y - 1, x^2 - y], [x y], 'MonomialOrder', 'lexicographic')"
+    }
+   ],
+   "see": [
+    "polynomialReduce",
+    "resultant",
+    "solve",
+    "root"
+   ]
+  },
+  "minpoly": {
+   "summary": {
+    "en": "Minimal polynomial of a matrix.",
+    "pt": "Polinômio mínimo de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "p = minpoly(A)",
+     "en": "Coefficient vector of the minimal polynomial of `A`, highest power first.",
+     "pt": "Vetor de coeficientes do polinômio mínimo de `A`, da maior potência para a menor."
+    },
+    {
+     "code": "p = minpoly(A, x)",
+     "en": "Minimal polynomial as an expression in the symbolic variable `x`.",
+     "pt": "Polinômio mínimo como expressão na variável simbólica `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square numeric or symbolic matrix.",
+     "pt": "Matriz quadrada numérica ou simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Symbolic variable for the polynomial form.",
+     "pt": "Variável simbólica para a forma polinomial."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Coefficients (row vector) or a polynomial in `x`.",
+     "pt": "Coeficientes (vetor linha) ou polinômio em `x`."
+    }
+   ],
+   "description": {
+    "en": "The minimal polynomial of a matrix `A` is the monic polynomial of lowest degree that vanishes at `A`. It divides the characteristic polynomial and has the same roots, but each root may appear with a smaller multiplicity. The two coincide when the matrix has no repeated eigenvalue with several independent eigenvectors.\n\nFor the 2-by-2 matrix `2*I` the characteristic polynomial is `(x - 2)^2`, while the minimal polynomial is just `x - 2`. This is the minimal polynomial of a matrix, not of an algebraic number: for a scalar `a`, it is `x - a`.",
+    "pt": "O polinômio mínimo de uma matriz `A` é o polinômio mônico de menor grau que se anula em `A`. Divide o polinômio característico e tem as mesmas raízes, mas cada raiz pode aparecer com multiplicidade menor. Os dois coincidem quando a matriz não tem autovalor repetido com vários autovetores independentes.\n\nPara a matriz 2 por 2 `2*I` o polinômio característico é `(x - 2)^2`, mas o polinômio mínimo é só `x - 2`. É o polinômio mínimo de uma matriz, não de um número algébrico: para um escalar `a`, vale `x - a`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compare with the characteristic polynomial",
+      "pt": "Comparação com o polinômio característico"
+     },
+     "code": "syms x\nA = sym([2 0; 0 2]);\nminpoly(A, x)\ncharpoly(A, x)\nminpoly(sym([1 2; 3 4]), x)"
+    }
+   ],
+   "see": [
+    "charpoly",
+    "poly",
+    "eig",
+    "jordan"
+   ]
+  },
+  "polynomialDegree": {
+   "summary": {
+    "en": "Degree of a polynomial expression.",
+    "pt": "Grau de uma expressão polinomial."
+   },
+   "syntax": [
+    {
+     "code": "d = polynomialDegree(p)",
+     "en": "Total degree of `p` in all its symbolic variables.",
+     "pt": "Grau total de `p` em todas as suas variáveis simbólicas."
+    },
+    {
+     "code": "d = polynomialDegree(p, vars)",
+     "en": "Degree with respect to the variables `vars`.",
+     "pt": "Grau em relação às variáveis `vars`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial expression.",
+     "pt": "Expressão polinomial simbólica."
+    },
+    {
+     "name": "vars",
+     "en": "Variable or vector of variables.",
+     "pt": "Variável ou vetor de variáveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Nonnegative integer degree. A constant has degree `0`.",
+     "pt": "Grau inteiro não negativo. Uma constante tem grau `0`."
+    }
+   ],
+   "description": {
+    "en": "With a vector of variables, the degree is the largest total degree of a term in those variables, so `x^2*y^3` has degree 5 in `[x y]`. Terms free of the chosen variables count as constants for the degree, which is why `x*y + y^4` has degree 4 in `y` and `polynomialDegree(x^2, y)` is `0`.\n\nAn expression that is not a polynomial in the chosen variables, such as `sin(x)` or `1/x`, is an error.",
+    "pt": "Com um vetor de variáveis, o grau é o maior grau total de um termo nessas variáveis; assim `x^2*y^3` tem grau 5 em `[x y]`. Termos sem as variáveis escolhidas contam como constantes, e por isso `x*y + y^4` tem grau 4 em `y` e `polynomialDegree(x^2, y)` vale `0`.\n\nUma expressão que não é polinômio nas variáveis escolhidas, como `sin(x)` ou `1/x`, gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One and several variables",
+      "pt": "Uma e várias variáveis"
+     },
+     "code": "syms x y\npolynomialDegree(x^3 + x)\npolynomialDegree(x^2*y + y, x)\npolynomialDegree(x^2*y^3, [x y])"
+    }
+   ],
+   "see": [
+    "coeffs",
+    "sym2poly",
+    "poly2sym",
+    "degree"
+   ]
+  },
+  "polynomialReduce": {
+   "summary": {
+    "en": "Remainder (and quotients) of dividing a polynomial by a set of polynomials.",
+    "pt": "Resto (e quocientes) da divisão de um polinômio por um conjunto de polinômios."
+   },
+   "syntax": [
+    {
+     "code": "r = polynomialReduce(p, G)",
+     "en": "Remainder of `p` divided by the polynomials `G`.",
+     "pt": "Resto de `p` dividido pelos polinômios `G`."
+    },
+    {
+     "code": "[r, q] = polynomialReduce(p, G, vars)",
+     "en": "Also returns the quotients, for the variables `vars`.",
+     "pt": "Também retorna os quocientes, para as variáveis `vars`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial to divide.",
+     "pt": "Polinômio simbólico a dividir."
+    },
+    {
+     "name": "G",
+     "en": "Divisor or vector of divisors.",
+     "pt": "Divisor ou vetor de divisores."
+    },
+    {
+     "name": "vars",
+     "en": "Variables of the polynomials (optional).",
+     "pt": "Variáveis dos polinômios (opcional)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "The remainder, a polynomial none of whose terms is divisible by a leading term of `G`.",
+     "pt": "O resto, um polinômio em que nenhum termo é divisível por um termo líder de `G`."
+    },
+    {
+     "name": "q",
+     "en": "Quotients, such that `p = sum(q.*G) + r`.",
+     "pt": "Quocientes, tais que `p = sum(q.*G) + r`."
+    }
+   ],
+   "description": {
+    "en": "The function performs multivariate polynomial division. With a single variable and a single divisor it is ordinary long division: `x^3 + 1` divided by `x + 2` leaves the remainder `-7` and the quotient `x^2 - 2*x + 4`. With several divisors the remainder can depend on the order of the divisors unless `G` is a Groebner basis (see `gbasis`).\n\nThe remainder is the first output, followed by the quotients.",
+    "pt": "A função faz divisão polinomial multivariável. Com uma variável e um divisor é a divisão longa comum: `x^3 + 1` dividido por `x + 2` deixa resto `-7` e quociente `x^2 - 2*x + 4`. Com vários divisores o resto pode depender da ordem dos divisores, a menos que `G` seja uma base de Groebner (veja `gbasis`).\n\nO resto é a primeira saída, seguido dos quocientes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Division by x + 2",
+      "pt": "Divisão por x + 2"
+     },
+     "code": "syms x\n[r, q] = polynomialReduce(x^3 + 1, x + 2)\npolynomialReduce(x^3 + x, x^2 + 1)"
+    }
+   ],
+   "see": [
+    "gbasis",
+    "deconv",
+    "quorem",
+    "resultant"
+   ]
+  },
+  "resultant": {
+   "summary": {
+    "en": "Resultant of two polynomials with respect to a variable.",
+    "pt": "Resultante de dois polinômios em relação a uma variável."
+   },
+   "syntax": [
+    {
+     "code": "R = resultant(p, q, var)",
+     "en": "Resultant of `p` and `q`, eliminating `var`.",
+     "pt": "Resultante de `p` e `q`, eliminando `var`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p, q",
+     "en": "Symbolic polynomials.",
+     "pt": "Polinômios simbólicos."
+    },
+    {
+     "name": "var",
+     "en": "Variable to eliminate. May be omitted when there is a single variable.",
+     "pt": "Variável a eliminar. Pode ser omitida quando há uma só variável."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Polynomial in the remaining variables, or a number when none remains.",
+     "pt": "Polinômio nas variáveis restantes, ou um número quando não resta nenhuma."
+    }
+   ],
+   "description": {
+    "en": "The resultant is the determinant of the Sylvester matrix built from the coefficients of `p` and `q`. It is zero exactly when the two polynomials have a common root, so it is a test for common factors without computing the roots.\n\nWith more than one variable it eliminates `var` and yields a polynomial in the others, whose roots are the values of the other variables for which a common root exists. For example the resultant of `x^2 + y^2 - 1` and `x - y` with respect to `x` is `2*y^2 - 1`, which gives the `y` coordinates of the circle-line intersection.",
+    "pt": "O resultante é o determinante da matriz de Sylvester formada com os coeficientes de `p` e `q`. Vale zero exatamente quando os dois polinômios têm raiz comum, servindo de teste de fator comum sem calcular as raízes.\n\nCom mais de uma variável, elimina `var` e produz um polinômio nas demais, cujas raízes são os valores das outras variáveis para os quais existe raiz comum. Por exemplo, o resultante de `x^2 + y^2 - 1` e `x - y` em relação a `x` é `2*y^2 - 1`, que dá as coordenadas `y` da interseção entre a circunferência e a reta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Common root and elimination",
+      "pt": "Raiz comum e eliminação"
+     },
+     "code": "syms x y\nresultant(x^2 - 3*x + 2, x^2 - 1, x)\nresultant(x^2 + y^2 - 1, x - y, x)"
+    }
+   ],
+   "see": [
+    "gbasis",
+    "polynomialReduce",
+    "discriminant",
+    "solve"
+   ]
+  },
+  "root": {
+   "summary": {
+    "en": "Symbolic k-th root of a polynomial, left unevaluated.",
+    "pt": "k-ésima raiz simbólica de um polinômio, sem avaliar."
+   },
+   "syntax": [
+    {
+     "code": "r = root(p, x, k)",
+     "en": "The `k`-th root of the polynomial `p` in the variable `x`.",
+     "pt": "A `k`-ésima raiz do polinômio `p` na variável `x`."
+    },
+    {
+     "code": "r = root(p, x)",
+     "en": "Column vector with all the roots of `p`.",
+     "pt": "Vetor coluna com todas as raízes de `p`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial.",
+     "pt": "Polinômio simbólico."
+    },
+    {
+     "name": "x",
+     "en": "Variable of the polynomial.",
+     "pt": "Variável do polinômio."
+    },
+    {
+     "name": "k",
+     "en": "Index of the root, from 1 to the degree of `p`.",
+     "pt": "Índice da raiz, de 1 até o grau de `p`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "A symbolic object that stands for the root. It can be evaluated with `vpa` or `double`.",
+     "pt": "Um objeto simbólico que representa a raiz. Pode ser avaliado com `vpa` ou `double`."
+    }
+   ],
+   "description": {
+    "en": "The result represents an exact root of a polynomial without needing a closed form, which matters for polynomials of degree five and above where no general formula exists. It prints as `root(p, x, k)` and can be turned into a number with `vpa` or `double`.\n\nAn index larger than the degree of the polynomial is an error. When the polynomial has multiple distinct roots, the root objects are numbered in a fixed order, so `root(p, x, 1)` always refers to the same root.",
+    "pt": "O resultado representa uma raiz exata de um polinômio sem exigir fórmula fechada, o que importa em graus cinco ou mais, onde não existe fórmula geral. É exibido como `root(p, x, k)` e pode virar número com `vpa` ou `double`.\n\nUm índice maior que o grau do polinômio é um erro. Quando o polinômio tem várias raízes distintas, os objetos raiz são numerados em ordem fixa, de modo que `root(p, x, 1)` sempre designa a mesma raiz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Exact and numeric root",
+      "pt": "Raiz exata e numérica"
+     },
+     "code": "syms x\nroot(x^2 - 2, x)\nr = root(x^3 - x - 1, x, 1);\nvpa(r, 6)"
+    }
+   ],
+   "see": [
+    "roots",
+    "solve",
+    "vpa",
+    "poly2sym"
+   ]
+  }
+ }
+}

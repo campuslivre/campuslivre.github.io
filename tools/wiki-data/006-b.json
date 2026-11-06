@@ -1,0 +1,549 @@
+{
+  "functions": {
+    "pbaspect": {
+      "summary": {"en": "Gets or sets the relative lengths of the x, y and z sides of the axes box.", "pt": "Obtém ou define os comprimentos relativos dos lados x, y e z da caixa dos eixos."},
+      "syntax": [
+        {"code": "pbaspect([rx ry rz])", "en": "Sets the plot box aspect ratio of the current axes.", "pt": "Define a razão de aspecto da caixa de plotagem dos eixos atuais."},
+        {"code": "r = pbaspect", "en": "Returns the current ratio as a three-element vector.", "pt": "Retorna a razão atual como um vetor de três elementos."},
+        {"code": "pbaspect auto", "en": "Returns control to the automatic mode, where the box fills the available space.", "pt": "Devolve o controle ao modo automático, em que a caixa preenche o espaço disponível."},
+        {"code": "pbaspect(ax, ___)", "en": "Acts on the axes `ax`.", "pt": "Atua nos eixos `ax`."}
+      ],
+      "inputs": [
+        {"name": "[rx ry rz]", "en": "Three positive numbers. Only their ratios matter.", "pt": "Três números positivos. Só importam as razões entre eles."}
+      ],
+      "outputs": [
+        {"name": "r", "en": "Current aspect ratio, a 1-by-3 vector.", "pt": "Razão de aspecto atual, um vetor 1-por-3."}
+      ],
+      "description": {
+        "en": "`pbaspect` controls the shape of the box that encloses the axes, independently of the data units. `pbaspect([1 1 1])` makes a cubic box for 3-D plots and a square one for 2-D plots, whatever the data ranges are.\n\nIt differs from `daspect`, which fixes the ratio of data units per unit of length. Setting `pbaspect` stores the value in the `PlotBoxAspectRatio` property and switches the matching mode property to manual.",
+        "pt": "`pbaspect` controla a forma da caixa que envolve os eixos, independentemente das unidades dos dados. `pbaspect([1 1 1])` produz uma caixa cúbica em gráficos 3-D e quadrada em 2-D, quaisquer que sejam as faixas dos dados.\n\nDifere de `daspect`, que fixa a razão de unidades de dados por unidade de comprimento. Definir `pbaspect` guarda o valor na propriedade `PlotBoxAspectRatio` e passa a propriedade de modo correspondente para manual."
+      },
+      "examples": [
+        {"title": {"en": "Make the plot box twice as wide as tall", "pt": "Caixa de plotagem com o dobro da largura em relação à altura"}, "code": "plot(1:10)\npbaspect([2 1 1])\nr = pbaspect"}
+      ],
+      "see": ["daspect", "axis", "xlim", "view", "subplot"]
+    },
+    "pink": {
+      "summary": {"en": "Sepia-toned colormap that goes from black through pink to white.", "pt": "Mapa de cores em tom sépia que vai do preto ao branco passando por rosa."},
+      "syntax": [
+        {"code": "map = pink", "en": "Returns a pink colormap with the default number of rows.", "pt": "Retorna um mapa de cores pink com o número padrão de linhas."},
+        {"code": "map = pink(m)", "en": "Returns a pink colormap with `m` rows.", "pt": "Retorna um mapa de cores pink com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The map is a gray ramp with a warm tint, built by mixing the `gray` colormap with a map that favors red. It gives images and surfaces an old-photograph look and keeps a monotonic brightness, so it prints well in grayscale.",
+        "pt": "O mapa é uma rampa de cinza com um tom quente, construída misturando o mapa `gray` com outro que favorece o vermelho. Dá a imagens e superfícies o aspecto de foto antiga e mantém o brilho monotônico, imprimindo bem em escala de cinza."
+      },
+      "examples": [
+        {"title": {"en": "Three pink shades", "pt": "Três tons de rosa"}, "code": "pink(3)"}
+      ],
+      "see": ["gray", "bone", "copper", "colormap", "hot"]
+    },
+    "plotyy": {
+      "summary": {"en": "Plots two data sets against separate y-axes, left and right (older form of `yyaxis`).", "pt": "Plota dois conjuntos de dados contra eixos y separados, esquerdo e direito (forma antiga de `yyaxis`)."},
+      "syntax": [
+        {"code": "plotyy(x1, y1, x2, y2)", "en": "Plots `y1` against the left y-axis and `y2` against the right one.", "pt": "Plota `y1` contra o eixo y esquerdo e `y2` contra o direito."},
+        {"code": "[AX, H1, H2] = plotyy(___)", "en": "Also returns the two axes and the two line objects.", "pt": "Também retorna os dois eixos e os dois objetos de linha."}
+      ],
+      "inputs": [
+        {"name": "x1, y1", "en": "Data for the left axis.", "pt": "Dados do eixo esquerdo."},
+        {"name": "x2, y2", "en": "Data for the right axis.", "pt": "Dados do eixo direito."}
+      ],
+      "outputs": [
+        {"name": "AX", "en": "Two-element array with the left and right axes.", "pt": "Array de dois elementos com os eixos esquerdo e direito."},
+        {"name": "H1, H2", "en": "Line objects of the first and second data sets.", "pt": "Objetos de linha do primeiro e do segundo conjuntos de dados."}
+      ],
+      "description": {
+        "en": "Two quantities with very different ranges, such as a temperature and a pressure, are hard to read on one scale. `plotyy` overlays two axes in the same position: the left one carries the first data set and the right one the second, each with its own tick labels.\n\nThe function is kept for compatibility with older code. New programs should use `yyaxis left` and `yyaxis right`, which put both on a single axes object.",
+        "pt": "Duas grandezas com faixas muito diferentes, como temperatura e pressão, são difíceis de ler em uma só escala. `plotyy` sobrepõe dois eixos na mesma posição: o esquerdo traz o primeiro conjunto e o direito o segundo, cada um com suas próprias marcas.\n\nA função é mantida por compatibilidade com código antigo. Programas novos devem usar `yyaxis left` e `yyaxis right`, que colocam ambos em um único objeto de eixos."
+      },
+      "examples": [
+        {"title": {"en": "Two scales", "pt": "Duas escalas"}, "code": "x = 1:5;\n[AX, H1, H2] = plotyy(x, x, x, 100*x.^2);\nsize(AX)\nclass(H1)"}
+      ],
+      "see": ["yyaxis", "plot", "ylabel", "hold", "subplot"]
+    },
+    "prism": {
+      "summary": {"en": "Colormap that repeats the six colors red, orange, yellow, green, blue and violet.", "pt": "Mapa de cores que repete as seis cores vermelho, laranja, amarelo, verde, azul e violeta."},
+      "syntax": [
+        {"code": "map = prism", "en": "Returns a prism colormap with the default number of rows.", "pt": "Retorna um mapa de cores prism com o número padrão de linhas."},
+        {"code": "map = prism(m)", "en": "Returns a prism colormap with `m` rows.", "pt": "Retorna um mapa de cores prism com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The sequence of six spectral colors is repeated until `m` rows are filled. Because neighboring values get very different colors, the map exposes small differences and bands in data, such as the contour lines of a smooth surface, but it is not suitable to show magnitudes.",
+        "pt": "A sequência de seis cores espectrais é repetida até preencher `m` linhas. Como valores vizinhos recebem cores muito diferentes, o mapa evidencia pequenas diferenças e faixas nos dados, como as curvas de nível de uma superfície suave, mas não serve para mostrar magnitudes."
+      },
+      "examples": [
+        {"title": {"en": "Four colors", "pt": "Quatro cores"}, "code": "prism(4)"}
+      ],
+      "see": ["flag", "lines", "hsv", "colormap", "jet"]
+    },
+    "rectangle": {
+      "summary": {"en": "Draws a rectangle, rounded rectangle or ellipse in 2-D.", "pt": "Desenha um retângulo, retângulo arredondado ou elipse em 2-D."},
+      "syntax": [
+        {"code": "rectangle('Position', [x y w h])", "en": "Draws a rectangle with lower-left corner `(x, y)`, width `w` and height `h`.", "pt": "Desenha um retângulo com canto inferior esquerdo `(x, y)`, largura `w` e altura `h`."},
+        {"code": "rectangle(..., 'Curvature', c)", "en": "Rounds the corners. `[1 1]` gives an ellipse (a circle if `w` equals `h`).", "pt": "Arredonda os cantos. `[1 1]` produz uma elipse (um círculo se `w` for igual a `h`)."},
+        {"code": "rectangle(..., 'FaceColor', color, 'EdgeColor', color)", "en": "Sets the fill and the outline.", "pt": "Define o preenchimento e o contorno."},
+        {"code": "r = rectangle(___)", "en": "Returns the rectangle object.", "pt": "Retorna o objeto retângulo."}
+      ],
+      "inputs": [
+        {"name": "Position", "en": "Four-element vector `[x y width height]` in data units.", "pt": "Vetor de quatro elementos `[x y largura altura]` em unidades de dados."},
+        {"name": "Curvature", "en": "Number or `[cx cy]` from 0 (sharp corners) to 1 (fully rounded). Default 0.", "pt": "Número ou `[cx cy]` de 0 (cantos vivos) a 1 (totalmente arredondado). Padrão 0."},
+        {"name": "FaceColor", "en": "Fill color. The default is no fill.", "pt": "Cor de preenchimento. O padrão é sem preenchimento."}
+      ],
+      "outputs": [
+        {"name": "r", "en": "Rectangle object, class `matlab.graphics.primitive.Rectangle`.", "pt": "Objeto retângulo, classe `matlab.graphics.primitive.Rectangle`."}
+      ],
+      "description": {
+        "en": "`rectangle` adds a shape to the current axes without clearing them, which makes it useful to mark regions of interest or to draw circles around points. A circle appears round only when the axes have equal scaling, so call `axis equal` first.\n\nThe position is in data coordinates, so the shape moves and stretches with the axes limits.",
+        "pt": "`rectangle` acrescenta uma forma aos eixos atuais sem limpá-los, o que é útil para marcar regiões de interesse ou desenhar círculos em torno de pontos. Um círculo só parece redondo quando os eixos têm escala igual, então chame `axis equal` antes.\n\nA posição está em coordenadas de dados, de modo que a forma se move e se estica junto com os limites dos eixos."
+      },
+      "examples": [
+        {"title": {"en": "A circle and a box", "pt": "Um círculo e uma caixa"}, "code": "axis equal\nxlim([0 6]); ylim([0 4])\nr = rectangle('Position', [1 1 2 2], 'Curvature', [1 1]);\nrectangle('Position', [3.5 1 2 2], 'FaceColor', [0.8 0.9 1]);\nr.Position\nr.Curvature"}
+      ],
+      "see": ["line", "text", "fill", "patch", "annotation"]
+    },
+    "rgb2hsv": {
+      "summary": {"en": "Converts colors from red-green-blue to hue-saturation-value.", "pt": "Converte cores de vermelho-verde-azul para matiz-saturação-valor."},
+      "syntax": [
+        {"code": "hsv = rgb2hsv(rgb)", "en": "Converts an `m`-by-3 colormap or an image of size `m`-by-`n`-by-3 from RGB to HSV.", "pt": "Converte um mapa de cores `m`-por-3 ou uma imagem `m`-por-`n`-por-3 de RGB para HSV."}
+      ],
+      "inputs": [
+        {"name": "rgb", "en": "Colormap or image with values between 0 and 1 in the last dimension. Integer images are converted to double first.", "pt": "Mapa de cores ou imagem com valores entre 0 e 1 na última dimensão. Imagens inteiras são convertidas antes para double."}
+      ],
+      "outputs": [
+        {"name": "hsv", "en": "Array of the same size with hue, saturation and value in the range 0 to 1.", "pt": "Array do mesmo tamanho com matiz, saturação e valor na faixa de 0 a 1."}
+      ],
+      "description": {
+        "en": "The value is the largest of the three channels and the saturation is the spread between largest and smallest, relative to the value. The hue is the position on the color wheel as a fraction: 0 for red, 1/3 for green and 2/3 for blue. For a gray color, where all channels are equal, saturation and hue are 0.\n\nThe conversion is useful to change brightness or saturation of a picture without shifting its colors. The inverse is `hsv2rgb`.",
+        "pt": "O valor é o maior dos três canais e a saturação é a diferença entre o maior e o menor, relativa ao valor. O matiz é a posição no círculo de cores como fração: 0 para vermelho, 1/3 para verde e 2/3 para azul. Para um cinza, em que todos os canais são iguais, saturação e matiz são 0.\n\nA conversão é útil para mudar o brilho ou a saturação de uma imagem sem deslocar suas cores. A inversa é `hsv2rgb`."
+      },
+      "examples": [
+        {"title": {"en": "Red, cyan and a gray", "pt": "Vermelho, ciano e um cinza"}, "code": "rgb2hsv([1 0 0; 0 1 1; 0.5 0.5 0.5])"}
+      ],
+      "see": ["hsv2rgb", "rgb2gray", "hsv", "colormap"]
+    },
+    "rgbplot": {
+      "summary": {"en": "Plots the red, green and blue columns of a colormap as three lines.", "pt": "Plota as colunas vermelha, verde e azul de um mapa de cores como três linhas."},
+      "syntax": [
+        {"code": "rgbplot(map)", "en": "Draws the three channels of `map` against the row index, in their own colors.", "pt": "Desenha os três canais de `map` contra o índice da linha, nas respectivas cores."}
+      ],
+      "inputs": [
+        {"name": "map", "en": "Colormap, an `m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Mapa de cores, uma matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "The horizontal axis is the row number and the vertical axis the intensity, so the plot shows how each channel grows or falls along the map. This is a quick way to compare maps such as `parula`, `jet` and `hot`, or to check a custom map you built.",
+        "pt": "O eixo horizontal é o número da linha e o vertical a intensidade, de modo que o gráfico mostra como cada canal cresce ou cai ao longo do mapa. É uma forma rápida de comparar mapas como `parula`, `jet` e `hot`, ou de conferir um mapa próprio que você tenha construído."
+      },
+      "notes": {
+        "en": "In MatLivre `rgbplot` draws the figure and returns no value.",
+        "pt": "No MatLivre, `rgbplot` desenha a figura e não retorna valor."
+      },
+      "examples": [
+        {"title": {"en": "Channels of the parula map", "pt": "Canais do mapa parula"}, "code": "rgbplot(parula(64))\ntitle('parula')",
+         "silent": true, "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["colormap", "parula", "jet", "plot", "hsv"]
+    },
+    "ruler2num": {
+      "summary": {"en": "Converts values shown on an axis ruler to the numbers the axes store internally.", "pt": "Converte valores exibidos em uma régua de eixo para os números que os eixos guardam internamente."},
+      "syntax": [
+        {"code": "num = ruler2num(data, ruler)", "en": "Converts `data`, for example datetime values, to numeric positions along the ruler.", "pt": "Converte `data`, por exemplo valores datetime, em posições numéricas ao longo da régua."}
+      ],
+      "inputs": [
+        {"name": "data", "en": "Values of the type that the ruler displays.", "pt": "Valores do tipo que a régua exibe."},
+        {"name": "ruler", "en": "An axis ruler such as `ax.XAxis` or `ax.YAxis`.", "pt": "Uma régua de eixo, como `ax.XAxis` ou `ax.YAxis`."}
+      ],
+      "outputs": [
+        {"name": "num", "en": "Numeric array of the same size as `data`.", "pt": "Array numérico do mesmo tamanho de `data`."}
+      ],
+      "description": {
+        "en": "Axes that show dates, durations or categories keep their positions as numbers. `ruler2num` gives the number that belongs to a given value, so that code can set limits, ticks or annotation positions in the units the axes use. On a date axis the numbers count days from the first day plotted.\n\nA numeric ruler returns its input unchanged. `num2ruler` is the inverse.",
+        "pt": "Eixos que mostram datas, durações ou categorias guardam suas posições como números. `ruler2num` fornece o número que corresponde a um dado valor, para que o código possa definir limites, marcas ou posições de anotação nas unidades usadas pelos eixos. Em um eixo de datas, os números contam dias a partir do primeiro dia plotado.\n\nUma régua numérica devolve a entrada sem alteração. `num2ruler` é a inversa."
+      },
+      "notes": {
+        "en": "In MatLivre the conversion is available for numeric and datetime rulers.",
+        "pt": "No MatLivre a conversão está disponível para réguas numéricas e de datetime."
+      },
+      "examples": [
+        {"title": {"en": "Number of the third date", "pt": "Número da terceira data"}, "code": "t = datetime(2024,1,1) + days(0:4);\nplot(t, [1 4 2 5 3])\nax = gca;\nn = ruler2num(t(3), ax.XAxis)"}
+      ],
+      "see": ["num2ruler", "datetime", "xlim", "xticks", "gca"]
+    },
+    "sgtitle": {
+      "summary": {"en": "Adds one title above a grid of subplots.", "pt": "Adiciona um título único acima de uma grade de subplots."},
+      "syntax": [
+        {"code": "sgtitle(txt)", "en": "Puts `txt` as the title of the whole figure.", "pt": "Coloca `txt` como título de toda a figura."},
+        {"code": "sgtitle(txt, Name, Value)", "en": "Sets text properties such as `'FontSize'` or `'Color'`.", "pt": "Define propriedades do texto como `'FontSize'` ou `'Color'`."},
+        {"code": "sgtitle(target, ___)", "en": "Places the title in a specific figure or panel.", "pt": "Coloca o título em uma figura ou painel específico."},
+        {"code": "t = sgtitle(___)", "en": "Returns the title object.", "pt": "Retorna o objeto do título."}
+      ],
+      "inputs": [
+        {"name": "txt", "en": "Title as text, a string array or a cell array of lines.", "pt": "Título como texto, string array ou cell array de linhas."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Text object of the title.", "pt": "Objeto de texto do título."}
+      ],
+      "description": {
+        "en": "Each axes made with `subplot` has its own `title`. `sgtitle` is the \"super title\" centered above all of them. For a layout made with `tiledlayout`, the equivalent is `title(t, txt)` on the layout object.",
+        "pt": "Cada eixo criado com `subplot` tem seu próprio `title`. `sgtitle` é o \"super título\" centralizado acima de todos. Em um layout feito com `tiledlayout`, o equivalente é `title(t, txt)` sobre o objeto do layout."
+      },
+      "examples": [
+        {"title": {"en": "Two subplots and a common title", "pt": "Dois subplots e um título comum"}, "code": "x = 0:0.1:6;\nsubplot(1, 2, 1), plot(x, sin(x)), title('sin')\nsubplot(1, 2, 2), plot(x, cos(x)), title('cos')\nsgtitle('Trigonometric functions')",
+         "silent": true, "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["subplot", "title", "tiledlayout", "xlabel", "text"]
+    },
+    "shading": {
+      "summary": {"en": "Sets how color is shaded across surfaces and patches.", "pt": "Define como a cor é sombreada em superfícies e patches."},
+      "syntax": [
+        {"code": "shading flat", "en": "One color per face and no mesh lines.", "pt": "Uma cor por face e sem linhas da malha."},
+        {"code": "shading interp", "en": "Interpolates colors smoothly across faces, again without mesh lines.", "pt": "Interpola as cores suavemente pelas faces, também sem linhas da malha."},
+        {"code": "shading faceted", "en": "One color per face with black mesh lines. This is the default.", "pt": "Uma cor por face, com linhas pretas da malha. É o padrão."},
+        {"code": "shading(ax, option)", "en": "Applies the option to the axes `ax`.", "pt": "Aplica a opção aos eixos `ax`."}
+      ],
+      "inputs": [
+        {"name": "option", "en": "`'flat'`, `'interp'` or `'faceted'`.", "pt": "`'flat'`, `'interp'` ou `'faceted'`."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`shading` changes the face and edge colors of the surface and patch objects in the axes. After `surf` the default faceted look is easy to see; `shading interp` removes the grid and blends the colors for a smooth surface, which is the usual choice for finely sampled data.\n\nThe command works on objects that already exist, so it comes after the plot call. It sets color, whereas `lighting` and `material` control light.",
+        "pt": "`shading` altera as cores de face e de aresta dos objetos surface e patch dos eixos. Depois de `surf`, o aspecto facetado padrão é fácil de ver; `shading interp` remove a grade e mistura as cores, dando uma superfície suave, a escolha usual para dados amostrados com fineza.\n\nO comando atua sobre objetos que já existem, portanto vem depois da chamada de plotagem. Ele define a cor, enquanto `lighting` e `material` controlam a luz."
+      },
+      "examples": [
+        {"title": {"en": "Smooth surface", "pt": "Superfície suave"}, "code": "surf(peaks(30))\nshading interp\ncolorbar",
+         "silent": true, "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["surf", "lighting", "material", "colormap", "light"]
+    },
+    "sky": {
+      "summary": {"en": "Colormap of sky blues, from a pale tone to a deep blue.", "pt": "Mapa de cores em tons de azul-céu, de um tom claro a um azul profundo."},
+      "syntax": [
+        {"code": "map = sky", "en": "Returns the colormap with the default number of rows.", "pt": "Retorna o mapa de cores com o número padrão de linhas."},
+        {"code": "map = sky(m)", "en": "Returns `m` colors.", "pt": "Retorna `m` cores."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "Sky is one of the newer colormaps that come with the graphics system. It runs from a nearly white blue at the first row to the saturated blue of the default line color at the last, so low values look pale and high values look strong. Like other sequential maps it is suited to data with a single direction of increase.",
+        "pt": "Sky é um dos mapas de cores mais novos que acompanham o sistema gráfico. Vai de um azul quase branco na primeira linha ao azul saturado da cor de linha padrão na última, de modo que valores baixos parecem claros e valores altos parecem fortes. Como outros mapas sequenciais, serve a dados com um único sentido de crescimento."
+      },
+      "examples": [
+        {"title": {"en": "Two ends of the map", "pt": "As duas pontas do mapa"}, "code": "sky(2)"}
+      ],
+      "see": ["parula", "turbo", "winter", "colormap", "gray"]
+    },
+    "specular": {
+      "summary": {"en": "Specular reflectance of a surface for given light and viewer directions.", "pt": "Reflectância especular de uma superfície para direções dadas da luz e do observador."},
+      "syntax": [
+        {"code": "R = specular(Nx, Ny, Nz, S, V)", "en": "Returns the specular reflectance with the default spread exponent of 10.", "pt": "Retorna a reflectância especular com o expoente de dispersão padrão 10."},
+        {"code": "R = specular(Nx, Ny, Nz, S, V, spread)", "en": "Uses the given spread exponent.", "pt": "Usa o expoente de dispersão dado."}
+      ],
+      "inputs": [
+        {"name": "Nx, Ny, Nz", "en": "Arrays of the same size with the surface normal components.", "pt": "Arrays do mesmo tamanho com as componentes da normal da superfície."},
+        {"name": "S", "en": "Light direction, as `[x y z]` or `[azimuth elevation]` in degrees.", "pt": "Direção da luz, como `[x y z]` ou `[azimute elevação]` em graus."},
+        {"name": "V", "en": "View direction, in the same forms as `S`.", "pt": "Direção de visão, nas mesmas formas de `S`."},
+        {"name": "spread", "en": "Exponent that sets how tight the highlight is. Larger values give a smaller, sharper spot.", "pt": "Expoente que define quão concentrado é o reflexo. Valores maiores dão um ponto menor e mais nítido."}
+      ],
+      "outputs": [
+        {"name": "R", "en": "Array of the same size as `Nx` with values between 0 and 1.", "pt": "Array do mesmo tamanho de `Nx` com valores entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The light direction is reflected about each normal, and the cosine of the angle between the reflected ray and the view direction is raised to the power `spread`. When the viewer sits exactly in the mirror direction the result is 1, and it falls off quickly as the angle grows. Negative cosines count as 0.\n\nThe result is the highlight term of the Phong model and is typically added to the `diffuse` term to shade a surface by hand.",
+        "pt": "A direção da luz é refletida em torno de cada normal, e o cosseno do ângulo entre o raio refletido e a direção de visão é elevado à potência `spread`. Quando o observador está exatamente na direção do espelho, o resultado é 1, e cai rapidamente quando o ângulo aumenta. Cossenos negativos contam como 0.\n\nO resultado é o termo de brilho do modelo de Phong e costuma ser somado ao termo `diffuse` para sombrear uma superfície manualmente."
+      },
+      "examples": [
+        {"title": {"en": "Viewer in and off the mirror direction", "pt": "Observador dentro e fora da direção do espelho"}, "code": "specular(0, 0, 1, [0 0 1], [0 0 1])\nspecular(0, 0.6, 0.8, [0 0 1], [0 0 1], 2)"}
+      ],
+      "see": ["diffuse", "surfnorm", "material", "lighting", "light"]
+    },
+    "spring": {
+      "summary": {"en": "Colormap that shades from magenta to yellow.", "pt": "Mapa de cores que varia de magenta a amarelo."},
+      "syntax": [
+        {"code": "map = spring", "en": "Returns the colormap with the default number of rows.", "pt": "Retorna o mapa de cores com o número padrão de linhas."},
+        {"code": "map = spring(m)", "en": "Returns `m` colors.", "pt": "Retorna `m` cores."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The red channel stays at 1, the blue channel falls linearly from 1 to 0 and the green channel rises linearly from 0 to 1. The result is a bright map from magenta to yellow, one of four seasonal maps with `summer`, `autumn` and `winter`.",
+        "pt": "O canal vermelho permanece em 1, o azul cai linearmente de 1 a 0 e o verde sobe linearmente de 0 a 1. O resultado é um mapa vivo de magenta a amarelo, um de quatro mapas sazonais junto com `summer`, `autumn` e `winter`."
+      },
+      "examples": [
+        {"title": {"en": "Three steps", "pt": "Três passos"}, "code": "spring(3)"}
+      ],
+      "see": ["summer", "autumn", "winter", "colormap", "hot"]
+    },
+    "subplot": {
+      "summary": {"en": "Divides a figure into a grid and selects one cell for the next plot.", "pt": "Divide uma figura em uma grade e seleciona uma célula para o próximo gráfico."},
+      "syntax": [
+        {"code": "subplot(m, n, p)", "en": "Splits the figure into an `m`-by-`n` grid and makes cell `p` current, counting along rows from the top left.", "pt": "Divide a figura em uma grade `m`-por-`n` e torna a célula `p` atual, contando ao longo das linhas a partir do canto superior esquerdo."},
+        {"code": "subplot(m, n, [p1 p2])", "en": "Makes one axes that spans several cells.", "pt": "Cria um único eixo que ocupa várias células."},
+        {"code": "subplot(mnp)", "en": "Shorthand with three digits, so `subplot(223)` means `subplot(2,2,3)`.", "pt": "Forma abreviada com três dígitos: `subplot(223)` equivale a `subplot(2,2,3)`."},
+        {"code": "subplot(ax)", "en": "Makes an existing axes current.", "pt": "Torna atual um eixo existente."}
+      ],
+      "inputs": [
+        {"name": "m, n", "en": "Number of rows and columns in the grid.", "pt": "Número de linhas e colunas da grade."},
+        {"name": "p", "en": "Cell index, or a vector of indices to span several cells.", "pt": "Índice da célula, ou vetor de índices para ocupar várias células."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "After `subplot(m, n, p)`, plotting commands draw in that cell. Calling `subplot` again with a different `p` moves to another cell without disturbing what was drawn before. Each cell is its own axes, with its own title, labels and limits.\n\nThe newer `tiledlayout` and `nexttile` give tighter control of spacing and shared titles, but `subplot` remains the most common way to arrange a few plots.",
+        "pt": "Depois de `subplot(m, n, p)`, os comandos de plotagem desenham nessa célula. Chamar `subplot` de novo com outro `p` passa para outra célula sem alterar o que foi desenhado antes. Cada célula é um eixo próprio, com título, rótulos e limites próprios.\n\nOs mais novos `tiledlayout` e `nexttile` oferecem controle melhor do espaçamento e de títulos compartilhados, mas `subplot` continua sendo a forma mais comum de organizar alguns gráficos."
+      },
+      "notes": {
+        "en": "In MatLivre `subplot` returns no value, so `ax = subplot(...)` is an error; use `gca` right after the call to get the axes.",
+        "pt": "No MatLivre `subplot` não retorna valor, então `ax = subplot(...)` gera erro; use `gca` logo após a chamada para obter os eixos."
+      },
+      "examples": [
+        {"title": {"en": "Three cells, one spanning two", "pt": "Três células, uma ocupando duas"}, "code": "x = linspace(0, 2*pi, 100);\nsubplot(2, 2, 1), plot(x, sin(x)), title('sin')\nsubplot(2, 2, 2), plot(x, cos(x)), title('cos')\nsubplot(2, 2, [3 4]), plot(x, sin(x).*cos(x)), title('product')",
+         "silent": true, "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["tiledlayout", "nexttile", "sgtitle", "figure", "gca"]
+    },
+    "subtitle": {
+      "summary": {"en": "Adds a second, smaller line of text under the title of the axes.", "pt": "Adiciona uma segunda linha de texto, menor, sob o título dos eixos."},
+      "syntax": [
+        {"code": "subtitle(txt)", "en": "Sets the subtitle of the current axes.", "pt": "Define o subtítulo dos eixos atuais."},
+        {"code": "subtitle(txt, Name, Value)", "en": "Sets text properties of the subtitle.", "pt": "Define propriedades de texto do subtítulo."},
+        {"code": "t = subtitle(___)", "en": "Returns the text object.", "pt": "Retorna o objeto de texto."}
+      ],
+      "inputs": [
+        {"name": "txt", "en": "Subtitle as text, a string array or a cell array of lines.", "pt": "Subtítulo como texto, string array ou cell array de linhas."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Text object of the subtitle.", "pt": "Objeto de texto do subtítulo."}
+      ],
+      "description": {
+        "en": "The subtitle appears below the `title` in a smaller, gray font and is used for secondary information, such as the data source or the units. It is stored in the `Subtitle` property of the axes.",
+        "pt": "O subtítulo aparece abaixo do `title`, em fonte menor e cinza, e serve para informação secundária, como a fonte dos dados ou as unidades. Ele é guardado na propriedade `Subtitle` dos eixos."
+      },
+      "examples": [
+        {"title": {"en": "Title and subtitle", "pt": "Título e subtítulo"}, "code": "plot(1:5, [2 4 3 6 5])\ntitle('Weekly sales')\nt = subtitle('thousands of units');\nt.String"}
+      ],
+      "see": ["title", "xlabel", "ylabel", "sgtitle", "text"]
+    },
+    "summer": {
+      "summary": {"en": "Colormap that shades from green to yellow.", "pt": "Mapa de cores que varia de verde a amarelo."},
+      "syntax": [
+        {"code": "map = summer", "en": "Returns the colormap with the default number of rows.", "pt": "Retorna o mapa de cores com o número padrão de linhas."},
+        {"code": "map = summer(m)", "en": "Returns `m` colors.", "pt": "Retorna `m` cores."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The red channel rises linearly from 0 to 1, the green channel goes from 0.5 to 1 and the blue channel stays at 0.4. The map starts at a dark green and ends at a light yellow, and is one of the four seasonal maps with `spring`, `autumn` and `winter`.",
+        "pt": "O canal vermelho sobe linearmente de 0 a 1, o verde vai de 0,5 a 1 e o azul fica em 0,4. O mapa começa em um verde escuro e termina em um amarelo claro, e é um dos quatro mapas sazonais junto com `spring`, `autumn` e `winter`."
+      },
+      "examples": [
+        {"title": {"en": "Three steps", "pt": "Três passos"}, "code": "summer(3)"}
+      ],
+      "see": ["spring", "autumn", "winter", "colormap", "parula"]
+    },
+    "texlabel": {
+      "summary": {"en": "Converts an expression or Greek-letter text to TeX markup for use in labels.", "pt": "Converte uma expressão ou texto com letras gregas em marcação TeX para uso em rótulos."},
+      "syntax": [
+        {"code": "s = texlabel(expr)", "en": "Returns a character vector in TeX notation for the expression given as text.", "pt": "Retorna um vetor de caracteres em notação TeX para a expressão dada como texto."}
+      ],
+      "inputs": [
+        {"name": "expr", "en": "Expression as text, such as `'alpha^2'` or `'sin(alpha)/beta'`. Names of Greek letters are turned into TeX commands.", "pt": "Expressão como texto, como `'alpha^2'` ou `'sin(alpha)/beta'`. Nomes de letras gregas viram comandos TeX."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "Character vector with TeX markup, ready to use with the `'Interpreter', 'tex'` setting of labels and titles.", "pt": "Vetor de caracteres com marcação TeX, pronto para o uso com `'Interpreter', 'tex'` em rótulos e títulos."}
+      ],
+      "description": {
+        "en": "Greek letter names such as `alpha` or `beta` become `\\alpha` and `\\beta`, and exponents and subscripts are enclosed in braces. The result can be passed to `xlabel`, `title` or `text`, which render TeX by default.\n\nWriting the TeX string directly is usually simpler for short labels. `texlabel` helps when the expression comes from a variable or a symbolic formula.",
+        "pt": "Nomes de letras gregas como `alpha` ou `beta` viram `\\alpha` e `\\beta`, e expoentes e índices são envolvidos por chaves. O resultado pode ser passado a `xlabel`, `title` ou `text`, que interpretam TeX por padrão.\n\nEscrever diretamente a string TeX costuma ser mais simples para rótulos curtos. `texlabel` ajuda quando a expressão vem de uma variável ou de uma fórmula simbólica."
+      },
+      "examples": [
+        {"title": {"en": "Greek letters and a power", "pt": "Letras gregas e uma potência"}, "code": "s1 = texlabel('alpha^2')\ns2 = texlabel('sin(alpha)/beta')\nplot(1:3)\nxlabel(s1)"}
+      ],
+      "see": ["xlabel", "title", "text", "sym", "latex"]
+    },
+    "text": {
+      "summary": {"en": "Writes text at a position in the axes, in data coordinates.", "pt": "Escreve texto em uma posição dos eixos, em coordenadas de dados."},
+      "syntax": [
+        {"code": "text(x, y, txt)", "en": "Writes `txt` with its anchor at the point `(x, y)`.", "pt": "Escreve `txt` com a âncora no ponto `(x, y)`."},
+        {"code": "text(x, y, z, txt)", "en": "Places the text in 3-D axes.", "pt": "Posiciona o texto em eixos 3-D."},
+        {"code": "text(___, Name, Value)", "en": "Sets properties such as `'FontSize'`, `'Color'` or `'HorizontalAlignment'`.", "pt": "Define propriedades como `'FontSize'`, `'Color'` ou `'HorizontalAlignment'`."},
+        {"code": "t = text(___)", "en": "Returns the text object.", "pt": "Retorna o objeto de texto."}
+      ],
+      "inputs": [
+        {"name": "x, y, z", "en": "Coordinates of the anchor, in data units. Vectors place several labels at once.", "pt": "Coordenadas da âncora, em unidades de dados. Vetores posicionam vários rótulos de uma vez."},
+        {"name": "txt", "en": "Text, a string array or a cell array with one entry per position.", "pt": "Texto, string array ou cell array com uma entrada por posição."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Text object, class `matlab.graphics.primitive.Text`, with the properties `String` and `Position`.", "pt": "Objeto de texto, classe `matlab.graphics.primitive.Text`, com as propriedades `String` e `Position`."}
+      ],
+      "description": {
+        "en": "The text is anchored at the given point and is by default left-aligned. It is part of the axes, so it moves with the data when the limits change. Common uses are to tag individual points, label peaks and mark regions of a plot.\n\nTeX markup, such as `\\alpha` or `x^2`, is interpreted by default.",
+        "pt": "O texto é ancorado no ponto dado e, por padrão, alinhado à esquerda. Faz parte dos eixos, portanto acompanha os dados quando os limites mudam. Usos comuns são identificar pontos individuais, rotular picos e marcar regiões de um gráfico.\n\nA marcação TeX, como `\\alpha` ou `x^2`, é interpretada por padrão."
+      },
+      "examples": [
+        {"title": {"en": "Label the maximum", "pt": "Rotular o máximo"}, "code": "x = 0:0.1:6;\ny = sin(x);\nplot(x, y)\n[m, i] = max(y);\nt = text(x(i), m, ' max', 'VerticalAlignment', 'bottom');\nt.String\nt.Position"}
+      ],
+      "see": ["title", "xlabel", "annotation", "gtext", "line"]
+    },
+    "tiledlayout": {
+      "summary": {"en": "Creates a grid of tiles in the figure to hold several plots.", "pt": "Cria uma grade de blocos na figura para abrigar vários gráficos."},
+      "syntax": [
+        {"code": "tiledlayout(m, n)", "en": "Creates a layout with `m` rows and `n` columns.", "pt": "Cria um layout com `m` linhas e `n` colunas."},
+        {"code": "tiledlayout('flow')", "en": "Creates a layout that grows as tiles are added.", "pt": "Cria um layout que cresce à medida que blocos são adicionados."},
+        {"code": "tiledlayout(___, Name, Value)", "en": "Sets options such as `'TileSpacing'` and `'Padding'`, each `'loose'`, `'compact'` or `'tight'`.", "pt": "Define opções como `'TileSpacing'` e `'Padding'`, cada uma `'loose'`, `'compact'` ou `'tight'`."},
+        {"code": "t = tiledlayout(___)", "en": "Returns the layout object.", "pt": "Retorna o objeto do layout."}
+      ],
+      "inputs": [
+        {"name": "m, n", "en": "Number of rows and columns of tiles.", "pt": "Número de linhas e colunas de blocos."},
+        {"name": "TileSpacing, Padding", "en": "Spacing between tiles and around the grid. The default is `'loose'`.", "pt": "Espaçamento entre blocos e ao redor da grade. O padrão é `'loose'`."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Layout object with properties such as `GridSize`, `TileSpacing` and `Padding`.", "pt": "Objeto de layout com propriedades como `GridSize`, `TileSpacing` e `Padding`."}
+      ],
+      "description": {
+        "en": "The layout is empty until tiles are filled with `nexttile`, one axes per tile. Compared with `subplot`, the layout object manages the gaps itself, can share a title and axis labels for the whole grid (`title(t, ...)`, `xlabel(t, ...)`), and lets a tile span several rows or columns.\n\nCalling `tiledlayout` again in the same figure replaces the previous layout.",
+        "pt": "O layout fica vazio até que os blocos sejam preenchidos com `nexttile`, um eixo por bloco. Em comparação com `subplot`, o objeto de layout gerencia os espaços sozinho, pode compartilhar um título e rótulos de eixo para toda a grade (`title(t, ...)`, `xlabel(t, ...)`) e permite que um bloco ocupe várias linhas ou colunas.\n\nChamar `tiledlayout` de novo na mesma figura substitui o layout anterior."
+      },
+      "examples": [
+        {"title": {"en": "A two-by-two grid", "pt": "Uma grade dois por dois"}, "code": "t = tiledlayout(2, 2, 'TileSpacing', 'compact');\nfor k = 1:4\n  nexttile\n  plot(1:5, (1:5).^k)\nend\ntitle(t, 'Powers')\nt.GridSize\nt.TileSpacing"}
+      ],
+      "see": ["nexttile", "tilenum", "tilerowcol", "subplot", "sgtitle"]
+    },
+    "tilenum": {
+      "summary": {"en": "Gives the tile number of a given row and column in a tiled layout.", "pt": "Dá o número do bloco de uma linha e coluna em um layout em blocos."},
+      "syntax": [
+        {"code": "n = tilenum(t, row, col)", "en": "Returns the number of the tile in row `row` and column `col` of layout `t`.", "pt": "Retorna o número do bloco na linha `row` e coluna `col` do layout `t`."}
+      ],
+      "inputs": [
+        {"name": "t", "en": "Layout created by `tiledlayout`.", "pt": "Layout criado por `tiledlayout`."},
+        {"name": "row, col", "en": "Row and column of the tile, counted from 1.", "pt": "Linha e coluna do bloco, contadas a partir de 1."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Tile number, counted along rows from the top left.", "pt": "Número do bloco, contado ao longo das linhas a partir do canto superior esquerdo."}
+      ],
+      "description": {
+        "en": "Tiles are numbered row by row, so in a layout with `c` columns the tile at `(row, col)` has the number `(row - 1)*c + col`. The result can be passed to `nexttile` to select that tile. `tilerowcol` does the opposite conversion.",
+        "pt": "Os blocos são numerados linha a linha, então, em um layout com `c` colunas, o bloco em `(row, col)` tem o número `(row - 1)*c + col`. O resultado pode ser passado a `nexttile` para selecionar o bloco. `tilerowcol` faz a conversão inversa."
+      },
+      "examples": [
+        {"title": {"en": "Numbers in a 2-by-3 layout", "pt": "Números em um layout 2-por-3"}, "code": "t = tiledlayout(2, 3);\ntilenum(t, 1, 3)\ntilenum(t, 2, 2)"}
+      ],
+      "see": ["tilerowcol", "nexttile", "tiledlayout", "subplot"]
+    },
+    "tilerowcol": {
+      "summary": {"en": "Gives the row and column of a tile, given its number in a tiled layout.", "pt": "Dá a linha e a coluna de um bloco, dado seu número em um layout em blocos."},
+      "syntax": [
+        {"code": "[row, col] = tilerowcol(t, n)", "en": "Returns the row and column of tile `n` in layout `t`.", "pt": "Retorna a linha e a coluna do bloco `n` do layout `t`."}
+      ],
+      "inputs": [
+        {"name": "t", "en": "Layout created by `tiledlayout`.", "pt": "Layout criado por `tiledlayout`."},
+        {"name": "n", "en": "Tile number, a positive integer counted along rows.", "pt": "Número do bloco, um inteiro positivo contado ao longo das linhas."}
+      ],
+      "outputs": [
+        {"name": "row, col", "en": "Position of the tile in the grid, counted from 1.", "pt": "Posição do bloco na grade, contada a partir de 1."}
+      ],
+      "description": {
+        "en": "It inverts `tilenum`. For a layout with `c` columns, tile `n` is in row `ceil(n/c)` and column `mod(n - 1, c) + 1`. The function is useful when a loop runs over tile numbers and the position of each is needed, for example to label only the outer tiles.",
+        "pt": "Inverte `tilenum`. Em um layout com `c` colunas, o bloco `n` está na linha `ceil(n/c)` e na coluna `mod(n - 1, c) + 1`. A função é útil quando um laço percorre os números dos blocos e a posição de cada um é necessária, por exemplo para rotular apenas os blocos externos."
+      },
+      "examples": [
+        {"title": {"en": "Where is tile 5?", "pt": "Onde está o bloco 5?"}, "code": "t = tiledlayout(2, 3);\n[r, c] = tilerowcol(t, 5)\n[r, c] = tilerowcol(t, 6)"}
+      ],
+      "see": ["tilenum", "nexttile", "tiledlayout", "subplot"]
+    },
+    "title": {
+      "summary": {"en": "Adds a title to the axes, figure layout or chart.", "pt": "Adiciona um título aos eixos, ao layout da figura ou ao gráfico."},
+      "syntax": [
+        {"code": "title(txt)", "en": "Sets the title of the current axes.", "pt": "Define o título dos eixos atuais."},
+        {"code": "title(txt, Name, Value)", "en": "Sets text properties such as `'FontSize'`, `'Color'` or `'FontWeight'`.", "pt": "Define propriedades de texto como `'FontSize'`, `'Color'` ou `'FontWeight'`."},
+        {"code": "title(target, ___)", "en": "Sets the title of the axes or tiled layout `target`.", "pt": "Define o título dos eixos ou do layout em blocos `target`."},
+        {"code": "t = title(___)", "en": "Returns the text object.", "pt": "Retorna o objeto de texto."}
+      ],
+      "inputs": [
+        {"name": "txt", "en": "Title as text, a string array or a cell array of lines (a multi-line title).", "pt": "Título como texto, string array ou cell array de linhas (título em várias linhas)."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Text object, class `matlab.graphics.primitive.Text`.", "pt": "Objeto de texto, classe `matlab.graphics.primitive.Text`."}
+      ],
+      "description": {
+        "en": "The title is centered above the axes, in a bold font by default. It is stored in the axes property `Title`, so a later `title` replaces it. TeX markup (`\\alpha`, `x^2`) is interpreted unless `'Interpreter'` is changed.\n\nTo build a title from numbers, create the text first with `sprintf` or `num2str`, for example `title(sprintf('n = %d', n))`.",
+        "pt": "O título é centralizado acima dos eixos, em negrito por padrão. Ele é guardado na propriedade `Title` dos eixos, portanto um novo `title` o substitui. A marcação TeX (`\\alpha`, `x^2`) é interpretada, a menos que `'Interpreter'` seja alterado.\n\nPara montar um título com números, crie o texto antes com `sprintf` ou `num2str`, por exemplo `title(sprintf('n = %d', n))`."
+      },
+      "examples": [
+        {"title": {"en": "A title built from a value", "pt": "Um título montado a partir de um valor"}, "code": "n = 5;\nplot(1:n)\nt = title(sprintf('Line with n = %d', n), 'FontSize', 14);\nt.String\nt.FontSize"}
+      ],
+      "see": ["subtitle", "xlabel", "ylabel", "sgtitle", "text"]
+    },
+    "turbo": {
+      "summary": {"en": "Rainbow-style colormap with more even lightness than `jet`.", "pt": "Mapa de cores estilo arco-íris com luminosidade mais uniforme que o `jet`."},
+      "syntax": [
+        {"code": "map = turbo", "en": "Returns a turbo colormap with the default number of rows.", "pt": "Retorna um mapa de cores turbo com o número padrão de linhas."},
+        {"code": "map = turbo(m)", "en": "Returns `m` colors.", "pt": "Retorna `m` cores."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "Turbo goes from dark purple through blue, green, yellow and orange to dark red. It keeps the strong contrast that makes rainbow maps attractive for showing detail, but its lightness changes smoothly, avoiding the bright bands of `jet` that can look like features in the data.",
+        "pt": "O turbo vai do roxo escuro ao vermelho escuro, passando por azul, verde, amarelo e laranja. Mantém o forte contraste que torna os mapas arco-íris atraentes para mostrar detalhes, mas sua luminosidade muda de forma suave, evitando as faixas brilhantes do `jet` que podem parecer estruturas nos dados."
+      },
+      "examples": [
+        {"title": {"en": "Two ends of the map", "pt": "As duas pontas do mapa"}, "code": "turbo(2)"}
+      ],
+      "see": ["jet", "parula", "colormap", "colorbar", "hsv"]
+    },
+    "view": {
+      "summary": {"en": "Sets or gets the viewing angle of 3-D axes as azimuth and elevation.", "pt": "Define ou obtém o ângulo de visão de eixos 3-D como azimute e elevação."},
+      "syntax": [
+        {"code": "view(az, el)", "en": "Sets the azimuth and elevation, in degrees.", "pt": "Define o azimute e a elevação, em graus."},
+        {"code": "view(2)", "en": "Uses the default 2-D view, `[0 90]`, looking down the z-axis.", "pt": "Usa a vista 2-D padrão, `[0 90]`, olhando ao longo do eixo z."},
+        {"code": "view(3)", "en": "Uses the default 3-D view, `[-37.5 30]`.", "pt": "Usa a vista 3-D padrão, `[-37.5 30]`."},
+        {"code": "[az, el] = view", "en": "Returns the current angles.", "pt": "Retorna os ângulos atuais."}
+      ],
+      "inputs": [
+        {"name": "az", "en": "Azimuth: the rotation about the vertical axis, in degrees. Positive values turn the viewpoint counterclockwise as seen from above.", "pt": "Azimute: a rotação em torno do eixo vertical, em graus. Valores positivos giram o ponto de vista em sentido anti-horário visto de cima."},
+        {"name": "el", "en": "Elevation: the angle above the xy plane, in degrees. 90 looks straight down.", "pt": "Elevação: o ângulo acima do plano xy, em graus. 90 olha diretamente de cima."}
+      ],
+      "outputs": [
+        {"name": "az, el", "en": "Current azimuth and elevation. With one output, a two-element vector `[az el]`.", "pt": "Azimute e elevação atuais. Com uma saída, um vetor `[az el]` de dois elementos."}
+      ],
+      "description": {
+        "en": "The two angles describe where the viewer stands relative to the axes. `view(0, 90)` is a top view, `view(0, 0)` looks along the y-axis from the front, and `view(90, 0)` looks from the side. For 2-D plots the default is `[0 90]`.\n\nThe viewpoint is stored in the axes property `View`. Rotating the axes by mouse changes it as well.",
+        "pt": "Os dois ângulos descrevem onde o observador está em relação aos eixos. `view(0, 90)` é a vista de cima, `view(0, 0)` olha ao longo do eixo y de frente, e `view(90, 0)` olha de lado. Em gráficos 2-D o padrão é `[0 90]`.\n\nO ponto de vista fica na propriedade `View` dos eixos. Girar os eixos com o mouse também o altera."
+      },
+      "notes": {
+        "en": "In MatLivre the form `view([x y z])`, which takes a direction vector, is not supported; give azimuth and elevation instead.",
+        "pt": "No MatLivre a forma `view([x y z])`, que recebe um vetor de direção, não é suportada; use azimute e elevação."
+      },
+      "examples": [
+        {"title": {"en": "Look from the side", "pt": "Olhar de lado"}, "code": "surf(peaks(25))\nview(3);\nv3 = view\nview(90, 0)\nv = view"}
+      ],
+      "see": ["viewmtx", "camlight", "surf", "axis", "pbaspect"]
+    }
+  }
+}

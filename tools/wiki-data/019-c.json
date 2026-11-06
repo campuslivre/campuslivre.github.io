@@ -1,0 +1,651 @@
+{
+  "functions": {
+    "inv": {
+      "summary": {"en": "Inverse of a square matrix.", "pt": "Inversa de uma matriz quadrada."},
+      "syntax": [
+        {"code": "Y = inv(X)", "en": "Returns the matrix `Y` with `X*Y = Y*X = I`.", "pt": "Retorna a matriz `Y` com `X*Y = Y*X = I`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Square matrix.", "pt": "Matriz quadrada."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Inverse of `X`. For a singular matrix a warning is printed and the result holds `Inf`.", "pt": "Inversa de `X`. Para uma matriz singular, um aviso é impresso e o resultado contém `Inf`."}
+      ],
+      "description": {
+        "en": "A matrix has an inverse only when its determinant is nonzero. `inv` computes it from an LU factorization. For a nearly singular matrix the result can be inaccurate, and a warning reports a bad condition.\n\nTo solve `A*x = b`, write `A\\b` instead of `inv(A)*b`: it is faster and more accurate, because it never forms the inverse.",
+        "pt": "Uma matriz só tem inversa quando seu determinante é diferente de zero. `inv` a calcula a partir de uma fatoração LU. Para uma matriz quase singular o resultado pode ser impreciso, e um aviso informa o mau condicionamento.\n\nPara resolver `A*x = b`, escreva `A\\b` em vez de `inv(A)*b`: é mais rápido e mais preciso, pois nunca forma a inversa."
+      },
+      "examples": [
+        {"title": {"en": "Regular and singular matrices", "pt": "Matrizes regulares e singulares"}, "code": "inv([1 2; 3 4])\ninv([2 0; 0 4])\ninv([1 2; 2 4])"}
+      ],
+      "see": ["det", "mldivide", "pinv", "lu", "cond"]
+    },
+    "isbanded": {
+      "summary": {"en": "Tests whether a matrix lies within a given band.", "pt": "Testa se uma matriz está dentro de uma banda dada."},
+      "syntax": [
+        {"code": "tf = isbanded(A, lower, upper)", "en": "True if `A` has all its nonzeros within `lower` diagonals below and `upper` diagonals above the main diagonal.", "pt": "Verdadeiro se todos os não zeros de `A` estão em até `lower` diagonais abaixo e `upper` diagonais acima da diagonal principal."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix.", "pt": "Matriz numérica."},
+        {"name": "lower, upper", "en": "Non-negative integers giving the lower and upper bandwidth to test.", "pt": "Inteiros não negativos com as larguras de banda inferior e superior a testar."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "`isbanded(A,0,0)` tests for a diagonal matrix, `isbanded(A,1,1)` for a tridiagonal one, `isbanded(A,n-1,0)` for lower triangular. The matrix may have narrower bandwidth than asked: a diagonal matrix is banded for any `lower` and `upper`.",
+        "pt": "`isbanded(A,0,0)` testa matriz diagonal, `isbanded(A,1,1)` testa tridiagonal, `isbanded(A,n-1,0)` testa triangular inferior. A matriz pode ter banda mais estreita que a pedida: uma matriz diagonal está em banda para quaisquer `lower` e `upper`."
+      },
+      "examples": [
+        {"title": {"en": "Tridiagonal test", "pt": "Teste de tridiagonal"}, "code": "A = [1 2 0; 3 4 5; 0 6 7];\nisbanded(A, 1, 1)\nisbanded(A, 0, 1)"}
+      ],
+      "see": ["bandwidth", "isdiag", "istril", "istriu"]
+    },
+    "isdiag": {
+      "summary": {"en": "Tests whether a matrix is diagonal.", "pt": "Testa se uma matriz é diagonal."},
+      "syntax": [
+        {"code": "tf = isdiag(A)", "en": "True if all entries off the main diagonal are zero.", "pt": "Verdadeiro se todas as entradas fora da diagonal principal são nulas."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric or logical matrix; not necessarily square.", "pt": "Matriz numérica ou lógica; não necessariamente quadrada."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "The diagonal entries themselves may be anything, including zero, so the zero matrix is diagonal. A rectangular matrix qualifies when everything outside the leading diagonal is zero. An empty matrix is diagonal.",
+        "pt": "As próprias entradas da diagonal podem ser quaisquer, inclusive zero, então a matriz nula é diagonal. Uma matriz retangular se qualifica quando tudo fora da diagonal principal é zero. Uma matriz vazia é diagonal."
+      },
+      "examples": [
+        {"title": {"en": "Three cases", "pt": "Três casos"}, "code": "isdiag(eye(3))\nisdiag([1 2; 0 3])\nisdiag([])"}
+      ],
+      "see": ["isbanded", "istril", "istriu", "diag", "bandwidth"]
+    },
+    "ishermitian": {
+      "summary": {"en": "Tests whether a matrix is Hermitian or skew-Hermitian.", "pt": "Testa se uma matriz é hermitiana ou anti-hermitiana."},
+      "syntax": [
+        {"code": "tf = ishermitian(A)", "en": "True if `A` equals its conjugate transpose `A'`.", "pt": "Verdadeiro se `A` é igual à sua transposta conjugada `A'`."},
+        {"code": "tf = ishermitian(A, 'skew')", "en": "True if `A` equals `-A'`.", "pt": "Verdadeiro se `A` é igual a `-A'`."},
+        {"code": "tf = ishermitian(A, tol)", "en": "Accepts a relative difference up to the tolerance `tol`.", "pt": "Aceita uma diferença relativa de até a tolerância `tol`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric square matrix.", "pt": "Matriz numérica quadrada."},
+        {"name": "tol", "en": "Non-negative tolerance; the default is 0 (exact comparison).", "pt": "Tolerância não negativa; o padrão é 0 (comparação exata)."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "For a real matrix, Hermitian means symmetric. A Hermitian matrix has real diagonal and real eigenvalues. The default test is exact, so matrices that are symmetric only up to rounding need a tolerance.",
+        "pt": "Para uma matriz real, hermitiana significa simétrica. Uma matriz hermitiana tem diagonal real e autovalores reais. O teste padrão é exato, então matrizes simétricas apenas a menos de arredondamento exigem uma tolerância."
+      },
+      "examples": [
+        {"title": {"en": "Complex Hermitian and a tolerance", "pt": "Hermitiana complexa e uma tolerância"}, "code": "ishermitian([1 2i; -2i 3])\nishermitian([1 2; 3 4])\nishermitian([1 2; 2.001 4])\nishermitian([1 2; 2.001 4], 0.01)"}
+      ],
+      "see": ["issymmetric", "ctranspose", "isdiag", "eig"]
+    },
+    "isIllConditioned": {
+      "summary": {"en": "Tests whether a decomposition object represents an ill-conditioned matrix.", "pt": "Testa se um objeto decomposition representa uma matriz mal condicionada."},
+      "syntax": [
+        {"code": "tf = isIllConditioned(dA)", "en": "True if the matrix factored in the `decomposition` object `dA` is ill conditioned.", "pt": "Verdadeiro se a matriz fatorada no objeto `decomposition` `dA` é mal condicionada."}
+      ],
+      "inputs": [
+        {"name": "dA", "en": "A `decomposition` object.", "pt": "Um objeto `decomposition`."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "A solution computed from an ill-conditioned matrix may have lost most of its accuracy. The test compares the reciprocal condition number of the matrix with a threshold related to machine precision, using the factorization already stored in the object, so no new factorization is needed.\n\nThe function applies to `decomposition` objects only, not to plain matrices; for those, use `rcond` or `cond`.",
+        "pt": "Uma solução calculada a partir de uma matriz mal condicionada pode ter perdido quase toda a precisão. O teste compara o inverso do número de condição da matriz com um limiar ligado à precisão de máquina, usando a fatoração já guardada no objeto, sem nova fatoração.\n\nA função se aplica apenas a objetos `decomposition`, não a matrizes comuns; para estas, use `rcond` ou `cond`."
+      },
+      "examples": [
+        {"title": {"en": "A well-conditioned matrix", "pt": "Uma matriz bem condicionada"}, "code": "dA = decomposition([4 1; 2 3]);\nisIllConditioned(dA)\nrcond(dA)"}
+      ],
+      "see": ["decomposition", "rcond", "cond", "condest"]
+    },
+    "issymmetric": {
+      "summary": {"en": "Tests whether a matrix is symmetric or skew-symmetric.", "pt": "Testa se uma matriz é simétrica ou antissimétrica."},
+      "syntax": [
+        {"code": "tf = issymmetric(A)", "en": "True if `A` equals its transpose `A.'`.", "pt": "Verdadeiro se `A` é igual à sua transposta `A.'`."},
+        {"code": "tf = issymmetric(A, 'skew')", "en": "True if `A` equals `-A.'`.", "pt": "Verdadeiro se `A` é igual a `-A.'`."},
+        {"code": "tf = issymmetric(A, tol)", "en": "Accepts a relative difference up to `tol`.", "pt": "Aceita uma diferença relativa de até `tol`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square numeric matrix.", "pt": "Matriz numérica quadrada."},
+        {"name": "tol", "en": "Non-negative tolerance, default 0.", "pt": "Tolerância não negativa, padrão 0."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "Symmetry refers to the plain transpose, not the conjugate transpose, so `[1 1i; 1i 2]` is symmetric but not Hermitian. A skew-symmetric matrix must have a zero diagonal. The default comparison is exact; use a tolerance for matrices computed with rounding.",
+        "pt": "A simetria se refere à transposta simples, e não à transposta conjugada, então `[1 1i; 1i 2]` é simétrica, mas não hermitiana. Uma matriz antissimétrica precisa ter diagonal nula. A comparação padrão é exata; use uma tolerância para matrizes calculadas com arredondamento."
+      },
+      "examples": [
+        {"title": {"en": "Symmetric, skew and tolerance", "pt": "Simétrica, antissimétrica e tolerância"}, "code": "issymmetric([1 2; 2 3])\nissymmetric([0 1; -1 0])\nissymmetric([0 1; -1 0], 'skew')\nissymmetric([1 2; 2.0001 3], 0.001)"}
+      ],
+      "see": ["ishermitian", "isdiag", "transpose", "chol"]
+    },
+    "istril": {
+      "summary": {"en": "Tests whether a matrix is lower triangular.", "pt": "Testa se uma matriz é triangular inferior."},
+      "syntax": [
+        {"code": "tf = istril(A)", "en": "True if all entries above the main diagonal are zero.", "pt": "Verdadeiro se todas as entradas acima da diagonal principal são nulas."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric or logical matrix.", "pt": "Matriz numérica ou lógica."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "The diagonal and everything below it are unrestricted. Diagonal matrices are both lower and upper triangular. Lower triangular matrices are solved by forward substitution, which is why solvers check this property.",
+        "pt": "A diagonal e tudo abaixo dela não têm restrição. Matrizes diagonais são ao mesmo tempo triangulares inferiores e superiores. Matrizes triangulares inferiores são resolvidas por substituição direta, razão pela qual os solvers verificam essa propriedade."
+      },
+      "examples": [
+        {"title": {"en": "Lower and not lower", "pt": "Inferior e não inferior"}, "code": "istril([1 0; 2 3])\nistril([1 2; 0 3])"}
+      ],
+      "see": ["istriu", "isdiag", "tril", "isbanded"]
+    },
+    "istriu": {
+      "summary": {"en": "Tests whether a matrix is upper triangular.", "pt": "Testa se uma matriz é triangular superior."},
+      "syntax": [
+        {"code": "tf = istriu(A)", "en": "True if all entries below the main diagonal are zero.", "pt": "Verdadeiro se todas as entradas abaixo da diagonal principal são nulas."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric or logical matrix.", "pt": "Matriz numérica ou lógica."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "The diagonal and everything above it are unrestricted. The result of `chol`, `qr` and `lu` (the `U` factor) satisfies this test. Upper triangular systems are solved by back substitution.",
+        "pt": "A diagonal e tudo acima dela não têm restrição. O resultado de `chol`, `qr` e `lu` (o fator `U`) satisfaz este teste. Sistemas triangulares superiores são resolvidos por substituição regressiva."
+      },
+      "examples": [
+        {"title": {"en": "Upper and not upper", "pt": "Superior e não superior"}, "code": "istriu([1 2; 0 3])\nistriu([1 2; 1 3])"}
+      ],
+      "see": ["istril", "isdiag", "triu", "isbanded"]
+    },
+    "kron": {
+      "summary": {"en": "Kronecker tensor product of two matrices.", "pt": "Produto tensorial de Kronecker de duas matrizes."},
+      "syntax": [
+        {"code": "K = kron(A, B)", "en": "Replaces each entry `A(i,j)` by the block `A(i,j)*B`.", "pt": "Substitui cada entrada `A(i,j)` pelo bloco `A(i,j)*B`."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Numeric arrays of any size.", "pt": "Arrays numéricos de qualquer tamanho."}
+      ],
+      "outputs": [
+        {"name": "K", "en": "Matrix of size `[size(A,1)*size(B,1), size(A,2)*size(B,2)]`.", "pt": "Matriz de tamanho `[size(A,1)*size(B,1), size(A,2)*size(B,2)]`."}
+      ],
+      "description": {
+        "en": "The Kronecker product arranges all the products of one entry of `A` with one entry of `B` into a large block matrix. It is not commutative. It is used to build operators on tensor-product spaces, for example the 2-D Laplacian from 1-D ones, and satisfies `(A kron B)(C kron D) = (A*C) kron (B*D)`.",
+        "pt": "O produto de Kronecker organiza todos os produtos de uma entrada de `A` por uma entrada de `B` em uma grande matriz de blocos. Não é comutativo. É usado para montar operadores em espaços de produto tensorial, como o laplaciano 2-D a partir de laplacianos 1-D, e satisfaz `(A kron B)(C kron D) = (A*C) kron (B*D)`."
+      },
+      "examples": [
+        {"title": {"en": "Block structure", "pt": "Estrutura em blocos"}, "code": "kron([1 2], [1; 1])\nkron(eye(2), [1 2; 3 4])"}
+      ],
+      "see": ["mtimes", "repmat", "eye", "cross"]
+    },
+    "ldl": {
+      "summary": {"en": "LDL factorization of a symmetric matrix.", "pt": "Fatoração LDL de uma matriz simétrica."},
+      "syntax": [
+        {"code": "[L, D] = ldl(A)", "en": "Returns a (permuted) unit lower triangular `L` and block diagonal `D` with `L*D*L' = A`.", "pt": "Retorna `L` triangular inferior unitária (permutada) e `D` bloco-diagonal com `L*D*L' = A`."},
+        {"code": "[L, D, P] = ldl(A)", "en": "Returns a permutation matrix too, with `P'*A*P = L*D*L'`.", "pt": "Retorna também uma matriz de permutação, com `P'*A*P = L*D*L'`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Symmetric (or Hermitian) square matrix, not necessarily positive definite.", "pt": "Matriz quadrada simétrica (ou hermitiana), não necessariamente positiva definida."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "Unit lower triangular factor (possibly permuted).", "pt": "Fator triangular inferior unitário (possivelmente permutado)."},
+        {"name": "D", "en": "Block diagonal matrix with 1-by-1 and 2-by-2 blocks.", "pt": "Matriz bloco-diagonal com blocos 1 por 1 e 2 por 2."},
+        {"name": "P", "en": "Permutation matrix.", "pt": "Matriz de permutação."}
+      ],
+      "description": {
+        "en": "`ldl` extends the Cholesky idea to symmetric matrices that are indefinite, where `chol` fails. Because it avoids square roots it does not require positive pivots, and it takes advantage of symmetry to use about half the work of `lu`.\n\nThe diagonal factor `D` may hold 2-by-2 blocks, which keep the method stable when a 1-by-1 pivot would be too small. For positive definite input `D` is diagonal with positive entries.",
+        "pt": "`ldl` estende a ideia de Cholesky a matrizes simétricas indefinidas, em que `chol` falha. Como evita raízes quadradas, não exige pivôs positivos, e aproveita a simetria para gastar cerca de metade do trabalho de `lu`.\n\nO fator diagonal `D` pode ter blocos 2 por 2, que mantêm o método estável quando um pivô 1 por 1 seria pequeno demais. Para entrada positiva definida, `D` é diagonal com entradas positivas."
+      },
+      "examples": [
+        {"title": {"en": "Positive definite and indefinite input", "pt": "Entrada positiva definida e indefinida"}, "code": "[L, D] = ldl([4 1; 1 3])\n[L, D, P] = ldl([2 1; 1 -3]);\nL*D*L'"}
+      ],
+      "see": ["chol", "lu", "qr", "decomposition"]
+    },
+    "linsolve": {
+      "summary": {"en": "Solves a linear system, optionally telling it about the matrix structure.", "pt": "Resolve um sistema linear, podendo informar a estrutura da matriz."},
+      "syntax": [
+        {"code": "X = linsolve(A, B)", "en": "Solves `A*X = B`, like `A\\B`.", "pt": "Resolve `A*X = B`, como `A\\B`."},
+        {"code": "X = linsolve(A, B, opts)", "en": "Uses the structure flags in the struct `opts`, such as `UT`, `LT`, `SYM`, `POSDEF` or `TRANSA`, to pick a faster method.", "pt": "Usa as marcas de estrutura da struct `opts`, como `UT`, `LT`, `SYM`, `POSDEF` ou `TRANSA`, para escolher um método mais rápido."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Coefficient matrix.", "pt": "Matriz de coeficientes."},
+        {"name": "B", "en": "Right-hand side, a vector or a matrix with `size(A,1)` rows.", "pt": "Lado direito, um vetor ou matriz com `size(A,1)` linhas."},
+        {"name": "opts", "en": "Struct of logical fields describing `A`. `TRANSA = true` solves with `A'`.", "pt": "Struct com campos lógicos que descrevem `A`. `TRANSA = true` resolve com `A'`."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "The solution.", "pt": "A solução."}
+      ],
+      "description": {
+        "en": "When you know that `A` is triangular or symmetric positive definite, passing that fact in `opts` lets `linsolve` skip the general factorization. The flags are trusted, not checked: if the claim is false the answer is wrong.\n\nFor general use `A\\B` does the same job and detects structure automatically.",
+        "pt": "Quando se sabe que `A` é triangular ou simétrica positiva definida, informar isso em `opts` permite que `linsolve` dispense a fatoração geral. As marcas são aceitas sem verificação: se a informação for falsa, a resposta estará errada.\n\nPara uso geral, `A\\B` faz o mesmo trabalho e detecta a estrutura automaticamente."
+      },
+      "examples": [
+        {"title": {"en": "General, upper triangular and transposed solves", "pt": "Resolução geral, triangular superior e transposta"}, "code": "A = [2 1; 1 3];\nb = [3; 5];\nx = linsolve(A, b)\nopts.UT = true;\nlinsolve([2 1; 0 3], b, opts)\nopts2.TRANSA = true;\nlinsolve([2 0; 1 3], b, opts2)"}
+      ],
+      "see": ["mldivide", "lu", "chol", "decomposition", "lscov"]
+    },
+    "logm": {
+      "summary": {"en": "Matrix logarithm.", "pt": "Logaritmo de matriz."},
+      "syntax": [
+        {"code": "L = logm(A)", "en": "Returns the matrix `L` with `expm(L) = A`.", "pt": "Retorna a matriz `L` com `expm(L) = A`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square matrix, without eigenvalues on the negative real axis or at zero if a real result is needed.", "pt": "Matriz quadrada, sem autovalores no eixo real negativo nem em zero, caso se queira resultado real."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "The principal matrix logarithm; may be complex.", "pt": "O logaritmo principal da matriz; pode ser complexo."}
+      ],
+      "description": {
+        "en": "`logm` inverts `expm`. It is not `log(A)`, which takes the logarithm of each entry. The logarithm is computed from the Schur form with inverse scaling and squaring.\n\nIt is used, for example, to recover the generator of a continuous-time Markov chain from its transition matrix.",
+        "pt": "`logm` inverte `expm`. Não é `log(A)`, que toma o logaritmo de cada elemento. O logaritmo é calculado a partir da forma de Schur com escalonamento inverso e quadrados sucessivos.\n\nÉ usado, por exemplo, para recuperar o gerador de uma cadeia de Markov de tempo contínuo a partir de sua matriz de transição."
+      },
+      "examples": [
+        {"title": {"en": "Inverting expm", "pt": "Invertendo expm"}, "code": "logm(eye(2))\nA = expm([1 2; 0 1]);\nlogm(A)\nlogm([4 0; 0 9])"}
+      ],
+      "see": ["expm", "sqrtm", "funm", "log"]
+    },
+    "lscov": {
+      "summary": {"en": "Least-squares solution with known covariance or weights.", "pt": "Solução de mínimos quadrados com covariância ou pesos conhecidos."},
+      "syntax": [
+        {"code": "x = lscov(A, b)", "en": "Ordinary least squares, the same as `A\\b` for a full-rank `A`.", "pt": "Mínimos quadrados ordinários, igual a `A\\b` para `A` de posto completo."},
+        {"code": "x = lscov(A, b, w)", "en": "Weighted least squares with the weight vector `w`.", "pt": "Mínimos quadrados ponderados com o vetor de pesos `w`."},
+        {"code": "x = lscov(A, b, V)", "en": "Generalized least squares for a covariance matrix `V` of the errors.", "pt": "Mínimos quadrados generalizados para uma matriz de covariância `V` dos erros."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Design matrix with more rows than columns.", "pt": "Matriz de projeto com mais linhas que colunas."},
+        {"name": "b", "en": "Observation vector.", "pt": "Vetor de observações."},
+        {"name": "w", "en": "Positive weights, one per observation; larger weights mean more reliable data.", "pt": "Pesos positivos, um por observação; pesos maiores significam dados mais confiáveis."},
+        {"name": "V", "en": "Symmetric positive definite covariance matrix of the observation errors.", "pt": "Matriz de covariância simétrica positiva definida dos erros de observação."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "Coefficients minimizing the weighted squared residual `(b - A*x)' * inv(V) * (b - A*x)`.", "pt": "Coeficientes que minimizam o resíduo quadrático ponderado `(b - A*x)' * inv(V) * (b - A*x)`."}
+      ],
+      "description": {
+        "en": "Observations with different reliabilities should not count equally in a fit. A weight vector `w` is equivalent to a diagonal covariance `V = diag(1./w)`. Giving the weight 4 to a point has the same effect as repeating that equation four times.",
+        "pt": "Observações com confiabilidades diferentes não devem contar igualmente em um ajuste. Um vetor de pesos `w` equivale a uma covariância diagonal `V = diag(1./w)`. Dar peso 4 a um ponto tem o mesmo efeito que repetir essa equação quatro vezes."
+      },
+      "examples": [
+        {"title": {"en": "Ordinary and weighted line fit", "pt": "Ajuste de reta ordinário e ponderado"}, "code": "A = [1 0; 1 1; 1 2];\nb = [1; 2; 2];\nx = lscov(A, b)\nx2 = lscov(A, b, [1; 1; 4])"}
+      ],
+      "see": ["mldivide", "lsqnonneg", "lsqminnorm", "polyfit"]
+    },
+    "lsqminnorm": {
+      "summary": {"en": "Minimum-norm least-squares solution of a linear system.", "pt": "Solução de mínimos quadrados de norma mínima de um sistema linear."},
+      "syntax": [
+        {"code": "x = lsqminnorm(A, b)", "en": "Returns the `x` of smallest 2-norm among those minimizing `norm(A*x - b)`.", "pt": "Retorna o `x` de menor norma 2 entre os que minimizam `norm(A*x - b)`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Coefficient matrix of any shape or rank.", "pt": "Matriz de coeficientes de qualquer forma ou posto."},
+        {"name": "b", "en": "Right-hand side with `size(A,1)` rows.", "pt": "Lado direito com `size(A,1)` linhas."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "The minimum-norm least-squares solution.", "pt": "A solução de mínimos quadrados de norma mínima."}
+      ],
+      "description": {
+        "en": "If `A` is rank deficient or has more columns than rows, infinitely many vectors give the same smallest residual. `lsqminnorm` picks the shortest one, the same answer as `pinv(A)*b`, found with a complete orthogonal decomposition instead of an explicit pseudoinverse.",
+        "pt": "Se `A` tem posto deficiente ou mais colunas que linhas, infinitos vetores dão o mesmo menor resíduo. `lsqminnorm` escolhe o mais curto, a mesma resposta de `pinv(A)*b`, obtida com uma decomposição ortogonal completa em vez de uma pseudoinversa explícita."
+      },
+      "examples": [
+        {"title": {"en": "Rank-deficient and underdetermined systems", "pt": "Sistemas de posto deficiente e subdeterminados"}, "code": "lsqminnorm([1 1; 1 1], [2; 2])\nlsqminnorm([1 2 3], 6)"}
+      ],
+      "see": ["pinv", "mldivide", "lscov", "svd"]
+    },
+    "lsqnonneg": {
+      "summary": {"en": "Least squares with non-negativity constraints.", "pt": "Mínimos quadrados com restrições de não negatividade."},
+      "syntax": [
+        {"code": "x = lsqnonneg(C, d)", "en": "Minimizes `norm(C*x - d)` subject to `x >= 0`.", "pt": "Minimiza `norm(C*x - d)` sujeito a `x >= 0`."},
+        {"code": "[x, resnorm] = lsqnonneg(C, d)", "en": "Also returns the squared residual norm.", "pt": "Retorna também a norma do resíduo ao quadrado."}
+      ],
+      "inputs": [
+        {"name": "C", "en": "Matrix of the system.", "pt": "Matriz do sistema."},
+        {"name": "d", "en": "Target vector.", "pt": "Vetor alvo."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "Non-negative solution vector.", "pt": "Vetor solução não negativo."},
+        {"name": "resnorm", "en": "`norm(C*x - d)^2`.", "pt": "`norm(C*x - d)^2`."}
+      ],
+      "description": {
+        "en": "Unconstrained least squares may give negative coefficients, which have no meaning for quantities like concentrations or amounts. `lsqnonneg` uses an active-set method: it keeps a set of variables free and holds the rest at zero, moving variables between the sets until the optimality conditions hold.\n\nThe solution is unique when `C` has full column rank.",
+        "pt": "Mínimos quadrados sem restrição podem dar coeficientes negativos, que não fazem sentido para grandezas como concentrações ou quantidades. `lsqnonneg` usa um método de conjunto ativo: mantém um conjunto de variáveis livres e as demais em zero, movendo variáveis entre os conjuntos até as condições de otimalidade valerem.\n\nA solução é única quando `C` tem posto completo nas colunas."
+      },
+      "examples": [
+        {"title": {"en": "A coefficient pinned at zero", "pt": "Um coeficiente travado em zero"}, "code": "C = [1 0; 0 1; 1 1];\nd = [1; -1; 0.5];\n[x, r] = lsqnonneg(C, d)"}
+      ],
+      "see": ["lscov", "mldivide", "lsqminnorm", "fminsearch"]
+    },
+    "lu": {
+      "summary": {"en": "LU factorization of a matrix.", "pt": "Fatoração LU de uma matriz."},
+      "syntax": [
+        {"code": "[L, U] = lu(A)", "en": "Returns a permuted lower triangular `L` and upper triangular `U` with `L*U = A`.", "pt": "Retorna `L` triangular inferior permutada e `U` triangular superior com `L*U = A`."},
+        {"code": "[L, U, P] = lu(A)", "en": "Returns `L` truly lower triangular and a permutation matrix `P` with `P*A = L*U`.", "pt": "Retorna `L` realmente triangular inferior e uma matriz de permutação `P` com `P*A = L*U`."},
+        {"code": "[L, U, p] = lu(A, 'vector')", "en": "Returns the permutation as a row vector `p`, with `A(p,:) = L*U`.", "pt": "Retorna a permutação como vetor linha `p`, com `A(p,:) = L*U`."},
+        {"code": "Y = lu(A)", "en": "Returns the packed factors in one matrix.", "pt": "Retorna os fatores compactados em uma única matriz."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix, usually square.", "pt": "Matriz, normalmente quadrada."}
+      ],
+      "outputs": [
+        {"name": "L, U", "en": "Lower and upper triangular factors; `L` has unit diagonal.", "pt": "Fatores triangulares inferior e superior; `L` tem diagonal unitária."},
+        {"name": "P, p", "en": "Row permutation as a matrix or as an index vector.", "pt": "Permutação de linhas como matriz ou como vetor de índices."}
+      ],
+      "description": {
+        "en": "Gaussian elimination written as a matrix product. The rows are swapped so that each pivot is the largest available in its column (partial pivoting), which keeps the multipliers at most 1 in size and the method stable.\n\nOnce factored, a system `A*x = b` is solved with two triangular solves, cheap for repeated right-hand sides. `det(A)` follows from the diagonal of `U` and the sign of the permutation.",
+        "pt": "Eliminação gaussiana escrita como produto de matrizes. As linhas são trocadas de modo que cada pivô seja o maior disponível em sua coluna (pivotamento parcial), o que mantém os multiplicadores com módulo no máximo 1 e o método estável.\n\nDepois de fatorado, um sistema `A*x = b` se resolve com duas substituições triangulares, baratas para vários lados direitos. O `det(A)` sai da diagonal de `U` e do sinal da permutação."
+      },
+      "examples": [
+        {"title": {"en": "With a permutation matrix", "pt": "Com matriz de permutação"}, "code": "A = [4 3; 6 3];\n[L, U, P] = lu(A)\ndisp(norm(P*A - L*U) < 1e-12)"}
+      ],
+      "see": ["chol", "qr", "ldl", "det", "mldivide", "decomposition"]
+    },
+    "mldivide": {
+      "summary": {"en": "Left matrix division, the backslash operator, for solving linear systems.", "pt": "Divisão matricial à esquerda, o operador barra invertida, para resolver sistemas lineares."},
+      "syntax": [
+        {"code": "x = A\\b", "en": "Solves `A*x = b`.", "pt": "Resolve `A*x = b`."},
+        {"code": "x = mldivide(A, b)", "en": "Function form of `A\\b`.", "pt": "Forma de função de `A\\b`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Coefficient matrix. Square for an exact solve; rectangular for least squares.", "pt": "Matriz de coeficientes. Quadrada para solução exata; retangular para mínimos quadrados."},
+        {"name": "b", "en": "Right-hand side with `size(A,1)` rows. A scalar `A` divides every element of `b`.", "pt": "Lado direito com `size(A,1)` linhas. Um `A` escalar divide todos os elementos de `b`."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "The solution with `size(A,2)` rows.", "pt": "A solução, com `size(A,2)` linhas."}
+      ],
+      "description": {
+        "en": "The backslash chooses a method from the shape of `A`: for a square matrix an LU factorization (a triangular solve if `A` is triangular, Cholesky if it is symmetric positive definite); for a non-square matrix a least-squares solution via QR.\n\nIt is the recommended way to solve systems, preferable to `inv(A)*b`. For several right-hand sides, pass them as columns of `b` in a single call.",
+        "pt": "A barra invertida escolhe o método pela forma de `A`: para matriz quadrada, uma fatoração LU (substituição triangular se `A` é triangular, Cholesky se é simétrica positiva definida); para matriz não quadrada, uma solução de mínimos quadrados via QR.\n\nÉ a forma recomendada de resolver sistemas, preferível a `inv(A)*b`. Para vários lados direitos, passe-os como colunas de `b` em uma única chamada."
+      },
+      "notes": {"en": "For an exactly singular square matrix, MATLAB prints a warning and returns `Inf` entries, while MatLivre stops with the error `Matrix is singular to working precision`.", "pt": "Para uma matriz quadrada exatamente singular, o MATLAB imprime um aviso e retorna entradas `Inf`, enquanto o MatLivre interrompe com o erro `Matrix is singular to working precision`."},
+      "examples": [
+        {"title": {"en": "Square, overdetermined and scalar cases", "pt": "Casos quadrado, sobredeterminado e escalar"}, "code": "[2 1; 1 3] \\ [3; 5]\n[1 2; 3 4; 5 6] \\ [1; 2; 3]\n2 \\ 6"}
+      ],
+      "see": ["mrdivide", "inv", "lu", "linsolve", "lscov", "decomposition"]
+    },
+    "mpower": {
+      "summary": {"en": "Matrix power, the ^ operator.", "pt": "Potência de matriz, o operador ^."},
+      "syntax": [
+        {"code": "C = A^p", "en": "Raises the square matrix `A` to the scalar power `p`.", "pt": "Eleva a matriz quadrada `A` à potência escalar `p`."},
+        {"code": "C = mpower(A, p)", "en": "Function form of `A^p`.", "pt": "Forma de função de `A^p`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square matrix (or a scalar).", "pt": "Matriz quadrada (ou um escalar)."},
+        {"name": "p", "en": "Scalar exponent. Integers are exact products; a negative integer uses the inverse.", "pt": "Expoente escalar. Inteiros são produtos exatos; um inteiro negativo usa a inversa."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "The matrix power, of the same size as `A`.", "pt": "A potência da matriz, do mesmo tamanho de `A`."}
+      ],
+      "description": {
+        "en": "`A^2` is `A*A`, which differs from `A.^2` that squares each entry. `A^0` is the identity and `A^-1` is `inv(A)`. Integer powers are computed by repeated squaring.\n\nIn full generality `A^p` with non-integer `p`, or `s^A` with scalar `s`, is defined through eigenvalues: `A^p = V*D.^p/V` and `s^A = expm(log(s)*A)`.",
+        "pt": "`A^2` é `A*A`, o que difere de `A.^2`, que eleva cada elemento ao quadrado. `A^0` é a identidade e `A^-1` é `inv(A)`. Potências inteiras são calculadas por quadrados sucessivos.\n\nEm toda a generalidade, `A^p` com `p` não inteiro, ou `s^A` com `s` escalar, é definido por autovalores: `A^p = V*D.^p/V` e `s^A = expm(log(s)*A)`."
+      },
+      "notes": {"en": "MatLivre supports integer exponents. Non-integer exponents (`A^0.5`) and a scalar raised to a matrix (`2^A`) are not implemented yet; use `sqrtm`, `expm` or `logm` for those.", "pt": "O MatLivre aceita expoentes inteiros. Expoentes não inteiros (`A^0.5`) e escalar elevado a matriz (`2^A`) ainda não estão implementados; use `sqrtm`, `expm` ou `logm` nesses casos."},
+      "examples": [
+        {"title": {"en": "Integer powers", "pt": "Potências inteiras"}, "code": "A = [1 1; 0 1];\nA^3\n[2 0; 0 4]^-1\n[1 2; 3 4]^0\nmpower(2, 3)"}
+      ],
+      "see": ["power", "mtimes", "expm", "sqrtm", "inv"]
+    },
+    "mrdivide": {
+      "summary": {"en": "Right matrix division, the / operator.", "pt": "Divisão matricial à direita, o operador /."},
+      "syntax": [
+        {"code": "x = b/A", "en": "Solves `x*A = b`.", "pt": "Resolve `x*A = b`."},
+        {"code": "x = mrdivide(b, A)", "en": "Function form of `b/A`.", "pt": "Forma de função de `b/A`."}
+      ],
+      "inputs": [
+        {"name": "b", "en": "Right-hand side with `size(A,2)` columns.", "pt": "Lado direito com `size(A,2)` colunas."},
+        {"name": "A", "en": "Coefficient matrix, or a scalar divisor.", "pt": "Matriz de coeficientes, ou um divisor escalar."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "The solution with `size(A,1)` columns.", "pt": "A solução, com `size(A,1)` colunas."}
+      ],
+      "description": {
+        "en": "Right division is left division on the transposes: `b/A` equals `(A'\\b')'`. Use it when the unknown multiplies the matrix from the left, as in a row vector of unknown weights. With scalar operands it is ordinary division.\n\nIt is also preferable to `b*inv(A)`, for the same reasons that backslash is preferable to `inv(A)*b`.",
+        "pt": "A divisão à direita é a divisão à esquerda sobre as transpostas: `b/A` é igual a `(A'\\b')'`. Use quando a incógnita multiplica a matriz pela esquerda, como em um vetor linha de pesos desconhecidos. Com operandos escalares é a divisão comum.\n\nTambém é preferível a `b*inv(A)`, pelas mesmas razões que a barra invertida é preferível a `inv(A)*b`."
+      },
+      "examples": [
+        {"title": {"en": "A row vector of unknowns", "pt": "Um vetor linha de incógnitas"}, "code": "x = [3 5] / [2 1; 1 3]\n6/2"}
+      ],
+      "see": ["mldivide", "mtimes", "inv", "rdivide"]
+    },
+    "mtimes": {
+      "summary": {"en": "Matrix multiplication, the * operator.", "pt": "Multiplicação de matrizes, o operador *."},
+      "syntax": [
+        {"code": "C = A*B", "en": "Matrix product of `A` and `B`.", "pt": "Produto matricial de `A` e `B`."},
+        {"code": "C = mtimes(A, B)", "en": "Function form of `A*B`.", "pt": "Forma de função de `A*B`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix with as many columns as `B` has rows (or a scalar).", "pt": "Matriz com tantas colunas quanto `B` tem linhas (ou um escalar)."},
+        {"name": "B", "en": "Matrix or scalar.", "pt": "Matriz ou escalar."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Matrix with `size(A,1)` rows and `size(B,2)` columns; `C(i,j)` is the dot product of row `i` of `A` with column `j` of `B`.", "pt": "Matriz com `size(A,1)` linhas e `size(B,2)` colunas; `C(i,j)` é o produto escalar da linha `i` de `A` pela coluna `j` de `B`."}
+      ],
+      "description": {
+        "en": "The inner dimensions must agree, otherwise an error about incorrect dimensions is raised. A row times a column gives a scalar; a column times a row gives a matrix (the outer product). The product is not commutative: `A*B` and `B*A` generally differ.\n\nThe element-by-element product is `.*` (`times`). If either operand is a scalar, `*` scales every element.",
+        "pt": "As dimensões internas precisam coincidir; caso contrário, é gerado um erro de dimensões incorretas. Uma linha vezes uma coluna dá um escalar; uma coluna vezes uma linha dá uma matriz (o produto externo). O produto não é comutativo: `A*B` e `B*A` em geral diferem.\n\nO produto elemento a elemento é `.*` (`times`). Se um dos operandos for escalar, `*` multiplica todos os elementos."
+      },
+      "examples": [
+        {"title": {"en": "Matrix, inner and outer products", "pt": "Produtos matricial, interno e externo"}, "code": "[1 2; 3 4] * [1; 1]\n[1 2 3] * [1; 2; 3]\n[1; 2] * [3 4]"}
+      ],
+      "see": ["times", "mldivide", "mpower", "dot", "kron"]
+    },
+    "norm": {
+      "summary": {"en": "Norm of a vector or matrix.", "pt": "Norma de um vetor ou matriz."},
+      "syntax": [
+        {"code": "n = norm(v)", "en": "Euclidean length of a vector, or the 2-norm of a matrix (largest singular value).", "pt": "Comprimento euclidiano de um vetor, ou norma 2 de uma matriz (maior valor singular)."},
+        {"code": "n = norm(X, p)", "en": "The `p`-norm: `1`, `2`, `Inf`, `'fro'`, and any `p >= 1` for vectors.", "pt": "A norma `p`: `1`, `2`, `Inf`, `'fro'` e qualquer `p >= 1` para vetores."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Vector or matrix.", "pt": "Vetor ou matriz."},
+        {"name": "p", "en": "Norm type, default 2. `'fro'` is the Frobenius norm.", "pt": "Tipo de norma, padrão 2. `'fro'` é a norma de Frobenius."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Non-negative scalar. The norm of an empty array is 0.", "pt": "Escalar não negativo. A norma de um array vazio é 0."}
+      ],
+      "description": {
+        "en": "For a vector, the 1-norm is the sum of absolute values, the 2-norm is the usual length, and the infinity norm is the largest absolute value. For a matrix, the 1-norm is the largest column sum of absolute values, the infinity norm is the largest row sum, the 2-norm is the largest singular value, and the Frobenius norm is the square root of the sum of squares of all entries.\n\nNote that for a matrix `norm(A)` is the 2-norm and is not the same as the Frobenius norm. The 2-norm needs a singular value computation; for large matrices `normest` is cheaper.",
+        "pt": "Para um vetor, a norma 1 é a soma dos valores absolutos, a norma 2 é o comprimento usual e a norma infinito é o maior valor absoluto. Para uma matriz, a norma 1 é a maior soma de colunas dos valores absolutos, a norma infinito é a maior soma de linhas, a norma 2 é o maior valor singular e a norma de Frobenius é a raiz quadrada da soma dos quadrados de todas as entradas.\n\nObserve que, para uma matriz, `norm(A)` é a norma 2 e não é igual à norma de Frobenius. A norma 2 exige um cálculo de valores singulares; para matrizes grandes, `normest` é mais barato."
+      },
+      "examples": [
+        {"title": {"en": "Vector and matrix norms", "pt": "Normas de vetor e de matriz"}, "code": "v = [3 4];\nnorm(v)\nnorm(v, 1)\nnorm(v, Inf)\nA = [1 2; 3 4];\nnorm(A)\nnorm(A, 'fro')\nnorm(A, 1)"}
+      ],
+      "see": ["normest", "cond", "vecnorm", "pagenorm", "svd"]
+    },
+    "normest": {
+      "summary": {"en": "Estimate of the 2-norm of a matrix.", "pt": "Estimativa da norma 2 de uma matriz."},
+      "syntax": [
+        {"code": "n = normest(S)", "en": "Estimates `norm(S)` to a default relative tolerance of 1e-6.", "pt": "Estima `norm(S)` com tolerância relativa padrão de 1e-6."},
+        {"code": "n = normest(S, tol)", "en": "Uses the relative tolerance `tol`.", "pt": "Usa a tolerância relativa `tol`."}
+      ],
+      "inputs": [
+        {"name": "S", "en": "Matrix, often large and sparse.", "pt": "Matriz, frequentemente grande e esparsa."},
+        {"name": "tol", "en": "Relative tolerance for the iteration.", "pt": "Tolerância relativa da iteração."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Approximation of the largest singular value of `S`.", "pt": "Aproximação do maior valor singular de `S`."}
+      ],
+      "description": {
+        "en": "`normest` runs the power method on `S'*S`, which only needs products of `S` with vectors. It avoids the full singular value decomposition that `norm(S)` performs, so it scales to sparse matrices that are too large to factor.\n\nThe estimate converges from below, and a tighter `tol` costs more iterations.",
+        "pt": "`normest` aplica o método das potências a `S'*S`, que só exige produtos de `S` por vetores. Isso evita a decomposição completa em valores singulares que `norm(S)` realiza, e permite trabalhar com matrizes esparsas grandes demais para fatorar.\n\nA estimativa converge por baixo, e uma `tol` menor custa mais iterações."
+      },
+      "examples": [
+        {"title": {"en": "Estimate against the exact norm", "pt": "Estimativa contra a norma exata"}, "code": "A = magic(4);\nnormest(A)\nnorm(A)"}
+      ],
+      "see": ["norm", "condest", "svds", "eigs"]
+    },
+    "null": {
+      "summary": {"en": "Orthonormal basis of the null space of a matrix.", "pt": "Base ortonormal do espaço nulo de uma matriz."},
+      "syntax": [
+        {"code": "Z = null(A)", "en": "Returns orthonormal vectors `Z` with `A*Z = 0`.", "pt": "Retorna vetores ortonormais `Z` com `A*Z = 0`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix.", "pt": "Matriz."}
+      ],
+      "outputs": [
+        {"name": "Z", "en": "Matrix whose columns span the null space; it has `n - rank(A)` columns, and is empty when `A` has full column rank.", "pt": "Matriz cujas colunas geram o espaço nulo; tem `n - rank(A)` colunas e é vazia quando `A` tem posto completo nas colunas."}
+      ],
+      "description": {
+        "en": "The null space is the set of vectors `x` with `A*x = 0`. `null` computes it from the singular value decomposition, treating singular values below a tolerance as zero, so the result is a numerical rank decision.\n\nThe basis is not unique: signs and rotations within the space vary. Check `A*Z` near zero instead of comparing entries with a reference.",
+        "pt": "O espaço nulo é o conjunto dos vetores `x` com `A*x = 0`. `null` o calcula a partir da decomposição em valores singulares, tratando como zero os valores singulares abaixo de uma tolerância, de modo que o resultado envolve uma decisão numérica de posto.\n\nA base não é única: sinais e rotações dentro do espaço variam. Verifique se `A*Z` é próximo de zero, em vez de comparar entradas com uma referência."
+      },
+      "examples": [
+        {"title": {"en": "A rank-one matrix", "pt": "Uma matriz de posto um"}, "code": "A = [1 1; 1 1];\nZ = null(A)\ndisp(norm(A*Z) < 1e-12)\nnull(eye(2))"}
+      ],
+      "see": ["orth", "rank", "svd", "pinv", "lsqminnorm"]
+    },
+    "ordeig": {
+      "summary": {"en": "Eigenvalues of a quasitriangular matrix in the order of the diagonal blocks.", "pt": "Autovalores de uma matriz quase triangular na ordem dos blocos da diagonal."},
+      "syntax": [
+        {"code": "e = ordeig(T)", "en": "Returns the eigenvalues of the (quasi)triangular `T` as they appear down the diagonal.", "pt": "Retorna os autovalores da matriz (quase) triangular `T` na ordem em que aparecem na diagonal."},
+        {"code": "e = ordeig(A, B)", "en": "Same for the generalized problem with triangular pair `(A, B)`.", "pt": "O mesmo para o problema generalizado com o par triangular `(A, B)`."}
+      ],
+      "inputs": [
+        {"name": "T", "en": "Upper triangular or quasitriangular (real Schur) matrix.", "pt": "Matriz triangular superior ou quase triangular (Schur real)."}
+      ],
+      "outputs": [
+        {"name": "e", "en": "Column vector of eigenvalues in diagonal order.", "pt": "Vetor coluna de autovalores na ordem da diagonal."}
+      ],
+      "description": {
+        "en": "`eig` returns eigenvalues in an order that does not tell where they sit in a Schur form. `ordeig` reads them straight from the diagonal of `T`, including the 2-by-2 blocks of real Schur form, so you can build the selection vector that `ordschur` needs.",
+        "pt": "`eig` retorna autovalores em uma ordem que não indica onde eles estão em uma forma de Schur. `ordeig` os lê direto da diagonal de `T`, incluindo os blocos 2 por 2 da forma de Schur real, de modo que se possa montar o vetor de seleção de que `ordschur` precisa."
+      },
+      "examples": [
+        {"title": {"en": "Diagonal order of a Schur form", "pt": "Ordem da diagonal de uma forma de Schur"}, "code": "T = [1 2 3; 0 4 5; 0 0 6];\nordeig(T)\n[U, S] = schur([1 2; 3 4]);\nordeig(S)"}
+      ],
+      "see": ["ordschur", "schur", "eig", "ordqz"]
+    },
+    "ordqz": {
+      "summary": {"en": "Reorders the eigenvalues in a QZ factorization.", "pt": "Reordena os autovalores em uma fatoração QZ."},
+      "syntax": [
+        {"code": "[AS, BS, QS, ZS] = ordqz(AA, BB, Q, Z, select)", "en": "Reorders `(AA, BB)` so that the eigenvalues chosen by `select` come first.", "pt": "Reordena `(AA, BB)` de modo que os autovalores escolhidos por `select` venham primeiro."}
+      ],
+      "inputs": [
+        {"name": "AA, BB, Q, Z", "en": "Outputs of `qz`: triangular pair and the transformations.", "pt": "Saídas de `qz`: o par triangular e as transformações."},
+        {"name": "select", "en": "A logical vector marking eigenvalues to move to the top left, or a keyword such as `'lhp'`, `'rhp'`, `'udi'` or `'udo'`.", "pt": "Um vetor lógico que marca os autovalores a mover para o canto superior esquerdo, ou uma palavra-chave como `'lhp'`, `'rhp'`, `'udi'` ou `'udo'`."}
+      ],
+      "outputs": [
+        {"name": "AS, BS", "en": "Reordered triangular pair.", "pt": "Par triangular reordenado."},
+        {"name": "QS, ZS", "en": "Updated transformation matrices.", "pt": "Matrizes de transformação atualizadas."}
+      ],
+      "description": {
+        "en": "The QZ algorithm triangularizes a matrix pair `(A, B)`; the generalized eigenvalues are the ratios of diagonal entries `AA(k,k)/BB(k,k)`. `ordqz` swaps diagonal entries so that a chosen group, such as the stable eigenvalues in the left half plane, is gathered at the top. This is needed to split a problem into stable and unstable subsystems.",
+        "pt": "O algoritmo QZ triangulariza um par de matrizes `(A, B)`; os autovalores generalizados são as razões das entradas diagonais `AA(k,k)/BB(k,k)`. `ordqz` troca entradas da diagonal de modo que um grupo escolhido, como os autovalores estáveis do semiplano esquerdo, fique reunido no topo. Isso é necessário para separar um problema em subsistemas estável e instável."
+      },
+      "examples": [
+        {"title": {"en": "Moving the left half plane eigenvalue first", "pt": "Colocando primeiro o autovalor do semiplano esquerdo"}, "code": "A = [1 2; 0 -3];\nB = eye(2);\n[AA, BB, Q, Z] = qz(A, B);\n[AS, BS, QS, ZS] = ordqz(AA, BB, Q, Z, 'lhp');\ndisp(diag(AS) ./ diag(BS))"}
+      ],
+      "see": ["qz", "ordschur", "ordeig", "eig"]
+    },
+    "ordschur": {
+      "summary": {"en": "Reorders the eigenvalues in a Schur factorization.", "pt": "Reordena os autovalores em uma fatoração de Schur."},
+      "syntax": [
+        {"code": "[US, TS] = ordschur(U, T, select)", "en": "Reorders the Schur form `T` and updates `U` so that the eigenvalues marked in `select` come first.", "pt": "Reordena a forma de Schur `T` e atualiza `U` de modo que os autovalores marcados em `select` venham primeiro."}
+      ],
+      "inputs": [
+        {"name": "U, T", "en": "Schur factors from `schur`, with `A = U*T*U'`.", "pt": "Fatores de Schur obtidos de `schur`, com `A = U*T*U'`."},
+        {"name": "select", "en": "Logical (or 0/1) vector with one entry per eigenvalue; nonzero entries mark the ones to move to the top.", "pt": "Vetor lógico (ou 0/1) com uma entrada por autovalor; entradas não nulas marcam os que vão para o topo."}
+      ],
+      "outputs": [
+        {"name": "US, TS", "en": "Reordered factors with `U*T*U' = US*TS*US'`.", "pt": "Fatores reordenados, com `U*T*U' = US*TS*US'`."}
+      ],
+      "description": {
+        "en": "The Schur form is not unique in the order of its diagonal entries. `ordschur` applies orthogonal swaps between neighbouring diagonal entries, keeping the factorization valid, to bring chosen eigenvalues to the leading positions. The leading columns of `US` then span an invariant subspace associated with those eigenvalues.",
+        "pt": "A forma de Schur não é única quanto à ordem das entradas da diagonal. `ordschur` aplica trocas ortogonais entre entradas vizinhas da diagonal, mantendo a fatoração válida, para levar os autovalores escolhidos às primeiras posições. As primeiras colunas de `US` geram então um subespaço invariante associado a esses autovalores."
+      },
+      "examples": [
+        {"title": {"en": "Bringing the eigenvalue 6 to the top", "pt": "Levando o autovalor 6 ao topo"}, "code": "T = [1 2 3; 0 4 5; 0 0 6];\n[US, TS] = ordschur(eye(3), T, [0 0 1]);\ndiag(TS)'\ndisp(norm(US*TS*US' - T) < 1e-12)"}
+      ],
+      "see": ["schur", "ordeig", "ordqz", "eig"]
+    },
+    "orth": {
+      "summary": {"en": "Orthonormal basis of the range of a matrix.", "pt": "Base ortonormal da imagem de uma matriz."},
+      "syntax": [
+        {"code": "Q = orth(A)", "en": "Returns orthonormal columns spanning the column space of `A`.", "pt": "Retorna colunas ortonormais que geram o espaço das colunas de `A`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix.", "pt": "Matriz."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Matrix with `rank(A)` orthonormal columns and `size(A,1)` rows.", "pt": "Matriz com `rank(A)` colunas ortonormais e `size(A,1)` linhas."}
+      ],
+      "description": {
+        "en": "`orth` takes the left singular vectors of `A` that correspond to singular values above a tolerance. The columns of the result are unit length and mutually perpendicular, and every column of `A` is a combination of them.\n\nFor a rank-deficient `A` the result has fewer columns than `A`. The basis is unique only up to sign and rotation within the space.",
+        "pt": "`orth` toma os vetores singulares à esquerda de `A` associados a valores singulares acima de uma tolerância. As colunas do resultado têm comprimento unitário e são mutuamente perpendiculares, e cada coluna de `A` é combinação delas.\n\nPara `A` de posto deficiente, o resultado tem menos colunas que `A`. A base é única apenas a menos de sinal e rotação dentro do espaço."
+      },
+      "examples": [
+        {"title": {"en": "A rank-one matrix has a one-column basis", "pt": "Uma matriz de posto um tem base de uma coluna"}, "code": "A = [1 1; 1 1];\nQ = orth(A)\nsize(orth([1 2; 3 4]))"}
+      ],
+      "see": ["null", "rank", "qr", "svd"]
+    },
+    "pageeig": {
+      "summary": {"en": "Eigenvalues of each page of a 3-D array.", "pt": "Autovalores de cada página de um array 3-D."},
+      "syntax": [
+        {"code": "e = pageeig(A)", "en": "Returns the eigenvalues of every square page `A(:,:,k)` as columns of a `n`-by-1-by-`p` array.", "pt": "Retorna os autovalores de cada página quadrada `A(:,:,k)` como colunas de um array `n` por 1 por `p`."},
+        {"code": "[V, D] = pageeig(A)", "en": "Also returns eigenvectors and diagonal eigenvalue matrices per page.", "pt": "Retorna também autovetores e matrizes diagonais de autovalores por página."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Array of size `n`-by-`n`-by-`p` (or more pages along higher dimensions).", "pt": "Array de tamanho `n` por `n` por `p` (ou mais páginas em dimensões superiores)."}
+      ],
+      "outputs": [
+        {"name": "e", "en": "Eigenvalues, one column per page along the third dimension.", "pt": "Autovalores, uma coluna por página ao longo da terceira dimensão."}
+      ],
+      "description": {
+        "en": "A page is a 2-D slice along the first two dimensions. `pageeig` does the work of a loop that calls `eig` on every page, in one call. It is handy for families of matrices such as a system matrix evaluated at many parameter values.",
+        "pt": "Uma página é uma fatia 2-D nas duas primeiras dimensões. `pageeig` faz o trabalho de um laço que chama `eig` em cada página, em uma só chamada. É útil para famílias de matrizes, como uma matriz de sistema avaliada em muitos valores de parâmetro."
+      },
+      "examples": [
+        {"title": {"en": "Two diagonal pages", "pt": "Duas páginas diagonais"}, "code": "A = cat(3, [2 0; 0 3], [1 0; 0 5]);\nE = pageeig(A)"}
+      ],
+      "see": ["eig", "pageinv", "pagenorm", "pagemtimes", "pagesvd"]
+    },
+    "pageinv": {
+      "summary": {"en": "Inverse of each page of a 3-D array.", "pt": "Inversa de cada página de um array 3-D."},
+      "syntax": [
+        {"code": "Y = pageinv(X)", "en": "Returns an array of the same size whose pages are the inverses of the square pages of `X`.", "pt": "Retorna um array do mesmo tamanho cujas páginas são as inversas das páginas quadradas de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Array of size `n`-by-`n`-by-`p`.", "pt": "Array de tamanho `n` por `n` por `p`."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array with `Y(:,:,k) = inv(X(:,:,k))`.", "pt": "Array com `Y(:,:,k) = inv(X(:,:,k))`."}
+      ],
+      "description": {
+        "en": "`pageinv` is the batched form of `inv`. As with `inv`, solving systems with `pagemldivide` is better numerically than multiplying by an inverse when only the solution is needed.",
+        "pt": "`pageinv` é a forma em lote de `inv`. Como no caso de `inv`, resolver sistemas com `pagemldivide` é numericamente melhor que multiplicar por uma inversa quando só a solução interessa."
+      },
+      "examples": [
+        {"title": {"en": "Inverting two pages", "pt": "Invertendo duas páginas"}, "code": "A = cat(3, [2 0; 0 4], [1 0; 0 5]);\nB = pageinv(A);\nB(:,:,1)\nB(:,:,2)"}
+      ],
+      "see": ["inv", "pageeig", "pagemtimes", "pagemldivide"]
+    },
+    "pagenorm": {
+      "summary": {"en": "Norm of each page of a 3-D array.", "pt": "Norma de cada página de um array 3-D."},
+      "syntax": [
+        {"code": "n = pagenorm(A)", "en": "Returns the 2-norm of every page `A(:,:,k)`.", "pt": "Retorna a norma 2 de cada página `A(:,:,k)`."},
+        {"code": "n = pagenorm(A, p)", "en": "Uses the norm type `p`: `1`, `2`, `Inf` or `'fro'`.", "pt": "Usa o tipo de norma `p`: `1`, `2`, `Inf` ou `'fro'`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Array whose pages are matrices.", "pt": "Array cujas páginas são matrizes."},
+        {"name": "p", "en": "Norm type, default 2.", "pt": "Tipo de norma, padrão 2."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Array of size `1`-by-`1`-by-`p`, one norm per page.", "pt": "Array de tamanho `1` por `1` por `p`, uma norma por página."}
+      ],
+      "description": {
+        "en": "`pagenorm` applies `norm` to each 2-D page without a loop, returning the results along the third dimension. Use `squeeze` to turn them into a vector.",
+        "pt": "`pagenorm` aplica `norm` a cada página 2-D sem laço, retornando os resultados ao longo da terceira dimensão. Use `squeeze` para transformá-los em vetor."
+      },
+      "examples": [
+        {"title": {"en": "Norms of two row-vector pages", "pt": "Normas de duas páginas de vetor linha"}, "code": "A = cat(3, [3 4], [6 8]);\nn = pagenorm(A);\nsqueeze(n)'\nsize(n)"}
+      ],
+      "see": ["norm", "pageeig", "pageinv", "squeeze", "vecnorm"]
+    }
+  }
+}

@@ -1,0 +1,1259 @@
+{
+ "functions": {
+  "strtrim": {
+   "summary": {
+    "en": "Removes leading and trailing whitespace from text.",
+    "pt": "Remove espaços em branco do início e do fim de um texto."
+   },
+   "syntax": [
+    {
+     "code": "s = strtrim(str)",
+     "en": "Returns `str` without leading or trailing whitespace.",
+     "pt": "Retorna `str` sem espaços em branco no início e no fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Character vector, string array, or cell array of character vectors.",
+     "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Text of the same type and size as `str`.",
+     "pt": "Texto do mesmo tipo e tamanho de `str`."
+    }
+   ],
+   "description": {
+    "en": "Whitespace here means blanks, tabs, newlines, carriage returns and similar characters. Spaces inside the text are untouched. For a cell array, each element is trimmed on its own.\n\nA character matrix is only trimmed of columns that are blank in every row, so rows stay aligned. To remove other characters from the edges, use `strip`.",
+    "pt": "Espaço em branco aqui significa espaços, tabulações, quebras de linha, retornos de carro e caracteres semelhantes. Espaços dentro do texto não são alterados. Em um cell array, cada elemento é aparado individualmente.\n\nEm uma matriz de caracteres, só são removidas as colunas em branco em todas as linhas, para que as linhas continuem alinhadas. Para remover outros caracteres das bordas, use `strip`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Characters, cells and strings",
+      "pt": "Caracteres, células e strings"
+     },
+     "code": "strtrim(sprintf('  hi \\t\\n'))\nstrtrim({' a ', 'b  '})\nstrtrim(\"  two words  \")"
+    }
+   ],
+   "see": [
+    "strip",
+    "deblank",
+    "pad",
+    "regexprep"
+   ]
+  },
+  "struct": {
+   "summary": {
+    "en": "Creates a structure array with named fields.",
+    "pt": "Cria um array de structs com campos nomeados."
+   },
+   "syntax": [
+    {
+     "code": "s = struct",
+     "en": "Creates a scalar struct with no fields.",
+     "pt": "Cria um struct escalar sem campos."
+    },
+    {
+     "code": "s = struct(field1, value1, ...)",
+     "en": "Creates a struct with the given fields and values.",
+     "pt": "Cria um struct com os campos e valores dados."
+    },
+    {
+     "code": "s = struct(field, {})",
+     "en": "Creates an empty struct array that has the field.",
+     "pt": "Cria um array de structs vazio que tem o campo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "field",
+     "en": "Field name, as text.",
+     "pt": "Nome do campo, como texto."
+    },
+    {
+     "name": "value",
+     "en": "Any value. If it is a cell array, the result is a struct array with one element per cell; wrap a cell in another cell, `{{...}}`, to store it as a single value.",
+     "pt": "Qualquer valor. Se for um cell array, o resultado é um array de structs com um elemento por célula; coloque a célula dentro de outra, `{{...}}`, para guardá-la como um único valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Struct or struct array.",
+     "pt": "Struct ou array de structs."
+    }
+   ],
+   "description": {
+    "en": "A struct groups related values under names, accessed as `s.name`. Fields can hold values of different types and sizes. With cell array values, `struct` expands: `struct('v', {1, 2, 3})` is a 1-by-3 struct array. All cell arguments must then have the same size, and non-cell values are copied to every element.\n\nFields can also be created by assignment, `s.age = 30`, and removed with `rmfield`. `fieldnames` lists them and `isfield` tests for them.",
+    "pt": "Um struct agrupa valores relacionados sob nomes, acessados como `s.nome`. Os campos podem guardar valores de tipos e tamanhos diferentes. Com valores em cell array, `struct` expande: `struct('v', {1, 2, 3})` é um array de structs 1-por-3. Todos os argumentos em célula devem ter o mesmo tamanho, e os valores que não são células são copiados para cada elemento.\n\nOs campos também podem ser criados por atribuição, `s.age = 30`, e removidos com `rmfield`. `fieldnames` os lista e `isfield` os testa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalar, array and cell value",
+      "pt": "Escalar, array e valor em célula"
+     },
+     "code": "s = struct('name', 'Ana', 'age', 30)\ns.age\nt = struct('v', {1, 2, 3});\nsize(t)\nc = struct('c', {{1, 2}});\nclass(c.c)"
+    }
+   ],
+   "see": [
+    "fieldnames",
+    "isfield",
+    "rmfield",
+    "setfield",
+    "cell2struct",
+    "struct2cell"
+   ]
+  },
+  "struct2cell": {
+   "summary": {
+    "en": "Converts the field values of a struct into a cell array.",
+    "pt": "Converte os valores dos campos de um struct em um cell array."
+   },
+   "syntax": [
+    {
+     "code": "C = struct2cell(s)",
+     "en": "Returns the field values of `s` in a column of cells.",
+     "pt": "Retorna os valores dos campos de `s` em uma coluna de células."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Struct or struct array.",
+     "pt": "Struct ou array de structs."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array. For a scalar struct with `n` fields it is `n`-by-1; for a struct array of size `[r c]` it is `n`-by-`r`-by-`c`.",
+     "pt": "Cell array. Para um struct escalar com `n` campos é `n`-por-1; para um array de structs de tamanho `[r c]` é `n`-por-`r`-por-`c`."
+    }
+   ],
+   "description": {
+    "en": "The first dimension of the result follows the order of `fieldnames(s)`, and the field names themselves are lost. Use `fieldnames` as well if you need to rebuild the struct later with `cell2struct`.",
+    "pt": "A primeira dimensão do resultado segue a ordem de `fieldnames(s)`, e os nomes dos campos se perdem. Use também `fieldnames` se precisar reconstruir o struct depois com `cell2struct`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalar and array",
+      "pt": "Escalar e array"
+     },
+     "code": "s.a = 1; s.b = 'hi';\nC = struct2cell(s)\nsize(struct2cell(struct('a', {1, 2})))"
+    }
+   ],
+   "see": [
+    "cell2struct",
+    "fieldnames",
+    "struct",
+    "table2cell"
+   ]
+  },
+  "struct2table": {
+   "summary": {
+    "en": "Converts a struct array into a table.",
+    "pt": "Converte um array de structs em uma tabela."
+   },
+   "syntax": [
+    {
+     "code": "T = struct2table(S)",
+     "en": "Turns each element of a struct array into a table row and each field into a variable.",
+     "pt": "Transforma cada elemento de um array de structs em uma linha da tabela e cada campo em uma variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Struct array whose elements have the same fields.",
+     "pt": "Array de structs cujos elementos têm os mesmos campos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Table with one row per element of `S` and one variable per field.",
+     "pt": "Tabela com uma linha por elemento de `S` e uma variável por campo."
+    }
+   ],
+   "description": {
+    "en": "The names of the fields become the names of the variables. Numeric fields turn into numeric columns and text fields into cell columns of character vectors. Use `table2struct` to go back.\n\nThis is a convenient way to bring records, for example read from JSON with `jsondecode`, into a table that can be sorted, filtered and summarized.",
+    "pt": "Os nomes dos campos viram os nomes das variáveis. Campos numéricos viram colunas numéricas e campos de texto viram colunas de células com vetores de caracteres. Use `table2struct` para voltar.\n\nÉ uma forma prática de trazer registros, por exemplo lidos de JSON com `jsondecode`, para uma tabela que pode ser ordenada, filtrada e resumida."
+   },
+   "notes": {
+    "en": "A scalar struct whose fields are column vectors becomes a single-row table with cell contents in MatLivre, whereas MATLAB spreads the vectors over the rows. Pass a struct array to get one row per record.",
+    "pt": "Um struct escalar cujos campos são vetores coluna vira uma tabela de uma linha com conteúdo em células no MatLivre, enquanto o MATLAB espalha os vetores pelas linhas. Passe um array de structs para obter uma linha por registro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "From a struct array",
+      "pt": "A partir de um array de structs"
+     },
+     "code": "s = struct('a', {1; 2}, 'b', {'x'; 'y'});\nT = struct2table(s)"
+    }
+   ],
+   "see": [
+    "table2struct",
+    "struct2cell",
+    "cell2table",
+    "table",
+    "jsondecode"
+   ]
+  },
+  "structfun": {
+   "summary": {
+    "en": "Applies a function to each field of a scalar struct.",
+    "pt": "Aplica uma função a cada campo de um struct escalar."
+   },
+   "syntax": [
+    {
+     "code": "A = structfun(func, S)",
+     "en": "Calls `func` on every field value and collects the results in a column vector.",
+     "pt": "Chama `func` sobre o valor de cada campo e reúne os resultados em um vetor coluna."
+    },
+    {
+     "code": "B = structfun(func, S, 'UniformOutput', false)",
+     "en": "Returns a struct with the same field names holding the results.",
+     "pt": "Retorna um struct com os mesmos nomes de campos contendo os resultados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "func",
+     "en": "Function handle that takes one field value.",
+     "pt": "Handle de função que recebe o valor de um campo."
+    },
+    {
+     "name": "S",
+     "en": "Scalar struct.",
+     "pt": "Struct escalar."
+    },
+    {
+     "name": "'UniformOutput'",
+     "en": "`true` (default) requires every result to be a scalar; `false` allows any result and returns a struct.",
+     "pt": "`true` (padrão) exige que cada resultado seja escalar; `false` permite qualquer resultado e retorna um struct."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Column vector with one element per field, in field order.",
+     "pt": "Vetor coluna com um elemento por campo, na ordem dos campos."
+    }
+   ],
+   "description": {
+    "en": "`structfun` is the struct counterpart of `cellfun` and `arrayfun`. It is helpful for summaries over a set of named values, such as `structfun(@numel, s)` for the size of each field.\n\nWhen the function returns non-scalar results (strings, vectors), set `'UniformOutput'` to `false`; otherwise an error is raised.",
+    "pt": "`structfun` é o equivalente de `cellfun` e `arrayfun` para structs. É útil para resumos sobre um conjunto de valores nomeados, como `structfun(@numel, s)` para o tamanho de cada campo.\n\nQuando a função retorna resultados não escalares (strings, vetores), defina `'UniformOutput'` como `false`; caso contrário ocorre um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Column result and struct result",
+      "pt": "Resultado em coluna e em struct"
+     },
+     "code": "s.a = 1; s.b = 4; s.c = 9;\nstructfun(@sqrt, s)\nr = structfun(@(v) v*2, s, 'UniformOutput', false)"
+    }
+   ],
+   "see": [
+    "cellfun",
+    "arrayfun",
+    "fieldnames",
+    "struct"
+   ]
+  },
+  "strvcat": {
+   "summary": {
+    "en": "Stacks text into a character matrix, skipping empty inputs.",
+    "pt": "Empilha textos em uma matriz de caracteres, ignorando entradas vazias."
+   },
+   "syntax": [
+    {
+     "code": "S = strvcat(s1, s2, ...)",
+     "en": "Returns a char matrix with one row per non-empty input.",
+     "pt": "Retorna uma matriz de char com uma linha por entrada não vazia."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s1, s2, ...",
+     "en": "Character vectors, strings or cell arrays of character vectors.",
+     "pt": "Vetores de caracteres, strings ou cell arrays de vetores de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Character matrix padded with blanks to the length of the longest row.",
+     "pt": "Matriz de caracteres preenchida com espaços até o comprimento da maior linha."
+    }
+   ],
+   "description": {
+    "en": "`strvcat` works like `char` or `str2mat`, with one difference: inputs that are empty do not produce a blank row, they are dropped. So `strvcat('a', '', 'b')` has two rows while `char('a', '', 'b')` has three.\n\nIt is a legacy function; prefer `char` when blank rows are wanted and `string` arrays when padding is not needed.",
+    "pt": "`strvcat` funciona como `char` ou `str2mat`, com uma diferença: entradas vazias não geram uma linha em branco, são descartadas. Assim `strvcat('a', '', 'b')` tem duas linhas, enquanto `char('a', '', 'b')` tem três.\n\nÉ uma função legada; prefira `char` quando linhas em branco forem desejadas e arrays de `string` quando o preenchimento não for necessário."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Empty input dropped",
+      "pt": "Entrada vazia descartada"
+     },
+     "code": "S = strvcat('one', '', 'three');\nsize(S)\nS"
+    }
+   ],
+   "see": [
+    "char",
+    "str2mat",
+    "string",
+    "cellstr"
+   ]
+  },
+  "summary": {
+   "summary": {
+    "en": "Prints a statistical summary of the variables of a table.",
+    "pt": "Imprime um resumo estatístico das variáveis de uma tabela."
+   },
+   "syntax": [
+    {
+     "code": "summary(T)",
+     "en": "Shows the type and main statistics of every variable in `T`.",
+     "pt": "Mostra o tipo e as principais estatísticas de cada variável de `T`."
+    },
+    {
+     "code": "S = summary(T)",
+     "en": "Returns the summary as a value instead of printing it.",
+     "pt": "Retorna o resumo como um valor em vez de imprimir."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table or timetable (also categorical arrays).",
+     "pt": "Tabela ou timetable (também arrays categóricos)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "The summary, when an output is requested.",
+     "pt": "O resumo, quando uma saída é solicitada."
+    }
+   ],
+   "description": {
+    "en": "For each variable `summary` reports its size and class. Numeric variables also show the minimum, median and maximum; categorical ones show the count per category. It gives a quick overview of an unknown dataset before analysis.\n\nUse `height`, `width` and `varfun` when you need individual numbers, not a report.",
+    "pt": "Para cada variável, `summary` informa o tamanho e a classe. Variáveis numéricas também mostram mínimo, mediana e máximo; as categóricas mostram a contagem por categoria. Dá uma visão rápida de um conjunto de dados desconhecido antes da análise.\n\nUse `height`, `width` e `varfun` quando precisar de números individuais, e não de um relatório."
+   },
+   "notes": {
+    "en": "The report is returned as a block of text with the minimum, median and maximum of numeric variables; its layout is simpler than MATLAB's.",
+    "pt": "O relatório é retornado como um bloco de texto com mínimo, mediana e máximo das variáveis numéricas; seu formato é mais simples que o do MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Summary of a table",
+      "pt": "Resumo de uma tabela"
+     },
+     "code": "T = table([1;2;3], [4;5;9], 'VariableNames', {'a','b'});\nsummary(T)"
+    }
+   ],
+   "see": [
+    "table",
+    "varfun",
+    "height",
+    "mean",
+    "categorical"
+   ]
+  },
+  "symvar": {
+   "summary": {
+    "en": "Lists the symbolic variables in an expression.",
+    "pt": "Lista as variáveis simbólicas de uma expressão."
+   },
+   "syntax": [
+    {
+     "code": "v = symvar(f)",
+     "en": "Returns all symbolic variables of `f`, in alphabetical order.",
+     "pt": "Retorna todas as variáveis simbólicas de `f`, em ordem alfabética."
+    },
+    {
+     "code": "v = symvar(f, n)",
+     "en": "Returns the `n` variables closest to `x`, in order of preference.",
+     "pt": "Retorna as `n` variáveis mais próximas de `x`, em ordem de preferência."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression, equation or function.",
+     "pt": "Expressão, equação ou função simbólica."
+    },
+    {
+     "name": "n",
+     "en": "Number of variables to return.",
+     "pt": "Número de variáveis a retornar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Row vector of symbolic variables.",
+     "pt": "Vetor linha de variáveis simbólicas."
+    }
+   ],
+   "description": {
+    "en": "Only free symbolic variables are listed; constants such as `pi` and numbers are not. The default variable that functions like `diff` and `int` use when you do not name one is the first element of `symvar(f, 1)`: the letter closest to `x` in the alphabet.\n\nThe expression must be symbolic, so create variables first with `syms`.",
+    "pt": "Apenas variáveis simbólicas livres são listadas; constantes como `pi` e números não aparecem. A variável padrão que funções como `diff` e `int` usam quando nenhuma é indicada é o primeiro elemento de `symvar(f, 1)`: a letra mais próxima de `x` no alfabeto.\n\nA expressão precisa ser simbólica, portanto crie as variáveis antes com `syms`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "All variables and the default one",
+      "pt": "Todas as variáveis e a padrão"
+     },
+     "code": "syms x y a\nsymvar(a*x^2 + y)\nsymvar(a*x^2 + y, 1)"
+    }
+   ],
+   "see": [
+    "syms",
+    "diff",
+    "int",
+    "subs",
+    "solve"
+   ]
+  },
+  "synchronize": {
+   "summary": {
+    "en": "Aligns several timetables onto a common time vector.",
+    "pt": "Alinha várias timetables em um vetor de tempo comum."
+   },
+   "syntax": [
+    {
+     "code": "TT = synchronize(TT1, TT2)",
+     "en": "Combines two timetables over the union of their row times, filling gaps with missing values.",
+     "pt": "Combina duas timetables sobre a união de seus tempos de linha, preenchendo lacunas com valores ausentes."
+    },
+    {
+     "code": "TT = synchronize(TT1, TT2, newTimes)",
+     "en": "Aligns onto a time basis: `'union'`, `'intersection'`, `'first'`, `'last'`, or an explicit time vector.",
+     "pt": "Alinha sobre uma base de tempo: `'union'`, `'intersection'`, `'first'`, `'last'` ou um vetor de tempos explícito."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT1, TT2, ...",
+     "en": "Timetables with distinct variable names.",
+     "pt": "Timetables com nomes de variáveis distintos."
+    },
+    {
+     "name": "newTimes",
+     "en": "The set of row times for the output.",
+     "pt": "O conjunto de tempos de linha da saída."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT",
+     "en": "Timetable whose variables are those of all inputs side by side.",
+     "pt": "Timetable cujas variáveis são as de todas as entradas lado a lado."
+    }
+   ],
+   "description": {
+    "en": "`synchronize` is the tool to put signals recorded at different instants into one table. With `'union'` every time that appears in any input is kept and unknown values are `NaN`; with `'intersection'` only times present in all inputs survive; `'first'` and `'last'` use the times of the first or last input.\n\nA fourth argument naming a method, such as `'fillwithmissing'`, controls how values at times missing from an input are obtained.",
+    "pt": "`synchronize` é a ferramenta para reunir em uma só tabela sinais gravados em instantes diferentes. Com `'union'` todo tempo que aparece em qualquer entrada é mantido e valores desconhecidos ficam `NaN`; com `'intersection'` só sobrevivem os tempos presentes em todas as entradas; `'first'` e `'last'` usam os tempos da primeira ou da última entrada.\n\nUm quarto argumento que nomeia um método, como `'fillwithmissing'`, controla como são obtidos os valores nos tempos ausentes de uma entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Union and intersection",
+      "pt": "União e interseção"
+     },
+     "code": "t1 = timetable(seconds([1;2;3]), [10;20;30], 'VariableNames', {'A'});\nt2 = timetable(seconds([2;3;4]), [5;6;7], 'VariableNames', {'B'});\nsynchronize(t1, t2)\nsynchronize(t1, t2, 'intersection')"
+    }
+   ],
+   "see": [
+    "timetable",
+    "retime",
+    "join",
+    "innerjoin",
+    "outerjoin"
+   ]
+  },
+  "table": {
+   "summary": {
+    "en": "Creates a table: column-oriented data with named variables, like a spreadsheet.",
+    "pt": "Cria uma tabela: dados orientados a colunas com variáveis nomeadas, como uma planilha."
+   },
+   "syntax": [
+    {
+     "code": "T = table(var1, var2, ...)",
+     "en": "Creates a table from variables of the same height.",
+     "pt": "Cria uma tabela a partir de variáveis com a mesma altura."
+    },
+    {
+     "code": "T = table(___, 'VariableNames', names)",
+     "en": "Names the variables.",
+     "pt": "Dá nomes às variáveis."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "var1, var2, ...",
+     "en": "Arrays with the same number of rows. Each one is a column (a matrix variable keeps several columns).",
+     "pt": "Arrays com o mesmo número de linhas. Cada um é uma coluna (uma variável matricial mantém várias colunas)."
+    },
+    {
+     "name": "'VariableNames'",
+     "en": "Cell array of names, one per variable. Names must be unique and valid.",
+     "pt": "Cell array de nomes, um por variável. Os nomes devem ser únicos e válidos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Table with one row per row of the inputs.",
+     "pt": "Tabela com uma linha por linha das entradas."
+    }
+   ],
+   "description": {
+    "en": "A table holds columns of different types side by side: numbers, text, dates, categories. Each column is a named variable, so you work with it by name instead of by position. `T.num` returns a column, `T(2, :)` returns a row as a table, `T{2, 'num'}` returns its content, and `size(T)` gives rows by variables.\n\nWithout `'VariableNames'` the variables are called `Var1`, `Var2`, and so on, or take the names of the input variables when they are plain variable names. Tables can be sorted with `sortrows`, grouped with `groupsummary`, and combined with `join`.",
+    "pt": "Uma tabela guarda colunas de tipos diferentes lado a lado: números, texto, datas, categorias. Cada coluna é uma variável nomeada, então você trabalha com ela pelo nome e não pela posição. `T.num` retorna uma coluna, `T(2, :)` retorna uma linha como tabela, `T{2, 'num'}` retorna seu conteúdo e `size(T)` dá linhas por variáveis.\n\nSem `'VariableNames'`, as variáveis se chamam `Var1`, `Var2` e assim por diante, ou assumem os nomes das variáveis de entrada quando são nomes simples. Tabelas podem ser ordenadas com `sortrows`, agrupadas com `groupsummary` e combinadas com `join`."
+   },
+   "notes": {
+    "en": "The form `table('Size', ..., 'VariableTypes', ...)` for preallocating an empty table is not supported by MatLivre.",
+    "pt": "A forma `table('Size', ..., 'VariableTypes', ...)` para pré-alocar uma tabela vazia não é suportada pelo MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build, index and slice",
+      "pt": "Criar, indexar e fatiar"
+     },
+     "code": "T = table([1;2;3], {'a';'b';'c'}, 'VariableNames', {'num','txt'})\nT.num\nsize(T)\nT(2,:)"
+    }
+   ],
+   "see": [
+    "array2table",
+    "cell2table",
+    "readtable",
+    "sortrows",
+    "timetable",
+    "struct2table"
+   ]
+  },
+  "table2array": {
+   "summary": {
+    "en": "Converts a table to a single homogeneous array.",
+    "pt": "Converte uma tabela em um único array homogêneo."
+   },
+   "syntax": [
+    {
+     "code": "A = table2array(T)",
+     "en": "Concatenates the variables of `T` horizontally.",
+     "pt": "Concatena horizontalmente as variáveis de `T`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table whose variables can be concatenated: for example all numeric.",
+     "pt": "Tabela cujas variáveis podem ser concatenadas: por exemplo, todas numéricas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Array with the same number of rows as `T` and one column for each variable column.",
+     "pt": "Array com o mesmo número de linhas de `T` e uma coluna para cada coluna de variável."
+    }
+   ],
+   "description": {
+    "en": "The result has the class of the combined data, so a table of doubles gives a double matrix. Mixing types follows the rules of concatenation, and variables that cannot be combined (for instance a numeric column with a cell column) cause an error. For mixed content, use `table2cell`.\n\nIt is equivalent to the brace syntax `T{:,:}`.",
+    "pt": "O resultado tem a classe dos dados combinados, então uma tabela de doubles gera uma matriz double. A mistura de tipos segue as regras de concatenação, e variáveis que não podem ser combinadas (por exemplo, uma coluna numérica com uma coluna de células) causam erro. Para conteúdo misto, use `table2cell`.\n\nÉ equivalente à sintaxe de chaves `T{:,:}`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Table to matrix",
+      "pt": "Tabela para matriz"
+     },
+     "code": "T = table([1;2], [3;4]);\nA = table2array(T)\nclass(A)"
+    }
+   ],
+   "see": [
+    "array2table",
+    "table2cell",
+    "cell2mat",
+    "table"
+   ]
+  },
+  "table2cell": {
+   "summary": {
+    "en": "Converts a table to a cell array.",
+    "pt": "Converte uma tabela em um cell array."
+   },
+   "syntax": [
+    {
+     "code": "C = table2cell(T)",
+     "en": "Returns a cell array with one cell per table element.",
+     "pt": "Retorna um cell array com uma célula por elemento da tabela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table of any variable types.",
+     "pt": "Tabela com variáveis de qualquer tipo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array with as many rows as `T` and one column per variable column; names are not included.",
+     "pt": "Cell array com tantas linhas quanto `T` e uma coluna por coluna de variável; os nomes não são incluídos."
+    }
+   ],
+   "description": {
+    "en": "Unlike `table2array`, it works with mixed content: numbers stay numbers and text stays text, each in its own cell. The variable names and row names are dropped, so keep `T.Properties.VariableNames` if you need them later.\n\n`cell2table` performs the reverse conversion.",
+    "pt": "Ao contrário de `table2array`, funciona com conteúdo misto: números continuam números e texto continua texto, cada um em sua célula. Os nomes das variáveis e das linhas são descartados, então guarde `T.Properties.VariableNames` se precisar deles depois.\n\n`cell2table` faz a conversão inversa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed content",
+      "pt": "Conteúdo misto"
+     },
+     "code": "T = table([1;2], {'a';'b'});\nC = table2cell(T)"
+    }
+   ],
+   "see": [
+    "cell2table",
+    "table2array",
+    "table2struct",
+    "table"
+   ]
+  },
+  "table2struct": {
+   "summary": {
+    "en": "Converts a table to a structure array.",
+    "pt": "Converte uma tabela em um array de structs."
+   },
+   "syntax": [
+    {
+     "code": "s = table2struct(T)",
+     "en": "Returns a column struct array with one element per row and one field per variable.",
+     "pt": "Retorna um array de structs em coluna, com um elemento por linha e um campo por variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table.",
+     "pt": "Tabela."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "`height(T)`-by-1 struct array whose fields have the names of the variables.",
+     "pt": "Array de structs `height(T)`-por-1 cujos campos têm os nomes das variáveis."
+    }
+   ],
+   "description": {
+    "en": "Each row of the table becomes a struct element, so `s(2)` is the second record. This is a handy form for looping over records or for encoding a table as JSON with `jsonencode`.\n\nThe inverse is `struct2table`.",
+    "pt": "Cada linha da tabela vira um elemento do struct, então `s(2)` é o segundo registro. É uma forma prática de percorrer registros em um laço ou de codificar uma tabela como JSON com `jsonencode`.\n\nA inversa é `struct2table`."
+   },
+   "notes": {
+    "en": "The `'ToScalar'` option, which returns one scalar struct holding whole columns, is not implemented correctly in MatLivre.",
+    "pt": "A opção `'ToScalar'`, que retorna um struct escalar com colunas inteiras, não está implementada corretamente no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One struct per row",
+      "pt": "Um struct por linha"
+     },
+     "code": "T = table([1;2], {'a';'b'}, 'VariableNames', {'n','s'});\ns = table2struct(T);\nsize(s)\ns(2)"
+    }
+   ],
+   "see": [
+    "struct2table",
+    "table2cell",
+    "jsonencode",
+    "table"
+   ]
+  },
+  "table2timetable": {
+   "summary": {
+    "en": "Converts a table with a time variable into a timetable.",
+    "pt": "Converte uma tabela com uma variável de tempo em uma timetable."
+   },
+   "syntax": [
+    {
+     "code": "TT = table2timetable(T)",
+     "en": "Uses the first datetime or duration variable of `T` as the row times.",
+     "pt": "Usa a primeira variável datetime ou duration de `T` como tempos das linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table whose first variable (or a chosen one) holds datetime or duration values.",
+     "pt": "Tabela cuja primeira variável (ou uma escolhida) contém valores datetime ou duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT",
+     "en": "Timetable with the time variable moved to the row times; the other variables are kept.",
+     "pt": "Timetable com a variável de tempo movida para os tempos das linhas; as demais variáveis são mantidas."
+    }
+   ],
+   "description": {
+    "en": "A timetable requires its row times to be a datetime or duration vector. `table2timetable` takes that vector from the table and removes it from the data columns, so the number of variables falls by one. The row times are shown under the original name when it is available.\n\nThe inverse is `timetable2table`.",
+    "pt": "Uma timetable exige que os tempos das linhas sejam um vetor datetime ou duration. `table2timetable` retira esse vetor da tabela e o remove das colunas de dados, de modo que o número de variáveis diminui em um. Os tempos das linhas são exibidos sob o nome original quando ele está disponível.\n\nA inversa é `timetable2table`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Duration column as row times",
+      "pt": "Coluna de duração como tempos das linhas"
+     },
+     "code": "T = table(seconds([1;2;3]), [4;5;6], 'VariableNames', {'t','v'});\nTT = table2timetable(T)"
+    }
+   ],
+   "see": [
+    "timetable2table",
+    "timetable",
+    "table",
+    "array2timetable"
+   ]
+  },
+  "textBoundary": {
+   "summary": {
+    "en": "Pattern that matches the start or end of the text.",
+    "pt": "Padrão que casa o início ou o fim do texto."
+   },
+   "syntax": [
+    {
+     "code": "pat = textBoundary",
+     "en": "Matches the start or the end of the text.",
+     "pt": "Casa o início ou o fim do texto."
+    },
+    {
+     "code": "pat = textBoundary(side)",
+     "en": "Matches only the `\"start\"` or the `\"end\"` of the text (or `\"either\"`).",
+     "pt": "Casa apenas o `\"start\"` (início) ou o `\"end\"` (fim) do texto (ou `\"either\"`)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "side",
+     "en": "`\"start\"`, `\"end\"` or `\"either\"` (default).",
+     "pt": "`\"start\"`, `\"end\"` ou `\"either\"` (padrão)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A pattern of zero width: it takes up no characters, it only anchors a match to a position.",
+     "pt": "Um padrão de largura zero: não consome caracteres, apenas ancora uma correspondência a uma posição."
+    }
+   ],
+   "description": {
+    "en": "`textBoundary` is a building block for the pattern functions `contains`, `extract`, `replace`, `startsWith` and others. It is combined with other patterns using `+`, as in `textBoundary(\"start\") + \"cat\"`, which only matches `cat` at the very beginning of the text, not in `concat`.\n\nWithout a text argument it matches both ends, and it differs from `lineBoundary`, which also recognizes line breaks inside the text.",
+    "pt": "`textBoundary` é um bloco de construção para as funções de padrões `contains`, `extract`, `replace`, `startsWith` e outras. Combina-se com outros padrões usando `+`, como em `textBoundary(\"start\") + \"cat\"`, que só casa `cat` no início do texto, não em `concat`.\n\nSem argumento casa as duas pontas, e difere de `lineBoundary`, que também reconhece quebras de linha dentro do texto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Anchoring to the text edges",
+      "pt": "Ancorando nas bordas do texto"
+     },
+     "code": "extract(\"cat concat\", textBoundary(\"start\") + \"cat\")\nreplace(\"one two\", textBoundary(\"start\"), \">\")\nreplace(\"one two\", textBoundary(\"end\"), \"<\")"
+    }
+   ],
+   "see": [
+    "lineBoundary",
+    "letterBoundary",
+    "whitespaceBoundary",
+    "replace",
+    "extract",
+    "pattern"
+   ]
+  },
+  "time": {
+   "summary": {
+    "en": "Time-of-day part of a calendar duration, as a duration.",
+    "pt": "Parte de horário de uma duração de calendário, como duration."
+   },
+   "syntax": [
+    {
+     "code": "t = time(caldur)",
+     "en": "Returns the time component of `caldur`.",
+     "pt": "Retorna o componente de tempo de `caldur`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "caldur",
+     "en": "calendarDuration array.",
+     "pt": "Array de calendarDuration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Duration array holding only the hours, minutes and seconds portion.",
+     "pt": "Array de duration contendo apenas a parte de horas, minutos e segundos."
+    }
+   ],
+   "description": {
+    "en": "A `calendarDuration` has three parts: months, days and time. The months and days depend on the calendar (a month can be 28 to 31 days), but the time part is an exact amount of time. `time` extracts that last part as a regular `duration`, in `hh:mm:ss` display.\n\nFor `calendarDuration(1, 2, 3, 4, 5, 6)`, which is 1 year, 2 months, 3 days, 4 hours, 5 minutes and 6 seconds, `time` returns `04:05:06`.",
+    "pt": "Uma `calendarDuration` tem três partes: meses, dias e tempo. Meses e dias dependem do calendário (um mês pode ter de 28 a 31 dias), mas a parte de tempo é uma quantidade exata. `time` extrai essa última parte como uma `duration` comum, exibida em `hh:mm:ss`.\n\nPara `calendarDuration(1, 2, 3, 4, 5, 6)`, que é 1 ano, 2 meses, 3 dias, 4 horas, 5 minutos e 6 segundos, `time` retorna `04:05:06`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Time part of a calendar duration",
+      "pt": "Parte de tempo de uma duração de calendário"
+     },
+     "code": "c = calendarDuration(1, 2, 3, 4, 5, 6);\nt = time(c)\nclass(t)"
+    }
+   ],
+   "see": [
+    "calendarDuration",
+    "duration",
+    "timeofday",
+    "caldiff",
+    "split"
+   ]
+  },
+  "timeofday": {
+   "summary": {
+    "en": "Time elapsed since midnight for each datetime.",
+    "pt": "Tempo decorrido desde a meia-noite para cada datetime."
+   },
+   "syntax": [
+    {
+     "code": "t = timeofday(d)",
+     "en": "Returns, as a duration, the time of day of each datetime in `d`.",
+     "pt": "Retorna, como duration, o horário de cada datetime em `d`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "datetime array.",
+     "pt": "Array de datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Duration array of the same size, from `00:00:00` up to just under 24 hours.",
+     "pt": "Array de duration do mesmo tamanho, de `00:00:00` até logo abaixo de 24 horas."
+    }
+   ],
+   "description": {
+    "en": "The date part is discarded and only the clock time remains, which makes it simple to compare times across different days. Convert the result to numbers with `hours`, `minutes` or `seconds`: `hours(timeofday(d))` is the time of day in decimal hours.\n\nFor a datetime with a time zone, the local clock time in that zone is used.",
+    "pt": "A parte da data é descartada e só resta o horário, o que facilita comparar horários de dias diferentes. Converta o resultado em números com `hours`, `minutes` ou `seconds`: `hours(timeofday(d))` é o horário em horas decimais.\n\nPara um datetime com fuso horário, usa-se o horário local naquele fuso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clock time and decimal hours",
+      "pt": "Horário e horas decimais"
+     },
+     "code": "d = datetime(2024,3,5,14,30,15);\ntimeofday(d)\nhours(timeofday(d))"
+    }
+   ],
+   "see": [
+    "datetime",
+    "dateshift",
+    "hours",
+    "duration",
+    "time"
+   ]
+  },
+  "timerange": {
+   "summary": {
+    "en": "Selects the rows of a timetable that fall within a time interval.",
+    "pt": "Seleciona as linhas de uma timetable que estão dentro de um intervalo de tempo."
+   },
+   "syntax": [
+    {
+     "code": "S = timerange(t1, t2)",
+     "en": "Subscript that selects row times from `t1` up to but not including `t2`.",
+     "pt": "Subscrito que seleciona tempos de linha de `t1` até `t2`, sem incluir `t2`."
+    },
+    {
+     "code": "S = timerange(t1, t2, intervalType)",
+     "en": "Chooses which ends are included: `'openright'` (default), `'closed'`, `'open'` or `'openleft'`.",
+     "pt": "Escolhe quais extremos são incluídos: `'openright'` (padrão), `'closed'`, `'open'` ou `'openleft'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t1, t2",
+     "en": "Start and end of the interval, as datetime or duration values matching the row times.",
+     "pt": "Início e fim do intervalo, como valores datetime ou duration compatíveis com os tempos das linhas."
+    },
+    {
+     "name": "intervalType",
+     "en": "Which of the two ends belong to the interval.",
+     "pt": "Quais dos dois extremos pertencem ao intervalo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Time-based subscript to use in parentheses with a timetable, e.g. `TT(timerange(a, b), :)`.",
+     "pt": "Subscrito baseado em tempo para usar entre parênteses com uma timetable, por exemplo `TT(timerange(a, b), :)`."
+    }
+   ],
+   "description": {
+    "en": "`timerange` returns a subscript object, not data. It only has meaning inside the parentheses of a timetable. By default the interval is closed on the left and open on the right, so `timerange(seconds(2), seconds(3))` selects the row at 2 s but not the one at 3 s. Pass `'closed'` to include both ends.",
+    "pt": "`timerange` retorna um objeto de subscrito, não dados. Só faz sentido dentro dos parênteses de uma timetable. Por padrão o intervalo é fechado à esquerda e aberto à direita, então `timerange(seconds(2), seconds(3))` seleciona a linha em 2 s, mas não a de 3 s. Informe `'closed'` para incluir os dois extremos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Open right end and closed interval",
+      "pt": "Extremo direito aberto e intervalo fechado"
+     },
+     "code": "t = datetime(2024,1,1) + days(0:4)';\nTT = timetable(t, (1:5)', 'VariableNames', {'v'});\nTT(timerange(datetime(2024,1,2), datetime(2024,1,4)), :)\nTT(timerange(datetime(2024,1,2), datetime(2024,1,4), 'closed'), :)"
+    }
+   ],
+   "see": [
+    "timetable",
+    "withtol",
+    "retime",
+    "datetime",
+    "isbetween"
+   ]
+  },
+  "timeseries": {
+   "summary": {
+    "en": "Creates a time series object: data samples with their times.",
+    "pt": "Cria um objeto de série temporal: amostras de dados com seus instantes."
+   },
+   "syntax": [
+    {
+     "code": "ts = timeseries(data)",
+     "en": "Creates a series with sample times `0, 1, 2, ...`.",
+     "pt": "Cria uma série com instantes de amostra `0, 1, 2, ...`."
+    },
+    {
+     "code": "ts = timeseries(data, time)",
+     "en": "Uses the given time vector.",
+     "pt": "Usa o vetor de tempos dado."
+    },
+    {
+     "code": "ts = timeseries(___, 'Name', name)",
+     "en": "Sets the name of the series.",
+     "pt": "Define o nome da série."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "data",
+     "en": "Numeric array. One dimension must match the number of times (usually the first).",
+     "pt": "Array numérico. Uma dimensão deve coincidir com o número de instantes (geralmente a primeira)."
+    },
+    {
+     "name": "time",
+     "en": "Vector of sample times, one per sample.",
+     "pt": "Vetor de instantes de amostra, um por amostra."
+    },
+    {
+     "name": "'Name'",
+     "en": "Name of the series (default `'unnamed'`).",
+     "pt": "Nome da série (padrão `'unnamed'`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ts",
+     "en": "timeseries object with properties `Data`, `Time`, `Name`, `Length` and others.",
+     "pt": "Objeto timeseries com as propriedades `Data`, `Time`, `Name`, `Length` e outras."
+    }
+   ],
+   "description": {
+    "en": "A `timeseries` keeps the values and their times together, and supports operations that respect time such as `resample`, `addsample`, `delsample` and `synchronize`. The sample count must match the length of the time vector; otherwise an error is raised.\n\nNewer code often uses `timetable`, which also stores data with times but fits better with tables; use `timeseries2timetable` to convert.",
+    "pt": "Uma `timeseries` mantém os valores e seus instantes juntos e oferece operações que respeitam o tempo, como `resample`, `addsample`, `delsample` e `synchronize`. A quantidade de amostras deve coincidir com o comprimento do vetor de tempos; caso contrário ocorre um erro.\n\nCódigo mais novo costuma usar `timetable`, que também guarda dados com instantes mas combina melhor com tabelas; use `timeseries2timetable` para converter."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Data, time and name",
+      "pt": "Dados, tempo e nome"
+     },
+     "code": "ts = timeseries([10 20 30]', [0 1 2], 'Name', 'sig');\nts.Data'\nts.Time'\nts.Name\nts.Length"
+    }
+   ],
+   "see": [
+    "timeseries2timetable",
+    "timetable",
+    "resample",
+    "addsample",
+    "tscollection"
+   ]
+  },
+  "timeseries2timetable": {
+   "summary": {
+    "en": "Converts timeseries objects to a timetable.",
+    "pt": "Converte objetos timeseries em uma timetable."
+   },
+   "syntax": [
+    {
+     "code": "TT = timeseries2timetable(ts)",
+     "en": "Returns a timetable with the samples and times of `ts`.",
+     "pt": "Retorna uma timetable com as amostras e os instantes de `ts`."
+    },
+    {
+     "code": "TT = timeseries2timetable(ts1, ts2, ...)",
+     "en": "Combines several series into one timetable.",
+     "pt": "Combina várias séries em uma só timetable."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "timeseries object (or several).",
+     "pt": "Objeto timeseries (ou vários)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT",
+     "en": "Timetable whose row times are the times of the series (as durations) and whose variable is the data.",
+     "pt": "Timetable cujos tempos das linhas são os instantes da série (como duration) e cuja variável são os dados."
+    }
+   ],
+   "description": {
+    "en": "Numeric time vectors in seconds become `duration` row times, so a series sampled at `0, 1, 2` becomes the times `0 sec`, `1 sec`, `2 sec`. The data variable is named `Data`.\n\nThe result can be used with `synchronize`, `retime` and indexing by time.",
+    "pt": "Vetores de tempo numéricos em segundos viram tempos de linha do tipo `duration`, então uma série amostrada em `0, 1, 2` fica com os tempos `0 sec`, `1 sec`, `2 sec`. A variável de dados se chama `Data`.\n\nO resultado pode ser usado com `synchronize`, `retime` e indexação por tempo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Series to timetable",
+      "pt": "De série para timetable"
+     },
+     "code": "ts = timeseries([1 2 3]', [0 1 2]);\ntimeseries2timetable(ts)"
+    }
+   ],
+   "see": [
+    "timeseries",
+    "timetable",
+    "timetable2table",
+    "synchronize"
+   ]
+  },
+  "timetable": {
+   "summary": {
+    "en": "Creates a table whose rows are labeled with times.",
+    "pt": "Cria uma tabela cujas linhas são rotuladas com instantes."
+   },
+   "syntax": [
+    {
+     "code": "TT = timetable(rowTimes, var1, var2, ...)",
+     "en": "Creates a timetable from a time vector and data variables of the same height.",
+     "pt": "Cria uma timetable a partir de um vetor de tempos e de variáveis de dados com a mesma altura."
+    },
+    {
+     "code": "TT = timetable(___, 'VariableNames', names)",
+     "en": "Names the data variables.",
+     "pt": "Dá nomes às variáveis de dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "rowTimes",
+     "en": "datetime or duration vector, one value per row.",
+     "pt": "Vetor datetime ou duration, um valor por linha."
+    },
+    {
+     "name": "var1, var2, ...",
+     "en": "Data arrays with as many rows as `rowTimes`.",
+     "pt": "Arrays de dados com tantas linhas quanto `rowTimes`."
+    },
+    {
+     "name": "'VariableNames'",
+     "en": "Names of the data variables.",
+     "pt": "Nomes das variáveis de dados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT",
+     "en": "Timetable. The row times are in `TT.Time` (or the name you gave them).",
+     "pt": "Timetable. Os tempos das linhas ficam em `TT.Time` (ou no nome que você deu a eles)."
+    }
+   ],
+   "description": {
+    "en": "A timetable is a table that always has the times as its first column, which allows time-aware operations: selecting with `timerange`, aligning with `synchronize`, resampling with `retime`, and plotting against time. Data variables are read like table variables, `TT.x`, and the times with `TT.Time`.\n\nIndexing a row gives another timetable; indexing a variable with a dot gives the raw column.",
+    "pt": "Uma timetable é uma tabela que sempre tem os instantes como primeira coluna, o que permite operações sensíveis ao tempo: selecionar com `timerange`, alinhar com `synchronize`, reamostrar com `retime` e plotar contra o tempo. As variáveis de dados são lidas como variáveis de tabela, `TT.x`, e os instantes com `TT.Time`.\n\nIndexar uma linha dá outra timetable; indexar uma variável com ponto dá a coluna pura."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build and read a timetable",
+      "pt": "Criar e ler uma timetable"
+     },
+     "code": "TT = timetable(seconds([0;1;2]), [5;6;7], 'VariableNames', {'x'})\nTT.x\nTT.Time"
+    }
+   ],
+   "see": [
+    "table",
+    "timerange",
+    "synchronize",
+    "retime",
+    "table2timetable",
+    "timeseries"
+   ]
+  },
+  "timetable2table": {
+   "summary": {
+    "en": "Converts a timetable to a table, keeping the row times as a variable.",
+    "pt": "Converte uma timetable em tabela, mantendo os tempos das linhas como uma variável."
+   },
+   "syntax": [
+    {
+     "code": "T = timetable2table(TT)",
+     "en": "Moves the row times into the first variable of the result.",
+     "pt": "Move os tempos das linhas para a primeira variável do resultado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "Timetable.",
+     "pt": "Timetable."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Table with one more variable than `TT`: the times, followed by the data.",
+     "pt": "Tabela com uma variável a mais que `TT`: os tempos, seguidos dos dados."
+    }
+   ],
+   "description": {
+    "en": "Use it when you need tools that apply to tables only, such as `groupsummary` on a time column, or to export the times as an ordinary column. The first variable gets the name of the timetable's time dimension, `Time` by default.\n\n`table2timetable` converts back.",
+    "pt": "Use quando precisar de ferramentas que só se aplicam a tabelas, como `groupsummary` sobre uma coluna de tempo, ou para exportar os instantes como uma coluna comum. A primeira variável recebe o nome da dimensão de tempo da timetable, `Time` por padrão.\n\n`table2timetable` converte de volta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Times become a column",
+      "pt": "Os tempos viram uma coluna"
+     },
+     "code": "TT = timetable(seconds([0;1]), [5;6], 'VariableNames', {'x'});\ntimetable2table(TT)"
+    }
+   ],
+   "see": [
+    "table2timetable",
+    "timetable",
+    "table",
+    "array2table"
+   ]
+  },
+  "timezones": {
+   "summary": {
+    "en": "Lists the time zones that datetime knows.",
+    "pt": "Lista os fusos horários que o datetime conhece."
+   },
+   "syntax": [
+    {
+     "code": "tz = timezones",
+     "en": "Returns a table with all time zones.",
+     "pt": "Retorna uma tabela com todos os fusos horários."
+    },
+    {
+     "code": "tz = timezones(area)",
+     "en": "Restricts the list to an area such as `'Africa'` or `'America'`.",
+     "pt": "Restringe a lista a uma área como `'Africa'` ou `'America'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "area",
+     "en": "Name of a geographic area.",
+     "pt": "Nome de uma área geográfica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tz",
+     "en": "Table with variables `Name`, `Area`, `UTCOffset` and `DSTOffset`: the zone name, its area, its offset from UTC, and its daylight-saving offset.",
+     "pt": "Tabela com as variáveis `Name`, `Area`, `UTCOffset` e `DSTOffset`: nome do fuso, sua área, deslocamento em relação ao UTC e deslocamento do horário de verão."
+    }
+   ],
+   "description": {
+    "en": "Use the names in the `Name` column, such as `'America/Sao_Paulo'`, with the `'TimeZone'` option of `datetime` or with the `TimeZone` property of a datetime. Names with a region use the IANA time zone database format.",
+    "pt": "Use os nomes da coluna `Name`, como `'America/Sao_Paulo'`, com a opção `'TimeZone'` de `datetime` ou com a propriedade `TimeZone` de um datetime. Nomes com região usam o formato do banco de dados de fusos horários IANA."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Searching the zone list",
+      "pt": "Pesquisando a lista de fusos"
+     },
+     "code": "tz = timezones();\nclass(tz)\nany(strcmp(tz.Name, 'America/Sao_Paulo'))\ntz2 = timezones('Africa');\ntz2.Name(1)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "tzoffset",
+    "posixtime"
+   ]
+  },
+  "today": {
+   "summary": {
+    "en": "Current date as a serial date number (no time of day).",
+    "pt": "Data atual como número de data serial (sem horário)."
+   },
+   "syntax": [
+    {
+     "code": "d = today",
+     "en": "Returns the current local date as a double.",
+     "pt": "Retorna a data local atual como um double."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Whole number of days since the datenum origin (January 0, year 0), identical to `floor(now)`.",
+     "pt": "Número inteiro de dias desde a origem do datenum (0 de janeiro do ano 0), idêntico a `floor(now)`."
+    }
+   ],
+   "description": {
+    "en": "`today` returns a serial date number and is mostly kept for compatibility with `datenum`-style code. New code should use `datetime('today')`, which gives a `datetime` that displays as a date, and `datestr` or `datetime` formats to print it.\n\nBecause the result depends on the day it runs, avoid comparing it with fixed numbers in tests; check its class or an inequality with an older date.",
+    "pt": "`today` retorna um número de data serial e é mantida principalmente por compatibilidade com código no estilo `datenum`. Código novo deve usar `datetime('today')`, que gera um `datetime` exibido como data, e `datestr` ou formatos de `datetime` para imprimi-lo.\n\nComo o resultado depende do dia da execução, evite compará-lo com números fixos em testes; verifique sua classe ou uma desigualdade com uma data antiga."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Class and sanity checks",
+      "pt": "Classe e verificações simples"
+     },
+     "code": "d = today();\nclass(d)\nd > 738000\nd == floor(d)"
+    }
+   ],
+   "see": [
+    "now",
+    "datetime",
+    "datenum",
+    "datestr",
+    "clock"
+   ]
+  }
+ }
+}

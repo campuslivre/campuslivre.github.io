@@ -1,0 +1,564 @@
+{
+  "functions": {
+    "ishandle": {
+      "summary": {"en": "Tests which elements of an array are valid graphics or UI handles.", "pt": "Testa quais elementos de um array são handles gráficos ou de UI válidos."},
+      "syntax": [
+        {"code": "tf = ishandle(H)", "en": "Returns true for each element of `H` that refers to an existing object.", "pt": "Retorna verdadeiro para cada elemento de `H` que se refere a um objeto existente."}
+      ],
+      "inputs": [
+        {"name": "H", "en": "Any array; non-handle values simply give false.", "pt": "Qualquer array; valores que não são handles simplesmente dão falso."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical array of the same size as `H`.", "pt": "Array lógico do mesmo tamanho de `H`."}
+      ],
+      "description": {
+        "en": "A handle becomes invalid once its object is deleted or its figure is closed, while the variable that held it remains. `ishandle` is the standard check before using such a stored handle. A plain number is accepted too and is true only if it matches an existing figure number.",
+        "pt": "Um handle se torna inválido quando seu objeto é apagado ou sua figura é fechada, embora a variável que o guardava continue existindo. `ishandle` é a verificação padrão antes de usar um handle guardado. Um número simples também é aceito e só é verdadeiro se corresponder a uma figura existente."
+      },
+      "notes": {
+        "en": "In MatLivre, `ishandle` accepts a single handle or number; arrays that mix handle objects with numbers are not supported.",
+        "pt": "No MatLivre, `ishandle` aceita um único handle ou número; arrays que misturam objetos handle com números não são suportados."
+      },
+      "examples": [
+        {"title": {"en": "Before and after deleting", "pt": "Antes e depois de apagar"}, "code": "f = figure;\nh = plot(1:3);\ndisp(ishandle(h))\ndelete(h)\ndisp(ishandle(h))\ndisp(ishandle(99999))"}
+      ],
+      "see": ["ishghandle", "isgraphics", "isvalid", "delete", "figure"]
+    },
+    "ishghandle": {
+      "summary": {"en": "Tests whether values are valid Handle Graphics object handles, optionally of a given type.", "pt": "Testa se valores são handles válidos de objetos gráficos, opcionalmente de um tipo dado."},
+      "syntax": [
+        {"code": "tf = ishghandle(H)", "en": "True for each element that is a valid graphics handle.", "pt": "Verdadeiro para cada elemento que é um handle gráfico válido."},
+        {"code": "tf = ishghandle(H, type)", "en": "True only for handles whose type is `type`, such as `'line'` or `'axes'`.", "pt": "Verdadeiro só para handles cujo tipo é `type`, como `'line'` ou `'axes'`."}
+      ],
+      "inputs": [
+        {"name": "H", "en": "Value or array to test.", "pt": "Valor ou array a testar."},
+        {"name": "type", "en": "Object type name, such as `'figure'`.", "pt": "Nome do tipo do objeto, como `'figure'`."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical array the size of `H`.", "pt": "Array lógico do tamanho de `H`."}
+      ],
+      "description": {
+        "en": "It differs from `ishandle` in that it considers only graphics objects, not UI objects created by older toolkits. In practice the two give the same answer for plots. Passing a type makes it a handy guard before calling type-specific code.",
+        "pt": "Difere de `ishandle` por considerar apenas objetos gráficos, não objetos de UI de toolkits mais antigos. Na prática, os dois dão a mesma resposta para gráficos. Informar um tipo a torna uma proteção útil antes de chamar código específico daquele tipo."
+      },
+      "examples": [
+        {"title": {"en": "Check the type", "pt": "Verificar o tipo"}, "code": "figure\nh = plot(1:3);\ndisp(ishghandle(h))\ndisp(ishghandle(h, 'line'))\ndisp(ishghandle(h, 'axes'))\ndelete(h)\ndisp(ishghandle(h))"}
+      ],
+      "see": ["ishandle", "isgraphics", "isvalid", "gca", "gcf"]
+    },
+    "ishold": {
+      "summary": {"en": "Tells whether the current axes keep existing plots when new ones are added.", "pt": "Informa se os eixos atuais mantêm os gráficos existentes quando novos são adicionados."},
+      "syntax": [
+        {"code": "tf = ishold", "en": "Returns the hold state of the current axes.", "pt": "Retorna o estado de hold dos eixos atuais."},
+        {"code": "tf = ishold(ax)", "en": "Returns the hold state of the axes `ax`.", "pt": "Retorna o estado de hold dos eixos `ax`."}
+      ],
+      "inputs": [
+        {"name": "ax", "en": "Optional axes handle.", "pt": "Handle de eixos opcional."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "`true` if hold is on, otherwise `false`.", "pt": "`true` se o hold está ligado, caso contrário `false`."}
+      ],
+      "description": {
+        "en": "`hold on` makes the next `plot` add to the axes; `hold off` makes it replace what is there. `ishold` reads that state, which is useful in functions that draw on caller-supplied axes and want to restore the original state when done.",
+        "pt": "`hold on` faz o próximo `plot` acrescentar ao eixo; `hold off` faz substituir o que existe. `ishold` lê esse estado, o que é útil em funções que desenham em eixos recebidos do chamador e querem restaurar o estado original ao terminar."
+      },
+      "examples": [
+        {"title": {"en": "Toggle hold", "pt": "Alternar o hold"}, "code": "figure\ndisp(ishold)\nhold on\ndisp(ishold)\nhold off\ndisp(ishold)"}
+      ],
+      "see": ["hold", "newplot", "plot", "gca"]
+    },
+    "newplot": {
+      "summary": {"en": "Prepares the figure and axes for a new plot, respecting hold and NextPlot settings.", "pt": "Prepara a figura e os eixos para um novo gráfico, respeitando hold e NextPlot."},
+      "syntax": [
+        {"code": "ax = newplot", "en": "Returns the axes a new plot should draw in, clearing them first unless hold is on.", "pt": "Retorna os eixos em que um novo gráfico deve desenhar, limpando-os antes, a menos que o hold esteja ligado."},
+        {"code": "ax = newplot(hsave)", "en": "Does the same for the figure or axes `hsave`.", "pt": "Faz o mesmo para a figura ou eixos `hsave`."}
+      ],
+      "inputs": [
+        {"name": "hsave", "en": "Optional figure or axes to prepare.", "pt": "Figura ou eixos opcionais a preparar."}
+      ],
+      "outputs": [
+        {"name": "ax", "en": "Handle of the axes to draw into.", "pt": "Handle dos eixos onde desenhar."}
+      ],
+      "description": {
+        "en": "`newplot` is meant to be the first call inside a custom plotting function, so that the function follows the same rules as built-in ones: it creates a figure and axes if none exist, keeps the old content when `hold on` is active, and otherwise clears the axes.",
+        "pt": "`newplot` deve ser a primeira chamada dentro de uma função de plotagem própria, para que ela siga as mesmas regras das funções nativas: cria figura e eixos se não existirem, mantém o conteúdo anterior quando `hold on` está ativo e, caso contrário, limpa os eixos."
+      },
+      "examples": [
+        {"title": {"en": "Clear unless hold is on", "pt": "Limpar, a menos que hold esteja ligado"}, "code": "plot(1:3)\nhold on\nax = newplot;\ndisp(numel(allchild(ax)))\nhold off\nax = newplot;\ndisp(numel(allchild(ax)))"}
+      ],
+      "see": ["hold", "ishold", "cla", "gca", "axes"]
+    },
+    "refresh": {
+      "summary": {"en": "Redraws the current figure.", "pt": "Redesenha a figura atual."},
+      "syntax": [
+        {"code": "refresh", "en": "Redraws the current figure.", "pt": "Redesenha a figura atual."},
+        {"code": "refresh(fig)", "en": "Redraws the figure `fig`.", "pt": "Redesenha a figura `fig`."}
+      ],
+      "inputs": [
+        {"name": "fig", "en": "Optional figure handle.", "pt": "Handle de figura opcional."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Normally graphics update by themselves when properties change. `refresh` forces a repaint of a figure, which is occasionally needed after changes made inside long computations. It does not change any property.",
+        "pt": "Normalmente os gráficos se atualizam sozinhos quando propriedades mudam. `refresh` força o redesenho de uma figura, o que às vezes é necessário após mudanças feitas dentro de cálculos longos. Não altera nenhuma propriedade."
+      },
+      "examples": [
+        {"title": {"en": "Force a redraw", "pt": "Forçar um redesenho"}, "silent": true, "code": "plot(1:3)\nrefresh\nrefresh(gcf)"}
+      ],
+      "see": ["drawnow", "gcf", "figure", "shg"]
+    },
+    "reset": {
+      "summary": {"en": "Restores the properties of a graphics object to their defaults.", "pt": "Restaura as propriedades de um objeto gráfico para seus padrões."},
+      "syntax": [
+        {"code": "reset(h)", "en": "Resets the properties of the object `h` (and its children) to default values, except a few such as position and units.", "pt": "Restaura as propriedades do objeto `h` (e de seus filhos) para os valores padrão, exceto algumas, como posição e unidades."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Handle of a figure, axes or other graphics object.", "pt": "Handle de uma figura, eixos ou outro objeto gráfico."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Use `reset` to undo property changes such as custom limits, fonts or colors without deleting the object. Position and size are kept, so the object stays where it was.\n\nTo remove the plotted content as well, use `cla reset` for axes or `clf reset` for figures.",
+        "pt": "Use `reset` para desfazer alterações de propriedades, como limites, fontes ou cores personalizados, sem apagar o objeto. Posição e tamanho são mantidos, então o objeto fica onde estava.\n\nPara remover também o conteúdo plotado, use `cla reset` nos eixos ou `clf reset` nas figuras."
+      },
+      "notes": {
+        "en": "In MatLivre `reset` is accepted, but customized properties such as axes limits are not restored.",
+        "pt": "No MatLivre `reset` é aceito, mas propriedades personalizadas, como os limites dos eixos, não são restauradas."
+      },
+      "examples": [
+        {"title": {"en": "Reset the current axes", "pt": "Reiniciar os eixos atuais"}, "silent": true, "code": "plot(1:3)\nax = gca;\nax.XLim = [0 10];\nreset(ax)"}
+      ],
+      "see": ["cla", "clf", "set", "get", "gca"]
+    },
+    "shg": {
+      "summary": {"en": "Shows the current figure, bringing it to the front.", "pt": "Mostra a figura atual, trazendo-a para a frente."},
+      "syntax": [
+        {"code": "shg", "en": "Makes the current figure visible and puts it on top of other windows.", "pt": "Torna visível a figura atual e a coloca sobre as outras janelas."}
+      ],
+      "inputs": [],
+      "outputs": [],
+      "description": {
+        "en": "The name stands for \"show graph window\". It is shorthand for raising the current figure and is useful after working in the command window, where figures may be hidden behind it. If there is no current figure, nothing is created.",
+        "pt": "O nome vem de \"show graph window\". É um atalho para trazer à frente a figura atual e é útil depois de trabalhar na janela de comandos, que pode esconder as figuras. Se não houver figura atual, nada é criado."
+      },
+      "notes": {
+        "en": "MatLivre draws figures inline in the live script, so `shg` has no visible effect.",
+        "pt": "O MatLivre desenha as figuras em linha no live script, então `shg` não tem efeito visível."
+      },
+      "examples": [
+        {"title": {"en": "Raise the figure", "pt": "Trazer a figura à frente"}, "silent": true, "code": "plot(1:3)\nshg"}
+      ],
+      "see": ["figure", "gcf", "refresh", "findfigs"]
+    },
+    "opengl": {
+      "summary": {"en": "Selects or queries the OpenGL rendering mode of graphics.", "pt": "Seleciona ou consulta o modo de renderização OpenGL dos gráficos."},
+      "syntax": [
+        {"code": "opengl software", "en": "Requests software rendering instead of the graphics card.", "pt": "Pede renderização por software em vez da placa gráfica."},
+        {"code": "opengl hardware", "en": "Requests hardware-accelerated rendering where available.", "pt": "Pede renderização acelerada por hardware, quando disponível."},
+        {"code": "opengl info", "en": "Prints information about the renderer, vendor and version.", "pt": "Mostra informações sobre o renderizador, o fabricante e a versão."},
+        {"code": "d = opengl('data')", "en": "Returns the same information as a struct.", "pt": "Retorna as mesmas informações como uma struct."}
+      ],
+      "inputs": [
+        {"name": "mode", "en": "`'software'`, `'hardware'` or `'hardwarebasic'` for settings.", "pt": "`'software'`, `'hardware'` ou `'hardwarebasic'`, para ajustes."}
+      ],
+      "outputs": [
+        {"name": "d", "en": "Struct describing the renderer.", "pt": "Struct que descreve o renderizador."}
+      ],
+      "description": {
+        "en": "Switching to software rendering is a common workaround for display glitches caused by graphics drivers. The `info` form is what to include in a bug report about rendering problems.",
+        "pt": "Mudar para renderização por software é um contorno comum para falhas de exibição causadas por drivers de vídeo. A forma `info` é o que se deve incluir num relatório de bug sobre problemas de renderização."
+      },
+      "notes": {
+        "en": "MatLivre has its own renderer, so the mode settings are accepted but change nothing. The info reports `MatLivre renderer` as the renderer and `MatLivre` as the vendor.",
+        "pt": "O MatLivre tem seu próprio renderizador, então os ajustes de modo são aceitos, mas não mudam nada. As informações indicam `MatLivre renderer` como renderizador e `MatLivre` como fabricante."
+      },
+      "examples": [
+        {"title": {"en": "Query the renderer", "pt": "Consultar o renderizador"}, "code": "d = opengl('data');\ndisp(d.Vendor)\ndisp(d.GraphicsRenderer)"}
+      ],
+      "see": ["rendererinfo", "figure", "get", "ver"]
+    },
+    "rendererinfo": {
+      "summary": {"en": "Returns details about the graphics renderer used by a figure or axes.", "pt": "Retorna detalhes do renderizador gráfico usado por uma figura ou eixos."},
+      "syntax": [
+        {"code": "info = rendererinfo", "en": "Describes the renderer of the current axes.", "pt": "Descreve o renderizador dos eixos atuais."},
+        {"code": "info = rendererinfo(ax)", "en": "Describes the renderer of the axes `ax`.", "pt": "Descreve o renderizador dos eixos `ax`."}
+      ],
+      "inputs": [
+        {"name": "ax", "en": "Optional axes handle.", "pt": "Handle de eixos opcional."}
+      ],
+      "outputs": [
+        {"name": "info", "en": "Struct with fields such as `GraphicsRenderer`, `Vendor`, `Version` and `RendererDevice`.", "pt": "Struct com campos como `GraphicsRenderer`, `Vendor`, `Version` e `RendererDevice`."}
+      ],
+      "description": {
+        "en": "This is the modern replacement for `opengl info`. The fields identify the graphics stack that draws the axes, which helps when diagnosing rendering problems or deciding whether hardware acceleration is in use.",
+        "pt": "É o substituto moderno de `opengl info`. Os campos identificam a pilha gráfica que desenha os eixos, o que ajuda a diagnosticar problemas de renderização ou saber se há aceleração por hardware."
+      },
+      "examples": [
+        {"title": {"en": "Which renderer draws this axes", "pt": "Qual renderizador desenha estes eixos"}, "code": "plot(1:3)\ninfo = rendererinfo;\ndisp(info.GraphicsRenderer)\ndisp(info.Vendor)"}
+      ],
+      "see": ["opengl", "gca", "figure", "get"]
+    },
+    "cmap2gray": {
+      "summary": {"en": "Converts a colormap to grayscale.", "pt": "Converte um mapa de cores para tons de cinza."},
+      "syntax": [
+        {"code": "g = cmap2gray(map)", "en": "Returns a colormap in which each color is replaced by its luminance.", "pt": "Retorna um mapa de cores em que cada cor é trocada por sua luminância."}
+      ],
+      "inputs": [
+        {"name": "map", "en": "m-by-3 matrix of RGB values in the range [0, 1].", "pt": "Matriz m por 3 de valores RGB no intervalo [0, 1]."}
+      ],
+      "outputs": [
+        {"name": "g", "en": "m-by-3 colormap whose three columns are equal.", "pt": "Mapa de cores m por 3 cujas três colunas são iguais."}
+      ],
+      "description": {
+        "en": "Each row is replaced by the weighted sum `0.2989*R + 0.5870*G + 0.1140*B`, which approximates perceived brightness, repeated in all three channels. Pure green therefore ends up much lighter than pure blue.",
+        "pt": "Cada linha é trocada pela soma ponderada `0.2989*R + 0.5870*G + 0.1140*B`, que aproxima o brilho percebido, repetida nos três canais. O verde puro fica, assim, bem mais claro que o azul puro."
+      },
+      "examples": [
+        {"title": {"en": "Primaries to gray", "pt": "Primárias em cinza"}, "code": "map = [1 0 0; 0 1 0; 0 0 1];\ng = cmap2gray(map)"}
+      ],
+      "see": ["rgb2gray", "im2gray", "colormap", "gray"]
+    },
+    "cmpermute": {
+      "summary": {"en": "Reorders the colors of a colormap and updates the indexed image to match.", "pt": "Reordena as cores de um mapa de cores e atualiza a imagem indexada para combinar."},
+      "syntax": [
+        {"code": "[Y, newmap] = cmpermute(X, map, order)", "en": "Rearranges `map` according to `order` and renumbers `X` so it looks the same.", "pt": "Reorganiza `map` conforme `order` e renumera `X` para que continue com a mesma aparência."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Indexed image (integer indices into the colormap).", "pt": "Imagem indexada (índices inteiros no mapa de cores)."},
+        {"name": "map", "en": "Colormap, m-by-3.", "pt": "Mapa de cores, m por 3."},
+        {"name": "order", "en": "Vector with the new order of the colormap rows; `newmap(k,:)` is `map(order(k),:)`.", "pt": "Vetor com a nova ordem das linhas do mapa; `newmap(k,:)` é `map(order(k),:)`."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Image with indices adjusted to the new order.", "pt": "Imagem com os índices ajustados à nova ordem."},
+        {"name": "newmap", "en": "The reordered colormap.", "pt": "O mapa de cores reordenado."}
+      ],
+      "description": {
+        "en": "Since an indexed image only refers to colors by position, simply shuffling the colormap would change the picture. `cmpermute` shuffles both consistently, so `ind2rgb(Y, newmap)` equals `ind2rgb(X, map)`.",
+        "pt": "Como uma imagem indexada só se refere às cores por posição, simplesmente embaralhar o mapa de cores mudaria a figura. `cmpermute` embaralha os dois de forma consistente, de modo que `ind2rgb(Y, newmap)` é igual a `ind2rgb(X, map)`."
+      },
+      "examples": [
+        {"title": {"en": "Swap two colors", "pt": "Trocar duas cores"}, "code": "X = [1 2; 2 1];\nmap = [1 0 0; 0 0 1];\n[Y, newmap] = cmpermute(X, map, [2 1])"}
+      ],
+      "see": ["cmunique", "ind2rgb", "colormap", "rgb2ind"]
+    },
+    "cmunique": {
+      "summary": {"en": "Removes duplicate colors from a colormap and reindexes the image.", "pt": "Remove cores repetidas de um mapa de cores e reindexa a imagem."},
+      "syntax": [
+        {"code": "[Y, newmap] = cmunique(X, map)", "en": "Reduces an indexed image and its colormap to unique colors.", "pt": "Reduz uma imagem indexada e seu mapa de cores a cores únicas."},
+        {"code": "[Y, newmap] = cmunique(I)", "en": "Does the same for a grayscale or truecolor image, producing an indexed image.", "pt": "Faz o mesmo para uma imagem em tons de cinza ou truecolor, produzindo uma imagem indexada."}
+      ],
+      "inputs": [
+        {"name": "X, map", "en": "Indexed image and its colormap.", "pt": "Imagem indexada e seu mapa de cores."},
+        {"name": "I", "en": "Grayscale or RGB image.", "pt": "Imagem em tons de cinza ou RGB."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Indexed image, of class `uint8` when the colormap has 256 or fewer colors and the input was an integer or grayscale image.", "pt": "Imagem indexada, da classe `uint8` quando o mapa tem 256 cores ou menos e a entrada era inteira ou em tons de cinza."},
+        {"name": "newmap", "en": "Colormap without repeated rows.", "pt": "Mapa de cores sem linhas repetidas."}
+      ],
+      "description": {
+        "en": "A colormap can contain the same color several times. `cmunique` merges the repeats into one entry and rewrites the indices in the image so the picture does not change. The result is smaller and easier to process.\n\nIndices in the output start at 0 for `uint8` images and at 1 for `double` ones, as in the input convention.",
+        "pt": "Um mapa de cores pode conter a mesma cor várias vezes. `cmunique` junta as repetições em uma só entrada e reescreve os índices da imagem para que a figura não mude. O resultado é menor e mais fácil de processar.\n\nOs índices de saída começam em 0 para imagens `uint8` e em 1 para as `double`, como na convenção da entrada."
+      },
+      "examples": [
+        {"title": {"en": "Merge duplicate colors", "pt": "Juntar cores duplicadas"}, "code": "X = uint8([0 1; 2 0]);\nmap = [1 0 0; 0 0 1; 1 0 0];\n[Y, newmap] = cmunique(X, map)"}
+      ],
+      "see": ["cmpermute", "rgb2ind", "ind2rgb", "unique"]
+    },
+    "dither": {
+      "summary": {"en": "Converts an image to fewer colors using error-diffusion dithering.", "pt": "Converte uma imagem para menos cores usando dithering por difusão de erro."},
+      "syntax": [
+        {"code": "X = dither(RGB, map)", "en": "Approximates the truecolor image `RGB` with the colors of `map`, returning an indexed image.", "pt": "Aproxima a imagem truecolor `RGB` com as cores de `map`, retornando uma imagem indexada."},
+        {"code": "BW = dither(I)", "en": "Converts a grayscale image to a binary one.", "pt": "Converte uma imagem em tons de cinza em binária."}
+      ],
+      "inputs": [
+        {"name": "RGB", "en": "m-by-n-by-3 truecolor image.", "pt": "Imagem truecolor m por n por 3."},
+        {"name": "map", "en": "Colormap of the palette to use.", "pt": "Mapa de cores da paleta a usar."},
+        {"name": "I", "en": "Grayscale image.", "pt": "Imagem em tons de cinza."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Indexed image, or logical image for the grayscale form.", "pt": "Imagem indexada, ou imagem lógica na forma de tons de cinza."}
+      ],
+      "description": {
+        "en": "A pixel is rounded to the nearest available color, and the rounding error is spread to neighboring pixels that are processed later. Regions of intermediate tone then become patterns of the available colors, which the eye averages back.\n\nThe result looks smoother than plain quantization but uses only the palette entries.",
+        "pt": "Cada pixel é arredondado para a cor disponível mais próxima, e o erro de arredondamento é repassado aos pixels vizinhos processados depois. Regiões de tom intermediário viram, então, padrões das cores disponíveis, que o olho volta a misturar.\n\nO resultado fica mais suave do que a quantização simples, mas usa apenas entradas da paleta."
+      },
+      "notes": {
+        "en": "In MatLivre only the form with a colormap, `dither(RGB, map)`, works.",
+        "pt": "No MatLivre, só funciona a forma com mapa de cores, `dither(RGB, map)`."
+      },
+      "examples": [
+        {"title": {"en": "Two-color palette", "pt": "Paleta de duas cores"}, "code": "g = [1 0.2; 0.5 0];\nRGB = cat(3, g, g, g);\nX = dither(RGB, [0 0 0; 1 1 1])"}
+      ],
+      "see": ["rgb2ind", "ind2rgb", "imbinarize", "rgb2gray"]
+    },
+    "getrangefromclass": {
+      "summary": {"en": "Returns the minimum and maximum values of an image's data class.", "pt": "Retorna os valores mínimo e máximo da classe de dados de uma imagem."},
+      "syntax": [
+        {"code": "range = getrangefromclass(I)", "en": "Returns `[min max]` for the class of `I`.", "pt": "Retorna `[min max]` para a classe de `I`."}
+      ],
+      "inputs": [
+        {"name": "I", "en": "Image array of any numeric or logical class.", "pt": "Array de imagem de qualquer classe numérica ou lógica."}
+      ],
+      "outputs": [
+        {"name": "range", "en": "Two-element vector: `[0 255]` for `uint8`, `[-32768 32767]` for `int16`, `[0 1]` for `double`, `single` and logical.", "pt": "Vetor de dois elementos: `[0 255]` para `uint8`, `[-32768 32767]` para `int16`, `[0 1]` para `double`, `single` e lógicos."}
+      ],
+      "description": {
+        "en": "Only the class of `I` matters, not its values. For integer classes the range is the full span of the type; for floating-point and logical images the conventional display range `[0 1]` is returned. It is useful for scaling code that must work with several image classes.",
+        "pt": "Importa apenas a classe de `I`, não seus valores. Para classes inteiras, o intervalo é a faixa completa do tipo; para imagens de ponto flutuante e lógicas, retorna-se o intervalo de exibição convencional `[0 1]`. É útil em código de escala que deve funcionar com várias classes de imagem."
+      },
+      "examples": [
+        {"title": {"en": "Ranges by class", "pt": "Intervalos por classe"}, "code": "getrangefromclass(uint8(1))\ngetrangefromclass(int16(1))\ngetrangefromclass(0.5)"}
+      ],
+      "see": ["im2double", "intmax", "intmin", "class"]
+    },
+    "im2double": {
+      "summary": {"en": "Converts an image to class double, rescaling integer data to the range 0 to 1.", "pt": "Converte uma imagem para a classe double, reescalando dados inteiros para o intervalo de 0 a 1."},
+      "syntax": [
+        {"code": "I2 = im2double(I)", "en": "Returns a double version of `I` scaled to the standard image range.", "pt": "Retorna uma versão double de `I` na escala padrão de imagens."}
+      ],
+      "inputs": [
+        {"name": "I", "en": "Image of class `uint8`, `uint16`, `int16`, `single`, `double` or logical.", "pt": "Imagem da classe `uint8`, `uint16`, `int16`, `single`, `double` ou lógica."}
+      ],
+      "outputs": [
+        {"name": "I2", "en": "Double image. Integer inputs map to [0, 1]; logical becomes 0 and 1.", "pt": "Imagem double. Entradas inteiras são mapeadas para [0, 1]; lógicas viram 0 e 1."}
+      ],
+      "description": {
+        "en": "Image code often assumes double data in [0, 1]. `im2double` gets there from `uint8` by dividing by 255, from `uint16` by dividing by 65535, and from `int16` by shifting so that -32768 maps to 0. A double input is returned unchanged, even if its values fall outside [0, 1].\n\nThis differs from `double(I)`, which converts the class only and keeps the original numbers.",
+        "pt": "O código de imagens costuma assumir dados double em [0, 1]. `im2double` chega lá a partir de `uint8` dividindo por 255, de `uint16` dividindo por 65535 e de `int16` deslocando de modo que -32768 vá para 0. Uma entrada double é devolvida sem mudança, mesmo com valores fora de [0, 1].\n\nIsso difere de `double(I)`, que converte apenas a classe e mantém os números originais."
+      },
+      "examples": [
+        {"title": {"en": "Scale by class", "pt": "Escala por classe"}, "code": "im2double(uint8([0 128 255]))\nim2double(uint16(65535))\nim2double([0.5 2])"}
+      ],
+      "see": ["double", "im2gray", "getrangefromclass", "imshow"]
+    },
+    "im2gray": {
+      "summary": {"en": "Converts an RGB image to grayscale, leaving grayscale images as they are.", "pt": "Converte uma imagem RGB para tons de cinza, mantendo as imagens que já são cinza."},
+      "syntax": [
+        {"code": "G = im2gray(I)", "en": "Returns the luminance of an RGB image, or `I` itself when it is already 2-D.", "pt": "Retorna a luminância de uma imagem RGB, ou a própria `I` quando já é 2-D."}
+      ],
+      "inputs": [
+        {"name": "I", "en": "RGB image (m-by-n-by-3) or grayscale image (m-by-n).", "pt": "Imagem RGB (m por n por 3) ou em tons de cinza (m por n)."}
+      ],
+      "outputs": [
+        {"name": "G", "en": "m-by-n grayscale image of the same class as `I`.", "pt": "Imagem em tons de cinza m por n, da mesma classe de `I`."}
+      ],
+      "description": {
+        "en": "Each pixel becomes `0.2989*R + 0.5870*G + 0.1140*B`, weights that follow how the eye sees brightness: green counts most and blue least. Unlike `rgb2gray`, `im2gray` accepts grayscale images, so it is safe to call without checking the input first.",
+        "pt": "Cada pixel vira `0.2989*R + 0.5870*G + 0.1140*B`, pesos que seguem como o olho percebe brilho: o verde pesa mais e o azul menos. Diferente de `rgb2gray`, `im2gray` aceita imagens em tons de cinza, então pode ser chamada sem verificar a entrada antes."
+      },
+      "examples": [
+        {"title": {"en": "Red and green pixels", "pt": "Pixels vermelho e verde"}, "code": "I = uint8(cat(3, [255 0], [0 255], [0 0]));\nG = im2gray(I)"}
+      ],
+      "see": ["rgb2gray", "cmap2gray", "im2double", "imshow"]
+    },
+    "image": {
+      "summary": {"en": "Displays an array as an image, with each value taken as a colormap index or a color.", "pt": "Exibe um array como imagem, com cada valor tomado como índice do mapa de cores ou como cor."},
+      "syntax": [
+        {"code": "image(C)", "en": "Displays `C`. A matrix is indexed into the current colormap; an m-by-n-by-3 array is read as RGB.", "pt": "Exibe `C`. Uma matriz é indexada no mapa de cores atual; um array m por n por 3 é lido como RGB."},
+        {"code": "image(x, y, C)", "en": "Places the image so the first and last pixels are centered at the `x` and `y` limits.", "pt": "Posiciona a imagem de modo que o primeiro e o último pixel fiquem centrados nos limites de `x` e `y`."},
+        {"code": "h = image(___)", "en": "Returns the image object.", "pt": "Retorna o objeto de imagem."}
+      ],
+      "inputs": [
+        {"name": "C", "en": "Matrix of indices or an RGB array. For `double` data, indices start at 1; for `uint8`, at 0.", "pt": "Matriz de índices ou array RGB. Para dados `double`, os índices começam em 1; para `uint8`, em 0."},
+        {"name": "x, y", "en": "Two-element vectors of pixel-center limits.", "pt": "Vetores de dois elementos com os limites dos centros dos pixels."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Image object; `h.CData` holds the data.", "pt": "Objeto de imagem; `h.CData` guarda os dados."}
+      ],
+      "description": {
+        "en": "`image` does not rescale the data: values are used directly as colormap positions, so values outside the colormap are clipped. For automatic scaling use `imagesc`. Pixels are drawn as squares, and the y-axis may run downward depending on the axes setup.",
+        "pt": "`image` não reescala os dados: os valores são usados diretamente como posições no mapa de cores, e valores fora do mapa são cortados. Para escala automática use `imagesc`. Os pixels são desenhados como quadrados, e o eixo y pode correr para baixo conforme a configuração dos eixos."
+      },
+      "examples": [
+        {"title": {"en": "Matrix as image", "pt": "Matriz como imagem"}, "code": "h = image([1 2; 3 4]);\ndisp(class(h))\ndisp(h.CData)"}
+      ],
+      "see": ["imagesc", "imshow", "colormap", "colorbar"]
+    },
+    "imagesc": {
+      "summary": {"en": "Displays a matrix as an image with values scaled to the full colormap.", "pt": "Exibe uma matriz como imagem com os valores escalados para todo o mapa de cores."},
+      "syntax": [
+        {"code": "imagesc(C)", "en": "Displays `C`, mapping its minimum and maximum to the ends of the colormap.", "pt": "Exibe `C`, mapeando seu mínimo e máximo para as pontas do mapa de cores."},
+        {"code": "imagesc(x, y, C)", "en": "Also sets the pixel coordinates.", "pt": "Também define as coordenadas dos pixels."},
+        {"code": "imagesc(___, clims)", "en": "Uses `[cmin cmax]` as the color limits instead of the data range.", "pt": "Usa `[cmin cmax]` como limites de cor em vez da faixa dos dados."},
+        {"code": "h = imagesc(___)", "en": "Returns the image object.", "pt": "Retorna o objeto de imagem."}
+      ],
+      "inputs": [
+        {"name": "C", "en": "Matrix of values, any real numeric class.", "pt": "Matriz de valores, de qualquer classe numérica real."},
+        {"name": "clims", "en": "Two-element vector with the values mapped to the first and last colors.", "pt": "Vetor de dois elementos com os valores mapeados para a primeira e a última cor."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Image object.", "pt": "Objeto de imagem."}
+      ],
+      "description": {
+        "en": "Think of `imagesc` as `image` with scaling: it sets the color limits (`clim`) from the data, so any range of values uses the whole colormap. It is the usual way to visualize a matrix as a heat map; add `colorbar` to show what the colors mean.",
+        "pt": "Pense em `imagesc` como `image` com escala: ela define os limites de cor (`clim`) a partir dos dados, de modo que qualquer faixa de valores use o mapa de cores inteiro. É a forma usual de visualizar uma matriz como mapa de calor; acrescente `colorbar` para mostrar o significado das cores."
+      },
+      "examples": [
+        {"title": {"en": "Heat map of a matrix", "pt": "Mapa de calor de uma matriz"}, "code": "A = magic(5);\nh = imagesc(A);\ncolorbar\ndisp(size(h.CData))"}
+      ],
+      "see": ["image", "imshow", "colorbar", "clim", "colormap"]
+    },
+    "imformats": {
+      "summary": {"en": "Lists the image file formats that can be read and written.", "pt": "Lista os formatos de arquivo de imagem que podem ser lidos e gravados."},
+      "syntax": [
+        {"code": "formats = imformats", "en": "Returns a struct array describing every known format.", "pt": "Retorna um array de structs descrevendo cada formato conhecido."},
+        {"code": "fmt = imformats(ext)", "en": "Returns the entry for the file extension `ext`.", "pt": "Retorna a entrada da extensão de arquivo `ext`."}
+      ],
+      "inputs": [
+        {"name": "ext", "en": "Extension such as `'png'` or `'jpg'`.", "pt": "Extensão, como `'png'` ou `'jpg'`."}
+      ],
+      "outputs": [
+        {"name": "formats", "en": "Struct array with fields such as `ext`, `description`, `read` and `write`.", "pt": "Array de structs com campos como `ext`, `description`, `read` e `write`."}
+      ],
+      "description": {
+        "en": "The registry tells `imread` and `imwrite` which extensions they understand. Querying it is a quick way to check whether a format such as `'tif'` is supported before trying to read a file.",
+        "pt": "O registro informa a `imread` e `imwrite` quais extensões eles entendem. Consultá-lo é uma forma rápida de verificar se um formato como `'tif'` é suportado antes de tentar ler um arquivo."
+      },
+      "examples": [
+        {"title": {"en": "Look up a format", "pt": "Consultar um formato"}, "code": "f = imformats('jpg');\ndisp(f.ext)"}
+      ],
+      "see": ["imread", "imwrite", "imfinfo", "imshow"]
+    },
+    "imresize": {
+      "summary": {"en": "Resizes an image by a scale factor or to a given size.", "pt": "Redimensiona uma imagem por um fator de escala ou para um tamanho dado."},
+      "syntax": [
+        {"code": "B = imresize(A, scale)", "en": "Scales both dimensions by `scale`.", "pt": "Escala as duas dimensões por `scale`."},
+        {"code": "B = imresize(A, [numrows numcols])", "en": "Resizes to the exact size; use `NaN` for one entry to keep the aspect ratio.", "pt": "Redimensiona para o tamanho exato; use `NaN` em uma entrada para manter a proporção."},
+        {"code": "B = imresize(___, method)", "en": "Chooses the interpolation: `'nearest'`, `'bilinear'` or `'bicubic'` (the default).", "pt": "Escolhe a interpolação: `'nearest'`, `'bilinear'` ou `'bicubic'` (o padrão)."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Grayscale, RGB or binary image.", "pt": "Imagem em tons de cinza, RGB ou binária."},
+        {"name": "scale", "en": "Positive factor; values below 1 shrink the image.", "pt": "Fator positivo; valores abaixo de 1 reduzem a imagem."},
+        {"name": "method", "en": "Interpolation method name.", "pt": "Nome do método de interpolação."}
+      ],
+      "outputs": [
+        {"name": "B", "en": "Resized image of the same class as `A`. Sizes are rounded up to whole pixels.", "pt": "Imagem redimensionada, da mesma classe de `A`. Os tamanhos são arredondados para cima, em pixels inteiros."}
+      ],
+      "description": {
+        "en": "`'nearest'` copies the closest pixel and keeps exact values, which suits label images and masks. `'bilinear'` and `'bicubic'` blend neighboring pixels and give smooth results for photographs. Because new values are computed, results are clamped to the range of integer classes.",
+        "pt": "`'nearest'` copia o pixel mais próximo e preserva os valores exatos, o que serve para imagens de rótulos e máscaras. `'bilinear'` e `'bicubic'` misturam pixels vizinhos e dão resultados suaves para fotografias. Como novos valores são calculados, os resultados são limitados à faixa das classes inteiras."
+      },
+      "examples": [
+        {"title": {"en": "Shrink and enlarge", "pt": "Reduzir e ampliar"}, "code": "A = magic(4);\nimresize(A, [2 2], 'nearest')\nsize(imresize(ones(10, 20), 0.5))\nsize(imresize(ones(10, 20), [5 NaN]))\nimresize([1 2; 3 4], 2, 'nearest')"}
+      ],
+      "see": ["imshow", "interp2", "imrotate", "imtile"]
+    },
+    "imshow": {
+      "summary": {"en": "Displays an image with the right scale, colormap and aspect ratio.", "pt": "Exibe uma imagem com a escala, o mapa de cores e a proporção adequados."},
+      "syntax": [
+        {"code": "imshow(I)", "en": "Shows a grayscale, RGB or binary image.", "pt": "Mostra uma imagem em tons de cinza, RGB ou binária."},
+        {"code": "imshow(I, [low high])", "en": "Displays grayscale data with `low` as black and `high` as white.", "pt": "Exibe dados em tons de cinza com `low` como preto e `high` como branco."},
+        {"code": "imshow(X, map)", "en": "Shows an indexed image with the colormap `map`.", "pt": "Mostra uma imagem indexada com o mapa de cores `map`."},
+        {"code": "h = imshow(___)", "en": "Returns the image object.", "pt": "Retorna o objeto de imagem."}
+      ],
+      "inputs": [
+        {"name": "I", "en": "Image array. Integer images use their full class range; `double` data is read as [0, 1].", "pt": "Array de imagem. Imagens inteiras usam a faixa completa da classe; dados `double` são lidos como [0, 1]."},
+        {"name": "[low high]", "en": "Display range for grayscale data.", "pt": "Faixa de exibição para dados em tons de cinza."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Image object.", "pt": "Objeto de imagem."}
+      ],
+      "description": {
+        "en": "Unlike `image`, `imshow` sets pixels to be square, hides the axes ticks and chooses scaling by class, so a `uint8` image looks right without further setup. Pass `[]` as the range to stretch the data's own minimum and maximum over the display.",
+        "pt": "Diferente de `image`, `imshow` torna os pixels quadrados, esconde as marcas dos eixos e escolhe a escala pela classe, então uma imagem `uint8` aparece corretamente sem mais ajustes. Passe `[]` como faixa para esticar o mínimo e o máximo dos próprios dados sobre a exibição."
+      },
+      "examples": [
+        {"title": {"en": "Show a small gray image", "pt": "Mostrar uma pequena imagem cinza"}, "code": "I = uint8([0 255; 128 64]);\nh = imshow(I);\ndisp(class(h))"}
+      ],
+      "see": ["image", "imagesc", "imread", "imresize", "colormap"]
+    },
+    "imtile": {
+      "summary": {"en": "Combines several images into one tiled image.", "pt": "Combina várias imagens em uma única imagem em mosaico."},
+      "syntax": [
+        {"code": "T = imtile(frames)", "en": "Tiles the images in a multi-frame array (an m-by-n-by-k or m-by-n-by-3-by-k array) into a grid.", "pt": "Dispõe em grade as imagens de um array de vários quadros (m por n por k ou m por n por 3 por k)."},
+        {"code": "T = imtile(cellOfImages)", "en": "Tiles images given in a cell array.", "pt": "Dispõe em mosaico imagens dadas em um cell array."},
+        {"code": "T = imtile(___, 'GridSize', [r c])", "en": "Fixes the number of rows and columns of the grid.", "pt": "Fixa o número de linhas e colunas da grade."}
+      ],
+      "inputs": [
+        {"name": "frames", "en": "Image stack or cell array of images of the same class.", "pt": "Pilha de imagens ou cell array de imagens da mesma classe."},
+        {"name": "'GridSize'", "en": "Two-element vector `[rows cols]`.", "pt": "Vetor de dois elementos `[linhas colunas]`."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "The tiled image. Unused cells in the grid are filled with background.", "pt": "A imagem em mosaico. Células sem uso na grade são preenchidas com o fundo."}
+      ],
+      "description": {
+        "en": "Without a `GridSize`, the grid is chosen to be close to square. Tiles are placed row by row. Use it to compare results side by side, for example the same image after different filters, in a single `imshow` call.",
+        "pt": "Sem `GridSize`, a grade é escolhida para ficar próxima de um quadrado. Os blocos são colocados linha a linha. Use para comparar resultados lado a lado, por exemplo a mesma imagem após filtros diferentes, em uma única chamada de `imshow`."
+      },
+      "examples": [
+        {"title": {"en": "Two tiles side by side", "pt": "Dois blocos lado a lado"}, "code": "a = uint8(ones(2));\nb = uint8(zeros(2));\nT = imtile({a, b}, 'GridSize', [1 2])"}
+      ],
+      "see": ["imshow", "montage", "cat", "imresize"]
+    },
+    "ind2rgb": {
+      "summary": {"en": "Converts an indexed image and its colormap to an RGB image.", "pt": "Converte uma imagem indexada e seu mapa de cores em uma imagem RGB."},
+      "syntax": [
+        {"code": "RGB = ind2rgb(X, map)", "en": "Replaces each index in `X` by the color of the corresponding row of `map`.", "pt": "Troca cada índice de `X` pela cor da linha correspondente de `map`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Indexed image. Integer-class indices start at 0, `double` ones at 1.", "pt": "Imagem indexada. Índices de classes inteiras começam em 0, os `double` em 1."},
+        {"name": "map", "en": "Colormap, m-by-3.", "pt": "Mapa de cores, m por 3."}
+      ],
+      "outputs": [
+        {"name": "RGB", "en": "m-by-n-by-3 `double` image.", "pt": "Imagem `double` m por n por 3."}
+      ],
+      "description": {
+        "en": "The result has one plane per color channel, so `RGB(:,:,1)` holds the red values of all pixels. It is the inverse of `rgb2ind` when no color was lost, and a convenient step before filtering color data.",
+        "pt": "O resultado tem um plano por canal de cor, de modo que `RGB(:,:,1)` guarda os valores de vermelho de todos os pixels. É o inverso de `rgb2ind` quando nenhuma cor se perdeu, e um passo conveniente antes de filtrar dados de cor."
+      },
+      "examples": [
+        {"title": {"en": "Look up colors", "pt": "Consultar cores"}, "code": "X = [1 2];\nmap = [1 0 0; 0 1 0];\nRGB = ind2rgb(X, map);\ndisp(size(RGB))\ndisp(squeeze(RGB(1, 2, :))')"}
+      ],
+      "see": ["rgb2ind", "cmunique", "colormap", "imshow"]
+    },
+    "rgb2gray": {
+      "summary": {"en": "Converts an RGB image or a colormap to grayscale.", "pt": "Converte uma imagem RGB ou um mapa de cores para tons de cinza."},
+      "syntax": [
+        {"code": "G = rgb2gray(RGB)", "en": "Converts a truecolor m-by-n-by-3 image to an m-by-n grayscale image.", "pt": "Converte uma imagem truecolor m por n por 3 em uma imagem cinza m por n."},
+        {"code": "newmap = rgb2gray(map)", "en": "Converts an m-by-3 colormap to a grayscale colormap.", "pt": "Converte um mapa de cores m por 3 em um mapa de cores em cinza."}
+      ],
+      "inputs": [
+        {"name": "RGB", "en": "Truecolor image of class `uint8`, `uint16`, `single` or `double`.", "pt": "Imagem truecolor da classe `uint8`, `uint16`, `single` ou `double`."},
+        {"name": "map", "en": "Colormap with three columns.", "pt": "Mapa de cores com três colunas."}
+      ],
+      "outputs": [
+        {"name": "G", "en": "Grayscale image of the same class as the input, or a three-column grayscale colormap.", "pt": "Imagem em tons de cinza da mesma classe da entrada, ou um mapa de cores cinza de três colunas."}
+      ],
+      "description": {
+        "en": "The gray level is `0.2989*R + 0.5870*G + 0.1140*B`, which preserves luminance. For a `uint8` input the result is rounded to an integer. A matrix with three columns is treated as a colormap, not an image.",
+        "pt": "O nível de cinza é `0.2989*R + 0.5870*G + 0.1140*B`, que preserva a luminância. Para entrada `uint8`, o resultado é arredondado para inteiro. Uma matriz com três colunas é tratada como mapa de cores, não como imagem."
+      },
+      "examples": [
+        {"title": {"en": "Two pixels", "pt": "Dois pixels"}, "code": "RGB = zeros(1, 2, 3);\nRGB(1, 1, :) = [1 0 0];\nRGB(1, 2, :) = [0 1 0];\nG = rgb2gray(RGB)\nrgb2gray(uint8(RGB * 255))"}
+      ],
+      "see": ["im2gray", "cmap2gray", "rgb2ind", "imshow"]
+    },
+    "rgb2ind": {
+      "summary": {"en": "Converts an RGB image to an indexed image using a given colormap.", "pt": "Converte uma imagem RGB em imagem indexada usando um mapa de cores dado."},
+      "syntax": [
+        {"code": "X = rgb2ind(RGB, map)", "en": "Maps each pixel to the index of the nearest color in `map`.", "pt": "Mapeia cada pixel para o índice da cor mais próxima em `map`."},
+        {"code": "[X, map] = rgb2ind(RGB, n)", "en": "Quantizes the image to at most `n` colors and returns the new colormap.", "pt": "Quantiza a imagem para no máximo `n` cores e retorna o novo mapa de cores."}
+      ],
+      "inputs": [
+        {"name": "RGB", "en": "Truecolor image.", "pt": "Imagem truecolor."},
+        {"name": "map", "en": "Colormap to match against.", "pt": "Mapa de cores para comparação."},
+        {"name": "n", "en": "Number of colors to use when the colormap is computed.", "pt": "Número de cores a usar quando o mapa é calculado."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Indexed image. Its class is `uint8` for up to 256 colors, otherwise `uint16`; indices start at 0.", "pt": "Imagem indexada. Sua classe é `uint8` para até 256 cores, senão `uint16`; os índices começam em 0."},
+        {"name": "map", "en": "The colormap used.", "pt": "O mapa de cores usado."}
+      ],
+      "description": {
+        "en": "Indexed images store one small integer per pixel plus a palette, so they take less memory when few colors are needed. Matching to a fixed palette picks the closest color by distance in RGB space; `dither` can be used instead to disguise the loss with patterns.",
+        "pt": "Imagens indexadas guardam um inteiro pequeno por pixel mais uma paleta, ocupando menos memória quando poucas cores bastam. O casamento com uma paleta fixa escolhe a cor mais próxima pela distância no espaço RGB; `dither` pode ser usado para disfarçar a perda com padrões."
+      },
+      "notes": {
+        "en": "In MatLivre a colormap must be supplied; automatic quantization to a number of colors is not supported.",
+        "pt": "No MatLivre é preciso fornecer um mapa de cores; a quantização automática para um número de cores não é suportada."
+      },
+      "examples": [
+        {"title": {"en": "Match a two-color palette", "pt": "Casar com uma paleta de duas cores"}, "code": "RGB = zeros(1, 2, 3);\nRGB(1, 1, :) = [1 0 0];\nRGB(1, 2, :) = [0 1 0];\nX = rgb2ind(RGB, [1 0 0; 0 1 0])\nclass(X)"}
+      ],
+      "see": ["ind2rgb", "dither", "cmunique", "rgb2gray"]
+    }
+  }
+}

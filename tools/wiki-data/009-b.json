@@ -1,0 +1,1309 @@
+{
+ "functions": {
+  "getqualitydesc": {
+   "summary": {
+    "en": "Quality descriptions of the samples of a timeseries.",
+    "pt": "Descrições de qualidade das amostras de uma timeseries."
+   },
+   "syntax": [
+    {
+     "code": "d = getqualitydesc(ts)",
+     "en": "Returns the quality text of each sample.",
+     "pt": "Retorna o texto de qualidade de cada amostra."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with `Quality` codes and `QualityInfo` set.",
+     "pt": "`timeseries` com códigos em `Quality` e `QualityInfo` definidos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Cell array with one description per sample. It is empty when the series has no quality codes.",
+     "pt": "Cell array com uma descrição por amostra. Fica vazio quando a série não tem códigos de qualidade."
+    }
+   ],
+   "description": {
+    "en": "Each sample can carry an integer quality code in `ts.Quality`. `ts.QualityInfo` maps codes to descriptions through its `Code` and `Description` fields. `getqualitydesc` looks up the code of every sample and returns the matching text.",
+    "pt": "Cada amostra pode ter um código inteiro de qualidade em `ts.Quality`. `ts.QualityInfo` associa códigos a descrições pelos campos `Code` e `Description`. `getqualitydesc` procura o código de cada amostra e retorna o texto correspondente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quality text per sample",
+      "pt": "Texto de qualidade por amostra"
+     },
+     "code": "ts = timeseries([1; 2; 3; 4], [0; 1; 2; 3]);\nts.Quality = [1; 1; 0; 1];\nts.QualityInfo.Code = [0 1];\nts.QualityInfo.Description = {'bad', 'good'};\ngetqualitydesc(ts)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "timeseries",
+    "getsamples",
+    "getdatasamples",
+    "addsample",
+    "tscollection"
+   ]
+  },
+  "getsamples": {
+   "summary": {
+    "en": "Subset of a timeseries chosen by sample index.",
+    "pt": "Subconjunto de uma timeseries escolhido por índice de amostra."
+   },
+   "syntax": [
+    {
+     "code": "tsout = getsamples(ts, idx)",
+     "en": "Returns a new timeseries with the samples at the indices `idx`.",
+     "pt": "Retorna uma nova timeseries com as amostras nos índices `idx`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    },
+    {
+     "name": "idx",
+     "en": "Vector of sample indices.",
+     "pt": "Vetor de índices de amostras."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` holding the selected times and data.",
+     "pt": "`timeseries` com os tempos e dados selecionados."
+    }
+   ],
+   "description": {
+    "en": "Unlike `getdatasamples`, which returns only numbers, `getsamples` keeps the time stamps with the data, so the result is still a time series. Indices refer to sample order, not to time values; use `getsampleusingtime` to select by time.",
+    "pt": "Diferente de `getdatasamples`, que retorna só números, `getsamples` mantém os tempos junto com os dados, então o resultado continua sendo uma série temporal. Os índices se referem à ordem das amostras, não a valores de tempo; para selecionar por tempo use `getsampleusingtime`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples 2 and 3",
+      "pt": "Amostras 2 e 3"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\ns = getsamples(ts, 2:3);\ndisp(s.Time')\ndisp(s.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "getdatasamples",
+    "getsampleusingtime",
+    "timeseries",
+    "resample",
+    "addsample"
+   ]
+  },
+  "getsampleusingtime": {
+   "summary": {
+    "en": "Subset of a timeseries between two time values.",
+    "pt": "Subconjunto de uma timeseries entre dois valores de tempo."
+   },
+   "syntax": [
+    {
+     "code": "tsout = getsampleusingtime(ts, t)",
+     "en": "Returns the sample at time `t`.",
+     "pt": "Retorna a amostra no tempo `t`."
+    },
+    {
+     "code": "tsout = getsampleusingtime(ts, t1, t2)",
+     "en": "Returns the samples with time from `t1` to `t2`.",
+     "pt": "Retorna as amostras com tempo de `t1` a `t2`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    },
+    {
+     "name": "t, t1, t2",
+     "en": "Time values, in the units of the series.",
+     "pt": "Valores de tempo, nas unidades da série."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the samples in the interval.",
+     "pt": "`timeseries` com as amostras no intervalo."
+    }
+   ],
+   "description": {
+    "en": "The limits are compared with the time vector of the series, and the samples that fall inside the interval are returned, including those on the limits. Use `getsamples` to select by position instead.",
+    "pt": "Os limites são comparados com o vetor de tempo da série, e as amostras dentro do intervalo são retornadas, inclusive as que estão nos limites. Use `getsamples` para selecionar por posição."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Interval in time",
+      "pt": "Intervalo no tempo"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nx = getsampleusingtime(ts, 1, 3);\ndisp(x.Time')\ndisp(x.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "getsamples",
+    "getdatasamples",
+    "resample",
+    "timeseries",
+    "gettsbetweenevents"
+   ]
+  },
+  "gettimeseriesnames": {
+   "summary": {
+    "en": "Names of the time series inside a tscollection.",
+    "pt": "Nomes das séries temporais dentro de uma tscollection."
+   },
+   "syntax": [
+    {
+     "code": "names = gettimeseriesnames(tsc)",
+     "en": "Returns the member names as a cell array.",
+     "pt": "Retorna os nomes dos membros como cell array."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "tsc",
+     "en": "`tscollection` object.",
+     "pt": "Objeto `tscollection`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "Cell array of character vectors, one per member `timeseries`.",
+     "pt": "Cell array de vetores de caracteres, um por `timeseries` membro."
+    }
+   ],
+   "description": {
+    "en": "A `tscollection` groups time series that share one time vector. Each member is reachable by its `Name`, and `gettimeseriesnames` lists those names, in the order the members were added.",
+    "pt": "Uma `tscollection` agrupa séries temporais que compartilham o mesmo vetor de tempo. Cada membro é acessível pelo seu `Name`, e `gettimeseriesnames` lista esses nomes, na ordem em que os membros foram adicionados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Members of a collection",
+      "pt": "Membros de uma coleção"
+     },
+     "code": "tc = tscollection(timeseries([1; 2; 3], [0; 1; 2], 'Name', 'pos'));\ntc = addts(tc, timeseries([5; 6; 7], [0; 1; 2], 'Name', 'vel'));\ngettimeseriesnames(tc)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "tscollection",
+    "addts",
+    "removets",
+    "timeseries",
+    "settimeseriesnames"
+   ]
+  },
+  "gettsafteratevent": {
+   "summary": {
+    "en": "Part of a timeseries from an event onward, including the event time.",
+    "pt": "Parte de uma timeseries a partir de um evento, incluindo o instante do evento."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsafteratevent(ts, event)",
+     "en": "Returns the samples at or after the event, named by `event` (or its index).",
+     "pt": "Retorna as amostras no instante do evento ou depois dele, nomeado por `event` (ou seu índice)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least one event.",
+     "pt": "`timeseries` com ao menos um evento."
+    },
+    {
+     "name": "event",
+     "en": "Event name as text, or the event index.",
+     "pt": "Nome do evento como texto, ou o índice do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the selected samples.",
+     "pt": "`timeseries` com as amostras selecionadas."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. Samples whose time equals or exceeds the event time are kept. Compare `gettsafterevent`, which keeps only samples strictly later.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. São mantidas as amostras cujo tempo é igual ou maior que o do evento. Compare com `gettsafterevent`, que mantém apenas amostras estritamente posteriores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples from an event on",
+      "pt": "Amostras a partir de um evento"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'start', 1.5);\nts = addevent(ts, 'stop', 3.5);\nr = gettsafteratevent(ts, 'start');\ndisp(r.Time')\ndisp(r.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "gettsafterevent",
+    "gettsbeforeatevent",
+    "gettsatevent",
+    "gettsbetweenevents",
+    "addevent"
+   ]
+  },
+  "gettsafterevent": {
+   "summary": {
+    "en": "Part of a timeseries strictly after an event.",
+    "pt": "Parte de uma timeseries estritamente depois de um evento."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsafterevent(ts, event)",
+     "en": "Returns the samples with time later than the event.",
+     "pt": "Retorna as amostras com tempo posterior ao do evento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least one event.",
+     "pt": "`timeseries` com ao menos um evento."
+    },
+    {
+     "name": "event",
+     "en": "Event name as text, or the event index.",
+     "pt": "Nome do evento como texto, ou o índice do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the selected samples.",
+     "pt": "`timeseries` com as amostras selecionadas."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. A sample that falls exactly on the event time is excluded; use `gettsafteratevent` to keep it.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. Uma amostra que cai exatamente no instante do evento é excluída; use `gettsafteratevent` para mantê-la."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples after an event",
+      "pt": "Amostras depois de um evento"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'start', 1.5);\nts = addevent(ts, 'stop', 3.5);\nr = gettsafterevent(ts, 'start');\ndisp(r.Time')\ndisp(r.Data')",
+     "silent": false
+    },
+    {
+     "title": {
+      "en": "Event on a sample",
+      "pt": "Evento sobre uma amostra"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'k', 2);\nr = gettsafterevent(ts, 'k');\ndisp(r.Time')",
+     "silent": false,
+     "note": {
+      "en": "The sample at time 2 is not included.",
+      "pt": "A amostra no tempo 2 não é incluída."
+     }
+    }
+   ],
+   "see": [
+    "gettsafteratevent",
+    "gettsbeforeevent",
+    "gettsatevent",
+    "gettsbetweenevents",
+    "addevent"
+   ]
+  },
+  "gettsatevent": {
+   "summary": {
+    "en": "Samples of a timeseries located exactly at an event time.",
+    "pt": "Amostras de uma timeseries situadas exatamente no instante de um evento."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsatevent(ts, event)",
+     "en": "Returns the samples whose time equals the event time.",
+     "pt": "Retorna as amostras cujo tempo é igual ao do evento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least one event.",
+     "pt": "`timeseries` com ao menos um evento."
+    },
+    {
+     "name": "event",
+     "en": "Event name as text, or the event index.",
+     "pt": "Nome do evento como texto, ou o índice do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the matching samples; empty if no sample has that time.",
+     "pt": "`timeseries` com as amostras correspondentes; vazia se nenhuma amostra tiver esse tempo."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. No interpolation is done: an event between two samples selects nothing.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. Não há interpolação: um evento entre duas amostras não seleciona nada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Event on a sample",
+      "pt": "Evento sobre uma amostra"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'k', 2);\nr = gettsatevent(ts, 'k');\ndisp(r.Time)\ndisp(r.Data)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "gettsafteratevent",
+    "gettsbeforeatevent",
+    "gettsbetweenevents",
+    "addevent",
+    "delevent"
+   ]
+  },
+  "gettsbeforeatevent": {
+   "summary": {
+    "en": "Part of a timeseries up to an event, including the event time.",
+    "pt": "Parte de uma timeseries até um evento, incluindo o instante do evento."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsbeforeatevent(ts, event)",
+     "en": "Returns the samples at or before the event.",
+     "pt": "Retorna as amostras no instante do evento ou antes dele."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least one event.",
+     "pt": "`timeseries` com ao menos um evento."
+    },
+    {
+     "name": "event",
+     "en": "Event name as text, or the event index.",
+     "pt": "Nome do evento como texto, ou o índice do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the selected samples.",
+     "pt": "`timeseries` com as amostras selecionadas."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. Samples with time up to and including the event time are kept. Compare `gettsbeforeevent`, which keeps only strictly earlier samples.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. São mantidas as amostras com tempo até o do evento, inclusive. Compare com `gettsbeforeevent`, que mantém apenas amostras estritamente anteriores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples up to an event",
+      "pt": "Amostras até um evento"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'start', 1.5);\nts = addevent(ts, 'stop', 3.5);\nr = gettsbeforeatevent(ts, 'stop');\ndisp(r.Time')\ndisp(r.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "gettsbeforeevent",
+    "gettsafteratevent",
+    "gettsatevent",
+    "gettsbetweenevents",
+    "addevent"
+   ]
+  },
+  "gettsbeforeevent": {
+   "summary": {
+    "en": "Part of a timeseries strictly before an event.",
+    "pt": "Parte de uma timeseries estritamente antes de um evento."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsbeforeevent(ts, event)",
+     "en": "Returns the samples with time earlier than the event.",
+     "pt": "Retorna as amostras com tempo anterior ao do evento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least one event.",
+     "pt": "`timeseries` com ao menos um evento."
+    },
+    {
+     "name": "event",
+     "en": "Event name as text, or the event index.",
+     "pt": "Nome do evento como texto, ou o índice do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the selected samples.",
+     "pt": "`timeseries` com as amostras selecionadas."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. A sample exactly at the event time is excluded; use `gettsbeforeatevent` to keep it.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. Uma amostra exatamente no instante do evento é excluída; use `gettsbeforeatevent` para mantê-la."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples before an event",
+      "pt": "Amostras antes de um evento"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'start', 1.5);\nts = addevent(ts, 'stop', 3.5);\nr = gettsbeforeevent(ts, 'stop');\ndisp(r.Time')\ndisp(r.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "gettsbeforeatevent",
+    "gettsafterevent",
+    "gettsatevent",
+    "gettsbetweenevents",
+    "addevent"
+   ]
+  },
+  "gettsbetweenevents": {
+   "summary": {
+    "en": "Part of a timeseries lying between two events.",
+    "pt": "Parte de uma timeseries situada entre dois eventos."
+   },
+   "syntax": [
+    {
+     "code": "tsout = gettsbetweenevents(ts, event1, event2)",
+     "en": "Returns the samples between the times of the two events.",
+     "pt": "Retorna as amostras entre os instantes dos dois eventos."
+    },
+    {
+     "code": "tsout = gettsbetweenevents(ts, n1, n2)",
+     "en": "Selects the events by index.",
+     "pt": "Seleciona os eventos pelo índice."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` with at least two events.",
+     "pt": "`timeseries` com ao menos dois eventos."
+    },
+    {
+     "name": "event1, event2",
+     "en": "Event names as text, or event indices.",
+     "pt": "Nomes de eventos como texto, ou índices de eventos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "`timeseries` with the samples in the interval.",
+     "pt": "`timeseries` com as amostras no intervalo."
+    }
+   ],
+   "description": {
+    "en": "Events are added with `addevent`. The result is a new `timeseries`; its `Time` and `Data` hold the selected samples. The interval runs from the time of the first event to the time of the second.",
+    "pt": "Os eventos são adicionados com `addevent`. O resultado é uma nova `timeseries`; seus `Time` e `Data` guardam as amostras selecionadas. O intervalo vai do tempo do primeiro evento ao do segundo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Between two events",
+      "pt": "Entre dois eventos"
+     },
+     "code": "ts = timeseries((10:10:50)', (0:4)');\nts = addevent(ts, 'start', 1.5);\nts = addevent(ts, 'stop', 3.5);\nr = gettsbetweenevents(ts, 'start', 'stop');\ndisp(r.Time')\ndisp(r.Data')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "gettsafterevent",
+    "gettsbeforeevent",
+    "getsampleusingtime",
+    "addevent",
+    "timeseries"
+   ]
+  },
+  "getvaropts": {
+   "summary": {
+    "en": "Import options of selected variables in an import-options object.",
+    "pt": "Opções de importação de variáveis selecionadas em um objeto de opções de importação."
+   },
+   "syntax": [
+    {
+     "code": "vo = getvaropts(opts, vars)",
+     "en": "Returns the variable import options for the named variables (or indices).",
+     "pt": "Retorna as opções de importação das variáveis indicadas (nomes ou índices)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "opts",
+     "en": "Import options object, such as one made by `detectImportOptions` or `delimitedTextImportOptions`.",
+     "pt": "Objeto de opções de importação, como o criado por `detectImportOptions` ou `delimitedTextImportOptions`."
+    },
+    {
+     "name": "vars",
+     "en": "Variable name, cell array of names, or numeric indices.",
+     "pt": "Nome de variável, cell array de nomes ou índices numéricos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "vo",
+     "en": "A variable-options object (for example `NumericVariableImportOptions`) for one variable, or a cell array of them for several.",
+     "pt": "Um objeto de opções de variável (por exemplo `NumericVariableImportOptions`) para uma variável, ou um cell array deles para várias."
+    }
+   ],
+   "description": {
+    "en": "The returned object lists how a column is read: its `Type`, the `FillValue` used for missing entries, strings treated as missing, and type-specific settings such as the decimal separator for numbers. Change them with `setvaropts` and pass the modified `opts` to `readtable`.",
+    "pt": "O objeto retornado lista como uma coluna é lida: seu `Type`, o `FillValue` usado para entradas ausentes, textos tratados como ausentes e ajustes específicos do tipo, como o separador decimal dos números. Altere-os com `setvaropts` e passe o `opts` modificado a `readtable`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Options of one variable",
+      "pt": "Opções de uma variável"
+     },
+     "code": "opts = delimitedTextImportOptions('NumVariables', 2);\nopts.VariableNames = {'id', 'score'};\nopts = setvartype(opts, 'score', 'double');\nv = getvaropts(opts, 'score');\ndisp(v.Type)\ndisp(v.FillValue)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "setvaropts",
+    "setvartype",
+    "detectImportOptions",
+    "readtable",
+    "delimitedTextImportOptions"
+   ]
+  },
+  "groupcounts": {
+   "summary": {
+    "en": "Counts how many rows fall in each group of a table or vector.",
+    "pt": "Conta quantas linhas há em cada grupo de uma tabela ou vetor."
+   },
+   "syntax": [
+    {
+     "code": "G = groupcounts(A)",
+     "en": "Counts the occurrences of each distinct value of a vector.",
+     "pt": "Conta as ocorrências de cada valor distinto de um vetor."
+    },
+    {
+     "code": "G = groupcounts(T, groupvars)",
+     "en": "Counts rows of a table for each combination of the grouping variables.",
+     "pt": "Conta as linhas de uma tabela para cada combinação das variáveis de agrupamento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, string or categorical vector.",
+     "pt": "Vetor numérico, string ou categorical."
+    },
+    {
+     "name": "T",
+     "en": "Table.",
+     "pt": "Tabela."
+    },
+    {
+     "name": "groupvars",
+     "en": "Name(s) of the grouping variables.",
+     "pt": "Nome(s) das variáveis de agrupamento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "For a table: a table with the group values, `GroupCount` and `Percent`. For a vector: the counts as a column.",
+     "pt": "Para uma tabela: uma tabela com os valores dos grupos, `GroupCount` e `Percent`. Para um vetor: as contagens em coluna."
+    }
+   ],
+   "description": {
+    "en": "Groups are formed from the distinct values of the grouping variables and listed in sorted order. `Percent` is the share of all rows, in percent, and so sums to 100. For more statistics per group, such as means and sums, use `groupsummary`.",
+    "pt": "Os grupos são formados pelos valores distintos das variáveis de agrupamento e listados em ordem classificada. `Percent` é a fatia do total de linhas, em porcentagem, e portanto soma 100. Para mais estatísticas por grupo, como médias e somas, use `groupsummary`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rows per category",
+      "pt": "Linhas por categoria"
+     },
+     "code": "tb = table(categorical({'a'; 'b'; 'a'; 'c'; 'a'}), [1; 2; 3; 4; 5], 'VariableNames', {'g', 'v'});\ngroupcounts(tb, 'g')\ngroupcounts([1 1 2 3 3 3]')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "groupsummary",
+    "findgroups",
+    "unique",
+    "histcounts",
+    "accumarray"
+   ]
+  },
+  "groupfilter": {
+   "summary": {
+    "en": "Keeps only the rows of groups that satisfy a condition.",
+    "pt": "Mantém apenas as linhas dos grupos que satisfazem uma condição."
+   },
+   "syntax": [
+    {
+     "code": "B = groupfilter(T, groupvars, fun)",
+     "en": "Applies `fun` to the data of each group and keeps the groups for which it returns true.",
+     "pt": "Aplica `fun` aos dados de cada grupo e mantém os grupos para os quais retorna verdadeiro."
+    },
+    {
+     "code": "B = groupfilter(T, groupvars, fun, datavars)",
+     "en": "Passes only the listed data variables to `fun`.",
+     "pt": "Passa a `fun` apenas as variáveis de dados indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table.",
+     "pt": "Tabela."
+    },
+    {
+     "name": "groupvars",
+     "en": "Variable(s) that define the groups.",
+     "pt": "Variável(is) que definem os grupos."
+    },
+    {
+     "name": "fun",
+     "en": "Function handle receiving the group's values and returning a logical scalar, or a logical vector with one entry per row.",
+     "pt": "Function handle que recebe os valores do grupo e retorna um escalar lógico, ou um vetor lógico com uma entrada por linha."
+    },
+    {
+     "name": "datavars",
+     "en": "Variable(s) given to `fun`.",
+     "pt": "Variável(is) entregues a `fun`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Table with the rows of the groups that passed, in original order.",
+     "pt": "Tabela com as linhas dos grupos aprovados, na ordem original."
+    }
+   ],
+   "description": {
+    "en": "This is a filter at the group level. For example, `groupfilter(T, 'g', @(x) numel(x) > 1, 'v')` drops every group that has a single row. The test sees the whole group at once, which is what separates it from logical indexing on single rows.",
+    "pt": "É um filtro no nível do grupo. Por exemplo, `groupfilter(T, 'g', @(x) numel(x) > 1, 'v')` descarta todo grupo com uma única linha. O teste enxerga o grupo inteiro de uma vez, o que o distingue da indexação lógica em linhas isoladas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dropping small groups",
+      "pt": "Descartando grupos pequenos"
+     },
+     "code": "tb = table(categorical({'a'; 'b'; 'a'; 'c'; 'a'}), [1; 2; 3; 4; 5], 'VariableNames', {'g', 'v'});\ngroupfilter(tb, 'g', @(x) numel(x) > 1, 'v')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "groupsummary",
+    "grouptransform",
+    "groupcounts",
+    "findgroups",
+    "splitapply"
+   ]
+  },
+  "groupsummary": {
+   "summary": {
+    "en": "Summary statistics of table variables, computed per group.",
+    "pt": "Estatísticas resumo de variáveis de uma tabela, calculadas por grupo."
+   },
+   "syntax": [
+    {
+     "code": "G = groupsummary(T, groupvars, method)",
+     "en": "Applies a statistic to every data variable, per group.",
+     "pt": "Aplica uma estatística a todas as variáveis de dados, por grupo."
+    },
+    {
+     "code": "G = groupsummary(T, groupvars, method, datavars)",
+     "en": "Restricts the statistic to the listed variables.",
+     "pt": "Restringe a estatística às variáveis indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table.",
+     "pt": "Tabela."
+    },
+    {
+     "name": "groupvars",
+     "en": "Variable(s) that define the groups.",
+     "pt": "Variável(is) que definem os grupos."
+    },
+    {
+     "name": "method",
+     "en": "Name such as `'mean'`, `'sum'`, `'min'`, `'max'`, `'median'`, a cell array of several names, or a function handle.",
+     "pt": "Nome como `'mean'`, `'sum'`, `'min'`, `'max'`, `'median'`, um cell array de vários nomes, ou um function handle."
+    },
+    {
+     "name": "datavars",
+     "en": "Variable(s) to summarize.",
+     "pt": "Variável(is) a resumir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Table with one row per group: the group values, `GroupCount`, and one column per statistic named `method_variable`, such as `mean_v`.",
+     "pt": "Tabela com uma linha por grupo: os valores dos grupos, `GroupCount` e uma coluna por estatística nomeada `método_variável`, como `mean_v`."
+    }
+   ],
+   "description": {
+    "en": "`groupsummary` is the table-oriented way to do a split-apply-combine step. Several methods can be requested at once, each giving its own column. Use `groupcounts` when only the counts matter and `grouptransform` when the result should keep the shape of the input.",
+    "pt": "`groupsummary` é a forma orientada a tabelas de fazer um passo dividir-aplicar-combinar. Vários métodos podem ser pedidos de uma vez, cada um gerando sua coluna. Use `groupcounts` quando só as contagens importam e `grouptransform` quando o resultado deve manter o formato da entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mean and max per group",
+      "pt": "Média e máximo por grupo"
+     },
+     "code": "tb = table(categorical({'a'; 'b'; 'a'; 'c'; 'a'}), [1; 2; 3; 4; 5], 'VariableNames', {'g', 'v'});\ngroupsummary(tb, 'g', {'mean', 'max'}, 'v')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "groupcounts",
+    "grouptransform",
+    "groupfilter",
+    "findgroups",
+    "splitapply",
+    "varfun"
+   ]
+  },
+  "grouptransform": {
+   "summary": {
+    "en": "Transforms table data group by group, keeping the original row layout.",
+    "pt": "Transforma dados de uma tabela grupo a grupo, mantendo a disposição original das linhas."
+   },
+   "syntax": [
+    {
+     "code": "B = grouptransform(T, groupvars, method)",
+     "en": "Replaces the data variables by the transformed values.",
+     "pt": "Substitui as variáveis de dados pelos valores transformados."
+    },
+    {
+     "code": "B = grouptransform(T, groupvars, method, datavars)",
+     "en": "Transforms only the listed variables.",
+     "pt": "Transforma apenas as variáveis indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table.",
+     "pt": "Tabela."
+    },
+    {
+     "name": "groupvars",
+     "en": "Variable(s) that define the groups.",
+     "pt": "Variável(is) que definem os grupos."
+    },
+    {
+     "name": "method",
+     "en": "Function handle applied to the values of each group. It returns a vector of the same length, or a scalar that is repeated for the group.",
+     "pt": "Function handle aplicado aos valores de cada grupo. Retorna um vetor de mesmo comprimento, ou um escalar repetido para o grupo."
+    },
+    {
+     "name": "datavars",
+     "en": "Variable(s) to transform.",
+     "pt": "Variável(is) a transformar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Table with the same number of rows and order as `T`.",
+     "pt": "Tabela com o mesmo número de linhas e ordem de `T`."
+    }
+   ],
+   "description": {
+    "en": "Unlike `groupsummary`, which collapses each group to one row, `grouptransform` returns a value for every original row. Typical uses are centering by group (`@(x) x - mean(x)`) or normalizing within each group.",
+    "pt": "Diferente de `groupsummary`, que reduz cada grupo a uma linha, `grouptransform` retorna um valor para cada linha original. Usos típicos são centralizar por grupo (`@(x) x - mean(x)`) ou normalizar dentro de cada grupo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Centering by group",
+      "pt": "Centralizando por grupo"
+     },
+     "code": "tb = table(categorical({'a'; 'b'; 'a'; 'c'; 'a'}), [1; 2; 3; 4; 5], 'VariableNames', {'g', 'v'});\ngrouptransform(tb, 'g', @(x) x - mean(x), 'v')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "groupsummary",
+    "groupfilter",
+    "groupcounts",
+    "findgroups",
+    "splitapply"
+   ]
+  },
+  "height": {
+   "summary": {
+    "en": "Number of rows of a table.",
+    "pt": "Número de linhas de uma tabela."
+   },
+   "syntax": [
+    {
+     "code": "h = height(T)",
+     "en": "Returns the number of rows.",
+     "pt": "Retorna o número de linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table or timetable.",
+     "pt": "Tabela ou timetable."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Nonnegative integer scalar.",
+     "pt": "Escalar inteiro não negativo."
+    }
+   ],
+   "description": {
+    "en": "`height(T)` equals `size(T, 1)`, and reads more naturally for tables. Its companion is `width`, which counts the variables.",
+    "pt": "`height(T)` equivale a `size(T, 1)` e é mais natural para tabelas. Sua companheira é `width`, que conta as variáveis."
+   },
+   "notes": {
+    "en": "In MATLAB `height` also accepts arrays and returns their number of rows. In MatLivre the argument must be a table or timetable; use `size(A, 1)` for arrays.",
+    "pt": "No MATLAB, `height` também aceita arrays e retorna o número de linhas. Em MatLivre o argumento deve ser uma tabela ou timetable; use `size(A, 1)` para arrays."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rows of a table",
+      "pt": "Linhas de uma tabela"
+     },
+     "code": "T = table([1; 2; 3], {'a'; 'b'; 'c'}, 'VariableNames', {'x', 'y'});\nheight(T)\nT(end+1, :) = {4, 'd'};\nheight(T)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "width",
+    "size",
+    "numel",
+    "table",
+    "summary"
+   ]
+  },
+  "hex2dec": {
+   "summary": {
+    "en": "Converts hexadecimal text to a decimal number.",
+    "pt": "Converte texto hexadecimal em número decimal."
+   },
+   "syntax": [
+    {
+     "code": "d = hex2dec(h)",
+     "en": "Returns the value of the hexadecimal digits in `h`.",
+     "pt": "Retorna o valor dos dígitos hexadecimais em `h`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Character vector, string, or cell array of them; digits `0`-`9` and `A`-`F`, upper or lower case.",
+     "pt": "Vetor de caracteres, string, ou cell array deles; dígitos `0`-`9` e `A`-`F`, maiúsculos ou minúsculos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Double column: one value per input string.",
+     "pt": "Coluna double: um valor por string de entrada."
+    }
+   ],
+   "description": {
+    "en": "Each string is read as a base-16 number. Because the result is a double, only values up to `flintmax` (`2^53`) are exact; use `hex2num` to read a 16-digit pattern as a floating-point number instead. The reverse conversion is `dec2hex`.",
+    "pt": "Cada string é lida como um número em base 16. Como o resultado é double, só valores até `flintmax` (`2^53`) são exatos; use `hex2num` para ler um padrão de 16 dígitos como número de ponto flutuante. A conversão inversa é `dec2hex`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hex to decimal",
+      "pt": "Hexadecimal para decimal"
+     },
+     "code": "hex2dec('FF')\nhex2dec('7fff')\nhex2dec({'A'; '1F'; '100'})",
+     "silent": false
+    }
+   ],
+   "see": [
+    "dec2hex",
+    "hex2num",
+    "bin2dec",
+    "dec2bin",
+    "num2hex"
+   ]
+  },
+  "hex2num": {
+   "summary": {
+    "en": "Converts a hexadecimal bit pattern to a floating-point number.",
+    "pt": "Converte um padrão de bits hexadecimal em número de ponto flutuante."
+   },
+   "syntax": [
+    {
+     "code": "x = hex2num(h)",
+     "en": "Reads `h` as the IEEE 754 double-precision bits of a number.",
+     "pt": "Lê `h` como os bits IEEE 754 de precisão dupla de um número."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Character vector or string of up to 16 hex digits. Shorter text is padded with zeros on the right.",
+     "pt": "Vetor de caracteres ou string com até 16 dígitos hexadecimais. Texto mais curto é completado com zeros à direita."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "Double value whose 64-bit representation is `h`.",
+     "pt": "Valor double cuja representação de 64 bits é `h`."
+    }
+   ],
+   "description": {
+    "en": "The 16 hex digits give the sign, exponent and fraction fields of a double. For instance `3ff0000000000000` is `1`, and `c000000000000000` is `-2`. This lets you build exact special values or inspect rounding. The reverse conversion is `num2hex`.",
+    "pt": "Os 16 dígitos hexadecimais dão os campos de sinal, expoente e fração de um double. Por exemplo, `3ff0000000000000` é `1` e `c000000000000000` é `-2`. Isso permite construir valores especiais exatos ou inspecionar arredondamentos. A conversão inversa é `num2hex`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Bit patterns",
+      "pt": "Padrões de bits"
+     },
+     "code": "hex2num('3ff0000000000000')\nhex2num('3ff8000000000000')\nhex2num('c000000000000000')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "num2hex",
+    "hex2dec",
+    "dec2hex",
+    "typecast",
+    "eps"
+   ]
+  },
+  "hms": {
+   "summary": {
+    "en": "Hour, minute and second of a datetime.",
+    "pt": "Hora, minuto e segundo de um datetime."
+   },
+   "syntax": [
+    {
+     "code": "[h, m, s] = hms(t)",
+     "en": "Returns the time-of-day components of `t`.",
+     "pt": "Retorna os componentes da hora do dia de `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`datetime` array.",
+     "pt": "Array `datetime`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h, m, s",
+     "en": "Numeric arrays the size of `t`: hour (0 to 23), minute (0 to 59) and second (0 up to 60, with fraction).",
+     "pt": "Arrays numéricos do tamanho de `t`: hora (0 a 23), minuto (0 a 59) e segundo (0 a 60, com fração)."
+    }
+   ],
+   "description": {
+    "en": "`hms` returns the time-of-day parts of each datetime. Asking for fewer outputs returns the leading ones, so `h = hms(t)` gives only the hour. The date part is ignored.",
+    "pt": "`hms` retorna as partes da hora do dia de cada datetime. Pedir menos saídas retorna as primeiras, então `h = hms(t)` dá só a hora. A parte da data é ignorada."
+   },
+   "notes": {
+    "en": "In MatLivre `hms` takes a `datetime`; it does not accept a `duration`.",
+    "pt": "Em MatLivre, `hms` recebe um `datetime`; ele não aceita uma `duration`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Splitting a time",
+      "pt": "Separando um horário"
+     },
+     "code": "t = datetime(2024, 3, 5, 14, 30, 15);\n[h, m, s] = hms(t)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ymd",
+    "hour",
+    "minute",
+    "second",
+    "datetime"
+   ]
+  },
+  "hour": {
+   "summary": {
+    "en": "Hour of the day of a datetime.",
+    "pt": "Hora do dia de um datetime."
+   },
+   "syntax": [
+    {
+     "code": "h = hour(t)",
+     "en": "Returns the hour component, 0 to 23.",
+     "pt": "Retorna o componente da hora, de 0 a 23."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`datetime` array.",
+     "pt": "Array `datetime`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Numeric array of the same size as `t`.",
+     "pt": "Array numérico do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`hour` extracts just the hour on a 24-hour clock. Minutes and seconds are ignored, and the value is not rounded. To get the hour count of a `duration`, use `hours` instead.",
+    "pt": "`hour` extrai apenas a hora em relógio de 24 horas. Minutos e segundos são ignorados, e o valor não é arredondado. Para obter a quantidade de horas de uma `duration`, use `hours`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hours of several times",
+      "pt": "Horas de vários instantes"
+     },
+     "code": "hour(datetime(2024, 1, 1, [0 13 23], 5, 0))\nhour(datetime(2024, 1, 1, 13, 45, 0))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "minute",
+    "second",
+    "hms",
+    "hours",
+    "datetime"
+   ]
+  },
+  "hours": {
+   "summary": {
+    "en": "Duration in hours, or the number of hours in a duration.",
+    "pt": "Duração em horas, ou o número de horas de uma duração."
+   },
+   "syntax": [
+    {
+     "code": "d = hours(x)",
+     "en": "Creates a duration of `x` hours from a number.",
+     "pt": "Cria uma duração de `x` horas a partir de um número."
+    },
+    {
+     "code": "x = hours(d)",
+     "en": "Converts a duration `d` to a number of hours.",
+     "pt": "Converte uma duração `d` em um número de horas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array of hours (may be fractional).",
+     "pt": "Array numérico de horas (pode ser fracionário)."
+    },
+    {
+     "name": "d",
+     "en": "`duration` array.",
+     "pt": "Array `duration`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "`duration` array in hours display format.",
+     "pt": "Array `duration` exibido em horas."
+    },
+    {
+     "name": "x",
+     "en": "Double array.",
+     "pt": "Array double."
+    }
+   ],
+   "description": {
+    "en": "`hours(1.5)` is a duration of one and a half hours, and it combines with other durations or datetimes by ordinary arithmetic: `hours(2) + minutes(30)`. Applied to a duration, `hours` goes the other way and returns a plain number, so `hours(minutes(90))` is `1.5`.",
+    "pt": "`hours(1.5)` é uma duração de uma hora e meia, e se combina com outras durações ou datetimes por aritmética comum: `hours(2) + minutes(30)`. Aplicada a uma duração, `hours` faz o caminho inverso e retorna um número comum, então `hours(minutes(90))` é `1.5`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Both directions",
+      "pt": "Nos dois sentidos"
+     },
+     "code": "d = hours(90)\nhours(duration(2, 30, 0))\nhours(0.5) + minutes(15)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "minutes",
+    "seconds",
+    "days",
+    "duration",
+    "hour"
+   ]
+  },
+  "idealfilter": {
+   "summary": {
+    "en": "Applies an ideal frequency-domain filter to a timeseries.",
+    "pt": "Aplica um filtro ideal no domínio da frequência a uma timeseries."
+   },
+   "syntax": [
+    {
+     "code": "tsout = idealfilter(ts, interval, 'pass')",
+     "en": "Keeps the frequencies inside each interval.",
+     "pt": "Mantém as frequências dentro de cada intervalo."
+    },
+    {
+     "code": "tsout = idealfilter(ts, interval, 'notch')",
+     "en": "Removes the frequencies inside each interval.",
+     "pt": "Remove as frequências dentro de cada intervalo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    },
+    {
+     "name": "interval",
+     "en": "Two-column matrix of frequency bands `[low high]`, in cycles per time unit of the series.",
+     "pt": "Matriz de duas colunas com as faixas de frequência `[baixa alta]`, em ciclos por unidade de tempo da série."
+    },
+    {
+     "name": "'pass' | 'notch'",
+     "en": "Whether the bands are kept or removed.",
+     "pt": "Se as faixas são mantidas ou removidas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsout",
+     "en": "Filtered `timeseries` with the same time vector.",
+     "pt": "`timeseries` filtrada com o mesmo vetor de tempo."
+    }
+   ],
+   "description": {
+    "en": "The filter works in the frequency domain: the data are transformed with an FFT, the unwanted frequency bins are set to zero, and the inverse transform gives the filtered signal. The cut is perfectly sharp, which is why it is called ideal, but also why it can ring near abrupt changes.",
+    "pt": "O filtro atua no domínio da frequência: os dados passam por uma FFT, as frequências indesejadas são zeradas e a transformada inversa fornece o sinal filtrado. O corte é perfeitamente abrupto, daí o nome ideal, mas também por isso pode oscilar perto de mudanças bruscas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Low-pass of two tones",
+      "pt": "Passa-baixas de dois tons"
+     },
+     "code": "t = (0:7)';\ny = sin(2*pi*0.05*t) + sin(2*pi*0.4*t);\nf = idealfilter(timeseries(y, t), [0 0.2], 'pass');\ndisp(round(f.Data' * 1000) / 1000)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "filter",
+    "fft",
+    "ifft",
+    "timeseries",
+    "resample"
+   ]
+  },
+  "Inf": {
+   "summary": {
+    "en": "Positive infinity, as a scalar or an array of the requested size and class.",
+    "pt": "Infinito positivo, como escalar ou array do tamanho e da classe pedidos."
+   },
+   "syntax": [
+    {
+     "code": "x = Inf",
+     "en": "Returns the scalar infinity.",
+     "pt": "Retorna o infinito escalar."
+    },
+    {
+     "code": "X = Inf(n)",
+     "en": "Returns an `n`-by-`n` matrix of Inf.",
+     "pt": "Retorna uma matriz `n` por `n` de Inf."
+    },
+    {
+     "code": "X = Inf(sz1, ..., szN)",
+     "en": "Returns an array with the given dimensions.",
+     "pt": "Retorna um array com as dimensões dadas."
+    },
+    {
+     "code": "X = Inf(___, classname)",
+     "en": "Creates it as `'double'` or `'single'`.",
+     "pt": "Cria como `'double'` ou `'single'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n, sz1, ..., szN",
+     "en": "Dimensions of the result.",
+     "pt": "Dimensões do resultado."
+    },
+    {
+     "name": "classname",
+     "en": "`'double'` (default) or `'single'`.",
+     "pt": "`'double'` (padrão) ou `'single'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "X",
+     "en": "Array filled with `Inf`.",
+     "pt": "Array preenchido com `Inf`."
+    }
+   ],
+   "description": {
+    "en": "`Inf` arises from overflow and from division of a nonzero number by zero: `1/0` is `Inf`. It follows IEEE rules: `Inf + 1` is `Inf`, while `Inf - Inf` and `0 * Inf` are `NaN`. Use `isinf` to test for it, and `-Inf` for negative infinity.",
+    "pt": "`Inf` surge de estouro e da divisão de um número não nulo por zero: `1/0` é `Inf`. Segue as regras IEEE: `Inf + 1` é `Inf`, enquanto `Inf - Inf` e `0 * Inf` são `NaN`. Use `isinf` para testá-lo e `-Inf` para o infinito negativo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Creating and combining Inf",
+      "pt": "Criando e combinando Inf"
+     },
+     "code": "Inf(2, 3)\nclass(Inf('single'))\n1/0\nInf - Inf\nisinf([1 Inf -Inf NaN])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "NaN",
+    "isinf",
+    "isnan",
+    "isfinite",
+    "realmax"
+   ]
+  }
+ }
+}

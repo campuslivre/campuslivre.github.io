@@ -1,0 +1,1425 @@
+{
+ "functions": {
+  "bubblecloud": {
+   "summary": {
+    "en": "Draws a packed cloud of circles whose areas are proportional to the data values.",
+    "pt": "Desenha uma nuvem compacta de círculos com áreas proporcionais aos valores dos dados."
+   },
+   "syntax": [
+    {
+     "code": "bubblecloud(sz)",
+     "en": "Draws one bubble per element of the vector `sz`.",
+     "pt": "Desenha uma bolha por elemento do vetor `sz`."
+    },
+    {
+     "code": "bubblecloud(sz, labels)",
+     "en": "Labels each bubble.",
+     "pt": "Rotula cada bolha."
+    },
+    {
+     "code": "bubblecloud(tbl, sizevar, labelvar)",
+     "en": "Takes sizes and labels from variables of a table.",
+     "pt": "Obtém tamanhos e rótulos de variáveis de uma tabela."
+    },
+    {
+     "code": "b = bubblecloud(___)",
+     "en": "Also returns the `BubbleCloud` object.",
+     "pt": "Também retorna o objeto `BubbleCloud`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "sz",
+     "en": "Vector of non-negative values; a bigger value gives a bigger circle.",
+     "pt": "Vetor de valores não negativos; um valor maior dá um círculo maior."
+    },
+    {
+     "name": "labels",
+     "en": "Cell array or string array with one label per bubble.",
+     "pt": "Cell array ou array de strings com um rótulo por bolha."
+    },
+    {
+     "name": "tbl",
+     "en": "A table, with `sizevar` and `labelvar` naming its variables.",
+     "pt": "Uma tabela, com `sizevar` e `labelvar` nomeando suas variáveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "The `BubbleCloud` object.",
+     "pt": "O objeto `BubbleCloud`."
+    }
+   ],
+   "description": {
+    "en": "A bubble cloud shows the relative weight of categories. Each category is a circle whose area follows its value, and the circles are packed together with no axes. It reads quickly but values are hard to compare precisely, so label the bubbles.",
+    "pt": "Uma nuvem de bolhas mostra o peso relativo de categorias. Cada categoria é um círculo cuja área segue o seu valor, e os círculos são agrupados sem eixos. Lê-se rapidamente, mas é difícil comparar valores com precisão, então rotule as bolhas."
+   },
+   "notes": {
+    "en": "The circle layout is an approximation of MATLAB's, so positions can differ.",
+    "pt": "O arranjo dos círculos é uma aproximação do do MATLAB, então as posições podem diferir."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Labeled bubbles",
+      "pt": "Bolhas rotuladas"
+     },
+     "code": "sales = [120 80 45 200 60];\nnames = {'North', 'South', 'East', 'West', 'Center'};\nbubblecloud(sales, names)\ntitle('Sales by region')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bubblechart",
+    "donutchart",
+    "pie",
+    "wordcloud"
+   ]
+  },
+  "bubblelegend": {
+   "summary": {
+    "en": "Adds a legend that explains the bubble sizes of a bubble chart.",
+    "pt": "Adiciona uma legenda que explica os tamanhos das bolhas de um gráfico de bolhas."
+   },
+   "syntax": [
+    {
+     "code": "bubblelegend(title)",
+     "en": "Adds a bubble legend with the given title.",
+     "pt": "Adiciona uma legenda de bolhas com o título indicado."
+    },
+    {
+     "code": "bubblelegend(title, 'Location', loc)",
+     "en": "Places the legend at a location such as `'eastoutside'`.",
+     "pt": "Posiciona a legenda em um local como `'eastoutside'`."
+    },
+    {
+     "code": "bl = bubblelegend(___)",
+     "en": "Also returns the legend object.",
+     "pt": "Também retorna o objeto da legenda."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "title",
+     "en": "Title shown above the sample bubbles.",
+     "pt": "Título mostrado acima das bolhas de exemplo."
+    },
+    {
+     "name": "'Location'",
+     "en": "Position of the legend relative to the axes.",
+     "pt": "Posição da legenda em relação aos eixos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "bl",
+     "en": "A `BubbleLegend` object.",
+     "pt": "Um objeto `BubbleLegend`."
+    }
+   ],
+   "description": {
+    "en": "The legend shows three sample bubbles with the data values they stand for, so the reader can decode the size channel. Call it after `bubblechart` or `bubblechart3`; the sizes follow `bubblesize` and `bubblelim`.",
+    "pt": "A legenda mostra três bolhas de exemplo com os valores de dados que elas representam, para que o leitor decodifique o canal de tamanho. Chame-a depois de `bubblechart` ou `bubblechart3`; os tamanhos seguem `bubblesize` e `bubblelim`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Legend for sizes",
+      "pt": "Legenda para tamanhos"
+     },
+     "code": "bubblechart(1:4, [2 4 1 3], [10 40 20 80]);\nbl = bubblelegend('Population');\ndisp(class(bl))"
+    }
+   ],
+   "see": [
+    "bubblechart",
+    "bubblechart3",
+    "bubblesize",
+    "bubblelim",
+    "legend"
+   ]
+  },
+  "bubblelim": {
+   "summary": {
+    "en": "Sets the range of data values that the bubble sizes cover.",
+    "pt": "Define a faixa de valores de dados coberta pelos tamanhos das bolhas."
+   },
+   "syntax": [
+    {
+     "code": "bubblelim([lo hi])",
+     "en": "Maps data values from `lo` to `hi` onto the bubble size range.",
+     "pt": "Mapeia os valores de dados de `lo` a `hi` para a faixa de tamanhos das bolhas."
+    },
+    {
+     "code": "lims = bubblelim",
+     "en": "Returns the current limits.",
+     "pt": "Retorna os limites atuais."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[lo hi]",
+     "en": "Two-element vector with the lower and upper data limits, `lo < hi`.",
+     "pt": "Vetor de dois elementos com os limites inferior e superior dos dados, `lo < hi`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Current limits as a two-element vector.",
+     "pt": "Limites atuais como vetor de dois elementos."
+    }
+   ],
+   "description": {
+    "en": "By default the data range comes from the plotted sizes. Fixing it with `bubblelim` makes several charts share the same size scale, so equal values look equal across plots. Data outside the limits are drawn at the smallest or largest size.",
+    "pt": "Por padrão a faixa de dados vem dos tamanhos plotados. Fixá-la com `bubblelim` faz vários gráficos compartilharem a mesma escala de tamanho, de modo que valores iguais pareçam iguais entre os gráficos. Dados fora dos limites são desenhados no menor ou no maior tamanho."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fix the size scale",
+      "pt": "Fixar a escala de tamanho"
+     },
+     "code": "bubblechart(1:3, [1 3 2], [5 50 20]);\nlims = bubblelim([1 100])"
+    }
+   ],
+   "see": [
+    "bubblesize",
+    "bubblechart",
+    "bubblelegend"
+   ]
+  },
+  "bubblesize": {
+   "summary": {
+    "en": "Sets the smallest and largest bubble size, in points.",
+    "pt": "Define o menor e o maior tamanho de bolha, em pontos."
+   },
+   "syntax": [
+    {
+     "code": "bubblesize([minsize maxsize])",
+     "en": "Sets the range of on-screen bubble diameters.",
+     "pt": "Define a faixa de diâmetros das bolhas na tela."
+    },
+    {
+     "code": "sizes = bubblesize",
+     "en": "Returns the current range.",
+     "pt": "Retorna a faixa atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[minsize maxsize]",
+     "en": "Two positive numbers, in points, with `minsize <= maxsize`.",
+     "pt": "Dois números positivos, em pontos, com `minsize <= maxsize`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "sizes",
+     "en": "Current range as a two-element vector.",
+     "pt": "Faixa atual como vetor de dois elementos."
+    }
+   ],
+   "description": {
+    "en": "The smallest data value (or the lower `bubblelim`) is drawn with diameter `minsize` and the largest with `maxsize`; values in between are scaled so that the area is proportional to the data.",
+    "pt": "O menor valor de dados (ou o limite inferior de `bubblelim`) é desenhado com diâmetro `minsize` e o maior com `maxsize`; os valores intermediários são escalados para que a área seja proporcional aos dados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Larger bubbles",
+      "pt": "Bolhas maiores"
+     },
+     "code": "bubblechart(1:3, [1 3 2], [5 50 20]);\nsizes = bubblesize([8 40])"
+    }
+   ],
+   "see": [
+    "bubblelim",
+    "bubblechart",
+    "bubblelegend"
+   ]
+  },
+  "clabel": {
+   "summary": {
+    "en": "Adds value labels to the lines of a contour plot.",
+    "pt": "Adiciona rótulos de valor às linhas de um gráfico de contorno."
+   },
+   "syntax": [
+    {
+     "code": "clabel(C, h)",
+     "en": "Labels the contour lines in `h` using the matrix `C`.",
+     "pt": "Rotula as linhas de contorno em `h` usando a matriz `C`."
+    },
+    {
+     "code": "clabel(C, h, v)",
+     "en": "Labels only the levels listed in `v`.",
+     "pt": "Rotula apenas os níveis listados em `v`."
+    },
+    {
+     "code": "clabel(C, h, 'manual')",
+     "en": "Selects label positions with the mouse.",
+     "pt": "Seleciona as posições dos rótulos com o mouse."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "Contour matrix returned by `contour`, `contourf` or `contourc`.",
+     "pt": "Matriz de contorno retornada por `contour`, `contourf` ou `contourc`."
+    },
+    {
+     "name": "h",
+     "en": "Contour object returned as the second output of `contour`.",
+     "pt": "Objeto de contorno retornado como segunda saída de `contour`."
+    },
+    {
+     "name": "v",
+     "en": "Vector of levels to label.",
+     "pt": "Vetor de níveis a rotular."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each label is the numeric value of its level, placed on the line. Get both `C` and `h` from the contour call: `[C, h] = contour(Z)`. Alternatively, set the `ShowText` property of the contour object to `'on'`.",
+    "pt": "Cada rótulo é o valor numérico do seu nível, colocado sobre a linha. Obtenha `C` e `h` na chamada de contorno: `[C, h] = contour(Z)`. Como alternativa, defina a propriedade `ShowText` do objeto de contorno como `'on'`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Label the levels",
+      "pt": "Rotular os níveis"
+     },
+     "code": "[X, Y] = meshgrid(-2:0.25:2);\nZ = X.^2 + Y.^2;\n[C, h] = contour(X, Y, Z, [1 2 3]);\nclabel(C, h)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "contour",
+    "contourf",
+    "contour3",
+    "contourc"
+   ]
+  },
+  "clearpoints": {
+   "summary": {
+    "en": "Removes all the points of an animated line.",
+    "pt": "Remove todos os pontos de uma linha animada."
+   },
+   "syntax": [
+    {
+     "code": "clearpoints(h)",
+     "en": "Empties the animated line `h`; the line object remains.",
+     "pt": "Esvazia a linha animada `h`; o objeto da linha permanece."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Handle returned by `animatedline`.",
+     "pt": "Handle retornado por `animatedline`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "After clearing, the line is still in the axes with its color and width, ready to receive new points with `addpoints`. It is faster and tidier than deleting and recreating the line.",
+    "pt": "Depois de limpa, a linha continua nos eixos com sua cor e largura, pronta para receber novos pontos com `addpoints`. É mais rápido e mais limpo do que apagar e recriar a linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clear and refill",
+      "pt": "Limpar e reencher"
+     },
+     "code": "h = animatedline;\naddpoints(h, 1:5, (1:5).^2);\n[x, y] = getpoints(h);\ndisp(numel(x))\nclearpoints(h)\n[x, y] = getpoints(h);\ndisp(numel(x))"
+    }
+   ],
+   "see": [
+    "animatedline",
+    "addpoints",
+    "getpoints",
+    "drawnow"
+   ]
+  },
+  "comet": {
+   "summary": {
+    "en": "Animates a 2-D curve with a moving head and a trailing tail.",
+    "pt": "Anima uma curva 2-D com uma cabeça em movimento e uma cauda que a segue."
+   },
+   "syntax": [
+    {
+     "code": "comet(y)",
+     "en": "Animates `y` against its index.",
+     "pt": "Anima `y` contra o seu índice."
+    },
+    {
+     "code": "comet(x, y)",
+     "en": "Animates the path `(x, y)`.",
+     "pt": "Anima o caminho `(x, y)`."
+    },
+    {
+     "code": "comet(x, y, p)",
+     "en": "Sets the tail length as a fraction `p` of the path; the default is 0.1.",
+     "pt": "Define o comprimento da cauda como fração `p` do caminho; o padrão é 0,1."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Vectors of the same length with the path coordinates.",
+     "pt": "Vetores de mesmo comprimento com as coordenadas do caminho."
+    },
+    {
+     "name": "p",
+     "en": "Tail length as a fraction of the number of points.",
+     "pt": "Comprimento da cauda como fração do número de pontos."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The head is drawn point by point along the path, with the recent points left behind as a tail and the whole path kept as a thin line at the end. It is meant for showing the order in which a trajectory is traversed.",
+    "pt": "A cabeça é desenhada ponto a ponto ao longo do caminho, com os pontos recentes deixados atrás como cauda e o caminho inteiro mantido como uma linha fina no final. Serve para mostrar a ordem em que uma trajetória é percorrida."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A spiral",
+      "pt": "Uma espiral"
+     },
+     "code": "t = linspace(0, 6*pi, 200);\ncomet(t.*cos(t), t.*sin(t))",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "comet3",
+    "plot",
+    "animatedline",
+    "drawnow"
+   ]
+  },
+  "comet3": {
+   "summary": {
+    "en": "Animates a 3-D curve with a moving head and a trailing tail.",
+    "pt": "Anima uma curva 3-D com uma cabeça em movimento e uma cauda que a segue."
+   },
+   "syntax": [
+    {
+     "code": "comet3(z)",
+     "en": "Animates `z` against its index.",
+     "pt": "Anima `z` contra o seu índice."
+    },
+    {
+     "code": "comet3(x, y, z)",
+     "en": "Animates the path `(x, y, z)`.",
+     "pt": "Anima o caminho `(x, y, z)`."
+    },
+    {
+     "code": "comet3(x, y, z, p)",
+     "en": "Sets the tail length as a fraction `p` of the path.",
+     "pt": "Define o comprimento da cauda como fração `p` do caminho."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y, z",
+     "en": "Vectors of the same length with the path coordinates.",
+     "pt": "Vetores de mesmo comprimento com as coordenadas do caminho."
+    },
+    {
+     "name": "p",
+     "en": "Tail length as a fraction of the number of points.",
+     "pt": "Comprimento da cauda como fração do número de pontos."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`comet3` is the three-dimensional counterpart of `comet`. It traces the path in 3-D axes, which is useful for trajectories such as a helix or an attractor.",
+    "pt": "`comet3` é a contrapartida tridimensional de `comet`. Ele traça o caminho em eixos 3-D, o que é útil para trajetórias como uma hélice ou um atrator."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A helix",
+      "pt": "Uma hélice"
+     },
+     "code": "t = linspace(0, 8*pi, 300);\ncomet3(cos(t), sin(t), t)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "comet",
+    "plot3",
+    "animatedline",
+    "drawnow"
+   ]
+  },
+  "compass": {
+   "summary": {
+    "en": "Draws vectors as arrows that start at the origin of a polar-style plot.",
+    "pt": "Desenha vetores como setas que partem da origem de um gráfico em estilo polar."
+   },
+   "syntax": [
+    {
+     "code": "compass(U, V)",
+     "en": "Draws an arrow from the origin to each point `(U, V)`.",
+     "pt": "Desenha uma seta da origem até cada ponto `(U, V)`."
+    },
+    {
+     "code": "compass(Z)",
+     "en": "Uses the real and imaginary parts of the complex array `Z` as `U` and `V`.",
+     "pt": "Usa as partes real e imaginária do array complexo `Z` como `U` e `V`."
+    },
+    {
+     "code": "h = compass(___)",
+     "en": "Also returns the graphics handles.",
+     "pt": "Também retorna os handles gráficos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "U, V",
+     "en": "Arrays of the same size with the horizontal and vertical components.",
+     "pt": "Arrays de mesmo tamanho com as componentes horizontal e vertical."
+    },
+    {
+     "name": "Z",
+     "en": "Complex array; each element is a vector `real(Z) + i*imag(Z)`.",
+     "pt": "Array complexo; cada elemento é um vetor `real(Z) + i*imag(Z)`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the arrow lines.",
+     "pt": "Handles das linhas das setas."
+    }
+   ],
+   "description": {
+    "en": "Each arrow has the direction and length of its vector, drawn over circles that give the magnitude. It suits wind directions, phasors and the roots of a polynomial in the complex plane.",
+    "pt": "Cada seta tem a direção e o comprimento do seu vetor, desenhada sobre círculos que indicam a magnitude. Serve para direções de vento, fasores e raízes de um polinômio no plano complexo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Phasors",
+      "pt": "Fasores"
+     },
+     "code": "z = [1+1i, -2+0.5i, 0.5-2i];\ncompass(z)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "polarplot",
+    "quiver",
+    "feather",
+    "roots"
+   ]
+  },
+  "coneplot": {
+   "summary": {
+    "en": "Draws 3-D vectors of a vector field as cones.",
+    "pt": "Desenha vetores 3-D de um campo vetorial como cones."
+   },
+   "syntax": [
+    {
+     "code": "coneplot(X, Y, Z, U, V, W, Cx, Cy, Cz)",
+     "en": "Places cones at the points `(Cx, Cy, Cz)` of the field `(U, V, W)` defined on the grid `(X, Y, Z)`.",
+     "pt": "Coloca cones nos pontos `(Cx, Cy, Cz)` do campo `(U, V, W)` definido na grade `(X, Y, Z)`."
+    },
+    {
+     "code": "h = coneplot(___)",
+     "en": "Also returns the patch object.",
+     "pt": "Também retorna o objeto patch."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Grid coordinates, as returned by `meshgrid`.",
+     "pt": "Coordenadas da grade, como retornadas por `meshgrid`."
+    },
+    {
+     "name": "U, V, W",
+     "en": "Components of the vector field on the grid.",
+     "pt": "Componentes do campo vetorial na grade."
+    },
+    {
+     "name": "Cx, Cy, Cz",
+     "en": "Coordinates where the cones are placed.",
+     "pt": "Coordenadas onde os cones são colocados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "A `Patch` object holding all the cones.",
+     "pt": "Um objeto `Patch` com todos os cones."
+    }
+   ],
+   "description": {
+    "en": "At each requested point the field is interpolated, and a cone is drawn pointing along the vector with a size proportional to its magnitude. Combine with `camlight` and `lighting` to give the cones volume.",
+    "pt": "Em cada ponto pedido o campo é interpolado e um cone é desenhado apontando ao longo do vetor, com tamanho proporcional à sua magnitude. Combine com `camlight` e `lighting` para dar volume aos cones."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Radial field",
+      "pt": "Campo radial"
+     },
+     "code": "[X, Y, Z] = meshgrid(-2:2);\nU = X; V = Y; W = Z;\n[cx, cy, cz] = meshgrid(-1:1);\nh = coneplot(X, Y, Z, U, V, W, cx, cy, cz);\ndisp(class(h))\nview(3)"
+    }
+   ],
+   "see": [
+    "quiver3",
+    "streamline",
+    "isosurface",
+    "meshgrid"
+   ]
+  },
+  "contour": {
+   "summary": {
+    "en": "Draws contour lines, the curves along which a function of two variables is constant.",
+    "pt": "Desenha curvas de nível, as curvas ao longo das quais uma função de duas variáveis é constante."
+   },
+   "syntax": [
+    {
+     "code": "contour(Z)",
+     "en": "Contour lines of the matrix `Z`, using column and row indices as coordinates.",
+     "pt": "Curvas de nível da matriz `Z`, usando os índices de coluna e linha como coordenadas."
+    },
+    {
+     "code": "contour(X, Y, Z)",
+     "en": "Uses the coordinates `X` and `Y`.",
+     "pt": "Usa as coordenadas `X` e `Y`."
+    },
+    {
+     "code": "contour(___, levels)",
+     "en": "A scalar sets the number of levels; a vector sets the levels themselves.",
+     "pt": "Um escalar define o número de níveis; um vetor define os próprios níveis."
+    },
+    {
+     "code": "[C, h] = contour(___)",
+     "en": "Also returns the contour matrix and the contour object.",
+     "pt": "Também retorna a matriz de contorno e o objeto de contorno."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of values.",
+     "pt": "Matriz de valores."
+    },
+    {
+     "name": "X, Y",
+     "en": "Coordinates of the grid: matrices the size of `Z`, or vectors matching its columns and rows.",
+     "pt": "Coordenadas da grade: matrizes do tamanho de `Z`, ou vetores correspondentes a suas colunas e linhas."
+    },
+    {
+     "name": "levels",
+     "en": "Number of levels or vector of level values. A vector with one value draws a single line.",
+     "pt": "Número de níveis ou vetor com os valores dos níveis. Um vetor com um valor desenha uma única linha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Contour matrix, see `contourc`.",
+     "pt": "Matriz de contorno, veja `contourc`."
+    },
+    {
+     "name": "h",
+     "en": "The `Contour` object; its `LevelList` property lists the levels drawn.",
+     "pt": "O objeto `Contour`; sua propriedade `LevelList` lista os níveis desenhados."
+    }
+   ],
+   "description": {
+    "en": "A contour map shows a surface from above, like the lines of equal height on a topographic map. Closely spaced lines mean a steep slope. Use `contourf` to fill the regions between lines and `contour3` to lift the lines to their height.",
+    "pt": "Um mapa de contorno mostra uma superfície vista de cima, como as linhas de mesma altitude de um mapa topográfico. Linhas próximas indicam declive acentuado. Use `contourf` para preencher as regiões entre as linhas e `contour3` para elevar as linhas à sua altura."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Levels of a paraboloid",
+      "pt": "Níveis de um paraboloide"
+     },
+     "code": "[X, Y] = meshgrid(-2:0.1:2);\nZ = X.^2 + Y.^2;\n[C, h] = contour(X, Y, Z, [1 2 3]);\ndisp(h.LevelList)\naxis equal"
+    }
+   ],
+   "see": [
+    "contourf",
+    "contour3",
+    "contourc",
+    "clabel",
+    "meshgrid",
+    "surf"
+   ]
+  },
+  "contour3": {
+   "summary": {
+    "en": "Draws contour lines at their own height in a 3-D view.",
+    "pt": "Desenha curvas de nível na sua própria altura em uma vista 3-D."
+   },
+   "syntax": [
+    {
+     "code": "contour3(Z)",
+     "en": "3-D contour lines of the matrix `Z`.",
+     "pt": "Curvas de nível 3-D da matriz `Z`."
+    },
+    {
+     "code": "contour3(X, Y, Z)",
+     "en": "Uses the coordinates `X` and `Y`.",
+     "pt": "Usa as coordenadas `X` e `Y`."
+    },
+    {
+     "code": "contour3(___, levels)",
+     "en": "Sets the number of levels or the level values.",
+     "pt": "Define o número de níveis ou os valores dos níveis."
+    },
+    {
+     "code": "h = contour3(___)",
+     "en": "Also returns the contour object.",
+     "pt": "Também retorna o objeto de contorno."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of values.",
+     "pt": "Matriz de valores."
+    },
+    {
+     "name": "X, Y",
+     "en": "Grid coordinates.",
+     "pt": "Coordenadas da grade."
+    },
+    {
+     "name": "levels",
+     "en": "Number of levels or vector of level values.",
+     "pt": "Número de níveis ou vetor com os valores dos níveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "The `Contour` object.",
+     "pt": "O objeto `Contour`."
+    }
+   ],
+   "description": {
+    "en": "Where `contour` flattens the lines onto a plane, `contour3` draws each one at the height of its level, so the picture is a wireframe of the surface cut by horizontal planes. Rotate the plot to inspect it.",
+    "pt": "Enquanto `contour` achata as linhas em um plano, `contour3` desenha cada uma na altura do seu nível, de modo que a imagem é uma estrutura de arame da superfície cortada por planos horizontais. Gire o gráfico para examiná-lo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Peaks in 3-D",
+      "pt": "Peaks em 3-D"
+     },
+     "code": "[X, Y, Z] = peaks(30);\ncontour3(X, Y, Z, 12)\nview(3)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "contour",
+    "contourf",
+    "surf",
+    "peaks"
+   ]
+  },
+  "contourc": {
+   "summary": {
+    "en": "Computes contour line coordinates without drawing them.",
+    "pt": "Calcula as coordenadas das curvas de nível sem desenhá-las."
+   },
+   "syntax": [
+    {
+     "code": "C = contourc(Z)",
+     "en": "Contour matrix for automatically chosen levels of `Z`.",
+     "pt": "Matriz de contorno para níveis de `Z` escolhidos automaticamente."
+    },
+    {
+     "code": "C = contourc(Z, levels)",
+     "en": "Uses the given number of levels or level values.",
+     "pt": "Usa o número de níveis ou valores de níveis informados."
+    },
+    {
+     "code": "C = contourc(x, y, Z, levels)",
+     "en": "Uses the coordinate vectors `x` and `y`.",
+     "pt": "Usa os vetores de coordenadas `x` e `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of values, at least 2 by 2.",
+     "pt": "Matriz de valores, de pelo menos 2 por 2."
+    },
+    {
+     "name": "x, y",
+     "en": "Coordinate vectors matching the columns and rows of `Z`.",
+     "pt": "Vetores de coordenadas correspondentes às colunas e linhas de `Z`."
+    },
+    {
+     "name": "levels",
+     "en": "Number of levels, or a vector of level values. Repeat a value, as in `[v v]`, to get a single level.",
+     "pt": "Número de níveis, ou vetor de valores. Repita um valor, como em `[v v]`, para obter um único nível."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Two-row matrix. Each line starts with a column holding the level (row 1) and the number of points (row 2), followed by that many columns of x (row 1) and y (row 2) coordinates.",
+     "pt": "Matriz de duas linhas. Cada curva começa com uma coluna contendo o nível (linha 1) e o número de pontos (linha 2), seguida de tantas colunas de coordenadas x (linha 1) e y (linha 2)."
+    }
+   ],
+   "description": {
+    "en": "`contourc` is the numerical core behind `contour`. Use it when you need the line coordinates as data, for example to measure a level curve or to plot it with `plot`. A closed curve repeats its first point at the end.",
+    "pt": "`contourc` é o núcleo numérico por trás de `contour`. Use-o quando precisar das coordenadas das linhas como dados, por exemplo para medir uma curva de nível ou plotá-la com `plot`. Uma curva fechada repete o primeiro ponto no final."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Coordinates of one level",
+      "pt": "Coordenadas de um nível"
+     },
+     "code": "[X, Y] = meshgrid(-2:2);\nZ = X.^2 + Y.^2;\nC = contourc(Z, [1 1])"
+    }
+   ],
+   "see": [
+    "contour",
+    "contourf",
+    "clabel",
+    "meshgrid"
+   ]
+  },
+  "contourf": {
+   "summary": {
+    "en": "Draws filled contour plots.",
+    "pt": "Desenha gráficos de contorno preenchidos."
+   },
+   "syntax": [
+    {
+     "code": "contourf(Z)",
+     "en": "Filled contours of the matrix `Z`.",
+     "pt": "Contornos preenchidos da matriz `Z`."
+    },
+    {
+     "code": "contourf(X, Y, Z)",
+     "en": "Uses the coordinates `X` and `Y`.",
+     "pt": "Usa as coordenadas `X` e `Y`."
+    },
+    {
+     "code": "contourf(___, levels)",
+     "en": "Sets the number of levels or the level values.",
+     "pt": "Define o número de níveis ou os valores dos níveis."
+    },
+    {
+     "code": "[C, h] = contourf(___)",
+     "en": "Also returns the contour matrix and the contour object.",
+     "pt": "Também retorna a matriz de contorno e o objeto de contorno."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of values.",
+     "pt": "Matriz de valores."
+    },
+    {
+     "name": "X, Y",
+     "en": "Grid coordinates.",
+     "pt": "Coordenadas da grade."
+    },
+    {
+     "name": "levels",
+     "en": "Number of levels or vector of level values.",
+     "pt": "Número de níveis ou vetor com os valores dos níveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Contour matrix, see `contourc`.",
+     "pt": "Matriz de contorno, veja `contourc`."
+    },
+    {
+     "name": "h",
+     "en": "The `Contour` object.",
+     "pt": "O objeto `Contour`."
+    }
+   ],
+   "description": {
+    "en": "The region between two neighboring levels gets one flat color taken from the colormap, so the plot works like a heat map with a limited number of bands. Add `colorbar` to read the values, and `clabel` to label the boundaries.",
+    "pt": "A região entre dois níveis vizinhos recebe uma cor uniforme do colormap, então o gráfico funciona como um mapa de calor com um número limitado de faixas. Acrescente `colorbar` para ler os valores e `clabel` para rotular as fronteiras."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Filled bands",
+      "pt": "Faixas preenchidas"
+     },
+     "code": "[X, Y, Z] = peaks(40);\ncontourf(X, Y, Z, 8)\ncolorbar",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "contour",
+    "contour3",
+    "imagesc",
+    "colorbar",
+    "peaks"
+   ]
+  },
+  "contourslice": {
+   "summary": {
+    "en": "Draws contour lines on slice planes of 3-D volume data.",
+    "pt": "Desenha curvas de nível em planos de corte de dados volumétricos 3-D."
+   },
+   "syntax": [
+    {
+     "code": "contourslice(V, Sx, Sy, Sz)",
+     "en": "Draws contours of the volume `V` on the slices at `Sx`, `Sy` and `Sz`.",
+     "pt": "Desenha contornos do volume `V` nos cortes em `Sx`, `Sy` e `Sz`."
+    },
+    {
+     "code": "contourslice(X, Y, Z, V, Sx, Sy, Sz)",
+     "en": "Uses the grid coordinates `X`, `Y` and `Z`.",
+     "pt": "Usa as coordenadas de grade `X`, `Y` e `Z`."
+    },
+    {
+     "code": "contourslice(___, n)",
+     "en": "Draws `n` contour levels per slice.",
+     "pt": "Desenha `n` níveis de contorno por corte."
+    },
+    {
+     "code": "h = contourslice(___)",
+     "en": "Also returns the graphics objects.",
+     "pt": "Também retorna os objetos gráficos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "V",
+     "en": "3-D array of values.",
+     "pt": "Array 3-D de valores."
+    },
+    {
+     "name": "Sx, Sy, Sz",
+     "en": "Positions of the slice planes, perpendicular to each axis. Use `[]` for none.",
+     "pt": "Posições dos planos de corte, perpendiculares a cada eixo. Use `[]` para nenhum."
+    },
+    {
+     "name": "n",
+     "en": "Number of contour levels in each slice.",
+     "pt": "Número de níveis de contorno em cada corte."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the contour lines drawn.",
+     "pt": "Handles das curvas de nível desenhadas."
+    }
+   ],
+   "description": {
+    "en": "Each slice cuts the volume with a plane and the values on that plane are contoured. This reveals the internal structure of scalar volume data, such as temperature or density, without drawing the whole volume.",
+    "pt": "Cada corte seciona o volume com um plano, e os valores nesse plano são contornados. Isso revela a estrutura interna de dados volumétricos escalares, como temperatura ou densidade, sem desenhar o volume inteiro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Slices of random volume",
+      "pt": "Cortes de um volume aleatório"
+     },
+     "code": "rng(1)\nV = smooth3(rand(12, 12, 12));\nh = contourslice(V, [4 8], [], [6], 5);\nview(3)\ndisp(numel(h) > 0)"
+    }
+   ],
+   "see": [
+    "slice",
+    "contour",
+    "isosurface",
+    "meshgrid"
+   ]
+  },
+  "curl": {
+   "summary": {
+    "en": "Curl and angular velocity of a vector field.",
+    "pt": "Rotacional e velocidade angular de um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "cz = curl(X, Y, U, V)",
+     "en": "Z-component of the curl of a 2-D field.",
+     "pt": "Componente z do rotacional de um campo 2-D."
+    },
+    {
+     "code": "[cz, cav] = curl(X, Y, U, V)",
+     "en": "Also returns the angular velocity.",
+     "pt": "Também retorna a velocidade angular."
+    },
+    {
+     "code": "[curlx, curly, curlz, cav] = curl(X, Y, Z, U, V, W)",
+     "en": "Curl components and angular velocity of a 3-D field.",
+     "pt": "Componentes do rotacional e velocidade angular de um campo 3-D."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Grid coordinates, as from `meshgrid`.",
+     "pt": "Coordenadas da grade, como de `meshgrid`."
+    },
+    {
+     "name": "U, V, W",
+     "en": "Components of the vector field, with the size of the grid.",
+     "pt": "Componentes do campo vetorial, com o tamanho da grade."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "cz",
+     "en": "Z-component of the curl, `dV/dx - dU/dy`.",
+     "pt": "Componente z do rotacional, `dV/dx - dU/dy`."
+    },
+    {
+     "name": "cav",
+     "en": "Angular velocity: half the curl.",
+     "pt": "Velocidade angular: metade do rotacional."
+    }
+   ],
+   "description": {
+    "en": "The curl measures how much a field rotates around each point. It is estimated with finite differences on the grid. For the solid-body rotation `(U, V) = (-y, x)` the z-curl is `2` everywhere, and for a field with no rotation, such as `(x, y)`, it is `0`.\n\nThe angular velocity is half the curl.",
+    "pt": "O rotacional mede quanto um campo gira em torno de cada ponto. É estimado por diferenças finitas na grade. Para a rotação de corpo rígido `(U, V) = (-y, x)` o rotacional em z vale `2` em todo ponto, e para um campo sem rotação, como `(x, y)`, vale `0`.\n\nA velocidade angular é metade do rotacional."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rotation versus radial field",
+      "pt": "Rotação contra campo radial"
+     },
+     "code": "[X, Y] = meshgrid(1:4);\ncz = curl(X, Y, -Y, X)\ncz0 = curl(X, Y, X, Y)"
+    }
+   ],
+   "see": [
+    "divergence",
+    "gradient",
+    "del2",
+    "quiver",
+    "meshgrid"
+   ]
+  },
+  "cylinder": {
+   "summary": {
+    "en": "Generates the coordinates of a surface of revolution, by default a cylinder.",
+    "pt": "Gera as coordenadas de uma superfície de revolução, por padrão um cilindro."
+   },
+   "syntax": [
+    {
+     "code": "[X, Y, Z] = cylinder",
+     "en": "A unit cylinder with 20 points around the circumference.",
+     "pt": "Um cilindro unitário com 20 pontos na circunferência."
+    },
+    {
+     "code": "[X, Y, Z] = cylinder(r)",
+     "en": "Revolves the radius profile `r` along a unit height.",
+     "pt": "Gira o perfil de raios `r` ao longo de uma altura unitária."
+    },
+    {
+     "code": "[X, Y, Z] = cylinder(r, n)",
+     "en": "Uses `n` points around the circumference.",
+     "pt": "Usa `n` pontos na circunferência."
+    },
+    {
+     "code": "cylinder(___)",
+     "en": "With no output arguments, draws the surface.",
+     "pt": "Sem argumentos de saída, desenha a superfície."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "r",
+     "en": "Scalar radius or vector of radii at equally spaced heights from 0 to 1.",
+     "pt": "Raio escalar ou vetor de raios em alturas igualmente espaçadas de 0 a 1."
+    },
+    {
+     "name": "n",
+     "en": "Number of points around the circumference, 20 by default.",
+     "pt": "Número de pontos na circunferência, 20 por padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Matrices of size `numel(r)` by `n+1`; row `k` is the circle at height `Z(k,1)`.",
+     "pt": "Matrizes de tamanho `numel(r)` por `n+1`; a linha `k` é o círculo na altura `Z(k,1)`."
+    }
+   ],
+   "description": {
+    "en": "The profile vector `r` gives the radius at heights equally spaced between 0 and 1. A scalar `r` is treated as `[r r]`, producing a straight cylinder, while `[2 1]` gives a cone frustum and `[0 1]` a cone. The matrices can be passed to `surf` or `mesh`; the seam column is repeated so the surface closes.",
+    "pt": "O vetor de perfil `r` dá o raio em alturas igualmente espaçadas entre 0 e 1. Um `r` escalar é tratado como `[r r]`, gerando um cilindro reto, enquanto `[2 1]` dá um tronco de cone e `[0 1]` um cone. As matrizes podem ser passadas a `surf` ou `mesh`; a coluna da emenda é repetida para a superfície fechar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A vase profile",
+      "pt": "Perfil de um vaso"
+     },
+     "code": "r = [1 1.4 1 0.6 1];\n[X, Y, Z] = cylinder(r, 12);\ndisp(size(X))\ndisp(Z(:, 1)')\nsurf(X, Y, Z)"
+    }
+   ],
+   "see": [
+    "sphere",
+    "ellipsoid",
+    "surf",
+    "mesh"
+   ]
+  },
+  "divergence": {
+   "summary": {
+    "en": "Divergence of a vector field.",
+    "pt": "Divergente de um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "div = divergence(X, Y, U, V)",
+     "en": "Divergence of a 2-D field.",
+     "pt": "Divergente de um campo 2-D."
+    },
+    {
+     "code": "div = divergence(X, Y, Z, U, V, W)",
+     "en": "Divergence of a 3-D field.",
+     "pt": "Divergente de um campo 3-D."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Grid coordinates, as from `meshgrid`.",
+     "pt": "Coordenadas da grade, como de `meshgrid`."
+    },
+    {
+     "name": "U, V, W",
+     "en": "Components of the vector field, with the size of the grid.",
+     "pt": "Componentes do campo vetorial, com o tamanho da grade."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "div",
+     "en": "Array of the grid size with `dU/dx + dV/dy (+ dW/dz)`.",
+     "pt": "Array do tamanho da grade com `dU/dx + dV/dy (+ dW/dz)`."
+    }
+   ],
+   "description": {
+    "en": "Divergence measures how much a field spreads out from each point: positive at a source, negative at a sink and zero for an incompressible flow. It is computed with finite differences on the grid, so it is exact for fields that are linear in the coordinates.",
+    "pt": "O divergente mede o quanto um campo se espalha a partir de cada ponto: positivo em uma fonte, negativo em um sumidouro e zero em um escoamento incompressível. É calculado por diferenças finitas na grade, portanto é exato para campos lineares nas coordenadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Radial field",
+      "pt": "Campo radial"
+     },
+     "code": "[X, Y] = meshgrid(1:4);\nd = divergence(X, Y, X, Y)"
+    }
+   ],
+   "see": [
+    "curl",
+    "gradient",
+    "del2",
+    "quiver",
+    "meshgrid"
+   ]
+  },
+  "donutchart": {
+   "summary": {
+    "en": "Draws a donut chart, a pie chart with a hole in the middle.",
+    "pt": "Desenha um gráfico de rosca, um gráfico de pizza com um buraco no meio."
+   },
+   "syntax": [
+    {
+     "code": "donutchart(data)",
+     "en": "One slice per element of the vector `data`, sized by its share of the total.",
+     "pt": "Uma fatia por elemento do vetor `data`, com tamanho dado pela fração do total."
+    },
+    {
+     "code": "donutchart(data, names)",
+     "en": "Labels the slices with `names`.",
+     "pt": "Rotula as fatias com `names`."
+    },
+    {
+     "code": "d = donutchart(___)",
+     "en": "Also returns the `DonutChart` object.",
+     "pt": "Também retorna o objeto `DonutChart`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "data",
+     "en": "Vector of non-negative values.",
+     "pt": "Vetor de valores não negativos."
+    },
+    {
+     "name": "names",
+     "en": "Cell array or string array with one name per slice.",
+     "pt": "Cell array ou array de strings com um nome por fatia."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "The `DonutChart` object.",
+     "pt": "O objeto `DonutChart`."
+    }
+   ],
+   "description": {
+    "en": "Each slice spans an angle proportional to its value divided by the sum of all values. The hole leaves room for a title or a total. As with pie charts, differences between similar slices are hard to judge, so a bar chart is often better for exact comparison.",
+    "pt": "Cada fatia cobre um ângulo proporcional ao seu valor dividido pela soma de todos os valores. O buraco deixa espaço para um título ou um total. Como nos gráficos de pizza, é difícil julgar diferenças entre fatias parecidas, então um gráfico de barras costuma ser melhor para comparações exatas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Shares of a total",
+      "pt": "Fatias de um total"
+     },
+     "code": "d = donutchart([45 30 25], {'Rent', 'Food', 'Other'});\ndisp(class(d))"
+    }
+   ],
+   "see": [
+    "pie",
+    "bar",
+    "bubblecloud",
+    "piechart"
+   ]
+  },
+  "drawnow": {
+   "summary": {
+    "en": "Updates the figures and processes pending events right away.",
+    "pt": "Atualiza as figuras e processa os eventos pendentes imediatamente."
+   },
+   "syntax": [
+    {
+     "code": "drawnow",
+     "en": "Draws pending graphics changes and runs queued callbacks.",
+     "pt": "Desenha as alterações gráficas pendentes e executa os callbacks na fila."
+    },
+    {
+     "code": "drawnow limitrate",
+     "en": "Updates at most about 20 times per second, skipping the extra calls.",
+     "pt": "Atualiza no máximo cerca de 20 vezes por segundo, ignorando as chamadas extras."
+    },
+    {
+     "code": "drawnow nocallbacks",
+     "en": "Updates the graphics but postpones callbacks.",
+     "pt": "Atualiza os gráficos, mas adia os callbacks."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'limitrate'",
+     "en": "Throttle updates inside fast loops.",
+     "pt": "Limita as atualizações dentro de laços rápidos."
+    },
+    {
+     "name": "'nocallbacks'",
+     "en": "Do not run pending callbacks.",
+     "pt": "Não executa os callbacks pendentes."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Graphics commands are queued and normally drawn when the script pauses or finishes. Inside a long loop, `drawnow` forces the figure to refresh so animation frames or progress become visible. It is the usual companion of `addpoints` and of property changes in a loop.",
+    "pt": "Os comandos gráficos entram em uma fila e normalmente são desenhados quando o script pausa ou termina. Dentro de um laço longo, `drawnow` força a atualização da figura para que os quadros de uma animação ou o progresso fiquem visíveis. É o acompanhante habitual de `addpoints` e de mudanças de propriedades em um laço."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Animate a marker",
+      "pt": "Animar um marcador"
+     },
+     "code": "h = plot(0, 0, 'o', 'MarkerSize', 10);\naxis([0 10 -1.5 1.5])\nfor k = 0:0.5:10\n    set(h, 'XData', k, 'YData', sin(k))\n    drawnow\nend\ndisp('done')"
+    }
+   ],
+   "see": [
+    "pause",
+    "animatedline",
+    "addpoints",
+    "refreshdata",
+    "plot"
+   ]
+  },
+  "ellipsoid": {
+   "summary": {
+    "en": "Generates the coordinates of an ellipsoid.",
+    "pt": "Gera as coordenadas de um elipsoide."
+   },
+   "syntax": [
+    {
+     "code": "[X, Y, Z] = ellipsoid(xc, yc, zc, xr, yr, zr)",
+     "en": "An ellipsoid centered at `(xc, yc, zc)` with semi-axes `xr`, `yr`, `zr`, using 20 faces.",
+     "pt": "Um elipsoide centrado em `(xc, yc, zc)` com semieixos `xr`, `yr`, `zr`, usando 20 faces."
+    },
+    {
+     "code": "[X, Y, Z] = ellipsoid(___, n)",
+     "en": "Uses `n` faces, returning `(n+1)`-by-`(n+1)` matrices.",
+     "pt": "Usa `n` faces, retornando matrizes `(n+1)` por `(n+1)`."
+    },
+    {
+     "code": "ellipsoid(___)",
+     "en": "With no outputs, draws the surface.",
+     "pt": "Sem saídas, desenha a superfície."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "xc, yc, zc",
+     "en": "Coordinates of the center.",
+     "pt": "Coordenadas do centro."
+    },
+    {
+     "name": "xr, yr, zr",
+     "en": "Semi-axis lengths along x, y and z.",
+     "pt": "Comprimentos dos semieixos em x, y e z."
+    },
+    {
+     "name": "n",
+     "en": "Number of faces, 20 by default.",
+     "pt": "Número de faces, 20 por padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Matrices of surface coordinates, to pass to `surf` or `mesh`.",
+     "pt": "Matrizes de coordenadas da superfície, para passar a `surf` ou `mesh`."
+    }
+   ],
+   "description": {
+    "en": "The surface satisfies `((x-xc)/xr)^2 + ((y-yc)/yr)^2 + ((z-zc)/zr)^2 = 1`. Equal semi-axes give a sphere. Increase `n` for a smoother picture.",
+    "pt": "A superfície satisfaz `((x-xc)/xr)^2 + ((y-yc)/yr)^2 + ((z-zc)/zr)^2 = 1`. Semieixos iguais dão uma esfera. Aumente `n` para uma imagem mais suave."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Check the equation",
+      "pt": "Verificar a equação"
+     },
+     "code": "[X, Y, Z] = ellipsoid(1, 0, 0, 2, 1, 3, 10);\ndisp(size(X))\nr = ((X-1)/2).^2 + Y.^2 + (Z/3).^2;\ndisp(max(abs(r(:) - 1)) < 1e-12)\nsurf(X, Y, Z)\naxis equal"
+    }
+   ],
+   "see": [
+    "sphere",
+    "cylinder",
+    "surf",
+    "mesh"
+   ]
+  },
+  "errorbar": {
+   "summary": {
+    "en": "Plots data with error bars.",
+    "pt": "Plota dados com barras de erro."
+   },
+   "syntax": [
+    {
+     "code": "errorbar(x, y, err)",
+     "en": "Plots `y` against `x` with symmetric vertical error bars of length `err` above and below each point.",
+     "pt": "Plota `y` contra `x` com barras de erro verticais simétricas de comprimento `err` acima e abaixo de cada ponto."
+    },
+    {
+     "code": "errorbar(x, y, neg, pos)",
+     "en": "Uses separate lengths below (`neg`) and above (`pos`).",
+     "pt": "Usa comprimentos separados abaixo (`neg`) e acima (`pos`)."
+    },
+    {
+     "code": "errorbar(x, y, yneg, ypos, xneg, xpos)",
+     "en": "Adds horizontal error bars too.",
+     "pt": "Acrescenta também barras de erro horizontais."
+    },
+    {
+     "code": "errorbar(___, Name, Value)",
+     "en": "Sets properties such as `'Marker'`, `'LineWidth'` or `'CapSize'`.",
+     "pt": "Define propriedades como `'Marker'`, `'LineWidth'` ou `'CapSize'`."
+    },
+    {
+     "code": "e = errorbar(___)",
+     "en": "Also returns the `ErrorBar` object.",
+     "pt": "Também retorna o objeto `ErrorBar`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Vectors of the same length with the data points.",
+     "pt": "Vetores de mesmo comprimento com os pontos de dados."
+    },
+    {
+     "name": "err",
+     "en": "Error lengths, one per point; the bar spans `y - err` to `y + err`.",
+     "pt": "Comprimentos de erro, um por ponto; a barra vai de `y - err` a `y + err`."
+    },
+    {
+     "name": "'CapSize'",
+     "en": "Width of the end caps in points.",
+     "pt": "Largura das tampas das extremidades em pontos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "e",
+     "en": "The `ErrorBar` object.",
+     "pt": "O objeto `ErrorBar`."
+    }
+   ],
+   "description": {
+    "en": "Error bars show the uncertainty of a measurement: a standard deviation, a confidence interval or a tolerance. The line connects the data points, and each point has a vertical segment with a cap at each end.",
+    "pt": "Barras de erro mostram a incerteza de uma medida: um desvio padrão, um intervalo de confiança ou uma tolerância. A linha liga os pontos de dados, e cada ponto tem um segmento vertical com uma tampa em cada extremidade."
+   },
+   "notes": {
+    "en": "A line-specification string (such as `'o'` or `'-r'`) and the direction options `'horizontal'`, `'both'` and `'vertical'` are not accepted; set `'Marker'` and `'Color'` as Name,Value pairs instead.",
+    "pt": "Strings de especificação de linha (como `'o'` ou `'-r'`) e as opções de direção `'horizontal'`, `'both'` e `'vertical'` não são aceitas; defina `'Marker'` e `'Color'` como pares Nome,Valor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Measurements with uncertainty",
+      "pt": "Medidas com incerteza"
+     },
+     "code": "x = 1:5;\ny = [2.1 3.9 6.2 7.8 10.1];\nerr = [0.3 0.4 0.2 0.5 0.3];\ne = errorbar(x, y, err, 'Marker', 'o');\ndisp(e.CapSize)\nxlim([0 6])"
+    }
+   ],
+   "see": [
+    "plot",
+    "bar",
+    "scatter",
+    "std",
+    "fill"
+   ]
+  }
+ }
+}

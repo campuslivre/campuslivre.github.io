@@ -1,0 +1,106 @@
+{
+  "section": "pilot",
+  "functions": {
+    "abs": {
+      "summary": {
+        "en": "Absolute value of real numbers and magnitude of complex numbers.",
+        "pt": "Valor absoluto de números reais e módulo de números complexos."
+      },
+      "syntax": [
+        {"code": "Y = abs(X)", "en": "Returns the absolute value of each element of `X`.", "pt": "Retorna o valor absoluto de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric or logical array of any size. Complex values are allowed.", "pt": "Array numérico ou lógico de qualquer tamanho. Valores complexos são permitidos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. For complex input it holds the magnitude `sqrt(real(X)^2 + imag(X)^2)`.", "pt": "Array do mesmo tamanho de `X`. Para entrada complexa, contém o módulo `sqrt(real(X)^2 + imag(X)^2)`."}
+      ],
+      "description": {
+        "en": "`abs` works element by element. For a real number it drops the sign. For a complex number it returns the distance from the origin in the complex plane, which is always real and non-negative.\n\nInteger types saturate instead of overflowing: `abs(int8(-128))` is `127`, because `128` does not fit in `int8`. A logical input is converted to double.",
+        "pt": "`abs` atua elemento a elemento. Para um número real, descarta o sinal. Para um número complexo, retorna a distância até a origem no plano complexo, que é sempre real e não negativa.\n\nOs tipos inteiros saturam em vez de estourar: `abs(int8(-128))` vale `127`, porque `128` não cabe em `int8`. Uma entrada lógica é convertida para double."
+      },
+      "examples": [
+        {"title": {"en": "Real and complex values", "pt": "Valores reais e complexos"}, "code": "abs([-3 0 2.5])\nabs(3 + 4i)\nabs(int8(-128))"}
+      ],
+      "see": ["sign", "angle", "real", "imag", "hypot"]
+    },
+    "sum": {
+      "summary": {
+        "en": "Sum of the elements of an array, along a dimension or over everything.",
+        "pt": "Soma dos elementos de um array, ao longo de uma dimensão ou de tudo."
+      },
+      "syntax": [
+        {"code": "S = sum(A)", "en": "Sums along the first dimension that is not of size 1: down the columns of a matrix, or along a vector.", "pt": "Soma ao longo da primeira dimensão de tamanho diferente de 1: pelas colunas de uma matriz, ou ao longo de um vetor."},
+        {"code": "S = sum(A, dim)", "en": "Sums along dimension `dim`.", "pt": "Soma ao longo da dimensão `dim`."},
+        {"code": "S = sum(A, 'all')", "en": "Sums every element and returns a scalar.", "pt": "Soma todos os elementos e retorna um escalar."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric or logical array.", "pt": "Array numérico ou lógico."},
+        {"name": "dim", "en": "Positive integer: the dimension to sum along.", "pt": "Inteiro positivo: a dimensão ao longo da qual somar."}
+      ],
+      "outputs": [
+        {"name": "S", "en": "The sums. The summed dimension has size 1 in the result; an empty array sums to `0`.", "pt": "As somas. A dimensão somada tem tamanho 1 no resultado; um array vazio soma `0`."}
+      ],
+      "description": {
+        "en": "For a matrix, `sum(A)` returns a row vector with the sum of each column, and `sum(A, 2)` returns a column vector with the sum of each row. Logical values count as 0 and 1, so `sum(x > 3)` counts how many elements exceed 3.",
+        "pt": "Para uma matriz, `sum(A)` retorna um vetor linha com a soma de cada coluna, e `sum(A, 2)` retorna um vetor coluna com a soma de cada linha. Valores lógicos contam como 0 e 1, então `sum(x > 3)` conta quantos elementos passam de 3."
+      },
+      "examples": [
+        {"title": {"en": "Columns, rows and everything", "pt": "Colunas, linhas e tudo"}, "code": "A = [1 2 3; 4 5 6];\nsum(A)\nsum(A, 2)\nsum(A, 'all')\nsum([2 7 1 9] > 3)"}
+      ],
+      "see": ["cumsum", "prod", "mean", "max"]
+    },
+    "plot": {
+      "summary": {
+        "en": "Draws 2-D line plots of one or more data sets.",
+        "pt": "Desenha gráficos de linha 2-D de um ou mais conjuntos de dados."
+      },
+      "syntax": [
+        {"code": "plot(Y)", "en": "Plots the values of `Y` against their index. For a matrix, each column becomes a line.", "pt": "Plota os valores de `Y` contra o índice. Para uma matriz, cada coluna vira uma linha."},
+        {"code": "plot(X, Y)", "en": "Plots `Y` against `X`.", "pt": "Plota `Y` contra `X`."},
+        {"code": "plot(X, Y, LineSpec)", "en": "Sets the color, marker and line style with a short string such as `'r--o'`.", "pt": "Define cor, marcador e estilo da linha com uma string curta como `'r--o'`."},
+        {"code": "plot(___, Name, Value)", "en": "Sets line properties such as `'LineWidth'` or `'Color'`.", "pt": "Define propriedades da linha, como `'LineWidth'` ou `'Color'`."},
+        {"code": "h = plot(___)", "en": "Also returns the line handles.", "pt": "Também retorna os handles das linhas."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Vectors or matrices of coordinates. Vectors must have the same length.", "pt": "Vetores ou matrizes de coordenadas. Os vetores devem ter o mesmo comprimento."},
+        {"name": "LineSpec", "en": "Optional string combining a color (`r g b c m y k w`), a line style (`-`, `--`, `:`, `-.`) and a marker (`o + * . x s d`).", "pt": "String opcional que combina uma cor (`r g b c m y k w`), um estilo de linha (`-`, `--`, `:`, `-.`) e um marcador (`o + * . x s d`)."},
+        {"name": "'LineWidth'", "en": "Line width in points.", "pt": "Largura da linha em pontos."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Array of line handles, one per plotted line, for use with `get` and `set`.", "pt": "Array de handles de linha, um por linha plotada, para usar com `get` e `set`."}
+      ],
+      "description": {
+        "en": "Each call draws in the current axes, replacing what was there unless `hold on` is active. In a live script the figure appears right below the code that creates it, and hovering shows a crosshair that reads values off the plot.\n\nUse `title`, `xlabel`, `ylabel`, `legend` and `grid` to decorate the plot, and `exportgraphics` to save it as PNG or SVG.",
+        "pt": "Cada chamada desenha nos eixos atuais, substituindo o que havia, a menos que `hold on` esteja ativo. Em um live script a figura aparece logo abaixo do código que a cria, e passar o mouse mostra uma mira que lê valores no gráfico.\n\nUse `title`, `xlabel`, `ylabel`, `legend` e `grid` para decorar o gráfico, e `exportgraphics` para salvá-lo em PNG ou SVG."
+      },
+      "examples": [
+        {"title": {"en": "Two curves", "pt": "Duas curvas"}, "silent": true, "code": "x = linspace(0, 2*pi, 200);\nplot(x, sin(x), 'LineWidth', 2)\nhold on\nplot(x, cos(x), '--')\nhold off\ngrid on\nlegend('sin', 'cos')", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["hold", "title", "xlabel", "legend", "exportgraphics", "plot3"]
+    },
+    "+": {
+      "summary": {
+        "en": "Addition operator: adds numbers, arrays and other values element by element.",
+        "pt": "Operador de adição: soma números, arrays e outros valores elemento a elemento."
+      },
+      "syntax": [
+        {"code": "C = A + B", "en": "Adds `A` and `B`. Same as `plus(A, B)`.", "pt": "Soma `A` e `B`. Equivale a `plus(A, B)`."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Numeric, logical or char arrays, or objects that define `plus`. The sizes must be compatible.", "pt": "Arrays numéricos, lógicos ou de char, ou objetos que definem `plus`. Os tamanhos devem ser compatíveis."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "The sum, with the size produced by implicit expansion.", "pt": "A soma, com o tamanho produzido pela expansão implícita."}
+      ],
+      "description": {
+        "en": "Sizes are compatible when, for each dimension, they are equal or one of them is 1. A size-1 dimension is expanded to match the other, so a column plus a row gives a matrix. Integer arithmetic saturates at the limits of the type, and adding two different integer types is an error.",
+        "pt": "Os tamanhos são compatíveis quando, em cada dimensão, são iguais ou um deles é 1. Uma dimensão de tamanho 1 é expandida para casar com a outra, então uma coluna mais uma linha dá uma matriz. A aritmética de inteiros satura nos limites do tipo, e somar dois tipos inteiros diferentes é um erro."
+      },
+      "examples": [
+        {"code": "[1 2 3] + 10\n[1; 2] + [10 20 30]\nint8(100) + int8(100)"}
+      ],
+      "see": ["plus", "-", ".*", "sum"]
+    }
+  }
+}

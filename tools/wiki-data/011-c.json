@@ -1,0 +1,1335 @@
+{
+  "functions": {
+    "rmprop": {
+      "summary": {
+        "en": "Removes a custom property from a table or timetable.",
+        "pt": "Remove uma propriedade personalizada de uma tabela ou timetable."
+      },
+      "syntax": [
+        {
+          "code": "T2 = rmprop(T, propertyName)",
+          "en": "Removes the custom property created earlier with `addprop`.",
+          "pt": "Remove a propriedade personalizada criada antes com `addprop`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "propertyName",
+          "en": "Name of a custom property.",
+          "pt": "Nome de uma propriedade personalizada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T2",
+          "en": "Table without that property; the data are untouched.",
+          "pt": "Tabela sem essa propriedade; os dados não são alterados."
+        }
+      ],
+      "description": {
+        "en": "Custom properties store metadata, such as units or a description of the source, next to a table. They live in `T.Properties.CustomProperties`. `rmprop` deletes one of them; it cannot remove the built-in properties like `VariableNames`.",
+        "pt": "Propriedades personalizadas guardam metadados, como unidades ou a descrição da origem, junto de uma tabela. Ficam em `T.Properties.CustomProperties`. `rmprop` apaga uma delas; não remove as propriedades embutidas como `VariableNames`."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2], 'VariableNames', {'A'});\nT = addprop(T, 'Note', 'table');\nT.Properties.CustomProperties.Note = 'raw data';\nT.Properties.CustomProperties\nT = rmprop(T, 'Note');\nT.Properties"
+        }
+      ],
+      "see": [
+        "addprop",
+        "table",
+        "timetable",
+        "summary"
+      ]
+    },
+    "rowfun": {
+      "summary": {
+        "en": "Applies a function to each row of a table.",
+        "pt": "Aplica uma função a cada linha de uma tabela."
+      },
+      "syntax": [
+        {
+          "code": "B = rowfun(func, A)",
+          "en": "Calls `func` once per row, passing the variables of that row as separate arguments.",
+          "pt": "Chama `func` uma vez por linha, passando as variáveis da linha como argumentos separados."
+        },
+        {
+          "code": "B = rowfun(___, 'InputVariables', vars)",
+          "en": "Uses only the listed variables as inputs.",
+          "pt": "Usa apenas as variáveis listadas como entradas."
+        },
+        {
+          "code": "B = rowfun(___, 'OutputVariableNames', names)",
+          "en": "Names the output variables.",
+          "pt": "Dá nome às variáveis de saída."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "func",
+          "en": "Function handle. It receives one value from each input variable and returns a scalar or a row.",
+          "pt": "Function handle. Recebe um valor de cada variável de entrada e retorna um escalar ou uma linha."
+        },
+        {
+          "name": "A",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "'InputVariables'",
+          "en": "Names or indices of the variables passed to `func`.",
+          "pt": "Nomes ou índices das variáveis passadas a `func`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Table with one row per row of `A` and the results as variables.",
+          "pt": "Tabela com uma linha por linha de `A` e os resultados como variáveis."
+        }
+      ],
+      "description": {
+        "en": "This is the table counterpart of `arrayfun`. With `@(a, b) a + b` and a table that has two variables, the function receives the `A` and `B` entries of each row and the results form the output column. By default the output variables are named `Var1`, `Var2`, ...; pass `'OutputVariableNames'` to choose them.",
+        "pt": "É o equivalente de `arrayfun` para tabelas. Com `@(a, b) a + b` e uma tabela de duas variáveis, a função recebe os valores `A` e `B` de cada linha e os resultados formam a coluna de saída. Por padrão as variáveis de saída têm nomes como `Var1`, `Var2`, ...; passe `'OutputVariableNames'` para escolhê-los."
+      },
+      "notes": {
+        "en": "Grouping and the `'SeparateInputs'` option are not fully supported yet in MatLivre; for grouped results, use `splitapply` or `groupsummary`.",
+        "pt": "Agrupamento e a opção `'SeparateInputs'` ainda não são totalmente suportados no MatLivre; para resultados agrupados use `splitapply` ou `groupsummary`."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2;3], [4;5;6], 'VariableNames', {'A','B'});\nrowfun(@(a, b) a + b, T, 'OutputVariableNames', 'S')"
+        }
+      ],
+      "see": [
+        "varfun",
+        "arrayfun",
+        "cellfun",
+        "splitapply",
+        "groupsummary"
+      ]
+    },
+    "rows2vars": {
+      "summary": {
+        "en": "Swaps the rows and variables of a table (transpose).",
+        "pt": "Troca linhas e variáveis de uma tabela (transposição)."
+      },
+      "syntax": [
+        {
+          "code": "T2 = rows2vars(T)",
+          "en": "Turns each row of `T` into a variable of `T2`.",
+          "pt": "Transforma cada linha de `T` em uma variável de `T2`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Table whose variables can be concatenated (for example all numeric).",
+          "pt": "Tabela cujas variáveis possam ser concatenadas (por exemplo, todas numéricas)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T2",
+          "en": "Table with a first variable `OriginalVariableNames` holding the old variable names, followed by one variable per original row.",
+          "pt": "Tabela com uma primeira variável `OriginalVariableNames` com os nomes das variáveis antigas, seguida de uma variável por linha original."
+        }
+      ],
+      "description": {
+        "en": "Where `T.Properties.RowNames` exists, the new variables take those names; otherwise they are called `Var1`, `Var2`, and so on. It is the table analogue of the transpose and is often used to prepare data for display.",
+        "pt": "Se existirem `T.Properties.RowNames`, as novas variáveis recebem esses nomes; caso contrário, chamam-se `Var1`, `Var2`, e assim por diante. É o análogo da transposta para tabelas e costuma ser usada para preparar dados para exibição."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2], [3;4], [5;6], 'VariableNames', {'A','B','C'});\nrows2vars(T)"
+        }
+      ],
+      "see": [
+        "table",
+        "stack",
+        "unstack",
+        "splitvars",
+        "array2table"
+      ]
+    },
+    "second": {
+      "summary": {
+        "en": "Seconds component of a datetime.",
+        "pt": "Componente de segundos de um datetime."
+      },
+      "syntax": [
+        {
+          "code": "s = second(t)",
+          "en": "Returns the seconds (0 up to but not including 60) of each element of `t`.",
+          "pt": "Retorna os segundos (de 0 até menos de 60) de cada elemento de `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Datetime array.",
+          "pt": "Array datetime."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Double array of the same size as `t`; fractions of a second are kept.",
+          "pt": "Array double do mesmo tamanho de `t`; frações de segundo são mantidas."
+        }
+      ],
+      "description": {
+        "en": "`second` extracts one field of a date and time, like `hour` and `minute` do. It is not the same as `seconds`, which builds a duration from a number.",
+        "pt": "`second` extrai um campo de uma data e hora, como fazem `hour` e `minute`. Não é o mesmo que `seconds`, que constrói uma duration a partir de um número."
+      },
+      "examples": [
+        {
+          "code": "second(datetime(2024, 1, 1, 10, 20, 30.5))"
+        }
+      ],
+      "see": [
+        "minute",
+        "hour",
+        "seconds",
+        "datetime",
+        "day"
+      ]
+    },
+    "seconds": {
+      "summary": {
+        "en": "Creates durations in seconds, or converts durations to a number of seconds.",
+        "pt": "Cria durations em segundos, ou converte durations em um número de segundos."
+      },
+      "syntax": [
+        {
+          "code": "d = seconds(x)",
+          "en": "Returns a duration of `x` seconds.",
+          "pt": "Retorna uma duration de `x` segundos."
+        },
+        {
+          "code": "x = seconds(d)",
+          "en": "Given a duration `d`, returns its length in seconds as a double.",
+          "pt": "Dada uma duration `d`, retorna sua duração em segundos como double."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array.",
+          "pt": "Array numérico."
+        },
+        {
+          "name": "d",
+          "en": "Duration array.",
+          "pt": "Array duration."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Duration array with the same size as `x`.",
+          "pt": "Array duration do mesmo tamanho de `x`."
+        },
+        {
+          "name": "x",
+          "en": "Double array.",
+          "pt": "Array double."
+        }
+      ],
+      "description": {
+        "en": "`seconds` is one of a family (`milliseconds`, `minutes`, `hours`, `days`, `years`) that work in both directions. Passing a number builds a duration; passing a duration returns a plain number in that unit. Durations can be added to datetimes, and `seconds(1:4)` is a convenient time vector for a timetable.",
+        "pt": "`seconds` faz parte de uma família (`milliseconds`, `minutes`, `hours`, `days`, `years`) que funciona nos dois sentidos. Passar um número constrói uma duration; passar uma duration retorna um número simples nessa unidade. Durations podem ser somadas a datetimes, e `seconds(1:4)` é um vetor de tempo prático para um timetable."
+      },
+      "examples": [
+        {
+          "code": "seconds(90)\nseconds([1 2])\nseconds(minutes(2))"
+        }
+      ],
+      "see": [
+        "minutes",
+        "hours",
+        "days",
+        "duration",
+        "second"
+      ]
+    },
+    "setabstime": {
+      "summary": {
+        "en": "Sets absolute (calendar) times on a timeseries from date strings.",
+        "pt": "Define tempos absolutos (calendário) em uma timeseries a partir de textos de data."
+      },
+      "syntax": [
+        {
+          "code": "ts = setabstime(ts, dates)",
+          "en": "Sets the time vector from a cell array of date strings, one per sample.",
+          "pt": "Define o vetor de tempo a partir de um cell array de textos de data, um por amostra."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ts",
+          "en": "A `timeseries` object.",
+          "pt": "Um objeto `timeseries`."
+        },
+        {
+          "name": "dates",
+          "en": "Cell array of date strings in a format understood by `datestr`.",
+          "pt": "Cell array de textos de data em um formato aceito por `datestr`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ts",
+          "en": "The series with absolute times; the first date becomes `TimeInfo.StartDate`.",
+          "pt": "A série com tempos absolutos; a primeira data vira `TimeInfo.StartDate`."
+        }
+      ],
+      "description": {
+        "en": "By default a timeseries counts time as a plain number of seconds. After `setabstime` the times are offsets from the start date, so the series can be aligned with real calendar dates. The number of dates must equal the number of samples.",
+        "pt": "Por padrão uma timeseries conta o tempo como um simples número de segundos. Depois de `setabstime` os tempos são deslocamentos a partir da data inicial, e a série pode ser alinhada a datas reais do calendário. O número de datas deve ser igual ao número de amostras."
+      },
+      "examples": [
+        {
+          "code": "ts = timeseries([1 2 3]', [0 1 2]);\nd = {'01-Jan-2024 00:00:00', '01-Jan-2024 00:00:01', '01-Jan-2024 00:00:02'};\nts = setabstime(ts, d);\nts.TimeInfo.StartDate"
+        }
+      ],
+      "see": [
+        "timeseries",
+        "setuniformtime",
+        "datestr",
+        "resample"
+      ]
+    },
+    "setcats": {
+      "summary": {
+        "en": "Sets the list of categories of a categorical array.",
+        "pt": "Define a lista de categorias de um array categorical."
+      },
+      "syntax": [
+        {
+          "code": "B = setcats(A, newcats)",
+          "en": "Makes `newcats` the categories of `A`, in that order.",
+          "pt": "Faz de `newcats` as categorias de `A`, nessa ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Categorical array.",
+          "pt": "Array categorical."
+        },
+        {
+          "name": "newcats",
+          "en": "Text or string array of category names.",
+          "pt": "Texto ou string array com nomes de categorias."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Categorical array. Elements whose category is not in `newcats` become `<undefined>`; new names add unused categories.",
+          "pt": "Array categorical. Elementos cuja categoria não está em `newcats` viram `<undefined>`; nomes novos acrescentam categorias sem uso."
+        }
+      ],
+      "description": {
+        "en": "This function replaces the whole category list in one step, so it can add, drop and reorder at once. For single operations, `addcats`, `removecats` and `reordercats` state the intent more clearly.",
+        "pt": "Esta função substitui a lista inteira de categorias de uma só vez, podendo adicionar, descartar e reordenar ao mesmo tempo. Para operações isoladas, `addcats`, `removecats` e `reordercats` deixam a intenção mais clara."
+      },
+      "examples": [
+        {
+          "code": "c = categorical([\"a\",\"b\",\"a\"]);\nc2 = setcats(c, [\"b\",\"a\",\"z\"])\ncategories(c2)"
+        }
+      ],
+      "see": [
+        "addcats",
+        "removecats",
+        "reordercats",
+        "renamecats",
+        "categorical"
+      ]
+    },
+    "setdiff": {
+      "summary": {
+        "en": "Elements of one set that are not in another.",
+        "pt": "Elementos de um conjunto que não estão em outro."
+      },
+      "syntax": [
+        {
+          "code": "C = setdiff(A, B)",
+          "en": "Values in `A` not in `B`, without repeats, sorted.",
+          "pt": "Valores de `A` que não estão em `B`, sem repetições, ordenados."
+        },
+        {
+          "code": "C = setdiff(A, B, 'stable')",
+          "en": "Keeps the order in which values first appear in `A`.",
+          "pt": "Mantém a ordem em que os valores aparecem primeiro em `A`."
+        },
+        {
+          "code": "[C, ia] = setdiff(___)",
+          "en": "Also returns the indices such that `C = A(ia)`.",
+          "pt": "Também retorna os índices tais que `C = A(ia)`."
+        },
+        {
+          "code": "C = setdiff(T1, T2)",
+          "en": "For tables, compares whole rows.",
+          "pt": "Para tabelas, compara linhas inteiras."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric arrays, string arrays, cell arrays of character vectors or tables.",
+          "pt": "Arrays numéricos, string arrays, cell arrays de vetores de caracteres ou tabelas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Vector of the result. Row vector if `A` is a row, otherwise column.",
+          "pt": "Vetor com o resultado. Vetor linha se `A` for linha, senão coluna."
+        },
+        {
+          "name": "ia",
+          "en": "Column vector of indices into `A`.",
+          "pt": "Vetor coluna de índices de `A`."
+        }
+      ],
+      "description": {
+        "en": "The result never contains duplicates. By default it is sorted; use `'stable'` to keep the original order. `setdiff(A, B)` is not symmetric: use `setxor` for the values that appear in only one of two sets.",
+        "pt": "O resultado nunca contém duplicatas. Por padrão é ordenado; use `'stable'` para manter a ordem original. `setdiff(A, B)` não é simétrico: use `setxor` para os valores que aparecem em apenas um de dois conjuntos."
+      },
+      "examples": [
+        {
+          "code": "setdiff([5 1 3 3], [1 2])\nsetdiff([5 1 3], 1, 'stable')\nsetdiff({'a','b'}, {'b'})"
+        }
+      ],
+      "see": [
+        "union",
+        "intersect",
+        "setxor",
+        "unique",
+        "ismember"
+      ]
+    },
+    "setfield": {
+      "summary": {
+        "en": "Sets the value of a structure field.",
+        "pt": "Define o valor de um campo de struct."
+      },
+      "syntax": [
+        {
+          "code": "s = setfield(s, field, value)",
+          "en": "Sets `s.field` to `value`.",
+          "pt": "Define `s.field` como `value`."
+        },
+        {
+          "code": "s = setfield(s, field1, field2, ..., value)",
+          "en": "Sets a nested field, as in `s.field1.field2`.",
+          "pt": "Define um campo aninhado, como em `s.field1.field2`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Structure.",
+          "pt": "Struct."
+        },
+        {
+          "name": "field",
+          "en": "Field name as text; the field is created if absent.",
+          "pt": "Nome do campo como texto; o campo é criado se não existir."
+        },
+        {
+          "name": "value",
+          "en": "Any value.",
+          "pt": "Qualquer valor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "The updated structure.",
+          "pt": "A struct atualizada."
+        }
+      ],
+      "description": {
+        "en": "`setfield` is the function form of `s.field = value`. Dot notation is shorter, but `setfield` is handy when the field names are computed or when it is used in an anonymous function. Dynamic field names also work in dot notation, as in `s.(name) = value`.",
+        "pt": "`setfield` é a forma de função de `s.field = value`. A notação com ponto é mais curta, mas `setfield` é útil quando os nomes dos campos são calculados ou em funções anônimas. Nomes de campo dinâmicos também funcionam na notação com ponto, como em `s.(name) = value`."
+      },
+      "examples": [
+        {
+          "code": "s = struct('b', 2);\ns = setfield(s, 'c', 3)\ns = setfield(s, 'p', 'q', 5);\ns.p.q"
+        }
+      ],
+      "see": [
+        "getfield",
+        "rmfield",
+        "isfield",
+        "fieldnames",
+        "orderfields"
+      ]
+    },
+    "setinterpmethod": {
+      "summary": {
+        "en": "Sets the interpolation method of a timeseries.",
+        "pt": "Define o método de interpolação de uma timeseries."
+      },
+      "syntax": [
+        {
+          "code": "ts = setinterpmethod(ts, method)",
+          "en": "Uses `method` when the series is evaluated at times that are not samples.",
+          "pt": "Usa `method` quando a série é avaliada em tempos que não são amostras."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ts",
+          "en": "A `timeseries` object.",
+          "pt": "Um objeto `timeseries`."
+        },
+        {
+          "name": "method",
+          "en": "`'linear'` or `'zoh'` (zero-order hold, which repeats the previous value), or an interpolation function handle.",
+          "pt": "`'linear'` ou `'zoh'` (retenção de ordem zero, que repete o valor anterior), ou um function handle de interpolação."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ts",
+          "en": "The series with the new method.",
+          "pt": "A série com o novo método."
+        }
+      ],
+      "description": {
+        "en": "The method is used by `resample` and by the arithmetic that needs data at common times. Linear interpolation suits continuous signals; zero-order hold suits quantities that stay constant until updated, such as a set point.",
+        "pt": "O método é usado por `resample` e pela aritmética que precisa de dados em tempos comuns. A interpolação linear serve a sinais contínuos; a retenção de ordem zero serve a grandezas que ficam constantes até serem atualizadas, como um valor de referência."
+      },
+      "examples": [
+        {
+          "code": "ts = timeseries([10 20 30]', [0 1 2]);\nts = setinterpmethod(ts, 'zoh');\nr = resample(ts, [0.5 1.5]);\nr.Data'"
+        }
+      ],
+      "see": [
+        "getinterpmethod",
+        "resample",
+        "timeseries",
+        "interp1"
+      ]
+    },
+    "settimeseriesnames": {
+      "summary": {
+        "en": "Renames a time series inside a tscollection.",
+        "pt": "Renomeia uma série temporal dentro de uma tscollection."
+      },
+      "syntax": [
+        {
+          "code": "tsc = settimeseriesnames(tsc, newname, oldname)",
+          "en": "Renames the member `oldname` to `newname`.",
+          "pt": "Renomeia o membro `oldname` para `newname`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "tsc",
+          "en": "A `tscollection` object.",
+          "pt": "Um objeto `tscollection`."
+        },
+        {
+          "name": "newname, oldname",
+          "en": "New and current names of the series.",
+          "pt": "Novo nome e nome atual da série."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tsc",
+          "en": "The collection with the member renamed.",
+          "pt": "A coleção com o membro renomeado."
+        }
+      ],
+      "description": {
+        "en": "Members of a `tscollection` are addressed by name, so renaming changes how they are accessed afterwards. The new name must be a valid identifier that is not already used by another member. `gettimeseriesnames` lists the current names.",
+        "pt": "Os membros de uma `tscollection` são acessados pelo nome, então renomear muda como serão acessados depois. O novo nome deve ser um identificador válido que não seja usado por outro membro. `gettimeseriesnames` lista os nomes atuais."
+      },
+      "notes": {
+        "en": "In MatLivre the rename call currently has no effect on the collection.",
+        "pt": "No MatLivre a chamada de renomeação hoje não tem efeito sobre a coleção."
+      },
+      "examples": [
+        {
+          "code": "ts1 = timeseries([1 2 3]', [0 1 2], 'Name', 'a');\nts2 = timeseries([4 5 6]', [0 1 2], 'Name', 'b');\ntsc = tscollection({ts1, ts2});\ngettimeseriesnames(tsc)\ntsc = settimeseriesnames(tsc, 'z', 'b');",
+          "note": {
+            "en": "Call `gettimeseriesnames` again afterwards to see the new name.",
+            "pt": "Chame `gettimeseriesnames` de novo depois para ver o novo nome."
+          }
+        }
+      ],
+      "see": [
+        "gettimeseriesnames",
+        "tscollection",
+        "removets",
+        "addts"
+      ]
+    },
+    "setuniformtime": {
+      "summary": {
+        "en": "Replaces the time vector of a timeseries with evenly spaced times.",
+        "pt": "Substitui o vetor de tempo de uma timeseries por tempos igualmente espaçados."
+      },
+      "syntax": [
+        {
+          "code": "ts = setuniformtime(ts, 'StartTime', t0, 'Interval', dt)",
+          "en": "Sets times `t0, t0+dt, t0+2*dt, ...`.",
+          "pt": "Define os tempos `t0, t0+dt, t0+2*dt, ...`."
+        },
+        {
+          "code": "ts = setuniformtime(ts, 'StartTime', t0, 'EndTime', t1)",
+          "en": "Spreads the samples evenly between `t0` and `t1`.",
+          "pt": "Distribui as amostras de modo uniforme entre `t0` e `t1`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "'StartTime'",
+          "en": "Time of the first sample.",
+          "pt": "Tempo da primeira amostra."
+        },
+        {
+          "name": "'Interval'",
+          "en": "Spacing between samples.",
+          "pt": "Espaçamento entre amostras."
+        },
+        {
+          "name": "'EndTime'",
+          "en": "Time of the last sample.",
+          "pt": "Tempo da última amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ts",
+          "en": "The series with the new, uniform time vector. The data are unchanged.",
+          "pt": "A série com o novo vetor de tempo uniforme. Os dados não mudam."
+        }
+      ],
+      "description": {
+        "en": "Only the time vector is rewritten; the data values keep their order. Because a uniform series stores just the start and the interval, it uses less memory than one with an explicit time vector.",
+        "pt": "Apenas o vetor de tempo é reescrito; os valores dos dados mantêm a ordem. Como uma série uniforme guarda apenas o início e o intervalo, usa menos memória que uma com vetor de tempo explícito."
+      },
+      "examples": [
+        {
+          "code": "ts = timeseries([1 2 3]', [0 1 2]);\nts = setuniformtime(ts, 'StartTime', 10, 'Interval', 2);\nts.Time'"
+        }
+      ],
+      "see": [
+        "timeseries",
+        "setabstime",
+        "resample",
+        "getinterpmethod"
+      ]
+    },
+    "setvaropts": {
+      "summary": {
+        "en": "Changes the import options of one or more variables.",
+        "pt": "Altera as opções de importação de uma ou mais variáveis."
+      },
+      "syntax": [
+        {
+          "code": "opts = setvaropts(opts, vars, Name, Value)",
+          "en": "Sets properties of the selected variables, such as `'Type'`, `'FillValue'` or `'TreatAsMissing'`.",
+          "pt": "Define propriedades das variáveis selecionadas, como `'Type'`, `'FillValue'` ou `'TreatAsMissing'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "opts",
+          "en": "Import options from `detectImportOptions`.",
+          "pt": "Opções de importação de `detectImportOptions`."
+        },
+        {
+          "name": "vars",
+          "en": "Variable names or indices.",
+          "pt": "Nomes ou índices de variáveis."
+        },
+        {
+          "name": "'Type'",
+          "en": "Type to read the variable as, for example `'string'`.",
+          "pt": "Tipo com que ler a variável, por exemplo `'string'`."
+        },
+        {
+          "name": "'FillValue'",
+          "en": "Value used for empty fields.",
+          "pt": "Valor usado em campos vazios."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opts",
+          "en": "The updated import options.",
+          "pt": "As opções de importação atualizadas."
+        }
+      ],
+      "description": {
+        "en": "Import options describe how each column of a file is read. `setvaropts` edits the per-variable part: the type, the fill value, which text means missing, prefixes and suffixes to strip. The options are then passed to `readtable` so that the data arrive in the form you want. `getvaropts` shows the current settings.",
+        "pt": "As opções de importação descrevem como cada coluna de um arquivo é lida. `setvaropts` edita a parte de cada variável: o tipo, o valor de preenchimento, qual texto significa ausente, prefixos e sufixos a remover. As opções são então passadas a `readtable` para que os dados cheguem na forma desejada. `getvaropts` mostra os ajustes atuais."
+      },
+      "notes": {
+        "en": "In MatLivre `setvaropts` works on import options only, not on tables.",
+        "pt": "No MatLivre `setvaropts` funciona apenas com opções de importação, não com tabelas."
+      },
+      "examples": [
+        {
+          "code": "fid = fopen('s.csv', 'w');\nfprintf(fid, 'id,name\\n1,a\\n2,b\\n');\nfclose(fid);\nopts = detectImportOptions('s.csv');\nopts = setvaropts(opts, 'name', 'Type', 'string');\nT = readtable('s.csv', opts);\nclass(T.name)"
+        }
+      ],
+      "see": [
+        "setvartype",
+        "getvaropts",
+        "detectImportOptions",
+        "readtable",
+        "preview"
+      ]
+    },
+    "setvartype": {
+      "summary": {
+        "en": "Sets the data type of variables in import options.",
+        "pt": "Define o tipo de dados de variáveis nas opções de importação."
+      },
+      "syntax": [
+        {
+          "code": "opts = setvartype(opts, vars, type)",
+          "en": "Reads the variables `vars` as `type`.",
+          "pt": "Lê as variáveis `vars` como `type`."
+        },
+        {
+          "code": "opts = setvartype(opts, type)",
+          "en": "Sets the type of every variable.",
+          "pt": "Define o tipo de todas as variáveis."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "opts",
+          "en": "Import options from `detectImportOptions`.",
+          "pt": "Opções de importação de `detectImportOptions`."
+        },
+        {
+          "name": "vars",
+          "en": "Variable name, cell array of names, or indices.",
+          "pt": "Nome de variável, cell array de nomes, ou índices."
+        },
+        {
+          "name": "type",
+          "en": "Type name such as `'double'`, `'single'`, `'int8'`, `'string'`, `'categorical'` or `'datetime'`.",
+          "pt": "Nome de tipo como `'double'`, `'single'`, `'int8'`, `'string'`, `'categorical'` ou `'datetime'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "opts",
+          "en": "The updated options. `opts.VariableTypes` lists the types.",
+          "pt": "As opções atualizadas. `opts.VariableTypes` lista os tipos."
+        }
+      ],
+      "description": {
+        "en": "The detected types are only a guess from the first rows. `setvartype` overrides them before the file is read, for example to read an identifier column as text so that leading zeros are kept, or a number column as `single` to save memory.",
+        "pt": "Os tipos detectados são só um palpite feito a partir das primeiras linhas. `setvartype` os sobrescreve antes de ler o arquivo, por exemplo para ler uma coluna de identificadores como texto e preservar zeros à esquerda, ou uma coluna numérica como `single` para economizar memória."
+      },
+      "notes": {
+        "en": "In MatLivre `setvartype` works on import options only, not on tables; for tables use `convertvars`.",
+        "pt": "No MatLivre `setvartype` funciona apenas com opções de importação, não com tabelas; para tabelas use `convertvars`."
+      },
+      "examples": [
+        {
+          "code": "fid = fopen('v.csv', 'w');\nfprintf(fid, 'id,score\\n1,2.5\\n2,3.5\\n');\nfclose(fid);\nopts = detectImportOptions('v.csv');\nopts = setvartype(opts, {'id','score'}, 'single');\nopts.VariableTypes"
+        }
+      ],
+      "see": [
+        "setvaropts",
+        "detectImportOptions",
+        "readtable",
+        "convertvars"
+      ]
+    },
+    "setxor": {
+      "summary": {
+        "en": "Elements that are in exactly one of two sets.",
+        "pt": "Elementos que estão em exatamente um de dois conjuntos."
+      },
+      "syntax": [
+        {
+          "code": "C = setxor(A, B)",
+          "en": "Values that appear in `A` or `B` but not in both, sorted and without repeats.",
+          "pt": "Valores que aparecem em `A` ou `B`, mas não em ambos, ordenados e sem repetições."
+        },
+        {
+          "code": "C = setxor(A, B, 'stable')",
+          "en": "Keeps the order of appearance.",
+          "pt": "Mantém a ordem de aparição."
+        },
+        {
+          "code": "[C, ia, ib] = setxor(___)",
+          "en": "Also returns the indices into `A` and `B`.",
+          "pt": "Também retorna os índices em `A` e `B`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric arrays, string arrays, cell arrays of character vectors or tables.",
+          "pt": "Arrays numéricos, string arrays, cell arrays de vetores de caracteres ou tabelas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The symmetric difference.",
+          "pt": "A diferença simétrica."
+        },
+        {
+          "name": "ia, ib",
+          "en": "Indices such that `C` is made of `A(ia)` and `B(ib)`.",
+          "pt": "Índices tais que `C` é formado por `A(ia)` e `B(ib)`."
+        }
+      ],
+      "description": {
+        "en": "The symmetric difference is the union minus the intersection. Equivalently, it is `[setdiff(A,B) setdiff(B,A)]` sorted. It answers the question of what differs between two lists.",
+        "pt": "A diferença simétrica é a união menos a interseção. Equivale a `[setdiff(A,B) setdiff(B,A)]` ordenado. Responde à pergunta do que difere entre duas listas."
+      },
+      "examples": [
+        {
+          "code": "setxor([1 2 3], [3 4])\n[c, ia, ib] = setxor([1 2 3], [3 4]);\nia'\nib"
+        }
+      ],
+      "see": [
+        "setdiff",
+        "union",
+        "intersect",
+        "unique",
+        "ismember"
+      ]
+    },
+    "single": {
+      "summary": {
+        "en": "Converts values to single-precision floating point.",
+        "pt": "Converte valores para ponto flutuante de precisão simples."
+      },
+      "syntax": [
+        {
+          "code": "B = single(A)",
+          "en": "Converts `A` to class `single`, 32 bits per element.",
+          "pt": "Converte `A` para a classe `single`, 32 bits por elemento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size with class `single`.",
+          "pt": "Array do mesmo tamanho, com classe `single`."
+        }
+      ],
+      "description": {
+        "en": "Single precision has about 7 decimal digits and a range up to about 3.4e38, against 15 or 16 digits and 1.8e308 for `double`. Values that do not fit are rounded: `single(16777217)` becomes `16777216`. Arithmetic that mixes `single` and `double` gives `single`, and mixing `single` with an integer type gives that integer type.\n\nUsing `single` halves memory use, which matters for large arrays.",
+        "pt": "A precisão simples tem cerca de 7 dígitos decimais e faixa até cerca de 3.4e38, contra 15 ou 16 dígitos e 1.8e308 do `double`. Valores que não cabem são arredondados: `single(16777217)` vira `16777216`. A aritmética que mistura `single` e `double` resulta em `single`, e misturar `single` com um tipo inteiro resulta nesse tipo inteiro.\n\nUsar `single` reduz o uso de memória pela metade, o que importa para arrays grandes."
+      },
+      "examples": [
+        {
+          "code": "single(pi)\nclass(single(1) + 1)\nsingle(16777217)\nclass(single(1) * int8(2))"
+        }
+      ],
+      "see": [
+        "double",
+        "int8",
+        "class",
+        "cast",
+        "eps",
+        "realmax"
+      ]
+    },
+    "split": {
+      "summary": {
+        "en": "Splits text at delimiters into separate pieces.",
+        "pt": "Divide um texto em partes separadas nos delimitadores."
+      },
+      "syntax": [
+        {
+          "code": "C = split(str)",
+          "en": "Splits at whitespace.",
+          "pt": "Divide nos espaços em branco."
+        },
+        {
+          "code": "C = split(str, delim)",
+          "en": "Splits at the delimiter `delim`, or at any of several delimiters given as an array.",
+          "pt": "Divide no delimitador `delim`, ou em qualquer um de vários delimitadores dados como array."
+        },
+        {
+          "code": "C = split(___, 'CollapseDelimiters', tf)",
+          "en": "Controls whether adjacent delimiters count as one.",
+          "pt": "Controla se delimitadores adjacentes contam como um."
+        },
+        {
+          "code": "[C, matches] = split(___)",
+          "en": "Also returns the delimiters found.",
+          "pt": "Também retorna os delimitadores encontrados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "String array, character vector or cell array of character vectors.",
+          "pt": "String array, vetor de caracteres ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "delim",
+          "en": "Delimiter text, an array of delimiters, or a pattern.",
+          "pt": "Texto delimitador, array de delimitadores ou um padrão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "For a single string input, a column string array of the pieces; for a char vector, a cell array.",
+          "pt": "Para uma única string, um string array coluna com as partes; para um vetor de caracteres, um cell array."
+        },
+        {
+          "name": "matches",
+          "en": "The delimiters that separated the pieces.",
+          "pt": "Os delimitadores que separaram as partes."
+        }
+      ],
+      "description": {
+        "en": "`split` always returns one more piece than it finds delimiters. For an array input, the pieces run along a new dimension. By default adjacent delimiters are collapsed into one, so `\"a--b\"` split at `\"-\"` gives `a` and `b`. To split at several different characters, pass a string array such as `[\",\", \";\"]`.\n\nThe output is a string array when the input is a string and a cell array when the input is a char vector. `strsplit` is the older equivalent for char vectors.",
+        "pt": "`split` sempre retorna uma parte a mais do que o número de delimitadores encontrados. Para uma entrada em array, as partes ficam ao longo de uma nova dimensão. Por padrão delimitadores adjacentes são tratados como um só, então `\"a--b\"` dividido em `\"-\"` dá `a` e `b`. Para dividir em vários caracteres diferentes, passe um string array como `[\",\", \";\"]`.\n\nA saída é um string array quando a entrada é string e um cell array quando é vetor de caracteres. `strsplit` é o equivalente mais antigo para vetores de caracteres."
+      },
+      "notes": {
+        "en": "In MatLivre the `'CollapseDelimiters'` default is not applied (adjacent delimiters give empty pieces) and the second output `matches` is not available.",
+        "pt": "No MatLivre o padrão de `'CollapseDelimiters'` não é aplicado (delimitadores adjacentes geram partes vazias) e a segunda saída `matches` não está disponível."
+      },
+      "examples": [
+        {
+          "code": "split(\"a,b,c\", \",\")\nsplit(\"one two three\")\nsplit(\"a1b2c\", [\"1\",\"2\"])"
+        }
+      ],
+      "see": [
+        "strsplit",
+        "splitlines",
+        "join",
+        "regexp",
+        "extractBefore",
+        "strtok"
+      ]
+    },
+    "splitapply": {
+      "summary": {
+        "en": "Applies a function to each group of data and collects the results.",
+        "pt": "Aplica uma função a cada grupo de dados e reúne os resultados."
+      },
+      "syntax": [
+        {
+          "code": "Y = splitapply(func, X, G)",
+          "en": "Splits `X` by the group numbers in `G`, calls `func` on each group and stacks the results.",
+          "pt": "Divide `X` pelos números de grupo em `G`, chama `func` em cada grupo e empilha os resultados."
+        },
+        {
+          "code": "[Y1, Y2, ...] = splitapply(func, X, G)",
+          "en": "For a function that returns several outputs.",
+          "pt": "Para uma função que retorna várias saídas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "func",
+          "en": "Function handle applied to each group.",
+          "pt": "Function handle aplicado a cada grupo."
+        },
+        {
+          "name": "X",
+          "en": "Data array, or several arrays `X1, X2, ...` if `func` takes several inputs. Groups are taken along the rows.",
+          "pt": "Array de dados, ou vários arrays `X1, X2, ...` se `func` receber várias entradas. Os grupos são tomados ao longo das linhas."
+        },
+        {
+          "name": "G",
+          "en": "Positive integers giving the group of each row, usually from `findgroups`.",
+          "pt": "Inteiros positivos que dão o grupo de cada linha, em geral vindos de `findgroups`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "One row per group, in group order.",
+          "pt": "Uma linha por grupo, na ordem dos grupos."
+        }
+      ],
+      "description": {
+        "en": "`splitapply` is the second half of a split-apply-combine step: `findgroups` assigns an integer to each distinct key, and `splitapply` runs the function on the data of each group. The function is expected to return the same size for every group, typically a scalar such as `sum`, `mean` or `numel`.",
+        "pt": "`splitapply` é a segunda metade de um passo dividir-aplicar-combinar: `findgroups` atribui um inteiro a cada chave distinta, e `splitapply` executa a função nos dados de cada grupo. Espera-se que a função retorne o mesmo tamanho para todos os grupos, em geral um escalar como `sum`, `mean` ou `numel`."
+      },
+      "examples": [
+        {
+          "code": "[g, id] = findgroups([\"b\";\"a\";\"b\"]);\nid\nsplitapply(@sum, [10;20;30], g)\n[m, i] = splitapply(@max, [3;9;4;1], [1;1;2;2])"
+        }
+      ],
+      "see": [
+        "findgroups",
+        "groupsummary",
+        "rowfun",
+        "varfun",
+        "accumarray",
+        "unique"
+      ]
+    },
+    "splitlines": {
+      "summary": {
+        "en": "Splits text at line breaks.",
+        "pt": "Divide um texto nas quebras de linha."
+      },
+      "syntax": [
+        {
+          "code": "C = splitlines(str)",
+          "en": "Returns the lines of `str` as a column.",
+          "pt": "Retorna as linhas de `str` como uma coluna."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "String scalar or character vector.",
+          "pt": "String escalar ou vetor de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "String array (for a string input) or cell array (for a char input) with one line per element.",
+          "pt": "String array (para entrada string) ou cell array (para entrada char) com uma linha por elemento."
+        }
+      ],
+      "description": {
+        "en": "The break may be a line feed, a carriage return, or the pair carriage return plus line feed, so text from any platform is split correctly. The line breaks themselves are not kept. A text with no break returns a single line.",
+        "pt": "A quebra pode ser um avanço de linha, um retorno de carro, ou o par retorno de carro mais avanço de linha, então texto de qualquer plataforma é dividido corretamente. As quebras em si não são mantidas. Um texto sem quebra retorna uma única linha."
+      },
+      "examples": [
+        {
+          "code": "splitlines(\"a\" + newline + \"b\")\nsplitlines(sprintf('l1\\nl2\\r\\nl3'))"
+        }
+      ],
+      "see": [
+        "newline",
+        "split",
+        "strsplit",
+        "join",
+        "readlines"
+      ]
+    },
+    "splitvars": {
+      "summary": {
+        "en": "Splits multi-column table variables into separate variables.",
+        "pt": "Divide variáveis de tabela com várias colunas em variáveis separadas."
+      },
+      "syntax": [
+        {
+          "code": "T2 = splitvars(T)",
+          "en": "Splits every variable that has more than one column.",
+          "pt": "Divide toda variável que tem mais de uma coluna."
+        },
+        {
+          "code": "T2 = splitvars(T, vars)",
+          "en": "Splits only the variables in `vars`.",
+          "pt": "Divide apenas as variáveis em `vars`."
+        },
+        {
+          "code": "T2 = splitvars(___, 'NewVariableNames', names)",
+          "en": "Names the new variables.",
+          "pt": "Dá nome às novas variáveis."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Table.",
+          "pt": "Tabela."
+        },
+        {
+          "name": "vars",
+          "en": "Names or indices of the variables to split.",
+          "pt": "Nomes ou índices das variáveis a dividir."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T2",
+          "en": "Table with one variable per column of the split variables.",
+          "pt": "Tabela com uma variável por coluna das variáveis divididas."
+        }
+      ],
+      "description": {
+        "en": "A table variable can hold a matrix whose columns belong together, such as coordinates. `splitvars` turns each column into its own variable, named after the original with a suffix (`M_1`, `M_2`, ...). `mergevars` does the opposite.",
+        "pt": "Uma variável de tabela pode guardar uma matriz cujas colunas estão relacionadas, como coordenadas. `splitvars` transforma cada coluna em uma variável própria, nomeada a partir da original com um sufixo (`M_1`, `M_2`, ...). `mergevars` faz o oposto."
+      },
+      "examples": [
+        {
+          "code": "T = table([1 2; 3 4], 'VariableNames', {'M'});\nsplitvars(T)"
+        }
+      ],
+      "see": [
+        "mergevars",
+        "removevars",
+        "table",
+        "rows2vars",
+        "addvars"
+      ]
+    },
+    "sprintf": {
+      "summary": {
+        "en": "Formats data into text with a format specification.",
+        "pt": "Formata dados em texto com uma especificação de formato."
+      },
+      "syntax": [
+        {
+          "code": "str = sprintf(formatSpec, A1, ..., An)",
+          "en": "Formats the arguments according to `formatSpec` and returns a character vector.",
+          "pt": "Formata os argumentos conforme `formatSpec` e retorna um vetor de caracteres."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "formatSpec",
+          "en": "Text with plain characters and conversions such as `%d` (integer), `%f` (fixed), `%e` (exponent), `%g` (shorter of the two), `%s` (text), `%c` (character), `%x` (hexadecimal). Flags, width and precision go between `%` and the letter, as in `%8.3f` or `%-6d`.",
+          "pt": "Texto com caracteres comuns e conversões como `%d` (inteiro), `%f` (fixo), `%e` (exponencial), `%g` (a mais curta das duas), `%s` (texto), `%c` (caractere), `%x` (hexadecimal). Flags, largura e precisão ficam entre `%` e a letra, como em `%8.3f` ou `%-6d`."
+        },
+        {
+          "name": "A1, ..., An",
+          "en": "Values to insert, consumed in column order.",
+          "pt": "Valores a inserir, consumidos em ordem de coluna."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "str",
+          "en": "Character vector with the formatted text.",
+          "pt": "Vetor de caracteres com o texto formatado."
+        }
+      ],
+      "description": {
+        "en": "The format is reused as many times as needed to use up all arguments, so `sprintf('%d,', [1 2 3])` gives `'1,2,3,'`. Escape sequences such as `\\n` and `\\t` in the format are translated. Matrix arguments are read down the columns.\n\nA `%d` conversion given a non-integer value switches to exponent notation (`sprintf('%d', 2.5)` gives `'2.500000e+00'`). Use `%s` with a string scalar, and `fprintf` to print the same text directly.",
+        "pt": "O formato é reutilizado quantas vezes for preciso para consumir todos os argumentos, então `sprintf('%d,', [1 2 3])` dá `'1,2,3,'`. Sequências de escape como `\\n` e `\\t` no formato são traduzidas. Argumentos matriciais são lidos coluna a coluna.\n\nUma conversão `%d` recebendo um valor não inteiro passa para notação exponencial (`sprintf('%d', 2.5)` dá `'2.500000e+00'`). Use `%s` com uma string escalar, e `fprintf` para imprimir o mesmo texto diretamente."
+      },
+      "examples": [
+        {
+          "code": "sprintf('%d items, %5.2f', 3, 2.5)\nsprintf('%d,', [1 2 3])\nsprintf('%6.2f|%-6d|%e', pi, 5, 12345.678)\nsprintf('%x', 255)"
+        }
+      ],
+      "see": [
+        "fprintf",
+        "num2str",
+        "disp",
+        "string",
+        "sscanf",
+        "compose"
+      ]
+    },
+    "sscanf": {
+      "summary": {
+        "en": "Reads formatted data from text.",
+        "pt": "Lê dados formatados de um texto."
+      },
+      "syntax": [
+        {
+          "code": "A = sscanf(str, formatSpec)",
+          "en": "Reads all the values that match the format.",
+          "pt": "Lê todos os valores que casam com o formato."
+        },
+        {
+          "code": "A = sscanf(str, formatSpec, sizeA)",
+          "en": "Reads at most `sizeA` values, or fills a matrix when `sizeA` is `[m n]`.",
+          "pt": "Lê no máximo `sizeA` valores, ou preenche uma matriz quando `sizeA` é `[m n]`."
+        },
+        {
+          "code": "[A, count] = sscanf(___)",
+          "en": "Also returns how many values were read.",
+          "pt": "Também retorna quantos valores foram lidos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Character vector or string.",
+          "pt": "Vetor de caracteres ou string."
+        },
+        {
+          "name": "formatSpec",
+          "en": "Conversions such as `%d`, `%f`, `%s`, `%c`, plus literal text that must match.",
+          "pt": "Conversões como `%d`, `%f`, `%s`, `%c`, mais texto literal que precisa casar."
+        },
+        {
+          "name": "sizeA",
+          "en": "Maximum number of values, or `[m n]`.",
+          "pt": "Número máximo de valores, ou `[m n]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "Column vector (or matrix) of the values read. If the format mixes numbers and text, characters are returned as their character codes.",
+          "pt": "Vetor coluna (ou matriz) com os valores lidos. Se o formato mistura números e texto, os caracteres são retornados como seus códigos."
+        },
+        {
+          "name": "count",
+          "en": "Number of values read.",
+          "pt": "Número de valores lidos."
+        }
+      ],
+      "description": {
+        "en": "`sscanf` is the reverse of `sprintf`. The format is applied repeatedly to the text, and reading stops at the first mismatch. Text between conversions in the format, like the `x=` in `'x=%f'`, must be present in the input. Whitespace in the format matches any amount of whitespace.\n\nIf nothing can be read, the result is empty. For plain conversion of a single number from text, `str2double` is simpler.",
+        "pt": "`sscanf` é o inverso de `sprintf`. O formato é aplicado repetidamente ao texto, e a leitura para na primeira divergência. O texto entre conversões no formato, como o `x=` em `'x=%f'`, precisa estar na entrada. Espaço em branco no formato casa com qualquer quantidade de espaço em branco.\n\nSe nada puder ser lido, o resultado é vazio. Para converter apenas um número a partir de texto, `str2double` é mais simples."
+      },
+      "examples": [
+        {
+          "code": "sscanf('3 4 5', '%d')'\nsscanf('x=2.5', 'x=%f')\n[v, n] = sscanf('1 2 3', '%d')\nsscanf('10:20', '%d:%d')'"
+        }
+      ],
+      "see": [
+        "sprintf",
+        "str2double",
+        "str2num",
+        "fscanf",
+        "textscan",
+        "regexp"
+      ]
+    },
+    "stack": {
+      "summary": {
+        "en": "Stacks several table variables into a single variable (wide to long).",
+        "pt": "Empilha várias variáveis de tabela em uma só (formato largo para longo)."
+      },
+      "syntax": [
+        {
+          "code": "S = stack(U, vars)",
+          "en": "Stacks the variables `vars` into one data variable, with an indicator variable naming the source.",
+          "pt": "Empilha as variáveis `vars` em uma variável de dados, com uma variável indicadora que nomeia a origem."
+        },
+        {
+          "code": "S = stack(___, 'NewDataVariableName', n, 'IndexVariableName', m)",
+          "en": "Names the new data and indicator variables.",
+          "pt": "Dá nome às novas variáveis de dados e indicadora."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "U",
+          "en": "Table.",
+          "pt": "Tabela."
+        },
+        {
+          "name": "vars",
+          "en": "Names or indices of the variables to stack.",
+          "pt": "Nomes ou índices das variáveis a empilhar."
+        },
+        {
+          "name": "'NewDataVariableName'",
+          "en": "Name of the combined data variable.",
+          "pt": "Nome da variável de dados combinada."
+        },
+        {
+          "name": "'IndexVariableName'",
+          "en": "Name of the indicator variable.",
+          "pt": "Nome da variável indicadora."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "S",
+          "en": "Table with `height(U) * numel(vars)` rows: rows of `U` come one after another, each repeated once per stacked variable.",
+          "pt": "Tabela com `height(U) * numel(vars)` linhas: as linhas de `U` vêm uma após a outra, cada uma repetida uma vez por variável empilhada."
+        }
+      ],
+      "description": {
+        "en": "Wide data keep one measurement per column (`Q1`, `Q2`, `Q3`); long data keep one measurement per row, with a column telling which one it is. Many grouping and plotting functions want the long form. The default names join the stacked variable names, as in `Q1_Q2_Q3`. `unstack` goes back to the wide form.",
+        "pt": "Dados largos guardam uma medida por coluna (`Q1`, `Q2`, `Q3`); dados longos guardam uma medida por linha, com uma coluna dizendo qual é. Muitas funções de agrupamento e gráfico querem a forma longa. Os nomes padrão juntam os nomes das variáveis empilhadas, como em `Q1_Q2_Q3`. `unstack` volta à forma larga."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2], [3;4], [5;6], 'VariableNames', {'Q1','Q2','Q3'});\nstack(T, {'Q1','Q2','Q3'}, 'NewDataVariableName', 'Val', 'IndexVariableName', 'Q')"
+        }
+      ],
+      "see": [
+        "unstack",
+        "pivot",
+        "splitvars",
+        "mergevars",
+        "table",
+        "rows2vars"
+      ]
+    },
+    "stackedplot": {
+      "summary": {
+        "en": "Plots several variables in vertically stacked axes that share the x-axis.",
+        "pt": "Plota várias variáveis em eixos empilhados na vertical que compartilham o eixo x."
+      },
+      "syntax": [
+        {
+          "code": "stackedplot(tbl)",
+          "en": "Plots every variable of a table or timetable in its own axes. A timetable uses its row times as x.",
+          "pt": "Plota cada variável de uma tabela ou timetable em seus próprios eixos. Um timetable usa os tempos das linhas como x."
+        },
+        {
+          "code": "stackedplot(X, Y)",
+          "en": "Plots the columns of `Y` against `X`, one axes per column.",
+          "pt": "Plota as colunas de `Y` contra `X`, um par de eixos por coluna."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "tbl",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "X, Y",
+          "en": "Numeric data; `Y` may be a matrix.",
+          "pt": "Dados numéricos; `Y` pode ser uma matriz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Optional handle to the stacked plot object.",
+          "pt": "Handle opcional do objeto de gráfico empilhado."
+        }
+      ],
+      "description": {
+        "en": "Variables with different units or ranges are easier to compare when each has its own y-axis but all share the same horizontal axis. Each stacked axes is labeled with the variable name. The plot appears below the code in a live script.",
+        "pt": "Variáveis com unidades ou faixas diferentes ficam mais fáceis de comparar quando cada uma tem seu próprio eixo y e todas compartilham o mesmo eixo horizontal. Cada par de eixos empilhado é rotulado com o nome da variável. O gráfico aparece abaixo do código em um live script."
+      },
+      "examples": [
+        {
+          "code": "TT = timetable(seconds([1;2;3]), [1;2;3], [3;2;1], 'VariableNames', {'up','down'});\nstackedplot(TT)",
+          "silent": true,
+          "note": {
+            "en": "In the app, the figure is drawn below the code.",
+            "pt": "No app, a figura é desenhada abaixo do código."
+          }
+        }
+      ],
+      "see": [
+        "plot",
+        "subplot",
+        "tiledlayout",
+        "timetable",
+        "linkaxes"
+      ]
+    }
+  }
+}

@@ -1,0 +1,1422 @@
+{
+ "functions": {
+  "matlab.settings.mustBeStringScalar": {
+   "summary": {
+    "en": "Validation function that errors unless the value is a string scalar or character vector.",
+    "pt": "Função de validação que gera erro a menos que o valor seja uma string escalar ou vetor de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "matlab.settings.mustBeStringScalar(v)",
+     "en": "Returns silently if `v` is a string scalar or character vector; otherwise throws an error.",
+     "pt": "Retorna sem nada se `v` for uma string escalar ou vetor de caracteres; caso contrário gera um erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "v",
+     "en": "Value to check.",
+     "pt": "Valor a verificar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "These validators are meant as the `'ValidationFcn'` of a setting, passed as a handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeStringScalar)`. They produce no output on success and raise an error on failure, which makes the assignment to the setting fail. They can also be called directly.",
+    "pt": "Estes validadores servem como `'ValidationFcn'` de uma configuração, passados como handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeStringScalar)`. Não produzem saída em caso de sucesso e geram erro em caso de falha, o que faz a atribuição à configuração falhar. Também podem ser chamados diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Accept and reject",
+      "pt": "Aceitar e rejeitar"
+     },
+     "code": "matlab.settings.mustBeStringScalar(\"abc\")\ndisp('accepted')\ntry\n    matlab.settings.mustBeStringScalar(42)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "matlab.settings.mustBeIntegerScalar",
+    "matlab.settings.mustBeLogicalScalar",
+    "matlab.settings.mustBeNumericScalar"
+   ]
+  },
+  "perl": {
+   "summary": {
+    "en": "Runs a Perl script and returns its output and exit status.",
+    "pt": "Executa um script Perl e retorna a saída e o código de saída."
+   },
+   "syntax": [
+    {
+     "code": "[result, status] = perl(scriptfile)",
+     "en": "Runs the script and returns what it printed and its exit code.",
+     "pt": "Executa o script e retorna o que ele imprimiu e seu código de saída."
+    },
+    {
+     "code": "[result, status] = perl(scriptfile, arg1, ..., argN)",
+     "en": "Passes the arguments to the script on its command line.",
+     "pt": "Passa os argumentos ao script na linha de comando."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "scriptfile",
+     "en": "Path of the Perl script. A file that does not exist is an error.",
+     "pt": "Caminho do script Perl. Um arquivo inexistente é um erro."
+    },
+    {
+     "name": "arg1, ..., argN",
+     "en": "Character vectors passed as command-line arguments.",
+     "pt": "Vetores de caracteres passados como argumentos de linha de comando."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "result",
+     "en": "Text the script wrote to standard output.",
+     "pt": "Texto que o script escreveu na saída padrão."
+    },
+    {
+     "name": "status",
+     "en": "Exit code of the interpreter; `0` means success.",
+     "pt": "Código de saída do interpretador; `0` indica sucesso."
+    }
+   ],
+   "description": {
+    "en": "`perl` is a thin wrapper over the system Perl interpreter. It calls `perl scriptfile args` and captures the output as a character vector. A Perl installation must be available on the machine; it is not bundled.",
+    "pt": "`perl` é uma camada fina sobre o interpretador Perl do sistema. Chama `perl scriptfile args` e captura a saída como vetor de caracteres. É preciso ter o Perl instalado na máquina; ele não vem incluído."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Run a one-line script",
+      "pt": "Executar um script de uma linha"
+     },
+     "code": "fid = fopen('hello.pl', 'w');\nfprintf(fid, 'print \"hello from perl\\\\n\";');\nfclose(fid);\n[result, status] = perl('hello.pl');\ndisp(strtrim(result))\ndisp(status)\ndelete('hello.pl')"
+    }
+   ],
+   "see": [
+    "system",
+    "unix",
+    "dos",
+    "cmdsep"
+   ]
+  },
+  "removeGroup": {
+   "summary": {
+    "en": "Deletes a settings group and everything inside it.",
+    "pt": "Apaga um grupo de configurações e tudo o que há dentro dele."
+   },
+   "syntax": [
+    {
+     "code": "removeGroup(parent, name)",
+     "en": "Removes the child group `name` from `parent`.",
+     "pt": "Remove o subgrupo `name` de `parent`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "parent",
+     "en": "The root from `settings` or a `SettingsGroup`.",
+     "pt": "A raiz de `settings` ou um `SettingsGroup`."
+    },
+    {
+     "name": "name",
+     "en": "Name of the child group to delete.",
+     "pt": "Nome do subgrupo a apagar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Removing a group also removes its settings and nested groups. Product groups that ship with the application cannot be removed. Asking for a group that does not exist is an error, so check with `hasGroup` when unsure.",
+    "pt": "Remover um grupo também remove suas configurações e subgrupos. Grupos de produtos que acompanham o aplicativo não podem ser removidos. Pedir um grupo inexistente é um erro, então verifique com `hasGroup` em caso de dúvida."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Add and remove",
+      "pt": "Adicionar e remover"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'tmpgroup');\naddSetting(g, 'A', 'PersonalValue', 1);\ndisp(hasGroup(s, 'tmpgroup'))\nremoveGroup(s, 'tmpgroup');\ndisp(hasGroup(s, 'tmpgroup'))"
+    }
+   ],
+   "see": [
+    "addGroup",
+    "hasGroup",
+    "removeSetting",
+    "settings"
+   ]
+  },
+  "removeSetting": {
+   "summary": {
+    "en": "Deletes a setting from a settings group.",
+    "pt": "Apaga uma configuração de um grupo de configurações."
+   },
+   "syntax": [
+    {
+     "code": "removeSetting(G, name)",
+     "en": "Removes the setting `name` from group `G`.",
+     "pt": "Remove a configuração `name` do grupo `G`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "G",
+     "en": "A `SettingsGroup` object.",
+     "pt": "Um objeto `SettingsGroup`."
+    },
+    {
+     "name": "name",
+     "en": "Name of the setting to delete.",
+     "pt": "Nome da configuração a apagar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "All value layers of the setting are discarded with it. Use `hasSetting` first when the setting may not exist.",
+    "pt": "Todas as camadas de valor da configuração são descartadas com ela. Use `hasSetting` antes quando a configuração puder não existir."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Add and remove a setting",
+      "pt": "Adicionar e remover uma configuração"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'tmpgroup');\naddSetting(g, 'A', 'PersonalValue', 1);\ndisp(hasSetting(g, 'A'))\nremoveSetting(g, 'A');\ndisp(hasSetting(g, 'A'))\nremoveGroup(s, 'tmpgroup');"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "hasSetting",
+    "removeGroup",
+    "settings"
+   ]
+  },
+  "rmpref": {
+   "summary": {
+    "en": "Removes a preference, or a whole preference group.",
+    "pt": "Remove uma preferência ou um grupo inteiro de preferências."
+   },
+   "syntax": [
+    {
+     "code": "rmpref(group)",
+     "en": "Deletes the group and all its preferences.",
+     "pt": "Apaga o grupo e todas as suas preferências."
+    },
+    {
+     "code": "rmpref(group, pref)",
+     "en": "Deletes only the preference `pref`.",
+     "pt": "Apaga apenas a preferência `pref`."
+    },
+    {
+     "code": "rmpref(group, {pref1, pref2})",
+     "en": "Deletes several preferences.",
+     "pt": "Apaga várias preferências."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "group",
+     "en": "Group name.",
+     "pt": "Nome do grupo."
+    },
+    {
+     "name": "pref",
+     "en": "Preference name or cell array of names.",
+     "pt": "Nome da preferência ou cell array de nomes."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The group and each named preference must exist, otherwise `rmpref` errors; check with `ispref` first when needed. Removing the last preference does not remove the group itself.",
+    "pt": "O grupo e cada preferência indicada devem existir, senão `rmpref` gera erro; verifique antes com `ispref` quando necessário. Remover a última preferência não remove o próprio grupo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Remove one, then the group",
+      "pt": "Remover uma e depois o grupo"
+     },
+     "code": "setpref('demoapp', 'a', 1);\nsetpref('demoapp', 'b', 2);\nrmpref('demoapp', 'a');\ndisp(ispref('demoapp', {'a', 'b'}))\nrmpref('demoapp');\ndisp(ispref('demoapp'))"
+    }
+   ],
+   "see": [
+    "setpref",
+    "getpref",
+    "addpref",
+    "ispref"
+   ]
+  },
+  "setenv": {
+   "summary": {
+    "en": "Sets an environment variable for the current process.",
+    "pt": "Define uma variável de ambiente para o processo atual."
+   },
+   "syntax": [
+    {
+     "code": "setenv(name, value)",
+     "en": "Sets variable `name` to `value`.",
+     "pt": "Define a variável `name` com o valor `value`."
+    },
+    {
+     "code": "setenv(name)",
+     "en": "Sets `name` to an empty value.",
+     "pt": "Define `name` com valor vazio."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name.",
+     "pt": "Nome da variável."
+    },
+    {
+     "name": "value",
+     "en": "Text to store.",
+     "pt": "Texto a armazenar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The change lasts for the current session and is inherited by programs started with `system`; it does not alter the permanent environment of the operating system. Setting an existing variable replaces its value.",
+    "pt": "A alteração vale para a sessão atual e é herdada pelos programas iniciados com `system`; ela não muda o ambiente permanente do sistema operacional. Definir uma variável existente substitui o valor."
+   },
+   "notes": {
+    "en": "The last line of the example uses the Windows syntax `%NAME%`; on other systems a shell would use `$NAME`.",
+    "pt": "A última linha do exemplo usa a sintaxe do Windows, `%NAME%`; em outros sistemas um shell usaria `$NAME`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Pass a value to a child process",
+      "pt": "Passar um valor a um processo filho"
+     },
+     "code": "setenv('GREETING', 'olá');\ndisp(getenv('GREETING'))\nsetenv('GREETING', 'hi');\ndisp(getenv('GREETING'))\n[~, out] = system('echo %GREETING%');\ndisp(strtrim(out))"
+    }
+   ],
+   "see": [
+    "getenv",
+    "unsetenv",
+    "isenv",
+    "system"
+   ]
+  },
+  "setpref": {
+   "summary": {
+    "en": "Creates a preference or changes its value.",
+    "pt": "Cria uma preferência ou altera seu valor."
+   },
+   "syntax": [
+    {
+     "code": "setpref(group, pref, val)",
+     "en": "Stores `val` under `pref` in `group`, creating either if needed.",
+     "pt": "Armazena `val` em `pref` no grupo `group`, criando um ou outro se necessário."
+    },
+    {
+     "code": "setpref(group, {pref1, pref2}, {val1, val2})",
+     "en": "Sets several preferences at once.",
+     "pt": "Define várias preferências de uma vez."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "group",
+     "en": "Group name.",
+     "pt": "Nome do grupo."
+    },
+    {
+     "name": "pref",
+     "en": "Preference name or cell array of names.",
+     "pt": "Nome da preferência ou cell array de nomes."
+    },
+    {
+     "name": "val",
+     "en": "Value of any type, or a cell array matching `pref`.",
+     "pt": "Valor de qualquer tipo, ou cell array correspondente a `pref`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`setpref` is create-or-update: unlike `addpref` it does not complain when the preference exists. Read the value back with `getpref`.",
+    "pt": "`setpref` cria ou atualiza: diferente de `addpref`, não reclama quando a preferência já existe. Leia o valor de volta com `getpref`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Set one and several",
+      "pt": "Definir uma e várias"
+     },
+     "code": "setpref('demoapp', 'n', 3);\nsetpref('demoapp', 'n', 4);\nsetpref('demoapp', {'a', 'b'}, {1, 'two'});\ndisp(getpref('demoapp', 'n'))\ns = getpref('demoapp')\nrmpref('demoapp');"
+    }
+   ],
+   "see": [
+    "getpref",
+    "addpref",
+    "rmpref",
+    "ispref"
+   ]
+  },
+  "Setting": {
+   "summary": {
+    "en": "Object that holds one named setting and its layered values.",
+    "pt": "Objeto que guarda uma configuração nomeada e suas camadas de valor."
+   },
+   "syntax": [
+    {
+     "code": "S = addSetting(G, name)",
+     "en": "Settings are created with `addSetting` and reached with dot syntax such as `s.group.name`.",
+     "pt": "Configurações são criadas com `addSetting` e acessadas com a sintaxe de ponto, como `s.group.name`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "description": {
+    "en": "A `Setting` has five value properties: `ActiveValue` (read only, the effective value), `TemporaryValue`, `PersonalValue`, `InstallationValue` and `FactoryValue`. The effective value comes from the first layer that is set, in that order. Assigning to a layer runs the validation function of the setting. Use `hasTemporaryValue`, `hasPersonalValue` and the other `has...Value` methods to query a layer and the `clear...Value` methods to empty one.\n\nDisplaying the object lists all layers, with `<no value>` for those not set.",
+    "pt": "Uma `Setting` tem cinco propriedades de valor: `ActiveValue` (somente leitura, o valor efetivo), `TemporaryValue`, `PersonalValue`, `InstallationValue` e `FactoryValue`. O valor efetivo vem da primeira camada definida, nessa ordem. Atribuir a uma camada executa a função de validação da configuração. Use `hasTemporaryValue`, `hasPersonalValue` e os demais métodos `has...Value` para consultar uma camada, e os métodos `clear...Value` para esvaziá-la.\n\nExibir o objeto lista todas as camadas, com `<no value>` para as não definidas."
+   },
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspect a setting",
+      "pt": "Inspecionar uma configuração"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level', 'PersonalValue', 3);\na\na.TemporaryValue = 9;\ndisp(a.ActiveValue)\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "settings",
+    "SettingsGroup",
+    "hasPersonalValue",
+    "clearPersonalValue"
+   ]
+  },
+  "settings": {
+   "summary": {
+    "en": "Returns the root of the settings tree.",
+    "pt": "Retorna a raiz da árvore de configurações."
+   },
+   "syntax": [
+    {
+     "code": "s = settings",
+     "en": "Returns the root `SettingsGroup`, from which groups are reached by dot syntax.",
+     "pt": "Retorna o `SettingsGroup` raiz, a partir do qual os grupos são acessados com sintaxe de ponto."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A `matlab.settings.SettingsGroup` object for the root of the tree.",
+     "pt": "Um objeto `matlab.settings.SettingsGroup` para a raiz da árvore."
+    }
+   ],
+   "description": {
+    "en": "Settings store options for the application and for your own code in a tree of groups and settings. `s.matlab` is the product group; `s.matlab.fonts` and similar nested groups hold individual settings. Add your own branch with `addGroup`, and populate it with `addSetting`.\n\nThe root itself only holds groups; settings must live inside a group.",
+    "pt": "As configurações guardam opções do aplicativo e do seu próprio código em uma árvore de grupos e configurações. `s.matlab` é o grupo do produto; `s.matlab.fonts` e grupos aninhados semelhantes guardam configurações individuais. Crie seu próprio ramo com `addGroup` e preencha com `addSetting`.\n\nA raiz só contém grupos; configurações devem ficar dentro de um grupo."
+   },
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Look at the root",
+      "pt": "Olhar a raiz"
+     },
+     "code": "s = settings;\ndisp(class(s))\ndisp(hasGroup(s, 'matlab'))\ns"
+    }
+   ],
+   "see": [
+    "addGroup",
+    "addSetting",
+    "hasGroup",
+    "SettingsGroup"
+   ]
+  },
+  "SettingsGroup": {
+   "summary": {
+    "en": "Object that represents a group of settings and nested groups.",
+    "pt": "Objeto que representa um grupo de configurações e subgrupos."
+   },
+   "syntax": [
+    {
+     "code": "G = addGroup(parent, name)",
+     "en": "Groups are created with `addGroup`; `settings` returns the root group.",
+     "pt": "Grupos são criados com `addGroup`; `settings` retorna o grupo raiz."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "A `matlab.settings.SettingsGroup` object.",
+     "pt": "Um objeto `matlab.settings.SettingsGroup`."
+    }
+   ],
+   "description": {
+    "en": "A `SettingsGroup` is a container. Its children are reached with dot syntax (`G.name`) and can be settings or other groups. The methods are `addGroup`, `addSetting`, `hasGroup`, `hasSetting`, `removeGroup` and `removeSetting`. Displaying a group lists its children.",
+    "pt": "Um `SettingsGroup` é um contêiner. Seus filhos são acessados com a sintaxe de ponto (`G.name`) e podem ser configurações ou outros grupos. Os métodos são `addGroup`, `addSetting`, `hasGroup`, `hasSetting`, `removeGroup` e `removeSetting`. Exibir um grupo lista seus filhos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build a small tree",
+      "pt": "Montar uma árvore pequena"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\nsub = addGroup(g, 'inner');\naddSetting(g, 'Level', 'PersonalValue', 2);\ng\ndisp(hasGroup(g, 'inner'))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "settings",
+    "addGroup",
+    "addSetting",
+    "Setting"
+   ]
+  },
+  "system": {
+   "summary": {
+    "en": "Runs an operating-system command and returns its exit status and output.",
+    "pt": "Executa um comando do sistema operacional e retorna o código de saída e a saída."
+   },
+   "syntax": [
+    {
+     "code": "status = system(cmd)",
+     "en": "Runs `cmd`, shows its output and returns the exit status.",
+     "pt": "Executa `cmd`, mostra a saída e retorna o código de saída."
+    },
+    {
+     "code": "[status, out] = system(cmd)",
+     "en": "Captures the output in `out` instead of showing it.",
+     "pt": "Captura a saída em `out` em vez de exibi-la."
+    },
+    {
+     "code": "[status, out] = system(cmd, '-echo')",
+     "en": "Captures the output and also shows it.",
+     "pt": "Captura a saída e também a exibe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cmd",
+     "en": "Command line passed to the system shell.",
+     "pt": "Linha de comando passada ao shell do sistema."
+    },
+    {
+     "name": "'-echo'",
+     "en": "Show the output even when it is also captured.",
+     "pt": "Mostra a saída mesmo quando ela também é capturada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Exit code; `0` means success, any other value means the command failed.",
+     "pt": "Código de saída; `0` indica sucesso e qualquer outro valor indica falha do comando."
+    },
+    {
+     "name": "out",
+     "en": "Character vector with the text the command wrote, including standard error.",
+     "pt": "Vetor de caracteres com o texto escrito pelo comando, incluindo o erro padrão."
+    }
+   ],
+   "description": {
+    "en": "The string is handed to the shell of the host, so shell syntax (pipes, redirection, built-in commands) is available. A failing command does not raise a MATLAB error: check `status`. Environment variables set with `setenv` are seen by the command.\n\nUse `cmdsep` to join several commands in a portable way.",
+    "pt": "A string é entregue ao shell do sistema, então a sintaxe do shell (pipes, redirecionamento, comandos internos) está disponível. Um comando que falha não gera erro no MATLAB: verifique `status`. Variáveis definidas com `setenv` são vistas pelo comando.\n\nUse `cmdsep` para juntar vários comandos de forma portável."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capture output and status",
+      "pt": "Capturar saída e status"
+     },
+     "code": "[status, out] = system('echo hello');\ndisp(status)\ndisp(strtrim(out))\nstatus = system('exit 3');\ndisp(status)"
+    }
+   ],
+   "see": [
+    "dos",
+    "unix",
+    "perl",
+    "cmdsep",
+    "setenv"
+   ]
+  },
+  "unix": {
+   "summary": {
+    "en": "Runs a command through the Unix shell and returns its status and output.",
+    "pt": "Executa um comando pelo shell Unix e retorna status e saída."
+   },
+   "syntax": [
+    {
+     "code": "status = unix(cmd)",
+     "en": "Runs `cmd`, showing its output, and returns the exit status.",
+     "pt": "Executa `cmd`, mostrando a saída, e retorna o código de saída."
+    },
+    {
+     "code": "[status, out] = unix(cmd)",
+     "en": "Captures the output in `out` instead of showing it.",
+     "pt": "Captura a saída em `out` em vez de exibi-la."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cmd",
+     "en": "Command line to run.",
+     "pt": "Linha de comando a executar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Exit code of the command; `0` means success.",
+     "pt": "Código de saída do comando; `0` indica sucesso."
+    },
+    {
+     "name": "out",
+     "en": "Text the command wrote as output.",
+     "pt": "Texto que o comando escreveu como saída."
+    }
+   ],
+   "description": {
+    "en": "`unix` is the Unix-specific counterpart of `dos`: it behaves like `system`, intended for Linux and macOS shells. Code that must run on every platform should call `system` instead.",
+    "pt": "`unix` é a contrapartida de `dos` para Unix: comporta-se como `system`, voltado a shells de Linux e macOS. Código que deve rodar em qualquer plataforma deve chamar `system`."
+   },
+   "notes": {
+    "en": "MatLivre runs the command on any host, including Windows. In MATLAB for Windows, `unix` is not meant to be used.",
+    "pt": "O MatLivre executa o comando em qualquer sistema, inclusive Windows. No MATLAB para Windows, `unix` não deve ser usado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capture the output",
+      "pt": "Capturar a saída"
+     },
+     "code": "[status, out] = unix('echo hi');\ndisp(status)\ndisp(strtrim(out))"
+    }
+   ],
+   "see": [
+    "system",
+    "dos",
+    "perl",
+    "cmdsep"
+   ]
+  },
+  "unsetenv": {
+   "summary": {
+    "en": "Removes an environment variable from the current process.",
+    "pt": "Remove uma variável de ambiente do processo atual."
+   },
+   "syntax": [
+    {
+     "code": "unsetenv(name)",
+     "en": "Deletes the variable `name` from the process environment.",
+     "pt": "Apaga a variável `name` do ambiente do processo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name.",
+     "pt": "Nome da variável."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "After the call `isenv(name)` is false and `getenv(name)` returns an empty character vector. Programs started afterwards with `system` no longer see the variable. Only the current process is changed.",
+    "pt": "Depois da chamada, `isenv(name)` é falso e `getenv(name)` retorna um vetor de caracteres vazio. Programas iniciados depois com `system` não veem mais a variável. Apenas o processo atual é alterado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create and remove",
+      "pt": "Criar e remover"
+     },
+     "code": "setenv('TMP_DEMO', '1');\ndisp(isenv('TMP_DEMO'))\nunsetenv('TMP_DEMO');\ndisp(isenv('TMP_DEMO'))\ndisp(isempty(getenv('TMP_DEMO')))"
+    }
+   ],
+   "see": [
+    "setenv",
+    "getenv",
+    "isenv",
+    "loadenv"
+   ]
+  },
+  "winqueryreg": {
+   "summary": {
+    "en": "Reads a value, or lists the entries, of a key in the Windows registry.",
+    "pt": "Lê um valor, ou lista as entradas, de uma chave do registro do Windows."
+   },
+   "syntax": [
+    {
+     "code": "value = winqueryreg(rootkey, subkey, valname)",
+     "en": "Reads the registry value `valname` of the key.",
+     "pt": "Lê o valor `valname` da chave do registro."
+    },
+    {
+     "code": "names = winqueryreg('name', rootkey, subkey)",
+     "en": "Lists the names of the values and subkeys of the key.",
+     "pt": "Lista os nomes dos valores e subchaves da chave."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "rootkey",
+     "en": "Root hive: `'HKEY_CLASSES_ROOT'`, `'HKEY_CURRENT_USER'`, `'HKEY_LOCAL_MACHINE'` or `'HKEY_USERS'`.",
+     "pt": "Hive raiz: `'HKEY_CLASSES_ROOT'`, `'HKEY_CURRENT_USER'`, `'HKEY_LOCAL_MACHINE'` ou `'HKEY_USERS'`."
+    },
+    {
+     "name": "subkey",
+     "en": "Path of the key under the root, with backslashes.",
+     "pt": "Caminho da chave sob a raiz, com barras invertidas."
+    },
+    {
+     "name": "valname",
+     "en": "Name of the value to read.",
+     "pt": "Nome do valor a ler."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "value",
+     "en": "The registry value: a character vector for string types, a number for integer types.",
+     "pt": "O valor do registro: vetor de caracteres para tipos string, número para tipos inteiros."
+    },
+    {
+     "name": "names",
+     "en": "Cell array of character vectors.",
+     "pt": "Cell array de vetores de caracteres."
+    }
+   ],
+   "description": {
+    "en": "`winqueryreg` only reads the registry; it never writes. A key or value that does not exist is an error ('Specified key or value does not exist in the registry'). The function exists for Windows only.",
+    "pt": "`winqueryreg` apenas lê o registro; nunca grava. Uma chave ou valor inexistente é um erro (`Specified key or value does not exist in the registry`). A função existe apenas para Windows."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "List and read values",
+      "pt": "Listar e ler valores"
+     },
+     "code": "key = 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion';\nnames = winqueryreg('name', 'HKEY_LOCAL_MACHINE', key);\ndisp(class(names))\nprod = winqueryreg('HKEY_LOCAL_MACHINE', key, 'ProductName');\ndisp(class(prod))"
+    }
+   ],
+   "see": [
+    "getenv",
+    "system",
+    "dos"
+   ]
+  },
+  "animatedline": {
+   "summary": {
+    "en": "Creates a line that grows as points are added to it.",
+    "pt": "Cria uma linha que cresce à medida que pontos são adicionados a ela."
+   },
+   "syntax": [
+    {
+     "code": "h = animatedline",
+     "en": "Creates an empty animated line in the current axes.",
+     "pt": "Cria uma linha animada vazia nos eixos atuais."
+    },
+    {
+     "code": "h = animatedline(x, y)",
+     "en": "Creates the line with initial points.",
+     "pt": "Cria a linha com pontos iniciais."
+    },
+    {
+     "code": "h = animatedline(___, Name, Value)",
+     "en": "Sets line properties such as `'Color'`, `'LineWidth'` or `'MaximumNumPoints'`.",
+     "pt": "Define propriedades da linha, como `'Color'`, `'LineWidth'` ou `'MaximumNumPoints'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Vectors of initial coordinates.",
+     "pt": "Vetores de coordenadas iniciais."
+    },
+    {
+     "name": "'MaximumNumPoints'",
+     "en": "Largest number of points kept; older points are dropped first.",
+     "pt": "Maior número de pontos mantidos; os mais antigos são descartados primeiro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "An `AnimatedLine` handle. Add points with `addpoints`, read them with `getpoints` and empty it with `clearpoints`.",
+     "pt": "Um handle `AnimatedLine`. Adicione pontos com `addpoints`, leia com `getpoints` e esvazie com `clearpoints`."
+    }
+   ],
+   "description": {
+    "en": "An animated line is meant for data that arrives step by step, such as a simulation or a measurement loop. Each `addpoints` call appends to the line instead of redrawing a full `plot`, and `drawnow` makes the update visible during a loop.",
+    "pt": "Uma linha animada serve para dados que chegam passo a passo, como uma simulação ou um laço de medição. Cada chamada de `addpoints` acrescenta à linha em vez de redesenhar um `plot` completo, e `drawnow` torna a atualização visível durante um laço."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Grow a line in a loop",
+      "pt": "Fazer uma linha crescer em um laço"
+     },
+     "code": "h = animatedline('LineWidth', 2);\nfor k = 1:20\n    addpoints(h, k, sin(k/3));\n    drawnow\nend\n[x, y] = getpoints(h);\ndisp(numel(x))\ndisp(round(y(1:3), 4))"
+    }
+   ],
+   "see": [
+    "addpoints",
+    "clearpoints",
+    "getpoints",
+    "drawnow",
+    "plot"
+   ]
+  },
+  "addpoints": {
+   "summary": {
+    "en": "Appends points to an animated line.",
+    "pt": "Acrescenta pontos a uma linha animada."
+   },
+   "syntax": [
+    {
+     "code": "addpoints(h, x, y)",
+     "en": "Adds the points `(x, y)` to animated line `h`.",
+     "pt": "Adiciona os pontos `(x, y)` à linha animada `h`."
+    },
+    {
+     "code": "addpoints(h, x, y, z)",
+     "en": "Adds 3-D points.",
+     "pt": "Adiciona pontos 3-D."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Handle returned by `animatedline`.",
+     "pt": "Handle retornado por `animatedline`."
+    },
+    {
+     "name": "x, y, z",
+     "en": "Scalars or vectors of the same length.",
+     "pt": "Escalares ou vetores de mesmo comprimento."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The new points go after the existing ones. If the line has a `MaximumNumPoints` limit, the oldest points fall off the front. Call `drawnow` inside a loop to see the line grow, and `getpoints` to read the stored data.",
+    "pt": "Os novos pontos vão depois dos existentes. Se a linha tem limite `MaximumNumPoints`, os pontos mais antigos saem do início. Chame `drawnow` dentro de um laço para ver a linha crescer, e `getpoints` para ler os dados guardados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Append vectors",
+      "pt": "Acrescentar vetores"
+     },
+     "code": "h = animatedline;\naddpoints(h, 1:3, [4 5 6]);\naddpoints(h, 4, 7);\n[x, y] = getpoints(h);\ndisp([x; y])"
+    }
+   ],
+   "see": [
+    "animatedline",
+    "clearpoints",
+    "getpoints",
+    "drawnow"
+   ]
+  },
+  "bar": {
+   "summary": {
+    "en": "Draws a bar chart.",
+    "pt": "Desenha um gráfico de barras."
+   },
+   "syntax": [
+    {
+     "code": "bar(y)",
+     "en": "One bar per element of vector `y`, at positions `1:n`. For a matrix, each row becomes a group and each column a series.",
+     "pt": "Uma barra por elemento do vetor `y`, nas posições `1:n`. Para uma matriz, cada linha vira um grupo e cada coluna uma série."
+    },
+    {
+     "code": "bar(x, y)",
+     "en": "Places the bars at the positions in `x`.",
+     "pt": "Posiciona as barras nas posições de `x`."
+    },
+    {
+     "code": "bar(___, Name, Value)",
+     "en": "Sets properties such as `'FaceColor'` or `'BarWidth'`.",
+     "pt": "Define propriedades como `'FaceColor'` ou `'BarWidth'`."
+    },
+    {
+     "code": "b = bar(___)",
+     "en": "Also returns the bar objects, one per column of `y`.",
+     "pt": "Também retorna os objetos de barra, um por coluna de `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Increasing positions of the bars.",
+     "pt": "Posições crescentes das barras."
+    },
+    {
+     "name": "y",
+     "en": "Heights of the bars: a vector or a matrix.",
+     "pt": "Alturas das barras: um vetor ou uma matriz."
+    },
+    {
+     "name": "'FaceColor'",
+     "en": "Fill color, as a color name or an RGB triplet.",
+     "pt": "Cor de preenchimento, como nome de cor ou tripla RGB."
+    },
+    {
+     "name": "'BarWidth'",
+     "en": "Relative width of each bar, 0.8 by default.",
+     "pt": "Largura relativa de cada barra, 0.8 por padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Array of `Bar` objects; read or change their properties with dot syntax.",
+     "pt": "Array de objetos `Bar`; leia ou altere suas propriedades com sintaxe de ponto."
+    }
+   ],
+   "description": {
+    "en": "Bars start at the baseline (0 by default) and reach the value of each element. A matrix produces grouped bars, with one color per column; each series is a separate `Bar` object, which is how `legend` labels them.\n\nUse `barh` for horizontal bars, `bar3` for 3-D bars and `histogram` when counting data into bins.",
+    "pt": "As barras partem da linha de base (0 por padrão) e chegam ao valor de cada elemento. Uma matriz produz barras agrupadas, com uma cor por coluna; cada série é um objeto `Bar` separado, e é assim que `legend` as identifica.\n\nUse `barh` para barras horizontais, `bar3` para barras 3-D e `histogram` para contar dados em intervalos."
+   },
+   "notes": {
+    "en": "The style strings `'stacked'` and `'grouped'` are not accepted, a numeric second argument is read as `x` (not as a width; use `'BarWidth'`), and categorical or cell-array `x` values are not supported. Matrix columns are always drawn grouped.",
+    "pt": "As strings de estilo `'stacked'` e `'grouped'` não são aceitas, um segundo argumento numérico é lido como `x` (não como largura; use `'BarWidth'`), e valores de `x` categóricos ou em cell array não são suportados. As colunas da matriz são sempre desenhadas agrupadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Single and grouped bars",
+      "pt": "Barras simples e agrupadas"
+     },
+     "code": "subplot(1, 2, 1)\nbar([3 5 2 8 4])\ntitle('One series')\nsubplot(1, 2, 2)\nbar(1:3, [2 4; 3 1; 5 6])\nlegend('A', 'B')\ntitle('Two series')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "barh",
+    "bar3",
+    "histogram",
+    "pie",
+    "stairs",
+    "legend"
+   ]
+  },
+  "barh": {
+   "summary": {
+    "en": "Draws a horizontal bar chart.",
+    "pt": "Desenha um gráfico de barras horizontais."
+   },
+   "syntax": [
+    {
+     "code": "barh(y)",
+     "en": "One horizontal bar per element of `y`, from the bottom up.",
+     "pt": "Uma barra horizontal por elemento de `y`, de baixo para cima."
+    },
+    {
+     "code": "barh(x, y)",
+     "en": "Places the bars at the vertical positions in `x`.",
+     "pt": "Posiciona as barras nas posições verticais de `x`."
+    },
+    {
+     "code": "b = barh(___, Name, Value)",
+     "en": "Sets bar properties and returns the bar objects.",
+     "pt": "Define propriedades das barras e retorna os objetos de barra."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Increasing positions on the vertical axis.",
+     "pt": "Posições crescentes no eixo vertical."
+    },
+    {
+     "name": "y",
+     "en": "Lengths of the bars: a vector or a matrix.",
+     "pt": "Comprimentos das barras: um vetor ou uma matriz."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Array of `Bar` objects, one per column of `y`.",
+     "pt": "Array de objetos `Bar`, um por coluna de `y`."
+    }
+   ],
+   "description": {
+    "en": "`barh` is `bar` with the axes swapped: values run along the horizontal axis and the bar positions along the vertical one. It is handy for long category labels and for ranked lists. A matrix gives grouped bars, as in `bar`.",
+    "pt": "`barh` é `bar` com os eixos trocados: os valores correm no eixo horizontal e as posições das barras no vertical. É útil para rótulos longos de categoria e listas ordenadas. Uma matriz dá barras agrupadas, como em `bar`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ranked values",
+      "pt": "Valores ordenados"
+     },
+     "code": "scores = [62 75 88 54];\nbarh(1:4, scores, 'FaceColor', [0.2 0.5 0.8])\nxlabel('Score')\nylabel('Team')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bar",
+    "bar3h",
+    "histogram",
+    "plot"
+   ]
+  },
+  "bar3": {
+   "summary": {
+    "en": "Draws a 3-D bar chart.",
+    "pt": "Desenha um gráfico de barras 3-D."
+   },
+   "syntax": [
+    {
+     "code": "bar3(Z)",
+     "en": "Draws one 3-D bar per element of `Z`, positioned by row and column.",
+     "pt": "Desenha uma barra 3-D por elemento de `Z`, posicionada por linha e coluna."
+    },
+    {
+     "code": "bar3(Y, Z)",
+     "en": "Places the rows of `Z` at the positions in `Y`.",
+     "pt": "Posiciona as linhas de `Z` nas posições de `Y`."
+    },
+    {
+     "code": "bar3(___, width)",
+     "en": "Sets the bar width.",
+     "pt": "Define a largura das barras."
+    },
+    {
+     "code": "h = bar3(___)",
+     "en": "Also returns the graphics objects.",
+     "pt": "Também retorna os objetos gráficos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of bar heights.",
+     "pt": "Matriz com as alturas das barras."
+    },
+    {
+     "name": "Y",
+     "en": "Positions along the row axis.",
+     "pt": "Posições ao longo do eixo das linhas."
+    },
+    {
+     "name": "width",
+     "en": "Relative bar width, between 0 and 1.",
+     "pt": "Largura relativa das barras, entre 0 e 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Graphics objects for the bars.",
+     "pt": "Objetos gráficos das barras."
+    }
+   ],
+   "description": {
+    "en": "Each element of a matrix becomes a box, so a 3-by-3 matrix gives nine bars arranged on a grid. The chart can be rotated with the mouse in the app. Use `bar3h` for the variant with horizontal bars.",
+    "pt": "Cada elemento da matriz vira uma caixa, então uma matriz 3 por 3 dá nove barras dispostas em uma grade. O gráfico pode ser girado com o mouse no app. Use `bar3h` para a variante com barras horizontais."
+   },
+   "notes": {
+    "en": "The `'stacked'` and `'grouped'` style strings are not accepted.",
+    "pt": "As strings de estilo `'stacked'` e `'grouped'` não são aceitas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A magic square",
+      "pt": "Um quadrado mágico"
+     },
+     "code": "bar3(magic(4))\nxlabel('Column')\nylabel('Row')\nzlabel('Value')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bar",
+    "bar3h",
+    "surf",
+    "histogram2"
+   ]
+  },
+  "bar3h": {
+   "summary": {
+    "en": "Draws a 3-D bar chart with horizontal bars.",
+    "pt": "Desenha um gráfico de barras 3-D com barras horizontais."
+   },
+   "syntax": [
+    {
+     "code": "bar3h(Z)",
+     "en": "Draws one horizontal 3-D bar per element of `Z`.",
+     "pt": "Desenha uma barra 3-D horizontal por elemento de `Z`."
+    },
+    {
+     "code": "bar3h(Y, Z)",
+     "en": "Places the rows of `Z` at the positions in `Y`.",
+     "pt": "Posiciona as linhas de `Z` nas posições de `Y`."
+    },
+    {
+     "code": "h = bar3h(___)",
+     "en": "Also returns the graphics objects.",
+     "pt": "Também retorna os objetos gráficos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Z",
+     "en": "Matrix of bar lengths.",
+     "pt": "Matriz com os comprimentos das barras."
+    },
+    {
+     "name": "Y",
+     "en": "Positions along the row axis.",
+     "pt": "Posições ao longo do eixo das linhas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Graphics objects for the bars.",
+     "pt": "Objetos gráficos das barras."
+    }
+   ],
+   "description": {
+    "en": "`bar3h` is to `bar3` what `barh` is to `bar`: the bars extend horizontally from the baseline. Each element of the matrix is one box on the row/column grid.",
+    "pt": "`bar3h` está para `bar3` assim como `barh` está para `bar`: as barras se estendem horizontalmente a partir da linha de base. Cada elemento da matriz é uma caixa na grade de linhas e colunas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Horizontal 3-D bars",
+      "pt": "Barras 3-D horizontais"
+     },
+     "code": "bar3h([1 2 3; 4 5 6; 7 8 9])",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bar3",
+    "barh",
+    "bar",
+    "surf"
+   ]
+  },
+  "binscatter": {
+   "summary": {
+    "en": "Shows the density of scattered points by counting them in rectangular bins.",
+    "pt": "Mostra a densidade de pontos dispersos contando-os em intervalos retangulares."
+   },
+   "syntax": [
+    {
+     "code": "binscatter(x, y)",
+     "en": "Bins the points `(x, y)` and colors each bin by its count.",
+     "pt": "Agrupa os pontos `(x, y)` em intervalos e colore cada um pela contagem."
+    },
+    {
+     "code": "binscatter(x, y, N)",
+     "en": "Uses `N` bins in each direction, or `[Nx Ny]`.",
+     "pt": "Usa `N` intervalos em cada direção, ou `[Nx Ny]`."
+    },
+    {
+     "code": "binscatter(___, Name, Value)",
+     "en": "Sets options such as `'NumBins'`.",
+     "pt": "Define opções como `'NumBins'`."
+    },
+    {
+     "code": "h = binscatter(___)",
+     "en": "Also returns the `Binscatter` object.",
+     "pt": "Também retorna o objeto `Binscatter`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Vectors of the same length with the point coordinates.",
+     "pt": "Vetores de mesmo comprimento com as coordenadas dos pontos."
+    },
+    {
+     "name": "'NumBins'",
+     "en": "Number of bins as `[Nx Ny]`.",
+     "pt": "Número de intervalos como `[Nx Ny]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "The `Binscatter` object; its `NumBins` property reports the grid used.",
+     "pt": "O objeto `Binscatter`; sua propriedade `NumBins` informa a grade usada."
+    }
+   ],
+   "description": {
+    "en": "A scatter plot hides structure when thousands of points overlap. `binscatter` divides the plane into a grid and colors each cell by how many points it holds, so dense regions stand out. Add `colorbar` to read the counts.",
+    "pt": "Um gráfico de dispersão esconde estrutura quando milhares de pontos se sobrepõem. `binscatter` divide o plano em uma grade e colore cada célula pela quantidade de pontos que ela contém, de modo que as regiões densas se destacam. Acrescente `colorbar` para ler as contagens."
+   },
+   "notes": {
+    "en": "When the number of bins is not given, the automatic choice is an approximation and may differ from MATLAB's. Pass the number of bins to get the same grid.",
+    "pt": "Quando o número de intervalos não é informado, a escolha automática é uma aproximação e pode diferir da do MATLAB. Informe o número de intervalos para obter a mesma grade."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Density of random points",
+      "pt": "Densidade de pontos aleatórios"
+     },
+     "code": "rng(1)\nx = randn(5000, 1);\ny = x + 0.5*randn(5000, 1);\nh = binscatter(x, y, [20 20]);\ncolorbar\ndisp(h.NumBins)"
+    }
+   ],
+   "see": [
+    "scatter",
+    "histogram2",
+    "hist3",
+    "colorbar",
+    "plot"
+   ]
+  },
+  "boxchart": {
+   "summary": {
+    "en": "Draws box plots that summarize the distribution of data.",
+    "pt": "Desenha box plots que resumem a distribuição dos dados."
+   },
+   "syntax": [
+    {
+     "code": "boxchart(ydata)",
+     "en": "One box for a vector, or one box per column of a matrix.",
+     "pt": "Uma caixa para um vetor, ou uma caixa por coluna de uma matriz."
+    },
+    {
+     "code": "boxchart(xgroupdata, ydata)",
+     "en": "Groups `ydata` by the categories in `xgroupdata` and draws one box per group.",
+     "pt": "Agrupa `ydata` pelas categorias em `xgroupdata` e desenha uma caixa por grupo."
+    },
+    {
+     "code": "boxchart(___, Name, Value)",
+     "en": "Sets properties such as `'Notch'` or `'BoxWidth'`.",
+     "pt": "Define propriedades como `'Notch'` ou `'BoxWidth'`."
+    },
+    {
+     "code": "b = boxchart(___)",
+     "en": "Also returns the `BoxChart` object.",
+     "pt": "Também retorna o objeto `BoxChart`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ydata",
+     "en": "Numeric vector or matrix of data.",
+     "pt": "Vetor ou matriz numérica de dados."
+    },
+    {
+     "name": "xgroupdata",
+     "en": "Group labels, one per element of `ydata`.",
+     "pt": "Rótulos de grupo, um por elemento de `ydata`."
+    },
+    {
+     "name": "'Notch'",
+     "en": "`'on'` draws a notch around the median.",
+     "pt": "`'on'` desenha um entalhe em torno da mediana."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "The `BoxChart` object.",
+     "pt": "O objeto `BoxChart`."
+    }
+   ],
+   "description": {
+    "en": "Each box spans the first to third quartile with a line at the median. Whiskers reach the most extreme points within 1.5 times the interquartile range, and points beyond that are drawn as outliers. Boxes make it easy to compare the spread of several groups side by side.",
+    "pt": "Cada caixa vai do primeiro ao terceiro quartil, com uma linha na mediana. Os bigodes chegam aos pontos mais extremos dentro de 1,5 vez a amplitude interquartil, e os pontos além disso são desenhados como outliers. As caixas facilitam comparar a dispersão de vários grupos lado a lado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three samples",
+      "pt": "Três amostras"
+     },
+     "code": "rng(1)\ndata = [randn(30, 1), 2 + randn(30, 1), 1 + 2*randn(30, 1)];\nboxchart(data)\nxticklabels({'A', 'B', 'C'})\nylabel('Value')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "boxplot",
+    "histogram",
+    "violinplot",
+    "median",
+    "quantile"
+   ]
+  },
+  "bubblechart": {
+   "summary": {
+    "en": "Draws a scatter plot whose markers vary in size and color.",
+    "pt": "Desenha um gráfico de dispersão cujos marcadores variam em tamanho e cor."
+   },
+   "syntax": [
+    {
+     "code": "bubblechart(x, y, sz)",
+     "en": "Draws a bubble at each `(x, y)` with area scaled by `sz`.",
+     "pt": "Desenha uma bolha em cada `(x, y)` com área proporcional a `sz`."
+    },
+    {
+     "code": "bubblechart(x, y, sz, c)",
+     "en": "Also colors the bubbles by `c`.",
+     "pt": "Também colore as bolhas por `c`."
+    },
+    {
+     "code": "b = bubblechart(___)",
+     "en": "Also returns the `BubbleChart` object.",
+     "pt": "Também retorna o objeto `BubbleChart`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Vectors of coordinates.",
+     "pt": "Vetores de coordenadas."
+    },
+    {
+     "name": "sz",
+     "en": "Vector of the same length giving the size of each bubble; it is scaled to the range set by `bubblesize`.",
+     "pt": "Vetor de mesmo comprimento com o tamanho de cada bolha; é escalado para a faixa definida por `bubblesize`."
+    },
+    {
+     "name": "c",
+     "en": "Colors: one value per bubble (mapped through the colormap) or a color specification.",
+     "pt": "Cores: um valor por bolha (mapeado pelo colormap) ou uma especificação de cor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "The `BubbleChart` object.",
+     "pt": "O objeto `BubbleChart`."
+    }
+   ],
+   "description": {
+    "en": "A bubble chart adds a third (and optionally fourth) variable to a scatter plot. The sizes in `sz` are data values, not points: `bubblesize` sets the smallest and largest bubble on screen, `bubblelim` the data range they span, and `bubblelegend` explains the mapping.",
+    "pt": "Um gráfico de bolhas acrescenta uma terceira (e opcionalmente quarta) variável a um gráfico de dispersão. Os tamanhos em `sz` são valores dos dados, não pontos: `bubblesize` define a menor e a maior bolha na tela, `bubblelim` a faixa de dados que elas cobrem, e `bubblelegend` explica a correspondência."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Population versus income",
+      "pt": "População e renda"
+     },
+     "code": "x = [1 2 3 4 5];\ny = [3 1 4 2 5];\nsz = [10 40 25 80 55];\nbubblechart(x, y, sz, [1 2 3 4 5]);\nbubblelegend('Size')\ncolorbar",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bubblechart3",
+    "bubblesize",
+    "bubblelim",
+    "bubblelegend",
+    "scatter"
+   ]
+  },
+  "bubblechart3": {
+   "summary": {
+    "en": "Draws a 3-D scatter plot whose markers vary in size and color.",
+    "pt": "Desenha um gráfico de dispersão 3-D cujos marcadores variam em tamanho e cor."
+   },
+   "syntax": [
+    {
+     "code": "bubblechart3(x, y, z, sz)",
+     "en": "Draws a bubble at each `(x, y, z)` with area scaled by `sz`.",
+     "pt": "Desenha uma bolha em cada `(x, y, z)` com área proporcional a `sz`."
+    },
+    {
+     "code": "bubblechart3(x, y, z, sz, c)",
+     "en": "Also colors the bubbles by `c`.",
+     "pt": "Também colore as bolhas por `c`."
+    },
+    {
+     "code": "b = bubblechart3(___)",
+     "en": "Also returns the `BubbleChart` object.",
+     "pt": "Também retorna o objeto `BubbleChart`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y, z",
+     "en": "Vectors of coordinates.",
+     "pt": "Vetores de coordenadas."
+    },
+    {
+     "name": "sz",
+     "en": "Vector giving the size of each bubble.",
+     "pt": "Vetor com o tamanho de cada bolha."
+    },
+    {
+     "name": "c",
+     "en": "Colors: one value per bubble or a color specification.",
+     "pt": "Cores: um valor por bolha ou uma especificação de cor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "The `BubbleChart` object.",
+     "pt": "O objeto `BubbleChart`."
+    }
+   ],
+   "description": {
+    "en": "`bubblechart3` is the three-dimensional version of `bubblechart`, so a bubble carries up to five variables: three positions, a size and a color. `bubblesize`, `bubblelim` and `bubblelegend` control the size mapping in the same way.",
+    "pt": "`bubblechart3` é a versão tridimensional de `bubblechart`, então uma bolha carrega até cinco variáveis: três posições, um tamanho e uma cor. `bubblesize`, `bubblelim` e `bubblelegend` controlam o mapeamento de tamanho da mesma forma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Bubbles in space",
+      "pt": "Bolhas no espaço"
+     },
+     "code": "x = [1 2 3 4];\ny = [2 4 1 3];\nz = [1 3 2 4];\nbubblechart3(x, y, z, [10 30 20 50], [1 2 3 4]);\nxlabel('x')\nylabel('y')\nzlabel('z')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "bubblechart",
+    "bubblesize",
+    "bubblelim",
+    "scatter3"
+   ]
+  }
+ }
+}

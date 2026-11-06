@@ -1,0 +1,1297 @@
+{
+  "functions": {
+    "readtable": {
+      "summary": {
+        "en": "Reads a delimited text or spreadsheet file into a table.",
+        "pt": "Lê um arquivo de texto delimitado ou planilha em uma tabela."
+      },
+      "syntax": [
+        {
+          "code": "T = readtable(filename)",
+          "en": "Reads the file, taking variable names from the first row and detecting the type of each column.",
+          "pt": "Lê o arquivo, tomando os nomes das variáveis da primeira linha e detectando o tipo de cada coluna."
+        },
+        {
+          "code": "T = readtable(filename, opts)",
+          "en": "Reads using an import options object.",
+          "pt": "Lê usando um objeto de opções de importação."
+        },
+        {
+          "code": "T = readtable(___, Name, Value)",
+          "en": "Adjusts reading with options such as `'Range'` or `'VariableNamingRule'`.",
+          "pt": "Ajusta a leitura com opções como `'Range'` ou `'VariableNamingRule'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "filename",
+          "en": "Name of a `.csv`, `.txt`, `.dat` or spreadsheet file.",
+          "pt": "Nome de um arquivo `.csv`, `.txt`, `.dat` ou de planilha."
+        },
+        {
+          "name": "opts",
+          "en": "Import options, for example from `detectImportOptions`.",
+          "pt": "Opções de importação, por exemplo de `detectImportOptions`."
+        },
+        {
+          "name": "'Range'",
+          "en": "Cell range to read, such as `'A2:B3'`.",
+          "pt": "Faixa de células a ler, como `'A2:B3'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "Table with one variable per column. Numeric columns become `double`, text columns become cell arrays of character vectors.",
+          "pt": "Tabela com uma variável por coluna. Colunas numéricas viram `double`, colunas de texto viram cell arrays de vetores de caracteres."
+        }
+      ],
+      "description": {
+        "en": "`readtable` is the usual way to bring tabular data into the workspace. Column names come from the header line; characters that are not valid in a variable name are replaced (a name such as `a;b` becomes `a_b`) unless the naming rule is `'preserve'`.\n\nFor control over types, missing-value markers or which columns to read, build an options object with `detectImportOptions`, change it with `setvartype` and `setvaropts`, and pass it as the second argument.",
+        "pt": "`readtable` é o modo usual de trazer dados tabulares para o workspace. Os nomes das colunas vêm da linha de cabeçalho; caracteres que não são válidos em nome de variável são substituídos (um nome como `a;b` vira `a_b`), a menos que a regra de nomes seja `'preserve'`.\n\nPara controlar tipos, marcadores de valores ausentes ou quais colunas ler, crie um objeto de opções com `detectImportOptions`, altere-o com `setvartype` e `setvaropts` e passe-o como segundo argumento."
+      },
+      "notes": {
+        "en": "In MatLivre the delimiter is detected from the file, and strings that look like dates stay as text instead of becoming `datetime`; convert them afterwards with `datetime`.",
+        "pt": "No MatLivre o delimitador é detectado a partir do arquivo, e textos que parecem datas continuam como texto em vez de virar `datetime`; converta-os depois com `datetime`."
+      },
+      "examples": [
+        {
+          "code": "fid = fopen('data.csv', 'w');\nfprintf(fid, 'x,y\\n1,a\\n2,b\\n');\nfclose(fid);\nT = readtable('data.csv')",
+          "note": {
+            "en": "The example first writes a small file in the current folder.",
+            "pt": "O exemplo primeiro grava um pequeno arquivo na pasta atual."
+          }
+        }
+      ],
+      "see": [
+        "writetable",
+        "detectImportOptions",
+        "readtimetable",
+        "readmatrix",
+        "table"
+      ]
+    },
+    "readtimetable": {
+      "summary": {
+        "en": "Reads a file into a timetable, using a column or a time step for the row times.",
+        "pt": "Lê um arquivo em um timetable, usando uma coluna ou um passo de tempo como tempos das linhas."
+      },
+      "syntax": [
+        {
+          "code": "TT = readtimetable(filename)",
+          "en": "Uses the first datetime or duration column as row times.",
+          "pt": "Usa a primeira coluna datetime ou duration como tempos das linhas."
+        },
+        {
+          "code": "TT = readtimetable(filename, 'TimeStep', dt)",
+          "en": "Generates evenly spaced row times with step `dt`.",
+          "pt": "Gera tempos de linha igualmente espaçados com passo `dt`."
+        },
+        {
+          "code": "TT = readtimetable(filename, 'SampleRate', fs)",
+          "en": "Generates row times from a sample rate.",
+          "pt": "Gera os tempos de linha a partir de uma taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "filename",
+          "en": "Name of the file to read.",
+          "pt": "Nome do arquivo a ler."
+        },
+        {
+          "name": "'TimeStep'",
+          "en": "A duration: the spacing between rows when the file has no time column.",
+          "pt": "Uma duration: o espaçamento entre linhas quando o arquivo não tem coluna de tempo."
+        },
+        {
+          "name": "'SampleRate'",
+          "en": "Positive number of rows per second.",
+          "pt": "Número positivo de linhas por segundo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TT",
+          "en": "Timetable whose remaining columns are the variables.",
+          "pt": "Timetable cujas demais colunas são as variáveis."
+        }
+      ],
+      "description": {
+        "en": "A timetable needs a time for every row. `readtimetable` takes it from the first column that holds datetime or duration values, or builds it from `'TimeStep'` or `'SampleRate'` when the file contains only measurements. The row times are stored apart from the variables and shown in the first column of the display.",
+        "pt": "Um timetable precisa de um tempo para cada linha. `readtimetable` o obtém da primeira coluna com valores datetime ou duration, ou o constrói a partir de `'TimeStep'` ou `'SampleRate'` quando o arquivo só contém medições. Os tempos das linhas ficam guardados à parte das variáveis e aparecem na primeira coluna da exibição."
+      },
+      "notes": {
+        "en": "In MatLivre, a time column written as text is not converted automatically; use `'TimeStep'` or `'SampleRate'`, or convert the column with `datetime` after `readtable`.",
+        "pt": "No MatLivre, uma coluna de tempo escrita como texto não é convertida automaticamente; use `'TimeStep'` ou `'SampleRate'`, ou converta a coluna com `datetime` após `readtable`."
+      },
+      "examples": [
+        {
+          "code": "fid = fopen('m.csv', 'w');\nfprintf(fid, 'v,w\\n1,5\\n2,6\\n');\nfclose(fid);\nTT = readtimetable('m.csv', 'TimeStep', seconds(1))"
+        }
+      ],
+      "see": [
+        "readtable",
+        "timetable",
+        "writetimetable",
+        "retime",
+        "seconds"
+      ]
+    },
+    "realmax": {
+      "summary": {
+        "en": "Largest finite floating-point number.",
+        "pt": "Maior número de ponto flutuante finito."
+      },
+      "syntax": [
+        {
+          "code": "realmax",
+          "en": "Largest finite `double`, about 1.7977e+308.",
+          "pt": "Maior `double` finito, cerca de 1.7977e+308."
+        },
+        {
+          "code": "realmax('single')",
+          "en": "Largest finite `single`, about 3.4028e+38.",
+          "pt": "Maior `single` finito, cerca de 3.4028e+38."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "classname",
+          "en": "`'double'` (default) or `'single'`.",
+          "pt": "`'double'` (padrão) ou `'single'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Scalar of the requested class.",
+          "pt": "Escalar da classe pedida."
+        }
+      ],
+      "description": {
+        "en": "Results above `realmax` overflow to `Inf`. The value is the end of the representable range, not the largest integer that is stored exactly; for that, see `flintmax`.",
+        "pt": "Resultados acima de `realmax` estouram para `Inf`. O valor é o fim da faixa representável, não o maior inteiro guardado com exatidão; para isso, veja `flintmax`."
+      },
+      "examples": [
+        {
+          "code": "realmax\nrealmax('single')\nclass(realmax('single'))\nrealmax * 10"
+        }
+      ],
+      "see": [
+        "realmin",
+        "flintmax",
+        "intmax",
+        "eps",
+        "Inf"
+      ]
+    },
+    "realmin": {
+      "summary": {
+        "en": "Smallest positive normalized floating-point number.",
+        "pt": "Menor número de ponto flutuante normalizado positivo."
+      },
+      "syntax": [
+        {
+          "code": "realmin",
+          "en": "Smallest normalized `double`, about 2.2251e-308.",
+          "pt": "Menor `double` normalizado, cerca de 2.2251e-308."
+        },
+        {
+          "code": "realmin('single')",
+          "en": "Smallest normalized `single`, about 1.1755e-38.",
+          "pt": "Menor `single` normalizado, cerca de 1.1755e-38."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "classname",
+          "en": "`'double'` (default) or `'single'`.",
+          "pt": "`'double'` (padrão) ou `'single'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Scalar of the requested class.",
+          "pt": "Escalar da classe pedida."
+        }
+      ],
+      "description": {
+        "en": "Below `realmin` numbers become denormalized: they lose precision gradually until they underflow to zero. `realmin` is therefore the smallest value that keeps the full precision of the type. Do not confuse it with `eps`, which measures the spacing of numbers near 1.",
+        "pt": "Abaixo de `realmin` os números ficam desnormalizados: perdem precisão gradualmente até chegar a zero. Assim, `realmin` é o menor valor que mantém a precisão total do tipo. Não confunda com `eps`, que mede o espaçamento dos números perto de 1."
+      },
+      "examples": [
+        {
+          "code": "realmin\nrealmin / 2 > 0\nrealmin('single')"
+        }
+      ],
+      "see": [
+        "realmax",
+        "eps",
+        "flintmax",
+        "intmin"
+      ]
+    },
+    "regexp": {
+      "summary": {
+        "en": "Matches a regular expression against text and returns positions, matches, tokens or names.",
+        "pt": "Aplica uma expressão regular a um texto e retorna posições, trechos casados, tokens ou nomes."
+      },
+      "syntax": [
+        {
+          "code": "[start, finish] = regexp(str, expr)",
+          "en": "Start and end indices of every match.",
+          "pt": "Índices de início e fim de cada ocorrência."
+        },
+        {
+          "code": "out = regexp(str, expr, outkey)",
+          "en": "Returns the piece selected by `outkey`: `'match'`, `'tokens'`, `'names'`, `'split'`, `'start'`, `'end'`, `'tokenExtents'`.",
+          "pt": "Retorna a parte selecionada por `outkey`: `'match'`, `'tokens'`, `'names'`, `'split'`, `'start'`, `'end'`, `'tokenExtents'`."
+        },
+        {
+          "code": "[a, b, ...] = regexp(str, expr, key1, key2, ...)",
+          "en": "Several outputs in the order requested.",
+          "pt": "Várias saídas na ordem pedida."
+        },
+        {
+          "code": "___ = regexp(___, 'once')",
+          "en": "Stops after the first match and returns it without the surrounding cell.",
+          "pt": "Para após a primeira ocorrência e a retorna sem o cell externo."
+        },
+        {
+          "code": "___ = regexp(___, 'ignorecase')",
+          "en": "Ignores letter case.",
+          "pt": "Ignora maiúsculas e minúsculas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Character vector, string, or cell array of them.",
+          "pt": "Vetor de caracteres, string, ou cell array deles."
+        },
+        {
+          "name": "expr",
+          "en": "Regular expression. Parentheses create tokens; `(?<name>...)` creates a named token.",
+          "pt": "Expressão regular. Parênteses criam tokens; `(?<name>...)` cria um token nomeado."
+        },
+        {
+          "name": "outkey / option",
+          "en": "Selector of outputs and options such as `'once'`, `'ignorecase'`, `'lineanchors'`.",
+          "pt": "Seletor de saídas e opções como `'once'`, `'ignorecase'`, `'lineanchors'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "start, finish",
+          "en": "Row vectors of indices.",
+          "pt": "Vetores linha de índices."
+        },
+        {
+          "name": "match",
+          "en": "Cell array of matched text (a single character vector with `'once'`).",
+          "pt": "Cell array com os textos casados (um único vetor de caracteres com `'once'`)."
+        },
+        {
+          "name": "tokens",
+          "en": "For each match, a cell array of the text captured by each pair of parentheses.",
+          "pt": "Para cada ocorrência, um cell array com o texto capturado por cada par de parênteses."
+        },
+        {
+          "name": "names",
+          "en": "Structure whose fields are the named tokens.",
+          "pt": "Struct cujos campos são os tokens nomeados."
+        },
+        {
+          "name": "split",
+          "en": "Cell array of the text between the matches.",
+          "pt": "Cell array com o texto entre as ocorrências."
+        }
+      ],
+      "description": {
+        "en": "`regexp` scans the text from left to right and finds non-overlapping matches. Without output keys, the outputs come in a fixed order: start, end, token extents, match, tokens, names, split. Naming keys lets you pick only what you need.\n\nIf `str` is a cell array, the outputs are cell arrays with one entry per input element. If nothing matches, `'match'` returns an empty cell (or an empty char with `'once'`).",
+        "pt": "`regexp` varre o texto da esquerda para a direita e encontra ocorrências sem sobreposição. Sem palavras-chave de saída, as saídas vêm numa ordem fixa: início, fim, extensões dos tokens, trechos, tokens, nomes, split. Usar palavras-chave permite escolher só o que interessa.\n\nSe `str` for um cell array, as saídas são cell arrays com uma entrada por elemento. Se nada casar, `'match'` retorna um cell vazio (ou um char vazio com `'once'`)."
+      },
+      "notes": {
+        "en": "When the expression has no parentheses, MATLAB returns the entire match as a single token; MatLivre currently returns an empty list for `'tokens'` in that case, so add a group when you need tokens.",
+        "pt": "Quando a expressão não tem parênteses, o MATLAB retorna a ocorrência inteira como um único token; o MatLivre hoje retorna uma lista vazia em `'tokens'` nesse caso, então adicione um grupo quando precisar de tokens."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Matches and tokens",
+            "pt": "Trechos e tokens"
+          },
+          "code": "[tok, mat] = regexp('x1y22', '(\\w)(\\d+)', 'tokens', 'match');\nmat\ntok{2}\nregexp('key=val', '(?<k>\\w+)=(?<v>\\w+)', 'names')"
+        },
+        {
+          "title": {
+            "en": "Positions and split",
+            "pt": "Posições e split"
+          },
+          "code": "[s, e] = regexp('ab12cd345', '\\d+')\nregexp('a,b;c', '[,;]', 'split')"
+        }
+      ],
+      "see": [
+        "regexpi",
+        "regexprep",
+        "regexptranslate",
+        "strfind",
+        "contains",
+        "extract"
+      ]
+    },
+    "regexpi": {
+      "summary": {
+        "en": "Case-insensitive version of regexp.",
+        "pt": "Versão de regexp que ignora maiúsculas e minúsculas."
+      },
+      "syntax": [
+        {
+          "code": "out = regexpi(str, expr, outkey)",
+          "en": "Same as `regexp` with the `'ignorecase'` option on.",
+          "pt": "Igual a `regexp` com a opção `'ignorecase'` ligada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str, expr, outkey",
+          "en": "Same arguments as in `regexp`.",
+          "pt": "Os mesmos argumentos de `regexp`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out",
+          "en": "Same outputs as `regexp`.",
+          "pt": "As mesmas saídas de `regexp`."
+        }
+      ],
+      "description": {
+        "en": "`regexpi(str, expr)` is shorthand for `regexp(str, expr, 'ignorecase')`. All options and outputs of `regexp` are available. Case sensitivity can also be turned back on inside the expression with `(?-i)`.",
+        "pt": "`regexpi(str, expr)` é atalho de `regexp(str, expr, 'ignorecase')`. Todas as opções e saídas de `regexp` estão disponíveis. A distinção entre maiúsculas e minúsculas também pode ser religada dentro da expressão com `(?-i)`."
+      },
+      "examples": [
+        {
+          "code": "regexpi('ABC', 'b', 'match')\nregexpi('Hello', '^h', 'match')\nregexpi('ABC', 'b')"
+        }
+      ],
+      "see": [
+        "regexp",
+        "regexprep",
+        "strfind",
+        "contains"
+      ]
+    },
+    "regexpPattern": {
+      "summary": {
+        "en": "Creates a pattern object from a regular expression.",
+        "pt": "Cria um objeto pattern a partir de uma expressão regular."
+      },
+      "syntax": [
+        {
+          "code": "p = regexpPattern(expr)",
+          "en": "Returns a pattern that matches the same text as the regular expression `expr`.",
+          "pt": "Retorna um padrão que casa o mesmo texto que a expressão regular `expr`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "expr",
+          "en": "Regular expression as text.",
+          "pt": "Expressão regular como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "A `pattern` object that can be combined with other patterns using `+` and `|`.",
+          "pt": "Um objeto `pattern` que pode ser combinado com outros padrões usando `+` e `|`."
+        }
+      ],
+      "description": {
+        "en": "This is the bridge between the two matching styles: write the hard part as a regular expression, then use it inside a larger pattern expression, or pass it to functions such as `extract`, `contains` and `replace` that take patterns.",
+        "pt": "É a ponte entre os dois estilos de correspondência: escreva a parte difícil como expressão regular e use-a dentro de uma expressão de padrões maior, ou passe-a a funções como `extract`, `contains` e `replace`, que aceitam padrões."
+      },
+      "examples": [
+        {
+          "code": "p = regexpPattern('[0-9]+');\nextract(\"ab12cd345\", p)\nmatches([\"abc\", \"a.c\", \"ac\"], regexpPattern('a.c'))"
+        }
+      ],
+      "see": [
+        "pattern",
+        "regexp",
+        "extract",
+        "matches",
+        "digitsPattern"
+      ]
+    },
+    "regexprep": {
+      "summary": {
+        "en": "Replaces text that matches a regular expression.",
+        "pt": "Substitui o texto que casa com uma expressão regular."
+      },
+      "syntax": [
+        {
+          "code": "newStr = regexprep(str, expr, repl)",
+          "en": "Replaces every match of `expr` in `str` by `repl`.",
+          "pt": "Substitui toda ocorrência de `expr` em `str` por `repl`."
+        },
+        {
+          "code": "newStr = regexprep(___, option)",
+          "en": "Options such as `'once'` (first match only) and `'ignorecase'`.",
+          "pt": "Opções como `'once'` (só a primeira ocorrência) e `'ignorecase'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Character vector, string, or cell array of them.",
+          "pt": "Vetor de caracteres, string, ou cell array deles."
+        },
+        {
+          "name": "expr",
+          "en": "Regular expression, or a cell array of expressions applied in order.",
+          "pt": "Expressão regular, ou cell array de expressões aplicadas em ordem."
+        },
+        {
+          "name": "repl",
+          "en": "Replacement text. `$1`, `$2`, ... insert the text captured by each group; `$0` inserts the whole match.",
+          "pt": "Texto de substituição. `$1`, `$2`, ... inserem o texto capturado por cada grupo; `$0` insere a ocorrência inteira."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "Same type as `str`, with the replacements made.",
+          "pt": "Mesmo tipo de `str`, com as substituições feitas."
+        }
+      ],
+      "description": {
+        "en": "Replacement is done in a single left-to-right pass, so the replacement text is not searched again. Group references let you rearrange text: replacing `(\\w+) (\\w+)` with `$2 $1` swaps two words.\n\nThe result keeps the type of the input: a char in gives a char out, a string in gives a string out, and a cell array gives a cell array.",
+        "pt": "A substituição é feita em uma única passada da esquerda para a direita, então o texto inserido não é pesquisado de novo. Referências a grupos permitem reorganizar texto: substituir `(\\w+) (\\w+)` por `$2 $1` troca duas palavras.\n\nO resultado mantém o tipo da entrada: char gera char, string gera string e cell array gera cell array."
+      },
+      "examples": [
+        {
+          "code": "regexprep('hello world', '(\\w+) (\\w+)', '$2 $1')\nregexprep('abc', 'B', 'x', 'ignorecase')\nregexprep('a  b   c', '\\s+', ' ')\nregexprep('aaa', 'a', 'b', 'once')"
+        }
+      ],
+      "see": [
+        "regexp",
+        "regexpi",
+        "strrep",
+        "replace",
+        "regexptranslate"
+      ]
+    },
+    "regexptranslate": {
+      "summary": {
+        "en": "Turns text or a wildcard pattern into a regular expression.",
+        "pt": "Transforma um texto ou padrão com curingas em uma expressão regular."
+      },
+      "syntax": [
+        {
+          "code": "newStr = regexptranslate('escape', str)",
+          "en": "Adds backslashes before characters that have special meaning in a regular expression.",
+          "pt": "Coloca barras invertidas antes de caracteres com significado especial em uma expressão regular."
+        },
+        {
+          "code": "newStr = regexptranslate('wildcard', str)",
+          "en": "Converts the wildcards `*` and `?` and the dot of a file pattern to their regular-expression equivalents.",
+          "pt": "Converte os curingas `*` e `?` e o ponto de um padrão de arquivo nos equivalentes de expressão regular."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "op",
+          "en": "`'escape'` or `'wildcard'`.",
+          "pt": "`'escape'` ou `'wildcard'`."
+        },
+        {
+          "name": "str",
+          "en": "Character vector or string to convert.",
+          "pt": "Vetor de caracteres ou string a converter."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "The translated expression.",
+          "pt": "A expressão traduzida."
+        }
+      ],
+      "description": {
+        "en": "`'escape'` makes a literal piece of text safe to embed in an expression: `a.b*c` becomes `a\\.b\\*c`. `'wildcard'` turns a shell-style pattern into an expression: `*.m` becomes `.*\\.m`.",
+        "pt": "`'escape'` torna seguro embutir um trecho literal de texto numa expressão: `a.b*c` vira `a\\.b\\*c`. `'wildcard'` transforma um padrão de estilo shell em expressão: `*.m` vira `.*\\.m`."
+      },
+      "examples": [
+        {
+          "code": "regexptranslate('escape', 'a.b*c')\nregexptranslate('wildcard', '*.m')"
+        }
+      ],
+      "see": [
+        "regexp",
+        "regexprep",
+        "strfind",
+        "contains"
+      ]
+    },
+    "remove": {
+      "summary": {
+        "en": "Deletes an entry from a dictionary or a containers.Map by key.",
+        "pt": "Apaga uma entrada de um dictionary ou de um containers.Map pela chave."
+      },
+      "syntax": [
+        {
+          "code": "D = remove(D, key)",
+          "en": "Returns the dictionary `D` without the entry for `key`.",
+          "pt": "Retorna o dictionary `D` sem a entrada de `key`."
+        },
+        {
+          "code": "remove(M, key)",
+          "en": "Deletes `key` from the `containers.Map` `M`, in place.",
+          "pt": "Apaga `key` do `containers.Map` `M`, no próprio objeto."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "D / M",
+          "en": "A `dictionary` or a `containers.Map` object.",
+          "pt": "Um objeto `dictionary` ou `containers.Map`."
+        },
+        {
+          "name": "key",
+          "en": "A key, or an array of keys, to delete.",
+          "pt": "Uma chave, ou um array de chaves, a apagar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "The updated dictionary. Dictionaries are values, so the result must be assigned.",
+          "pt": "O dictionary atualizado. Dictionaries são valores, então o resultado precisa ser atribuído."
+        }
+      ],
+      "description": {
+        "en": "A `dictionary` behaves like an ordinary value, so `remove` returns a new dictionary and the original is unchanged until you assign the result. A `containers.Map` is a handle object: `remove` changes the map itself.\n\nAsking to remove a key that does not exist is an error for both types; test with `isKey` first if the key may be missing.",
+        "pt": "Um `dictionary` se comporta como um valor comum, então `remove` retorna um novo dictionary e o original não muda até você atribuir o resultado. Um `containers.Map` é um objeto handle: `remove` altera o próprio mapa.\n\nPedir para remover uma chave que não existe é erro nos dois tipos; teste com `isKey` antes se a chave puder faltar."
+      },
+      "examples": [
+        {
+          "code": "d = dictionary([\"a\" \"b\"], [1 2]);\nd = remove(d, \"a\")\nm = containers.Map({'a','b'}, [1 2]);\nremove(m, 'a');\nm.keys"
+        }
+      ],
+      "see": [
+        "dictionary",
+        "containers.Map",
+        "isKey",
+        "keys",
+        "numEntries",
+        "values"
+      ]
+    },
+    "removecats": {
+      "summary": {
+        "en": "Removes categories from a categorical array.",
+        "pt": "Remove categorias de um array categorical."
+      },
+      "syntax": [
+        {
+          "code": "B = removecats(A)",
+          "en": "Removes all categories that are not used.",
+          "pt": "Remove todas as categorias não usadas."
+        },
+        {
+          "code": "B = removecats(A, oldcats)",
+          "en": "Removes the named categories.",
+          "pt": "Remove as categorias indicadas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Categorical array.",
+          "pt": "Array categorical."
+        },
+        {
+          "name": "oldcats",
+          "en": "Category names to remove (text or string array).",
+          "pt": "Nomes de categorias a remover (texto ou string array)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Categorical array; elements that belonged to a removed category become `<undefined>`.",
+          "pt": "Array categorical; os elementos que pertenciam a uma categoria removida viram `<undefined>`."
+        }
+      ],
+      "description": {
+        "en": "The category list is separate from the data. `removecats` deletes names from that list, and any element that had such a value is turned into an undefined element rather than deleted. Call it without a second argument to tidy up after filtering, when some categories no longer occur.",
+        "pt": "A lista de categorias é separada dos dados. `removecats` apaga nomes dessa lista, e todo elemento que tinha esse valor vira um elemento indefinido, não é excluído. Chame-a sem o segundo argumento para arrumar após uma filtragem, quando algumas categorias já não ocorrem."
+      },
+      "examples": [
+        {
+          "code": "c = categorical([\"a\",\"b\",\"a\",\"c\"]);\nc2 = removecats(c, \"b\")\ncategories(c2)"
+        }
+      ],
+      "see": [
+        "categorical",
+        "addcats",
+        "renamecats",
+        "reordercats",
+        "categories",
+        "mergecats"
+      ]
+    },
+    "removets": {
+      "summary": {
+        "en": "Removes a time series from a tscollection.",
+        "pt": "Remove uma série temporal de uma tscollection."
+      },
+      "syntax": [
+        {
+          "code": "tsc = removets(tsc, name)",
+          "en": "Removes the member time series called `name`.",
+          "pt": "Remove a série temporal membro chamada `name`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "tsc",
+          "en": "A `tscollection` object.",
+          "pt": "Um objeto `tscollection`."
+        },
+        {
+          "name": "name",
+          "en": "Name or cell array of names of the series to remove.",
+          "pt": "Nome, ou cell array de nomes, das séries a remover."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tsc",
+          "en": "The collection without those series.",
+          "pt": "A coleção sem essas séries."
+        }
+      ],
+      "description": {
+        "en": "A `tscollection` groups several timeseries objects that share one time vector. `removets` drops members by name and leaves the others and the shared time vector untouched. Use `gettimeseriesnames` to list what remains.",
+        "pt": "Uma `tscollection` agrupa vários objetos timeseries que compartilham um único vetor de tempo. `removets` descarta membros pelo nome e deixa os demais e o vetor de tempo compartilhado intactos. Use `gettimeseriesnames` para listar o que sobrou."
+      },
+      "examples": [
+        {
+          "code": "ts1 = timeseries([1 2 3]', [0 1 2], 'Name', 'a');\nts2 = timeseries([4 5 6]', [0 1 2], 'Name', 'b');\ntsc = tscollection({ts1, ts2});\ntsc = removets(tsc, 'a');\ngettimeseriesnames(tsc)"
+        }
+      ],
+      "see": [
+        "tscollection",
+        "addts",
+        "gettimeseriesnames",
+        "settimeseriesnames",
+        "timeseries"
+      ]
+    },
+    "removevars": {
+      "summary": {
+        "en": "Deletes variables (columns) from a table or timetable.",
+        "pt": "Apaga variáveis (colunas) de uma tabela ou timetable."
+      },
+      "syntax": [
+        {
+          "code": "T2 = removevars(T, vars)",
+          "en": "Returns `T` without the variables in `vars`.",
+          "pt": "Retorna `T` sem as variáveis em `vars`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "vars",
+          "en": "Variable names, indices, or a logical vector.",
+          "pt": "Nomes de variáveis, índices ou um vetor lógico."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T2",
+          "en": "Table without those variables; the row names or times are kept.",
+          "pt": "Tabela sem essas variáveis; os nomes ou tempos das linhas são mantidos."
+        }
+      ],
+      "description": {
+        "en": "`removevars` is the readable form of `T(:, vars) = []`. Asking for a variable that does not exist is an error. To keep a few variables instead of dropping some, index the table with `T(:, keep)`.",
+        "pt": "`removevars` é a forma legível de `T(:, vars) = []`. Pedir uma variável que não existe é erro. Para manter algumas variáveis em vez de descartar outras, indexe a tabela com `T(:, keep)`."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2], [3;4], [5;6], 'VariableNames', {'A','B','C'});\nremovevars(T, 'B')\nremovevars(T, [1 3])"
+        }
+      ],
+      "see": [
+        "addvars",
+        "movevars",
+        "renamevars",
+        "splitvars",
+        "table"
+      ]
+    },
+    "renamecats": {
+      "summary": {
+        "en": "Renames categories of a categorical array.",
+        "pt": "Renomeia categorias de um array categorical."
+      },
+      "syntax": [
+        {
+          "code": "B = renamecats(A, newnames)",
+          "en": "Renames all categories in their current order.",
+          "pt": "Renomeia todas as categorias na ordem atual."
+        },
+        {
+          "code": "B = renamecats(A, old, new)",
+          "en": "Renames the category `old` to `new`.",
+          "pt": "Renomeia a categoria `old` para `new`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Categorical array.",
+          "pt": "Array categorical."
+        },
+        {
+          "name": "newnames",
+          "en": "Text or string array with one name per category.",
+          "pt": "Texto ou string array com um nome por categoria."
+        },
+        {
+          "name": "old, new",
+          "en": "Current name and the new name.",
+          "pt": "Nome atual e novo nome."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Categorical array with the new names; the data keep pointing to the same categories.",
+          "pt": "Array categorical com os novos nomes; os dados continuam apontando para as mesmas categorias."
+        }
+      ],
+      "description": {
+        "en": "Renaming changes the label, not the values. Every element of the old category shows the new name. If the new name matches another category, the two are merged.",
+        "pt": "Renomear muda o rótulo, não os valores. Todo elemento da categoria antiga mostra o novo nome. Se o novo nome coincidir com outra categoria, as duas são mescladas."
+      },
+      "examples": [
+        {
+          "code": "c = categorical([\"lo\",\"hi\",\"lo\"]);\nrenamecats(c, \"lo\", \"low\")"
+        }
+      ],
+      "see": [
+        "categorical",
+        "addcats",
+        "removecats",
+        "reordercats",
+        "mergecats"
+      ]
+    },
+    "renamevars": {
+      "summary": {
+        "en": "Renames variables of a table or timetable.",
+        "pt": "Renomeia variáveis de uma tabela ou timetable."
+      },
+      "syntax": [
+        {
+          "code": "T2 = renamevars(T, vars, newnames)",
+          "en": "Gives the variables `vars` the names in `newnames`.",
+          "pt": "Dá às variáveis `vars` os nomes em `newnames`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "vars",
+          "en": "Names or indices of the variables to rename.",
+          "pt": "Nomes ou índices das variáveis a renomear."
+        },
+        {
+          "name": "newnames",
+          "en": "Text, string array or cell array of new names; one per variable in `vars`.",
+          "pt": "Texto, string array ou cell array de novos nomes; um por variável em `vars`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T2",
+          "en": "Table with the new names and the same data.",
+          "pt": "Tabela com os novos nomes e os mesmos dados."
+        }
+      ],
+      "description": {
+        "en": "The new names must be valid and distinct from the other variable names. Renaming leaves data and order unchanged. It is equivalent to editing `T.Properties.VariableNames`, but works on a subset by name.",
+        "pt": "Os novos nomes devem ser válidos e distintos dos demais nomes de variáveis. Renomear não altera dados nem ordem. Equivale a editar `T.Properties.VariableNames`, mas atua sobre um subconjunto pelo nome."
+      },
+      "examples": [
+        {
+          "code": "T = table([1;2], [3;4], 'VariableNames', {'A','B'});\nrenamevars(T, 'A', 'Alpha')\nrenamevars(T, {'A','B'}, {'X','Y'})"
+        }
+      ],
+      "see": [
+        "removevars",
+        "addvars",
+        "movevars",
+        "table",
+        "rows2vars"
+      ]
+    },
+    "reordercats": {
+      "summary": {
+        "en": "Changes the order of the categories of a categorical array.",
+        "pt": "Muda a ordem das categorias de um array categorical."
+      },
+      "syntax": [
+        {
+          "code": "B = reordercats(A)",
+          "en": "Sorts the categories alphabetically.",
+          "pt": "Ordena as categorias em ordem alfabética."
+        },
+        {
+          "code": "B = reordercats(A, neworder)",
+          "en": "Uses the order given in `neworder`, a list of all the category names.",
+          "pt": "Usa a ordem dada em `neworder`, uma lista com todos os nomes de categorias."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Categorical array.",
+          "pt": "Array categorical."
+        },
+        {
+          "name": "neworder",
+          "en": "Text or string array containing every category exactly once.",
+          "pt": "Texto ou string array com cada categoria exatamente uma vez."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Categorical array with the same values and the new category order.",
+          "pt": "Array categorical com os mesmos valores e a nova ordem de categorias."
+        }
+      ],
+      "description": {
+        "en": "The data are not modified; only the category list changes. The order matters for `categories`, `sort`, plots and tables that group by category, and for comparisons with `<` and `>` when the array is ordinal.",
+        "pt": "Os dados não são modificados; só a lista de categorias muda. A ordem importa para `categories`, `sort`, gráficos e tabelas que agrupam por categoria, e para comparações com `<` e `>` quando o array é ordinal."
+      },
+      "examples": [
+        {
+          "code": "c = categorical([\"lo\",\"hi\",\"mid\",\"lo\"]);\nc = reordercats(c, [\"lo\",\"mid\",\"hi\"]);\ncategories(c)"
+        }
+      ],
+      "see": [
+        "categorical",
+        "categories",
+        "addcats",
+        "removecats",
+        "sort"
+      ]
+    },
+    "replace": {
+      "summary": {
+        "en": "Replaces occurrences of a substring or pattern.",
+        "pt": "Substitui ocorrências de uma substring ou padrão."
+      },
+      "syntax": [
+        {
+          "code": "newStr = replace(str, old, new)",
+          "en": "Replaces every `old` in `str` by `new`.",
+          "pt": "Substitui todo `old` em `str` por `new`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "String array, character vector or cell array of character vectors.",
+          "pt": "String array, vetor de caracteres ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "old",
+          "en": "Text to find, or an array of texts, or a pattern.",
+          "pt": "Texto a procurar, ou array de textos, ou um padrão."
+        },
+        {
+          "name": "new",
+          "en": "Replacement text, or an array with one replacement per entry of `old`.",
+          "pt": "Texto de substituição, ou um array com uma substituição para cada entrada de `old`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "Same type as `str`.",
+          "pt": "Mesmo tipo de `str`."
+        }
+      ],
+      "description": {
+        "en": "Matching is literal and case-sensitive, and applies to every element of `str`. When `old` and `new` are arrays, the pairs are applied together in a single pass, so one replacement cannot be re-replaced by another. For rules based on regular expressions, use `regexprep`.",
+        "pt": "A correspondência é literal e diferencia maiúsculas de minúsculas, e vale para todo elemento de `str`. Quando `old` e `new` são arrays, os pares são aplicados juntos em uma só passada, de modo que uma substituição não é refeita por outra. Para regras baseadas em expressões regulares, use `regexprep`."
+      },
+      "examples": [
+        {
+          "code": "replace(\"hello world\", \"world\", \"there\")\nreplace([\"aa\",\"ba\"], \"a\", \"x\")\nreplace(\"abc\", [\"a\",\"b\"], [\"1\",\"2\"])"
+        }
+      ],
+      "see": [
+        "strrep",
+        "regexprep",
+        "replaceBetween",
+        "extractBefore",
+        "erase"
+      ]
+    },
+    "replaceBetween": {
+      "summary": {
+        "en": "Replaces the text found between two markers.",
+        "pt": "Substitui o texto que está entre dois marcadores."
+      },
+      "syntax": [
+        {
+          "code": "newStr = replaceBetween(str, start, stop, new)",
+          "en": "Replaces what lies between `start` and `stop` by `new`, keeping the markers.",
+          "pt": "Substitui o que está entre `start` e `stop` por `new`, mantendo os marcadores."
+        },
+        {
+          "code": "newStr = replaceBetween(___, 'Boundaries', b)",
+          "en": "`b` is `'exclusive'` (default) or `'inclusive'`.",
+          "pt": "`b` é `'exclusive'` (padrão) ou `'inclusive'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Text to search.",
+          "pt": "Texto onde procurar."
+        },
+        {
+          "name": "start, stop",
+          "en": "Boundary text or patterns, or numeric positions.",
+          "pt": "Texto ou padrões de limite, ou posições numéricas."
+        },
+        {
+          "name": "new",
+          "en": "Replacement text.",
+          "pt": "Texto de substituição."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "Text with the content between the boundaries replaced.",
+          "pt": "Texto com o conteúdo entre os limites substituído."
+        }
+      ],
+      "description": {
+        "en": "The markers are located by searching from the left: first `start`, then the next `stop` after it. By default the markers are not part of the replaced region, which suits changing the content inside brackets or tags.",
+        "pt": "Os marcadores são localizados procurando-se da esquerda: primeiro `start`, depois o próximo `stop` após ele. Por padrão os marcadores não fazem parte da região substituída, o que serve para trocar o conteúdo dentro de colchetes ou tags."
+      },
+      "examples": [
+        {
+          "code": "replaceBetween(\"abc[def]ghi\", \"[\", \"]\", \"XY\")"
+        }
+      ],
+      "see": [
+        "extractBetween",
+        "insertBefore",
+        "replace",
+        "extractAfter",
+        "eraseBetween"
+      ]
+    },
+    "resample": {
+      "summary": {
+        "en": "Resamples a timeseries at new time points.",
+        "pt": "Reamostra uma timeseries em novos instantes de tempo."
+      },
+      "syntax": [
+        {
+          "code": "ts2 = resample(ts, timevec)",
+          "en": "Returns `ts` evaluated at the times in `timevec`, using the series' interpolation method.",
+          "pt": "Retorna `ts` avaliada nos tempos de `timevec`, usando o método de interpolação da série."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ts",
+          "en": "A `timeseries` object.",
+          "pt": "Um objeto `timeseries`."
+        },
+        {
+          "name": "timevec",
+          "en": "Vector of new times, in the series' time units.",
+          "pt": "Vetor de novos tempos, nas unidades de tempo da série."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ts2",
+          "en": "`timeseries` with the new time vector and interpolated data.",
+          "pt": "`timeseries` com o novo vetor de tempo e dados interpolados."
+        }
+      ],
+      "description": {
+        "en": "By default the data are interpolated linearly between samples; change this with `setinterpmethod`, for instance `'zoh'` holds each value until the next sample. Times outside the original range are not extrapolated.\n\nTo resample a timetable use `retime`.",
+        "pt": "Por padrão os dados são interpolados linearmente entre amostras; mude isso com `setinterpmethod`, por exemplo `'zoh'` mantém cada valor até a próxima amostra. Tempos fora da faixa original não são extrapolados.\n\nPara reamostrar um timetable use `retime`."
+      },
+      "examples": [
+        {
+          "code": "ts = timeseries([10 20 30]', [0 1 2]);\nr = resample(ts, [0.5 1.5]);\nr.Time'\nr.Data'"
+        }
+      ],
+      "see": [
+        "setinterpmethod",
+        "timeseries",
+        "retime",
+        "interp1",
+        "synchronize"
+      ]
+    },
+    "retime": {
+      "summary": {
+        "en": "Changes the row times of a timetable, filling in values by interpolation or another rule.",
+        "pt": "Muda os tempos das linhas de um timetable, preenchendo os valores por interpolação ou outra regra."
+      },
+      "syntax": [
+        {
+          "code": "TT2 = retime(TT, newTimes, method)",
+          "en": "Evaluates the timetable at `newTimes` using `method`.",
+          "pt": "Avalia o timetable em `newTimes` usando `method`."
+        },
+        {
+          "code": "TT2 = retime(TT, 'regular', method, 'TimeStep', dt)",
+          "en": "Builds a regular time grid with step `dt`.",
+          "pt": "Constrói uma grade regular de tempos com passo `dt`."
+        },
+        {
+          "code": "TT2 = retime(TT, 'secondly', method)",
+          "en": "Uses a built-in time step such as `'secondly'`, `'minutely'` or `'daily'`.",
+          "pt": "Usa um passo de tempo embutido como `'secondly'`, `'minutely'` ou `'daily'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "TT",
+          "en": "Timetable.",
+          "pt": "Timetable."
+        },
+        {
+          "name": "newTimes",
+          "en": "Datetime or duration vector.",
+          "pt": "Vetor datetime ou duration."
+        },
+        {
+          "name": "method",
+          "en": "Rule such as `'linear'`, `'previous'`, `'next'`, `'nearest'`, `'fillwithmissing'`, `'fillwithconstant'`, `'sum'` or `'mean'`.",
+          "pt": "Regra como `'linear'`, `'previous'`, `'next'`, `'nearest'`, `'fillwithmissing'`, `'fillwithconstant'`, `'sum'` ou `'mean'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TT2",
+          "en": "Timetable on the new times, with the same variables.",
+          "pt": "Timetable nos novos tempos, com as mesmas variáveis."
+        }
+      ],
+      "description": {
+        "en": "When the new times are denser than the old ones, the method fills in the missing values: `'linear'` interpolates, `'previous'` repeats the last known value and `'fillwithmissing'` leaves `NaN`. When they are sparser, aggregation methods such as `'mean'` and `'sum'` combine the rows that fall within each interval.\n\nUse `synchronize` to align several timetables with each other.",
+        "pt": "Quando os novos tempos são mais densos que os antigos, o método preenche os valores que faltam: `'linear'` interpola, `'previous'` repete o último valor conhecido e `'fillwithmissing'` deixa `NaN`. Quando são mais esparsos, métodos de agregação como `'mean'` e `'sum'` combinam as linhas que caem em cada intervalo.\n\nUse `synchronize` para alinhar vários timetables entre si."
+      },
+      "examples": [
+        {
+          "code": "TT = timetable(seconds([1;2;4]), [10;20;40]);\nretime(TT, seconds(1:4), 'linear')\nretime(TT, seconds(1:4), 'previous')\nretime(TT, seconds(1:4), 'fillwithmissing')"
+        }
+      ],
+      "see": [
+        "timetable",
+        "synchronize",
+        "resample",
+        "interp1",
+        "timerange",
+        "seconds"
+      ]
+    },
+    "reverse": {
+      "summary": {
+        "en": "Reverses the order of the characters in text.",
+        "pt": "Inverte a ordem dos caracteres em um texto."
+      },
+      "syntax": [
+        {
+          "code": "newStr = reverse(str)",
+          "en": "Returns `str` with its characters in reverse order.",
+          "pt": "Retorna `str` com os caracteres em ordem inversa."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "String array or character vector.",
+          "pt": "String array ou vetor de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "newStr",
+          "en": "Same type and size as `str`; each element is reversed individually.",
+          "pt": "Mesmo tipo e tamanho de `str`; cada elemento é invertido individualmente."
+        }
+      ],
+      "description": {
+        "en": "For a string array, every string is reversed on its own and the order of the strings stays the same. To reverse the order of the elements of a numeric array or cell array use `flip` instead; `reverse` accepts text only.",
+        "pt": "Em um string array, cada string é invertida por conta própria e a ordem das strings permanece. Para inverter a ordem dos elementos de um array numérico ou cell array use `flip`; `reverse` aceita apenas texto."
+      },
+      "examples": [
+        {
+          "code": "reverse('hello')\nreverse([\"ab\", \"cd\"])"
+        }
+      ],
+      "see": [
+        "flip",
+        "fliplr",
+        "strrep",
+        "upper",
+        "lower"
+      ]
+    },
+    "rmfield": {
+      "summary": {
+        "en": "Removes fields from a structure.",
+        "pt": "Remove campos de uma struct."
+      },
+      "syntax": [
+        {
+          "code": "s2 = rmfield(s, field)",
+          "en": "Removes the field named `field`.",
+          "pt": "Remove o campo chamado `field`."
+        },
+        {
+          "code": "s2 = rmfield(s, fields)",
+          "en": "Removes several fields given as a cell array or string array.",
+          "pt": "Remove vários campos dados como cell array ou string array."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Structure or structure array.",
+          "pt": "Struct ou array de structs."
+        },
+        {
+          "name": "field(s)",
+          "en": "Name(s) of fields that exist in `s`.",
+          "pt": "Nome(s) de campos que existem em `s`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s2",
+          "en": "Structure without those fields.",
+          "pt": "Struct sem esses campos."
+        }
+      ],
+      "description": {
+        "en": "The field must exist; otherwise `rmfield` raises an error, so check with `isfield` when unsure. For a structure array the field is removed from every element. The original variable is not changed, so assign the result.",
+        "pt": "O campo deve existir; caso contrário `rmfield` gera um erro, então verifique com `isfield` quando houver dúvida. Em um array de structs o campo é removido de todos os elementos. A variável original não muda, então atribua o resultado."
+      },
+      "examples": [
+        {
+          "code": "s = struct('a', 1, 'b', 2, 'c', 3);\ns = rmfield(s, {'a','c'})\nisfield(s, 'a')"
+        }
+      ],
+      "see": [
+        "setfield",
+        "getfield",
+        "isfield",
+        "fieldnames",
+        "struct",
+        "orderfields"
+      ]
+    },
+    "rmmissing": {
+      "summary": {
+        "en": "Removes missing entries (NaN, empty text, undefined) from arrays and tables.",
+        "pt": "Remove entradas ausentes (NaN, texto ausente, indefinido) de arrays e tabelas."
+      },
+      "syntax": [
+        {
+          "code": "B = rmmissing(A)",
+          "en": "Removes elements of a vector, or the rows of a matrix or table, that contain missing values.",
+          "pt": "Remove elementos de um vetor, ou linhas de uma matriz ou tabela, que contêm valores ausentes."
+        },
+        {
+          "code": "B = rmmissing(A, dim)",
+          "en": "Removes along dimension `dim`; `2` removes columns.",
+          "pt": "Remove ao longo da dimensão `dim`; `2` remove colunas."
+        },
+        {
+          "code": "B = rmmissing(___, 'MinNumMissing', n)",
+          "en": "Removes only rows or columns that have at least `n` missing values.",
+          "pt": "Remove apenas linhas ou colunas com pelo menos `n` valores ausentes."
+        },
+        {
+          "code": "[B, TF] = rmmissing(___)",
+          "en": "Also returns a logical index of what was removed.",
+          "pt": "Também retorna um índice lógico do que foi removido."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric array, string array, cell array of character vectors, categorical or table.",
+          "pt": "Array numérico, string array, cell array de vetores de caracteres, categorical ou tabela."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to remove along.",
+          "pt": "Dimensão ao longo da qual remover."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array without the missing entries.",
+          "pt": "Array sem as entradas ausentes."
+        },
+        {
+          "name": "TF",
+          "en": "Logical column or row vector marking the removed rows or columns.",
+          "pt": "Vetor lógico coluna ou linha que marca as linhas ou colunas removidas."
+        }
+      ],
+      "description": {
+        "en": "What counts as missing depends on the type: `NaN` for numbers, `<missing>` for strings, empty character vectors in a cell array of text, `<undefined>` for categorical and `NaT` for datetime. An empty string `\"\"` in a string array is not missing.\n\nBy default one missing value is enough to remove a whole row (a column when `dim` is 2). Raise `'MinNumMissing'` to require more.",
+        "pt": "O que conta como ausente depende do tipo: `NaN` em números, `<missing>` em strings, vetores de caracteres vazios em cell array de texto, `<undefined>` em categorical e `NaT` em datetime. Uma string vazia `\"\"` em um string array não é ausente.\n\nPor padrão um único valor ausente basta para remover a linha inteira (a coluna quando `dim` é 2). Aumente `'MinNumMissing'` para exigir mais."
+      },
+      "examples": [
+        {
+          "code": "rmmissing([1 NaN 3 4])\nrmmissing([1 NaN; 3 4])\nrmmissing([1 NaN; 3 4], 2)\nT = table([1;NaN;3], [\"a\";\"b\";missing], 'VariableNames', {'A','B'});\n[R, TF] = rmmissing(T)"
+        }
+      ],
+      "see": [
+        "ismissing",
+        "fillmissing",
+        "standardizeMissing",
+        "isnan",
+        "missing"
+      ]
+    }
+  }
+}

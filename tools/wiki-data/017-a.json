@@ -1,0 +1,465 @@
+{
+  "functions": {
+    "erfcx": {
+      "summary": {"en": "Scaled complementary error function, exp(x^2) times erfc(x).", "pt": "Função de erro complementar escalada, exp(x^2) vezes erfc(x)."},
+      "syntax": [
+        {"code": "Y = erfcx(X)", "en": "Evaluates `exp(X.^2) .* erfc(X)` for each element of `X`, without the overflow or underflow that the direct formula suffers.", "pt": "Calcula `exp(X.^2) .* erfc(X)` para cada elemento de `X`, sem o estouro ou o subfluxo que a fórmula direta sofre."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "For large positive `X`, `erfc(X)` is so small that it underflows to zero, and `exp(X^2)` is so large that it overflows. Their product, however, is a perfectly ordinary number that decays slowly like `1/(X*sqrt(pi))`. `erfcx` computes that product directly, so it stays accurate where the naive expression returns `NaN` or `0`.\n\nIt is the natural building block for the Mills ratio, the Voigt profile and tail probabilities of the normal distribution.",
+        "pt": "Para `X` positivo e grande, `erfc(X)` é tão pequeno que vira zero por subfluxo, e `exp(X^2)` é tão grande que estoura. O produto, porém, é um número comum que decai devagar, como `1/(X*sqrt(pi))`. `erfcx` calcula esse produto diretamente, e por isso continua preciso onde a expressão ingênua devolve `NaN` ou `0`.\n\nÉ o bloco básico natural para a razão de Mills, o perfil de Voigt e as caudas da distribuição normal."
+      },
+      "examples": [
+        {"title": {"en": "Stable for large arguments", "pt": "Estável para argumentos grandes"}, "code": "erfcx([0 1 10 100])\nx = 30;\nexp(x^2) * erfc(x)\nerfcx(x)", "note": {"en": "The direct product fails at `x = 30`, while `erfcx` stays accurate.", "pt": "O produto direto falha em `x = 30`, enquanto `erfcx` continua preciso."}}
+      ],
+      "see": ["erf", "erfc", "erfcinv", "erfinv", "exp"]
+    },
+    "erfinv": {
+      "summary": {"en": "Inverse error function.", "pt": "Função de erro inversa."},
+      "syntax": [
+        {"code": "X = erfinv(Y)", "en": "Returns the value `X` such that `erf(X) == Y`.", "pt": "Retorna o valor `X` tal que `erf(X) == Y`."}
+      ],
+      "inputs": [
+        {"name": "Y", "en": "Real array with values in the closed interval from -1 to 1.", "pt": "Array real com valores no intervalo fechado de -1 a 1."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Array of the same size as `Y`. The endpoints map to `-Inf` and `Inf`; values outside the interval give `NaN`.", "pt": "Array do mesmo tamanho de `Y`. Os extremos levam a `-Inf` e `Inf`; valores fora do intervalo dão `NaN`."}
+      ],
+      "description": {
+        "en": "`erf` is increasing and bounded between -1 and 1, so it can be inverted on that open interval. `erfinv` is the inverse, an odd function that grows without bound as `Y` approaches 1.\n\nA common use is turning uniform random numbers into normal ones: if `U` is uniform in (0, 1), then `sqrt(2)*erfinv(2*U-1)` follows a standard normal distribution.",
+        "pt": "`erf` é crescente e limitada entre -1 e 1, então pode ser invertida nesse intervalo aberto. `erfinv` é a inversa, uma função ímpar que cresce sem limite quando `Y` se aproxima de 1.\n\nUm uso comum é transformar números uniformes em normais: se `U` é uniforme em (0, 1), então `sqrt(2)*erfinv(2*U-1)` segue a distribuição normal padrão."
+      },
+      "examples": [
+        {"title": {"en": "Inverting erf", "pt": "Invertendo erf"}, "code": "erfinv([-0.5 0 0.5 1 2])\nerf(erfinv(0.3))"}
+      ],
+      "see": ["erf", "erfc", "erfcinv", "erfcx"]
+    },
+    "exp": {
+      "summary": {"en": "Exponential function e^x, element by element.", "pt": "Função exponencial e^x, elemento a elemento."},
+      "syntax": [
+        {"code": "Y = exp(X)", "en": "Returns `e` raised to each element of `X`.", "pt": "Retorna `e` elevado a cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "For a real argument `exp(x)` is the usual exponential, positive for every `x`, equal to 1 at 0, overflowing to `Inf` for arguments above about 709.78. For a complex argument `x + iy` the result is `exp(x)*(cos(y) + i*sin(y))`, which is Euler's formula.\n\nTo get the matrix exponential of a square matrix, use `expm`. `exp` always works element by element.",
+        "pt": "Para argumento real, `exp(x)` é a exponencial usual: positiva para todo `x`, igual a 1 em 0, e que estoura para `Inf` com argumentos acima de cerca de 709,78. Para um argumento complexo `x + iy` o resultado é `exp(x)*(cos(y) + i*sin(y))`, a fórmula de Euler.\n\nPara a exponencial matricial de uma matriz quadrada, use `expm`. `exp` sempre atua elemento a elemento."
+      },
+      "examples": [
+        {"title": {"en": "Real and complex arguments", "pt": "Argumentos reais e complexos"}, "code": "exp([0 1 2])\nexp(1i*pi)\nexp(710)"}
+      ],
+      "see": ["expm1", "log", "expm", "pow2", "sinh"]
+    },
+    "expint": {
+      "summary": {"en": "Exponential integral E1(x).", "pt": "Integral exponencial E1(x)."},
+      "syntax": [
+        {"code": "Y = expint(X)", "en": "Evaluates the integral of `exp(-t)/t` from `X` to infinity, for each element of `X`.", "pt": "Calcula a integral de `exp(-t)/t` de `X` até o infinito, para cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array.", "pt": "Array numérico."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`expint(x)` is the function usually written E1(x). It decreases from `Inf` at `x = 0` toward zero as `x` grows, and it appears in heat conduction, radiative transfer and the Theis well function.\n\nFor negative real `x` the integral is not real: the result is complex, with an imaginary part of `-pi`.",
+        "pt": "`expint(x)` é a função normalmente escrita E1(x). Ela decresce de `Inf` em `x = 0` até zero conforme `x` cresce, e aparece em condução de calor, transferência radiativa e na função de poço de Theis.\n\nPara `x` real negativo a integral não é real: o resultado é complexo, com parte imaginária `-pi`."
+      },
+      "examples": [
+        {"title": {"en": "Values and the singularity at zero", "pt": "Valores e a singularidade em zero"}, "code": "expint([0.5 1 2])\nexpint(0)\nexpint(-1)"}
+      ],
+      "see": ["erf", "gammainc", "exp", "integral"]
+    },
+    "expm1": {
+      "summary": {"en": "Accurate exp(x) - 1 for small x.", "pt": "Calcula exp(x) - 1 com precisão para x pequeno."},
+      "syntax": [
+        {"code": "Y = expm1(X)", "en": "Returns `exp(X) - 1` for each element, without the cancellation error of the direct subtraction.", "pt": "Retorna `exp(X) - 1` para cada elemento, sem o erro de cancelamento da subtração direta."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "When `x` is tiny, `exp(x)` is very close to 1, and subtracting 1 throws away most of the significant digits. `expm1` uses a method that keeps full precision, which matters in interest-rate formulas, decay constants and any code that later divides the result by `x`.\n\n`log1p` is the inverse operation: `log1p(expm1(x))` returns `x`.",
+        "pt": "Quando `x` é minúsculo, `exp(x)` fica muito perto de 1, e subtrair 1 descarta a maior parte dos dígitos significativos. `expm1` usa um método que mantém a precisão total, o que importa em fórmulas de juros, constantes de decaimento e qualquer código que depois divida o resultado por `x`.\n\n`log1p` é a operação inversa: `log1p(expm1(x))` devolve `x`."
+      },
+      "examples": [
+        {"title": {"en": "Small arguments", "pt": "Argumentos pequenos"}, "code": "x = 1e-12;\nexp(x) - 1\nexpm1(x)", "note": {"en": "The direct subtraction is wrong in the fourth digit; `expm1` returns `1.0000e-12`.", "pt": "A subtração direta erra a partir do quarto dígito; `expm1` retorna `1.0000e-12`."}}
+      ],
+      "see": ["exp", "log1p", "log", "expm"]
+    },
+    "factor": {
+      "summary": {"en": "Prime factorization of a positive integer.", "pt": "Fatoração em primos de um inteiro positivo."},
+      "syntax": [
+        {"code": "p = factor(n)", "en": "Returns the prime factors of `n` in a row vector, in nondecreasing order, repeated according to multiplicity.", "pt": "Retorna os fatores primos de `n` em um vetor linha, em ordem não decrescente, repetidos conforme a multiplicidade."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Nonnegative integer scalar. Integer classes are accepted and the result keeps the class.", "pt": "Escalar inteiro não negativo. Classes inteiras são aceitas e o resultado mantém a classe."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "Row vector of primes whose product is `n`. For a prime `n` it is `n` itself; for `1` it is empty.", "pt": "Vetor linha de primos cujo produto é `n`. Para `n` primo é o próprio `n`; para `1` é vazio."}
+      ],
+      "description": {
+        "en": "The factorization is found by trial division, so it is quick for numbers that fit in a double (up to `2^53`) and slower when `n` has two large prime factors. Taking `prod(factor(n))` always recovers `n`.\n\nTo see each prime once together with its exponent, apply `unique` to the result and count with `histc` or `accumarray`.",
+        "pt": "A fatoração é obtida por divisão tentativa, então é rápida para números que cabem em um double (até `2^53`) e mais lenta quando `n` tem dois fatores primos grandes. `prod(factor(n))` sempre recupera `n`.\n\nPara ver cada primo uma única vez com seu expoente, aplique `unique` ao resultado e conte com `histc` ou `accumarray`."
+      },
+      "notes": {
+        "en": "The two-output form `[p, k] = factor(n)` (distinct primes and exponents) is not available in MatLivre; compute it from the single-output result with `unique`.",
+        "pt": "A forma com duas saídas `[p, k] = factor(n)` (primos distintos e expoentes) não está disponível no MatLivre; obtenha-a a partir do resultado de uma saída com `unique`."
+      },
+      "examples": [
+        {"title": {"en": "Factor and rebuild", "pt": "Fatorar e reconstruir"}, "code": "p = factor(360)\nprod(p)\nfactor(97)"}
+      ],
+      "see": ["primes", "isprime", "gcd", "lcm", "unique"]
+    },
+    "factorial": {
+      "summary": {"en": "Factorial n! of nonnegative integers.", "pt": "Fatorial n! de inteiros não negativos."},
+      "syntax": [
+        {"code": "f = factorial(n)", "en": "Returns the product `1*2*...*n` for each element of `n`.", "pt": "Retorna o produto `1*2*...*n` para cada elemento de `n`."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Array of nonnegative integers (stored in any numeric class).", "pt": "Array de inteiros não negativos (em qualquer classe numérica)."}
+      ],
+      "outputs": [
+        {"name": "f", "en": "Array of the same size as `n`. `factorial(0)` is `1`.", "pt": "Array do mesmo tamanho de `n`. `factorial(0)` é `1`."}
+      ],
+      "description": {
+        "en": "Factorials grow very fast. In double precision `factorial(170)` is about `7.26e306` and `factorial(171)` already overflows to `Inf`. Beyond `factorial(21)` the result is no longer an exact integer in a double, only the nearest representable value.\n\nFor non-integer or negative arguments, the generalization is `gamma(n + 1)`.",
+        "pt": "Fatoriais crescem muito rápido. Em precisão dupla `factorial(170)` vale cerca de `7.26e306` e `factorial(171)` já estoura para `Inf`. Depois de `factorial(21)` o resultado deixa de ser um inteiro exato em double, apenas o valor representável mais próximo.\n\nPara argumentos não inteiros, a generalização é `gamma(n + 1)`."
+      },
+      "notes": {
+        "en": "MatLivre currently returns `Inf` already for `factorial(170)` and `gamma(171)`, whose true values are finite (about `7.26e306`).",
+        "pt": "O MatLivre atualmente já retorna `Inf` para `factorial(170)` e `gamma(171)`, cujos valores verdadeiros são finitos (cerca de `7.26e306`)."
+      },
+      "examples": [
+        {"title": {"en": "Small and large factorials", "pt": "Fatoriais pequenos e grandes"}, "code": "factorial([0 1 5 10])\nfactorial(171)"}
+      ],
+      "see": ["gamma", "nchoosek", "prod", "gammaln"]
+    },
+    "gallery": {
+      "summary": {"en": "Collection of named test matrices.", "pt": "Coleção de matrizes de teste identificadas por nome."},
+      "syntax": [
+        {"code": "A = gallery(matname, params)", "en": "Builds the test matrix called `matname`, using the parameters that family needs.", "pt": "Constrói a matriz de teste chamada `matname`, usando os parâmetros que aquela família exige."}
+      ],
+      "inputs": [
+        {"name": "matname", "en": "Name of the matrix family, such as `'minij'`, `'tridiag'`, `'lehmer'`, `'moler'`, `'circul'` or `'frank'`.", "pt": "Nome da família de matrizes, como `'minij'`, `'tridiag'`, `'lehmer'`, `'moler'`, `'circul'` ou `'frank'`."},
+        {"name": "params", "en": "Size and other parameters of the family. For most families the first one is the order `n`.", "pt": "Tamanho e outros parâmetros da família. Na maioria das famílias o primeiro é a ordem `n`."}
+      ],
+      "outputs": [
+        {"name": "A", "en": "The requested matrix.", "pt": "A matriz pedida."}
+      ],
+      "description": {
+        "en": "The gallery gathers matrices chosen to stress numerical algorithms: some are ill conditioned (`'moler'`, `'lotkin'`), some have a known inverse or eigenvalues (`'minij'`, `'tridiag'`, `'kms'`), some are sparse-friendly (`'tridiag'`, `'jordbloc'`). They are used to test solvers and to give examples with known properties.\n\n`gallery('tridiag', n)` gives the second-difference matrix with 2 on the diagonal and -1 beside it, and `gallery('tridiag', n, c, d, e)` sets the sub-diagonal, diagonal and super-diagonal values.",
+        "pt": "A galeria reúne matrizes escolhidas para exigir dos algoritmos numéricos: algumas são mal condicionadas (`'moler'`, `'lotkin'`), outras têm inversa ou autovalores conhecidos (`'minij'`, `'tridiag'`, `'kms'`), outras favorecem matrizes esparsas (`'tridiag'`, `'jordbloc'`). Servem para testar solvers e para dar exemplos com propriedades conhecidas.\n\n`gallery('tridiag', n)` devolve a matriz de segunda diferença, com 2 na diagonal e -1 ao lado, e `gallery('tridiag', n, c, d, e)` define os valores da subdiagonal, da diagonal e da superdiagonal."
+      },
+      "notes": {
+        "en": "MatLivre implements the deterministic families only. The families that fill the matrix with random data, such as `'integerdata'`, `'normaldata'` and `'uniformdata'`, and some others like `'toeppd'`, report that they are not supported.",
+        "pt": "O MatLivre implementa apenas as famílias determinísticas. As famílias que preenchem a matriz com dados aleatórios, como `'integerdata'`, `'normaldata'` e `'uniformdata'`, e algumas outras como `'toeppd'`, informam que não são suportadas."
+      },
+      "examples": [
+        {"title": {"en": "Two test matrices", "pt": "Duas matrizes de teste"}, "code": "gallery('minij', 4)\ngallery('tridiag', 4)"}
+      ],
+      "see": ["hilb", "magic", "pascal", "hankel", "rosser"]
+    },
+    "gamma": {
+      "summary": {"en": "Gamma function, the extension of the factorial to real numbers.", "pt": "Função gama, a extensão do fatorial aos números reais."},
+      "syntax": [
+        {"code": "Y = gamma(X)", "en": "Evaluates the gamma function at each element of `X`.", "pt": "Calcula a função gama em cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "For positive integers, `gamma(n)` equals `factorial(n-1)`. For other real values it interpolates smoothly between them, with `gamma(0.5)` equal to `sqrt(pi)`. The function has poles at zero and at the negative integers, where `gamma` returns `Inf`, and it alternates in sign between consecutive negative poles.\n\nThe values grow so quickly that they overflow for large arguments. When only the logarithm is needed, `gammaln` avoids the overflow.",
+        "pt": "Para inteiros positivos, `gamma(n)` é igual a `factorial(n-1)`. Para outros valores reais ela interpola suavemente entre eles, e `gamma(0.5)` vale `sqrt(pi)`. A função tem polos em zero e nos inteiros negativos, onde `gamma` retorna `Inf`, e alterna de sinal entre polos negativos consecutivos.\n\nOs valores crescem tão depressa que estouram para argumentos grandes. Quando só o logaritmo é necessário, `gammaln` evita o estouro."
+      },
+      "examples": [
+        {"title": {"en": "Factorials and half-integers", "pt": "Fatoriais e meio-inteiros"}, "code": "gamma([1 2 5])\ngamma(0.5)^2\ngamma([0 -1.5])"}
+      ],
+      "see": ["gammaln", "factorial", "gammainc", "psi", "beta"]
+    },
+    "gammainc": {
+      "summary": {"en": "Regularized incomplete gamma function.", "pt": "Função gama incompleta regularizada."},
+      "syntax": [
+        {"code": "P = gammainc(X, A)", "en": "Returns the lower regularized incomplete gamma function `P(A, X)`.", "pt": "Retorna a função gama incompleta regularizada inferior `P(A, X)`."},
+        {"code": "Q = gammainc(X, A, tail)", "en": "Selects the tail: `'lower'` (default), `'upper'` for `1 - P`, or `'scaledlower'` / `'scaledupper'` for the scaled versions.", "pt": "Escolhe a cauda: `'lower'` (padrão), `'upper'` para `1 - P`, ou `'scaledlower'` / `'scaledupper'` para as versões escaladas."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Nonnegative real array, the upper limit of the integral.", "pt": "Array real não negativo, o limite superior da integral."},
+        {"name": "A", "en": "Positive real array, the shape parameter. Sizes of `X` and `A` must be compatible.", "pt": "Array real positivo, o parâmetro de forma. Os tamanhos de `X` e `A` devem ser compatíveis."},
+        {"name": "tail", "en": "Character vector naming the tail to compute.", "pt": "Vetor de caracteres que nomeia a cauda a calcular."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "Values in the interval from 0 to 1 (for the unscaled tails).", "pt": "Valores no intervalo de 0 a 1 (para as caudas sem escala)."}
+      ],
+      "description": {
+        "en": "The lower function is the integral of `t^(A-1)*exp(-t)` from 0 to `X`, divided by `gamma(A)`. It rises from 0 to 1 as `X` grows, so it is the cumulative distribution function of the gamma distribution with unit scale. With `A = 1` it reduces to `1 - exp(-X)`, and `gammainc(x/2, k/2)` is the chi-square CDF with `k` degrees of freedom.\n\nUse `'upper'` rather than `1 - gammainc(...)` when the tail is tiny, since the subtraction loses all significant digits.",
+        "pt": "A função inferior é a integral de `t^(A-1)*exp(-t)` de 0 a `X`, dividida por `gamma(A)`. Ela sobe de 0 a 1 conforme `X` cresce, sendo portanto a função de distribuição acumulada da distribuição gama com escala unitária. Com `A = 1` reduz-se a `1 - exp(-X)`, e `gammainc(x/2, k/2)` é a CDF qui-quadrado com `k` graus de liberdade.\n\nUse `'upper'` em vez de `1 - gammainc(...)` quando a cauda é minúscula, pois a subtração perde todos os dígitos significativos."
+      },
+      "examples": [
+        {"title": {"en": "Lower and upper tails", "pt": "Caudas inferior e superior"}, "code": "gammainc(1, 2)\ngammainc(1, 2, 'upper')\ngammainc([0.5 1 2], 1)"}
+      ],
+      "see": ["gammaincinv", "gamma", "gammaln", "erf", "expint"]
+    },
+    "gammaincinv": {
+      "summary": {"en": "Inverse of the regularized incomplete gamma function.", "pt": "Inversa da função gama incompleta regularizada."},
+      "syntax": [
+        {"code": "X = gammaincinv(Y, A)", "en": "Returns `X` such that `gammainc(X, A) == Y`.", "pt": "Retorna `X` tal que `gammainc(X, A) == Y`."}
+      ],
+      "inputs": [
+        {"name": "Y", "en": "Probabilities in the interval from 0 to 1.", "pt": "Probabilidades no intervalo de 0 a 1."},
+        {"name": "A", "en": "Positive shape parameter.", "pt": "Parâmetro de forma positivo."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Nonnegative values, with the size given by implicit expansion of `Y` and `A`.", "pt": "Valores não negativos, com o tamanho dado pela expansão implícita de `Y` e `A`."}
+      ],
+      "description": {
+        "en": "`gammaincinv` is the quantile function of the gamma distribution with unit scale. For `Y = 0.5` it gives the median. Multiplying by a scale `theta` gives the quantile of a gamma distribution with that scale, and `2*gammaincinv(p, k/2)` is the chi-square quantile with `k` degrees of freedom.",
+        "pt": "`gammaincinv` é a função quantil da distribuição gama de escala unitária. Para `Y = 0.5` ela dá a mediana. Multiplicar por uma escala `theta` dá o quantil de uma gama com aquela escala, e `2*gammaincinv(p, k/2)` é o quantil qui-quadrado com `k` graus de liberdade."
+      },
+      "examples": [
+        {"title": {"en": "Median and round trip", "pt": "Mediana e ida e volta"}, "code": "x = gammaincinv(0.5, 2)\ngammainc(x, 2)"}
+      ],
+      "see": ["gammainc", "gamma", "erfinv", "gammaln"]
+    },
+    "gammaln": {
+      "summary": {"en": "Natural logarithm of the gamma function.", "pt": "Logaritmo natural da função gama."},
+      "syntax": [
+        {"code": "Y = gammaln(X)", "en": "Returns `log(gamma(X))` for each element, computed so that it does not overflow.", "pt": "Retorna `log(gamma(X))` para cada elemento, calculado de modo a não estourar."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`gamma(172)` already overflows, but its logarithm is only a few hundred. `gammaln` works with the logarithm throughout, so it handles arguments of any practical size. This is how large binomial coefficients and factorial ratios are computed without overflow: `exp(gammaln(n+1) - gammaln(k+1) - gammaln(n-k+1))`.",
+        "pt": "`gamma(172)` já estoura, mas seu logaritmo é de apenas algumas centenas. `gammaln` trabalha com o logaritmo o tempo todo, e por isso lida com argumentos de qualquer tamanho prático. É assim que se calculam coeficientes binomiais grandes e razões de fatoriais sem estouro: `exp(gammaln(n+1) - gammaln(k+1) - gammaln(n-k+1))`."
+      },
+      "examples": [
+        {"title": {"en": "Beyond the range of gamma", "pt": "Além do alcance de gamma"}, "code": "gammaln([10 100 1000])\nexp(gammaln(51) - gammaln(26) - gammaln(26))"}
+      ],
+      "see": ["gamma", "factorial", "nchoosek", "psi"]
+    },
+    "gcd": {
+      "summary": {"en": "Greatest common divisor of integers.", "pt": "Máximo divisor comum de inteiros."},
+      "syntax": [
+        {"code": "G = gcd(A, B)", "en": "Returns the largest positive integer that divides both `A` and `B`, element by element.", "pt": "Retorna o maior inteiro positivo que divide `A` e `B`, elemento a elemento."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Integer-valued arrays of compatible sizes. A scalar is expanded to match an array.", "pt": "Arrays de valores inteiros com tamanhos compatíveis. Um escalar é expandido para casar com um array."}
+      ],
+      "outputs": [
+        {"name": "G", "en": "Array of nonnegative integers. `gcd(0, 0)` is `0`, and `gcd(0, n)` is `abs(n)`. Integer inputs of one class give a result of that class.", "pt": "Array de inteiros não negativos. `gcd(0, 0)` é `0`, e `gcd(0, n)` é `abs(n)`. Entradas inteiras de uma classe dão resultado dessa classe."}
+      ],
+      "description": {
+        "en": "The computation uses the Euclidean algorithm: replace the pair `(a, b)` by `(b, mod(a, b))` until the second number is zero. Signs are ignored, since the divisor is always taken positive.\n\nTo reduce a fraction `p/q` to lowest terms, divide both by `gcd(p, q)`. The least common multiple is related by `lcm(a, b) = abs(a*b)/gcd(a, b)`.",
+        "pt": "O cálculo usa o algoritmo de Euclides: troca-se o par `(a, b)` por `(b, mod(a, b))` até que o segundo número seja zero. Os sinais são ignorados, pois o divisor é sempre tomado positivo.\n\nPara reduzir uma fração `p/q` a termos mínimos, divida ambos por `gcd(p, q)`. O mínimo múltiplo comum se relaciona por `lcm(a, b) = abs(a*b)/gcd(a, b)`."
+      },
+      "notes": {
+        "en": "The extended form `[G, C, D] = gcd(A, B)`, which also returns the Bezout coefficients, is not available in MatLivre.",
+        "pt": "A forma estendida `[G, C, D] = gcd(A, B)`, que também retorna os coeficientes de Bezout, não está disponível no MatLivre."
+      },
+      "examples": [
+        {"title": {"en": "Scalars and arrays", "pt": "Escalares e arrays"}, "code": "gcd(12, 18)\ngcd([12 15 20], 5)\ngcd(0, 7)"}
+      ],
+      "see": ["lcm", "factor", "mod", "rat", "primes"]
+    },
+    "hadamard": {
+      "summary": {"en": "Hadamard matrix of +1 and -1 entries.", "pt": "Matriz de Hadamard com entradas +1 e -1."},
+      "syntax": [
+        {"code": "H = hadamard(n)", "en": "Returns an `n`-by-`n` matrix `H` whose entries are `1` or `-1` and whose rows are mutually orthogonal.", "pt": "Retorna uma matriz `H` `n`-por-`n` cujas entradas são `1` ou `-1` e cujas linhas são mutuamente ortogonais."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Order of the matrix. It must be `1`, `2`, or a multiple of `4` of the form `2^e`, `12*2^e` or `20*2^e`.", "pt": "Ordem da matriz. Deve ser `1`, `2`, ou um múltiplo de `4` da forma `2^e`, `12*2^e` ou `20*2^e`."}
+      ],
+      "outputs": [
+        {"name": "H", "en": "Matrix satisfying `H'*H == n*eye(n)`.", "pt": "Matriz que satisfaz `H'*H == n*eye(n)`."}
+      ],
+      "description": {
+        "en": "The defining property is that distinct rows are orthogonal, so `H*H'` is `n` times the identity. Such matrices are the basis of the Walsh-Hadamard transform and of error-correcting codes and experimental designs.\n\nFor powers of two the matrix is built by the doubling rule `[H H; H -H]`. Other orders use known constructions, and an order for which no matrix of this type is available is an error.",
+        "pt": "A propriedade que a define é que linhas distintas são ortogonais, de modo que `H*H'` é `n` vezes a identidade. Essas matrizes são a base da transformada de Walsh-Hadamard, de códigos corretores de erros e de planejamentos experimentais.\n\nPara potências de dois a matriz é construída pela regra de duplicação `[H H; H -H]`. Outras ordens usam construções conhecidas, e uma ordem para a qual não há matriz desse tipo é um erro."
+      },
+      "examples": [
+        {"title": {"en": "Order 4 and its orthogonality", "pt": "Ordem 4 e sua ortogonalidade"}, "code": "H = hadamard(4)\nH' * H"}
+      ],
+      "see": ["hilb", "magic", "gallery", "kron"]
+    },
+    "hankel": {
+      "summary": {"en": "Hankel matrix, constant along each anti-diagonal.", "pt": "Matriz de Hankel, constante ao longo de cada antidiagonal."},
+      "syntax": [
+        {"code": "H = hankel(c)", "en": "Square matrix with `c` as its first column and zeros below the anti-diagonal.", "pt": "Matriz quadrada com `c` como primeira coluna e zeros abaixo da antidiagonal."},
+        {"code": "H = hankel(c, r)", "en": "Matrix with first column `c` and last row `r`, of size `numel(c)`-by-`numel(r)`.", "pt": "Matriz com primeira coluna `c` e última linha `r`, de tamanho `numel(c)`-por-`numel(r)`."}
+      ],
+      "inputs": [
+        {"name": "c", "en": "Vector giving the first column.", "pt": "Vetor que dá a primeira coluna."},
+        {"name": "r", "en": "Vector giving the last row. If `r(1)` differs from `c(end)`, the value of `c(end)` is used and a warning is issued.", "pt": "Vetor que dá a última linha. Se `r(1)` for diferente de `c(end)`, vale `c(end)` e um aviso é emitido."}
+      ],
+      "outputs": [
+        {"name": "H", "en": "The Hankel matrix: entry `(i, j)` depends only on `i + j`.", "pt": "A matriz de Hankel: a entrada `(i, j)` depende apenas de `i + j`."}
+      ],
+      "description": {
+        "en": "In a Hankel matrix, `H(i, j)` is a function of `i + j` alone, so the anti-diagonals are constant. Such matrices arise when a sequence is arranged into overlapping windows, for instance in linear prediction, system identification and the moment problem.\n\nA Toeplitz matrix is the same matrix with its columns reversed.",
+        "pt": "Em uma matriz de Hankel, `H(i, j)` é função só de `i + j`, de modo que as antidiagonais são constantes. Essas matrizes surgem quando uma sequência é organizada em janelas sobrepostas, por exemplo em predição linear, identificação de sistemas e no problema de momentos.\n\nUma matriz de Toeplitz é a mesma matriz com as colunas invertidas."
+      },
+      "examples": [
+        {"title": {"en": "One and two vectors", "pt": "Um e dois vetores"}, "code": "hankel([1 2 3])\nhankel([1 2 3], [3 4 5])"}
+      ],
+      "see": ["toeplitz", "vander", "hilb", "gallery"]
+    },
+    "hilb": {
+      "summary": {"en": "Hilbert matrix, with entries 1/(i+j-1).", "pt": "Matriz de Hilbert, com entradas 1/(i+j-1)."},
+      "syntax": [
+        {"code": "H = hilb(n)", "en": "Returns the `n`-by-`n` Hilbert matrix.", "pt": "Retorna a matriz de Hilbert `n`-por-`n`."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Nonnegative integer, the order of the matrix.", "pt": "Inteiro não negativo, a ordem da matriz."}
+      ],
+      "outputs": [
+        {"name": "H", "en": "Symmetric positive definite matrix with `H(i, j) = 1/(i + j - 1)`.", "pt": "Matriz simétrica positiva definida com `H(i, j) = 1/(i + j - 1)`."}
+      ],
+      "description": {
+        "en": "The Hilbert matrix is the classical example of an ill-conditioned matrix. Its condition number grows exponentially with `n` (about `1.6e13` already for `n = 10`), so solving `H*x = b` in floating point loses most digits for modest sizes. It comes from least-squares fitting by polynomials on the interval from 0 to 1.\n\nIts exact inverse has integer entries and is returned by `invhilb`.",
+        "pt": "A matriz de Hilbert é o exemplo clássico de matriz mal condicionada. Seu número de condição cresce exponencialmente com `n` (cerca de `1.6e13` já para `n = 10`), de modo que resolver `H*x = b` em ponto flutuante perde a maior parte dos dígitos para tamanhos modestos. Ela surge do ajuste por mínimos quadrados com polinômios no intervalo de 0 a 1.\n\nSua inversa exata tem entradas inteiras e é fornecida por `invhilb`."
+      },
+      "examples": [
+        {"title": {"en": "A 3-by-3 Hilbert matrix", "pt": "Uma matriz de Hilbert 3-por-3"}, "code": "H = hilb(3)\ncond(hilb(8))"}
+      ],
+      "see": ["invhilb", "magic", "hankel", "cond", "gallery"]
+    },
+    "hypot": {
+      "summary": {"en": "Square root of the sum of squares, without overflow.", "pt": "Raiz quadrada da soma dos quadrados, sem estouro."},
+      "syntax": [
+        {"code": "C = hypot(A, B)", "en": "Returns `sqrt(abs(A).^2 + abs(B).^2)` element by element.", "pt": "Retorna `sqrt(abs(A).^2 + abs(B).^2)` elemento a elemento."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Real (or complex, using absolute values) arrays of compatible sizes.", "pt": "Arrays reais (ou complexos, usando os valores absolutos) de tamanhos compatíveis."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Nonnegative array: the length of the hypotenuse of a right triangle with legs `A` and `B`.", "pt": "Array não negativo: o comprimento da hipotenusa de um triângulo retângulo com catetos `A` e `B`."}
+      ],
+      "description": {
+        "en": "`hypot` gives the Euclidean length of a two-component vector. Writing `sqrt(a^2 + b^2)` directly can overflow when `a` or `b` is near `1e154` even though the true result is representable; `hypot` rescales internally and avoids that.\n\nFor more than two components use `norm`, or nest calls as `hypot(hypot(a, b), c)`.",
+        "pt": "`hypot` dá o comprimento euclidiano de um vetor de duas componentes. Escrever `sqrt(a^2 + b^2)` diretamente pode estourar quando `a` ou `b` está perto de `1e154`, mesmo que o resultado verdadeiro seja representável; `hypot` reescala internamente e evita isso.\n\nPara mais de duas componentes use `norm`, ou encadeie chamadas como `hypot(hypot(a, b), c)`."
+      },
+      "examples": [
+        {"title": {"en": "Triangles and huge values", "pt": "Triângulos e valores enormes"}, "code": "hypot(3, 4)\nhypot([3 5], [4 12])\nsqrt((1e200)^2 + (1e200)^2)\nhypot(1e200, 1e200)"}
+      ],
+      "see": ["sqrt", "abs", "norm", "cart2pol"]
+    },
+    "i": {
+      "summary": {"en": "Imaginary unit, the square root of -1.", "pt": "Unidade imaginária, a raiz quadrada de -1."},
+      "syntax": [
+        {"code": "z = i", "en": "The imaginary unit, the complex number `0 + 1i`.", "pt": "A unidade imaginária, o número complexo `0 + 1i`."},
+        {"code": "z = a + b*i", "en": "Builds a complex number from its real part `a` and imaginary part `b`.", "pt": "Constrói um número complexo a partir da parte real `a` e da imaginária `b`."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "z", "en": "Complex scalar of class double.", "pt": "Escalar complexo da classe double."}
+      ],
+      "description": {
+        "en": "`i` is a built-in function that returns the imaginary unit. Because it is only a name, assigning to a variable called `i` (a very common loop index) hides it, and `2 + 3*i` then uses the variable instead. The imaginary literals `1i`, `3j` and `2.5i` are immune to this: a number followed directly by `i` or `j` is always imaginary, so they are the safer way to write complex constants.\n\n`j` is an equivalent alias, popular in engineering.",
+        "pt": "`i` é uma função interna que retorna a unidade imaginária. Como é apenas um nome, atribuir a uma variável chamada `i` (um índice de laço muito comum) a oculta, e `2 + 3*i` passa a usar a variável. Os literais imaginários `1i`, `3j` e `2.5i` são imunes a isso: um número seguido diretamente de `i` ou `j` é sempre imaginário, sendo a forma mais segura de escrever constantes complexas.\n\n`j` é um sinônimo equivalente, popular na engenharia."
+      },
+      "examples": [
+        {"title": {"en": "Complex arithmetic", "pt": "Aritmética complexa"}, "code": "i^2\nz = 2 + 3*i\nabs(z)\nexp(1i*pi/2)"}
+      ],
+      "see": ["j", "complex", "real", "imag", "abs"]
+    },
+    "imag": {
+      "summary": {"en": "Imaginary part of a complex number.", "pt": "Parte imaginária de um número complexo."},
+      "syntax": [
+        {"code": "Y = imag(Z)", "en": "Returns the imaginary part of each element of `Z`.", "pt": "Retorna a parte imaginária de cada elemento de `Z`."}
+      ],
+      "inputs": [
+        {"name": "Z", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Real array of the same size as `Z`. It is zero for every real element.", "pt": "Array real do mesmo tamanho de `Z`. É zero para todo elemento real."}
+      ],
+      "description": {
+        "en": "For `z = a + b*i`, `imag(z)` is `b`. Together with `real` it splits a complex array into two real arrays, and `complex(real(z), imag(z))` rebuilds it.\n\nThe imaginary part of the complex conjugate is the negative: `imag(conj(z)) == -imag(z)`.",
+        "pt": "Para `z = a + b*i`, `imag(z)` vale `b`. Junto com `real`, separa um array complexo em dois arrays reais, e `complex(real(z), imag(z))` o reconstrói.\n\nA parte imaginária do conjugado complexo é o oposto: `imag(conj(z)) == -imag(z)`."
+      },
+      "examples": [
+        {"title": {"en": "Splitting a complex vector", "pt": "Separando um vetor complexo"}, "code": "z = [1+2i, 3, 4-5i];\nimag(z)\nreal(z)\nimag(7)"}
+      ],
+      "see": ["real", "complex", "conj", "abs", "angle"]
+    },
+    "invhilb": {
+      "summary": {"en": "Exact inverse of the Hilbert matrix.", "pt": "Inversa exata da matriz de Hilbert."},
+      "syntax": [
+        {"code": "H = invhilb(n)", "en": "Returns the inverse of `hilb(n)`, computed from a closed formula.", "pt": "Retorna a inversa de `hilb(n)`, calculada por uma fórmula fechada."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Positive integer, the order of the matrix.", "pt": "Inteiro positivo, a ordem da matriz."}
+      ],
+      "outputs": [
+        {"name": "H", "en": "Symmetric matrix of integers with alternating-sign structure.", "pt": "Matriz simétrica de inteiros com estrutura de sinais alternados."}
+      ],
+      "description": {
+        "en": "The inverse of the Hilbert matrix has integer entries given by binomial-coefficient formulas, so it can be written down exactly without inverting anything. Calling `inv(hilb(n))` for the same `n` goes through floating point and becomes inaccurate quickly, because `hilb` is badly conditioned; `invhilb` stays exact as long as the integers fit in a double.\n\nIt is handy as a reference solution when testing linear solvers.",
+        "pt": "A inversa da matriz de Hilbert tem entradas inteiras dadas por fórmulas de coeficientes binomiais, então pode ser escrita exatamente sem inverter nada. Chamar `inv(hilb(n))` passa por ponto flutuante e fica imprecisa depressa, porque `hilb` é mal condicionada; `invhilb` permanece exata enquanto os inteiros cabem em um double.\n\nÉ útil como solução de referência ao testar solvers lineares."
+      },
+      "examples": [
+        {"title": {"en": "Exact inverse", "pt": "Inversa exata"}, "code": "H = invhilb(3)\nhilb(3) * H"}
+      ],
+      "see": ["hilb", "inv", "cond", "gallery"]
+    },
+    "isprime": {
+      "summary": {"en": "Tests which elements are prime numbers.", "pt": "Testa quais elementos são números primos."},
+      "syntax": [
+        {"code": "TF = isprime(X)", "en": "Returns a logical array that is `true` where the element of `X` is prime.", "pt": "Retorna um array lógico que é `true` onde o elemento de `X` é primo."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Array of nonnegative integer values (any numeric class).", "pt": "Array de valores inteiros não negativos (qualquer classe numérica)."}
+      ],
+      "outputs": [
+        {"name": "TF", "en": "Logical array of the same size as `X`.", "pt": "Array lógico do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "A prime is an integer greater than 1 whose only positive divisors are 1 and itself. So `0` and `1` are not prime, and `2` is the only even prime.\n\nCombine with `find` to list primes in a range, or with `sum` to count them: `sum(isprime(1:100))` is `25`.",
+        "pt": "Um primo é um inteiro maior que 1 cujos únicos divisores positivos são 1 e ele mesmo. Assim, `0` e `1` não são primos, e `2` é o único primo par.\n\nCombine com `find` para listar os primos de uma faixa, ou com `sum` para contá-los: `sum(isprime(1:100))` vale `25`."
+      },
+      "examples": [
+        {"title": {"en": "Primes up to 10 and a Mersenne prime", "pt": "Primos até 10 e um primo de Mersenne"}, "code": "isprime(1:10)\nisprime(2^31 - 1)\nsum(isprime(1:100))"}
+      ],
+      "see": ["primes", "factor", "gcd", "nchoosek"]
+    },
+    "j": {
+      "summary": {"en": "Imaginary unit, equivalent to i.", "pt": "Unidade imaginária, equivalente a i."},
+      "syntax": [
+        {"code": "z = j", "en": "The imaginary unit, the complex number `0 + 1i`.", "pt": "A unidade imaginária, o número complexo `0 + 1i`."},
+        {"code": "z = a + b*j", "en": "Builds a complex number from real part `a` and imaginary part `b`.", "pt": "Constrói um número complexo a partir da parte real `a` e da imaginária `b`."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "z", "en": "Complex scalar of class double.", "pt": "Escalar complexo da classe double."}
+      ],
+      "description": {
+        "en": "`j` returns exactly the same value as `i`. The notation comes from electrical engineering, where `i` is reserved for current. Like `i`, it can be shadowed by a variable of the same name, whereas the literal `3j` is always imaginary.\n\nThe display of complex numbers always uses the letter `i`, even if the value was written with `j`.",
+        "pt": "`j` retorna exatamente o mesmo valor que `i`. A notação vem da engenharia elétrica, onde `i` é reservado para a corrente. Como `i`, pode ser ocultado por uma variável de mesmo nome, enquanto o literal `3j` é sempre imaginário.\n\nA exibição de números complexos sempre usa a letra `i`, mesmo que o valor tenha sido escrito com `j`."
+      },
+      "examples": [
+        {"title": {"en": "Impedance of a series circuit", "pt": "Impedância de um circuito em série"}, "code": "w = 2*pi*60;\nZ = 10 + j*w*0.02\nabs(Z)\nangle(Z)"}
+      ],
+      "see": ["i", "complex", "real", "imag", "abs"]
+    }
+  }
+}

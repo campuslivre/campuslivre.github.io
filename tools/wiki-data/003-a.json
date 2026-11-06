@@ -1,0 +1,1194 @@
+{
+ "functions": {
+  "addGroup": {
+   "summary": {
+    "en": "Creates a new settings group inside the settings tree or inside another group.",
+    "pt": "Cria um novo grupo de configurações na árvore de configurações ou dentro de outro grupo."
+   },
+   "syntax": [
+    {
+     "code": "G = addGroup(parent, name)",
+     "en": "Adds a group called `name` under `parent` and returns it.",
+     "pt": "Adiciona um grupo chamado `name` em `parent` e o retorna."
+    },
+    {
+     "code": "G = addGroup(parent, name, 'Hidden', tf)",
+     "en": "Also marks the group as hidden when `tf` is true.",
+     "pt": "Também marca o grupo como oculto quando `tf` é verdadeiro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "parent",
+     "en": "The root object returned by `settings`, or an existing `SettingsGroup`.",
+     "pt": "O objeto raiz retornado por `settings`, ou um `SettingsGroup` existente."
+    },
+    {
+     "name": "name",
+     "en": "Group name. It must start with a letter and contain only letters, digits and underscores.",
+     "pt": "Nome do grupo. Deve começar com letra e conter apenas letras, dígitos e sublinhados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "The new `matlab.settings.SettingsGroup` object.",
+     "pt": "O novo objeto `matlab.settings.SettingsGroup`."
+    }
+   ],
+   "description": {
+    "en": "The settings tree stores configuration values in named groups. Product groups such as `matlab` already exist; a program or toolbox adds its own group so that its options live in one place. Groups can nest, and a group is reached with dot syntax: `s.mygroup.sub`.\n\nCreating a group whose name is already taken in the same parent is an error. Use `hasGroup` to check first and `removeGroup` to delete it.",
+    "pt": "A árvore de configurações guarda valores em grupos nomeados. Grupos de produtos como `matlab` já existem; um programa ou toolbox cria o seu próprio grupo para manter as opções em um só lugar. Grupos podem ser aninhados e são acessados com a sintaxe de ponto: `s.mygroup.sub`.\n\nCriar um grupo cujo nome já existe no mesmo pai é um erro. Use `hasGroup` para verificar antes e `removeGroup` para apagá-lo."
+   },
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create and remove a group",
+      "pt": "Criar e remover um grupo"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\ndisp(class(g))\ndisp(hasGroup(s, 'demo'))\nremoveGroup(s, 'demo');\ndisp(hasGroup(s, 'demo'))"
+    }
+   ],
+   "see": [
+    "settings",
+    "hasGroup",
+    "removeGroup",
+    "addSetting"
+   ]
+  },
+  "addSetting": {
+   "summary": {
+    "en": "Adds a setting, a named value holder, to a settings group.",
+    "pt": "Adiciona uma configuração, um item de valor nomeado, a um grupo de configurações."
+   },
+   "syntax": [
+    {
+     "code": "S = addSetting(G, name)",
+     "en": "Creates an empty setting called `name` in group `G`.",
+     "pt": "Cria uma configuração vazia chamada `name` no grupo `G`."
+    },
+    {
+     "code": "S = addSetting(G, name, Name, Value)",
+     "en": "Creates the setting with options such as `'PersonalValue'` and `'ValidationFcn'`.",
+     "pt": "Cria a configuração com opções como `'PersonalValue'` e `'ValidationFcn'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "G",
+     "en": "A `SettingsGroup` created with `addGroup`. Settings cannot be added to the root returned by `settings`.",
+     "pt": "Um `SettingsGroup` criado com `addGroup`. Não é possível adicionar configurações à raiz retornada por `settings`."
+    },
+    {
+     "name": "name",
+     "en": "Setting name, with the same naming rules as a group.",
+     "pt": "Nome da configuração, com as mesmas regras de nome de um grupo."
+    },
+    {
+     "name": "'PersonalValue'",
+     "en": "Initial personal value. It is checked by the validation function, if any.",
+     "pt": "Valor pessoal inicial. É verificado pela função de validação, se houver."
+    },
+    {
+     "name": "'ValidationFcn'",
+     "en": "Function handle called on every assigned value; it should error for invalid values, like `@matlab.settings.mustBeNumericScalar`.",
+     "pt": "Handle de função chamado a cada valor atribuído; deve gerar erro para valores inválidos, como `@matlab.settings.mustBeNumericScalar`."
+    },
+    {
+     "name": "'Hidden'",
+     "en": "Logical flag that hides the setting from listings.",
+     "pt": "Flag lógica que oculta a configuração das listagens."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "The new `matlab.settings.Setting` object.",
+     "pt": "O novo objeto `matlab.settings.Setting`."
+    }
+   ],
+   "description": {
+    "en": "A setting holds up to four layers of value: temporary, personal, installation and factory. Reading `S.ActiveValue` returns the first one that is set, in that priority order, and errors when none is. Assigning `S.PersonalValue` or `S.TemporaryValue` stores a value in that layer and runs the validation function.\n\nA new setting starts with no value in any layer, so give it a personal value before reading it.",
+    "pt": "Uma configuração guarda até quatro camadas de valor: temporário, pessoal, de instalação e de fábrica. Ler `S.ActiveValue` retorna a primeira camada definida, nessa ordem de prioridade, e gera erro se nenhuma estiver. Atribuir `S.PersonalValue` ou `S.TemporaryValue` grava o valor naquela camada e executa a função de validação.\n\nUma configuração nova começa sem valor em nenhuma camada; defina um valor pessoal antes de lê-la."
+   },
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting with validation",
+      "pt": "Configuração com validação"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Size', 'PersonalValue', 10, ...\n    'ValidationFcn', @matlab.settings.mustBeNumericScalar);\ndisp(a.ActiveValue)\na.PersonalValue = 20;\ndisp(a.ActiveValue)\ntry\n    a.PersonalValue = 'x';\ncatch err\n    disp(['Rejected: ' err.message])\nend\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "addGroup",
+    "removeSetting",
+    "hasSetting",
+    "settings",
+    "hasPersonalValue"
+   ]
+  },
+  "clearPersonalValue": {
+   "summary": {
+    "en": "Removes the personal value of a setting.",
+    "pt": "Remove o valor pessoal de uma configuração."
+   },
+   "syntax": [
+    {
+     "code": "clearPersonalValue(S)",
+     "en": "Clears the personal layer of setting `S`; the other layers are kept.",
+     "pt": "Limpa a camada pessoal da configuração `S`; as demais camadas são mantidas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A setting keeps separate layers of value, and `S.ActiveValue` returns the first one set in the order temporary, personal, installation, factory. `clearPersonalValue` empties only the personal layer, so afterwards `hasPersonalValue(S)` is false and `ActiveValue` falls back to the next layer. If no layer is left, reading `ActiveValue` is an error.",
+    "pt": "Uma configuração mantém camadas separadas de valor, e `S.ActiveValue` retorna a primeira definida na ordem temporário, pessoal, de instalação, de fábrica. `clearPersonalValue` esvazia apenas a camada pessoal; depois disso `hasPersonalValue(S)` é falso e `ActiveValue` passa para a camada seguinte. Se não restar nenhuma, ler `ActiveValue` é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clear the personal value",
+      "pt": "Limpar o valor pessoal"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level');\na.PersonalValue = 5;\ndisp(hasPersonalValue(a))\nclearPersonalValue(a);\ndisp(hasPersonalValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "hasPersonalValue",
+    "clearTemporaryValue",
+    "addSetting",
+    "settings"
+   ],
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   }
+  },
+  "clearTemporaryValue": {
+   "summary": {
+    "en": "Removes the temporary value of a setting.",
+    "pt": "Remove o valor temporário de uma configuração."
+   },
+   "syntax": [
+    {
+     "code": "clearTemporaryValue(S)",
+     "en": "Clears the temporary layer of setting `S`; the other layers are kept.",
+     "pt": "Limpa a camada temporário da configuração `S`; as demais camadas são mantidas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A setting keeps separate layers of value, and `S.ActiveValue` returns the first one set in the order temporary, personal, installation, factory. `clearTemporaryValue` empties only the temporary layer, so afterwards `hasTemporaryValue(S)` is false and `ActiveValue` falls back to the next layer. If no layer is left, reading `ActiveValue` is an error.",
+    "pt": "Uma configuração mantém camadas separadas de valor, e `S.ActiveValue` retorna a primeira definida na ordem temporário, pessoal, de instalação, de fábrica. `clearTemporaryValue` esvazia apenas a camada temporário; depois disso `hasTemporaryValue(S)` é falso e `ActiveValue` passa para a camada seguinte. Se não restar nenhuma, ler `ActiveValue` é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clear the temporary value",
+      "pt": "Limpar o valor temporário"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level');\na.TemporaryValue = 5;\ndisp(hasTemporaryValue(a))\nclearTemporaryValue(a);\ndisp(hasTemporaryValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "hasTemporaryValue",
+    "clearPersonalValue",
+    "addSetting",
+    "settings"
+   ]
+  },
+  "clearInstallationValue": {
+   "summary": {
+    "en": "Removes the installation value of a setting.",
+    "pt": "Remove o valor de instalação de uma configuração."
+   },
+   "syntax": [
+    {
+     "code": "clearInstallationValue(S)",
+     "en": "Clears the installation layer of setting `S`; the other layers are kept.",
+     "pt": "Limpa a camada de instalação da configuração `S`; as demais camadas são mantidas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The installation layer holds values set for a whole installation by an administrator, below the personal and temporary layers in priority. `clearInstallationValue` empties that layer only. If the setting has no installation value the call does nothing.",
+    "pt": "A camada de instalação guarda valores definidos para toda a instalação por um administrador, abaixo das camadas pessoal e temporária em prioridade. `clearInstallationValue` esvazia apenas essa camada. Se a configuração não tem valor de instalação, a chamada não faz nada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Safe to call without a value",
+      "pt": "Chamada sem valor definido"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level', 'PersonalValue', 1);\nclearInstallationValue(a)\ndisp(hasInstallationValue(a))\ndisp(a.ActiveValue)\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "hasInstallationValue",
+    "clearPersonalValue",
+    "clearTemporaryValue",
+    "addSetting"
+   ]
+  },
+  "hasPersonalValue": {
+   "summary": {
+    "en": "Tests whether a setting has a personal value.",
+    "pt": "Testa se uma configuração tem valor pessoal."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasPersonalValue(S)",
+     "en": "Returns true when the personal layer of setting `S` holds a value.",
+     "pt": "Retorna verdadeiro quando a camada pessoal da configuração `S` contém um valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar: `true` if the personal value is set.",
+     "pt": "Escalar lógico: `true` se o valor pessoal está definido."
+    }
+   ],
+   "description": {
+    "en": "A setting can hold a temporary, personal, installation and factory value at the same time, and `ActiveValue` shows the first one set in that order. `hasPersonalValue` looks at one layer only, so it tells whether that layer would take part in the lookup.",
+    "pt": "Uma configuração pode guardar ao mesmo tempo um valor temporário, pessoal, de instalação e de fábrica, e `ActiveValue` mostra o primeiro definido nessa ordem. `hasPersonalValue` olha apenas uma camada, e indica se ela participaria da busca."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Query the personal layer",
+      "pt": "Consultar a camada pessoal"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level');\ndisp(hasPersonalValue(a))\na.PersonalValue = 5;\ndisp(hasPersonalValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "clearPersonalValue",
+    "hasTemporaryValue",
+    "addSetting",
+    "settings"
+   ],
+   "notes": {
+    "en": "In MatLivre, personal values last for the current session only; they are not saved between runs as MATLAB saves them.",
+    "pt": "No MatLivre, os valores pessoais valem apenas para a sessão atual; não são gravados entre execuções como o MATLAB faz."
+   }
+  },
+  "hasTemporaryValue": {
+   "summary": {
+    "en": "Tests whether a setting has a temporary value.",
+    "pt": "Testa se uma configuração tem valor temporário."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasTemporaryValue(S)",
+     "en": "Returns true when the temporary layer of setting `S` holds a value.",
+     "pt": "Retorna verdadeiro quando a camada temporário da configuração `S` contém um valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar: `true` if the temporary value is set.",
+     "pt": "Escalar lógico: `true` se o valor temporário está definido."
+    }
+   ],
+   "description": {
+    "en": "A setting can hold a temporary, personal, installation and factory value at the same time, and `ActiveValue` shows the first one set in that order. `hasTemporaryValue` looks at one layer only, so it tells whether that layer would take part in the lookup.",
+    "pt": "Uma configuração pode guardar ao mesmo tempo um valor temporário, pessoal, de instalação e de fábrica, e `ActiveValue` mostra o primeiro definido nessa ordem. `hasTemporaryValue` olha apenas uma camada, e indica se ela participaria da busca."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Query the temporary layer",
+      "pt": "Consultar a camada temporário"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level');\ndisp(hasTemporaryValue(a))\na.TemporaryValue = 5;\ndisp(hasTemporaryValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "clearTemporaryValue",
+    "hasPersonalValue",
+    "addSetting",
+    "settings"
+   ]
+  },
+  "hasInstallationValue": {
+   "summary": {
+    "en": "Tests whether a setting has a installation value.",
+    "pt": "Testa se uma configuração tem valor de instalação."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasInstallationValue(S)",
+     "en": "Returns true when the installation layer of setting `S` holds a value.",
+     "pt": "Retorna verdadeiro quando a camada de instalação da configuração `S` contém um valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar: `true` if the installation value is set.",
+     "pt": "Escalar lógico: `true` se o valor de instalação está definido."
+    }
+   ],
+   "description": {
+    "en": "A setting can hold a temporary, personal, installation and factory value at the same time, and `ActiveValue` shows the first one set in that order. `hasInstallationValue` looks at one layer only, so it tells whether that layer would take part in the lookup.",
+    "pt": "Uma configuração pode guardar ao mesmo tempo um valor temporário, pessoal, de instalação e de fábrica, e `ActiveValue` mostra o primeiro definido nessa ordem. `hasInstallationValue` olha apenas uma camada, e indica se ela participaria da busca."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Query the installation layer",
+      "pt": "Consultar a camada de instalação"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level', 'PersonalValue', 1);\ndisp(hasInstallationValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "clearInstallationValue",
+    "hasPersonalValue",
+    "addSetting",
+    "settings"
+   ]
+  },
+  "hasFactoryValue": {
+   "summary": {
+    "en": "Tests whether a setting has a factory value.",
+    "pt": "Testa se uma configuração tem valor de fábrica."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasFactoryValue(S)",
+     "en": "Returns true when the factory layer of setting `S` holds a value.",
+     "pt": "Retorna verdadeiro quando a camada de fábrica da configuração `S` contém um valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "A `matlab.settings.Setting` object.",
+     "pt": "Um objeto `matlab.settings.Setting`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar: `true` if the factory value is set.",
+     "pt": "Escalar lógico: `true` se o valor de fábrica está definido."
+    }
+   ],
+   "description": {
+    "en": "A setting can hold a temporary, personal, installation and factory value at the same time, and `ActiveValue` shows the first one set in that order. `hasFactoryValue` looks at one layer only, so it tells whether that layer would take part in the lookup. Settings created with `addSetting` never have a factory value; only product settings do.",
+    "pt": "Uma configuração pode guardar ao mesmo tempo um valor temporário, pessoal, de instalação e de fábrica, e `ActiveValue` mostra o primeiro definido nessa ordem. `hasFactoryValue` olha apenas uma camada, e indica se ela participaria da busca. Configurações criadas com `addSetting` nunca têm valor de fábrica; só as de produtos têm."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Query the factory layer",
+      "pt": "Consultar a camada de fábrica"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\na = addSetting(g, 'Level', 'PersonalValue', 1);\ndisp(hasFactoryValue(a))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "hasInstallationValue",
+    "hasPersonalValue",
+    "addSetting",
+    "settings"
+   ]
+  },
+  "hasGroup": {
+   "summary": {
+    "en": "Tests whether a settings group contains a child group of a given name.",
+    "pt": "Testa se um grupo de configurações contém um subgrupo com determinado nome."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasGroup(parent, name)",
+     "en": "Returns true if `parent` has a group called `name`.",
+     "pt": "Retorna verdadeiro se `parent` tem um grupo chamado `name`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "parent",
+     "en": "The root from `settings` or a `SettingsGroup`.",
+     "pt": "A raiz de `settings` ou um `SettingsGroup`."
+    },
+    {
+     "name": "name",
+     "en": "Name of the child group to look for.",
+     "pt": "Nome do subgrupo a procurar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Only direct children are checked, so `hasGroup(s, 'sub')` does not find a group nested two levels down. Settings are not groups: a name that belongs to a setting gives false. Use it before `addGroup` to avoid the error raised for a duplicate name.",
+    "pt": "Apenas filhos diretos são verificados, então `hasGroup(s, 'sub')` não encontra um grupo aninhado dois níveis abaixo. Configurações não são grupos: um nome que pertence a uma configuração dá falso. Use antes de `addGroup` para evitar o erro de nome duplicado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Check before adding",
+      "pt": "Verificar antes de criar"
+     },
+     "code": "s = settings;\ndisp(hasGroup(s, 'matlab'))\ndisp(hasGroup(s, 'nothere'))\nif ~hasGroup(s, 'demo')\n    addGroup(s, 'demo');\nend\ndisp(hasGroup(s, 'demo'))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "addGroup",
+    "removeGroup",
+    "hasSetting",
+    "settings"
+   ]
+  },
+  "hasSetting": {
+   "summary": {
+    "en": "Tests whether a settings group contains a setting of a given name.",
+    "pt": "Testa se um grupo de configurações contém uma configuração com determinado nome."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasSetting(G, name)",
+     "en": "Returns true if group `G` has a setting called `name`.",
+     "pt": "Retorna verdadeiro se o grupo `G` tem uma configuração chamada `name`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "G",
+     "en": "A `SettingsGroup` object.",
+     "pt": "Um objeto `SettingsGroup`."
+    },
+    {
+     "name": "name",
+     "en": "Name of the setting to look for.",
+     "pt": "Nome da configuração a procurar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Only direct children of `G` are checked, and a child group with the same name does not count as a setting. Use it before `addSetting` to avoid the duplicate-name error.",
+    "pt": "Apenas filhos diretos de `G` são verificados, e um subgrupo com o mesmo nome não conta como configuração. Use antes de `addSetting` para evitar o erro de nome duplicado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting present and absent",
+      "pt": "Configuração presente e ausente"
+     },
+     "code": "s = settings;\ng = addGroup(s, 'demo');\naddSetting(g, 'Level', 'PersonalValue', 1);\ndisp(hasSetting(g, 'Level'))\ndisp(hasSetting(g, 'Other'))\nremoveGroup(s, 'demo');"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "removeSetting",
+    "hasGroup",
+    "settings"
+   ]
+  },
+  "clipboard": {
+   "summary": {
+    "en": "Copies text to the system clipboard or reads the text stored there.",
+    "pt": "Copia texto para a área de transferência do sistema ou lê o texto armazenado nela."
+   },
+   "syntax": [
+    {
+     "code": "clipboard('copy', data)",
+     "en": "Puts `data` on the clipboard as text.",
+     "pt": "Coloca `data` na área de transferência como texto."
+    },
+    {
+     "code": "data = clipboard('paste')",
+     "en": "Returns the current clipboard text as a character vector.",
+     "pt": "Retorna o texto atual da área de transferência como vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'copy' | 'paste'",
+     "en": "The action to perform.",
+     "pt": "A ação a executar."
+    },
+    {
+     "name": "data",
+     "en": "Text to copy. Other values are converted to their text form.",
+     "pt": "Texto a copiar. Outros valores são convertidos para a forma de texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "data",
+     "en": "Clipboard contents as text, for `'paste'`.",
+     "pt": "Conteúdo da área de transferência como texto, para `'paste'`."
+    }
+   ],
+   "description": {
+    "en": "`clipboard` is the programmatic equivalent of copy and paste for plain text. Only text is exchanged; images and files on the clipboard are not read.",
+    "pt": "`clipboard` é o equivalente programático de copiar e colar para texto simples. Apenas texto é trocado; imagens e arquivos na área de transferência não são lidos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip through the clipboard",
+      "pt": "Ida e volta pela área de transferência"
+     },
+     "code": "clipboard('copy', 'hello from MatLivre');\ns = clipboard('paste')"
+    }
+   ],
+   "see": [
+    "disp",
+    "sprintf",
+    "fprintf"
+   ]
+  },
+  "cmdsep": {
+   "summary": {
+    "en": "Returns the string that separates commands on one line of the system shell.",
+    "pt": "Retorna a string que separa comandos em uma mesma linha do shell do sistema."
+   },
+   "syntax": [
+    {
+     "code": "sep = cmdsep",
+     "en": "Returns the command separator of the current platform.",
+     "pt": "Retorna o separador de comandos da plataforma atual."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "sep",
+     "en": "Character vector with the separator.",
+     "pt": "Vetor de caracteres com o separador."
+    }
+   ],
+   "description": {
+    "en": "Shells differ in how they chain several commands in one string. `cmdsep` returns the separator for the host so that a string passed to `system` can run two commands in order without hard-coding the platform.",
+    "pt": "Os shells diferem na forma de encadear vários comandos em uma só string. `cmdsep` retorna o separador do sistema, de modo que uma string passada a `system` execute dois comandos em ordem sem fixar a plataforma no código."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Chain two commands",
+      "pt": "Encadear dois comandos"
+     },
+     "code": "sep = cmdsep;\ncmd = ['echo first ' sep ' echo second'];\n[status, out] = system(cmd);\ndisp(out)"
+    }
+   ],
+   "see": [
+    "system",
+    "dos",
+    "unix",
+    "perl"
+   ]
+  },
+  "dos": {
+   "summary": {
+    "en": "Runs a command through the Windows command interpreter and returns its status and output.",
+    "pt": "Executa um comando pelo interpretador de comandos do Windows e retorna status e saída."
+   },
+   "syntax": [
+    {
+     "code": "status = dos(cmd)",
+     "en": "Runs `cmd`, showing its output, and returns the exit status.",
+     "pt": "Executa `cmd`, mostrando a saída, e retorna o código de saída."
+    },
+    {
+     "code": "[status, out] = dos(cmd)",
+     "en": "Captures the output in `out` instead of showing it.",
+     "pt": "Captura a saída em `out` em vez de exibi-la."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cmd",
+     "en": "Command line to run.",
+     "pt": "Linha de comando a executar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Exit code of the command; `0` means success.",
+     "pt": "Código de saída do comando; `0` indica sucesso."
+    },
+    {
+     "name": "out",
+     "en": "Text the command wrote as output.",
+     "pt": "Texto que o comando escreveu como saída."
+    }
+   ],
+   "description": {
+    "en": "`dos` is the Windows-specific form of `system`. The command string goes to the Windows shell, so built-in commands like `echo` and `dir` work. Without an output argument the text is printed; with one, it is returned as a character vector.",
+    "pt": "`dos` é a forma de `system` específica do Windows. A string do comando vai para o shell do Windows, então comandos internos como `echo` e `dir` funcionam. Sem argumento de saída, o texto é impresso; com um, é retornado como vetor de caracteres."
+   },
+   "notes": {
+    "en": "In MATLAB, `dos` is meant for Windows. Prefer `system` in code that must also run on other platforms.",
+    "pt": "No MATLAB, `dos` é voltado ao Windows. Prefira `system` em código que também deve rodar em outras plataformas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capture the output",
+      "pt": "Capturar a saída"
+     },
+     "code": "[status, out] = dos('echo hi');\ndisp(status)\ndisp(strtrim(out))"
+    }
+   ],
+   "see": [
+    "system",
+    "unix",
+    "perl",
+    "cmdsep"
+   ]
+  },
+  "getenv": {
+   "summary": {
+    "en": "Returns the value of an operating-system environment variable.",
+    "pt": "Retorna o valor de uma variável de ambiente do sistema operacional."
+   },
+   "syntax": [
+    {
+     "code": "v = getenv(name)",
+     "en": "Returns the value of the variable `name` as a character vector.",
+     "pt": "Retorna o valor da variável `name` como vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name, as a character vector or string scalar.",
+     "pt": "Nome da variável, como vetor de caracteres ou string escalar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "The value. A variable that is not defined gives an empty character vector.",
+     "pt": "O valor. Uma variável não definida resulta em um vetor de caracteres vazio."
+    }
+   ],
+   "description": {
+    "en": "`getenv` reads the process environment, which includes variables changed earlier with `setenv`. An undefined variable is not an error; test the result with `isempty`, or use `isenv` to ask directly.",
+    "pt": "`getenv` lê o ambiente do processo, que inclui variáveis alteradas antes com `setenv`. Uma variável indefinida não é erro; teste o resultado com `isempty`, ou use `isenv` para perguntar diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Set and read a variable",
+      "pt": "Definir e ler uma variável"
+     },
+     "code": "setenv('MY_DEMO', 'abc');\nv = getenv('MY_DEMO')\nmissing = getenv('NO_SUCH_VARIABLE_XYZ')\nisempty(missing)"
+    }
+   ],
+   "see": [
+    "setenv",
+    "unsetenv",
+    "isenv",
+    "loadenv"
+   ]
+  },
+  "isenv": {
+   "summary": {
+    "en": "Tests whether an environment variable is defined.",
+    "pt": "Testa se uma variável de ambiente está definida."
+   },
+   "syntax": [
+    {
+     "code": "tf = isenv(name)",
+     "en": "Returns true when the variable `name` exists in the process environment.",
+     "pt": "Retorna verdadeiro quando a variável `name` existe no ambiente do processo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name, as a character vector or string scalar.",
+     "pt": "Nome da variável, como vetor de caracteres ou string escalar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`isenv` gives a direct yes or no, without reading the value. Variables created with `setenv` count; variables removed with `unsetenv` do not.",
+    "pt": "`isenv` dá um sim ou não direto, sem ler o valor. Variáveis criadas com `setenv` contam; as removidas com `unsetenv` não."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Defined or not",
+      "pt": "Definida ou não"
+     },
+     "code": "disp(isenv('MY_FLAG'))\nsetenv('MY_FLAG', '1');\ndisp(isenv('MY_FLAG'))\nunsetenv('MY_FLAG');\ndisp(isenv('MY_FLAG'))"
+    }
+   ],
+   "see": [
+    "getenv",
+    "setenv",
+    "unsetenv",
+    "loadenv"
+   ]
+  },
+  "getpref": {
+   "summary": {
+    "en": "Reads a preference stored under a group name.",
+    "pt": "Lê uma preferência armazenada sob o nome de um grupo."
+   },
+   "syntax": [
+    {
+     "code": "v = getpref(group, pref)",
+     "en": "Returns the value of `pref` in `group`; errors if it does not exist.",
+     "pt": "Retorna o valor de `pref` em `group`; gera erro se não existir."
+    },
+    {
+     "code": "v = getpref(group, pref, default)",
+     "en": "Returns `default` when the preference does not exist.",
+     "pt": "Retorna `default` quando a preferência não existe."
+    },
+    {
+     "code": "s = getpref(group)",
+     "en": "Returns a struct with every preference of the group.",
+     "pt": "Retorna uma struct com todas as preferências do grupo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "group",
+     "en": "Group name, usually the name of the program that owns the preferences.",
+     "pt": "Nome do grupo, normalmente o nome do programa dono das preferências."
+    },
+    {
+     "name": "pref",
+     "en": "Preference name.",
+     "pt": "Nome da preferência."
+    },
+    {
+     "name": "default",
+     "en": "Value returned in place of an error when the preference is missing.",
+     "pt": "Valor retornado no lugar de um erro quando a preferência não existe."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "The stored value, of any type; or a struct when only `group` is given.",
+     "pt": "O valor armazenado, de qualquer tipo; ou uma struct quando só `group` é informado."
+    }
+   ],
+   "description": {
+    "en": "Preferences are a small key/value store for user options, organized by group and name. The three-argument form with a default is the usual way to read an option that may not have been saved yet.",
+    "pt": "Preferências são um pequeno armazenamento chave/valor para opções do usuário, organizado por grupo e nome. A forma de três argumentos com um valor padrão é o modo habitual de ler uma opção que pode ainda não ter sido salva."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read with a default",
+      "pt": "Ler com valor padrão"
+     },
+     "code": "setpref('demoapp', 'count', 7);\ndisp(getpref('demoapp', 'count'))\ndisp(getpref('demoapp', 'color', 'blue'))\ns = getpref('demoapp')\nrmpref('demoapp');"
+    }
+   ],
+   "see": [
+    "setpref",
+    "addpref",
+    "rmpref",
+    "ispref"
+   ]
+  },
+  "addpref": {
+   "summary": {
+    "en": "Creates a new preference; fails if it already exists.",
+    "pt": "Cria uma nova preferência; falha se ela já existir."
+   },
+   "syntax": [
+    {
+     "code": "addpref(group, pref, val)",
+     "en": "Adds preference `pref` with value `val` to `group`.",
+     "pt": "Adiciona a preferência `pref` com valor `val` ao grupo `group`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "group",
+     "en": "Group name; the group is created if needed.",
+     "pt": "Nome do grupo; ele é criado se necessário."
+    },
+    {
+     "name": "pref",
+     "en": "Preference name.",
+     "pt": "Nome da preferência."
+    },
+    {
+     "name": "val",
+     "en": "Value to store, of any type.",
+     "pt": "Valor a armazenar, de qualquer tipo."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`addpref` is the strict way to create a preference: if the name already exists in the group it raises an error instead of overwriting. Use `setpref` when you want create-or-update behavior.",
+    "pt": "`addpref` é a forma estrita de criar uma preferência: se o nome já existe no grupo, gera um erro em vez de sobrescrever. Use `setpref` quando quiser o comportamento de criar ou atualizar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create, then try again",
+      "pt": "Criar e tentar de novo"
+     },
+     "code": "addpref('demoapp', 'level', 1);\ndisp(getpref('demoapp', 'level'))\ntry\n    addpref('demoapp', 'level', 2);\ncatch err\n    disp(err.message)\nend\nrmpref('demoapp');"
+    }
+   ],
+   "see": [
+    "setpref",
+    "getpref",
+    "rmpref",
+    "ispref"
+   ]
+  },
+  "ispref": {
+   "summary": {
+    "en": "Tests whether a preference or a preference group exists.",
+    "pt": "Testa se uma preferência ou um grupo de preferências existe."
+   },
+   "syntax": [
+    {
+     "code": "tf = ispref(group)",
+     "en": "True if the group exists.",
+     "pt": "Verdadeiro se o grupo existe."
+    },
+    {
+     "code": "tf = ispref(group, pref)",
+     "en": "True if the preference exists in the group; with a cell array of names it returns one logical per name.",
+     "pt": "Verdadeiro se a preferência existe no grupo; com um cell array de nomes retorna um lógico por nome."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "group",
+     "en": "Group name.",
+     "pt": "Nome do grupo."
+    },
+    {
+     "name": "pref",
+     "en": "Preference name or cell array of names.",
+     "pt": "Nome da preferência ou cell array de nomes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar, or a logical array the size of `pref`.",
+     "pt": "Escalar lógico, ou array lógico do tamanho de `pref`."
+    }
+   ],
+   "description": {
+    "en": "`ispref` never errors for a missing group or name; it just returns false. It is the safe check to run before `getpref` when no default makes sense.",
+    "pt": "`ispref` nunca gera erro para grupo ou nome inexistente; apenas retorna falso. É a verificação segura antes de `getpref` quando nenhum valor padrão faz sentido."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Check groups and names",
+      "pt": "Verificar grupos e nomes"
+     },
+     "code": "setpref('demoapp', 'a', 1);\ndisp(ispref('demoapp'))\ndisp(ispref('demoapp', 'a'))\ndisp(ispref('demoapp', {'a', 'b'}))\nrmpref('demoapp');\ndisp(ispref('demoapp'))"
+    }
+   ],
+   "see": [
+    "getpref",
+    "setpref",
+    "addpref",
+    "rmpref"
+   ]
+  },
+  "loadenv": {
+   "summary": {
+    "en": "Loads environment variables from a .env file.",
+    "pt": "Carrega variáveis de ambiente de um arquivo .env."
+   },
+   "syntax": [
+    {
+     "code": "loadenv(filename)",
+     "en": "Reads `NAME=value` lines from `filename` and sets them as environment variables.",
+     "pt": "Lê linhas `NAME=value` de `filename` e as define como variáveis de ambiente."
+    },
+    {
+     "code": "env = loadenv(filename)",
+     "en": "Also returns the variables as a dictionary.",
+     "pt": "Também retorna as variáveis como um dictionary."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Path of the file to read. A missing file is an error.",
+     "pt": "Caminho do arquivo a ler. Um arquivo inexistente é um erro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "env",
+     "en": "A `dictionary` mapping each variable name to its value.",
+     "pt": "Um `dictionary` que mapeia cada nome de variável ao seu valor."
+    }
+   ],
+   "description": {
+    "en": "A `.env` file lists one variable per line as `NAME=value`. Values may be quoted to keep spaces. After `loadenv`, the variables are visible to `getenv` and to commands started with `system`. This keeps settings such as paths or keys out of the source code.",
+    "pt": "Um arquivo `.env` lista uma variável por linha no formato `NAME=value`. Os valores podem ter aspas para manter espaços. Depois de `loadenv`, as variáveis ficam visíveis para `getenv` e para comandos iniciados com `system`. Isso mantém configurações como caminhos ou chaves fora do código-fonte."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Load a small file",
+      "pt": "Carregar um arquivo pequeno"
+     },
+     "code": "fid = fopen('demo.env', 'w');\nfprintf(fid, 'MYV1=abc\\nMYV2=\"x y\"\\n');\nfclose(fid);\nloadenv('demo.env');\ndisp(getenv('MYV1'))\ndisp(getenv('MYV2'))\ndelete('demo.env')"
+    }
+   ],
+   "see": [
+    "getenv",
+    "setenv",
+    "isenv",
+    "fopen"
+   ]
+  },
+  "matlab.io.saveVariablesToScript": {
+   "summary": {
+    "en": "Saves workspace variables as a MATLAB script that recreates them.",
+    "pt": "Salva variáveis do workspace como um script MATLAB que as recria."
+   },
+   "syntax": [
+    {
+     "code": "matlab.io.saveVariablesToScript(filename)",
+     "en": "Writes every variable of the workspace to `filename`.",
+     "pt": "Grava todas as variáveis do workspace em `filename`."
+    },
+    {
+     "code": "matlab.io.saveVariablesToScript(filename, varnames)",
+     "en": "Writes only the named variables.",
+     "pt": "Grava apenas as variáveis indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the script file to create.",
+     "pt": "Nome do arquivo de script a criar."
+    },
+    {
+     "name": "varnames",
+     "en": "Variable name, or a cell array of names, to save.",
+     "pt": "Nome de variável, ou cell array de nomes, a salvar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Instead of a binary MAT-file, the result is plain code of the form `x = 3;` that anyone can read and edit, and running the script restores the variables. Numeric, char and logical values are written as literals. A variable that cannot be written as code is skipped and a comment in the file says so.",
+    "pt": "Em vez de um MAT-file binário, o resultado é código simples na forma `x = 3;` que qualquer pessoa pode ler e editar, e executar o script restaura as variáveis. Valores numéricos, char e lógicos são escritos como literais. Uma variável que não pode ser escrita como código é ignorada, e um comentário no arquivo avisa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Save and read back",
+      "pt": "Salvar e ler de volta"
+     },
+     "code": "x = 3;\nb = [1 2 3];\nc = 'hi';\nmatlab.io.saveVariablesToScript('demo_vars.m', {'x', 'b', 'c'});\nclear x b c\ndemo_vars\ndisp(x)\ndisp(b)\ndisp(c)\ndelete('demo_vars.m')"
+    }
+   ],
+   "see": [
+    "save",
+    "load",
+    "who",
+    "clear"
+   ]
+  },
+  "matlab.settings.mustBeIntegerScalar": {
+   "summary": {
+    "en": "Validation function that errors unless the value is an integer scalar.",
+    "pt": "Função de validação que gera erro a menos que o valor seja um escalar inteiro."
+   },
+   "syntax": [
+    {
+     "code": "matlab.settings.mustBeIntegerScalar(v)",
+     "en": "Returns silently if `v` is an integer scalar; otherwise throws an error.",
+     "pt": "Retorna sem nada se `v` for um escalar inteiro; caso contrário gera um erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "v",
+     "en": "Value to check.",
+     "pt": "Valor a verificar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "These validators are meant as the `'ValidationFcn'` of a setting, passed as a handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeIntegerScalar)`. They produce no output on success and raise an error on failure, which makes the assignment to the setting fail. They can also be called directly.",
+    "pt": "Estes validadores servem como `'ValidationFcn'` de uma configuração, passados como handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeIntegerScalar)`. Não produzem saída em caso de sucesso e geram erro em caso de falha, o que faz a atribuição à configuração falhar. Também podem ser chamados diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Accept and reject",
+      "pt": "Aceitar e rejeitar"
+     },
+     "code": "matlab.settings.mustBeIntegerScalar(3)\ndisp('accepted')\ntry\n    matlab.settings.mustBeIntegerScalar(2.5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "matlab.settings.mustBeLogicalScalar",
+    "matlab.settings.mustBeNumericScalar",
+    "matlab.settings.mustBeStringScalar"
+   ]
+  },
+  "matlab.settings.mustBeLogicalScalar": {
+   "summary": {
+    "en": "Validation function that errors unless the value is a logical scalar.",
+    "pt": "Função de validação que gera erro a menos que o valor seja um escalar lógico."
+   },
+   "syntax": [
+    {
+     "code": "matlab.settings.mustBeLogicalScalar(v)",
+     "en": "Returns silently if `v` is a logical scalar; otherwise throws an error.",
+     "pt": "Retorna sem nada se `v` for um escalar lógico; caso contrário gera um erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "v",
+     "en": "Value to check.",
+     "pt": "Valor a verificar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "These validators are meant as the `'ValidationFcn'` of a setting, passed as a handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeLogicalScalar)`. They produce no output on success and raise an error on failure, which makes the assignment to the setting fail. They can also be called directly.",
+    "pt": "Estes validadores servem como `'ValidationFcn'` de uma configuração, passados como handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeLogicalScalar)`. Não produzem saída em caso de sucesso e geram erro em caso de falha, o que faz a atribuição à configuração falhar. Também podem ser chamados diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Accept and reject",
+      "pt": "Aceitar e rejeitar"
+     },
+     "code": "matlab.settings.mustBeLogicalScalar(true)\ndisp('accepted')\ntry\n    matlab.settings.mustBeLogicalScalar(1)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "matlab.settings.mustBeIntegerScalar",
+    "matlab.settings.mustBeNumericScalar",
+    "matlab.settings.mustBeStringScalar"
+   ]
+  },
+  "matlab.settings.mustBeNumericScalar": {
+   "summary": {
+    "en": "Validation function that errors unless the value is a numeric scalar.",
+    "pt": "Função de validação que gera erro a menos que o valor seja um escalar numérico."
+   },
+   "syntax": [
+    {
+     "code": "matlab.settings.mustBeNumericScalar(v)",
+     "en": "Returns silently if `v` is a numeric scalar; otherwise throws an error.",
+     "pt": "Retorna sem nada se `v` for um escalar numérico; caso contrário gera um erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "v",
+     "en": "Value to check.",
+     "pt": "Valor a verificar."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "These validators are meant as the `'ValidationFcn'` of a setting, passed as a handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeNumericScalar)`. They produce no output on success and raise an error on failure, which makes the assignment to the setting fail. They can also be called directly.",
+    "pt": "Estes validadores servem como `'ValidationFcn'` de uma configuração, passados como handle: `addSetting(g, 'Size', 'ValidationFcn', @matlab.settings.mustBeNumericScalar)`. Não produzem saída em caso de sucesso e geram erro em caso de falha, o que faz a atribuição à configuração falhar. Também podem ser chamados diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Accept and reject",
+      "pt": "Aceitar e rejeitar"
+     },
+     "code": "matlab.settings.mustBeNumericScalar(2)\ndisp('accepted')\ntry\n    matlab.settings.mustBeNumericScalar('a')\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "addSetting",
+    "matlab.settings.mustBeIntegerScalar",
+    "matlab.settings.mustBeLogicalScalar",
+    "matlab.settings.mustBeStringScalar"
+   ]
+  }
+ }
+}

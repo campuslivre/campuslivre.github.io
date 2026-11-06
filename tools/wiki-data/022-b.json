@@ -1,0 +1,947 @@
+{
+ "functions": {
+  "genpath": {
+   "summary": {
+    "en": "Returns a path string listing a folder and all of its subfolders.",
+    "pt": "Retorna um texto de path com uma pasta e todas as suas subpastas."
+   },
+   "syntax": [
+    {
+     "code": "p = genpath(folder)",
+     "en": "Builds the path string for `folder` and every folder below it.",
+     "pt": "Monta o texto de path para `folder` e todas as pastas abaixo dela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Root folder, as text.",
+     "pt": "Pasta raiz, como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Folders separated by `pathsep`, root first, each followed by its subfolders.",
+     "pt": "Pastas separadas por `pathsep`, a raiz primeiro, cada uma seguida de suas subpastas."
+    }
+   ],
+   "description": {
+    "en": "`genpath` only builds a string; it does not change the search path. Pass the result to `addpath` to put a whole tree on the path at once: `addpath(genpath('lib'))`.\n\nThe listing leaves out folders that MATLAB treats as special, namely those whose names start with `@` (class folders), `+` (package folders) or `private`, and folders called `resources`.",
+    "pt": "`genpath` apenas monta um texto; não altera o caminho de busca. Passe o resultado a `addpath` para colocar uma árvore inteira no path de uma vez: `addpath(genpath('lib'))`.\n\nA lista deixa de fora as pastas que o MATLAB trata como especiais: as cujo nome começa com `@` (pastas de classe), `+` (pastas de pacote) ou `private`, e as pastas chamadas `resources`."
+   },
+   "notes": {
+    "en": "The returned text keeps relative folders relative and ends with a separator.",
+    "pt": "O texto retornado mantém pastas relativas como relativas e termina com um separador."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Folders of a small tree",
+      "pt": "Pastas de uma árvore pequena"
+     },
+     "code": "mkdir lib/inner\nmkdir lib/more\np = genpath('lib')"
+    }
+   ],
+   "see": [
+    "addpath",
+    "rmpath",
+    "path",
+    "pathsep"
+   ]
+  },
+  "gunzip": {
+   "summary": {
+    "en": "Decompresses files compressed with gzip.",
+    "pt": "Descomprime arquivos compactados com gzip."
+   },
+   "syntax": [
+    {
+     "code": "gunzip(filename)",
+     "en": "Extracts `filename` (a `.gz` file) next to the original.",
+     "pt": "Extrai `filename` (um arquivo `.gz`) ao lado do original."
+    },
+    {
+     "code": "gunzip(filename, outputfolder)",
+     "en": "Extracts into `outputfolder`.",
+     "pt": "Extrai em `outputfolder`."
+    },
+    {
+     "code": "files = gunzip(___)",
+     "en": "Also returns the names of the extracted files.",
+     "pt": "Também retorna os nomes dos arquivos extraídos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the `.gz` file, or a pattern, or a cell array of names.",
+     "pt": "Nome do arquivo `.gz`, ou um padrão, ou um cell array de nomes."
+    },
+    {
+     "name": "outputfolder",
+     "en": "Destination folder; created if missing.",
+     "pt": "Pasta de destino; criada se não existir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "files",
+     "en": "Cell array with the names of the files that were written.",
+     "pt": "Cell array com os nomes dos arquivos gravados."
+    }
+   ],
+   "description": {
+    "en": "A `.gz` file holds one compressed file. `gunzip` removes the `.gz` suffix to name the result, and writes it to the folder of the archive unless an output folder is given. The original `.gz` file is left in place.\n\n`gzip` does the reverse.",
+    "pt": "Um arquivo `.gz` guarda um único arquivo compactado. `gunzip` remove o sufixo `.gz` para nomear o resultado e o grava na pasta do arquivo compactado, a menos que se indique uma pasta de saída. O arquivo `.gz` original permanece.\n\n`gzip` faz o inverso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip through gzip",
+      "pt": "Ida e volta com gzip"
+     },
+     "code": "writelines([\"one\"; \"two\"], 'log.txt');\ngzip('log.txt');\nmkdir plain\ngunzip('log.txt.gz', 'plain');\ndisp(fileread('plain/log.txt'))"
+    }
+   ],
+   "see": [
+    "gzip",
+    "unzip",
+    "untar",
+    "zip"
+   ]
+  },
+  "gzip": {
+   "summary": {
+    "en": "Compresses files individually into gzip files.",
+    "pt": "Compacta arquivos, um a um, em arquivos gzip."
+   },
+   "syntax": [
+    {
+     "code": "gzip(files)",
+     "en": "Writes a `.gz` file next to each input file.",
+     "pt": "Grava um arquivo `.gz` ao lado de cada arquivo de entrada."
+    },
+    {
+     "code": "gzip(files, outputfolder)",
+     "en": "Writes the results into `outputfolder`.",
+     "pt": "Grava os resultados em `outputfolder`."
+    },
+    {
+     "code": "names = gzip(___)",
+     "en": "Also returns the names of the created files.",
+     "pt": "Também retorna os nomes dos arquivos criados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "files",
+     "en": "File name, wildcard pattern or cell array of names.",
+     "pt": "Nome de arquivo, padrão com curinga ou cell array de nomes."
+    },
+    {
+     "name": "outputfolder",
+     "en": "Destination folder; created if missing.",
+     "pt": "Pasta de destino; criada se não existir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "Cell array with the names of the `.gz` files.",
+     "pt": "Cell array com os nomes dos arquivos `.gz`."
+    }
+   ],
+   "description": {
+    "en": "Each input file becomes its own `<name>.gz` file; `gzip` does not bundle several files into one archive (use `zip` or `tar` for that). The originals are kept. Text files typically shrink a lot, binary and already compressed files little.\n\nUse `gunzip` to restore.",
+    "pt": "Cada arquivo de entrada vira seu próprio arquivo `<nome>.gz`; `gzip` não reúne vários arquivos em um só (use `zip` ou `tar` para isso). Os originais são mantidos. Arquivos de texto costumam encolher bastante, e os binários ou já compactados, pouco.\n\nUse `gunzip` para restaurar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compressing a file",
+      "pt": "Compactando um arquivo"
+     },
+     "code": "writelines(repmat(\"hello\", 100, 1), 'big.txt');\nnames = gzip('big.txt')\nd = dir('big.txt*');\nd(2).bytes < d(1).bytes"
+    }
+   ],
+   "see": [
+    "gunzip",
+    "zip",
+    "tar",
+    "untar"
+   ]
+  },
+  "isdir": {
+   "summary": {
+    "en": "Tests whether a name is a folder (superseded by isfolder).",
+    "pt": "Testa se um nome é uma pasta (substituída por isfolder)."
+   },
+   "syntax": [
+    {
+     "code": "tf = isdir(name)",
+     "en": "Returns `true` if `name` is an existing folder.",
+     "pt": "Retorna `true` se `name` é uma pasta existente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Folder name as text.",
+     "pt": "Nome da pasta como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`isdir` is kept for old code. It returns true for existing folders and false for files and for names that do not exist. New code should call `isfolder`, which also accepts string arrays and cell arrays and returns an array of the same size.",
+    "pt": "`isdir` é mantida para código antigo. Retorna verdadeiro para pastas existentes e falso para arquivos e para nomes que não existem. Código novo deve chamar `isfolder`, que também aceita arrays de strings e cell arrays e retorna um array do mesmo tamanho."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Folder, file and missing name",
+      "pt": "Pasta, arquivo e nome inexistente"
+     },
+     "code": "mkdir photos\nwritelines('x', 'photo.txt');\nisdir('photos')\nisdir('photo.txt')\nisdir('missing')"
+    }
+   ],
+   "see": [
+    "isfolder",
+    "isfile",
+    "exist",
+    "mkdir"
+   ]
+  },
+  "isfile": {
+   "summary": {
+    "en": "Tests whether a name is an existing file.",
+    "pt": "Testa se um nome é um arquivo existente."
+   },
+   "syntax": [
+    {
+     "code": "tf = isfile(name)",
+     "en": "Returns `true` if `name` is a file.",
+     "pt": "Retorna `true` se `name` é um arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "File name as text, a string array, or a cell array of names.",
+     "pt": "Nome de arquivo como texto, array de strings ou cell array de nomes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array with one entry per name.",
+     "pt": "Array lógico com uma entrada por nome."
+    }
+   ],
+   "description": {
+    "en": "`isfile` is true only for regular files: folders and names that do not exist give false. Unlike `exist`, it does not look on the search path, only at the name given.\n\nWith a cell array or string array it tests every name and returns an array of the same size.",
+    "pt": "`isfile` é verdadeira só para arquivos comuns: pastas e nomes que não existem dão falso. Diferente de `exist`, não procura no path, apenas no nome dado.\n\nCom um cell array ou array de strings, testa cada nome e retorna um array do mesmo tamanho."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One name and several",
+      "pt": "Um nome e vários"
+     },
+     "code": "writelines('data', 'a.txt');\nisfile('a.txt')\nisfile('nothere.txt')\nisfile({'a.txt', '.', 'zzz'})"
+    }
+   ],
+   "see": [
+    "isfolder",
+    "exist",
+    "dir",
+    "fileattrib"
+   ]
+  },
+  "isfolder": {
+   "summary": {
+    "en": "Tests whether a name is an existing folder.",
+    "pt": "Testa se um nome é uma pasta existente."
+   },
+   "syntax": [
+    {
+     "code": "tf = isfolder(name)",
+     "en": "Returns `true` if `name` is a folder.",
+     "pt": "Retorna `true` se `name` é uma pasta."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Folder name as text, a string array, or a cell array of names.",
+     "pt": "Nome de pasta como texto, array de strings ou cell array de nomes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array with one entry per name.",
+     "pt": "Array lógico com uma entrada por nome."
+    }
+   ],
+   "description": {
+    "en": "`isfolder` is true for existing folders and false for files and for names that do not exist. Relative names are resolved against the current folder, and `'.'` is always a folder. It does not search the path.\n\nWith a cell array or string array it tests every name and returns an array of the same size.",
+    "pt": "`isfolder` é verdadeira para pastas existentes e falsa para arquivos e para nomes que não existem. Nomes relativos são resolvidos a partir da pasta atual, e `'.'` é sempre uma pasta. Não consulta o path.\n\nCom um cell array ou array de strings, testa cada nome e retorna um array do mesmo tamanho."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Testing folders",
+      "pt": "Testando pastas"
+     },
+     "code": "mkdir reports\nisfolder('reports')\nisfolder({'.', 'reports', 'nope'})"
+    }
+   ],
+   "see": [
+    "isfile",
+    "isdir",
+    "exist",
+    "mkdir"
+   ]
+  },
+  "ls": {
+   "summary": {
+    "en": "Lists the names of the files and folders in a folder.",
+    "pt": "Lista os nomes dos arquivos e pastas de uma pasta."
+   },
+   "syntax": [
+    {
+     "code": "ls",
+     "en": "Displays the contents of the current folder.",
+     "pt": "Exibe o conteúdo da pasta atual."
+    },
+    {
+     "code": "ls name",
+     "en": "Displays the items matching a folder name or a pattern.",
+     "pt": "Exibe os itens que correspondem a um nome de pasta ou padrão."
+    },
+    {
+     "code": "list = ls(name)",
+     "en": "Returns the names as a padded character matrix, one row per item.",
+     "pt": "Retorna os nomes como matriz de caracteres preenchida, uma linha por item."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Folder or pattern such as `'data/*.csv'`.",
+     "pt": "Pasta ou padrão como `'data/*.csv'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "list",
+     "en": "Character matrix, rows padded with blanks. Convert with `cellstr`.",
+     "pt": "Matriz de caracteres, linhas preenchidas com espaços. Converta com `cellstr`."
+    }
+   ],
+   "description": {
+    "en": "`ls` is a quick way to look at a folder. As a command, `ls data` prints the names in columns. With an output argument it returns a char matrix that includes `.` and `..` for a folder listing; `cellstr(ls(...))` turns it into a cell array of names, and `dir` gives the richer struct form with sizes and dates.",
+    "pt": "`ls` é um jeito rápido de olhar uma pasta. Como comando, `ls data` imprime os nomes em colunas. Com argumento de saída, retorna uma matriz de char que inclui `.` e `..` na listagem de uma pasta; `cellstr(ls(...))` a converte em cell array de nomes, e `dir` dá a forma struct mais rica, com tamanhos e datas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Printing and collecting names",
+      "pt": "Imprimindo e coletando nomes"
+     },
+     "code": "mkdir data\nwritelines('1', 'data/x.txt');\nwritelines('2', 'data/y.csv');\nls data\nnames = cellstr(ls('data/*.csv'))"
+    }
+   ],
+   "see": [
+    "dir",
+    "what",
+    "cd",
+    "cellstr"
+   ]
+  },
+  "matlabroot": {
+   "summary": {
+    "en": "Returns the folder where the program is installed.",
+    "pt": "Retorna a pasta onde o programa está instalado."
+   },
+   "syntax": [
+    {
+     "code": "r = matlabroot",
+     "en": "Returns the installation root as a character vector.",
+     "pt": "Retorna a raiz da instalação como vetor de caracteres."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Path of the installation folder.",
+     "pt": "Caminho da pasta de instalação."
+    }
+   ],
+   "description": {
+    "en": "`matlabroot` is the base for locating files that ship with the program, as in `fullfile(matlabroot, 'toolbox')`. The value depends on the machine, so scripts should not print it or rely on a fixed path.",
+    "pt": "`matlabroot` é a base para localizar arquivos que acompanham o programa, como em `fullfile(matlabroot, 'toolbox')`. O valor depende da máquina, então scripts não devem imprimi-lo nem depender de um caminho fixo."
+   },
+   "notes": {
+    "en": "In MatLivre the root is the folder that contains the running program.",
+    "pt": "No MatLivre, a raiz é a pasta que contém o programa em execução."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Checking the root",
+      "pt": "Verificando a raiz"
+     },
+     "code": "r = matlabroot;\nischar(r)\nisfolder(r)"
+    }
+   ],
+   "see": [
+    "toolboxdir",
+    "userpath",
+    "fullfile",
+    "path"
+   ]
+  },
+  "mkdir": {
+   "summary": {
+    "en": "Creates a folder, including any missing parent folders.",
+    "pt": "Cria uma pasta, inclusive as pastas pai que faltarem."
+   },
+   "syntax": [
+    {
+     "code": "mkdir(folder)",
+     "en": "Creates `folder`.",
+     "pt": "Cria `folder`."
+    },
+    {
+     "code": "mkdir(parent, name)",
+     "en": "Creates `name` inside `parent`.",
+     "pt": "Cria `name` dentro de `parent`."
+    },
+    {
+     "code": "[status, message, messageid] = mkdir(___)",
+     "en": "Returns the outcome instead of only acting.",
+     "pt": "Retorna o resultado em vez de apenas agir."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder to create, relative or absolute. Intermediate folders are created too.",
+     "pt": "Pasta a criar, relativa ou absoluta. As pastas intermediárias também são criadas."
+    },
+    {
+     "name": "parent, name",
+     "en": "Parent folder and new folder name, as separate arguments.",
+     "pt": "Pasta pai e nome da nova pasta, como argumentos separados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`true` if the folder exists afterwards.",
+     "pt": "`true` se a pasta existe depois."
+    },
+    {
+     "name": "message",
+     "en": "Text such as `'Directory already exists.'`, empty on a plain success.",
+     "pt": "Texto como `'Directory already exists.'`, vazio em um sucesso simples."
+    },
+    {
+     "name": "messageid",
+     "en": "Message identifier, for instance `'MATLAB:MKDIR:DirectoryExists'`.",
+     "pt": "Identificador da mensagem, por exemplo `'MATLAB:MKDIR:DirectoryExists'`."
+    }
+   ],
+   "description": {
+    "en": "Creating a folder that already exists is not an error: the call reports success and, if outputs are requested, a message saying that the directory already exists. This makes `mkdir` safe to call at the top of a script that saves results.\n\nThe command form `mkdir results` works like the function call.",
+    "pt": "Criar uma pasta que já existe não é erro: a chamada informa sucesso e, se houver saídas, uma mensagem dizendo que o diretório já existe. Isso torna `mkdir` seguro no começo de um script que salva resultados.\n\nA forma de comando `mkdir results` funciona como a chamada de função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Nested folders and a repeat call",
+      "pt": "Pastas aninhadas e uma chamada repetida"
+     },
+     "code": "mkdir out/2024/jan\nisfolder('out/2024/jan')\n[status, msg, id] = mkdir('out/2024/jan')"
+    }
+   ],
+   "see": [
+    "rmdir",
+    "cd",
+    "isfolder",
+    "copyfile",
+    "movefile"
+   ]
+  },
+  "movefile": {
+   "summary": {
+    "en": "Moves or renames a file or folder.",
+    "pt": "Move ou renomeia um arquivo ou pasta."
+   },
+   "syntax": [
+    {
+     "code": "movefile(source, destination)",
+     "en": "Moves `source` to `destination`.",
+     "pt": "Move `source` para `destination`."
+    },
+    {
+     "code": "[status, message, messageid] = movefile(___)",
+     "en": "Returns the outcome of the move.",
+     "pt": "Retorna o resultado da movimentação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "source",
+     "en": "File, folder or wildcard pattern.",
+     "pt": "Arquivo, pasta ou padrão com curinga."
+    },
+    {
+     "name": "destination",
+     "en": "New name, or an existing folder to move into.",
+     "pt": "Novo nome, ou pasta existente para onde mover."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`true` when the move succeeded.",
+     "pt": "`true` quando a movimentação deu certo."
+    },
+    {
+     "name": "message",
+     "en": "Text describing the problem; empty on success.",
+     "pt": "Texto que descreve o problema; vazio em caso de sucesso."
+    },
+    {
+     "name": "messageid",
+     "en": "Message identifier; empty on success.",
+     "pt": "Identificador da mensagem; vazio em caso de sucesso."
+    }
+   ],
+   "description": {
+    "en": "A move within one drive is a rename, so it is fast and keeps the content intact. If `destination` is a folder that exists, the item keeps its name inside it; otherwise the item takes the new name, which is how a file is renamed.\n\nThe source no longer exists after a successful move. To keep it, use `copyfile`.",
+    "pt": "Mover dentro de um mesmo disco equivale a renomear, o que é rápido e mantém o conteúdo intacto. Se `destination` é uma pasta existente, o item mantém o nome dentro dela; caso contrário, assume o novo nome, que é como um arquivo é renomeado.\n\nA origem deixa de existir após uma movimentação bem-sucedida. Para mantê-la, use `copyfile`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Renaming, then moving into a folder",
+      "pt": "Renomeando e depois movendo para uma pasta"
+     },
+     "code": "writelines('v1', 'draft.txt');\nmkdir archive\nmovefile('draft.txt', 'final.txt');\nmovefile('final.txt', 'archive');\n[isfile('draft.txt'), isfile('final.txt'), isfile('archive/final.txt')]"
+    }
+   ],
+   "see": [
+    "copyfile",
+    "delete",
+    "mkdir",
+    "dir"
+   ]
+  },
+  "path": {
+   "summary": {
+    "en": "Shows or sets the search path.",
+    "pt": "Mostra ou define o caminho de busca."
+   },
+   "syntax": [
+    {
+     "code": "path",
+     "en": "Displays the search path.",
+     "pt": "Exibe o caminho de busca."
+    },
+    {
+     "code": "p = path",
+     "en": "Returns the path as one character vector, folders separated by `pathsep`.",
+     "pt": "Retorna o path como um único vetor de caracteres, com pastas separadas por `pathsep`."
+    },
+    {
+     "code": "path(newpath)",
+     "en": "Replaces the path with `newpath`.",
+     "pt": "Substitui o path por `newpath`."
+    },
+    {
+     "code": "path(path1, path2)",
+     "en": "Joins two path strings and makes the result the path.",
+     "pt": "Une dois textos de path e faz do resultado o path."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "newpath",
+     "en": "Folders separated by `pathsep`.",
+     "pt": "Pastas separadas por `pathsep`."
+    },
+    {
+     "name": "path1, path2",
+     "en": "Two path strings; the call `path(path, 'dir')` appends `dir`, and `path('dir', path)` prepends it.",
+     "pt": "Dois textos de path; a chamada `path(path, 'dir')` anexa `dir`, e `path('dir', path)` a põe no início."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "The current path.",
+     "pt": "O path atual."
+    }
+   ],
+   "description": {
+    "en": "The search path is the ordered list of folders where function files are looked up after the current folder. `path` reads or replaces it as a single string, whereas `addpath` and `rmpath` edit it one folder at a time and are usually the better tools.\n\nSplit the string with `strsplit(path, pathsep)` to work with the folders individually.",
+    "pt": "O caminho de busca é a lista ordenada de pastas em que os arquivos de função são procurados depois da pasta atual. `path` lê ou substitui tudo como um único texto, enquanto `addpath` e `rmpath` editam uma pasta por vez e costumam ser as melhores ferramentas.\n\nDivida o texto com `strsplit(path, pathsep)` para trabalhar com as pastas separadamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Prepending a folder with path",
+      "pt": "Pondo uma pasta no início com path"
+     },
+     "code": "mkdir tools\nold = path;\npath('tools', old);\nparts = strsplit(path, pathsep);\nparts{1}\npath(old);"
+    }
+   ],
+   "see": [
+    "addpath",
+    "rmpath",
+    "genpath",
+    "pathsep",
+    "restoredefaultpath"
+   ]
+  },
+  "pathsep": {
+   "summary": {
+    "en": "Returns the character that separates folders in a path string.",
+    "pt": "Retorna o caractere que separa pastas em um texto de path."
+   },
+   "syntax": [
+    {
+     "code": "s = pathsep",
+     "en": "Returns `';'` on Windows and `':'` elsewhere.",
+     "pt": "Retorna `';'` no Windows e `':'` nos demais sistemas."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A one-character vector.",
+     "pt": "Um vetor de um caractere."
+    }
+   ],
+   "description": {
+    "en": "The separator appears in the result of `path` and `genpath` and in the arguments of `addpath`. Use `pathsep` when building or splitting such strings, for example `strsplit(path, pathsep)`, instead of typing the character.",
+    "pt": "O separador aparece no resultado de `path` e `genpath` e nos argumentos de `addpath`. Use `pathsep` ao montar ou dividir esses textos, por exemplo `strsplit(path, pathsep)`, em vez de digitar o caractere."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Joining folders for a path",
+      "pt": "Juntando pastas para um path"
+     },
+     "code": "s = pathsep\njoined = ['lib1' pathsep 'lib2']"
+    }
+   ],
+   "see": [
+    "filesep",
+    "path",
+    "genpath",
+    "addpath"
+   ]
+  },
+  "pwd": {
+   "summary": {
+    "en": "Returns the current folder.",
+    "pt": "Retorna a pasta atual."
+   },
+   "syntax": [
+    {
+     "code": "pwd",
+     "en": "Displays the current folder.",
+     "pt": "Exibe a pasta atual."
+    },
+    {
+     "code": "f = pwd",
+     "en": "Returns the folder path as a character vector.",
+     "pt": "Retorna o caminho da pasta como vetor de caracteres."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Full path of the current folder.",
+     "pt": "Caminho completo da pasta atual."
+    }
+   ],
+   "description": {
+    "en": "The current folder is where a relative file name such as `'data.csv'` is looked for. `pwd` returns its absolute path; combine it with `fileparts` to get just the folder name. Use `cd` to change it.",
+    "pt": "A pasta atual é onde um nome relativo de arquivo, como `'data.csv'`, é procurado. `pwd` retorna o caminho absoluto dela; combine com `fileparts` para obter só o nome da pasta. Use `cd` para mudá-la."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Folder name of the current folder",
+      "pt": "Nome da pasta atual"
+     },
+     "code": "mkdir lab\ncd lab\n[~, here] = fileparts(pwd)"
+    }
+   ],
+   "see": [
+    "cd",
+    "fileparts",
+    "dir",
+    "fullfile"
+   ]
+  },
+  "recycle": {
+   "summary": {
+    "en": "Gets or sets whether deleted files go to the recycle bin.",
+    "pt": "Consulta ou define se arquivos apagados vão para a lixeira."
+   },
+   "syntax": [
+    {
+     "code": "state = recycle",
+     "en": "Returns the current setting, `'on'` or `'off'`.",
+     "pt": "Retorna a configuração atual, `'on'` ou `'off'`."
+    },
+    {
+     "code": "recycle(state)",
+     "en": "Sets it to `'on'` or `'off'`.",
+     "pt": "Define como `'on'` ou `'off'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "state",
+     "en": "`'on'` or `'off'`.",
+     "pt": "`'on'` ou `'off'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "state",
+     "en": "The current setting.",
+     "pt": "A configuração atual."
+    }
+   ],
+   "description": {
+    "en": "When the setting is on, `delete` and `rmdir` should move items to the operating system's recycle bin so they can be restored. When it is off, they remove items for good. The setting applies to the session.",
+    "pt": "Quando a configuração está ligada, `delete` e `rmdir` devem mover os itens para a lixeira do sistema operacional, de modo que possam ser restaurados. Quando está desligada, removem de vez. A configuração vale para a sessão."
+   },
+   "notes": {
+    "en": "MatLivre has no recycle bin: `recycle('on')` is accepted but prints a warning, and `delete` still removes files permanently. The default is `'off'`.",
+    "pt": "O MatLivre não tem lixeira: `recycle('on')` é aceito mas mostra um aviso, e `delete` continua removendo os arquivos de forma permanente. O padrão é `'off'`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading the setting",
+      "pt": "Lendo a configuração"
+     },
+     "code": "recycle"
+    }
+   ],
+   "see": [
+    "delete",
+    "rmdir",
+    "movefile"
+   ]
+  },
+  "rehash": {
+   "summary": {
+    "en": "Refreshes the program's cache of the folders on the path.",
+    "pt": "Atualiza o cache do programa sobre as pastas do path."
+   },
+   "syntax": [
+    {
+     "code": "rehash",
+     "en": "Rescans the folders on the search path for function files.",
+     "pt": "Revarre as pastas do path de busca à procura de arquivos de função."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "The program remembers which function files exist in each folder on the path. Files added or removed by another program may not be noticed until the next scan. `rehash` forces the scan so that the new function can be called by name. Files created with `writelines` or other functions of the session are normally seen already.",
+    "pt": "O programa lembra quais arquivos de função existem em cada pasta do path. Arquivos adicionados ou removidos por outro programa podem não ser notados até a próxima varredura. `rehash` força a varredura, para que a nova função possa ser chamada pelo nome. Arquivos criados com `writelines` ou outras funções da sessão normalmente já são vistos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Using a function file just created",
+      "pt": "Usando um arquivo de função recém-criado"
+     },
+     "code": "writelines('function y = twice(x), y = 2*x; end', 'twice.m');\nrehash\ntwice(21)"
+    }
+   ],
+   "see": [
+    "path",
+    "addpath",
+    "which",
+    "exist"
+   ]
+  },
+  "restoredefaultpath": {
+   "summary": {
+    "en": "Resets the search path to its default folders.",
+    "pt": "Restaura o caminho de busca para as pastas padrão."
+   },
+   "syntax": [
+    {
+     "code": "restoredefaultpath",
+     "en": "Drops every folder added with `addpath` and keeps only the default ones.",
+     "pt": "Descarta toda pasta adicionada com `addpath` e mantém só as padrão."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Use `restoredefaultpath` to undo a tangle of `addpath` calls or to rule out a shadowed function when debugging. Afterward, functions that lived only in added folders are no longer found, so call `addpath` again for the ones you need.",
+    "pt": "Use `restoredefaultpath` para desfazer uma confusão de chamadas a `addpath` ou para descartar uma função ofuscada ao depurar. Depois dela, funções que existiam só em pastas adicionadas deixam de ser encontradas, então chame `addpath` de novo para as que precisar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dropping an added folder",
+      "pt": "Descartando uma pasta adicionada"
+     },
+     "code": "mkdir lib\nwritelines('function y = triple(x), y = 3*x; end', 'lib/triple.m');\naddpath('lib')\nexist('triple')\nrestoredefaultpath\nexist('triple')"
+    }
+   ],
+   "see": [
+    "addpath",
+    "rmpath",
+    "path",
+    "genpath"
+   ]
+  },
+  "rmdir": {
+   "summary": {
+    "en": "Removes a folder.",
+    "pt": "Remove uma pasta."
+   },
+   "syntax": [
+    {
+     "code": "rmdir(folder)",
+     "en": "Removes an empty folder.",
+     "pt": "Remove uma pasta vazia."
+    },
+    {
+     "code": "rmdir(folder, 's')",
+     "en": "Removes the folder with all its files and subfolders.",
+     "pt": "Remove a pasta com todos os arquivos e subpastas."
+    },
+    {
+     "code": "[status, message] = rmdir(___)",
+     "en": "Returns the outcome instead of raising an error.",
+     "pt": "Retorna o resultado em vez de gerar um erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder to remove.",
+     "pt": "Pasta a remover."
+    },
+    {
+     "name": "'s'",
+     "en": "Option to remove the contents too.",
+     "pt": "Opção que remove também o conteúdo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`true` on success.",
+     "pt": "`true` em caso de sucesso."
+    },
+    {
+     "name": "message",
+     "en": "Text describing the failure, empty on success.",
+     "pt": "Texto que descreve a falha, vazio em caso de sucesso."
+    }
+   ],
+   "description": {
+    "en": "Without `'s'`, a folder that still has content cannot be removed. The removal with `'s'` is permanent unless a recycle bin is in use, so check the folder name first. Without output arguments any failure is an error; with them the call returns `false` and a message.",
+    "pt": "Sem `'s'`, uma pasta que ainda tem conteúdo não pode ser removida. A remoção com `'s'` é permanente, a menos que se use a lixeira, então confira o nome da pasta antes. Sem argumentos de saída, qualquer falha é um erro; com eles, a chamada retorna `false` e uma mensagem."
+   },
+   "notes": {
+    "en": "MatLivre's `rmdir` returns at most two outputs, `status` and `message`.",
+    "pt": "O `rmdir` do MatLivre retorna no máximo duas saídas, `status` e `message`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Empty-only versus recursive removal",
+      "pt": "Remoção só de vazia versus recursiva"
+     },
+     "code": "mkdir tmp/inner\nwritelines('x', 'tmp/inner/f.txt');\n[ok, msg] = rmdir('tmp');\nok\nrmdir('tmp', 's');\nisfolder('tmp')"
+    }
+   ],
+   "see": [
+    "mkdir",
+    "delete",
+    "isfolder",
+    "movefile"
+   ]
+  },
+  "rmpath": {
+   "summary": {
+    "en": "Removes folders from the search path.",
+    "pt": "Remove pastas do caminho de busca."
+   },
+   "syntax": [
+    {
+     "code": "rmpath(folder)",
+     "en": "Removes `folder` from the path.",
+     "pt": "Remove `folder` do path."
+    },
+    {
+     "code": "oldpath = rmpath(folder)",
+     "en": "Also returns the path as it was before.",
+     "pt": "Também retorna o path como estava antes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder to remove, as text; it must match the text that was added.",
+     "pt": "Pasta a remover, como texto; deve corresponder ao texto que foi adicionado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "oldpath",
+     "en": "The previous path.",
+     "pt": "O path anterior."
+    }
+   ],
+   "description": {
+    "en": "`rmpath` is the counterpart of `addpath`. The folder is left on disk; only the lookup stops. To remove a whole tree, pass the result of `genpath`: `rmpath(genpath('lib'))`.",
+    "pt": "`rmpath` é o complemento de `addpath`. A pasta continua no disco; apenas a busca nela deixa de ocorrer. Para remover uma árvore inteira, passe o resultado de `genpath`: `rmpath(genpath('lib'))`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Adding and removing a folder",
+      "pt": "Adicionando e removendo uma pasta"
+     },
+     "code": "mkdir lib\nwritelines('function y = triple(x), y = 3*x; end', 'lib/triple.m');\naddpath('lib')\nexist('triple')\nrmpath('lib')\nexist('triple')"
+    }
+   ],
+   "see": [
+    "addpath",
+    "genpath",
+    "path",
+    "restoredefaultpath"
+   ]
+  }
+ }
+}

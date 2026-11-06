@@ -1,0 +1,1207 @@
+{
+ "functions": {
+  "accumarray": {
+   "summary": {
+    "en": "Groups values by index and sums each group.",
+    "pt": "Agrupa valores por índice e soma cada grupo."
+   },
+   "syntax": [
+    {
+     "code": "A = accumarray(subs, vals)",
+     "en": "Adds up the elements of `vals` that share the same value in `subs`.",
+     "pt": "Soma os elementos de `vals` que têm o mesmo valor em `subs`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "subs",
+     "en": "Column vector of positive integer indices; each says which output element receives the matching value.",
+     "pt": "Vetor coluna de índices inteiros positivos; cada um diz qual elemento da saída recebe o valor correspondente."
+    },
+    {
+     "name": "vals",
+     "en": "Column vector of values, one per index, or a scalar that is added once per index.",
+     "pt": "Vetor coluna de valores, um por índice, ou um escalar somado uma vez por índice."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Column vector whose length is `max(subs)`; element `k` is the sum of the values whose index is `k`. Positions that never appear hold `0`.",
+     "pt": "Vetor coluna de comprimento `max(subs)`; o elemento `k` é a soma dos valores cujo índice é `k`. Posições que nunca aparecem guardam `0`."
+    }
+   ],
+   "description": {
+    "en": "`accumarray` is a compact way to compute group totals, a histogram with weights, or a count per category. Think of `subs` as group labels and `vals` as the data: the output at position `k` collects everything labeled `k`.\n\nUsing a scalar for `vals` counts how many times each index occurs (with `vals = 1`).",
+    "pt": "`accumarray` é uma forma compacta de calcular totais por grupo, um histograma com pesos ou uma contagem por categoria. Pense em `subs` como rótulos de grupo e em `vals` como os dados: a saída na posição `k` reúne tudo o que foi rotulado com `k`.\n\nUsar um escalar em `vals` (por exemplo `1`) conta quantas vezes cada índice ocorre."
+   },
+   "notes": {
+    "en": "MatLivre implements only the plain sum with a vector of indices. The size argument, the function handle (as in `accumarray(subs, vals, [], @max)`) and matrix subscripts are not supported: the extra arguments are ignored and 2-column `subs` stops the program.",
+    "pt": "O MatLivre implementa apenas a soma simples com um vetor de índices. O argumento de tamanho, o function handle (como em `accumarray(subs, vals, [], @max)`) e subscritos em matriz não são suportados: os argumentos extras são ignorados e um `subs` de 2 colunas interrompe o programa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Totals per group",
+      "pt": "Totais por grupo"
+     },
+     "code": "subs = [1; 2; 1; 3];\nvals = [10; 20; 30; 40];\naccumarray(subs, vals)\naccumarray([2; 3; 3; 3], 1)"
+    }
+   ],
+   "see": [
+    "histcounts",
+    "unique",
+    "sum",
+    "cumsum",
+    "splitapply"
+   ]
+  },
+  "fillmissing2": {
+   "summary": {
+    "en": "Fills missing entries of a matrix using the surrounding values in two dimensions.",
+    "pt": "Preenche entradas ausentes de uma matriz usando os valores vizinhos em duas dimensões."
+   },
+   "syntax": [
+    {
+     "code": "B = fillmissing2(A, method)",
+     "en": "Replaces each `NaN` in `A` using the chosen method.",
+     "pt": "Substitui cada `NaN` de `A` usando o método escolhido."
+    },
+    {
+     "code": "B = fillmissing2(A, 'movmean', wlen)",
+     "en": "Replaces each `NaN` with the mean of the non-missing values in a window of size `wlen`.",
+     "pt": "Substitui cada `NaN` pela média dos valores presentes em uma janela de tamanho `wlen`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric matrix with `NaN` marking the missing entries.",
+     "pt": "Matriz numérica com `NaN` marcando as entradas ausentes."
+    },
+    {
+     "name": "method",
+     "en": "`'nearest'`, `'movmean'` or `'movmedian'`.",
+     "pt": "`'nearest'`, `'movmean'` ou `'movmedian'`."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length (scalar for a square window, or `[rows cols]`) for the moving methods.",
+     "pt": "Tamanho da janela (escalar para janela quadrada, ou `[linhas colunas]`) nos métodos móveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Matrix of the same size as `A` with the gaps filled.",
+     "pt": "Matriz do mesmo tamanho de `A` com as lacunas preenchidas."
+    }
+   ],
+   "description": {
+    "en": "Unlike `fillmissing`, which treats each column or row as a separate series, `fillmissing2` looks at neighbors in both directions, so it suits images, maps and other gridded data. With `'movmean'` a window is centered on every gap and the mean of the values present inside it is used; `'movmedian'` uses the median instead and resists outliers.\n\nValues that were not missing are left unchanged.",
+    "pt": "Ao contrário de `fillmissing`, que trata cada coluna ou linha como uma série separada, `fillmissing2` olha os vizinhos nas duas direções, e por isso serve para imagens, mapas e outros dados em grade. Com `'movmean'` uma janela é centrada em cada lacuna e usa-se a média dos valores presentes nela; `'movmedian'` usa a mediana, que resiste a valores atípicos.\n\nOs valores que não estavam ausentes permanecem inalterados."
+   },
+   "notes": {
+    "en": "MatLivre supports `'nearest'`, `'movmean'` and `'movmedian'`. The interpolating methods `'linear'`, `'natural'` and `'cubic'` report 'not supported in this version'. Calling it with only the matrix is an error.",
+    "pt": "O MatLivre suporta `'nearest'`, `'movmean'` e `'movmedian'`. Os métodos de interpolação `'linear'`, `'natural'` e `'cubic'` respondem 'not supported in this version'. Chamar apenas com a matriz gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mean of a 3 by 3 neighborhood",
+      "pt": "Média de uma vizinhança 3 por 3"
+     },
+     "code": "A = [1 NaN 3; 4 5 6; 7 8 9];\nB = fillmissing2(A, 'movmean', 3)"
+    }
+   ],
+   "see": [
+    "fillmissing",
+    "ismissing",
+    "rmmissing",
+    "smoothdata2",
+    "inpaintn"
+   ]
+  },
+  "filloutliers": {
+   "summary": {
+    "en": "Detects outliers and replaces them with a chosen value.",
+    "pt": "Detecta valores atípicos e os substitui por um valor escolhido."
+   },
+   "syntax": [
+    {
+     "code": "B = filloutliers(A, fillmethod)",
+     "en": "Replaces outliers (found by the default median rule) according to `fillmethod`.",
+     "pt": "Substitui os valores atípicos (encontrados pela regra padrão da mediana) conforme `fillmethod`."
+    },
+    {
+     "code": "[B, TF] = filloutliers(___)",
+     "en": "Also returns a logical array marking the replaced elements.",
+     "pt": "Também retorna um array lógico que marca os elementos substituídos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix.",
+     "pt": "Vetor ou matriz numérica."
+    },
+    {
+     "name": "fillmethod",
+     "en": "`'center'` (the median), `'previous'`, `'next'` or `'nearest'` (copy a neighboring non-outlier), or `'linear'`.",
+     "pt": "`'center'` (a mediana), `'previous'`, `'next'` ou `'nearest'` (copiar um vizinho que não é atípico), ou `'linear'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of the same size with outliers replaced.",
+     "pt": "Array do mesmo tamanho com os atípicos substituídos."
+    },
+    {
+     "name": "TF",
+     "en": "Logical array, `true` where an element was replaced.",
+     "pt": "Array lógico, `true` onde um elemento foi substituído."
+    }
+   ],
+   "description": {
+    "en": "By default an element is an outlier when it lies more than three scaled median absolute deviations from the median, the same rule used by `isoutlier`. `filloutliers` keeps the data length and edits only those elements, in contrast to `rmoutliers`, which deletes them.\n\nChoose `'center'` to pull outliers to the median, or `'previous'`/`'next'` to hold the last good value, which suits time series.",
+    "pt": "Por padrão, um elemento é atípico quando está a mais de três desvios absolutos medianos escalados da mediana, a mesma regra usada por `isoutlier`. `filloutliers` mantém o comprimento dos dados e edita apenas esses elementos, ao contrário de `rmoutliers`, que os apaga.\n\nEscolha `'center'` para levar os atípicos à mediana, ou `'previous'`/`'next'` para manter o último valor bom, o que combina com séries temporais."
+   },
+   "notes": {
+    "en": "With `'linear'` an outlier at the end of the data is extrapolated, so `'previous'` or `'center'` give more predictable results there.",
+    "pt": "Com `'linear'`, um atípico no fim dos dados é extrapolado, e por isso `'previous'` ou `'center'` dão resultados mais previsíveis ali."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hold the previous good value",
+      "pt": "Manter o último valor bom"
+     },
+     "code": "x = [1 2 3 4 5 6 7 8 9 10 50];\nfilloutliers(x, 'previous')\nfilloutliers(x, 'center')"
+    }
+   ],
+   "see": [
+    "isoutlier",
+    "rmoutliers",
+    "fillmissing",
+    "movmedian"
+   ]
+  },
+  "histcounts": {
+   "summary": {
+    "en": "Counts how many values fall into each bin.",
+    "pt": "Conta quantos valores caem em cada intervalo (bin)."
+   },
+   "syntax": [
+    {
+     "code": "[N, edges] = histcounts(X)",
+     "en": "Bins `X` with automatically chosen, equal-width bins.",
+     "pt": "Distribui `X` em intervalos de largura igual escolhidos automaticamente."
+    },
+    {
+     "code": "[N, edges] = histcounts(X, nbins)",
+     "en": "Uses `nbins` equal-width bins.",
+     "pt": "Usa `nbins` intervalos de largura igual."
+    },
+    {
+     "code": "[N, edges] = histcounts(X, edges)",
+     "en": "Uses the given bin edges.",
+     "pt": "Usa as bordas de intervalo fornecidas."
+    },
+    {
+     "code": "N = histcounts(___, 'Normalization', s)",
+     "en": "Scales the counts, for example `'probability'`.",
+     "pt": "Escala as contagens, por exemplo `'probability'`."
+    },
+    {
+     "code": "N = histcounts(___, 'BinWidth', w)",
+     "en": "Uses bins of width `w`.",
+     "pt": "Usa intervalos de largura `w`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric array; the elements are counted regardless of shape.",
+     "pt": "Array numérico; os elementos são contados qualquer que seja o formato."
+    },
+    {
+     "name": "nbins",
+     "en": "Number of bins.",
+     "pt": "Número de intervalos."
+    },
+    {
+     "name": "edges",
+     "en": "Increasing vector of bin edges.",
+     "pt": "Vetor crescente de bordas dos intervalos."
+    },
+    {
+     "name": "'Normalization'",
+     "en": "`'count'` (default), `'probability'`, `'countdensity'`, `'pdf'`, `'cumcount'` or `'cdf'`.",
+     "pt": "`'count'` (padrão), `'probability'`, `'countdensity'`, `'pdf'`, `'cumcount'` ou `'cdf'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "N",
+     "en": "Row vector with one value per bin.",
+     "pt": "Vetor linha com um valor por intervalo."
+    },
+    {
+     "name": "edges",
+     "en": "Bin edges; `N` has one fewer element.",
+     "pt": "Bordas dos intervalos; `N` tem um elemento a menos."
+    }
+   ],
+   "description": {
+    "en": "Each bin includes its left edge and excludes its right edge, except the last bin, which includes both. Values outside the range of the edges, and `NaN`, are not counted. The function returns numbers only; `histogram` draws the same data.\n\nWith 'probability' the counts are divided by the total number of elements, so they sum to 1 when all data fall inside the bins.",
+    "pt": "Cada intervalo inclui a borda esquerda e exclui a direita, exceto o último, que inclui as duas. Valores fora da faixa das bordas, e `NaN`, não são contados. A função retorna apenas números; `histogram` desenha os mesmos dados.\n\nCom 'probability' as contagens são divididas pelo total de elementos, de modo que somam 1 quando todos os dados caem dentro dos intervalos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Explicit edges",
+      "pt": "Bordas explícitas"
+     },
+     "code": "x = [1 2 2 3 5 8];\nN = histcounts(x, [0 2 4 10])\nhistcounts(x, [0 2 4 10], 'Normalization', 'probability')\n[N, e] = histcounts(x)"
+    }
+   ],
+   "see": [
+    "histcounts2",
+    "histogram",
+    "accumarray",
+    "discretize"
+   ]
+  },
+  "histcounts2": {
+   "summary": {
+    "en": "Counts how many pairs of values fall into each two-dimensional bin.",
+    "pt": "Conta quantos pares de valores caem em cada intervalo bidimensional."
+   },
+   "syntax": [
+    {
+     "code": "[N, xedges, yedges] = histcounts2(X, Y)",
+     "en": "Bins the pairs `(X, Y)` with automatic bins.",
+     "pt": "Distribui os pares `(X, Y)` em intervalos automáticos."
+    },
+    {
+     "code": "N = histcounts2(X, Y, nbins)",
+     "en": "Uses `nbins` bins in each direction.",
+     "pt": "Usa `nbins` intervalos em cada direção."
+    },
+    {
+     "code": "N = histcounts2(X, Y, xedges, yedges)",
+     "en": "Uses the given edges for each axis.",
+     "pt": "Usa as bordas fornecidas para cada eixo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y",
+     "en": "Numeric arrays of the same size; element `k` of each forms the point `k`.",
+     "pt": "Arrays numéricos do mesmo tamanho; o elemento `k` de cada um forma o ponto `k`."
+    },
+    {
+     "name": "xedges, yedges",
+     "en": "Increasing vectors of bin edges.",
+     "pt": "Vetores crescentes de bordas dos intervalos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "N",
+     "en": "Matrix of counts; `N(i,j)` counts points with `X` in bin `i` and `Y` in bin `j`.",
+     "pt": "Matriz de contagens; `N(i,j)` conta os pontos com `X` no intervalo `i` e `Y` no intervalo `j`."
+    },
+    {
+     "name": "xedges, yedges",
+     "en": "The edges used along each axis.",
+     "pt": "As bordas usadas em cada eixo."
+    }
+   ],
+   "description": {
+    "en": "`histcounts2` is the two-dimensional version of `histcounts`. The first dimension of the result follows `X` and the second follows `Y`. The same left-closed, right-open rule applies to each axis, and points outside the edges are ignored.\n\nThe counts are useful for joint distributions, density maps and checking how two variables vary together.",
+    "pt": "`histcounts2` é a versão bidimensional de `histcounts`. A primeira dimensão do resultado segue `X` e a segunda segue `Y`. A mesma regra de intervalo fechado à esquerda e aberto à direita vale para cada eixo, e os pontos fora das bordas são ignorados.\n\nAs contagens servem para distribuições conjuntas, mapas de densidade e para ver como duas variáveis variam juntas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Counting points in cells",
+      "pt": "Contando pontos em células"
+     },
+     "code": "x = [1 2 3 3];\ny = [1 2 3 1];\nN = histcounts2(x, y, [0 2 4], [0 2 4])"
+    }
+   ],
+   "see": [
+    "histcounts",
+    "histogram2",
+    "accumarray",
+    "discretize"
+   ]
+  },
+  "ischange": {
+   "summary": {
+    "en": "Detects abrupt changes in a data series.",
+    "pt": "Detecta mudanças abruptas em uma série de dados."
+   },
+   "syntax": [
+    {
+     "code": "TF = ischange(A)",
+     "en": "Marks the points where the mean of `A` changes abruptly.",
+     "pt": "Marca os pontos em que a média de `A` muda de forma abrupta."
+    },
+    {
+     "code": "[TF, S1] = ischange(A)",
+     "en": "Also returns the piecewise constant level estimated at every point.",
+     "pt": "Também retorna o nível constante por partes estimado em cada ponto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector (or matrix, analyzed by columns).",
+     "pt": "Vetor numérico (ou matriz, analisada por colunas)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TF",
+     "en": "Logical array, `true` at the first point of each new segment.",
+     "pt": "Array lógico, `true` no primeiro ponto de cada novo segmento."
+    },
+    {
+     "name": "S1",
+     "en": "Segment mean assigned to each point.",
+     "pt": "Média do segmento atribuída a cada ponto."
+    }
+   ],
+   "description": {
+    "en": "The data are split into segments so that the points within each segment are close to a constant. `ischange` flags the index where a new segment starts, which is a quick way to find level shifts, step changes and regime switches. The first element is never marked.\n\nThe number of changes found depends on the noise: very noisy data may produce more flags.",
+    "pt": "Os dados são divididos em segmentos de modo que os pontos de cada um fiquem próximos de uma constante. `ischange` marca o índice onde um novo segmento começa, o que é uma forma rápida de achar mudanças de nível, degraus e trocas de regime. O primeiro elemento nunca é marcado.\n\nO número de mudanças encontradas depende do ruído: dados muito ruidosos podem gerar mais marcações."
+   },
+   "notes": {
+    "en": "MatLivre implements the default mean-change detection. Other methods such as `'linear'` do not give meaningful output yet.",
+    "pt": "O MatLivre implementa a detecção padrão de mudança de média. Outros métodos, como `'linear'`, ainda não dão saída significativa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A step in a series",
+      "pt": "Um degrau em uma série"
+     },
+     "code": "x = [1 1 1 5 5 5];\n[tf, s] = ischange(x)\nfind(tf)"
+    }
+   ],
+   "see": [
+    "islocalmax",
+    "isoutlier",
+    "findchangepts",
+    "diff"
+   ]
+  },
+  "islocalmax": {
+   "summary": {
+    "en": "Marks the local maxima of a vector.",
+    "pt": "Marca os máximos locais de um vetor."
+   },
+   "syntax": [
+    {
+     "code": "TF = islocalmax(A)",
+     "en": "`true` where an element is larger than its neighbors.",
+     "pt": "`true` onde um elemento é maior que seus vizinhos."
+    },
+    {
+     "code": "[TF, P] = islocalmax(A)",
+     "en": "Also returns the prominence of each peak.",
+     "pt": "Também retorna a proeminência de cada pico."
+    },
+    {
+     "code": "TF = islocalmax(A, 'MinProminence', m)",
+     "en": "Keeps only peaks whose prominence is at least `m`.",
+     "pt": "Mantém apenas picos com proeminência de pelo menos `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix (columns are analyzed).",
+     "pt": "Vetor ou matriz numérica (as colunas são analisadas)."
+    },
+    {
+     "name": "'MinProminence'",
+     "en": "Minimum height a peak must stand above its surroundings.",
+     "pt": "Altura mínima que um pico precisa ter acima do entorno."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TF",
+     "en": "Logical array the size of `A`.",
+     "pt": "Array lógico do tamanho de `A`."
+    },
+    {
+     "name": "P",
+     "en": "Prominence values, zero at points that are not peaks.",
+     "pt": "Valores de proeminência, zero nos pontos que não são picos."
+    }
+   ],
+   "description": {
+    "en": "A local maximum is a point strictly greater than the neighbors on both sides. Prominence measures how far a peak rises above the lowest contour that separates it from a higher peak, so it filters out small ripples caused by noise.\n\nUse `find(TF)` to get the positions of the peaks.",
+    "pt": "Um máximo local é um ponto estritamente maior que os vizinhos dos dois lados. A proeminência mede o quanto um pico se eleva acima do contorno mais baixo que o separa de um pico mais alto, e por isso filtra pequenas ondulações causadas por ruído.\n\nUse `find(TF)` para obter as posições dos picos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Peaks and prominence",
+      "pt": "Picos e proeminência"
+     },
+     "code": "x = [1 3 1 4 1];\n[tf, p] = islocalmax(x)\nislocalmax(x, 'MinProminence', 3)"
+    }
+   ],
+   "see": [
+    "islocalmin",
+    "findpeaks",
+    "max",
+    "ischange"
+   ]
+  },
+  "islocalmin": {
+   "summary": {
+    "en": "Marks the local minima of a vector.",
+    "pt": "Marca os mínimos locais de um vetor."
+   },
+   "syntax": [
+    {
+     "code": "TF = islocalmin(A)",
+     "en": "`true` where an element is smaller than its neighbors.",
+     "pt": "`true` onde um elemento é menor que seus vizinhos."
+    },
+    {
+     "code": "[TF, P] = islocalmin(A)",
+     "en": "Also returns the prominence of each valley.",
+     "pt": "Também retorna a proeminência de cada vale."
+    },
+    {
+     "code": "TF = islocalmin(A, 'MinProminence', m)",
+     "en": "Keeps only valleys whose prominence is at least `m`.",
+     "pt": "Mantém apenas vales com proeminência de pelo menos `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix (columns are analyzed).",
+     "pt": "Vetor ou matriz numérica (as colunas são analisadas)."
+    },
+    {
+     "name": "'MinProminence'",
+     "en": "Minimum depth a valley must have below its surroundings.",
+     "pt": "Profundidade mínima que um vale precisa ter abaixo do entorno."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TF",
+     "en": "Logical array the size of `A`.",
+     "pt": "Array lógico do tamanho de `A`."
+    },
+    {
+     "name": "P",
+     "en": "Prominence values, zero at points that are not valleys.",
+     "pt": "Valores de proeminência, zero nos pontos que não são vales."
+    }
+   ],
+   "description": {
+    "en": "A local minimum is a point strictly smaller than the neighbors on both sides. It is the mirror image of `islocalmax`: the prominence of a valley measures how deep it is below the highest ridge that separates it from a deeper valley.",
+    "pt": "Um mínimo local é um ponto estritamente menor que os vizinhos dos dois lados. É o espelho de `islocalmax`: a proeminência de um vale mede o quanto ele é fundo abaixo da crista mais alta que o separa de um vale mais profundo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Valleys of a series",
+      "pt": "Vales de uma série"
+     },
+     "code": "x = [3 1 3 0 3];\ntf = islocalmin(x)\nfind(tf)"
+    }
+   ],
+   "see": [
+    "islocalmax",
+    "findpeaks",
+    "min",
+    "ischange"
+   ]
+  },
+  "isoutlier": {
+   "summary": {
+    "en": "Detects outliers in data.",
+    "pt": "Detecta valores atípicos (outliers) nos dados."
+   },
+   "syntax": [
+    {
+     "code": "TF = isoutlier(A)",
+     "en": "`true` for elements more than three scaled median absolute deviations from the median.",
+     "pt": "`true` para elementos a mais de três desvios absolutos medianos escalados da mediana."
+    },
+    {
+     "code": "TF = isoutlier(A, method)",
+     "en": "Uses another rule, such as `'quartiles'` or `'mean'`.",
+     "pt": "Usa outra regra, como `'quartiles'` ou `'mean'`."
+    },
+    {
+     "code": "[TF, L, U, C] = isoutlier(___)",
+     "en": "Also returns the lower and upper thresholds and the center value.",
+     "pt": "Também retorna os limiares inferior e superior e o valor central."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix (columns are analyzed).",
+     "pt": "Vetor ou matriz numérica (as colunas são analisadas)."
+    },
+    {
+     "name": "method",
+     "en": "`'median'` (default), `'mean'`, `'quartiles'`, `'grubbs'` or `'gesd'`.",
+     "pt": "`'median'` (padrão), `'mean'`, `'quartiles'`, `'grubbs'` ou `'gesd'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TF",
+     "en": "Logical array, `true` at outliers.",
+     "pt": "Array lógico, `true` nos atípicos."
+    },
+    {
+     "name": "L, U",
+     "en": "Lower and upper thresholds.",
+     "pt": "Limiares inferior e superior."
+    },
+    {
+     "name": "C",
+     "en": "Center value (the median for the default method).",
+     "pt": "Valor central (a mediana no método padrão)."
+    }
+   ],
+   "description": {
+    "en": "With the default method the scaled median absolute deviation is `1.4826 * median(abs(A - median(A)))`. A point farther than three of these from the median is flagged. Because median and MAD barely move when a few extreme values are present, the rule is robust, unlike the mean and standard deviation.\n\nThe result tells you which elements to inspect; use `filloutliers` to replace them or `rmoutliers` to drop them.",
+    "pt": "No método padrão, o desvio absoluto mediano escalado é `1.4826 * median(abs(A - median(A)))`. Um ponto a mais de três desses da mediana é marcado. Como a mediana e o MAD quase não se movem quando há alguns valores extremos, a regra é robusta, ao contrário da média e do desvio padrão.\n\nO resultado indica quais elementos inspecionar; use `filloutliers` para substituí-los ou `rmoutliers` para descartá-los."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Spot the odd value",
+      "pt": "Encontrar o valor discrepante"
+     },
+     "code": "x = [1 2 3 4 5 6 7 8 9 10 50];\n[tf, lo, hi, c] = isoutlier(x)\nx(tf)"
+    }
+   ],
+   "see": [
+    "filloutliers",
+    "rmoutliers",
+    "median",
+    "mad",
+    "ischange"
+   ]
+  },
+  "missing": {
+   "summary": {
+    "en": "Creates a missing value placeholder that works for any data type.",
+    "pt": "Cria um marcador de valor ausente que funciona para qualquer tipo de dado."
+   },
+   "syntax": [
+    {
+     "code": "m = missing",
+     "en": "Returns a scalar missing value.",
+     "pt": "Retorna um valor ausente escalar."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "The missing value. It prints as `<missing>`.",
+     "pt": "O valor ausente. É exibido como `<missing>`."
+    }
+   ],
+   "description": {
+    "en": "`missing` is a type-independent way to say that a value is absent. When it is placed in an array, it is converted to the standard missing marker of that array: `NaN` for numbers, `<missing>` for strings, `NaT` for datetimes. `ismissing` detects all of these uniformly.\n\nIt is handy when building a string array with gaps, or when filling a table whose columns have different types.",
+    "pt": "`missing` é uma forma independente de tipo de dizer que um valor está ausente. Quando colocado em um array, é convertido para o marcador padrão de ausência desse array: `NaN` para números, `<missing>` para strings, `NaT` para datetimes. `ismissing` detecta todos eles de modo uniforme.\n\nÉ útil ao montar um array de strings com lacunas, ou ao preencher uma tabela cujas colunas têm tipos diferentes."
+   },
+   "notes": {
+    "en": "In MatLivre `class(missing)` reports `'string'`, whereas in MATLAB it is `'missing'`. Assigning `missing` into a numeric array is not supported; use `NaN`.",
+    "pt": "No MatLivre, `class(missing)` informa `'string'`, enquanto no MATLAB é `'missing'`. Atribuir `missing` dentro de um array numérico não é suportado; use `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A gap in a string array",
+      "pt": "Uma lacuna em um array de strings"
+     },
+     "code": "s = [\"a\" missing \"c\"]\nismissing(s)\nismissing([1 NaN 3])"
+    }
+   ],
+   "see": [
+    "ismissing",
+    "fillmissing",
+    "rmmissing",
+    "standardizeMissing"
+   ]
+  },
+  "movmad": {
+   "summary": {
+    "en": "Moving median absolute deviation over a sliding window.",
+    "pt": "Desvio absoluto mediano móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "M = movmad(A, wlen)",
+     "en": "Median absolute deviation over a window of `wlen` elements centered on each element.",
+     "pt": "Desvio absoluto mediano sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "M = movmad(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Inside each window the function computes `median(abs(x - median(x)))`. This is a robust measure of spread: a single wild value in the window hardly changes it, which makes `movmad` better than `movstd` for noisy data with spikes.\n\nWindows shrink at the ends of the data.",
+    "pt": "Dentro de cada janela a função calcula `median(abs(x - median(x)))`. É uma medida robusta de dispersão: um único valor discrepante na janela quase não a altera, o que torna `movmad` melhor que `movstd` para dados ruidosos com picos.\n\nAs janelas encolhem nas extremidades dos dados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Robust rolling spread",
+      "pt": "Dispersão móvel robusta"
+     },
+     "code": "x = [1 2 3 10 5];\nmovmad(x, 3)"
+    }
+   ],
+   "see": [
+    "movmedian",
+    "movstd",
+    "mad",
+    "isoutlier"
+   ]
+  },
+  "movmean": {
+   "summary": {
+    "en": "Moving average over a sliding window.",
+    "pt": "Média móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "M = movmean(A, wlen)",
+     "en": "Mean over a window of `wlen` elements centered on each element.",
+     "pt": "Média sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "M = movmean(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    },
+    {
+     "code": "M = movmean(A, wlen, 'Endpoints', 'discard')",
+     "en": "Drops the positions where the window does not fit entirely.",
+     "pt": "Descarta as posições em que a janela não cabe por inteiro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    },
+    {
+     "name": "'Endpoints'",
+     "en": "How to treat the ends: `'shrink'` (default) uses the available elements; `'discard'` removes the incomplete positions.",
+     "pt": "Como tratar as pontas: `'shrink'` (padrão) usa os elementos disponíveis; `'discard'` remove as posições incompletas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Smoothed array. Same size as `A` unless endpoints are discarded.",
+     "pt": "Array suavizado. Mesmo tamanho de `A`, a menos que as pontas sejam descartadas."
+    }
+   ],
+   "description": {
+    "en": "`movmean` is the classic moving average, used to smooth noise and reveal a trend. A longer window smooths more but blurs fast changes. A centered window does not shift the signal in time, while a one-sided window such as `[k 0]` follows the data with a delay.\n\nBy default the window shrinks near the ends so that the output has the same length as the input.",
+    "pt": "`movmean` é a média móvel clássica, usada para suavizar ruído e revelar uma tendência. Uma janela maior suaviza mais, mas borra mudanças rápidas. Uma janela centrada não desloca o sinal no tempo, enquanto uma janela unilateral como `[k 0]` acompanha os dados com atraso.\n\nPor padrão a janela encolhe perto das pontas, de modo que a saída tenha o mesmo comprimento da entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Centered, trailing and discarded ends",
+      "pt": "Centrada, à esquerda e pontas descartadas"
+     },
+     "code": "x = [1 2 3 4 5];\nmovmean(x, 3)\nmovmean(x, [1 0])\nmovmean(x, 3, 'Endpoints', 'discard')"
+    }
+   ],
+   "see": [
+    "movmedian",
+    "movsum",
+    "smoothdata",
+    "filter",
+    "conv"
+   ]
+  },
+  "movmedian": {
+   "summary": {
+    "en": "Moving median over a sliding window.",
+    "pt": "Mediana móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "M = movmedian(A, wlen)",
+     "en": "Median over a window of `wlen` elements centered on each element.",
+     "pt": "Mediana sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "M = movmedian(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "The median of each window ignores extreme values, so `movmedian` removes isolated spikes while keeping sharp edges, something a moving average cannot do. It is a standard way to clean impulsive noise.\n\nThe window shrinks at the ends, so the output has the same size as the input.",
+    "pt": "A mediana de cada janela ignora valores extremos, então `movmedian` remove picos isolados mantendo bordas nítidas, algo que a média móvel não consegue. É um modo padrão de limpar ruído impulsivo.\n\nA janela encolhe nas pontas, então a saída tem o mesmo tamanho da entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Removing a spike",
+      "pt": "Removendo um pico"
+     },
+     "code": "x = [1 2 3 40 5 6 7];\nmovmedian(x, 3)\nmovmean(x, 3)"
+    }
+   ],
+   "see": [
+    "movmean",
+    "movmad",
+    "medfilt1",
+    "smoothdata"
+   ]
+  },
+  "normalize": {
+   "summary": {
+    "en": "Normalizes data, by default to zero mean and unit standard deviation.",
+    "pt": "Normaliza dados, por padrão para média zero e desvio padrão um."
+   },
+   "syntax": [
+    {
+     "code": "N = normalize(A)",
+     "en": "Z-score of each column (or of a vector).",
+     "pt": "Escore z de cada coluna (ou de um vetor)."
+    },
+    {
+     "code": "N = normalize(A, 'range')",
+     "en": "Rescales to the interval from 0 to 1.",
+     "pt": "Reescala para o intervalo de 0 a 1."
+    },
+    {
+     "code": "N = normalize(A, 'center')",
+     "en": "Subtracts the mean only.",
+     "pt": "Subtrai apenas a média."
+    },
+    {
+     "code": "N = normalize(A, 'norm')",
+     "en": "Divides by the 2-norm.",
+     "pt": "Divide pela norma 2."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix; matrices are normalized column by column.",
+     "pt": "Vetor ou matriz numérica; matrizes são normalizadas coluna a coluna."
+    },
+    {
+     "name": "method",
+     "en": "`'zscore'` (default), `'range'`, `'center'`, `'norm'`, `'scale'`.",
+     "pt": "`'zscore'` (padrão), `'range'`, `'center'`, `'norm'`, `'scale'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "N",
+     "en": "Normalized array of the same size as `A`.",
+     "pt": "Array normalizado do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "The default z-score subtracts the mean and divides by the standard deviation, so the result has mean 0 and standard deviation 1. This puts variables with different units on a common scale before comparing or combining them, for instance before clustering.\n\n`'range'` maps the minimum to 0 and the maximum to 1, equivalent to `rescale` with its default limits.",
+    "pt": "O escore z padrão subtrai a média e divide pelo desvio padrão, de modo que o resultado tem média 0 e desvio padrão 1. Isso coloca variáveis de unidades diferentes numa escala comum antes de comparar ou combinar, por exemplo antes de agrupar. \n\n`'range'` leva o mínimo a 0 e o máximo a 1, equivalente a `rescale` com seus limites padrão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three normalizations",
+      "pt": "Três normalizações"
+     },
+     "code": "x = [1 2 3 4];\nnormalize(x)\nnormalize(x, 'range')\nnormalize(x, 'center')"
+    }
+   ],
+   "see": [
+    "rescale",
+    "zscore",
+    "mean",
+    "std",
+    "bounds"
+   ]
+  },
+  "rescale": {
+   "summary": {
+    "en": "Rescales data linearly to a given interval.",
+    "pt": "Reescala dados linearmente para um intervalo dado."
+   },
+   "syntax": [
+    {
+     "code": "B = rescale(A)",
+     "en": "Maps the data to the interval from 0 to 1.",
+     "pt": "Mapeia os dados para o intervalo de 0 a 1."
+    },
+    {
+     "code": "B = rescale(A, l, u)",
+     "en": "Maps the data to the interval from `l` to `u`.",
+     "pt": "Mapeia os dados para o intervalo de `l` a `u`."
+    },
+    {
+     "code": "B = rescale(___, 'InputMin', a, 'InputMax', b)",
+     "en": "Treats `a` and `b` as the input limits instead of the data extremes.",
+     "pt": "Trata `a` e `b` como os limites de entrada em vez dos extremos dos dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "l, u",
+     "en": "Lower and upper limit of the output.",
+     "pt": "Limites inferior e superior da saída."
+    },
+    {
+     "name": "'InputMin', 'InputMax'",
+     "en": "Input values that map to `l` and `u`.",
+     "pt": "Valores de entrada que correspondem a `l` e `u`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "The mapping is linear: `l + (A - min) .* (u - l) ./ (max - min)`, where `min` and `max` are the extremes of the whole array unless `InputMin` and `InputMax` are given. Unlike `normalize`, the extremes are taken over all elements, not column by column.\n\nSetting the input limits is useful to scale new data with the limits of a reference set, for example turning a sensor range into percentages.",
+    "pt": "O mapeamento é linear: `l + (A - min) .* (u - l) ./ (max - min)`, em que `min` e `max` são os extremos do array inteiro, a menos que `InputMin` e `InputMax` sejam fornecidos. Ao contrário de `normalize`, os extremos são tomados sobre todos os elementos, não coluna a coluna.\n\nDefinir os limites de entrada serve para escalar dados novos com os limites de um conjunto de referência, por exemplo transformar a faixa de um sensor em porcentagens."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Into 0 to 1, and with fixed input limits",
+      "pt": "Para 0 a 1, e com limites de entrada fixos"
+     },
+     "code": "x = [1 2 3 4];\nrescale(x)\nrescale(x, -1, 1)\nrescale(x, 0, 10, 'InputMin', 0, 'InputMax', 8)"
+    }
+   ],
+   "see": [
+    "normalize",
+    "bounds",
+    "mapminmax",
+    "zscore"
+   ]
+  },
+  "rmoutliers": {
+   "summary": {
+    "en": "Detects outliers and removes them from the data.",
+    "pt": "Detecta valores atípicos e os remove dos dados."
+   },
+   "syntax": [
+    {
+     "code": "B = rmoutliers(A)",
+     "en": "Removes outliers found by the default median rule.",
+     "pt": "Remove os atípicos encontrados pela regra padrão da mediana."
+    },
+    {
+     "code": "[B, TF] = rmoutliers(A)",
+     "en": "Also returns a logical array marking the removed elements.",
+     "pt": "Também retorna um array lógico que marca os elementos removidos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix.",
+     "pt": "Vetor ou matriz numérica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Data without the outliers; shorter than `A` when something was removed.",
+     "pt": "Dados sem os atípicos; mais curtos que `A` quando algo foi removido."
+    },
+    {
+     "name": "TF",
+     "en": "Logical array, `true` where an element was removed.",
+     "pt": "Array lógico, `true` onde um elemento foi removido."
+    }
+   ],
+   "description": {
+    "en": "The detection rule is the same as `isoutlier`: elements more than three scaled median absolute deviations from the median. `rmoutliers` shortens the vector, so positions after a removed element shift. Use `filloutliers` instead when the data must keep its length, for example a time series with aligned timestamps.",
+    "pt": "A regra de detecção é a mesma de `isoutlier`: elementos a mais de três desvios absolutos medianos escalados da mediana. `rmoutliers` encurta o vetor, então as posições após um elemento removido se deslocam. Use `filloutliers` quando os dados precisam manter o comprimento, por exemplo uma série temporal com datas alinhadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Drop the odd value",
+      "pt": "Descartar o valor discrepante"
+     },
+     "code": "x = [1 2 3 4 5 6 7 8 9 10 50];\n[B, tf] = rmoutliers(x);\nB\nfind(tf)"
+    }
+   ],
+   "see": [
+    "isoutlier",
+    "filloutliers",
+    "rmmissing",
+    "median"
+   ]
+  },
+  "smoothdata": {
+   "summary": {
+    "en": "Smooths noisy data with a chosen method.",
+    "pt": "Suaviza dados ruidosos com o método escolhido."
+   },
+   "syntax": [
+    {
+     "code": "B = smoothdata(A)",
+     "en": "Smooths with a moving average whose window is chosen automatically.",
+     "pt": "Suaviza com uma média móvel cuja janela é escolhida automaticamente."
+    },
+    {
+     "code": "B = smoothdata(A, method, wlen)",
+     "en": "Uses `method` with a window of `wlen` elements.",
+     "pt": "Usa `method` com uma janela de `wlen` elementos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector or matrix (columns are smoothed).",
+     "pt": "Vetor ou matriz numérica (as colunas são suavizadas)."
+    },
+    {
+     "name": "method",
+     "en": "`'movmean'`, `'movmedian'`, `'gaussian'` or `'sgolay'`.",
+     "pt": "`'movmean'`, `'movmedian'`, `'gaussian'` ou `'sgolay'`."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length.",
+     "pt": "Comprimento da janela."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Smoothed array of the same size as `A`.",
+     "pt": "Array suavizado do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "`smoothdata` collects the usual smoothers behind one interface. `'movmean'` averages inside the window; `'movmedian'` takes the median and keeps edges; `'gaussian'` is a weighted average whose weights follow a bell curve, so nearby points count more; `'sgolay'` fits a low-degree polynomial in each window and preserves peaks better.\n\nA longer window removes more noise at the price of flattening real features.",
+    "pt": "`smoothdata` reúne os suavizadores usuais em uma única interface. `'movmean'` faz a média dentro da janela; `'movmedian'` toma a mediana e preserva bordas; `'gaussian'` é uma média ponderada com pesos em forma de sino, de modo que os pontos próximos contam mais; `'sgolay'` ajusta um polinômio de grau baixo em cada janela e preserva melhor os picos.\n\nUma janela maior remove mais ruído ao custo de achatar características reais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mean versus median",
+      "pt": "Média versus mediana"
+     },
+     "code": "x = [1 5 2 8 3];\nsmoothdata(x, 'movmean', 3)\nsmoothdata(x, 'movmedian', 3)"
+    }
+   ],
+   "see": [
+    "movmean",
+    "movmedian",
+    "smoothdata2",
+    "filter",
+    "sgolayfilt"
+   ]
+  },
+  "smoothdata2": {
+   "summary": {
+    "en": "Smooths a matrix in two dimensions.",
+    "pt": "Suaviza uma matriz em duas dimensões."
+   },
+   "syntax": [
+    {
+     "code": "B = smoothdata2(A)",
+     "en": "Smooths with a default method and window.",
+     "pt": "Suaviza com um método e uma janela padrão."
+    },
+    {
+     "code": "B = smoothdata2(A, method, wlen)",
+     "en": "Uses `method` with a window of `wlen`, a scalar for a square window.",
+     "pt": "Usa `method` com uma janela `wlen`, um escalar para janela quadrada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric matrix, such as an image or gridded measurements.",
+     "pt": "Matriz numérica, como uma imagem ou medições em grade."
+    },
+    {
+     "name": "method",
+     "en": "`'movmean'`, `'movmedian'` or `'gaussian'`.",
+     "pt": "`'movmean'`, `'movmedian'` ou `'gaussian'`."
+    },
+    {
+     "name": "wlen",
+     "en": "Window size, scalar or `[rows cols]`.",
+     "pt": "Tamanho da janela, escalar ou `[linhas colunas]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Smoothed matrix of the same size as `A`.",
+     "pt": "Matriz suavizada do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "This is the two-dimensional counterpart of `smoothdata`: each element is replaced by a statistic of its neighborhood in both directions, so rows and columns are smoothed together. With `'movmean'` and a 3 by 3 window each interior point becomes the mean of its eight neighbors and itself; windows are truncated at the edges.\n\nA median window removes salt-and-pepper type noise, while a mean window gives a blur.",
+    "pt": "Este é o equivalente bidimensional de `smoothdata`: cada elemento é trocado por uma estatística de sua vizinhança nas duas direções, de modo que linhas e colunas são suavizadas juntas. Com `'movmean'` e uma janela 3 por 3, cada ponto interno vira a média de seus oito vizinhos e dele mesmo; as janelas são cortadas nas bordas.\n\nUma janela de mediana remove ruído do tipo sal e pimenta, enquanto uma janela de média produz um borrão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Neighborhood mean",
+      "pt": "Média da vizinhança"
+     },
+     "code": "A = [1 2 3; 4 5 6; 7 8 9];\nsmoothdata2(A, 'movmean', 3)"
+    }
+   ],
+   "see": [
+    "smoothdata",
+    "movmean",
+    "imgaussfilt",
+    "conv2"
+   ]
+  },
+  "trenddecomp": {
+   "summary": {
+    "en": "Splits a time series into long-term trend, seasonal and remainder parts.",
+    "pt": "Separa uma série temporal em tendência de longo prazo, partes sazonais e resíduo."
+   },
+   "syntax": [
+    {
+     "code": "LT = trenddecomp(A)",
+     "en": "Long-term trend of the vector `A`.",
+     "pt": "Tendência de longo prazo do vetor `A`."
+    },
+    {
+     "code": "[LT, ST, R] = trenddecomp(A)",
+     "en": "Long-term trend, seasonal trend and the remainder.",
+     "pt": "Tendência de longo prazo, tendência sazonal e o resíduo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric vector holding a regularly sampled series.",
+     "pt": "Vetor numérico com uma série amostrada regularmente."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "LT",
+     "en": "Long-term trend.",
+     "pt": "Tendência de longo prazo."
+    },
+    {
+     "name": "ST",
+     "en": "Seasonal (periodic) component.",
+     "pt": "Componente sazonal (periódico)."
+    },
+    {
+     "name": "R",
+     "en": "Remainder: `A - LT - ST`.",
+     "pt": "Resíduo: `A - LT - ST`."
+    }
+   ],
+   "description": {
+    "en": "`trenddecomp` separates what changes slowly, what repeats with a period, and what is left over, so that each part can be studied on its own. The components add up to the original data. It is used on measurements with a daily or yearly cycle, such as temperature or sales.\n\nThe decomposition can use a method such as singular spectrum analysis, which finds the dominant oscillatory patterns in the series.",
+    "pt": "`trenddecomp` separa o que muda devagar, o que se repete com um período e o que sobra, para que cada parte possa ser estudada isoladamente. Os componentes somam os dados originais. É usada em medições com ciclo diário ou anual, como temperatura ou vendas.\n\nA decomposição pode usar um método como a análise espectral singular, que encontra os padrões oscilatórios dominantes da série."
+   },
+   "notes": {
+    "en": "`trenddecomp` is not available in MatLivre yet: calling it reports 'trenddecomp is not supported in this version.' The example above shows that message. Use `smoothdata` or `detrend` for a simple trend estimate.",
+    "pt": "`trenddecomp` ainda não está disponível no MatLivre: a chamada informa 'trenddecomp is not supported in this version.' O exemplo acima mostra essa mensagem. Use `smoothdata` ou `detrend` para uma estimativa simples de tendência."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Calling it in MatLivre",
+      "pt": "Chamando no MatLivre"
+     },
+     "code": "x = (1:20) + sin(1:20);\ntry\n  LT = trenddecomp(x);\n  disp(size(LT))\ncatch err\n  disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "smoothdata",
+    "movmean",
+    "detrend",
+    "ischange"
+   ]
+  }
+ }
+}

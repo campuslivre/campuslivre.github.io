@@ -1,0 +1,1451 @@
+{
+ "functions": {
+  "stream2": {
+   "summary": {
+    "en": "Computes 2-D streamline vertices of a vector field.",
+    "pt": "Calcula os vértices de linhas de corrente 2-D de um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "verts = stream2(X, Y, U, V, startx, starty)",
+     "en": "Traces a streamline from each starting point.",
+     "pt": "Traça uma linha de corrente a partir de cada ponto inicial."
+    },
+    {
+     "code": "verts = stream2(U, V, startx, starty)",
+     "en": "Uses array indices as coordinates.",
+     "pt": "Usa os índices do array como coordenadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y",
+     "en": "Grid coordinates, such as from `meshgrid`.",
+     "pt": "Coordenadas da malha, como as de `meshgrid`."
+    },
+    {
+     "name": "U, V",
+     "en": "Vector components at the grid points.",
+     "pt": "Componentes do vetor nos pontos da malha."
+    },
+    {
+     "name": "startx, starty",
+     "en": "Coordinates of the starting points.",
+     "pt": "Coordenadas dos pontos iniciais."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "verts",
+     "en": "Cell array with one entry per starting point. Each entry is an N-by-2 matrix of x and y vertices.",
+     "pt": "Cell array com uma entrada por ponto inicial. Cada entrada é uma matriz N por 2 de vértices x e y."
+    }
+   ],
+   "description": {
+    "en": "The path follows the field by numerical integration, forward and backward from each starting point, and stops at the edge of the grid or where the field vanishes. The vertices can be passed to `streamline` to draw the curves, or used directly in computations.",
+    "pt": "O caminho segue o campo por integração numérica, para frente e para trás a partir de cada ponto inicial, e termina na borda da malha ou onde o campo se anula. Os vértices podem ser passados a `streamline` para desenhar as curvas, ou usados diretamente em cálculos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A path in a rotation field",
+      "pt": "Um caminho em um campo de rotação"
+     },
+     "code": "[x, y] = meshgrid(-2:0.5:2);\nu = -y;\nv = x;\nxy = stream2(x, y, u, v, 1, 0);\ndisp(class(xy))\ndisp(size(xy{1}, 2))"
+    }
+   ],
+   "see": [
+    "streamline",
+    "stream3",
+    "quiver",
+    "meshgrid"
+   ]
+  },
+  "stream3": {
+   "summary": {
+    "en": "Computes 3-D streamline vertices of a vector field.",
+    "pt": "Calcula os vértices de linhas de corrente 3-D de um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "verts = stream3(X, Y, Z, U, V, W, startx, starty, startz)",
+     "en": "Traces a streamline from each starting point.",
+     "pt": "Traça uma linha de corrente a partir de cada ponto inicial."
+    },
+    {
+     "code": "verts = stream3(U, V, W, startx, starty, startz)",
+     "en": "Uses array indices as coordinates.",
+     "pt": "Usa os índices do array como coordenadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Grid coordinates, such as from `meshgrid`.",
+     "pt": "Coordenadas da malha, como as de `meshgrid`."
+    },
+    {
+     "name": "U, V, W",
+     "en": "Vector components at the grid points.",
+     "pt": "Componentes do vetor nos pontos da malha."
+    },
+    {
+     "name": "startx, starty, startz",
+     "en": "Coordinates of the starting points.",
+     "pt": "Coordenadas dos pontos iniciais."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "verts",
+     "en": "Cell array with one N-by-3 matrix of vertices for each starting point.",
+     "pt": "Cell array com uma matriz N por 3 de vértices para cada ponto inicial."
+    }
+   ],
+   "description": {
+    "en": "This is the 3-D version of `stream2`. The vertices can be drawn with `streamline`, or used to build ribbons and tubes with `streamribbon` and `streamtube`.",
+    "pt": "É a versão 3-D de `stream2`. Os vértices podem ser desenhados com `streamline`, ou usados para construir fitas e tubos com `streamribbon` e `streamtube`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A helical path",
+      "pt": "Um caminho helicoidal"
+     },
+     "code": "[x, y, z] = meshgrid(-2:1:2);\nu = -y;\nv = x;\nw = 0*z + 0.1;\nxyz = stream3(x, y, z, u, v, w, 1, 0, 0);\ndisp(class(xyz))\ndisp(size(xyz{1}, 2))"
+    }
+   ],
+   "see": [
+    "stream2",
+    "streamline",
+    "streamribbon",
+    "streamtube"
+   ]
+  },
+  "streamline": {
+   "summary": {
+    "en": "Draws streamlines from precomputed vertices.",
+    "pt": "Desenha linhas de corrente a partir de vértices já calculados."
+   },
+   "syntax": [
+    {
+     "code": "streamline(verts)",
+     "en": "Draws the lines in the cell array `verts`.",
+     "pt": "Desenha as linhas do cell array `verts`."
+    },
+    {
+     "code": "streamline(X, Y, U, V, startx, starty)",
+     "en": "Computes 2-D streamlines and draws them.",
+     "pt": "Calcula e desenha linhas de corrente 2-D."
+    },
+    {
+     "code": "h = streamline(___)",
+     "en": "Also returns the line handles.",
+     "pt": "Também retorna os handles das linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "verts",
+     "en": "Cell array of vertex matrices from `stream2` or `stream3`.",
+     "pt": "Cell array de matrizes de vértices vindas de `stream2` ou `stream3`."
+    },
+    {
+     "name": "X, Y, U, V, startx, starty",
+     "en": "Grid, vector field and starting points, as in `stream2`.",
+     "pt": "Malha, campo vetorial e pontos iniciais, como em `stream2`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the line objects, one per streamline.",
+     "pt": "Handles dos objetos de linha, um por linha de corrente."
+    }
+   ],
+   "description": {
+    "en": "The function only draws; computing the paths is the job of `stream2` and `stream3`. Splitting the two steps lets you inspect or filter the vertices before plotting.",
+    "pt": "A função apenas desenha; calcular os caminhos é tarefa de `stream2` e `stream3`. Separar as duas etapas permite inspecionar ou filtrar os vértices antes de plotar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two streamlines of a rotation field",
+      "pt": "Duas linhas de corrente de um campo de rotação"
+     },
+     "code": "[x, y] = meshgrid(-2:0.5:2);\nu = -y;\nv = x;\nverts = stream2(x, y, u, v, [1 0.5], [0 0]);\nh = streamline(verts);\naxis equal\ndisp(numel(h))"
+    }
+   ],
+   "see": [
+    "stream2",
+    "stream3",
+    "streamslice",
+    "quiver"
+   ]
+  },
+  "streamparticles": {
+   "summary": {
+    "en": "Draws particles moving along streamlines.",
+    "pt": "Desenha partículas que se movem ao longo de linhas de corrente."
+   },
+   "syntax": [
+    {
+     "code": "streamparticles(verts, n)",
+     "en": "Draws `n` particles that travel along the lines in `verts`.",
+     "pt": "Desenha `n` partículas que percorrem as linhas de `verts`."
+    },
+    {
+     "code": "streamparticles(verts, n, Name, Value)",
+     "en": "Sets options such as `'Animate'`.",
+     "pt": "Define opções como `'Animate'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "verts",
+     "en": "Cell array of vertices from `stream2` or `stream3`.",
+     "pt": "Cell array de vértices vindo de `stream2` ou `stream3`."
+    },
+    {
+     "name": "n",
+     "en": "Number of particles.",
+     "pt": "Número de partículas."
+    },
+    {
+     "name": "'Animate'",
+     "en": "Number of animation cycles. With 0 the particles are drawn once, without animation.",
+     "pt": "Número de ciclos de animação. Com 0 as partículas são desenhadas uma vez, sem animação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Particles are markers placed along the streamlines and advanced step by step, which conveys the speed and direction of the flow. The input is the same vertex data used by `streamline`.",
+    "pt": "As partículas são marcadores colocados ao longo das linhas de corrente e avançados passo a passo, o que transmite a velocidade e a direção do escoamento. A entrada são os mesmos dados de vértices usados por `streamline`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Particles on two streamlines",
+      "pt": "Partículas em duas linhas de corrente"
+     },
+     "code": "[x, y] = meshgrid(-2:0.5:2);\nu = -y;\nv = x;\nverts = stream2(x, y, u, v, [1 0.5], [0 0]);\nstreamline(verts)\nstreamparticles(verts, 5);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "streamline",
+    "stream2",
+    "stream3"
+   ]
+  },
+  "streamribbon": {
+   "summary": {
+    "en": "Draws 3-D stream ribbons that twist with the flow.",
+    "pt": "Desenha fitas de corrente 3-D que giram com o escoamento."
+   },
+   "syntax": [
+    {
+     "code": "h = streamribbon(verts, X, Y, Z, cav, spd)",
+     "en": "Draws ribbons along `verts`, twisted by the curl angular velocity `cav`.",
+     "pt": "Desenha fitas ao longo de `verts`, torcidas pela velocidade angular do rotacional `cav`."
+    },
+    {
+     "code": "h = streamribbon(X, Y, Z, U, V, W, startx, starty, startz, width)",
+     "en": "Computes the paths and draws ribbons of the given width.",
+     "pt": "Calcula os caminhos e desenha fitas com a largura dada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "verts",
+     "en": "Cell array of vertices from `stream3`.",
+     "pt": "Cell array de vértices vindo de `stream3`."
+    },
+    {
+     "name": "X, Y, Z",
+     "en": "Grid coordinates.",
+     "pt": "Coordenadas da malha."
+    },
+    {
+     "name": "cav",
+     "en": "Curl angular velocity, which sets how fast the ribbon twists.",
+     "pt": "Velocidade angular do rotacional, que define a rapidez da torção da fita."
+    },
+    {
+     "name": "spd",
+     "en": "Flow speed.",
+     "pt": "Velocidade do escoamento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the ribbon surfaces.",
+     "pt": "Handles das superfícies das fitas."
+    }
+   ],
+   "description": {
+    "en": "A ribbon is a thin surface laid along a streamline. Its rotation about the line shows the local rotation of the flow, so a twisting ribbon reveals vorticity that a plain line hides.",
+    "pt": "Uma fita é uma superfície fina disposta ao longo de uma linha de corrente. Sua rotação em torno da linha mostra a rotação local do escoamento, de modo que uma fita torcida revela vorticidade que uma linha simples esconde."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ribbon along one path",
+      "pt": "Fita ao longo de um caminho"
+     },
+     "code": "[x, y, z] = meshgrid(-2:1:2);\nu = -y;\nv = x;\nw = 0*z + 0.1;\nverts = stream3(x, y, z, u, v, w, 1, 0, 0);\nh = streamribbon(verts, x, y, z, 0*x, 0*x + 1);\nview(3)\ndisp(numel(h))"
+    }
+   ],
+   "see": [
+    "stream3",
+    "streamtube",
+    "streamline",
+    "curl"
+   ]
+  },
+  "streamslice": {
+   "summary": {
+    "en": "Draws streamlines with direction arrows, evenly spaced across a vector field.",
+    "pt": "Desenha linhas de corrente com setas de direção, bem distribuídas em um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "streamslice(X, Y, U, V)",
+     "en": "Draws evenly spaced 2-D streamlines with arrows.",
+     "pt": "Desenha linhas de corrente 2-D uniformemente espaçadas, com setas."
+    },
+    {
+     "code": "streamslice(X, Y, U, V, density)",
+     "en": "Sets the spacing of the lines.",
+     "pt": "Define o espaçamento das linhas."
+    },
+    {
+     "code": "h = streamslice(___)",
+     "en": "Also returns the handles.",
+     "pt": "Também retorna os handles."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y",
+     "en": "Grid coordinates.",
+     "pt": "Coordenadas da malha."
+    },
+    {
+     "name": "U, V",
+     "en": "Vector components.",
+     "pt": "Componentes do vetor."
+    },
+    {
+     "name": "density",
+     "en": "Scalar that scales the number of lines. The default is 1.",
+     "pt": "Escalar que ajusta o número de linhas. O padrão é 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the lines and arrows.",
+     "pt": "Handles das linhas e setas."
+    }
+   ],
+   "description": {
+    "en": "Unlike `streamline`, the starting points are chosen automatically so the lines are spread evenly, and arrowheads mark the direction. It is a quick way to visualize a planar flow field without choosing starting points.",
+    "pt": "Diferente de `streamline`, os pontos iniciais são escolhidos automaticamente para que as linhas fiquem bem distribuídas, e pontas de seta marcam a direção. É um modo rápido de visualizar um campo de escoamento plano sem escolher pontos iniciais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rotation field",
+      "pt": "Campo de rotação"
+     },
+     "code": "[x, y] = meshgrid(-2:0.25:2);\nstreamslice(x, y, -y, x)\naxis equal",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "streamline",
+    "quiver",
+    "stream2",
+    "contour"
+   ]
+  },
+  "streamtube": {
+   "summary": {
+    "en": "Draws 3-D stream tubes whose width follows the divergence of the flow.",
+    "pt": "Desenha tubos de corrente 3-D cuja largura acompanha a divergência do escoamento."
+   },
+   "syntax": [
+    {
+     "code": "h = streamtube(X, Y, Z, U, V, W, startx, starty, startz)",
+     "en": "Computes streamlines and draws a tube around each.",
+     "pt": "Calcula as linhas de corrente e desenha um tubo em volta de cada uma."
+    },
+    {
+     "code": "h = streamtube(verts, width)",
+     "en": "Draws tubes of the given width along existing vertices.",
+     "pt": "Desenha tubos de largura dada ao longo de vértices existentes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z, U, V, W",
+     "en": "Grid and vector components.",
+     "pt": "Malha e componentes do vetor."
+    },
+    {
+     "name": "startx, starty, startz",
+     "en": "Starting points.",
+     "pt": "Pontos iniciais."
+    },
+    {
+     "name": "verts, width",
+     "en": "Vertices from `stream3` and a tube width.",
+     "pt": "Vértices vindos de `stream3` e uma largura de tubo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the tube surfaces.",
+     "pt": "Handles das superfícies dos tubos."
+    }
+   ],
+   "description": {
+    "en": "A tube widens where the flow spreads out and narrows where it converges, so its cross-section tracks the divergence of the field. Tubes are surfaces, so lighting and shading work on them.",
+    "pt": "O tubo se alarga onde o escoamento se espalha e se estreita onde converge, de modo que sua seção acompanha a divergência do campo. Tubos são superfícies, então iluminação e sombreamento funcionam sobre eles."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One tube",
+      "pt": "Um tubo"
+     },
+     "code": "[x, y, z] = meshgrid(-2:1:2);\nu = -y;\nv = x;\nw = 0*z + 0.1;\nh = streamtube(x, y, z, u, v, w, 1, 0, 0);\nview(3)\ndisp(numel(h))"
+    }
+   ],
+   "see": [
+    "stream3",
+    "streamribbon",
+    "streamline",
+    "camlight"
+   ]
+  },
+  "subvolume": {
+   "summary": {
+    "en": "Extracts a rectangular part of a volume data set.",
+    "pt": "Extrai uma parte retangular de um conjunto de dados volumétricos."
+   },
+   "syntax": [
+    {
+     "code": "[Nx, Ny, Nz, NV] = subvolume(X, Y, Z, V, limits)",
+     "en": "Returns the part of the volume inside `limits`.",
+     "pt": "Retorna a parte do volume dentro de `limits`."
+    },
+    {
+     "code": "[Nx, Ny, Nz, NV] = subvolume(V, limits)",
+     "en": "Uses array indices as coordinates.",
+     "pt": "Usa os índices do array como coordenadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Coordinate arrays of the same size as `V`.",
+     "pt": "Arrays de coordenadas do mesmo tamanho de `V`."
+    },
+    {
+     "name": "V",
+     "en": "3-D array of values.",
+     "pt": "Array 3-D de valores."
+    },
+    {
+     "name": "limits",
+     "en": "Six-element vector `[xmin xmax ymin ymax zmin zmax]`. Use `NaN` to leave a bound unchanged.",
+     "pt": "Vetor de seis elementos `[xmin xmax ymin ymax zmin zmax]`. Use `NaN` para manter um limite."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Nx, Ny, Nz",
+     "en": "Coordinates of the extracted block.",
+     "pt": "Coordenadas do bloco extraído."
+    },
+    {
+     "name": "NV",
+     "en": "Values of the extracted block.",
+     "pt": "Valores do bloco extraído."
+    }
+   ],
+   "description": {
+    "en": "The function keeps the grid points that fall inside the limits. It is typically used to isolate a region of interest before calling `isosurface` or `slice`.",
+    "pt": "A função mantém os pontos da malha que caem dentro dos limites. Costuma ser usada para isolar uma região de interesse antes de chamar `isosurface` ou `slice`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A 2-by-2-by-2 block",
+      "pt": "Um bloco 2 por 2 por 2"
+     },
+     "code": "[x, y, z] = meshgrid(1:4);\nv = x + y + z;\n[nx, ny, nz, nv] = subvolume(x, y, z, v, [2 3 2 3 2 3]);\ndisp(size(nv))\ndisp(nv(:)')"
+    }
+   ],
+   "see": [
+    "slice",
+    "isosurface",
+    "meshgrid",
+    "reducevolume"
+   ]
+  },
+  "surf": {
+   "summary": {
+    "en": "Draws a 3-D surface colored by height.",
+    "pt": "Desenha uma superfície 3-D colorida pela altura."
+   },
+   "syntax": [
+    {
+     "code": "surf(Z)",
+     "en": "Draws the surface with heights `Z` over the grid of indices.",
+     "pt": "Desenha a superfície com alturas `Z` sobre a malha de índices."
+    },
+    {
+     "code": "surf(X, Y, Z)",
+     "en": "Uses `X` and `Y` as the grid coordinates.",
+     "pt": "Usa `X` e `Y` como coordenadas da malha."
+    },
+    {
+     "code": "surf(X, Y, Z, C)",
+     "en": "Colors the surface by `C` instead of by `Z`.",
+     "pt": "Colore a superfície por `C` em vez de `Z`."
+    },
+    {
+     "code": "surf(___, Name, Value)",
+     "en": "Sets properties such as `'EdgeColor'` or `'FaceAlpha'`.",
+     "pt": "Define propriedades como `'EdgeColor'` ou `'FaceAlpha'`."
+    },
+    {
+     "code": "h = surf(___)",
+     "en": "Also returns the surface handle.",
+     "pt": "Também retorna o handle da superfície."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y",
+     "en": "Vectors or matrices of coordinates. If both are vectors, their lengths must match the columns and rows of `Z`.",
+     "pt": "Vetores ou matrizes de coordenadas. Se ambos forem vetores, seus comprimentos devem casar com as colunas e linhas de `Z`."
+    },
+    {
+     "name": "Z",
+     "en": "Matrix of heights.",
+     "pt": "Matriz de alturas."
+    },
+    {
+     "name": "C",
+     "en": "Optional color data, the same size as `Z`, mapped through the colormap.",
+     "pt": "Dados de cor opcionais, do mesmo tamanho de `Z`, mapeados pelo colormap."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the surface object.",
+     "pt": "Handle do objeto de superfície."
+    }
+   ],
+   "description": {
+    "en": "Each cell of the grid becomes a colored quadrilateral, with black edges by default. Use `shading interp` or `shading flat` to remove the grid lines, `colormap` to change the colors, and `view` or the mouse to rotate the plot.\n\nTo build the grid for a function of two variables, call `meshgrid` first and evaluate the function on its output.",
+    "pt": "Cada célula da malha vira um quadrilátero colorido, com bordas pretas por padrão. Use `shading interp` ou `shading flat` para remover as linhas da malha, `colormap` para mudar as cores, e `view` ou o mouse para girar o gráfico.\n\nPara montar a malha de uma função de duas variáveis, chame `meshgrid` primeiro e avalie a função na saída."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A smooth bump",
+      "pt": "Uma elevação suave"
+     },
+     "code": "[X, Y] = meshgrid(-2:0.2:2);\nZ = X .* exp(-X.^2 - Y.^2);\nsurf(X, Y, Z)\ncolorbar",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "mesh",
+    "surfc",
+    "surfl",
+    "meshgrid",
+    "contour"
+   ]
+  },
+  "surf2patch": {
+   "summary": {
+    "en": "Converts surface data into patch faces and vertices.",
+    "pt": "Converte dados de superfície em faces e vértices de patch."
+   },
+   "syntax": [
+    {
+     "code": "fv = surf2patch(X, Y, Z)",
+     "en": "Returns a struct with quadrilateral faces and vertices.",
+     "pt": "Retorna uma struct com faces quadrilaterais e vértices."
+    },
+    {
+     "code": "fv = surf2patch(Z)",
+     "en": "Uses array indices for `X` and `Y`.",
+     "pt": "Usa índices do array para `X` e `Y`."
+    },
+    {
+     "code": "fv = surf2patch(___, 'triangles')",
+     "en": "Splits each quadrilateral into two triangles.",
+     "pt": "Divide cada quadrilátero em dois triângulos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Matrices of the same size describing the surface.",
+     "pt": "Matrizes de mesmo tamanho que descrevem a superfície."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "fv",
+     "en": "Struct with `faces` (one row of vertex indices per face) and `vertices` (one row of x, y, z per vertex).",
+     "pt": "Struct com `faces` (uma linha de índices de vértices por face) e `vertices` (uma linha x, y, z por vértice)."
+    }
+   ],
+   "description": {
+    "en": "A grid of `m`-by-`n` points gives `(m-1)*(n-1)` quadrilateral faces and `m*n` vertices. The struct can be passed to `patch` or `reducepatch`, which is how a surface gets simplified or exported to a mesh format.",
+    "pt": "Uma malha de `m` por `n` pontos dá `(m-1)*(n-1)` faces quadrilaterais e `m*n` vértices. A struct pode ser passada a `patch` ou `reducepatch`, que é como uma superfície é simplificada ou exportada para um formato de malha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Faces and vertices of a 5-by-5 grid",
+      "pt": "Faces e vértices de uma malha 5 por 5"
+     },
+     "code": "[X, Y, Z] = peaks(5);\nfv = surf2patch(X, Y, Z);\ndisp(size(fv.faces))\ndisp(size(fv.vertices))"
+    }
+   ],
+   "see": [
+    "patch",
+    "surf",
+    "reducepatch",
+    "isosurface"
+   ]
+  },
+  "surface": {
+   "summary": {
+    "en": "Low-level function that creates a surface object in the current axes.",
+    "pt": "Função de baixo nível que cria um objeto de superfície nos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "surface(X, Y, Z)",
+     "en": "Adds a surface to the current axes.",
+     "pt": "Adiciona uma superfície aos eixos atuais."
+    },
+    {
+     "code": "surface(X, Y, Z, C)",
+     "en": "Colors it with `C`.",
+     "pt": "Colore-a com `C`."
+    },
+    {
+     "code": "h = surface(___, Name, Value)",
+     "en": "Sets properties and returns the handle.",
+     "pt": "Define propriedades e retorna o handle."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Coordinates, as for `surf`.",
+     "pt": "Coordenadas, como em `surf`."
+    },
+    {
+     "name": "C",
+     "en": "Optional color data.",
+     "pt": "Dados de cor opcionais."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the new surface.",
+     "pt": "Handle da nova superfície."
+    }
+   ],
+   "description": {
+    "en": "`surface` does not set the view the way `surf` does, and it is meant for building a figure piece by piece or adding a surface to existing graphics. Call `view(3)` yourself to see it from an angle.",
+    "pt": "`surface` não define a vista como `surf` faz, e serve para montar uma figura aos poucos ou acrescentar uma superfície a gráficos existentes. Chame `view(3)` para ver de um ângulo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Adding a surface by hand",
+      "pt": "Adicionando uma superfície manualmente"
+     },
+     "code": "[X, Y] = meshgrid(1:4);\nh = surface(X, Y, X + Y);\nview(3)\ndisp(class(h))"
+    }
+   ],
+   "see": [
+    "surf",
+    "patch",
+    "mesh",
+    "view"
+   ]
+  },
+  "surfc": {
+   "summary": {
+    "en": "Draws a 3-D surface with a contour plot underneath.",
+    "pt": "Desenha uma superfície 3-D com um gráfico de contorno por baixo."
+   },
+   "syntax": [
+    {
+     "code": "surfc(Z)",
+     "en": "Draws the surface with heights `Z`, plus contours below.",
+     "pt": "Desenha a superfície de alturas `Z`, mais curvas de nível abaixo."
+    },
+    {
+     "code": "surfc(X, Y, Z)",
+     "en": "Uses `X` and `Y` as coordinates.",
+     "pt": "Usa `X` e `Y` como coordenadas."
+    },
+    {
+     "code": "surfc(___, Name, Value)",
+     "en": "Sets surface properties.",
+     "pt": "Define propriedades da superfície."
+    },
+    {
+     "code": "h = surfc(___)",
+     "en": "Returns handles to the surface and the contour.",
+     "pt": "Retorna handles da superfície e do contorno."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z, C",
+     "en": "The same arguments as `surf`.",
+     "pt": "Os mesmos argumentos de `surf`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handles of the graphics objects created.",
+     "pt": "Handles dos objetos gráficos criados."
+    }
+   ],
+   "description": {
+    "en": "The contour lines are drawn on the lower face of the axes box, so the plot shows the shape of the surface and its level curves together. This helps locate peaks and valleys by their position in the plane.",
+    "pt": "As curvas de nível são desenhadas na face inferior da caixa dos eixos, então o gráfico mostra a forma da superfície e suas curvas de nível juntas. Isso ajuda a localizar picos e vales pela posição no plano."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Peaks with contours",
+      "pt": "Peaks com contornos"
+     },
+     "code": "[X, Y, Z] = peaks(20);\nsurfc(X, Y, Z)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "surf",
+    "contour3",
+    "meshc",
+    "peaks"
+   ]
+  },
+  "surfl": {
+   "summary": {
+    "en": "Draws a 3-D surface with lighting based on a light source.",
+    "pt": "Desenha uma superfície 3-D com iluminação a partir de uma fonte de luz."
+   },
+   "syntax": [
+    {
+     "code": "surfl(Z)",
+     "en": "Draws a lit surface with heights `Z`.",
+     "pt": "Desenha uma superfície iluminada de alturas `Z`."
+    },
+    {
+     "code": "surfl(X, Y, Z)",
+     "en": "Uses `X` and `Y` as coordinates.",
+     "pt": "Usa `X` e `Y` como coordenadas."
+    },
+    {
+     "code": "surfl(X, Y, Z, s)",
+     "en": "Places the light in direction `s`, as `[azimuth elevation]` or `[sx sy sz]`.",
+     "pt": "Posiciona a luz na direção `s`, como `[azimute elevação]` ou `[sx sy sz]`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Coordinates, as for `surf`.",
+     "pt": "Coordenadas, como em `surf`."
+    },
+    {
+     "name": "s",
+     "en": "Light direction.",
+     "pt": "Direção da luz."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the surface.",
+     "pt": "Handle da superfície."
+    }
+   ],
+   "description": {
+    "en": "The color of each point is computed from the surface normal and the light direction, combining ambient, diffuse and specular terms. It works best with a smooth, monotonic colormap such as `gray` or `copper`, together with `shading interp`.",
+    "pt": "A cor de cada ponto é calculada a partir da normal da superfície e da direção da luz, combinando termos ambiente, difuso e especular. Funciona melhor com um colormap suave e monotônico, como `gray` ou `copper`, junto com `shading interp`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Lit peaks in gray",
+      "pt": "Peaks iluminado em cinza"
+     },
+     "code": "[X, Y, Z] = peaks(30);\nsurfl(X, Y, Z)\nshading interp\ncolormap(gray)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "surf",
+    "camlight",
+    "lighting",
+    "shading",
+    "colormap"
+   ]
+  },
+  "surfnorm": {
+   "summary": {
+    "en": "Computes the normal vectors of a surface.",
+    "pt": "Calcula os vetores normais de uma superfície."
+   },
+   "syntax": [
+    {
+     "code": "[Nx, Ny, Nz] = surfnorm(Z)",
+     "en": "Returns normals of the surface with heights `Z`.",
+     "pt": "Retorna as normais da superfície de alturas `Z`."
+    },
+    {
+     "code": "[Nx, Ny, Nz] = surfnorm(X, Y, Z)",
+     "en": "Uses `X` and `Y` as coordinates.",
+     "pt": "Usa `X` e `Y` como coordenadas."
+    },
+    {
+     "code": "surfnorm(___)",
+     "en": "With no outputs, draws the surface with its normals as lines.",
+     "pt": "Sem saídas, desenha a superfície com as normais como linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Matrices of the same size describing the surface.",
+     "pt": "Matrizes de mesmo tamanho que descrevem a superfície."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Nx, Ny, Nz",
+     "en": "Components of the unit normals, the same size as `Z`.",
+     "pt": "Componentes das normais unitárias, do mesmo tamanho de `Z`."
+    }
+   ],
+   "description": {
+    "en": "The normal at each grid point is estimated from the neighboring points, and every vector has length 1. The normals are the basis of lighting calculations.",
+    "pt": "A normal em cada ponto da malha é estimada a partir dos pontos vizinhos, e todo vetor tem comprimento 1. As normais são a base dos cálculos de iluminação."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Normal of a tilted plane",
+      "pt": "Normal de um plano inclinado"
+     },
+     "code": "[X, Y] = meshgrid(-1:1);\nZ = X + Y;\n[Nx, Ny, Nz] = surfnorm(X, Y, Z);\ndisp([Nx(2,2) Ny(2,2) Nz(2,2)])"
+    }
+   ],
+   "see": [
+    "surf",
+    "isonormals",
+    "surfl",
+    "quiver3"
+   ]
+  },
+  "swarmchart": {
+   "summary": {
+    "en": "Draws a scatter plot whose points are spread sideways to avoid overlap.",
+    "pt": "Desenha um gráfico de dispersão cujos pontos se espalham lateralmente para evitar sobreposição."
+   },
+   "syntax": [
+    {
+     "code": "swarmchart(x, y)",
+     "en": "Draws points at `(x, y)`, spread along x according to the density of the data.",
+     "pt": "Desenha pontos em `(x, y)`, espalhados em x conforme a densidade dos dados."
+    },
+    {
+     "code": "swarmchart(x, y, sz)",
+     "en": "Sets the marker size.",
+     "pt": "Define o tamanho do marcador."
+    },
+    {
+     "code": "swarmchart(x, y, sz, c)",
+     "en": "Sets the marker colors.",
+     "pt": "Define as cores dos marcadores."
+    },
+    {
+     "code": "h = swarmchart(___)",
+     "en": "Also returns the chart object.",
+     "pt": "Também retorna o objeto do gráfico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Group positions, such as repeated values or categories.",
+     "pt": "Posições dos grupos, como valores repetidos ou categorias."
+    },
+    {
+     "name": "y",
+     "en": "Values to display.",
+     "pt": "Valores a exibir."
+    },
+    {
+     "name": "sz",
+     "en": "Marker area, as a scalar or vector.",
+     "pt": "Área do marcador, escalar ou vetor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the chart.",
+     "pt": "Handle do gráfico."
+    }
+   ],
+   "description": {
+    "en": "Points that share an x value would sit on top of each other in a normal scatter plot. A swarm chart shifts them horizontally in proportion to the local density of the y data, so the width of each group shows the distribution of its values.",
+    "pt": "Pontos com o mesmo valor de x ficariam sobrepostos em um gráfico de dispersão comum. O swarm chart os desloca na horizontal em proporção à densidade local dos dados em y, de modo que a largura de cada grupo mostra a distribuição dos valores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two groups of random values",
+      "pt": "Dois grupos de valores aleatórios"
+     },
+     "code": "rng(1);\nx = [ones(1, 20), 2*ones(1, 20)];\ny = [randn(1, 20), 2 + randn(1, 20)];\nswarmchart(x, y)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "swarmchart3",
+    "scatter",
+    "boxchart",
+    "violinplot"
+   ]
+  },
+  "swarmchart3": {
+   "summary": {
+    "en": "Draws a 3-D scatter plot whose points are spread sideways to avoid overlap.",
+    "pt": "Desenha um gráfico de dispersão 3-D cujos pontos se espalham lateralmente para evitar sobreposição."
+   },
+   "syntax": [
+    {
+     "code": "swarmchart3(x, y, z)",
+     "en": "Draws points at `(x, y, z)`, spread in the xy-plane according to density.",
+     "pt": "Desenha pontos em `(x, y, z)`, espalhados no plano xy conforme a densidade."
+    },
+    {
+     "code": "swarmchart3(x, y, z, sz, c)",
+     "en": "Sets marker size and colors.",
+     "pt": "Define tamanho e cores dos marcadores."
+    },
+    {
+     "code": "h = swarmchart3(___)",
+     "en": "Also returns the chart object.",
+     "pt": "Também retorna o objeto do gráfico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Group positions in the plane.",
+     "pt": "Posições dos grupos no plano."
+    },
+    {
+     "name": "z",
+     "en": "Values to display.",
+     "pt": "Valores a exibir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the chart.",
+     "pt": "Handle do gráfico."
+    }
+   ],
+   "description": {
+    "en": "This is the 3-D version of `swarmchart`. The `z` values are the quantity being compared, and points that share an `(x, y)` position are shifted in the horizontal plane according to the local density of `z`.",
+    "pt": "É a versão 3-D de `swarmchart`. Os valores de `z` são a grandeza comparada, e pontos que compartilham a posição `(x, y)` são deslocados no plano horizontal conforme a densidade local de `z`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two groups in 3-D",
+      "pt": "Dois grupos em 3-D"
+     },
+     "code": "rng(1);\nx = [ones(1, 20), 2*ones(1, 20)];\ny = ones(1, 40);\nz = randn(1, 40);\nswarmchart3(x, y, z)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "swarmchart",
+    "scatter3",
+    "plot3"
+   ]
+  },
+  "thetalim": {
+   "summary": {
+    "en": "Gets or sets the angular limits of a polar axes.",
+    "pt": "Obtém ou define os limites angulares de eixos polares."
+   },
+   "syntax": [
+    {
+     "code": "thetalim([tmin tmax])",
+     "en": "Sets the angular range, in degrees.",
+     "pt": "Define a faixa angular, em graus."
+    },
+    {
+     "code": "lims = thetalim",
+     "en": "Returns the current limits.",
+     "pt": "Retorna os limites atuais."
+    },
+    {
+     "code": "thetalim auto",
+     "en": "Restores automatic limits.",
+     "pt": "Restaura os limites automáticos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[tmin tmax]",
+     "en": "Two-element vector in degrees, with `tmin` less than `tmax`.",
+     "pt": "Vetor de dois elementos em graus, com `tmin` menor que `tmax`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Two-element vector `[tmin tmax]` in degrees.",
+     "pt": "Vetor de dois elementos `[tmin tmax]` em graus."
+    }
+   ],
+   "description": {
+    "en": "By default a polar axes covers the full circle. Restricting the range, for instance to `[0 180]`, shows only a half-plane, which is handy for antenna patterns or any data limited to part of the circle.",
+    "pt": "Por padrão, eixos polares cobrem o círculo completo. Restringir a faixa, por exemplo a `[0 180]`, mostra apenas um semiplano, o que é útil para diagramas de antena ou dados restritos a parte do círculo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Half-circle polar plot",
+      "pt": "Gráfico polar em meio círculo"
+     },
+     "code": "theta = 0:0.1:pi;\npolarplot(theta, 1 + 0.1*theta)\nthetalim([0 180])\ndisp(thetalim)"
+    }
+   ],
+   "see": [
+    "rlim",
+    "polarplot",
+    "thetaticks",
+    "polaraxes"
+   ]
+  },
+  "thetatickformat": {
+   "summary": {
+    "en": "Gets or sets the format of the angular tick labels of a polar axes.",
+    "pt": "Obtém ou define o formato dos rótulos angulares de eixos polares."
+   },
+   "syntax": [
+    {
+     "code": "thetatickformat(fmt)",
+     "en": "Sets the label format, such as `'degrees'` or `'%g°'`.",
+     "pt": "Define o formato dos rótulos, como `'degrees'` ou `'%g°'`."
+    },
+    {
+     "code": "fmt = thetatickformat",
+     "en": "Returns the current format.",
+     "pt": "Retorna o formato atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fmt",
+     "en": "A format name or a `sprintf`-style format applied to each tick value.",
+     "pt": "Um nome de formato ou um formato do tipo `sprintf` aplicado a cada valor de marca."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "fmt",
+     "en": "Current format of the angular tick labels.",
+     "pt": "Formato atual dos rótulos angulares."
+    }
+   ],
+   "description": {
+    "en": "The format changes how the angle values are written on the axis without changing the tick positions. Use `thetaticks` to choose the positions and `thetaticklabels` to write fully custom labels.",
+    "pt": "O formato muda como os valores dos ângulos são escritos no eixo, sem mudar as posições das marcas. Use `thetaticks` para escolher as posições e `thetaticklabels` para escrever rótulos totalmente personalizados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Label angles in degrees",
+      "pt": "Rotulando ângulos em graus"
+     },
+     "code": "polarplot(0:0.1:pi, ones(1, 32))\nthetatickformat('degrees')\ndisp(thetatickformat)"
+    }
+   ],
+   "see": [
+    "thetaticks",
+    "thetaticklabels",
+    "rtickformat",
+    "polaraxes"
+   ]
+  },
+  "thetaticklabels": {
+   "summary": {
+    "en": "Gets or sets the text of the angular tick labels of a polar axes.",
+    "pt": "Obtém ou define o texto dos rótulos angulares de eixos polares."
+   },
+   "syntax": [
+    {
+     "code": "thetaticklabels(labels)",
+     "en": "Sets the labels shown at the angular ticks.",
+     "pt": "Define os rótulos mostrados nas marcas angulares."
+    },
+    {
+     "code": "labels = thetaticklabels",
+     "en": "Returns the current labels.",
+     "pt": "Retorna os rótulos atuais."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "labels",
+     "en": "Cell array of character vectors, one for each tick.",
+     "pt": "Cell array de vetores de caracteres, um para cada marca."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "labels",
+     "en": "Cell array of the current labels.",
+     "pt": "Cell array com os rótulos atuais."
+    }
+   ],
+   "description": {
+    "en": "The labels are assigned to the ticks in order, so set the positions first with `thetaticks`. If there are fewer labels than ticks, the list is repeated.",
+    "pt": "Os rótulos são atribuídos às marcas em ordem, então defina primeiro as posições com `thetaticks`. Se houver menos rótulos que marcas, a lista se repete."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compass directions",
+      "pt": "Pontos cardeais"
+     },
+     "code": "polarplot(0:0.1:2*pi, ones(1, 63))\nthetaticks(0:90:270)\nthetaticklabels({'E', 'N', 'W', 'S'})\ndisp(thetaticklabels)"
+    }
+   ],
+   "see": [
+    "thetaticks",
+    "thetatickformat",
+    "rticklabels",
+    "polaraxes"
+   ]
+  },
+  "thetaticks": {
+   "summary": {
+    "en": "Gets or sets the angular tick positions of a polar axes.",
+    "pt": "Obtém ou define as posições das marcas angulares de eixos polares."
+   },
+   "syntax": [
+    {
+     "code": "thetaticks(ticks)",
+     "en": "Sets tick positions, in degrees.",
+     "pt": "Define as posições das marcas, em graus."
+    },
+    {
+     "code": "ticks = thetaticks",
+     "en": "Returns the current tick positions.",
+     "pt": "Retorna as posições atuais das marcas."
+    },
+    {
+     "code": "thetaticks('auto')",
+     "en": "Restores automatic ticks.",
+     "pt": "Restaura as marcas automáticas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ticks",
+     "en": "Vector of angles in degrees.",
+     "pt": "Vetor de ângulos em graus."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ticks",
+     "en": "Row vector of tick angles in degrees.",
+     "pt": "Vetor linha com os ângulos das marcas, em graus."
+    }
+   ],
+   "description": {
+    "en": "Use it to place grid lines at meaningful angles, for instance every 45 degrees. Combine with `thetaticklabels` to give the ticks other names.",
+    "pt": "Serve para colocar linhas de grade em ângulos significativos, por exemplo a cada 45 graus. Combine com `thetaticklabels` para dar outros nomes às marcas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ticks every 45 degrees",
+      "pt": "Marcas a cada 45 graus"
+     },
+     "code": "polarplot(0:0.1:2*pi, ones(1, 63))\nthetaticks(0:45:315)\ndisp(thetaticks)"
+    }
+   ],
+   "see": [
+    "thetaticklabels",
+    "thetatickformat",
+    "rticks",
+    "thetalim"
+   ]
+  },
+  "volumebounds": {
+   "summary": {
+    "en": "Returns the coordinate and color limits of volume data.",
+    "pt": "Retorna os limites de coordenadas e de cor de dados volumétricos."
+   },
+   "syntax": [
+    {
+     "code": "lims = volumebounds(X, Y, Z, V)",
+     "en": "Returns limits for scalar volume data.",
+     "pt": "Retorna os limites de dados volumétricos escalares."
+    },
+    {
+     "code": "lims = volumebounds(X, Y, Z, U, V, W)",
+     "en": "Returns limits for vector volume data, with color limits from the speed.",
+     "pt": "Retorna os limites de dados volumétricos vetoriais, com limites de cor vindos do módulo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Coordinate arrays.",
+     "pt": "Arrays de coordenadas."
+    },
+    {
+     "name": "V",
+     "en": "3-D array of scalar values.",
+     "pt": "Array 3-D de valores escalares."
+    },
+    {
+     "name": "U, V, W",
+     "en": "Vector components.",
+     "pt": "Componentes do vetor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Vector `[xmin xmax ymin ymax zmin zmax cmin cmax]`. The color limits come from the scalar data, or from the vector magnitude.",
+     "pt": "Vetor `[xmin xmax ymin ymax zmin zmax cmin cmax]`. Os limites de cor vêm dos dados escalares, ou do módulo do vetor."
+    }
+   ],
+   "description": {
+    "en": "The result can be passed straight to `axis` and `clim` so that a volume visualization fills the axes with a suitable color range.",
+    "pt": "O resultado pode ser passado diretamente a `axis` e `clim` para que uma visualização volumétrica preencha os eixos com uma faixa de cores adequada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Limits of a small volume",
+      "pt": "Limites de um volume pequeno"
+     },
+     "code": "[X, Y, Z] = meshgrid(1:3);\nV = X + Y + Z;\nlims = volumebounds(X, Y, Z, V)"
+    }
+   ],
+   "see": [
+    "slice",
+    "isosurface",
+    "axis",
+    "clim"
+   ]
+  },
+  "waterfall": {
+   "summary": {
+    "en": "Draws a mesh with lines in one direction only, like a waterfall of curves.",
+    "pt": "Desenha uma malha com linhas em uma só direção, como uma cascata de curvas."
+   },
+   "syntax": [
+    {
+     "code": "waterfall(Z)",
+     "en": "Draws one curve per row of `Z`.",
+     "pt": "Desenha uma curva por linha de `Z`."
+    },
+    {
+     "code": "waterfall(X, Y, Z)",
+     "en": "Uses `X` and `Y` as coordinates.",
+     "pt": "Usa `X` e `Y` como coordenadas."
+    },
+    {
+     "code": "h = waterfall(___)",
+     "en": "Also returns the handle.",
+     "pt": "Também retorna o handle."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X, Y, Z",
+     "en": "Coordinates, as for `mesh`.",
+     "pt": "Coordenadas, como em `mesh`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the graphics object.",
+     "pt": "Handle do objeto gráfico."
+    }
+   ],
+   "description": {
+    "en": "It is a mesh plot with the column lines removed, so each row of `Z` appears as a separate curve stacked in the y direction. This is a convenient way to compare how a signal changes from one record to the next, such as spectra over time.",
+    "pt": "É um gráfico de malha sem as linhas das colunas, de modo que cada linha de `Z` aparece como uma curva separada, empilhada na direção y. É um modo prático de comparar como um sinal muda de um registro para o seguinte, como espectros ao longo do tempo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Peaks as stacked curves",
+      "pt": "Peaks como curvas empilhadas"
+     },
+     "code": "[X, Y, Z] = peaks(20);\nwaterfall(X, Y, Z)",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "mesh",
+    "surf",
+    "plot3",
+    "ribbon"
+   ]
+  },
+  "wordcloud": {
+   "summary": {
+    "en": "Draws words sized by their frequency or by a weight.",
+    "pt": "Desenha palavras com tamanho proporcional à frequência ou a um peso."
+   },
+   "syntax": [
+    {
+     "code": "wordcloud(words, sizes)",
+     "en": "Draws each word with a size set by the matching value in `sizes`.",
+     "pt": "Desenha cada palavra com tamanho dado pelo valor correspondente em `sizes`."
+    },
+    {
+     "code": "wordcloud(words)",
+     "en": "Counts repeated words and sizes them by count.",
+     "pt": "Conta palavras repetidas e dimensiona pela contagem."
+    },
+    {
+     "code": "wordcloud(tbl, wordVar, sizeVar)",
+     "en": "Reads the words and weights from table variables.",
+     "pt": "Lê as palavras e os pesos de variáveis de uma tabela."
+    },
+    {
+     "code": "h = wordcloud(___)",
+     "en": "Also returns the chart object.",
+     "pt": "Também retorna o objeto do gráfico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "words",
+     "en": "String array or categorical array of words.",
+     "pt": "String array ou array categórico de palavras."
+    },
+    {
+     "name": "sizes",
+     "en": "Numeric weights, one per word.",
+     "pt": "Pesos numéricos, um por palavra."
+    },
+    {
+     "name": "tbl, wordVar, sizeVar",
+     "en": "A table and the names of its word and weight variables.",
+     "pt": "Uma tabela e os nomes de suas variáveis de palavras e de pesos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Handle of the word cloud chart.",
+     "pt": "Handle do gráfico de nuvem de palavras."
+    }
+   ],
+   "description": {
+    "en": "The more frequent or heavier a word, the larger it is drawn. A word cloud gives a quick impression of the dominant terms in a text or a list of categories, though it does not allow precise comparison of values.",
+    "pt": "Quanto mais frequente ou pesada a palavra, maior ela é desenhada. Uma nuvem de palavras dá uma impressão rápida dos termos dominantes de um texto ou de uma lista de categorias, mas não permite comparar valores com precisão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Four words with weights",
+      "pt": "Quatro palavras com pesos"
+     },
+     "code": "words = [\"apple\" \"pear\" \"fig\" \"plum\"];\nwordcloud(words, [10 5 3 2])",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "histogram",
+    "bar",
+    "pie",
+    "string"
+   ]
+  }
+ }
+}

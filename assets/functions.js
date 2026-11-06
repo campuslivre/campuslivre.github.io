@@ -15,11 +15,11 @@
     return {
       sec: sec,
       groups: Array.prototype.slice.call(sec.querySelectorAll(".fn-group")).map(function (g) {
-        return { el: g, chips: Array.prototype.slice.call(g.querySelectorAll("code")) };
+        return { el: g, chips: Array.prototype.slice.call(g.querySelectorAll(".fn-list a")) };
       })
     };
   });
-  var total = root.querySelectorAll("code").length;
+  var total = root.querySelectorAll(".fn-list a").length;
 
   function pt() { return document.documentElement.getAttribute("data-lang") === "pt-BR"; }
 

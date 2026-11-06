@@ -1,0 +1,1371 @@
+{
+ "functions": {
+  "cellfun": {
+   "summary": {
+    "en": "Applies a function to the contents of each cell of a cell array.",
+    "pt": "Aplica uma função ao conteúdo de cada célula de um cell array."
+   },
+   "syntax": [
+    {
+     "code": "A = cellfun(func, C)",
+     "en": "Calls `func` on each cell and collects scalar results in an array.",
+     "pt": "Chama `func` em cada célula e reúne os resultados escalares em um array."
+    },
+    {
+     "code": "A = cellfun(func, C1, C2, ...)",
+     "en": "Passes the contents of matching cells of several arrays to `func`.",
+     "pt": "Passa o conteúdo de células correspondentes de vários arrays para `func`."
+    },
+    {
+     "code": "[A, B, ...] = cellfun(___)",
+     "en": "Collects several outputs of `func`.",
+     "pt": "Reúne várias saídas de `func`."
+    },
+    {
+     "code": "B = cellfun(___, 'UniformOutput', false)",
+     "en": "Returns a cell array, so results of any size or class are allowed.",
+     "pt": "Retorna um cell array, permitindo resultados de qualquer tamanho ou classe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "func",
+     "en": "Function handle, or a legacy name such as `'isempty'`, `'length'` or `'numel'`.",
+     "pt": "Function handle, ou um nome legado como `'isempty'`, `'length'` ou `'numel'`."
+    },
+    {
+     "name": "C",
+     "en": "Cell array. Several cell arrays must have the same size.",
+     "pt": "Cell array. Vários cell arrays devem ter o mesmo tamanho."
+    },
+    {
+     "name": "'UniformOutput'",
+     "en": "Logical. With `true` (default) each result must be a scalar; with `false` results are stored in cells.",
+     "pt": "Lógico. Com `true` (padrão) cada resultado deve ser escalar; com `false` os resultados são guardados em células."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Array with the size of `C` (uniform output) or a cell array of that size.",
+     "pt": "Array com o tamanho de `C` (saída uniforme) ou cell array desse tamanho."
+    }
+   ],
+   "description": {
+    "en": "`cellfun` is the cell array counterpart of a loop over `C{k}`. With uniform output the scalars are joined into a numeric, logical or char array; if one result is not a scalar, or the classes differ, an error says to set `'UniformOutput'` to false.\n\nIt is typically used with an anonymous function, as in `cellfun(@(s) numel(s), names)` to get the length of each name.",
+    "pt": "`cellfun` é o equivalente, para cell arrays, de um laço sobre `C{k}`. Com saída uniforme os escalares são reunidos num array numérico, lógico ou char; se algum resultado não for escalar, ocorre um erro orientando a definir `'UniformOutput'` como false.\n\nÉ usado tipicamente com função anônima, como em `cellfun(@(s) numel(s), nomes)` para obter o comprimento de cada nome."
+   },
+   "notes": {
+    "en": "The `'ErrorHandler'` option is not applied in MatLivre: an error inside `func` stops `cellfun`.",
+    "pt": "A opção `'ErrorHandler'` não é aplicada no MatLivre: um erro dentro de `func` interrompe o `cellfun`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Counting and transforming",
+      "pt": "Contando e transformando"
+     },
+     "code": "names = {'ab','c',''};\ncellfun(@numel, names)\ncellfun(@(x) upper(x), {'a','b'}, 'UniformOutput', false)\n[mx, ix] = cellfun(@max, {[1 5 2], [7 3]})"
+    }
+   ],
+   "see": [
+    "arrayfun",
+    "cell2mat",
+    "structfun",
+    "cell",
+    "isempty"
+   ]
+  },
+  "cellstr": {
+   "summary": {
+    "en": "Converts text to a cell array of character vectors.",
+    "pt": "Converte texto em um cell array de vetores de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "c = cellstr(A)",
+     "en": "Converts a char matrix, string array or categorical array.",
+     "pt": "Converte uma matriz char, array de strings ou array categorical."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Char array, string array, categorical array, or a cell array of text.",
+     "pt": "Array char, array de strings, array categorical ou cell array de texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Cell array of character vectors. A char matrix gives one cell per row, with trailing blanks removed.",
+     "pt": "Cell array de vetores de caracteres. Uma matriz char gera uma célula por linha, sem os espaços finais."
+    }
+   ],
+   "description": {
+    "en": "Many functions that accept a list of names expect a cell array of character vectors, and `cellstr` is the standard way to produce one. For a char matrix the padding blanks that make the rows equal in length are dropped, which makes it the inverse of `char` for lists of words.\n\nA single string becomes a 1-by-1 cell. An empty char `''` becomes a cell holding an empty char.",
+    "pt": "Muitas funções que recebem uma lista de nomes esperam um cell array de vetores de caracteres, e `cellstr` é a forma padrão de produzi-lo. Em uma matriz char, os espaços de preenchimento que igualam o comprimento das linhas são removidos, o que torna `cellstr` a inversa de `char` para listas de palavras.\n\nUma única string vira um cell 1 por 1. Um char vazio `''` vira um cell com um char vazio."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rows of a char matrix",
+      "pt": "Linhas de uma matriz char"
+     },
+     "code": "cellstr(['ab ';'cde'])\ncellstr([\"a\" \"bc\"])"
+    }
+   ],
+   "see": [
+    "char",
+    "string",
+    "iscellstr",
+    "categorical",
+    "strtrim"
+   ]
+  },
+  "char": {
+   "summary": {
+    "en": "Converts numbers to characters, or text of several kinds to a char array.",
+    "pt": "Converte números em caracteres, ou texto de vários tipos em um array char."
+   },
+   "syntax": [
+    {
+     "code": "c = char(n)",
+     "en": "Converts character codes to characters.",
+     "pt": "Converte códigos de caracteres em caracteres."
+    },
+    {
+     "code": "c = char(C)",
+     "en": "Converts a cell array of text to a padded char matrix, one row per cell.",
+     "pt": "Converte um cell array de texto em uma matriz char preenchida, uma linha por célula."
+    },
+    {
+     "code": "c = char(S)",
+     "en": "Converts a string array to a char array.",
+     "pt": "Converte um array de strings em um array char."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Numeric array of character codes (nonnegative integers).",
+     "pt": "Array numérico de códigos de caracteres (inteiros não negativos)."
+    },
+    {
+     "name": "C",
+     "en": "Cell array of character vectors or strings.",
+     "pt": "Cell array de vetores de caracteres ou strings."
+    },
+    {
+     "name": "S",
+     "en": "String array.",
+     "pt": "Array de strings."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Char array. Shorter rows are padded with blanks to the length of the longest.",
+     "pt": "Array char. Linhas mais curtas são preenchidas com espaços até o comprimento da maior."
+    }
+   ],
+   "description": {
+    "en": "For numeric input `char(65)` is `'A'` and `char(65:70)` is `'ABCDEF'`; the inverse is `double('A')`. Codes above 255 give Unicode characters.\n\nFor several pieces of text, `char` builds a rectangular matrix by padding each row with blanks on the right, so `char({'a','bcd'})` is a 2-by-3 matrix. This matrix can be turned back into a cell array of words with `cellstr`.",
+    "pt": "Para entrada numérica, `char(65)` é `'A'` e `char(65:70)` é `'ABCDEF'`; a inversa é `double('A')`. Códigos acima de 255 geram caracteres Unicode.\n\nPara vários trechos de texto, `char` monta uma matriz retangular preenchendo cada linha com espaços à direita, de modo que `char({'a','bcd'})` é uma matriz 2 por 3. Essa matriz pode voltar a ser um cell array de palavras com `cellstr`."
+   },
+   "notes": {
+    "en": "Passing several separate text arguments, as in `char('a','bcd')`, returns only the first one; put the pieces in a cell array instead.",
+    "pt": "Passar vários argumentos de texto separados, como em `char('a','bcd')`, retorna só o primeiro; coloque os trechos em um cell array."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Codes and words",
+      "pt": "Códigos e palavras"
+     },
+     "code": "char(72:76)\nchar({'a','bcd'})\ndouble('A')"
+    }
+   ],
+   "see": [
+    "double",
+    "cellstr",
+    "string",
+    "blanks",
+    "strcat"
+   ]
+  },
+  "characterListPattern": {
+   "summary": {
+    "en": "Pattern that matches any single character from a list.",
+    "pt": "Padrão que casa qualquer caractere isolado de uma lista."
+   },
+   "syntax": [
+    {
+     "code": "pat = characterListPattern(chars)",
+     "en": "Matches one character found in `chars`.",
+     "pt": "Casa um caractere presente em `chars`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "chars",
+     "en": "Text whose characters form the list.",
+     "pt": "Texto cujos caracteres formam a lista."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object matching one character.",
+     "pt": "Um objeto `pattern` que casa um caractere."
+    }
+   ],
+   "description": {
+    "en": "It plays the role of a bracket expression `[...]` in regular expressions, but without special symbols: every character in `chars` is taken literally, including `-` and `^`. Combine it with `asManyOfPattern` to match runs of such characters.",
+    "pt": "Faz o papel de uma expressão entre colchetes `[...]` em expressões regulares, mas sem símbolos especiais: todo caractere de `chars` é tomado literalmente, inclusive `-` e `^`. Combine com `asManyOfPattern` para casar sequências desses caracteres."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Separators in text",
+      "pt": "Separadores em um texto"
+     },
+     "code": "extract('a-b_c', characterListPattern('-_'))\nextract('a1b2', characterListPattern('0123456789'))"
+    }
+   ],
+   "see": [
+    "digitsPattern",
+    "lettersPattern",
+    "asManyOfPattern",
+    "extract",
+    "pattern"
+   ]
+  },
+  "class": {
+   "summary": {
+    "en": "Name of the class of a value.",
+    "pt": "Nome da classe de um valor."
+   },
+   "syntax": [
+    {
+     "code": "c = class(obj)",
+     "en": "Returns the class name as a character vector.",
+     "pt": "Retorna o nome da classe como vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Character vector such as `'double'`, `'char'`, `'cell'`, `'struct'` or `'function_handle'`.",
+     "pt": "Vetor de caracteres como `'double'`, `'char'`, `'cell'`, `'struct'` ou `'function_handle'`."
+    }
+   ],
+   "description": {
+    "en": "`class` identifies the data type used to store the value, regardless of its size. Literals like `1` are `double`, `'a'` is `char`, `\"a\"` is `string`, and `true` is `logical`. Objects such as tables and datetimes return their own class names.\n\nUse `isa(x, 'numeric')` to test against a group of classes, and `cast` to convert.",
+    "pt": "`class` identifica o tipo de dado usado para armazenar o valor, independentemente do tamanho. Literais como `1` são `double`, `'a'` é `char`, `\"a\"` é `string` e `true` é `logical`. Objetos como tabelas e datetimes retornam seus próprios nomes de classe.\n\nUse `isa(x, 'numeric')` para testar um grupo de classes e `cast` para converter."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Classes of common values",
+      "pt": "Classes de valores comuns"
+     },
+     "code": "class(1:3)\nclass('a')\nclass(\"a\")\nclass(@sin)\nclass(int8(1))\nclass({})"
+    }
+   ],
+   "see": [
+    "isa",
+    "cast",
+    "isnumeric",
+    "ischar",
+    "whos"
+   ]
+  },
+  "clock": {
+   "summary": {
+    "en": "Current date and time as a six-element vector.",
+    "pt": "Data e hora atuais como vetor de seis elementos."
+   },
+   "syntax": [
+    {
+     "code": "c = clock",
+     "en": "Returns `[year month day hour minute seconds]`.",
+     "pt": "Retorna `[ano mês dia hora minuto segundos]`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "1-by-6 double vector. The seconds element has a fractional part.",
+     "pt": "Vetor double 1 por 6. O elemento dos segundos tem parte fracionária."
+    }
+   ],
+   "description": {
+    "en": "The first five elements are whole numbers in the local time zone and the sixth holds the seconds with fractions. The vector can be passed to `datenum` or `etime`. The newer `datetime('now')` is recommended in new code.\n\nBecause the value depends on when it runs, the result is not reproducible; take only the parts you need, such as the year.",
+    "pt": "Os cinco primeiros elementos são inteiros no fuso horário local e o sexto guarda os segundos com fração. O vetor pode ser passado a `datenum` ou `etime`. Em código novo recomenda-se o `datetime('now')`.\n\nComo o valor depende do momento da execução, o resultado não é reproduzível; use apenas as partes necessárias, como o ano."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Shape of the result",
+      "pt": "Forma do resultado"
+     },
+     "code": "c = clock;\nsize(c)\nc(1) >= 2024"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datenum",
+    "datevec",
+    "tic",
+    "date"
+   ]
+  },
+  "compose": {
+   "summary": {
+    "en": "Formats values into text using a format with placeholders.",
+    "pt": "Formata valores em texto usando um formato com marcadores."
+   },
+   "syntax": [
+    {
+     "code": "str = compose(formatSpec)",
+     "en": "Processes escape sequences and returns a string.",
+     "pt": "Processa sequências de escape e retorna uma string."
+    },
+    {
+     "code": "str = compose(formatSpec, A1, ..., An)",
+     "en": "Inserts the values using the format.",
+     "pt": "Insere os valores usando o formato."
+    },
+    {
+     "code": "str = compose(formatSpec, A)",
+     "en": "With a single array `A` and one placeholder, returns one string per element.",
+     "pt": "Com um único array `A` e um marcador, retorna uma string por elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "formatSpec",
+     "en": "Text with operators such as `%d`, `%f`, `%s`, as in `sprintf`. May be a string array.",
+     "pt": "Texto com operadores como `%d`, `%f`, `%s`, como em `sprintf`. Pode ser array de strings."
+    },
+    {
+     "name": "A1, ..., An",
+     "en": "Values to insert.",
+     "pt": "Valores a inserir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "str",
+     "en": "String array.",
+     "pt": "Array de strings."
+    }
+   ],
+   "description": {
+    "en": "`compose` is a vectorized `sprintf`: it formats once per element instead of concatenating everything into one line. `compose('%.2f', [1.234; 5.6789])` returns a column of two strings.\n\nThe result is a string array, not a char vector, so it can be combined with `+` and used with the string functions.",
+    "pt": "`compose` é um `sprintf` vetorizado: formata uma vez por elemento em vez de concatenar tudo em uma única linha. `compose('%.2f', [1.234; 5.6789])` retorna uma coluna com duas strings.\n\nO resultado é um array de strings, não um vetor char, e portanto pode ser combinado com `+` e usado com as funções de string."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One string per element",
+      "pt": "Uma string por elemento"
+     },
+     "code": "compose('x=%d', [1 2])\ncompose('%.2f', [1.234; 5.6789])\ncompose(\"Value %d of %s\", 3, \"x\")"
+    }
+   ],
+   "see": [
+    "sprintf",
+    "string",
+    "strcat",
+    "num2str",
+    "fprintf"
+   ]
+  },
+  "configureDictionary": {
+   "summary": {
+    "en": "Creates an empty dictionary with fixed key and value types.",
+    "pt": "Cria um dicionário vazio com tipos fixos de chave e valor."
+   },
+   "syntax": [
+    {
+     "code": "d = configureDictionary(keyType, valueType)",
+     "en": "Returns an empty `dictionary` whose keys and values must be of the given classes.",
+     "pt": "Retorna um `dictionary` vazio cujas chaves e valores devem ser das classes indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "keyType",
+     "en": "Class name of the keys, for example `'string'` or `'double'`.",
+     "pt": "Nome da classe das chaves, por exemplo `'string'` ou `'double'`."
+    },
+    {
+     "name": "valueType",
+     "en": "Class name of the values, for example `'double'`, `'string'` or `'cell'`.",
+     "pt": "Nome da classe dos valores, por exemplo `'double'`, `'string'` ou `'cell'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Empty dictionary configured for those types.",
+     "pt": "Dicionário vazio configurado para esses tipos."
+    }
+   ],
+   "description": {
+    "en": "A dictionary created with no arguments has unset types and takes them from the first entry. `configureDictionary` fixes them in advance, so that an empty dictionary can be created in a function and filled later with `d(key) = value`, and a later entry of the wrong type is rejected.",
+    "pt": "Um dicionário criado sem argumentos tem tipos indefinidos e os assume a partir da primeira entrada. `configureDictionary` os fixa de antemão, de modo que um dicionário vazio pode ser criado em uma função e preenchido depois com `d(chave) = valor`, e uma entrada posterior de tipo errado é rejeitada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Typed empty dictionary",
+      "pt": "Dicionário vazio tipado"
+     },
+     "code": "d = configureDictionary('string', 'double');\nd(\"a\") = 1;\nd(\"b\") = 2;\nd"
+    }
+   ],
+   "see": [
+    "dictionary",
+    "containers.Map",
+    "isKey",
+    "keys",
+    "values"
+   ]
+  },
+  "containers.Map": {
+   "summary": {
+    "en": "Map object that stores values under keys of text or numbers.",
+    "pt": "Objeto de mapeamento que guarda valores associados a chaves de texto ou número."
+   },
+   "syntax": [
+    {
+     "code": "M = containers.Map()",
+     "en": "Creates an empty map with character keys and any values.",
+     "pt": "Cria um mapa vazio com chaves de caracteres e valores quaisquer."
+    },
+    {
+     "code": "M = containers.Map(keys, values)",
+     "en": "Creates a map from a cell array of keys and matching values.",
+     "pt": "Cria um mapa a partir de um cell array de chaves e valores correspondentes."
+    },
+    {
+     "code": "M = containers.Map('KeyType', kt, 'ValueType', vt)",
+     "en": "Creates an empty map with the given key and value types.",
+     "pt": "Cria um mapa vazio com os tipos de chave e valor dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "keys",
+     "en": "Cell array of keys (all text or all numeric), or one key.",
+     "pt": "Cell array de chaves (todas texto ou todas numéricas), ou uma chave."
+    },
+    {
+     "name": "values",
+     "en": "Cell array or numeric array of values, same count as keys.",
+     "pt": "Cell array ou array numérico de valores, na mesma quantidade das chaves."
+    },
+    {
+     "name": "'KeyType'",
+     "en": "`'char'` (default), `'double'`, `'single'`, `'int32'`, `'uint32'`, and so on.",
+     "pt": "`'char'` (padrão), `'double'`, `'single'`, `'int32'`, `'uint32'` etc."
+    },
+    {
+     "name": "'ValueType'",
+     "en": "`'any'` (default), `'double'`, `'char'`, `'logical'`, and so on.",
+     "pt": "`'any'` (padrão), `'double'`, `'char'`, `'logical'` etc."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "A handle to the map object.",
+     "pt": "Um handle para o objeto de mapeamento."
+    }
+   ],
+   "description": {
+    "en": "A map is a handle object: assigning it to another variable does not copy it. Read with `M(key)` and write with `M(key) = value`; reading a missing key is an error. `isKey(M, key)`, `keys(M)`, `values(M)`, `remove(M, key)` and the property `M.Count` manage the contents.\n\nKeys are always kept in sorted order, so `keys(M)` is alphabetical for text keys.",
+    "pt": "Um mapa é um objeto handle: atribuí-lo a outra variável não o copia. Leia com `M(chave)` e escreva com `M(chave) = valor`; ler uma chave inexistente é erro. `isKey(M, chave)`, `keys(M)`, `values(M)`, `remove(M, chave)` e a propriedade `M.Count` gerenciam o conteúdo.\n\nAs chaves ficam sempre em ordem, então `keys(M)` é alfabético para chaves de texto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create, read and query",
+      "pt": "Criar, ler e consultar"
+     },
+     "code": "m = containers.Map({'a','b'}, [10 20]);\nm('c') = 30;\nm('b')\nisKey(m, 'z')\nm.keys\nm.Count"
+    }
+   ],
+   "see": [
+    "dictionary",
+    "isKey",
+    "keys",
+    "values",
+    "struct"
+   ]
+  },
+  "contains": {
+   "summary": {
+    "en": "Tests whether text contains a given piece of text or pattern.",
+    "pt": "Testa se um texto contém um dado trecho ou padrão."
+   },
+   "syntax": [
+    {
+     "code": "tf = contains(str, pat)",
+     "en": "True where `str` contains `pat`.",
+     "pt": "Verdadeiro onde `str` contém `pat`."
+    },
+    {
+     "code": "tf = contains(str, pat, 'IgnoreCase', true)",
+     "en": "Ignores letter case.",
+     "pt": "Ignora maiúsculas e minúsculas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Character vector, string array or cell array of character vectors.",
+     "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "pat",
+     "en": "Text, a list of text (true if any matches), or a `pattern` object.",
+     "pt": "Texto, uma lista de textos (verdadeiro se qualquer um casar) ou um objeto `pattern`."
+    },
+    {
+     "name": "'IgnoreCase'",
+     "en": "Logical, default `false`.",
+     "pt": "Lógico, padrão `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array with the size of `str`.",
+     "pt": "Array lógico com o tamanho de `str`."
+    }
+   ],
+   "description": {
+    "en": "The search is by plain text, not by regular expression. When `pat` is a list, an element of `str` counts as a match if it contains any item of the list. For a single char vector the result is a scalar.\n\nUse `startsWith` and `endsWith` for the ends of the text, `count` to know how many times it occurs, and `regexp` for regular expressions.",
+    "pt": "A busca é por texto simples, não por expressão regular. Quando `pat` é uma lista, um elemento de `str` conta como casamento se contiver qualquer item da lista. Para um único vetor de caracteres o resultado é escalar.\n\nUse `startsWith` e `endsWith` para as pontas do texto, `count` para saber quantas vezes ocorre e `regexp` para expressões regulares."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strings, lists and case",
+      "pt": "Strings, listas e caixa"
+     },
+     "code": "contains(\"hello\", 'ell')\ncontains({'apple','berry'}, 'AP', 'IgnoreCase', true)\ncontains(\"abc\", [\"x\" \"c\"])"
+    }
+   ],
+   "see": [
+    "startsWith",
+    "endsWith",
+    "strfind",
+    "count",
+    "regexp"
+   ]
+  },
+  "containsrange": {
+   "summary": {
+    "en": "Tests whether a timetable spans a given time range.",
+    "pt": "Testa se um timetable abrange um dado intervalo de tempo."
+   },
+   "syntax": [
+    {
+     "code": "tf = containsrange(TT, timeRange)",
+     "en": "True if the row times of `TT` cover the whole of `timeRange`.",
+     "pt": "Verdadeiro se os horários das linhas de `TT` cobrem todo o intervalo `timeRange`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "timetable.",
+     "pt": "timetable."
+    },
+    {
+     "name": "timeRange",
+     "en": "A `timerange` object, or a two-element datetime or duration vector.",
+     "pt": "Um objeto `timerange`, ou um vetor de dois elementos datetime ou duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test compares the first and last row times of the timetable with the ends of the range. It is true when the earliest time is not after the start of the range and the latest time is not before its end. It does not need a row to fall exactly at either end.\n\nRelated tests are `withinrange`, true if the whole timetable lies inside the range, and `overlapsrange`, true if they share any time.",
+    "pt": "O teste compara o primeiro e o último horário de linha do timetable com as pontas do intervalo. É verdadeiro quando o menor horário não é posterior ao início do intervalo e o maior não é anterior ao fim. Não é preciso que uma linha caia exatamente numa das pontas.\n\nTestes relacionados são `withinrange`, verdadeiro se todo o timetable está dentro do intervalo, e `overlapsrange`, verdadeiro se há algum tempo em comum."
+   },
+   "notes": {
+    "en": "MatLivre implements only the timetable form; other kinds of input raise an error.",
+    "pt": "O MatLivre implementa apenas a forma para timetable; outros tipos de entrada geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Covering a range",
+      "pt": "Cobrindo um intervalo"
+     },
+     "code": "TT = timetable(seconds([1;2;4]), [1;2;3]);\ncontainsrange(TT, timerange(seconds(1), seconds(3)))\ncontainsrange(TT, timerange(seconds(0), seconds(3)))"
+    }
+   ],
+   "see": [
+    "withinrange",
+    "overlapsrange",
+    "timerange",
+    "timetable"
+   ]
+  },
+  "convertCharsToStrings": {
+   "summary": {
+    "en": "Converts character vectors to strings, leaving other values alone.",
+    "pt": "Converte vetores de caracteres em strings, deixando os demais valores intactos."
+   },
+   "syntax": [
+    {
+     "code": "B = convertCharsToStrings(A)",
+     "en": "Returns `A` with character vectors replaced by strings.",
+     "pt": "Retorna `A` com vetores de caracteres substituídos por strings."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "A char vector, or a cell array of char vectors.",
+     "pt": "Um vetor de caracteres, ou um cell array de vetores de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "A string scalar, or a string array of the same size as the cell array.",
+     "pt": "Uma string escalar, ou um array de strings do mesmo tamanho do cell array."
+    }
+   ],
+   "description": {
+    "en": "The function exists to make code accept both kinds of text. A char vector becomes a 1-by-1 string, and a cell array of char vectors becomes a string array. Values that are already strings or are not text are returned unchanged.\n\nThe opposite conversion is `convertStringsToChars`.",
+    "pt": "A função existe para que um código aceite os dois tipos de texto. Um vetor de caracteres vira uma string 1 por 1, e um cell array de vetores de caracteres vira um array de strings. Valores que já são strings ou que não são texto são devolvidos sem alteração.\n\nA conversão oposta é `convertStringsToChars`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Chars to strings",
+      "pt": "Chars para strings"
+     },
+     "code": "convertCharsToStrings('abc')\nconvertCharsToStrings({'a','b'})"
+    }
+   ],
+   "see": [
+    "convertStringsToChars",
+    "convertContainedStringsToChars",
+    "string",
+    "cellstr"
+   ]
+  },
+  "convertContainedStringsToChars": {
+   "summary": {
+    "en": "Converts strings found inside cell arrays to character vectors.",
+    "pt": "Converte em vetores de caracteres as strings encontradas dentro de cell arrays."
+   },
+   "syntax": [
+    {
+     "code": "B = convertContainedStringsToChars(A)",
+     "en": "Returns `A` with every string, at any depth of cell nesting, replaced by a char vector.",
+     "pt": "Retorna `A` com toda string, em qualquer nível de aninhamento de células, substituída por um vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "A value, usually a cell array that may hold strings.",
+     "pt": "Um valor, geralmente um cell array que pode conter strings."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Value with the same structure as `A` but no strings.",
+     "pt": "Valor com a mesma estrutura de `A`, sem strings."
+    }
+   ],
+   "description": {
+    "en": "This is the recursive form of `convertStringsToChars`: where that function looks at the top level, this one also converts strings inside nested cell arrays. It is useful for cleaning inputs before passing them to code that expects char vectors.",
+    "pt": "É a forma recursiva de `convertStringsToChars`: enquanto aquela olha só o nível superior, esta também converte strings dentro de cell arrays aninhados. É útil para limpar entradas antes de passá-las a código que espera vetores de caracteres."
+   },
+   "notes": {
+    "en": "MatLivre converts only the strings at the top level of the cell array; strings inside nested cell arrays or structs are left unchanged.",
+    "pt": "O MatLivre converte apenas as strings do nível superior do cell array; strings dentro de cell arrays aninhados ou de structs permanecem inalteradas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strings in a cell array",
+      "pt": "Strings em um cell array"
+     },
+     "code": "B = convertContainedStringsToChars({\"a\", \"bc\", 3});\nclass(B{1})\nclass(B{3})\nB"
+    }
+   ],
+   "see": [
+    "convertStringsToChars",
+    "convertCharsToStrings",
+    "cellstr",
+    "char"
+   ]
+  },
+  "convertStringsToChars": {
+   "summary": {
+    "en": "Converts strings to character vectors, leaving other values alone.",
+    "pt": "Converte strings em vetores de caracteres, deixando os demais valores intactos."
+   },
+   "syntax": [
+    {
+     "code": "B = convertStringsToChars(A)",
+     "en": "Returns `A` with strings replaced by character vectors.",
+     "pt": "Retorna `A` com strings substituídas por vetores de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "A string scalar, a string array, or a cell array that may contain strings.",
+     "pt": "Uma string escalar, um array de strings ou um cell array que pode conter strings."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "A char vector for a string scalar, a cell array of char vectors for a string array.",
+     "pt": "Um vetor de caracteres para uma string escalar, um cell array de vetores de caracteres para um array de strings."
+    }
+   ],
+   "description": {
+    "en": "A string scalar becomes a char vector. A string array with several elements becomes a cell array of char vectors with the same size. In a cell array, each string at the top level is converted, while other contents are left as they are.\n\nThe function lets a routine written for char vectors accept strings as well.",
+    "pt": "Uma string escalar vira um vetor de caracteres. Um array de strings com vários elementos vira um cell array de vetores de caracteres do mesmo tamanho. Em um cell array, cada string do nível superior é convertida e o restante fica como está.\n\nA função permite que uma rotina escrita para vetores de caracteres aceite também strings."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strings to chars",
+      "pt": "Strings para chars"
+     },
+     "code": "convertStringsToChars(\"abc\")\nconvertStringsToChars([\"a\" \"bc\"])"
+    }
+   ],
+   "see": [
+    "convertCharsToStrings",
+    "convertContainedStringsToChars",
+    "char",
+    "cellstr"
+   ]
+  },
+  "convertTo": {
+   "summary": {
+    "en": "Converts datetime values to a numeric date representation.",
+    "pt": "Converte valores datetime em uma representação numérica de data."
+   },
+   "syntax": [
+    {
+     "code": "d = convertTo(t, type)",
+     "en": "Converts the datetime array `t` to the numeric format `type`.",
+     "pt": "Converte o array datetime `t` para o formato numérico `type`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    },
+    {
+     "name": "type",
+     "en": "Text: `'datenum'`, `'posixtime'`, `'excel'`, `'juliandate'`, `'yyyymmdd'`, and others.",
+     "pt": "Texto: `'datenum'`, `'posixtime'`, `'excel'`, `'juliandate'`, `'yyyymmdd'` e outros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Numeric array with the size of `t`.",
+     "pt": "Array numérico com o tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "Each format counts time from its own origin: `'datenum'` from year 0, `'posixtime'` in seconds since 1970-01-01, `'excel'` in days since 1900, and `'yyyymmdd'` packs year, month and day into one integer such as `20200101`. The inverse is `datetime(d, 'ConvertFrom', type)`.",
+    "pt": "Cada formato conta o tempo a partir de sua própria origem: `'datenum'` a partir do ano 0, `'posixtime'` em segundos desde 1970-01-01, `'excel'` em dias desde 1900 e `'yyyymmdd'` reúne ano, mês e dia em um inteiro como `20200101`. A inversa é `datetime(d, 'ConvertFrom', tipo)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Several numeric formats",
+      "pt": "Vários formatos numéricos"
+     },
+     "code": "t = datetime(2020,1,1);\nconvertTo(t, 'datenum')\nconvertTo(t, 'excel')\nconvertTo(t, 'yyyymmdd')"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datenum",
+    "posixtime",
+    "datestr"
+   ]
+  },
+  "convertvars": {
+   "summary": {
+    "en": "Changes the data type of selected table variables.",
+    "pt": "Muda o tipo de dado de variáveis selecionadas de uma tabela."
+   },
+   "syntax": [
+    {
+     "code": "T2 = convertvars(T, vars, dataType)",
+     "en": "Converts the chosen variables of table `T` to `dataType`.",
+     "pt": "Converte as variáveis escolhidas da tabela `T` para `dataType`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "table or timetable.",
+     "pt": "table ou timetable."
+    },
+    {
+     "name": "vars",
+     "en": "Variable name, cell array of names, string array, or numeric index.",
+     "pt": "Nome de variável, cell array de nomes, array de strings ou índice numérico."
+    },
+    {
+     "name": "dataType",
+     "en": "Class name such as `'string'`, `'categorical'`, `'single'`, `'int8'`.",
+     "pt": "Nome de classe como `'string'`, `'categorical'`, `'single'`, `'int8'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T2",
+     "en": "Table with the same shape, with the chosen variables converted.",
+     "pt": "Tabela com a mesma forma, com as variáveis escolhidas convertidas."
+    }
+   ],
+   "description": {
+    "en": "The conversion applies the function with the name of `dataType` to each selected variable, for example `string(T.Name)` or `categorical(T.Group)`, then puts the result back into the table. Unselected variables are not touched.",
+    "pt": "A conversão aplica a cada variável selecionada a função de mesmo nome que `dataType`, por exemplo `string(T.Nome)` ou `categorical(T.Grupo)`, e coloca o resultado de volta na tabela. As variáveis não selecionadas não são alteradas."
+   },
+   "notes": {
+    "en": "Selecting variables with a function handle, such as `@isnumeric`, is not supported in MatLivre; name the variables instead.",
+    "pt": "Selecionar variáveis com um function handle, como `@isnumeric`, não é suportado no MatLivre; indique as variáveis pelo nome."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers to strings",
+      "pt": "Números para strings"
+     },
+     "code": "T = table([1;2], [3;4]);\nT2 = convertvars(T, 'Var1', 'string')\nclass(T2.Var2)"
+    }
+   ],
+   "see": [
+    "table",
+    "varfun",
+    "string",
+    "categorical",
+    "cast"
+   ]
+  },
+  "count": {
+   "summary": {
+    "en": "Counts how many times a piece of text or pattern occurs.",
+    "pt": "Conta quantas vezes um trecho de texto ou padrão ocorre."
+   },
+   "syntax": [
+    {
+     "code": "n = count(str, pat)",
+     "en": "Number of non-overlapping occurrences of `pat` in `str`.",
+     "pt": "Número de ocorrências de `pat` em `str`, sem sobreposição."
+    },
+    {
+     "code": "n = count(str, pat, 'IgnoreCase', true)",
+     "en": "Ignores letter case.",
+     "pt": "Ignora maiúsculas e minúsculas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Character vector, string array or cell array of character vectors.",
+     "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "pat",
+     "en": "Text or `pattern` object.",
+     "pt": "Texto ou objeto `pattern`."
+    },
+    {
+     "name": "'IgnoreCase'",
+     "en": "Logical, default `false`.",
+     "pt": "Lógico, padrão `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Array with the size of `str`; each element is a count.",
+     "pt": "Array com o tamanho de `str`; cada elemento é uma contagem."
+    }
+   ],
+   "description": {
+    "en": "Matching scans left to right and each match consumes its characters, so `count('aaa', 'aa')` is `1`, not `2`. A search in empty text gives 0. Compare with `contains`, which only tells whether there is at least one occurrence.",
+    "pt": "A busca percorre da esquerda para a direita e cada ocorrência consome seus caracteres, então `count('aaa', 'aa')` é `1`, e não `2`. Uma busca em texto vazio dá 0. Compare com `contains`, que só informa se há ao menos uma ocorrência."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Occurrences",
+      "pt": "Ocorrências"
+     },
+     "code": "count('banana', 'an')\ncount([\"banana\" \"ab\"], 'a')\ncount('Banana', 'a', 'IgnoreCase', true)"
+    }
+   ],
+   "see": [
+    "contains",
+    "strfind",
+    "startsWith",
+    "regexp"
+   ]
+  },
+  "countcats": {
+   "summary": {
+    "en": "Number of elements in each category of a categorical array.",
+    "pt": "Número de elementos em cada categoria de um array categorical."
+   },
+   "syntax": [
+    {
+     "code": "N = countcats(C)",
+     "en": "Counts elements per category, along the first non-singleton dimension.",
+     "pt": "Conta elementos por categoria, ao longo da primeira dimensão não singleton."
+    },
+    {
+     "code": "N = countcats(C, dim)",
+     "en": "Counts along dimension `dim`.",
+     "pt": "Conta ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "categorical array.",
+     "pt": "Array categorical."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to count along.",
+     "pt": "Dimensão ao longo da qual contar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "N",
+     "en": "Counts in category order. For a vector, one number per category.",
+     "pt": "Contagens na ordem das categorias. Para um vetor, um número por categoria."
+    }
+   ],
+   "description": {
+    "en": "Categories with no elements are reported with 0. Undefined elements are not counted. The order of `N` follows `categories(C)`, so the two outputs can be displayed side by side.",
+    "pt": "Categorias sem elementos aparecem com 0. Elementos indefinidos não são contados. A ordem de `N` segue `categories(C)`, então as duas saídas podem ser exibidas lado a lado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Counting labels",
+      "pt": "Contando rótulos"
+     },
+     "code": "c = categorical({'a','b','a','c'});\ncategories(c)'\ncountcats(c)"
+    }
+   ],
+   "see": [
+    "categories",
+    "categorical",
+    "summary",
+    "histcounts"
+   ]
+  },
+  "date": {
+   "summary": {
+    "en": "Today's date as text.",
+    "pt": "Data de hoje como texto."
+   },
+   "syntax": [
+    {
+     "code": "d = date",
+     "en": "Returns the current date in the form `dd-mmm-yyyy`.",
+     "pt": "Retorna a data atual na forma `dd-mmm-yyyy`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Char vector of length 11, such as `'06-Nov-2026'`.",
+     "pt": "Vetor de caracteres de 11 posições, como `'06-Nov-2026'`."
+    }
+   ],
+   "description": {
+    "en": "`date` is shorthand for `datestr(now, 1)`. The result is text, so it cannot be used directly for date arithmetic; use `datetime('today')` for that. The value changes each day, so examples should not print it.",
+    "pt": "`date` é abreviação de `datestr(now, 1)`. O resultado é texto, portanto não pode ser usado direto em aritmética de datas; para isso use `datetime('today')`. O valor muda a cada dia, então exemplos não devem imprimi-lo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Format of the result",
+      "pt": "Formato do resultado"
+     },
+     "code": "d = date;\nclass(d)\nlength(d)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datestr",
+    "clock",
+    "now"
+   ]
+  },
+  "datenum": {
+   "summary": {
+    "en": "Serial date number: days counted from a fixed origin.",
+    "pt": "Número serial de data: dias contados a partir de uma origem fixa."
+   },
+   "syntax": [
+    {
+     "code": "n = datenum(y, m, d)",
+     "en": "Date number for year, month and day.",
+     "pt": "Número de data para ano, mês e dia."
+    },
+    {
+     "code": "n = datenum(y, m, d, h, mi, s)",
+     "en": "Adds the time of day as a fraction.",
+     "pt": "Acrescenta o horário como fração do dia."
+    },
+    {
+     "code": "n = datenum(V)",
+     "en": "From a date vector `[y m d h mi s]`.",
+     "pt": "A partir de um vetor de data `[y m d h mi s]`."
+    },
+    {
+     "code": "n = datenum(str, format)",
+     "en": "From text parsed with a format such as `'yyyy-mm-dd'`.",
+     "pt": "A partir de texto interpretado com um formato como `'yyyy-mm-dd'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y, m, d",
+     "en": "Year, month, day (out-of-range months and days roll over).",
+     "pt": "Ano, mês, dia (meses e dias fora do intervalo são normalizados)."
+    },
+    {
+     "name": "str",
+     "en": "Date text.",
+     "pt": "Texto de data."
+    },
+    {
+     "name": "format",
+     "en": "Pattern describing `str`.",
+     "pt": "Padrão que descreve `str`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Double. The integer part is the day count, the fraction is the time of day.",
+     "pt": "Double. A parte inteira é a contagem de dias, a fração é o horário."
+    }
+   ],
+   "description": {
+    "en": "January 1 of year 0 is date number 1, so `datenum(2020,1,1)` is `737791`. Because it is a plain number, differences between date numbers are lengths in days, and they can be sorted or plotted directly.\n\nNew code usually prefers `datetime`, which is clearer; `datenum` remains common for compatibility, and `datenum(t)` also accepts a datetime.",
+    "pt": "O dia 1 de janeiro do ano 0 é o número de data 1, então `datenum(2020,1,1)` vale `737791`. Por ser um número simples, diferenças entre números de data são intervalos em dias, e podem ser ordenadas ou plotadas diretamente.\n\nCódigo novo geralmente prefere `datetime`, mais claro; `datenum` continua comum por compatibilidade, e `datenum(t)` também aceita um datetime."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "From parts and from text",
+      "pt": "A partir de partes e de texto"
+     },
+     "code": "datenum(2020,1,1)\ndatenum(2020,3,1) - datenum(2020,2,1)\ndatenum('2020-01-02', 'yyyy-mm-dd')"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datestr",
+    "datevec",
+    "now",
+    "calendar"
+   ]
+  },
+  "dateshift": {
+   "summary": {
+    "en": "Moves datetime values to the start or end of a time unit.",
+    "pt": "Move valores datetime para o início ou o fim de uma unidade de tempo."
+   },
+   "syntax": [
+    {
+     "code": "t2 = dateshift(t, 'start', unit)",
+     "en": "Start of the unit that contains each element.",
+     "pt": "Início da unidade que contém cada elemento."
+    },
+    {
+     "code": "t2 = dateshift(t, 'end', unit)",
+     "en": "End of that unit.",
+     "pt": "Fim dessa unidade."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    },
+    {
+     "name": "unit",
+     "en": "`'year'`, `'month'`, `'week'` or `'day'`.",
+     "pt": "`'year'`, `'month'`, `'week'` ou `'day'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t2",
+     "en": "datetime array with the size of `t`.",
+     "pt": "Array datetime com o tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`dateshift(t,'start','month')` gives midnight on the first day of the month. The end of a unit is the last instant before the next one begins, which displays as the last date of the unit. A week starts on Sunday.\n\nThis is the standard way to group dates by month or year, for example before a `groupsummary`.",
+    "pt": "`dateshift(t,'start','month')` dá a meia-noite do primeiro dia do mês. O fim de uma unidade é o último instante antes de a seguinte começar, e é exibido como a última data da unidade. A semana começa no domingo.\n\nÉ a forma usual de agrupar datas por mês ou ano, por exemplo antes de um `groupsummary`."
+   },
+   "notes": {
+    "en": "The `'dayofweek'` form (moving to the next Monday, for example) may return the input date unchanged in MatLivre.",
+    "pt": "A forma `'dayofweek'` (ir para a próxima segunda-feira, por exemplo) pode devolver a data de entrada sem alteração no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Month and year boundaries",
+      "pt": "Limites de mês e ano"
+     },
+     "code": "t = datetime(2020,5,17,13,30,0);\ndateshift(t, 'start', 'month')\ndateshift(t, 'end', 'month')\ndateshift(t, 'start', 'year')"
+    }
+   ],
+   "see": [
+    "datetime",
+    "month",
+    "calmonths",
+    "eomday",
+    "groupsummary"
+   ]
+  },
+  "datestr": {
+   "summary": {
+    "en": "Date and time as formatted text.",
+    "pt": "Data e hora como texto formatado."
+   },
+   "syntax": [
+    {
+     "code": "s = datestr(D)",
+     "en": "Formats date numbers or datetimes with a default format.",
+     "pt": "Formata números de data ou datetimes com um formato padrão."
+    },
+    {
+     "code": "s = datestr(D, format)",
+     "en": "Uses a format name, number or pattern such as `'yyyy-mm-dd HH:MM'`.",
+     "pt": "Usa um nome, número ou padrão de formato como `'yyyy-mm-dd HH:MM'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "D",
+     "en": "Date number from `datenum`, date vector, datetime, or date text.",
+     "pt": "Número de data de `datenum`, vetor de data, datetime ou texto de data."
+    },
+    {
+     "name": "format",
+     "en": "Format number (0 to 31) or pattern with `yyyy`, `mm`, `mmm`, `dd`, `HH`, `MM`, `SS`.",
+     "pt": "Número de formato (0 a 31) ou padrão com `yyyy`, `mm`, `mmm`, `dd`, `HH`, `MM`, `SS`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Char array, one row per date.",
+     "pt": "Array char, uma linha por data."
+    }
+   ],
+   "description": {
+    "en": "When the date has a nonzero time of day, the default format is `'dd-mmm-yyyy HH:MM:SS'`; when the time is exactly midnight it is `'dd-mmm-yyyy'`. In a pattern, `mm` means month and `MM` minutes, so case matters.\n\nNew code usually calls `char(t)` or `string(t)` on a datetime, or sets its `Format` property.",
+    "pt": "Quando a data tem horário diferente de zero, o formato padrão é `'dd-mmm-yyyy HH:MM:SS'`; quando é exatamente meia-noite, é `'dd-mmm-yyyy'`. Em um padrão, `mm` significa mês e `MM` minutos, então a caixa importa.\n\nCódigo novo geralmente usa `char(t)` ou `string(t)` em um datetime, ou ajusta sua propriedade `Format`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Default and custom formats",
+      "pt": "Formatos padrão e personalizados"
+     },
+     "code": "n = datenum(2020,1,2,3,4,5);\ndatestr(n)\ndatestr(n, 'yyyy-mm-dd HH:MM')\ndatestr(n, 29)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datenum",
+    "datevec",
+    "char",
+    "string"
+   ]
+  },
+  "datetime": {
+   "summary": {
+    "en": "Array of points in time with calendar and clock fields.",
+    "pt": "Array de instantes no tempo com campos de calendário e relógio."
+   },
+   "syntax": [
+    {
+     "code": "t = datetime(y, m, d)",
+     "en": "Dates from year, month, day.",
+     "pt": "Datas a partir de ano, mês e dia."
+    },
+    {
+     "code": "t = datetime(y, m, d, h, mi, s)",
+     "en": "Adds hour, minute and second.",
+     "pt": "Acrescenta hora, minuto e segundo."
+    },
+    {
+     "code": "t = datetime(str)",
+     "en": "Parses text such as `'2020-03-04'`.",
+     "pt": "Interpreta texto como `'2020-03-04'`."
+    },
+    {
+     "code": "t = datetime(str, 'InputFormat', f)",
+     "en": "Parses text with an explicit format.",
+     "pt": "Interpreta texto com um formato explícito."
+    },
+    {
+     "code": "t = datetime(x, 'ConvertFrom', type)",
+     "en": "Converts from `'datenum'`, `'posixtime'`, `'excel'` and others.",
+     "pt": "Converte de `'datenum'`, `'posixtime'`, `'excel'` e outros."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y, m, d, h, mi, s",
+     "en": "Numeric arrays of the same size, or scalars.",
+     "pt": "Arrays numéricos do mesmo tamanho, ou escalares."
+    },
+    {
+     "name": "'InputFormat'",
+     "en": "Pattern describing the text, such as `'dd/MM/yyyy'`.",
+     "pt": "Padrão que descreve o texto, como `'dd/MM/yyyy'`."
+    },
+    {
+     "name": "'Format'",
+     "en": "Display format.",
+     "pt": "Formato de exibição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "description": {
+    "en": "A datetime holds a time stamp and can be added to durations (`t + hours(5)`), subtracted from another datetime to get a `duration`, compared with `<` and `==`, and queried with fields such as `t.Year`, `t.Month`, `t.Day`. Out-of-range values roll over, so month 13 means January of the next year.\n\nIn a pattern for text, `MM` means month and `mm` minutes, the opposite of `datestr`.",
+    "pt": "Um datetime guarda um instante e pode ser somado a durações (`t + hours(5)`), subtraído de outro datetime para obter uma `duration`, comparado com `<` e `==` e consultado por campos como `t.Year`, `t.Month`, `t.Day`. Valores fora do intervalo são normalizados, então o mês 13 significa janeiro do ano seguinte.\n\nEm um padrão para texto, `MM` significa mês e `mm` minutos, o contrário de `datestr`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build, shift and query",
+      "pt": "Criar, deslocar e consultar"
+     },
+     "code": "t = datetime(2020,3,4,5,6,7)\nt + hours(20)\nt.Month\ndatetime('2020-03-04')\ndatetime(2020,1,2,'Format','yyyy/MM/dd')"
+    }
+   ],
+   "see": [
+    "duration",
+    "datenum",
+    "datestr",
+    "dateshift",
+    "between",
+    "calendarDuration"
+   ]
+  },
+  "datevec": {
+   "summary": {
+    "en": "Splits dates into year, month, day, hour, minute and second.",
+    "pt": "Separa datas em ano, mês, dia, hora, minuto e segundo."
+   },
+   "syntax": [
+    {
+     "code": "V = datevec(D)",
+     "en": "Returns a matrix with one date vector per row.",
+     "pt": "Retorna uma matriz com um vetor de data por linha."
+    },
+    {
+     "code": "[y, m, d, h, mi, s] = datevec(D)",
+     "en": "Returns each component separately.",
+     "pt": "Retorna cada componente separadamente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "D",
+     "en": "Date number, date text or datetime.",
+     "pt": "Número de data, texto de data ou datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "V",
+     "en": "`N`-by-6 matrix `[y m d h mi s]`.",
+     "pt": "Matriz `N` por 6 `[y m d h mi s]`."
+    },
+    {
+     "name": "y, m, d, ...",
+     "en": "Column vectors with each component.",
+     "pt": "Vetores coluna com cada componente."
+    }
+   ],
+   "description": {
+    "en": "`datevec` is the inverse of `datenum` for values in range. The seconds column holds the fractional part of the minute. Text input is recognized in common layouts such as `'2020-03-04 05:06:07'` or `'03/04/2020'`.",
+    "pt": "`datevec` é a inversa de `datenum` para valores dentro do intervalo. A coluna dos segundos guarda a parte fracionária do minuto. A entrada em texto é reconhecida em formatos comuns como `'2020-03-04 05:06:07'` ou `'03/04/2020'`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "From text and number",
+      "pt": "A partir de texto e número"
+     },
+     "code": "datevec('2020-03-04 05:06:07')\n[y, m, d] = datevec(738000)"
+    }
+   ],
+   "see": [
+    "datenum",
+    "datetime",
+    "datestr",
+    "clock"
+   ]
+  }
+ }
+}

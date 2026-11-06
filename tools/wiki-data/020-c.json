@@ -1,0 +1,502 @@
+{
+  "functions": {
+    "ode23": {
+      "summary": {"en": "Low-order Runge-Kutta solver for nonstiff differential equations.", "pt": "Solver de Runge-Kutta de baixa ordem para equações diferenciais não rígidas."},
+      "syntax": [
+        {"code": "[t, y] = ode23(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)` over `tspan` from `y0`.", "pt": "Integra `y' = odefun(t, y)` em `tspan` a partir de `y0`."},
+        {"code": "[t, y] = ode23(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."},
+        {"code": "sol = ode23(___)", "en": "Returns a structure for use with `deval`.", "pt": "Retorna uma estrutura para uso com `deval`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)` returning a column vector.", "pt": "Handle `dydt = odefun(t, y)` que retorna um vetor coluna."},
+        {"name": "tspan", "en": "`[t0 tf]`, or a longer vector of times at which to report the solution.", "pt": "`[t0 tf]`, ou um vetor mais longo de instantes em que reportar a solução."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."},
+        {"name": "options", "en": "Structure from `odeset`.", "pt": "Estrutura de `odeset`."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Column vector of time points.", "pt": "Vetor coluna de instantes."},
+        {"name": "y", "en": "Array with one row per time and one column per component.", "pt": "Array com uma linha por instante e uma coluna por componente."}
+      ],
+      "description": {
+        "en": "`ode23` pairs a second-order and a third-order Runge-Kutta formula to estimate the error and adapt the step. It is cheaper per step than `ode45` but needs more steps for a given accuracy, so it is the better choice for crude tolerances or for mildly stiff problems.\n\nWhen `tspan` has only two entries, the solver returns the points it chose; with more entries, it returns the solution at exactly those times.",
+        "pt": "`ode23` combina uma fórmula de Runge-Kutta de segunda e outra de terceira ordem para estimar o erro e adaptar o passo. É mais barato por passo que `ode45`, mas precisa de mais passos para uma dada precisão, sendo a melhor escolha para tolerâncias grosseiras ou problemas levemente rígidos.\n\nQuando `tspan` tem apenas duas entradas, o solver retorna os pontos que escolheu; com mais entradas, retorna a solução exatamente nesses instantes."
+      },
+      "examples": [
+        {"title": {"en": "Exponential decay", "pt": "Decaimento exponencial"}, "code": "[t, y] = ode23(@(t, y) -y, [0 1], 1);\nfprintf('%.4f %.4f\\n', y(end), exp(-1))"}
+      ],
+      "see": ["ode45", "ode113", "ode23s", "odeset", "deval"]
+    },
+    "ode23s": {
+      "summary": {"en": "One-step solver for stiff differential equations, based on a modified Rosenbrock formula.", "pt": "Solver de passo único para equações diferenciais rígidas, baseado em uma fórmula de Rosenbrock modificada."},
+      "syntax": [
+        {"code": "[t, y] = ode23s(odefun, tspan, y0)", "en": "Integrates the stiff system `y' = odefun(t, y)`.", "pt": "Integra o sistema rígido `y' = odefun(t, y)`."},
+        {"code": "[t, y] = ode23s(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`; supplying `'Jacobian'` improves speed.", "pt": "Aplica também opções de `odeset`; fornecer `'Jacobian'` melhora a velocidade."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)`.", "pt": "Handle `dydt = odefun(t, y)`."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "As a one-step method it needs no history, so it restarts cleanly after a discontinuity and can be more efficient than `ode15s` at crude tolerances. It forms and factors the Jacobian at each step, so for large systems giving a sparse Jacobian matters.\n\nUse it when `ode45` takes very small steps although the solution looks smooth.",
+        "pt": "Por ser um método de passo único, não precisa de histórico, recomeça bem depois de uma descontinuidade e pode ser mais eficiente que `ode15s` em tolerâncias grosseiras. Monta e fatora o Jacobiano a cada passo, então em sistemas grandes importa fornecer um Jacobiano esparso.\n\nUse-o quando `ode45` dá passos minúsculos embora a solução pareça suave."
+      },
+      "examples": [
+        {"title": {"en": "Stiff decay", "pt": "Decaimento rígido"}, "code": "f = @(t, y) -100*(y - cos(t));\n[t, y] = ode23s(f, [0 1], 0);\nfprintf('%.3f\\n', y(end))"}
+      ],
+      "see": ["ode15s", "ode23t", "ode23tb", "ode45", "odeset"]
+    },
+    "ode23t": {
+      "summary": {"en": "Trapezoidal-rule solver for moderately stiff equations and differential-algebraic systems.", "pt": "Solver de regra do trapézio para equações moderadamente rígidas e sistemas algébrico-diferenciais."},
+      "syntax": [
+        {"code": "[t, y] = ode23t(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)`.", "pt": "Integra `y' = odefun(t, y)`."},
+        {"code": "[t, y] = ode23t(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`, including a `'Mass'` matrix.", "pt": "Aplica também opções de `odeset`, incluindo uma matriz `'Mass'`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)`.", "pt": "Handle `dydt = odefun(t, y)`."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "The implicit trapezoidal rule, with a free interpolant, does not damp oscillations, which makes `ode23t` the stiff solver to prefer when the solution is oscillatory and you want to keep its amplitude. It accepts a singular mass matrix, so it also solves index-1 differential-algebraic equations.\n\nFor strong damping of stiff transients, `ode15s` or `ode23tb` are better.",
+        "pt": "A regra do trapézio implícita, com um interpolante livre, não amortece oscilações, o que faz de `ode23t` o solver rígido preferido quando a solução é oscilatória e se quer preservar sua amplitude. Aceita matriz de massa singular, então também resolve equações algébrico-diferenciais de índice 1.\n\nPara amortecer fortemente transientes rígidos, `ode15s` ou `ode23tb` são melhores."
+      },
+      "examples": [
+        {"title": {"en": "Decay toward a cosine", "pt": "Decaimento rumo a um cosseno"}, "code": "f = @(t, y) -50*(y - cos(t));\n[t, y] = ode23t(f, [0 1], 0);\nfprintf('%.3f\\n', y(end))"}
+      ],
+      "see": ["ode15s", "ode23tb", "ode23s", "odeset"]
+    },
+    "ode23tb": {
+      "summary": {"en": "TR-BDF2 solver for stiff differential equations at crude tolerances.", "pt": "Solver TR-BDF2 para equações diferenciais rígidas em tolerâncias grosseiras."},
+      "syntax": [
+        {"code": "[t, y] = ode23tb(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)`.", "pt": "Integra `y' = odefun(t, y)`."},
+        {"code": "[t, y] = ode23tb(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)`.", "pt": "Handle `dydt = odefun(t, y)`."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "Each step combines a trapezoidal-rule stage with a second-order backward differentiation stage, using the same iteration matrix for both. The method is implicit and L-stable, so it damps stiff components well.\n\nLike `ode23s`, it can beat `ode15s` when the tolerances are loose.",
+        "pt": "Cada passo combina um estágio de regra do trapézio com um estágio de diferenciação para trás de segunda ordem, usando a mesma matriz de iteração para ambos. O método é implícito e L-estável, e portanto amortece bem as componentes rígidas.\n\nComo `ode23s`, pode superar `ode15s` quando as tolerâncias são folgadas."
+      },
+      "examples": [
+        {"title": {"en": "Stiff decay", "pt": "Decaimento rígido"}, "code": "f = @(t, y) -100*(y - cos(t));\n[t, y] = ode23tb(f, [0 1], 0);\nfprintf('%.3f\\n', y(end))"}
+      ],
+      "see": ["ode15s", "ode23t", "ode23s", "odeset"]
+    },
+    "ode45": {
+      "summary": {"en": "Default Runge-Kutta solver for nonstiff ordinary differential equations.", "pt": "Solver de Runge-Kutta padrão para equações diferenciais ordinárias não rígidas."},
+      "syntax": [
+        {"code": "[t, y] = ode45(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)` over `tspan` from `y0`.", "pt": "Integra `y' = odefun(t, y)` em `tspan` a partir de `y0`."},
+        {"code": "[t, y] = ode45(odefun, tspan, y0, options)", "en": "Also applies options from `odeset` (tolerances, events, output functions).", "pt": "Aplica também opções de `odeset` (tolerâncias, eventos, funções de saída)."},
+        {"code": "sol = ode45(___)", "en": "Returns a structure for use with `deval`.", "pt": "Retorna uma estrutura para uso com `deval`."},
+        {"code": "[t, y, te, ye, ie] = ode45(___)", "en": "Also returns event times, states and indices when an event function is set.", "pt": "Retorna também instantes, estados e índices de eventos quando uma função de eventos está definida."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)` returning a column vector the size of `y`.", "pt": "Handle `dydt = odefun(t, y)` que retorna um vetor coluna do tamanho de `y`."},
+        {"name": "tspan", "en": "`[t0 tf]`, or a vector of increasing (or decreasing) times to report.", "pt": "`[t0 tf]`, ou um vetor de instantes crescentes (ou decrescentes) a reportar."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."},
+        {"name": "options", "en": "Structure from `odeset`. Default tolerances are `RelTol = 1e-3` and `AbsTol = 1e-6`.", "pt": "Estrutura de `odeset`. As tolerâncias padrão são `RelTol = 1e-3` e `AbsTol = 1e-6`."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Column vector of time points.", "pt": "Vetor coluna de instantes."},
+        {"name": "y", "en": "Array with one row per time and one column per component.", "pt": "Array com uma linha por instante e uma coluna por componente."}
+      ],
+      "description": {
+        "en": "`ode45` uses the Dormand-Prince pair of fourth- and fifth-order formulas: the difference between the two estimates controls the step size. It is a good first attempt for most problems, as long as they are not stiff.\n\nHigher-order equations are written as first-order systems: for `x'' = -x`, use `y = [x; x']` and `odefun = @(t,y) [y(2); -y(1)]`. If the integration needs huge numbers of tiny steps, the problem is probably stiff and `ode15s` is the right tool.",
+        "pt": "`ode45` usa o par de fórmulas de Dormand-Prince de quarta e quinta ordem: a diferença entre as duas estimativas controla o tamanho do passo. É uma boa primeira tentativa para a maioria dos problemas, desde que não sejam rígidos.\n\nEquações de ordem superior se escrevem como sistemas de primeira ordem: para `x'' = -x`, use `y = [x; x']` e `odefun = @(t,y) [y(2); -y(1)]`. Se a integração precisa de um número enorme de passos minúsculos, o problema provavelmente é rígido e `ode15s` é a ferramenta certa."
+      },
+      "examples": [
+        {"title": {"en": "Harmonic oscillator", "pt": "Oscilador harmônico"}, "code": "[t, y] = ode45(@(t, y) [y(2); -y(1)], [0 pi/2], [0; 1]);\nfprintf('%.3f %.3f\\n', y(end, 1), y(end, 2))"}
+      ],
+      "see": ["ode23", "ode113", "ode15s", "odeset", "deval"]
+    },
+    "ode78": {
+      "summary": {"en": "Seventh- and eighth-order Runge-Kutta solver for nonstiff equations with tight tolerances.", "pt": "Solver de Runge-Kutta de sétima e oitava ordem para equações não rígidas com tolerâncias apertadas."},
+      "syntax": [
+        {"code": "[t, y] = ode78(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)`.", "pt": "Integra `y' = odefun(t, y)`."},
+        {"code": "[t, y] = ode78(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)`.", "pt": "Handle `dydt = odefun(t, y)`."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "High-order Runge-Kutta formulas take large steps on smooth solutions and are efficient when the tolerances are strict, for example `RelTol` near `1e-10`, as in orbit computations. The cost per step is higher than for `ode45`, so for crude tolerances `ode45` can be faster.\n\nIt is for nonstiff problems only.",
+        "pt": "Fórmulas de Runge-Kutta de alta ordem dão passos grandes em soluções suaves e são eficientes quando as tolerâncias são rigorosas, por exemplo `RelTol` perto de `1e-10`, como em cálculos de órbitas. O custo por passo é maior que o de `ode45`, então, para tolerâncias grosseiras, `ode45` pode ser mais rápido.\n\nServe só para problemas não rígidos."
+      },
+      "examples": [
+        {"title": {"en": "Strict tolerance", "pt": "Tolerância rigorosa"}, "code": "opts = odeset('RelTol', 1e-10, 'AbsTol', 1e-12);\n[t, y] = ode78(@(t, y) -y, [0 1], 1, opts);\nfprintf('%.8f %.8f\\n', y(end), exp(-1))"}
+      ],
+      "see": ["ode89", "ode45", "ode113", "odeset"]
+    },
+    "ode89": {
+      "summary": {"en": "Eighth- and ninth-order Runge-Kutta solver for nonstiff equations with very tight tolerances.", "pt": "Solver de Runge-Kutta de oitava e nona ordem para equações não rígidas com tolerâncias muito apertadas."},
+      "syntax": [
+        {"code": "[t, y] = ode89(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)`.", "pt": "Integra `y' = odefun(t, y)`."},
+        {"code": "[t, y] = ode89(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)`.", "pt": "Handle `dydt = odefun(t, y)`."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "`ode89` is the highest-order explicit solver of the family. It pays off for very smooth solutions integrated over long spans at strict tolerances, where it reaches a given accuracy with the fewest function evaluations.\n\nLike all explicit methods, it takes very small steps on stiff problems; use `ode15s` there.",
+        "pt": "`ode89` é o solver explícito de maior ordem da família. Compensa em soluções muito suaves integradas por longos intervalos com tolerâncias rigorosas, em que atinge uma dada precisão com o menor número de avaliações da função.\n\nComo todo método explícito, dá passos minúsculos em problemas rígidos; use `ode15s` nesses casos."
+      },
+      "examples": [
+        {"title": {"en": "Strict tolerance", "pt": "Tolerância rigorosa"}, "code": "opts = odeset('RelTol', 1e-12, 'AbsTol', 1e-14);\n[t, y] = ode89(@(t, y) -y, [0 1], 1, opts);\nfprintf('%.10f %.10f\\n', y(end), exp(-1))"}
+      ],
+      "see": ["ode78", "ode45", "ode113", "odeset"]
+    },
+    "odeget": {
+      "summary": {"en": "Reads a named option from an ODE options structure.", "pt": "Lê uma opção nomeada de uma estrutura de opções de EDO."},
+      "syntax": [
+        {"code": "val = odeget(options, 'name')", "en": "Returns the value of the option, or `[]` if it is not set.", "pt": "Retorna o valor da opção, ou `[]` se não estiver definida."},
+        {"code": "val = odeget(options, 'name', default)", "en": "Returns `default` when the option is empty.", "pt": "Retorna `default` quando a opção está vazia."}
+      ],
+      "inputs": [
+        {"name": "options", "en": "Structure created by `odeset`.", "pt": "Estrutura criada por `odeset`."},
+        {"name": "'name'", "en": "Option name, such as `'RelTol'`.", "pt": "Nome da opção, como `'RelTol'`."},
+        {"name": "default", "en": "Value to return if the option is empty.", "pt": "Valor a retornar se a opção está vazia."}
+      ],
+      "outputs": [
+        {"name": "val", "en": "The option value.", "pt": "O valor da opção."}
+      ],
+      "description": {
+        "en": "The solvers call `odeget` to read each setting, substituting their own defaults for empty fields. It is useful in functions that receive an options structure from the caller and must fall back on a sensible value.",
+        "pt": "Os solvers chamam `odeget` para ler cada configuração, substituindo por seus padrões os campos vazios. É útil em funções que recebem uma estrutura de opções do chamador e precisam recorrer a um valor razoável."
+      },
+      "examples": [
+        {"title": {"en": "Reading with a default", "pt": "Lendo com um padrão"}, "code": "opts = odeset('RelTol', 1e-8);\nodeget(opts, 'RelTol')\nodeget(opts, 'AbsTol', 1e-10)"}
+      ],
+      "see": ["odeset", "bvpget", "ddeget", "ode45"]
+    },
+    "odeset": {
+      "summary": {"en": "Creates or updates the options structure used by the ODE solvers.", "pt": "Cria ou atualiza a estrutura de opções usada pelos solvers de EDO."},
+      "syntax": [
+        {"code": "options = odeset('name1', value1, 'name2', value2, ...)", "en": "Returns a structure with the given options set.", "pt": "Retorna uma estrutura com as opções indicadas definidas."},
+        {"code": "options = odeset(oldopts, 'name', value)", "en": "Copies `oldopts` and changes the listed options.", "pt": "Copia `oldopts` e altera as opções listadas."},
+        {"code": "options = odeset(oldopts, newopts)", "en": "Merges two structures; non-empty fields of `newopts` win.", "pt": "Combina duas estruturas; os campos não vazios de `newopts` prevalecem."}
+      ],
+      "inputs": [
+        {"name": "'RelTol', 'AbsTol'", "en": "Relative and absolute error tolerances. Defaults `1e-3` and `1e-6`.", "pt": "Tolerâncias de erro relativa e absoluta. Padrões `1e-3` e `1e-6`."},
+        {"name": "'MaxStep', 'InitialStep'", "en": "Bound for the step size and the size of the first step.", "pt": "Limite para o tamanho do passo e tamanho do primeiro passo."},
+        {"name": "'Events'", "en": "Handle `[value, isterminal, direction] = f(t, y)` to detect zero crossings.", "pt": "Handle `[value, isterminal, direction] = f(t, y)` para detectar cruzamentos por zero."},
+        {"name": "'Mass', 'Jacobian'", "en": "Mass matrix and Jacobian for the stiff solvers.", "pt": "Matriz de massa e Jacobiano para os solvers rígidos."},
+        {"name": "'NonNegative'", "en": "Indices of components that must stay nonnegative.", "pt": "Índices de componentes que devem permanecer não negativas."}
+      ],
+      "outputs": [
+        {"name": "options", "en": "Structure to pass as the fourth argument of an ODE solver.", "pt": "Estrutura para passar como quarto argumento de um solver de EDO."}
+      ],
+      "description": {
+        "en": "Names are matched without regard to case and may be abbreviated when unambiguous. Options you leave out stay empty, and the solver substitutes its default.\n\nAn event function lets the integration stop, for example when a ball reaches the ground, and the event time is returned by the solver.",
+        "pt": "Os nomes são comparados sem distinção entre maiúsculas e minúsculas e podem ser abreviados quando não ambíguos. As opções omitidas ficam vazias, e o solver usa seu padrão.\n\nUma função de eventos permite parar a integração, por exemplo quando uma bola chega ao chão, e o instante do evento é retornado pelo solver."
+      },
+      "examples": [
+        {"title": {"en": "Tolerances and a step limit", "pt": "Tolerâncias e limite de passo"}, "code": "opts = odeset('RelTol', 1e-8, 'AbsTol', 1e-10, 'MaxStep', 0.1);\n[t, y] = ode45(@(t, y) -y, [0 1], 1, opts);\nfprintf('%.7f\\n', y(end))"}
+      ],
+      "see": ["odeget", "ode45", "ode15s", "bvpset", "ddeset"]
+    },
+    "odextend": {
+      "summary": {"en": "Extends the solution of an ODE initial value problem to a later time.", "pt": "Estende a solução de um problema de valor inicial de EDO para um instante posterior."},
+      "syntax": [
+        {"code": "solext = odextend(sol, odefun, tfinal)", "en": "Continues the integration of `sol` up to `tfinal`.", "pt": "Continua a integração de `sol` até `tfinal`."},
+        {"code": "solext = odextend(sol, odefun, tfinal, yinit)", "en": "Restarts from the new initial value `yinit` at the end of `sol`.", "pt": "Reinicia a partir do novo valor inicial `yinit` no fim de `sol`."},
+        {"code": "solext = odextend(sol, odefun, tfinal, yinit, options)", "en": "Also changes the integration options.", "pt": "Altera também as opções de integração."}
+      ],
+      "inputs": [
+        {"name": "sol", "en": "Structure returned by an ODE solver called with one output.", "pt": "Estrutura retornada por um solver de EDO chamado com uma saída."},
+        {"name": "odefun", "en": "Function to integrate in the extension, or `[]` to reuse the original.", "pt": "Função a integrar na extensão, ou `[]` para reutilizar a original."},
+        {"name": "tfinal", "en": "New final time, beyond the end of `sol`.", "pt": "Novo instante final, além do fim de `sol`."},
+        {"name": "yinit", "en": "Optional new initial value.", "pt": "Novo valor inicial opcional."}
+      ],
+      "outputs": [
+        {"name": "solext", "en": "Solution structure covering the original and the extended interval, usable with `deval`.", "pt": "Estrutura de solução que cobre o intervalo original e o estendido, utilizável com `deval`."}
+      ],
+      "description": {
+        "en": "When you find out later that the integration interval was too short, or you want to change the equation or restart with a jump in the state, `odextend` continues without redoing the work already done. The result is a single structure for the full interval.",
+        "pt": "Quando se descobre depois que o intervalo de integração foi curto demais, ou se quer mudar a equação ou reiniciar com um salto no estado, `odextend` continua sem refazer o trabalho já feito. O resultado é uma única estrutura para o intervalo completo."
+      },
+      "examples": [
+        {"title": {"en": "Extending from t = 1 to t = 2", "pt": "Estendendo de t = 1 até t = 2"}, "code": "f = @(t, y) -y;\nsol = ode45(f, [0 1], 1);\nsolext = odextend(sol, [], 2);\nsolext.x(end)\ny = deval(solext, 1.5);\nfprintf('%.4f %.4f\\n', y, exp(-1.5))"}
+      ],
+      "see": ["ode45", "deval", "odeset", "bvpxtend"]
+    },
+    "pdepe": {
+      "summary": {"en": "Solves one-dimensional parabolic and elliptic partial differential equations.", "pt": "Resolve equações diferenciais parciais parabólicas e elípticas em uma dimensão."},
+      "syntax": [
+        {"code": "sol = pdepe(m, pdefun, icfun, bcfun, xmesh, tspan)", "en": "Solves the PDE system on the mesh `xmesh` at the times `tspan`.", "pt": "Resolve o sistema de EDPs na malha `xmesh` nos instantes `tspan`."},
+        {"code": "sol = pdepe(m, pdefun, icfun, bcfun, xmesh, tspan, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Symmetry: `0` slab, `1` cylindrical, `2` spherical.", "pt": "Simetria: `0` placa, `1` cilíndrica, `2` esférica."},
+        {"name": "pdefun", "en": "Handle `[c, f, s] = pdefun(x, t, u, dudx)` defining `c*u_t = x^(-m) * (x^m * f)_x + s`.", "pt": "Handle `[c, f, s] = pdefun(x, t, u, dudx)` que define `c*u_t = x^(-m) * (x^m * f)_x + s`."},
+        {"name": "icfun", "en": "Handle `u0 = icfun(x)` for the initial condition.", "pt": "Handle `u0 = icfun(x)` para a condição inicial."},
+        {"name": "bcfun", "en": "Handle `[pl, ql, pr, qr] = bcfun(xl, ul, xr, ur, t)` for the conditions `p + q*f = 0` at both ends.", "pt": "Handle `[pl, ql, pr, qr] = bcfun(xl, ul, xr, ur, t)` para as condições `p + q*f = 0` nas duas extremidades."},
+        {"name": "xmesh, tspan", "en": "Vectors of spatial points and output times, each with at least 3 and 2 entries respectively.", "pt": "Vetores de pontos espaciais e instantes de saída, com pelo menos 3 e 2 entradas respectivamente."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Array of size `numel(tspan)`-by-`numel(xmesh)`-by-`npde`: `sol(i,j,k)` is component `k` at time `tspan(i)` and point `xmesh(j)`.", "pt": "Array de tamanho `numel(tspan)`-por-`numel(xmesh)`-por-`npde`: `sol(i,j,k)` é a componente `k` no instante `tspan(i)` e no ponto `xmesh(j)`."}
+      ],
+      "description": {
+        "en": "The spatial derivatives are discretized on `xmesh` and the resulting system of ODEs is advanced in time. The heat equation `u_t = u_xx` corresponds to `c = 1`, `f = dudx` and `s = 0`.\n\nUse `pdeval` to evaluate the solution between mesh points. Choose the mesh fine enough in regions where the solution changes quickly.",
+        "pt": "As derivadas espaciais são discretizadas em `xmesh` e o sistema de EDOs resultante é avançado no tempo. A equação do calor `u_t = u_xx` corresponde a `c = 1`, `f = dudx` e `s = 0`.\n\nUse `pdeval` para avaliar a solução entre pontos da malha. Escolha a malha fina o bastante onde a solução muda rápido."
+      },
+      "examples": [
+        {"title": {"en": "Heat equation with fixed ends", "pt": "Equação do calor com extremidades fixas"}, "code": "m = 0;\npdefun = @(x, t, u, dudx) deal(1, dudx, 0);\nicfun = @(x) sin(pi*x);\nbcfun = @(xl, ul, xr, ur, t) deal(ul, 0, ur, 0);\nx = linspace(0, 1, 11);\nt = linspace(0, 0.1, 5);\nsol = pdepe(m, pdefun, icfun, bcfun, x, t);\nfprintf('%.3f %.3f\\n', sol(end, 6, 1), exp(-pi^2*0.1))"}
+      ],
+      "see": ["pdeval", "ode15s", "odeset", "bvp4c"]
+    },
+    "pdeval": {
+      "summary": {"en": "Evaluates a pdepe solution and its derivative at chosen points.", "pt": "Avalia uma solução de pdepe e sua derivada em pontos escolhidos."},
+      "syntax": [
+        {"code": "[uout, duoutdx] = pdeval(m, xmesh, ue, xout)", "en": "Interpolates the solution `ue` (one time slice) at the points `xout`.", "pt": "Interpola a solução `ue` (uma fatia no tempo) nos pontos `xout`."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Symmetry, as given to `pdepe`.", "pt": "Simetria, como dada a `pdepe`."},
+        {"name": "xmesh", "en": "The mesh used with `pdepe`.", "pt": "A malha usada com `pdepe`."},
+        {"name": "ue", "en": "Row of the solution at a fixed time, for example `sol(end, :, 1)`.", "pt": "Linha da solução em um instante fixo, por exemplo `sol(end, :, 1)`."},
+        {"name": "xout", "en": "Points at which to evaluate, inside the mesh range.", "pt": "Pontos em que avaliar, dentro da faixa da malha."}
+      ],
+      "outputs": [
+        {"name": "uout", "en": "Interpolated solution values.", "pt": "Valores interpolados da solução."},
+        {"name": "duoutdx", "en": "Interpolated spatial derivative.", "pt": "Derivada espacial interpolada."}
+      ],
+      "description": {
+        "en": "`pdepe` returns values only at the mesh points. `pdeval` interpolates with the same discretization the solver uses, so the derivative it returns is consistent with the flux used in the equation.\n\nTo see the solution over time, call it once for each row of `sol`.",
+        "pt": "`pdepe` retorna valores apenas nos pontos da malha. `pdeval` interpola com a mesma discretização que o solver usa, de modo que a derivada devolvida é consistente com o fluxo usado na equação.\n\nPara ver a solução ao longo do tempo, chame-a uma vez para cada linha de `sol`."
+      },
+      "examples": [
+        {"title": {"en": "Value between mesh points", "pt": "Valor entre pontos da malha"}, "code": "m = 0;\nx = linspace(0, 1, 11);\nt = linspace(0, 0.1, 5);\nsol = pdepe(m, @(x, t, u, dudx) deal(1, dudx, 0), @(x) sin(pi*x), @(xl, ul, xr, ur, t) deal(ul, 0, ur, 0), x, t);\nu = pdeval(m, x, sol(end, :, 1), 0.55);\nfprintf('%.3f\\n', u)"}
+      ],
+      "see": ["pdepe", "interp1", "deval"]
+    },
+    "quad": {
+      "summary": {"en": "Numerical integral by adaptive Simpson quadrature (older interface).", "pt": "Integral numérica por quadratura adaptativa de Simpson (interface antiga)."},
+      "syntax": [
+        {"code": "q = quad(fun, a, b)", "en": "Integrates `fun` from `a` to `b`.", "pt": "Integra `fun` de `a` a `b`."},
+        {"code": "q = quad(fun, a, b, tol)", "en": "Uses the absolute tolerance `tol`.", "pt": "Usa a tolerância absoluta `tol`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle that accepts a vector `x` and returns a vector.", "pt": "Handle que aceita um vetor `x` e retorna um vetor."},
+        {"name": "a, b", "en": "Finite limits.", "pt": "Limites finitos."},
+        {"name": "tol", "en": "Absolute tolerance. Default `1e-6`.", "pt": "Tolerância absoluta. Padrão `1e-6`."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "`quad` bisects the interval recursively and applies Simpson's rule until the estimated error is below the tolerance. It is kept for old code; `integral` is more accurate and more general (it accepts infinite limits and options).\n\nWrite the integrand with element-wise operators.",
+        "pt": "`quad` bisseciona o intervalo recursivamente e aplica a regra de Simpson até que o erro estimado fique abaixo da tolerância. É mantida para código antigo; `integral` é mais precisa e geral (aceita limites infinitos e opções).\n\nEscreva o integrando com operadores elemento a elemento."
+      },
+      "examples": [
+        {"title": {"en": "Integral of x^2 from 0 to 1", "pt": "Integral de x^2 de 0 a 1"}, "code": "quad(@(x) x.^2, 0, 1)"}
+      ],
+      "see": ["integral", "quadl", "quadgk", "trapz"]
+    },
+    "quad2d": {
+      "summary": {"en": "Numerical double integral using tiled adaptive Gauss-Kronrod quadrature.", "pt": "Integral dupla numérica por quadratura adaptativa de Gauss-Kronrod em ladrilhos."},
+      "syntax": [
+        {"code": "q = quad2d(fun, xmin, xmax, ymin, ymax)", "en": "Integrates `fun(x, y)` over a region; the `y` limits may be function handles of `x`.", "pt": "Integra `fun(x, y)` sobre uma região; os limites de `y` podem ser handles de função de `x`."},
+        {"code": "q = quad2d(___, Name, Value)", "en": "Sets options such as `'AbsTol'` and `'RelTol'`.", "pt": "Define opções como `'AbsTol'` e `'RelTol'`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle `z = fun(x, y)` accepting arrays of the same size.", "pt": "Handle `z = fun(x, y)` que aceita arrays de mesmo tamanho."},
+        {"name": "xmin ... ymax", "en": "Limits of the region.", "pt": "Limites da região."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "The region is split into subregions, and each is integrated with a Gauss-Kronrod rule; the subregions with the largest error are split again. This performs well for smooth integrands and for regions with curved boundaries.\n\nFor most work, `integral2` is the recommended interface; `quad2d` remains for compatibility and for integrands with singularities at the boundary.",
+        "pt": "A região é dividida em sub-regiões, cada uma integrada por uma regra de Gauss-Kronrod; as de maior erro são divididas de novo. Funciona bem para integrandos suaves e para regiões com fronteiras curvas.\n\nPara a maior parte do trabalho, `integral2` é a interface recomendada; `quad2d` permanece por compatibilidade e para integrandos com singularidades na fronteira."
+      },
+      "examples": [
+        {"title": {"en": "Integral of x*y on the unit square", "pt": "Integral de x*y no quadrado unitário"}, "code": "quad2d(@(x, y) x.*y, 0, 1, 0, 1)"}
+      ],
+      "see": ["integral2", "dblquad", "integral3"]
+    },
+    "quadgk": {
+      "summary": {"en": "Adaptive Gauss-Kronrod quadrature, including infinite limits and singular endpoints.", "pt": "Quadratura adaptativa de Gauss-Kronrod, inclusive com limites infinitos e extremos singulares."},
+      "syntax": [
+        {"code": "q = quadgk(fun, a, b)", "en": "Integrates `fun` from `a` to `b`.", "pt": "Integra `fun` de `a` a `b`."},
+        {"code": "[q, errbnd] = quadgk(fun, a, b)", "en": "Also returns an estimate of the error.", "pt": "Retorna também uma estimativa do erro."},
+        {"code": "q = quadgk(fun, a, b, Name, Value)", "en": "Sets options such as `'AbsTol'`, `'RelTol'` and `'Waypoints'`.", "pt": "Define opções como `'AbsTol'`, `'RelTol'` e `'Waypoints'`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle accepting a vector `x` and returning a vector.", "pt": "Handle que aceita um vetor `x` e retorna um vetor."},
+        {"name": "a, b", "en": "Limits, which may be infinite.", "pt": "Limites, que podem ser infinitos."},
+        {"name": "'Waypoints'", "en": "Interior points at which to split the interval, for integrands with kinks or discontinuities.", "pt": "Pontos interiores em que dividir o intervalo, para integrandos com quinas ou descontinuidades."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."},
+        {"name": "errbnd", "en": "Estimated upper bound on the absolute error.", "pt": "Estimativa de limite superior do erro absoluto."}
+      ],
+      "description": {
+        "en": "Infinite limits are mapped to a finite interval, and endpoint singularities of the type `1/sqrt(x)` are tamed by a change of variables, which makes the method robust. A contour can be defined in the complex plane through complex waypoints.\n\n`integral` is built on the same algorithm and is generally preferred in new code.",
+        "pt": "Limites infinitos são mapeados em um intervalo finito, e singularidades nos extremos do tipo `1/sqrt(x)` são contornadas por mudança de variáveis, o que torna o método robusto. Um contorno pode ser definido no plano complexo por pontos intermediários complexos.\n\n`integral` é construída sobre o mesmo algoritmo e geralmente é preferida em código novo."
+      },
+      "examples": [
+        {"title": {"en": "An integrable singularity", "pt": "Uma singularidade integrável"}, "code": "q = quadgk(@(x) 1./sqrt(x), 0, 1)\nquadgk(@(x) exp(-x.^2), -Inf, Inf)"}
+      ],
+      "see": ["integral", "quad", "quadl", "quadv"]
+    },
+    "quadl": {
+      "summary": {"en": "Numerical integral by adaptive Lobatto quadrature (older interface).", "pt": "Integral numérica por quadratura adaptativa de Lobatto (interface antiga)."},
+      "syntax": [
+        {"code": "q = quadl(fun, a, b)", "en": "Integrates `fun` from `a` to `b`.", "pt": "Integra `fun` de `a` a `b`."},
+        {"code": "q = quadl(fun, a, b, tol)", "en": "Uses the absolute tolerance `tol`.", "pt": "Usa a tolerância absoluta `tol`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle accepting a vector `x` and returning a vector.", "pt": "Handle que aceita um vetor `x` e retorna um vetor."},
+        {"name": "a, b", "en": "Finite limits.", "pt": "Limites finitos."},
+        {"name": "tol", "en": "Absolute tolerance. Default `1e-6`.", "pt": "Tolerância absoluta. Padrão `1e-6`."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "`quadl` applies a Gauss-Lobatto rule with adaptive subdivision. For smooth integrands and strict tolerances it is generally more efficient than `quad`, which uses the lower-order Simpson rule.\n\nIt is retained for compatibility; `integral` is the current recommendation.",
+        "pt": "`quadl` aplica uma regra de Gauss-Lobatto com subdivisão adaptativa. Para integrandos suaves e tolerâncias rigorosas, em geral é mais eficiente que `quad`, que usa a regra de Simpson, de ordem menor.\n\nÉ mantida por compatibilidade; `integral` é a recomendação atual."
+      },
+      "examples": [
+        {"title": {"en": "A smooth integrand", "pt": "Um integrando suave"}, "code": "q = quadl(@(x) sin(x), 0, pi);\nfprintf('%.6f\\n', q)"}
+      ],
+      "see": ["integral", "quad", "quadgk", "trapz"]
+    },
+    "quadv": {
+      "summary": {"en": "Adaptive Simpson quadrature of a vector-valued function of one variable.", "pt": "Quadratura adaptativa de Simpson de uma função de uma variável com valores vetoriais."},
+      "syntax": [
+        {"code": "Q = quadv(fun, a, b)", "en": "Integrates `fun` from `a` to `b`, where `fun(x)` returns an array for a scalar `x`.", "pt": "Integra `fun` de `a` a `b`, onde `fun(x)` retorna um array para `x` escalar."},
+        {"code": "Q = quadv(fun, a, b, tol)", "en": "Uses the absolute tolerance `tol`.", "pt": "Usa a tolerância absoluta `tol`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle called with a scalar `x` that returns a scalar, vector or array.", "pt": "Handle chamado com `x` escalar que retorna um escalar, vetor ou array."},
+        {"name": "a, b", "en": "Finite limits.", "pt": "Limites finitos."},
+        {"name": "tol", "en": "Absolute tolerance. Default `1e-6`.", "pt": "Tolerância absoluta. Padrão `1e-6`."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Array of the same size as `fun(x)`, holding the integrals of every component.", "pt": "Array do mesmo tamanho de `fun(x)`, com as integrais de todas as componentes."}
+      ],
+      "description": {
+        "en": "All components are integrated together on a shared subdivision of the interval, which is faster than calling `quad` once per component. The function is evaluated one point at a time, so it does not need to be vectorized in `x`.\n\nThe modern equivalent is `integral(fun, a, b, 'ArrayValued', true)`.",
+        "pt": "Todas as componentes são integradas juntas em uma subdivisão comum do intervalo, o que é mais rápido que chamar `quad` uma vez por componente. A função é avaliada um ponto por vez, então não precisa ser vetorizada em `x`.\n\nO equivalente moderno é `integral(fun, a, b, 'ArrayValued', true)`."
+      },
+      "examples": [
+        {"title": {"en": "Two integrals at once", "pt": "Duas integrais de uma vez"}, "code": "Q = quadv(@(x) [x, x.^2], 0, 1)"}
+      ],
+      "see": ["integral", "quad", "quadgk", "trapz"]
+    },
+    "solutionFcn": {
+      "summary": {"en": "Method of the ode object: returns a function handle that evaluates the solution at any time.", "pt": "Método do objeto ode: retorna um handle de função que avalia a solução em qualquer instante."},
+      "syntax": [
+        {"code": "sfun = solutionFcn(F, t0, tf)", "en": "Solves the problem defined by the `ode` object `F` on `[t0 tf]` and returns a handle `sfun(t)`.", "pt": "Resolve o problema definido pelo objeto `ode` `F` em `[t0 tf]` e retorna um handle `sfun(t)`."}
+      ],
+      "inputs": [
+        {"name": "F", "en": "An `ode` object with `ODEFcn`, `InitialTime` and `InitialValue` set.", "pt": "Um objeto `ode` com `ODEFcn`, `InitialTime` e `InitialValue` definidos."},
+        {"name": "t0, tf", "en": "Start and end of the interval to solve.", "pt": "Início e fim do intervalo a resolver."}
+      ],
+      "outputs": [
+        {"name": "sfun", "en": "Function handle: `y = sfun(t)` returns the solution at the times `t` inside `[t0 tf]`.", "pt": "Handle de função: `y = sfun(t)` retorna a solução nos instantes `t` dentro de `[t0 tf]`."}
+      ],
+      "description": {
+        "en": "This is the object-based counterpart of calling a solver with a single output and then `deval`. The integration runs once, when `solutionFcn` is called, and the handle interpolates between the computed steps.\n\nThe solver is chosen by the `Solver` property of the object, which defaults to automatic selection.",
+        "pt": "É a contrapartida baseada em objeto de chamar um solver com uma única saída e depois `deval`. A integração roda uma só vez, quando `solutionFcn` é chamada, e o handle interpola entre os passos calculados.\n\nO solver é escolhido pela propriedade `Solver` do objeto, que por padrão é seleção automática."
+      },
+      "examples": [
+        {"title": {"en": "Handle to y' = -y", "pt": "Handle para y' = -y"}, "code": "F = ode;\nF.ODEFcn = @(t, y) -y;\nF.InitialTime = 0;\nF.InitialValue = 1;\nsfun = solutionFcn(F, 0, 1);\nfprintf('%.4f %.4f\\n', sfun(0.5), exp(-0.5))"}
+      ],
+      "see": ["solve", "ode", "deval", "ode45"]
+    },
+    "solve": {
+      "summary": {"en": "Method of the ode object: integrates the differential equation it defines.", "pt": "Método do objeto ode: integra a equação diferencial que ele define."},
+      "syntax": [
+        {"code": "S = solve(F, t0, tf)", "en": "Solves the problem of the `ode` object `F` from `t0` to `tf`.", "pt": "Resolve o problema do objeto `ode` `F` de `t0` a `tf`."},
+        {"code": "S = solve(F, tspan)", "en": "Solves over `tspan`, a vector of times at which to report the result.", "pt": "Resolve em `tspan`, um vetor de instantes em que reportar o resultado."}
+      ],
+      "inputs": [
+        {"name": "F", "en": "An `ode` object with `ODEFcn` and `InitialValue` set (and optionally `Solver`, `InitialTime`, `RelativeTolerance`, `EventDefinition`).", "pt": "Um objeto `ode` com `ODEFcn` e `InitialValue` definidos (e opcionalmente `Solver`, `InitialTime`, `RelativeTolerance`, `EventDefinition`)."},
+        {"name": "t0, tf", "en": "Start and end of the interval.", "pt": "Início e fim do intervalo."}
+      ],
+      "outputs": [
+        {"name": "S", "en": "A results object whose `Time` and `Solution` properties hold the time points and the solution, one column per time point.", "pt": "Um objeto de resultados cujas propriedades `Time` e `Solution` guardam os instantes e a solução, uma coluna por instante."}
+      ],
+      "description": {
+        "en": "With the object interface, the problem and its settings live together in one variable: set the properties, then call `solve`. If no solver is named, one is chosen automatically from the problem, so stiffness need not be known in advance.\n\nEvents, mass matrices and Jacobians are attached as objects (`odeEvent`, `odeMassMatrix`, `odeJacobian`) rather than through `odeset`.",
+        "pt": "Na interface por objeto, o problema e suas configurações ficam juntos em uma só variável: definem-se as propriedades e chama-se `solve`. Se nenhum solver é indicado, um é escolhido automaticamente a partir do problema, então não é preciso saber de antemão se há rigidez.\n\nEventos, matrizes de massa e Jacobianos são anexados como objetos (`odeEvent`, `odeMassMatrix`, `odeJacobian`) em vez de passarem por `odeset`."
+      },
+      "notes": {"en": "`solve` is also the name of a method on other object types. This entry covers the `ode` object.", "pt": "`solve` também é o nome de um método em outros tipos de objeto. Esta entrada trata do objeto `ode`."},
+      "examples": [
+        {"title": {"en": "Solve y' = -y", "pt": "Resolver y' = -y"}, "code": "F = ode;\nF.ODEFcn = @(t, y) -y;\nF.InitialTime = 0;\nF.InitialValue = 1;\nS = solve(F, 0, 1);\nfprintf('%.4f %.4f\\n', S.Solution(end), exp(-1))"}
+      ],
+      "see": ["solutionFcn", "ode", "ode45", "odeset"]
+    },
+    "trapz": {
+      "summary": {"en": "Numerical integral of sampled data by the trapezoidal rule.", "pt": "Integral numérica de dados amostrados pela regra do trapézio."},
+      "syntax": [
+        {"code": "Q = trapz(Y)", "en": "Integrates `Y` assuming unit spacing between samples.", "pt": "Integra `Y` supondo espaçamento unitário entre as amostras."},
+        {"code": "Q = trapz(X, Y)", "en": "Integrates `Y` against the sample points `X`.", "pt": "Integra `Y` em relação aos pontos de amostragem `X`."},
+        {"code": "Q = trapz(X, Y, dim)", "en": "Integrates along dimension `dim`.", "pt": "Integra ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Vector of sample points, not necessarily evenly spaced.", "pt": "Vetor de pontos de amostragem, não necessariamente igualmente espaçados."},
+        {"name": "Y", "en": "Vector, matrix or array of function values.", "pt": "Vetor, matriz ou array de valores da função."},
+        {"name": "dim", "en": "Dimension to integrate along.", "pt": "Dimensão ao longo da qual integrar."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Approximate integral. For a matrix, a row vector with one integral per column.", "pt": "Integral aproximada. Para uma matriz, um vetor linha com uma integral por coluna."}
+      ],
+      "description": {
+        "en": "The curve is replaced by straight segments between samples and the areas of the resulting trapezoids are added. The method is exact for linear data and has an error that shrinks with the square of the spacing for smooth data.\n\nIt works directly on measured data, unlike `integral`, which needs a function. The running version is `cumtrapz`.",
+        "pt": "A curva é substituída por segmentos de reta entre as amostras e somam-se as áreas dos trapézios resultantes. O método é exato para dados lineares e tem erro que diminui com o quadrado do espaçamento em dados suaves.\n\nFunciona diretamente com dados medidos, ao contrário de `integral`, que precisa de uma função. A versão acumulada é `cumtrapz`."
+      },
+      "examples": [
+        {"title": {"en": "Area under y = x", "pt": "Área sob y = x"}, "code": "x = 0:0.25:1;\ntrapz(x, x)\ntrapz([1 2 3])"}
+      ],
+      "see": ["cumtrapz", "integral", "sum", "diff"]
+    },
+    "triplequad": {
+      "summary": {"en": "Numerical triple integral over a box (older interface).", "pt": "Integral tripla numérica sobre uma caixa (interface antiga)."},
+      "syntax": [
+        {"code": "q = triplequad(fun, xmin, xmax, ymin, ymax, zmin, zmax)", "en": "Integrates `fun(x, y, z)` over the box.", "pt": "Integra `fun(x, y, z)` sobre a caixa."},
+        {"code": "q = triplequad(___, tol)", "en": "Uses the absolute tolerance `tol`.", "pt": "Usa a tolerância absoluta `tol`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle accepting a vector `x` and scalars `y`, `z`, returning a vector.", "pt": "Handle que aceita um vetor `x` e escalares `y`, `z`, e retorna um vetor."},
+        {"name": "xmin ... zmax", "en": "Finite limits of the box.", "pt": "Limites finitos da caixa."},
+        {"name": "tol", "en": "Absolute tolerance. Default `1e-6`.", "pt": "Tolerância absoluta. Padrão `1e-6`."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "`triplequad` nests adaptive one-dimensional integrals. It is kept for compatibility, and `integral3` is the recommended replacement, which also accepts variable limits.\n\nUse element-wise operators in the integrand.",
+        "pt": "`triplequad` aninha integrais unidimensionais adaptativas. É mantida por compatibilidade, e `integral3` é a substituta recomendada, que aceita também limites variáveis.\n\nUse operadores elemento a elemento no integrando."
+      },
+      "examples": [
+        {"title": {"en": "Integral of x + y + z on the unit cube", "pt": "Integral de x + y + z no cubo unitário"}, "code": "triplequad(@(x, y, z) x + y + z, 0, 1, 0, 1, 0, 1)"}
+      ],
+      "see": ["integral3", "dblquad", "integral2"]
+    }
+  }
+}

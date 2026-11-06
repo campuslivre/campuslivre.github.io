@@ -1,0 +1,1268 @@
+{
+ "functions": {
+  "powermod": {
+   "summary": {
+    "en": "Modular exponentiation: the remainder of a power divided by a modulus.",
+    "pt": "Exponenciação modular: o resto da divisão de uma potência por um módulo."
+   },
+   "syntax": [
+    {
+     "code": "r = powermod(a, b, m)",
+     "en": "Computes `mod(a^b, m)` without forming the full power.",
+     "pt": "Calcula `mod(a^b, m)` sem formar a potência completa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Integer base, scalar or array.",
+     "pt": "Base inteira, escalar ou array."
+    },
+    {
+     "name": "b",
+     "en": "Nonnegative integer exponent.",
+     "pt": "Expoente inteiro não negativo."
+    },
+    {
+     "name": "m",
+     "en": "Positive integer modulus.",
+     "pt": "Módulo inteiro positivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Remainder in the range `0` to `m-1`.",
+     "pt": "Resto no intervalo de `0` a `m-1`."
+    }
+   ],
+   "description": {
+    "en": "The result equals `mod(a^b, m)`, but the power is reduced step by step by repeated squaring, so large exponents do not overflow. This is the basic operation behind modular arithmetic in number theory and in schemes such as RSA.\n\nThe arguments must be integers, the exponent nonnegative and the modulus positive; otherwise an error is raised. Array bases give an array of the same size.",
+    "pt": "O resultado é igual a `mod(a^b, m)`, mas a potência é reduzida passo a passo por quadrados sucessivos, de modo que expoentes grandes não estouram. É a operação básica da aritmética modular na teoria dos números e em esquemas como o RSA.\n\nOs argumentos devem ser inteiros, o expoente não negativo e o módulo positivo; caso contrário ocorre um erro. Bases em array produzem um array do mesmo tamanho."
+   },
+   "notes": {
+    "en": "In MatLivre `powermod` accepts numeric (double or integer type) arguments only; symbolic integers and negative exponents (modular inverses) raise an error.",
+    "pt": "No MatLivre `powermod` aceita apenas argumentos numéricos (double ou tipos inteiros); inteiros simbólicos e expoentes negativos (inversos modulares) geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Large powers modulo a number",
+      "pt": "Potências grandes módulo um número"
+     },
+     "code": "powermod(2, 10, 1000)\npowermod([2 3 5], 20, 7)\npowermod(7, 128, 13)"
+    }
+   ],
+   "see": [
+    "mod",
+    "rem",
+    "gcd",
+    "primes",
+    "isprime"
+   ]
+  },
+  "quorem": {
+   "summary": {
+    "en": "Quotient and remainder of the division of two symbolic polynomials or integers.",
+    "pt": "Quociente e resto da divisão de dois polinômios ou inteiros simbólicos."
+   },
+   "syntax": [
+    {
+     "code": "[q, r] = quorem(a, b)",
+     "en": "Divides `a` by `b` and returns quotient and remainder.",
+     "pt": "Divide `a` por `b` e retorna quociente e resto."
+    },
+    {
+     "code": "q = quorem(a, b)",
+     "en": "Returns only the quotient.",
+     "pt": "Retorna apenas o quociente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Dividend: symbolic polynomial or integer.",
+     "pt": "Dividendo: polinômio ou inteiro simbólico."
+    },
+    {
+     "name": "b",
+     "en": "Divisor, nonzero.",
+     "pt": "Divisor, diferente de zero."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "q",
+     "en": "Quotient.",
+     "pt": "Quociente."
+    },
+    {
+     "name": "r",
+     "en": "Remainder, so that `a = q*b + r`.",
+     "pt": "Resto, de modo que `a = q*b + r`."
+    }
+   ],
+   "description": {
+    "en": "For polynomials in one variable, `quorem` performs long division and the remainder has a lower degree than the divisor. For integers it performs integer division with a remainder that is nonnegative for a positive divisor.\n\nThe identity `a = q*b + r` always holds, so `expand(q*b + r - a)` is zero.",
+    "pt": "Para polinômios em uma variável, `quorem` faz a divisão longa e o resto tem grau menor que o do divisor. Para inteiros faz a divisão inteira, com resto não negativo quando o divisor é positivo.\n\nA identidade `a = q*b + r` sempre vale, portanto `expand(q*b + r - a)` é zero."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Polynomial and integer division",
+      "pt": "Divisão de polinômios e de inteiros"
+     },
+     "code": "syms x\n[q, r] = quorem(x^3 + 2*x, x^2 + 1)\n[q2, r2] = quorem(sym(-17), sym(5))"
+    }
+   ],
+   "see": [
+    "polynomialReduce",
+    "gcd",
+    "rem",
+    "mod",
+    "deconv"
+   ]
+  },
+  "rdivide": {
+   "summary": {
+    "en": "Element-wise right division, the function form of the `./` operator.",
+    "pt": "Divisão elemento a elemento, a forma de função do operador `./`."
+   },
+   "syntax": [
+    {
+     "code": "C = rdivide(A, B)",
+     "en": "Equivalent to `A ./ B`.",
+     "pt": "Equivalente a `A ./ B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numerator: numeric, logical or symbolic array.",
+     "pt": "Numerador: array numérico, lógico ou simbólico."
+    },
+    {
+     "name": "B",
+     "en": "Denominator, of compatible size.",
+     "pt": "Denominador, de tamanho compatível."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Array of element-wise quotients.",
+     "pt": "Array dos quocientes elemento a elemento."
+    }
+   ],
+   "description": {
+    "en": "`rdivide(A, B)` divides each element of `A` by the corresponding element of `B`. A scalar on either side is expanded to the size of the other argument, and compatible dimensions are expanded as with any element-wise operator.\n\nWith symbolic arguments the result stays exact: `rdivide(x, y)` is `x/y`, and a sym array divided by a number gives a sym array of fractions. Writing `A ./ B` calls this function.",
+    "pt": "`rdivide(A, B)` divide cada elemento de `A` pelo elemento correspondente de `B`. Um escalar em qualquer lado é expandido ao tamanho do outro argumento, e dimensões compatíveis são expandidas como em qualquer operador elemento a elemento.\n\nCom argumentos simbólicos o resultado permanece exato: `rdivide(x, y)` é `x/y`, e um array sym dividido por um número gera um array sym de frações. Escrever `A ./ B` chama esta função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric and symbolic division",
+      "pt": "Divisão numérica e simbólica"
+     },
+     "code": "rdivide([6 8 10], [2 4 5])\nsyms x y\nrdivide([x 2*x], 3)\nrdivide(x, y)"
+    }
+   ],
+   "see": [
+    "times",
+    "mrdivide",
+    "ldivide",
+    "mtimes"
+   ]
+  },
+  "symfalse": {
+   "summary": {
+    "en": "Symbolic logical false.",
+    "pt": "Falso lógico simbólico."
+   },
+   "syntax": [
+    {
+     "code": "symfalse",
+     "en": "Returns the symbolic constant false.",
+     "pt": "Retorna a constante simbólica falso."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "`symfalse` is the symbolic counterpart of `false`. It is a `sym` object, not a logical value, and it appears in symbolic results such as the condition of an unsatisfiable equation or the default branch of a `piecewise`.\n\nUse `isAlways` to turn a symbolic truth value into an ordinary logical.",
+    "pt": "`symfalse` é a contrapartida simbólica de `false`. É um objeto `sym`, não um valor lógico, e aparece em resultados simbólicos, como a condição de uma equação impossível ou o ramo padrão de um `piecewise`.\n\nUse `isAlways` para converter um valor de verdade simbólico em um lógico comum."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The constant and its class",
+      "pt": "A constante e sua classe"
+     },
+     "code": "symfalse\nclass(symfalse)\nisAlways(symfalse)"
+    }
+   ],
+   "see": [
+    "symtrue",
+    "isAlways",
+    "piecewise",
+    "false"
+   ]
+  },
+  "symtrue": {
+   "summary": {
+    "en": "Symbolic logical true.",
+    "pt": "Verdadeiro lógico simbólico."
+   },
+   "syntax": [
+    {
+     "code": "symtrue",
+     "en": "Returns the symbolic constant true.",
+     "pt": "Retorna a constante simbólica verdadeiro."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "`symtrue` is the symbolic counterpart of `true`. It is a `sym` object, not a logical value. It shows up as the condition of the catch-all branch in a `piecewise` expression, and as the result of symbolic comparisons that hold identically.\n\nUse `isAlways` to turn a symbolic truth value into an ordinary logical.",
+    "pt": "`symtrue` é a contrapartida simbólica de `true`. É um objeto `sym`, não um valor lógico. Aparece como condição do ramo geral de uma expressão `piecewise` e como resultado de comparações simbólicas que valem identicamente.\n\nUse `isAlways` para converter um valor de verdade simbólico em um lógico comum."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The constant in a piecewise default",
+      "pt": "A constante no ramo padrão de um piecewise"
+     },
+     "code": "syms x\nsymtrue\nisAlways(symtrue)\npiecewise(x < 0, -1, 0)"
+    }
+   ],
+   "see": [
+    "symfalse",
+    "isAlways",
+    "piecewise",
+    "true"
+   ]
+  },
+  "times": {
+   "summary": {
+    "en": "Element-wise multiplication, the function form of the `.*` operator.",
+    "pt": "Multiplicação elemento a elemento, a forma de função do operador `.*`."
+   },
+   "syntax": [
+    {
+     "code": "C = times(A, B)",
+     "en": "Equivalent to `A .* B`.",
+     "pt": "Equivalente a `A .* B`."
+    },
+    {
+     "code": "C = times(A1, A2, ..., An)",
+     "en": "Multiplies several arrays element by element.",
+     "pt": "Multiplica vários arrays elemento a elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, logical or symbolic arrays of compatible size.",
+     "pt": "Arrays numéricos, lógicos ou simbólicos de tamanho compatível."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Array of element-wise products.",
+     "pt": "Array dos produtos elemento a elemento."
+    }
+   ],
+   "description": {
+    "en": "`times(A, B)` multiplies corresponding elements. A scalar is expanded to the size of the other argument, and compatible dimensions are expanded as for any element-wise operator. This differs from `mtimes` (the `*` operator), which is matrix multiplication.\n\nWith symbolic input the product is kept exact, so `times(x, y)` is `x*y` and `times(sym([1 2 3]), [4 5 6])` is the sym vector `[4, 10, 18]`.",
+    "pt": "`times(A, B)` multiplica os elementos correspondentes. Um escalar é expandido ao tamanho do outro argumento, e dimensões compatíveis são expandidas como em qualquer operador elemento a elemento. Difere de `mtimes` (o operador `*`), que é a multiplicação matricial.\n\nCom entrada simbólica o produto permanece exato: `times(x, y)` é `x*y` e `times(sym([1 2 3]), [4 5 6])` é o vetor sym `[4, 10, 18]`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric and symbolic products",
+      "pt": "Produtos numéricos e simbólicos"
+     },
+     "code": "times([1 2 3], [4 5 6])\nsyms x y\ntimes(x, y)\ntimes(sym([1 2 3]), [4 5 6])"
+    }
+   ],
+   "see": [
+    "rdivide",
+    "mtimes",
+    "prod",
+    "plus"
+   ]
+  },
+  "argnames": {
+   "summary": {
+    "en": "Input variables of a symbolic function.",
+    "pt": "Variáveis de entrada de uma função simbólica."
+   },
+   "syntax": [
+    {
+     "code": "vars = argnames(f)",
+     "en": "Returns the input variables of the symfun `f` as a row vector.",
+     "pt": "Retorna as variáveis de entrada da symfun `f` como vetor linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic function created with `syms f(x, y)` or by assignment `f(x) = expr`.",
+     "pt": "Função simbólica criada com `syms f(x, y)` ou por atribuição `f(x) = expr`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "vars",
+     "en": "Symbolic row vector with the argument names, in declaration order.",
+     "pt": "Vetor linha simbólico com os nomes dos argumentos, na ordem de declaração."
+    }
+   ],
+   "description": {
+    "en": "A symbolic function carries both a formula and the list of variables it depends on. `argnames` returns that list, which is not always the same as the free variables of the formula: `f(x, y) = x^2` still has two arguments.\n\nThe companion function `formula` returns the expression.",
+    "pt": "Uma função simbólica guarda a fórmula e a lista de variáveis de que depende. `argnames` retorna essa lista, que nem sempre coincide com as variáveis livres da fórmula: `f(x, y) = x^2` continua com dois argumentos.\n\nA função `formula` retorna a expressão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Arguments of a function",
+      "pt": "Argumentos de uma função"
+     },
+     "code": "syms f(x, y)\nf(x, y) = x^2 + y;\nargnames(f)\nformula(f)"
+    }
+   ],
+   "see": [
+    "formula",
+    "symfun",
+    "syms",
+    "symvar"
+   ]
+  },
+  "children": {
+   "summary": {
+    "en": "Subexpressions that form the operands of a symbolic expression.",
+    "pt": "Subexpressões que formam os operandos de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "c = children(S)",
+     "en": "Returns the operands of the top-level operation of `S`.",
+     "pt": "Retorna os operandos da operação de nível mais alto de `S`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Scalar symbolic expression.",
+     "pt": "Expressão simbólica escalar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Row vector of subexpressions. A symbolic variable or number is its own single child.",
+     "pt": "Vetor linha de subexpressões. Uma variável ou número simbólico é o seu próprio único filho."
+    }
+   ],
+   "description": {
+    "en": "`children` looks at the outermost operation of an expression and returns its arguments. For a sum it returns the terms, for a product the factors, for `sin(x)` the argument `x`. Applying it repeatedly walks the expression tree down to the variables and constants.\n\nThe order of the terms is the internal order of the expression, which need not be the order in which it was typed. The input must be a scalar expression, not a symbolic array.",
+    "pt": "`children` examina a operação mais externa de uma expressão e retorna seus argumentos. Para uma soma retorna as parcelas, para um produto os fatores, para `sin(x)` o argumento `x`. Aplicada repetidamente, percorre a árvore da expressão até as variáveis e constantes.\n\nA ordem dos termos é a ordem interna da expressão, que não precisa coincidir com a digitada. A entrada deve ser uma expressão escalar, não um array simbólico."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Taking an expression apart",
+      "pt": "Desmontando uma expressão"
+     },
+     "code": "syms a b\nexpr = (a + b)*sin(a);\nchildren(expr)\nchildren(sin(a))\nchildren(a + b)"
+    }
+   ],
+   "see": [
+    "has",
+    "fold",
+    "findSymType",
+    "mapSymType",
+    "subexpr"
+   ]
+  },
+  "findSymType": {
+   "summary": {
+    "en": "Finds the subexpressions of a given symbolic type.",
+    "pt": "Encontra as subexpressões de um dado tipo simbólico."
+   },
+   "syntax": [
+    {
+     "code": "found = findSymType(S, type)",
+     "en": "Returns every subexpression of `S` whose type is `type`.",
+     "pt": "Retorna todas as subexpressões de `S` cujo tipo é `type`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "type",
+     "en": "Type name as a string, such as `'variable'`, `'integer'`, `'rational'` or a function name like `'sin'`.",
+     "pt": "Nome do tipo como string, como `'variable'`, `'integer'`, `'rational'` ou o nome de uma função como `'sin'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "found",
+     "en": "Symbolic row vector of the matching subexpressions, without repeats. Empty when nothing matches.",
+     "pt": "Vetor linha simbólico com as subexpressões encontradas, sem repetições. Vazio quando nada corresponde."
+    }
+   ],
+   "description": {
+    "en": "The whole expression tree is searched, not only the top level. With `'variable'` the result lists the symbolic variables in use; with `'integer'` it lists every integer constant, including exponents and coefficients; with a function name it lists each distinct call of that function.\n\nUse `symType` to find out which type name applies to a given object.",
+    "pt": "A árvore inteira da expressão é percorrida, não apenas o nível superior. Com `'variable'` o resultado lista as variáveis simbólicas em uso; com `'integer'` lista cada constante inteira, inclusive expoentes e coeficientes; com o nome de uma função lista cada chamada distinta dessa função.\n\nUse `symType` para descobrir qual nome de tipo se aplica a um objeto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Variables, integers and function calls",
+      "pt": "Variáveis, inteiros e chamadas de função"
+     },
+     "code": "syms x\nS = x^2 + 3*x + sin(x);\nfindSymType(S, 'variable')\nfindSymType(S, 'integer')\nfindSymType(S, 'sin')"
+    }
+   ],
+   "see": [
+    "hasSymType",
+    "isSymType",
+    "mapSymType",
+    "symType",
+    "symvar"
+   ]
+  },
+  "fold": {
+   "summary": {
+    "en": "Combines the elements of an array with a binary function, from left to right.",
+    "pt": "Combina os elementos de um array com uma função binária, da esquerda para a direita."
+   },
+   "syntax": [
+    {
+     "code": "r = fold(f, A)",
+     "en": "Applies the two-argument function `f` cumulatively along the elements of `A`.",
+     "pt": "Aplica a função de dois argumentos `f` cumulativamente aos elementos de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Function handle taking two arguments, such as `@plus` or `@(p, q) p*q`.",
+     "pt": "Handle de função com dois argumentos, como `@plus` ou `@(p, q) p*q`."
+    },
+    {
+     "name": "A",
+     "en": "Symbolic array to reduce.",
+     "pt": "Array simbólico a reduzir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Symbolic result of folding all elements.",
+     "pt": "Resultado simbólico da redução de todos os elementos."
+    }
+   ],
+   "description": {
+    "en": "`fold(f, [a b c])` computes `f(f(a, b), c)`: the first two elements are combined, the result is combined with the third, and so on. Because the grouping is from the left, a non-associative function such as subtraction gives `a - b - c`, not `a - (b - c)`.\n\nIt is a convenient way to apply an operation that only takes two operands, like `gcd` or `lcm`, to a whole list of symbolic values.",
+    "pt": "`fold(f, [a b c])` calcula `f(f(a, b), c)`: os dois primeiros elementos são combinados, o resultado é combinado com o terceiro, e assim por diante. Como o agrupamento é pela esquerda, uma função não associativa como a subtração dá `a - b - c`, e não `a - (b - c)`.\n\nÉ uma forma prática de aplicar uma operação de dois operandos, como `gcd` ou `lcm`, a uma lista inteira de valores simbólicos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sum, product and subtraction",
+      "pt": "Soma, produto e subtração"
+     },
+     "code": "syms a b c\nfold(@plus, [a 2*a 3*a])\nfold(@(p, q) p*q, [a b c])\nfold(@(p, q) p - q, [a b c])"
+    }
+   ],
+   "see": [
+    "children",
+    "sum",
+    "prod",
+    "arrayfun",
+    "cumsum"
+   ]
+  },
+  "formula": {
+   "summary": {
+    "en": "Mathematical expression that defines a symbolic function.",
+    "pt": "Expressão matemática que define uma função simbólica."
+   },
+   "syntax": [
+    {
+     "code": "expr = formula(f)",
+     "en": "Returns the body of the symfun `f` as a plain symbolic expression.",
+     "pt": "Retorna o corpo da symfun `f` como uma expressão simbólica comum."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic function. A plain sym expression is returned unchanged.",
+     "pt": "Função simbólica. Uma expressão sym comum é devolvida sem alteração."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression in the input variables of `f`.",
+     "pt": "Expressão simbólica nas variáveis de entrada de `f`."
+    }
+   ],
+   "description": {
+    "en": "A symfun such as `f(x) = x^2 + 1` is more than an expression: it also knows its argument list. `formula` strips that wrapper and gives the expression, which can then be differentiated, simplified or substituted like any other sym.\n\nWhen `f` has been declared but not yet defined, the formula is just the unevaluated call `f(x)`.",
+    "pt": "Uma symfun como `f(x) = x^2 + 1` é mais do que uma expressão: também conhece sua lista de argumentos. `formula` remove esse invólucro e devolve a expressão, que pode então ser derivada, simplificada ou substituída como qualquer sym.\n\nQuando `f` foi declarada mas ainda não definida, a fórmula é apenas a chamada não avaliada `f(x)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extracting the expression",
+      "pt": "Extraindo a expressão"
+     },
+     "code": "syms f(x)\nformula(f)\nf(x) = x^2 + 1;\ne = formula(f)\nclass(e)"
+    }
+   ],
+   "see": [
+    "argnames",
+    "symfun",
+    "syms",
+    "subs"
+   ]
+  },
+  "has": {
+   "summary": {
+    "en": "Tests whether a symbolic expression contains a given subexpression.",
+    "pt": "Testa se uma expressão simbólica contém uma dada subexpressão."
+   },
+   "syntax": [
+    {
+     "code": "tf = has(expr, sub)",
+     "en": "Returns `true` when `sub` occurs inside `expr`.",
+     "pt": "Retorna `true` quando `sub` ocorre dentro de `expr`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Scalar symbolic expression to search.",
+     "pt": "Expressão simbólica escalar a pesquisar."
+    },
+    {
+     "name": "sub",
+     "en": "Variable or subexpression to look for.",
+     "pt": "Variável ou subexpressão a procurar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`has` searches the whole expression tree, so `has(x^2 + y, y)` is true even though `y` is only one term of a sum. It matches structure, not value, so `has(2*x, x)` is true while `has(x^2, 4)` is false.\n\nA typical use is deciding whether an expression still depends on a variable before differentiating or solving for it.",
+    "pt": "`has` pesquisa a árvore inteira da expressão, então `has(x^2 + y, y)` é verdadeiro mesmo que `y` seja apenas uma parcela de uma soma. Compara estrutura, não valor, então `has(2*x, x)` é verdadeiro e `has(x^2, 4)` é falso.\n\nUm uso típico é decidir se uma expressão ainda depende de uma variável antes de derivar ou resolver em relação a ela."
+   },
+   "notes": {
+    "en": "In MatLivre `expr` and `sub` must both be scalar symbolic expressions; passing a symbolic array raises an error.",
+    "pt": "No MatLivre `expr` e `sub` devem ser expressões simbólicas escalares; passar um array simbólico gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Does the expression depend on a variable",
+      "pt": "A expressão depende de uma variável"
+     },
+     "code": "syms x y\nhas(x^2 + y, y)\nhas(sin(x)*2, y)\nhas(sin(x)*2, sin(x))"
+    }
+   ],
+   "see": [
+    "hasSymType",
+    "children",
+    "symvar",
+    "isequal",
+    "findSymType"
+   ]
+  },
+  "hasSymType": {
+   "summary": {
+    "en": "Tests whether an expression contains a subexpression of a given symbolic type.",
+    "pt": "Testa se uma expressão contém uma subexpressão de um dado tipo simbólico."
+   },
+   "syntax": [
+    {
+     "code": "tf = hasSymType(S, type)",
+     "en": "Returns `true` if any subexpression of `S` has the type `type`.",
+     "pt": "Retorna `true` se alguma subexpressão de `S` tem o tipo `type`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "type",
+     "en": "Type name string, such as `'variable'`, `'integer'` or a function name like `'sin'`.",
+     "pt": "String com o nome do tipo, como `'variable'`, `'integer'` ou o nome de uma função como `'sin'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The search covers the entire expression tree. That is why `hasSymType(x^2, 'integer')` is true: the exponent `2` is an integer subexpression, even though the expression as a whole is not an integer.\n\nIt is the yes-or-no counterpart of `findSymType`, and unlike `isSymType` it looks inside the expression rather than at its top level.",
+    "pt": "A busca cobre toda a árvore da expressão. Por isso `hasSymType(x^2, 'integer')` é verdadeiro: o expoente `2` é uma subexpressão inteira, embora a expressão como um todo não seja um inteiro.\n\nÉ a contrapartida de resposta sim ou não de `findSymType` e, diferentemente de `isSymType`, olha dentro da expressão em vez de apenas o nível superior."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Searching by type",
+      "pt": "Busca por tipo"
+     },
+     "code": "syms x\nhasSymType(x^2, 'variable')\nhasSymType(x^2, 'integer')\nhasSymType(x^2, 'sin')\nhasSymType(sin(x) + 1, 'sin')"
+    }
+   ],
+   "see": [
+    "findSymType",
+    "isSymType",
+    "symType",
+    "has"
+   ]
+  },
+  "isSymType": {
+   "summary": {
+    "en": "Tests the symbolic type of each element of an array.",
+    "pt": "Testa o tipo simbólico de cada elemento de um array."
+   },
+   "syntax": [
+    {
+     "code": "tf = isSymType(S, type)",
+     "en": "Returns a logical array telling which elements of `S` are of type `type`.",
+     "pt": "Retorna um array lógico indicando quais elementos de `S` são do tipo `type`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic scalar or array.",
+     "pt": "Escalar ou array simbólico."
+    },
+    {
+     "name": "type",
+     "en": "Type name string, such as `'variable'`, `'integer'`, `'rational'` or `'expression'`.",
+     "pt": "String com o nome do tipo, como `'variable'`, `'integer'`, `'rational'` ou `'expression'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array of the same size as `S`.",
+     "pt": "Array lógico do mesmo tamanho de `S`."
+    }
+   ],
+   "description": {
+    "en": "Only the object itself is classified, not its parts. `isSymType(x + 1, 'variable')` is false because the sum as a whole is an expression. Types form a hierarchy in which a more specific type also satisfies the general ones, so the integer `2` is of type `'integer'` and also `'rational'`.\n\nFor a symbolic array the test is applied to each element, which makes it handy for picking out the numeric entries of a mixed matrix.",
+    "pt": "Apenas o próprio objeto é classificado, não as suas partes. `isSymType(x + 1, 'variable')` é falso porque a soma como um todo é uma expressão. Os tipos formam uma hierarquia em que um tipo mais específico também satisfaz os mais gerais, de modo que o inteiro `2` é do tipo `'integer'` e também `'rational'`.\n\nPara um array simbólico o teste é aplicado a cada elemento, o que ajuda a separar as entradas numéricas de uma matriz mista."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Classifying the elements of a vector",
+      "pt": "Classificando os elementos de um vetor"
+     },
+     "code": "syms x\nv = [x, 2, x + 1, sym(1)/3];\nisSymType(v, 'variable')\nisSymType(v, 'integer')\nisSymType(v, 'rational')"
+    }
+   ],
+   "see": [
+    "symType",
+    "hasSymType",
+    "findSymType",
+    "isa"
+   ]
+  },
+  "mapSymType": {
+   "summary": {
+    "en": "Applies a function to every subexpression of a given type.",
+    "pt": "Aplica uma função a toda subexpressão de um dado tipo."
+   },
+   "syntax": [
+    {
+     "code": "R = mapSymType(S, type, f)",
+     "en": "Replaces each subexpression of `S` of type `type` with `f` applied to it.",
+     "pt": "Substitui cada subexpressão de `S` do tipo `type` por `f` aplicada a ela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "type",
+     "en": "Type name string, such as `'variable'`, `'integer'` or a function name like `'sin'`.",
+     "pt": "String com o nome do tipo, como `'variable'`, `'integer'` ou o nome de uma função como `'sin'`."
+    },
+    {
+     "name": "f",
+     "en": "Function handle that takes one subexpression and returns its replacement.",
+     "pt": "Handle de função que recebe uma subexpressão e retorna a substituição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "The rewritten expression.",
+     "pt": "A expressão reescrita."
+    }
+   ],
+   "description": {
+    "en": "`mapSymType` walks the expression tree, finds every part of the requested type and replaces it by the value of `f` on that part. It is a structural rewrite: unlike `subs` it can act on all occurrences of a whole class of subexpressions, such as every integer or every call of `sin`.\n\nFor example, mapping `n -> n + 1` over the integers of `x^2 + 3*x` produces `x^3 + 4*x`, since both the exponent and the coefficient are integers.",
+    "pt": "`mapSymType` percorre a árvore da expressão, encontra cada parte do tipo pedido e a substitui pelo valor de `f` nessa parte. É uma reescrita estrutural: ao contrário de `subs`, pode atuar sobre todas as ocorrências de uma classe inteira de subexpressões, como todos os inteiros ou todas as chamadas de `sin`.\n\nPor exemplo, aplicar `n -> n + 1` aos inteiros de `x^2 + 3*x` produz `x^3 + 4*x`, já que o expoente e o coeficiente são inteiros."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rewriting variables and function calls",
+      "pt": "Reescrevendo variáveis e chamadas de função"
+     },
+     "code": "syms x\nmapSymType(x + 1, 'variable', @(v) v^2)\nmapSymType(sin(x) + cos(x), 'sin', @(s) cos(children(s)))\nmapSymType(x^2 + 3*x, 'integer', @(n) n + 1)"
+    }
+   ],
+   "see": [
+    "findSymType",
+    "hasSymType",
+    "isSymType",
+    "subs",
+    "children"
+   ]
+  },
+  "piecewise": {
+   "summary": {
+    "en": "Symbolic piecewise function defined by conditions.",
+    "pt": "Função simbólica definida por partes, segundo condições."
+   },
+   "syntax": [
+    {
+     "code": "p = piecewise(cond1, val1, cond2, val2, ...)",
+     "en": "Value of the first branch whose condition is true.",
+     "pt": "Valor do primeiro ramo cuja condição é verdadeira."
+    },
+    {
+     "code": "p = piecewise(cond1, val1, ..., otherwiseVal)",
+     "en": "A final unpaired value is used when no condition holds.",
+     "pt": "Um último valor sem condição é usado quando nenhuma condição vale."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cond",
+     "en": "Symbolic condition, such as `x < 0`.",
+     "pt": "Condição simbólica, como `x < 0`."
+    },
+    {
+     "name": "val",
+     "en": "Value or expression returned when its condition is true.",
+     "pt": "Valor ou expressão retornado quando a condição é verdadeira."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Symbolic piecewise expression.",
+     "pt": "Expressão simbólica definida por partes."
+    }
+   ],
+   "description": {
+    "en": "The branches are tried in order, and the first true condition decides the value. If no condition is true and no final value is given, the result is undefined (`NaN`) at that point. A trailing unpaired argument works as an otherwise clause and is stored with the condition `symtrue`.\n\nPiecewise expressions can be evaluated with `subs`, differentiated with `diff`, and integrated; the conditions are carried along in the result.",
+    "pt": "Os ramos são testados em ordem, e a primeira condição verdadeira define o valor. Se nenhuma condição é verdadeira e não há valor final, o resultado é indefinido (`NaN`) naquele ponto. Um último argumento sem par funciona como cláusula padrão e é guardado com a condição `symtrue`.\n\nExpressões por partes podem ser avaliadas com `subs`, derivadas com `diff` e integradas; as condições acompanham o resultado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Absolute value as a piecewise function",
+      "pt": "Valor absoluto como função por partes"
+     },
+     "code": "syms x\np = piecewise(x < 0, -x, x >= 0, x)\nsubs(p, x, -3)\nsubs(p, x, 2)\npiecewise(x < 0, -1, x > 0, 1, 0)"
+    }
+   ],
+   "see": [
+    "symtrue",
+    "subs",
+    "diff",
+    "heaviside",
+    "abs"
+   ]
+  },
+  "pretty": {
+   "summary": {
+    "en": "Prints a symbolic expression in a readable form.",
+    "pt": "Imprime uma expressão simbólica em forma legível."
+   },
+   "syntax": [
+    {
+     "code": "pretty(S)",
+     "en": "Displays the expression `S` in the command window.",
+     "pt": "Exibe a expressão `S` na janela de comandos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression or array.",
+     "pt": "Expressão ou array simbólico."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`pretty` writes a symbolic expression as text that is easier to read than the default one-line display: in MATLAB, fractions are drawn with a horizontal bar and exponents are raised, using ASCII characters. It prints and returns nothing.\n\nFor a symbolic matrix it prints the rows between brackets.",
+    "pt": "`pretty` escreve uma expressão simbólica como texto mais fácil de ler do que a exibição padrão em uma linha: no MATLAB, frações são desenhadas com barra horizontal e expoentes são elevados, usando caracteres ASCII. Imprime e não retorna nada.\n\nPara uma matriz simbólica imprime as linhas entre colchetes."
+   },
+   "notes": {
+    "en": "MatLivre prints the expression on a single line in linear form (`x^2/(x + 1)`) rather than as two-dimensional ASCII art.",
+    "pt": "O MatLivre imprime a expressão em uma única linha, em forma linear (`x^2/(x + 1)`), em vez da arte ASCII bidimensional."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fraction and matrix",
+      "pt": "Fração e matriz"
+     },
+     "code": "syms x y\npretty(x^2/(x + 1))\npretty([x 1; 2 y])"
+    }
+   ],
+   "see": [
+    "latex",
+    "disp",
+    "simplify",
+    "vpa"
+   ]
+  },
+  "str2sym": {
+   "summary": {
+    "en": "Converts a string of MATLAB syntax to a symbolic expression.",
+    "pt": "Converte uma string em sintaxe MATLAB para uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "S = str2sym(text)",
+     "en": "Parses `text` and returns the symbolic expression it describes.",
+     "pt": "Interpreta `text` e retorna a expressão simbólica que ele descreve."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "text",
+     "en": "String or character vector holding an expression, an equation with `==`, or a matrix such as `'[1 2; 3 4]'`.",
+     "pt": "String ou vetor de caracteres com uma expressão, uma equação com `==` ou uma matriz como `'[1 2; 3 4]'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression, equation or matrix.",
+     "pt": "Expressão, equação ou matriz simbólica."
+    }
+   ],
+   "description": {
+    "en": "Names in the text become symbolic variables, and numbers are read exactly, so `'1/3'` stays the rational `1/3` instead of a rounded double. The text is parsed, not evaluated as MATLAB code, so it cannot call arbitrary functions with side effects. Invalid text raises a parse error.\n\nUnlike `sym` with a string, `str2sym` is the recommended way to turn text from a file or a user into an expression, and it understands relations such as `==`.",
+    "pt": "Os nomes no texto viram variáveis simbólicas e os números são lidos exatamente, de modo que `'1/3'` permanece o racional `1/3` em vez de um double arredondado. O texto é interpretado, não executado como código MATLAB, portanto não chama funções arbitrárias com efeitos colaterais. Texto inválido gera um erro de análise.\n\nAo contrário de `sym` com uma string, `str2sym` é a forma recomendada de transformar texto vindo de um arquivo ou de um usuário em expressão, e entende relações como `==`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Expressions, matrices and equations",
+      "pt": "Expressões, matrizes e equações"
+     },
+     "code": "f = str2sym('x^2 + 3*x')\nM = str2sym('[1 2; 3 4]')\ne = str2sym('x^2 - y == 3')\nclass(f)"
+    }
+   ],
+   "see": [
+    "sym",
+    "syms",
+    "eval",
+    "char",
+    "symvar"
+   ]
+  },
+  "sym": {
+   "summary": {
+    "en": "Creates symbolic variables, numbers and arrays.",
+    "pt": "Cria variáveis, números e arrays simbólicos."
+   },
+   "syntax": [
+    {
+     "code": "x = sym('x')",
+     "en": "Creates the symbolic variable `x`.",
+     "pt": "Cria a variável simbólica `x`."
+    },
+    {
+     "code": "n = sym(num)",
+     "en": "Converts a number to an exact symbolic value; `sym(1/3)` gives `1/3`.",
+     "pt": "Converte um número em um valor simbólico exato; `sym(1/3)` dá `1/3`."
+    },
+    {
+     "code": "n = sym(num, flag)",
+     "en": "Chooses how a floating-point value is converted: `'r'` rational (default), `'d'` decimal, `'e'` estimate with error, `'f'` exact binary fraction.",
+     "pt": "Escolhe como um valor de ponto flutuante é convertido: `'r'` racional (padrão), `'d'` decimal, `'e'` estimativa com erro, `'f'` fração binária exata."
+    },
+    {
+     "code": "A = sym('A', [m n])",
+     "en": "Creates an `m`-by-`n` matrix of variables `A1_1`, `A1_2`, ...",
+     "pt": "Cria uma matriz `m` por `n` de variáveis `A1_1`, `A1_2`, ..."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Name of the variable, a valid identifier.",
+     "pt": "Nome da variável, um identificador válido."
+    },
+    {
+     "name": "num",
+     "en": "Numeric array to convert exactly.",
+     "pt": "Array numérico a converter de forma exata."
+    },
+    {
+     "name": "[m n]",
+     "en": "Size of the symbolic matrix to generate.",
+     "pt": "Tamanho da matriz simbólica a gerar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic variable, number or array.",
+     "pt": "Variável, número ou array simbólico."
+    }
+   ],
+   "description": {
+    "en": "`sym` is the entry point to the Symbolic Math Toolbox. A string argument creates a variable with that name; a numeric argument is turned into an exact value that arithmetic will keep exact. Floating-point conversion uses the nearest simple rational by default, so `sym(0.1)` is `1/10` and `sym(pi)` stays the symbol `pi`.\n\nTo create several variables at once, `syms x y z` is shorter. Mixing a sym with a double in an expression converts the double with `sym` first, so `sym(1)/3` is the exact `1/3` while `1/3` alone is a rounded double.",
+    "pt": "`sym` é a porta de entrada do Symbolic Math Toolbox. Um argumento string cria uma variável com esse nome; um argumento numérico vira um valor exato que a aritmética manterá exato. A conversão de ponto flutuante usa por padrão o racional simples mais próximo, então `sym(0.1)` é `1/10` e `sym(pi)` continua sendo o símbolo `pi`.\n\nPara criar várias variáveis de uma vez, `syms x y z` é mais curto. Misturar um sym com um double em uma expressão converte o double com `sym` antes, então `sym(1)/3` é o `1/3` exato, enquanto `1/3` sozinho é um double arredondado."
+   },
+   "notes": {
+    "en": "In MatLivre the flags `'f'` and `'e'` give the same rational result as `'r'`, so `sym(0.1, 'f')` is `1/10` and not the exact binary fraction. The pattern form `sym('a%d', [1 3])` is not expanded. Positivity and similar assumptions given as `sym('y', 'positive')` are not tracked, and `assumptions` reports only `real`.",
+    "pt": "No MatLivre os flags `'f'` e `'e'` dão o mesmo resultado racional que `'r'`, então `sym(0.1, 'f')` é `1/10` e não a fração binária exata. A forma com padrão `sym('a%d', [1 3])` não é expandida. Suposições como positividade, dadas em `sym('y', 'positive')`, não são rastreadas, e `assumptions` informa apenas `real`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Variables, exact numbers and matrices",
+      "pt": "Variáveis, números exatos e matrizes"
+     },
+     "code": "x = sym('x');\nx^2 + 1\nsym(1)/3\nsym(0.1)\nA = sym('A', [2 2])"
+    }
+   ],
+   "see": [
+    "syms",
+    "str2sym",
+    "double",
+    "vpa",
+    "symType"
+   ]
+  },
+  "symfun": {
+   "summary": {
+    "en": "Symbolic function of named input variables.",
+    "pt": "Função simbólica de variáveis de entrada nomeadas."
+   },
+   "syntax": [
+    {
+     "code": "f = symfun(expr, vars)",
+     "en": "Creates the function `f(vars) = expr`.",
+     "pt": "Cria a função `f(vars) = expr`."
+    },
+    {
+     "code": "syms f(x, y)",
+     "en": "Declares a symbolic function and its arguments; define it later with `f(x, y) = expr`.",
+     "pt": "Declara uma função simbólica e seus argumentos; defina-a depois com `f(x, y) = expr`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression that defines the function.",
+     "pt": "Expressão simbólica que define a função."
+    },
+    {
+     "name": "vars",
+     "en": "Input variables of the function.",
+     "pt": "Variáveis de entrada da função."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic function (class `symfun`) that can be called with numbers or expressions.",
+     "pt": "Função simbólica (classe `symfun`) que pode ser chamada com números ou expressões."
+    }
+   ],
+   "description": {
+    "en": "A symfun is an expression bundled with its list of input variables. Calling it with values substitutes them, so `f(2, 3)` evaluates the formula at that point, and calling it with symbolic expressions gives the composed expression. Operations such as `diff`, `int` and arithmetic between symfuns return symfuns again.\n\n`argnames` returns the variable list and `formula` the expression. The declaration form `syms f(x)` followed by `f(x) = expr` is the most common way to build one.",
+    "pt": "Uma symfun é uma expressão empacotada com sua lista de variáveis de entrada. Chamá-la com valores os substitui, então `f(2, 3)` avalia a fórmula nesse ponto, e chamá-la com expressões simbólicas dá a expressão composta. Operações como `diff`, `int` e a aritmética entre symfuns devolvem symfuns.\n\n`argnames` retorna a lista de variáveis e `formula` a expressão. A forma de declaração `syms f(x)` seguida de `f(x) = expr` é a maneira mais comum de construir uma."
+   },
+   "notes": {
+    "en": "In MatLivre the constructor call `symfun(expr, vars)` is not supported and raises an error; create symbolic functions with `syms f(x)` and `f(x) = expr`, or with the assignment `f(x) = expr` on a sym variable.",
+    "pt": "No MatLivre a chamada do construtor `symfun(expr, vars)` não é suportada e gera erro; crie funções simbólicas com `syms f(x)` e `f(x) = expr`, ou com a atribuição `f(x) = expr` sobre uma variável sym."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Defining and calling a function",
+      "pt": "Definindo e chamando uma função"
+     },
+     "code": "syms f(x, y)\nf(x, y) = x*y + 1;\nf(2, 3)\nclass(f)\nargnames(f)"
+    }
+   ],
+   "see": [
+    "syms",
+    "formula",
+    "argnames",
+    "matlabFunction",
+    "subs"
+   ]
+  },
+  "symFunType": {
+   "summary": {
+    "en": "Name of the top-level function or operation of a symbolic expression.",
+    "pt": "Nome da função ou operação de nível mais alto de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "t = symFunType(S)",
+     "en": "Returns the head of the expression `S` as a string.",
+     "pt": "Retorna o cabeçalho da expressão `S` como string."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Scalar symbolic expression.",
+     "pt": "Expressão simbólica escalar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "String scalar such as `\"plus\"`, `\"times\"`, `\"sin\"` or `\"variable\"`.",
+     "pt": "String escalar como `\"plus\"`, `\"times\"`, `\"sin\"` ou `\"variable\"`."
+    }
+   ],
+   "description": {
+    "en": "Every symbolic expression is a tree whose root is an operation or function. `symFunType` names that root, for example `\"times\"` for `x*y` and `\"sin\"` for `sin(x)`, while a lone variable reports `\"variable\"`. Together with `children` it lets a program walk an expression and branch on what it finds.\n\nIt answers the question of how an expression is built, whereas `symType` tells what kind of object it is.",
+    "pt": "Toda expressão simbólica é uma árvore cuja raiz é uma operação ou função. `symFunType` dá nome a essa raiz, por exemplo `\"times\"` para `x*y` e `\"sin\"` para `sin(x)`, enquanto uma variável isolada informa `\"variable\"`. Junto com `children`, permite a um programa percorrer uma expressão e ramificar conforme o que encontra.\n\nResponde como a expressão é construída, enquanto `symType` diz que tipo de objeto ela é."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Heads of some expressions",
+      "pt": "Cabeçalhos de algumas expressões"
+     },
+     "code": "syms x y\nsymFunType(x*y)\nsymFunType(sin(x))\nsymFunType(x)"
+    }
+   ],
+   "see": [
+    "symType",
+    "children",
+    "isSymType",
+    "findSymType"
+   ]
+  },
+  "sympref": {
+   "summary": {
+    "en": "Gets or sets preferences of the Symbolic Math Toolbox.",
+    "pt": "Consulta ou define preferências do Symbolic Math Toolbox."
+   },
+   "syntax": [
+    {
+     "code": "sympref(name, value)",
+     "en": "Sets the preference `name` to `value`.",
+     "pt": "Define a preferência `name` com o valor `value`."
+    },
+    {
+     "code": "old = sympref(name, value)",
+     "en": "Sets the preference and returns its previous value.",
+     "pt": "Define a preferência e retorna o valor anterior."
+    },
+    {
+     "code": "sympref('default')",
+     "en": "Restores every preference to its default.",
+     "pt": "Restaura todas as preferências ao padrão."
+    },
+    {
+     "code": "prefs = sympref",
+     "en": "Returns a structure with the current preferences.",
+     "pt": "Retorna uma struct com as preferências atuais."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Preference name: `'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'HeavisideAtOrigin'`, `'AbbreviateOutput'`, `'MatrixWithSquareBrackets'`, `'FourierParameters'`, `'TypesetOutput'`.",
+     "pt": "Nome da preferência: `'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'HeavisideAtOrigin'`, `'AbbreviateOutput'`, `'MatrixWithSquareBrackets'`, `'FourierParameters'`, `'TypesetOutput'`."
+    },
+    {
+     "name": "value",
+     "en": "New value for the preference.",
+     "pt": "Novo valor da preferência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "old",
+     "en": "Previous value of the preference, or a struct of all preferences.",
+     "pt": "Valor anterior da preferência, ou uma struct com todas."
+    }
+   ],
+   "description": {
+    "en": "Preferences affect how results are displayed and how a few special values are defined. `'HeavisideAtOrigin'` sets the value of `heaviside(0)`, `'FourierParameters'` sets the convention of `fourier`, and `'PolynomialDisplayStyle'` controls the order of terms in polynomials.\n\nPreferences last for the session. Call `sympref('default')` to reset them, which is good practice at the start and end of a script that changes them.",
+    "pt": "As preferências afetam como os resultados são exibidos e como alguns valores especiais são definidos. `'HeavisideAtOrigin'` define o valor de `heaviside(0)`, `'FourierParameters'` define a convenção de `fourier` e `'PolynomialDisplayStyle'` controla a ordem dos termos nos polinômios.\n\nAs preferências valem durante a sessão. Chame `sympref('default')` para restaurá-las, o que é boa prática no início e no fim de um script que as altera."
+   },
+   "notes": {
+    "en": "MatLivre stores every preference, but of them only `'HeavisideAtOrigin'` and `'FourierParameters'` change results. The display preferences (`'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'MatrixWithSquareBrackets'`) are accepted and have no effect on the output.",
+    "pt": "O MatLivre guarda todas as preferências, mas apenas `'HeavisideAtOrigin'` e `'FourierParameters'` alteram resultados. As preferências de exibição (`'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'MatrixWithSquareBrackets'`) são aceitas e não afetam a saída."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Changing and restoring a preference",
+      "pt": "Alterando e restaurando uma preferência"
+     },
+     "code": "sympref('HeavisideAtOrigin', 1);\nheaviside(sym(0))\nsympref('default');\nheaviside(sym(0))"
+    }
+   ],
+   "see": [
+    "syms",
+    "heaviside",
+    "fourier",
+    "vpa",
+    "digits"
+   ]
+  },
+  "syms": {
+   "summary": {
+    "en": "Creates symbolic variables and functions in the workspace.",
+    "pt": "Cria variáveis e funções simbólicas no workspace."
+   },
+   "syntax": [
+    {
+     "code": "syms x y z",
+     "en": "Creates the symbolic variables `x`, `y` and `z`.",
+     "pt": "Cria as variáveis simbólicas `x`, `y` e `z`."
+    },
+    {
+     "code": "syms x y real",
+     "en": "Creates variables with an assumption such as `real`, `positive` or `integer`.",
+     "pt": "Cria variáveis com uma suposição como `real`, `positive` ou `integer`."
+    },
+    {
+     "code": "syms f(x, y)",
+     "en": "Creates a symbolic function with arguments `x` and `y`.",
+     "pt": "Cria uma função simbólica com argumentos `x` e `y`."
+    },
+    {
+     "code": "syms",
+     "en": "With no arguments, lists the symbolic variables in the workspace.",
+     "pt": "Sem argumentos, lista as variáveis simbólicas do workspace."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x y z",
+     "en": "Names of the variables to create, separated by spaces.",
+     "pt": "Nomes das variáveis a criar, separados por espaços."
+    },
+    {
+     "name": "assumption",
+     "en": "Optional trailing word: `real`, `positive`, `integer`, `rational`, or `clear` to drop assumptions.",
+     "pt": "Palavra final opcional: `real`, `positive`, `integer`, `rational`, ou `clear` para remover suposições."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`syms x` is a command-syntax shorthand for `x = sym('x')`: it puts a symbolic variable named `x` in the workspace so that expressions such as `x^2 + 1` stay symbolic instead of being evaluated. Without an assumption, a variable is treated as an arbitrary complex number.\n\nAssumptions let functions simplify more: for a variable declared `real`, `conj(x)` is just `x`. They are stored with the variable and queried with `assumptions`.",
+    "pt": "`syms x` é uma abreviação em sintaxe de comando para `x = sym('x')`: coloca no workspace uma variável simbólica chamada `x`, de modo que expressões como `x^2 + 1` permaneçam simbólicas em vez de serem avaliadas. Sem suposição, uma variável é tratada como um número complexo qualquer.\n\nSuposições permitem simplificar mais: para uma variável declarada `real`, `conj(x)` é simplesmente `x`. Ficam guardadas com a variável e são consultadas com `assumptions`."
+   },
+   "notes": {
+    "en": "In MatLivre only the `real` assumption is recorded; `positive` and `integer` are accepted, but `assumptions` reports `real` and `simplify` does not use the extra information.",
+    "pt": "No MatLivre apenas a suposição `real` é registrada; `positive` e `integer` são aceitas, mas `assumptions` informa `real` e `simplify` não usa a informação extra."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Variables and a symbolic function",
+      "pt": "Variáveis e uma função simbólica"
+     },
+     "code": "syms a b\nexpand((a + b)^2)\nsyms g(t)\ng(t) = t^2;\ng(3)"
+    }
+   ],
+   "see": [
+    "sym",
+    "symfun",
+    "assumptions",
+    "assume",
+    "clear"
+   ]
+  },
+  "symType": {
+   "summary": {
+    "en": "Symbolic type of an object or of each element of an array.",
+    "pt": "Tipo simbólico de um objeto ou de cada elemento de um array."
+   },
+   "syntax": [
+    {
+     "code": "t = symType(S)",
+     "en": "Returns the type name of `S`, or a string array with one name per element.",
+     "pt": "Retorna o nome do tipo de `S`, ou um array de strings com um nome por elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic scalar or array.",
+     "pt": "Escalar ou array simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "String array of the same size as `S`, with names such as `\"variable\"`, `\"integer\"`, `\"rational\"`, `\"complex\"`, `\"constant\"`, `\"expression\"` or `\"equation\"`.",
+     "pt": "Array de strings do mesmo tamanho de `S`, com nomes como `\"variable\"`, `\"integer\"`, `\"rational\"`, `\"complex\"`, `\"constant\"`, `\"expression\"` ou `\"equation\"`."
+    }
+   ],
+   "description": {
+    "en": "`symType` gives the most specific type of what it is handed. A name such as `x` is a `\"variable\"`, `sym(2)` an `\"integer\"`, `sym(1)/2` a `\"rational\"`, `sym(pi)` a `\"constant\"`, `x + 1` an `\"expression\"` and `x == 1` an `\"equation\"`.\n\nThe result is the single best label, while `isSymType` answers whether an object belongs to a given type, including the more general ones.",
+    "pt": "`symType` dá o tipo mais específico do que recebe. Um nome como `x` é uma `\"variable\"`, `sym(2)` um `\"integer\"`, `sym(1)/2` um `\"rational\"`, `sym(pi)` uma `\"constant\"`, `x + 1` uma `\"expression\"` e `x == 1` uma `\"equation\"`.\n\nO resultado é o melhor rótulo único, enquanto `isSymType` responde se um objeto pertence a um dado tipo, inclusive aos mais gerais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Types of common objects",
+      "pt": "Tipos de objetos comuns"
+     },
+     "code": "syms x\nsymType(x)\nsymType(sym(2))\nsymType(sym(1)/2)\nsymType(sym(pi))\nsymType(x + 1)\nsymType(x == 1)\nsymType([x 1])"
+    }
+   ],
+   "see": [
+    "isSymType",
+    "hasSymType",
+    "findSymType",
+    "symFunType"
+   ]
+  }
+ }
+}

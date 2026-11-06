@@ -1,0 +1,1516 @@
+{
+ "functions": {
+  "bicg": {
+   "summary": {
+    "en": "Solves a square linear system with the biconjugate gradients method.",
+    "pt": "Resolve um sistema linear quadrado pelo método dos gradientes biconjugados."
+   },
+   "syntax": [
+    {
+     "code": "x = bicg(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = bicg(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = bicg(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = bicg(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`bicg` solves `A*x = b` for a square, not necessarily symmetric matrix. It builds two sequences of search directions, one using `A` and one using its transpose, which keeps the cost per step low. Each iteration needs one product with `A` and one with `A'`.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`bicg` resolve `A*x = b` para uma matriz quadrada, não necessariamente simétrica. Constrói duas sequências de direções de busca, uma usando `A` e outra usando sua transposta, o que mantém o custo por passo baixo. Cada iteração precisa de um produto com `A` e outro com `A'`.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = bicg(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "bicgstab",
+    "cgs",
+    "gmres",
+    "pcg",
+    "qmr"
+   ]
+  },
+  "bicgstab": {
+   "summary": {
+    "en": "Solves a square linear system with the stabilized biconjugate gradients method.",
+    "pt": "Resolve um sistema linear quadrado pelo método dos gradientes biconjugados estabilizado."
+   },
+   "syntax": [
+    {
+     "code": "x = bicgstab(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = bicgstab(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = bicgstab(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = bicgstab(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`bicgstab` is a smoother variant of biconjugate gradients that avoids products with `A'`. It uses two products with `A` per full iteration and its residuals usually decrease more regularly than those of `cgs`. The returned `iter` can end in `.5` because the method counts half iterations.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`bicgstab` é uma variante mais suave dos gradientes biconjugados que evita produtos com `A'`. Usa dois produtos com `A` por iteração completa e seus resíduos costumam diminuir de forma mais regular que os do `cgs`. O `iter` retornado pode terminar em `.5`, pois o método conta meias iterações.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = bicgstab(A, b, 1e-10, 100);\nfprintf('flag = %d, iterations = %g\\n', flag, iter)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "bicg",
+    "bicgstabl",
+    "cgs",
+    "gmres",
+    "qmr"
+   ]
+  },
+  "bicgstabl": {
+   "summary": {
+    "en": "Solves a square linear system with the BiCGStab(l) method.",
+    "pt": "Resolve um sistema linear quadrado pelo método BiCGStab(l)."
+   },
+   "syntax": [
+    {
+     "code": "x = bicgstabl(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = bicgstabl(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = bicgstabl(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = bicgstabl(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`bicgstabl` generalizes `bicgstab` by smoothing the residual with a polynomial of degree `l` at each step. Larger `l` helps on matrices with strongly complex eigenvalues, where `bicgstab` tends to stall, at the price of more work per iteration.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`bicgstabl` generaliza o `bicgstab` suavizando o resíduo com um polinômio de grau `l` a cada passo. Um `l` maior ajuda em matrizes com autovalores fortemente complexos, nas quais o `bicgstab` tende a estagnar, ao custo de mais trabalho por iteração.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = bicgstabl(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "bicgstab",
+    "bicg",
+    "cgs",
+    "gmres",
+    "tfqmr"
+   ]
+  },
+  "cgs": {
+   "summary": {
+    "en": "Solves a square linear system with the conjugate gradients squared method.",
+    "pt": "Resolve um sistema linear quadrado pelo método dos gradientes conjugados ao quadrado."
+   },
+   "syntax": [
+    {
+     "code": "x = cgs(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = cgs(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = cgs(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = cgs(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`cgs` squares the residual polynomial of biconjugate gradients, which can double the convergence speed when the method behaves well but makes the residual curve irregular and sensitive to rounding. It needs two products with `A` per iteration and none with `A'`.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`cgs` eleva ao quadrado o polinômio de resíduo dos gradientes biconjugados, o que pode dobrar a velocidade de convergência quando o método se comporta bem, mas torna a curva do resíduo irregular e sensível a arredondamentos. Precisa de dois produtos com `A` por iteração e nenhum com `A'`.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = cgs(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "bicg",
+    "bicgstab",
+    "gmres",
+    "qmr",
+    "tfqmr"
+   ]
+  },
+  "colperm": {
+   "summary": {
+    "en": "Column permutation that orders the columns by their number of nonzeros.",
+    "pt": "Permutação de colunas que ordena as colunas pelo número de elementos não nulos."
+   },
+   "syntax": [
+    {
+     "code": "p = colperm(S)",
+     "en": "Returns a permutation vector `p` so that `S(:,p)` has columns with nondecreasing nonzero counts.",
+     "pt": "Retorna um vetor de permutação `p` tal que `S(:,p)` tenha colunas com contagens de não nulos não decrescentes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Sparse or full matrix.",
+     "pt": "Matriz esparsa ou cheia."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Permutation vector of length `size(S,2)`.",
+     "pt": "Vetor de permutação de comprimento `size(S,2)`."
+    }
+   ],
+   "description": {
+    "en": "The ordering is a cheap heuristic: columns with few nonzeros come first. Applied before an LU or QR factorization it sometimes reduces fill-in, the new nonzeros created during the factorization. Ties keep their original order.\n\nIt is much simpler than `symrcm` or an approximate minimum degree ordering, which usually give better results.",
+    "pt": "A ordenação é uma heurística barata: colunas com poucos não nulos vêm primeiro. Aplicada antes de uma fatoração LU ou QR, às vezes reduz o preenchimento, os novos não nulos criados durante a fatoração. Empates mantêm a ordem original.\n\nÉ bem mais simples que `symrcm` ou uma ordenação por grau mínimo aproximado, que costumam dar resultados melhores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sorting columns by density",
+      "pt": "Ordenando colunas por densidade"
+     },
+     "code": "S = sparse([1 1 1; 0 1 0; 0 1 1]);\np = colperm(S)\nfull(S(:, p))"
+    }
+   ],
+   "see": [
+    "symrcm",
+    "nnz",
+    "sparse",
+    "lu"
+   ]
+  },
+  "etree": {
+   "summary": {
+    "en": "Elimination tree of a sparse symmetric matrix.",
+    "pt": "Árvore de eliminação de uma matriz esparsa simétrica."
+   },
+   "syntax": [
+    {
+     "code": "p = etree(A)",
+     "en": "Returns the parent of each node in the elimination tree of `A`.",
+     "pt": "Retorna o pai de cada nó na árvore de eliminação de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse square matrix. Only its nonzero pattern in the upper triangle is used.",
+     "pt": "Matriz esparsa quadrada. Só o padrão de não nulos do triângulo superior é usado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Row vector with `p(j)` the parent of column `j`, or `0` for a root.",
+     "pt": "Vetor linha com `p(j)` sendo o pai da coluna `j`, ou `0` para uma raiz."
+    }
+   ],
+   "description": {
+    "en": "The elimination tree describes the dependencies of a Cholesky factorization: column `j` of the factor affects only its ancestors in the tree. Its shape tells how much of the computation can run independently, and its height bounds the number of sequential steps.\n\nThe tree depends only on the nonzero pattern of `A`, not on the values. A matrix with several diagonal blocks gives a forest, with one root for each block.",
+    "pt": "A árvore de eliminação descreve as dependências de uma fatoração de Cholesky: a coluna `j` do fator afeta apenas seus ancestrais na árvore. Sua forma indica quanto do cálculo pode ocorrer de modo independente, e sua altura limita o número de passos sequenciais.\n\nA árvore depende apenas do padrão de não nulos de `A`, não dos valores. Uma matriz com vários blocos diagonais gera uma floresta, com uma raiz por bloco."
+   },
+   "notes": {
+    "en": "Only the single output `p` is supported; the optional second output (a postorder) is not.",
+    "pt": "Só a saída única `p` é suportada; a segunda saída opcional (uma pós-ordem) não é."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tree of a tridiagonal matrix",
+      "pt": "Árvore de uma matriz tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(4,1)) + diag(ones(3,1),1) + diag(ones(3,1),-1));\np = etree(A)"
+    }
+   ],
+   "see": [
+    "etreeplot",
+    "treeplot",
+    "symbfact",
+    "symrcm"
+   ]
+  },
+  "etreeplot": {
+   "summary": {
+    "en": "Plots the elimination tree of a sparse matrix.",
+    "pt": "Desenha a árvore de eliminação de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "etreeplot(A)",
+     "en": "Draws the elimination tree of `A` as a tree diagram.",
+     "pt": "Desenha a árvore de eliminação de `A` como um diagrama em árvore."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse square matrix; only the nonzero pattern matters.",
+     "pt": "Matriz esparsa quadrada; só o padrão de não nulos importa."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`etreeplot(A)` computes `etree(A)` and displays the result with `treeplot`. Each node is a column of `A`, and the line from a node goes up to its parent. It gives a quick picture of how a factorization is organized.",
+    "pt": "`etreeplot(A)` calcula `etree(A)` e exibe o resultado com `treeplot`. Cada nó é uma coluna de `A`, e a linha de um nó sobe até seu pai. Dá uma imagem rápida de como a fatoração se organiza."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tree of a tridiagonal matrix",
+      "pt": "Árvore de uma matriz tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(6,1)) + diag(ones(5,1),1) + diag(ones(5,1),-1));\netreeplot(A)",
+     "silent": true
+    }
+   ],
+   "see": [
+    "etree",
+    "treeplot",
+    "treelayout",
+    "spy"
+   ]
+  },
+  "full": {
+   "summary": {
+    "en": "Converts a sparse matrix to ordinary full storage.",
+    "pt": "Converte uma matriz esparsa para o armazenamento comum (cheio)."
+   },
+   "syntax": [
+    {
+     "code": "A = full(S)",
+     "en": "Returns `S` with every element stored, zeros included.",
+     "pt": "Retorna `S` com todos os elementos armazenados, inclusive os zeros."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Sparse or full array. A full array is returned unchanged.",
+     "pt": "Array esparso ou cheio. Um array cheio é retornado sem alteração."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Full array of the same size and class.",
+     "pt": "Array cheio de mesmo tamanho e classe."
+    }
+   ],
+   "description": {
+    "en": "A sparse matrix stores only its nonzero entries and their positions. `full` fills in the zeros so that the matrix can be displayed in the usual grid, indexed quickly or passed to functions that need full input. The memory use grows to `numel(S)` elements, so avoid it for very large matrices.",
+    "pt": "Uma matriz esparsa guarda apenas seus elementos não nulos e as posições. `full` preenche os zeros para que a matriz possa ser exibida na grade habitual, indexada rapidamente ou passada a funções que exigem entrada cheia. O uso de memória passa a `numel(S)` elementos, então evite em matrizes muito grandes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sparse to full",
+      "pt": "De esparsa a cheia"
+     },
+     "code": "S = sparse([1 2 3], [1 2 3], [4 5 6])\nA = full(S)\nissparse(A)"
+    }
+   ],
+   "see": [
+    "sparse",
+    "issparse",
+    "nnz",
+    "spones"
+   ]
+  },
+  "gmres": {
+   "summary": {
+    "en": "Solves a square linear system with the generalized minimal residual method.",
+    "pt": "Resolve um sistema linear quadrado pelo método do resíduo mínimo generalizado."
+   },
+   "syntax": [
+    {
+     "code": "x = gmres(A, b)",
+     "en": "Solves `A*x = b` with default settings.",
+     "pt": "Resolve `A*x = b` com as configurações padrão."
+    },
+    {
+     "code": "x = gmres(A, b, restart, tol, maxit)",
+     "en": "Restarts every `restart` inner steps; `[]` runs without restarts.",
+     "pt": "Reinicia a cada `restart` passos internos; `[]` executa sem reinícios."
+    },
+    {
+     "code": "x = gmres(A, b, restart, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = gmres(___)",
+     "en": "Also returns the flag, final relative residual, iteration counts `[outer inner]` and residual history.",
+     "pt": "Também retorna o indicador, o resíduo relativo final, as contagens de iteração `[externa interna]` e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix, or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada, ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector.",
+     "pt": "Vetor coluna do lado direito."
+    },
+    {
+     "name": "restart",
+     "en": "Inner iterations before restarting. `[]` or a value of `size(A,1)` means no restart.",
+     "pt": "Iterações internas antes de reiniciar. `[]` ou um valor `size(A,1)` significa sem reinício."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; default `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; padrão `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of outer iterations.",
+     "pt": "Número máximo de iterações externas."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors.",
+     "pt": "Fatores do pré-condicionador."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess; default zeros.",
+     "pt": "Estimativa inicial; padrão zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution.",
+     "pt": "A solução calculada."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if converged, `1` if `maxit` was reached, `2` for an ill-conditioned preconditioner, `3` if stagnated.",
+     "pt": "`0` se convergiu, `1` se `maxit` foi atingido, `2` para pré-condicionador mal condicionado, `3` se estagnou."
+    },
+    {
+     "name": "relres",
+     "en": "Final relative residual.",
+     "pt": "Resíduo relativo final."
+    },
+    {
+     "name": "iter",
+     "en": "Two-element vector `[outer inner]` locating the iteration at which `x` was found.",
+     "pt": "Vetor de dois elementos `[externa interna]` que localiza a iteração em que `x` foi obtido."
+    },
+    {
+     "name": "resvec",
+     "en": "Residual norms at each inner iteration.",
+     "pt": "Normas do resíduo em cada iteração interna."
+    }
+   ],
+   "description": {
+    "en": "At step k, GMRES picks the vector in the Krylov subspace spanned by `b, A*b, ..., A^(k-1)*b` that minimizes the residual. It handles any square matrix, symmetric or not, and its residual never increases. The price is memory: it stores all k basis vectors, and the work per step grows with k.\n\nRestarting after `restart` steps caps that cost, but may slow convergence or even stall it. Use `[]` for small problems and a restart value for large ones.",
+    "pt": "No passo k, o GMRES escolhe, no subespaço de Krylov gerado por `b, A*b, ..., A^(k-1)*b`, o vetor que minimiza o resíduo. Funciona com qualquer matriz quadrada, simétrica ou não, e seu resíduo nunca aumenta. O preço é a memória: guarda todos os k vetores da base, e o trabalho por passo cresce com k.\n\nReiniciar após `restart` passos limita esse custo, mas pode retardar a convergência ou até estagná-la. Use `[]` para problemas pequenos e um valor de reinício para os grandes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Without and with a restart",
+      "pt": "Sem e com reinício"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = gmres(A, b, [], 1e-10, 5);\nfprintf('flag = %d, iter = [%d %d]\\n', flag, iter)\ndisp(x')\n[x, flag, relres, iter] = gmres(A, b, 2, 1e-10, 20);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)"
+    }
+   ],
+   "see": [
+    "bicgstab",
+    "pcg",
+    "lsqr",
+    "qmr",
+    "ilu"
+   ]
+  },
+  "gplot": {
+   "summary": {
+    "en": "Draws a graph from its adjacency matrix and node coordinates.",
+    "pt": "Desenha um grafo a partir da matriz de adjacência e das coordenadas dos nós."
+   },
+   "syntax": [
+    {
+     "code": "gplot(A, xy)",
+     "en": "Plots a line between nodes `i` and `j` wherever `A(i,j)` is nonzero.",
+     "pt": "Desenha uma linha entre os nós `i` e `j` sempre que `A(i,j)` é não nulo."
+    },
+    {
+     "code": "gplot(A, xy, LineSpec)",
+     "en": "Uses a line specification such as `'-o'` for color, style and markers.",
+     "pt": "Usa uma especificação de linha como `'-o'` para cor, estilo e marcadores."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square adjacency matrix, sparse or full.",
+     "pt": "Matriz de adjacência quadrada, esparsa ou cheia."
+    },
+    {
+     "name": "xy",
+     "en": "`n`-by-2 (or `n`-by-3) matrix: row `i` holds the coordinates of node `i`.",
+     "pt": "Matriz `n`-por-2 (ou `n`-por-3): a linha `i` guarda as coordenadas do nó `i`."
+    },
+    {
+     "name": "LineSpec",
+     "en": "Optional line style, color and marker string.",
+     "pt": "String opcional com estilo de linha, cor e marcador."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`gplot` is a lightweight way to look at a graph or at the connectivity of a sparse matrix. The positions come from `xy`, so you choose the layout: coordinates from a mesh, the output of `treelayout`, points on a circle, and so on. Edges are drawn once for each nonzero entry in the matrix.",
+    "pt": "`gplot` é uma forma leve de ver um grafo ou a conectividade de uma matriz esparsa. As posições vêm de `xy`, então o layout é escolha sua: coordenadas de uma malha, a saída de `treelayout`, pontos em um círculo etc. As arestas são desenhadas uma vez para cada elemento não nulo da matriz."
+   },
+   "notes": {
+    "en": "The output form `[x, y] = gplot(A, xy)` that returns the line coordinates is not supported.",
+    "pt": "A forma com saída `[x, y] = gplot(A, xy)`, que retorna as coordenadas das linhas, não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A triangle with a tail",
+      "pt": "Um triângulo com uma cauda"
+     },
+     "code": "A = sparse([0 1 1 0; 1 0 1 0; 1 1 0 1; 0 0 1 0]);\nxy = [0 0; 1 0; 0.5 1; 2 1];\ngplot(A, xy, '-o')",
+     "silent": true
+    }
+   ],
+   "see": [
+    "treeplot",
+    "spy",
+    "treelayout",
+    "plot"
+   ]
+  },
+  "ichol": {
+   "summary": {
+    "en": "Incomplete Cholesky factorization of a sparse symmetric positive definite matrix.",
+    "pt": "Fatoração de Cholesky incompleta de uma matriz esparsa simétrica definida positiva."
+   },
+   "syntax": [
+    {
+     "code": "L = ichol(A)",
+     "en": "Returns a sparse lower triangular `L` with the same nonzero pattern as `tril(A)` such that `L*L'` approximates `A`.",
+     "pt": "Retorna uma `L` triangular inferior esparsa com o mesmo padrão de não nulos de `tril(A)` tal que `L*L'` aproxima `A`."
+    },
+    {
+     "code": "L = ichol(A, opts)",
+     "en": "Chooses the variant with a struct: `type` is `'nofill'` or `'ict'`, plus options such as `droptol` and `michol`.",
+     "pt": "Escolhe a variante com uma struct: `type` é `'nofill'` ou `'ict'`, além de opções como `droptol` e `michol`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse, symmetric, positive definite matrix. Only its lower triangle is read.",
+     "pt": "Matriz esparsa, simétrica e definida positiva. Só o triângulo inferior é lido."
+    },
+    {
+     "name": "opts",
+     "en": "Struct with fields `type`, `droptol` (for `'ict'`) and `michol` (`'on'` or `'off'`).",
+     "pt": "Struct com os campos `type`, `droptol` (para `'ict'`) e `michol` (`'on'` ou `'off'`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Sparse lower triangular incomplete Cholesky factor.",
+     "pt": "Fator de Cholesky incompleto, triangular inferior esparso."
+    }
+   ],
+   "description": {
+    "en": "A full Cholesky factorization of a sparse matrix creates many new nonzeros (fill-in). The incomplete version discards most of them, keeping a factor that is sparse but only approximately equal to `A`. It is not used to solve the system directly: `L*L'` serves as a preconditioner for `pcg`, which then converges in far fewer iterations.\n\nThe factorization can fail with an error if a nonpositive pivot appears.",
+    "pt": "Uma fatoração de Cholesky completa de uma matriz esparsa cria muitos novos não nulos (preenchimento). A versão incompleta descarta a maior parte deles, mantendo um fator esparso mas apenas aproximadamente igual a `A`. Não serve para resolver o sistema diretamente: `L*L'` funciona como pré-condicionador do `pcg`, que passa a convergir em bem menos iterações.\n\nA fatoração pode falhar com um erro se surgir um pivô não positivo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Preconditioning pcg",
+      "pt": "Pré-condicionando o pcg"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nL = ichol(A);\nfull(L)\nb = (1:5)';\n[x, flag] = pcg(A, b, 1e-10, 50, L, L');\nflag"
+    }
+   ],
+   "see": [
+    "ilu",
+    "pcg",
+    "chol",
+    "sparse"
+   ]
+  },
+  "ilu": {
+   "summary": {
+    "en": "Incomplete LU factorization of a sparse matrix.",
+    "pt": "Fatoração LU incompleta de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "[L, U] = ilu(A)",
+     "en": "Returns sparse triangular factors with the nonzero pattern of `A`, so that `L*U` approximates `A`.",
+     "pt": "Retorna fatores triangulares esparsos com o padrão de não nulos de `A`, de modo que `L*U` aproxime `A`."
+    },
+    {
+     "code": "[L, U] = ilu(A, opts)",
+     "en": "Chooses the variant with a struct: `type` is `'nofill'`, `'crout'` or `'ilutp'`, with `droptol` for the last two.",
+     "pt": "Escolhe a variante com uma struct: `type` é `'nofill'`, `'crout'` ou `'ilutp'`, com `droptol` nas duas últimas."
+    },
+    {
+     "code": "LU = ilu(A)",
+     "en": "Returns the two factors packed in one matrix (`L` without its unit diagonal, plus `U`).",
+     "pt": "Retorna os dois fatores juntos em uma matriz (`L` sem a diagonal unitária, mais `U`)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse square matrix.",
+     "pt": "Matriz esparsa quadrada."
+    },
+    {
+     "name": "opts",
+     "en": "Struct with `type` and, for `'crout'` and `'ilutp'`, `droptol`, a threshold below which entries are dropped.",
+     "pt": "Struct com `type` e, para `'crout'` e `'ilutp'`, `droptol`, um limiar abaixo do qual os elementos são descartados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Unit lower triangular factor.",
+     "pt": "Fator triangular inferior com diagonal unitária."
+    },
+    {
+     "name": "U",
+     "en": "Upper triangular factor.",
+     "pt": "Fator triangular superior."
+    }
+   ],
+   "description": {
+    "en": "An exact LU factorization of a sparse matrix usually fills in many zeros. `ilu` keeps the factors sparse by dropping entries, either those outside the original pattern (`'nofill'`) or those smaller than a tolerance (`'crout'`, `'ilutp'`). `L*U` is then only close to `A`, which is exactly what is wanted for a preconditioner.\n\nPass `L` and `U` as `M1` and `M2` to `gmres`, `bicgstab` and the other iterative solvers.",
+    "pt": "Uma fatoração LU exata de uma matriz esparsa costuma preencher muitos zeros. `ilu` mantém os fatores esparsos descartando elementos: os que estão fora do padrão original (`'nofill'`) ou os menores que uma tolerância (`'crout'`, `'ilutp'`). Assim `L*U` fica apenas próximo de `A`, que é justamente o desejado para um pré-condicionador.\n\nPasse `L` e `U` como `M1` e `M2` ao `gmres`, `bicgstab` e aos demais solvers iterativos."
+   },
+   "notes": {
+    "en": "The three-output form `[L, U, P] = ilu(A, opts)` with row pivoting is not supported.",
+    "pt": "A forma com três saídas `[L, U, P] = ilu(A, opts)`, com pivoteamento de linhas, não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Preconditioning bicgstab",
+      "pt": "Pré-condicionando o bicgstab"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\n[L, U] = ilu(A);\nfull(U)\nb = (1:5)';\n[x, flag] = bicgstab(A, b, 1e-10, 50, L, U);\nflag"
+    }
+   ],
+   "see": [
+    "ichol",
+    "lu",
+    "gmres",
+    "bicgstab"
+   ]
+  },
+  "lsqr": {
+   "summary": {
+    "en": "Solves a least-squares or linear system iteratively.",
+    "pt": "Resolve iterativamente um sistema linear ou de mínimos quadrados."
+   },
+   "syntax": [
+    {
+     "code": "x = lsqr(A, b)",
+     "en": "Solves `A*x = b`, in the least-squares sense when `A` is rectangular.",
+     "pt": "Resolve `A*x = b`, no sentido de mínimos quadrados quando `A` é retangular."
+    },
+    {
+     "code": "x = lsqr(A, b, tol, maxit)",
+     "en": "Sets the tolerance and iteration limit.",
+     "pt": "Define a tolerância e o limite de iterações."
+    },
+    {
+     "code": "x = lsqr(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner and an initial guess.",
+     "pt": "Acrescenta um pré-condicionador e uma estimativa inicial."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec, lsvec] = lsqr(___)",
+     "en": "Also returns the convergence flag, residual information and history vectors.",
+     "pt": "Também retorna o indicador de convergência, informações do resíduo e vetores de histórico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Coefficient matrix, not necessarily square, or a function handle.",
+     "pt": "Matriz de coeficientes, não necessariamente quadrada, ou um handle de função."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector.",
+     "pt": "Vetor coluna do lado direito."
+    },
+    {
+     "name": "tol",
+     "en": "Tolerance; default `1e-6`.",
+     "pt": "Tolerância; padrão `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum iterations; default `min(size(A,1), size(A,2), 20)`.",
+     "pt": "Máximo de iterações; padrão `min(size(A,1), size(A,2), 20)`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The solution, a column vector with `size(A,2)` entries.",
+     "pt": "A solução, um vetor coluna com `size(A,2)` elementos."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if converged, `1` if `maxit` was reached, `2` for an ill-conditioned preconditioner, `3` if stagnated.",
+     "pt": "`0` se convergiu, `1` se `maxit` foi atingido, `2` para pré-condicionador mal condicionado, `3` se estagnou."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)`.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)`."
+    }
+   ],
+   "description": {
+    "en": "LSQR applies the Lanczos bidiagonalization to the normal equations `A'*A*x = A'*b` without ever forming `A'*A`, which would square the condition number. Each iteration costs one product with `A` and one with `A'`.\n\nIt is intended for large sparse least-squares problems. Because the default `maxit` is only 20 for large matrices, raise it when the flag is `1`.",
+    "pt": "O LSQR aplica a bidiagonalização de Lanczos às equações normais `A'*A*x = A'*b` sem nunca formar `A'*A`, o que elevaria ao quadrado o número de condição. Cada iteração custa um produto com `A` e um com `A'`.\n\nÉ voltado para problemas de mínimos quadrados esparsos e grandes. Como o `maxit` padrão é apenas 20 para matrizes grandes, aumente-o quando o indicador for `1`."
+   },
+   "notes": {
+    "en": "Rectangular systems may return a solution of the wrong size in this version; use square matrices, or `A\\b`, for least squares.",
+    "pt": "Sistemas retangulares podem retornar uma solução de tamanho errado nesta versão; use matrizes quadradas, ou `A\\b`, para mínimos quadrados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Square system",
+      "pt": "Sistema quadrado"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres] = lsqr(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "pcg",
+    "gmres",
+    "mldivide",
+    "lscov"
+   ]
+  },
+  "minres": {
+   "summary": {
+    "en": "Solves a symmetric linear system with the minimum residual method.",
+    "pt": "Resolve um sistema linear simétrico pelo método do resíduo mínimo."
+   },
+   "syntax": [
+    {
+     "code": "x = minres(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = minres(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = minres(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = minres(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`minres` is for a symmetric `A`, which may be indefinite (with both positive and negative eigenvalues), the case where `pcg` can break down. Each step minimizes the residual norm over the Krylov subspace, using a short recurrence so memory stays constant. A preconditioner must be symmetric positive definite.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`minres` é para uma `A` simétrica, que pode ser indefinida (com autovalores positivos e negativos), caso em que o `pcg` pode falhar. Cada passo minimiza a norma do resíduo no subespaço de Krylov, usando uma recorrência curta, de modo que a memória fica constante. Um pré-condicionador deve ser simétrico definido positivo.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Symmetric tridiagonal system",
+      "pt": "Sistema tridiagonal simétrico"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = minres(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "symmlq",
+    "pcg",
+    "gmres",
+    "lsqr"
+   ]
+  },
+  "nnz": {
+   "summary": {
+    "en": "Number of nonzero elements.",
+    "pt": "Número de elementos não nulos."
+   },
+   "syntax": [
+    {
+     "code": "n = nnz(X)",
+     "en": "Counts the elements of `X` that are nonzero.",
+     "pt": "Conta os elementos de `X` que são diferentes de zero."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric or logical array, sparse or full.",
+     "pt": "Array numérico ou lógico, esparso ou cheio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Nonnegative integer scalar.",
+     "pt": "Escalar inteiro não negativo."
+    }
+   ],
+   "description": {
+    "en": "For a sparse matrix, `nnz` is the number of entries it actually stores, which tells how sparse it is: `nnz(S)/numel(S)` is the density. For a full array it counts the elements that are not zero, so `nnz(x > 3)` counts the elements above 3.\n\nNaN counts as nonzero.",
+    "pt": "Para uma matriz esparsa, `nnz` é o número de elementos que ela de fato armazena, o que indica o quanto é esparsa: `nnz(S)/numel(S)` é a densidade. Para um array cheio conta os elementos diferentes de zero, então `nnz(x > 3)` conta os elementos acima de 3.\n\nNaN conta como não nulo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Counting and density",
+      "pt": "Contagem e densidade"
+     },
+     "code": "S = sparse([1 2 3], [1 2 3], [4 5 6]);\nnnz(S)\nnnz(S) / numel(S)\nnnz([0 2 0 7 NaN])\nnnz([1 5 9 2] > 3)"
+    }
+   ],
+   "see": [
+    "nonzeros",
+    "nzmax",
+    "sparse",
+    "find",
+    "numel"
+   ]
+  },
+  "nonzeros": {
+   "summary": {
+    "en": "Column vector with the nonzero elements of an array.",
+    "pt": "Vetor coluna com os elementos não nulos de um array."
+   },
+   "syntax": [
+    {
+     "code": "v = nonzeros(A)",
+     "en": "Returns the nonzero values of `A`, scanning column by column.",
+     "pt": "Retorna os valores não nulos de `A`, percorrendo coluna por coluna."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array, sparse or full.",
+     "pt": "Array numérico ou lógico, esparso ou cheio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Column vector with `nnz(A)` elements, in column-major order.",
+     "pt": "Vetor coluna com `nnz(A)` elementos, em ordem de colunas."
+    }
+   ],
+   "description": {
+    "en": "The values are collected down the first column, then the second, and so on, which is the order in which a sparse matrix stores them. The positions are lost; to get them as well use `find`.",
+    "pt": "Os valores são coletados descendo a primeira coluna, depois a segunda, e assim por diante, que é a ordem em que uma matriz esparsa os guarda. As posições se perdem; para obtê-las também use `find`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Nonzeros in column order",
+      "pt": "Não nulos em ordem de colunas"
+     },
+     "code": "A = [0 5; 6 0; 7 8];\nnonzeros(A)\nnonzeros(sparse(A))'"
+    }
+   ],
+   "see": [
+    "nnz",
+    "find",
+    "sparse",
+    "nzmax"
+   ]
+  },
+  "nzmax": {
+   "summary": {
+    "en": "Amount of storage allocated for nonzero elements.",
+    "pt": "Quantidade de armazenamento alocada para elementos não nulos."
+   },
+   "syntax": [
+    {
+     "code": "n = nzmax(S)",
+     "en": "Returns the number of elements of storage reserved for the nonzeros of `S`.",
+     "pt": "Retorna o número de elementos de armazenamento reservados para os não nulos de `S`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Sparse or full array.",
+     "pt": "Array esparso ou cheio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Storage count. It is at least `nnz(S)` for sparse input and `numel(S)` for full input.",
+     "pt": "Contagem de armazenamento. É pelo menos `nnz(S)` para entrada esparsa e `numel(S)` para entrada cheia."
+    }
+   ],
+   "description": {
+    "en": "A sparse matrix may reserve room for more nonzeros than it holds, so that filling it in later does not require repeated reallocation. `nzmax` reports that capacity, while `nnz` reports how much is used. For a full array the answer is simply the number of elements.",
+    "pt": "Uma matriz esparsa pode reservar espaço para mais não nulos do que contém, para que o preenchimento posterior não exija realocações repetidas. `nzmax` informa essa capacidade, enquanto `nnz` informa quanto está em uso. Para um array cheio, a resposta é simplesmente o número de elementos."
+   },
+   "notes": {
+    "en": "The reserved capacity can differ from MATLAB's, for example after `spalloc`, so compare `nzmax` against `nnz` rather than a fixed number.",
+    "pt": "A capacidade reservada pode diferir da do MATLAB, por exemplo após `spalloc`, então compare `nzmax` com `nnz` em vez de um número fixo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capacity versus use",
+      "pt": "Capacidade versus uso"
+     },
+     "code": "S = sparse([1 2], [1 2], [3 4], 5, 5);\nnnz(S)\nnzmax(S) >= nnz(S)\nnzmax(ones(2, 3))"
+    }
+   ],
+   "see": [
+    "nnz",
+    "spalloc",
+    "sparse",
+    "nonzeros"
+   ]
+  },
+  "pcg": {
+   "summary": {
+    "en": "Solves a symmetric positive definite linear system with preconditioned conjugate gradients.",
+    "pt": "Resolve um sistema linear simétrico definido positivo pelo gradiente conjugado pré-condicionado."
+   },
+   "syntax": [
+    {
+     "code": "x = pcg(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = pcg(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = pcg(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = pcg(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`pcg` is the standard method when `A` is symmetric and positive definite. It needs one product with `A` per iteration, stores only a few vectors, and in exact arithmetic finds the answer in at most `size(A,1)` steps. In practice the preconditioner decides how fast it gets there.\n\nIf `A` is not symmetric positive definite, the method can break down or give a wrong answer; use `gmres` or `bicgstab` instead.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`pcg` é o método padrão quando `A` é simétrica e definida positiva. Precisa de um produto com `A` por iteração, guarda apenas alguns vetores e, em aritmética exata, encontra a resposta em no máximo `size(A,1)` passos. Na prática, o pré-condicionador decide a rapidez.\n\nSe `A` não é simétrica definida positiva, o método pode falhar ou dar resposta errada; use `gmres` ou `bicgstab`.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system, plain and preconditioned",
+      "pt": "Sistema tridiagonal, simples e pré-condicionado"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = pcg(A, b, 1e-10, 100);\nfprintf('flag = %d, iterations = %d\\n', flag, iter)\ndisp(x')\nL = ichol(A);\n[x2, flag2] = pcg(A, b, 1e-10, 100, L, L');\nfprintf('preconditioned flag = %d, same answer: %d\\n', flag2, norm(x - x2) < 1e-8)"
+    }
+   ],
+   "see": [
+    "ichol",
+    "gmres",
+    "minres",
+    "bicgstab",
+    "symmlq"
+   ]
+  },
+  "qmr": {
+   "summary": {
+    "en": "Solves a square linear system with the quasi-minimal residual method.",
+    "pt": "Resolve um sistema linear quadrado pelo método do resíduo quase mínimo."
+   },
+   "syntax": [
+    {
+     "code": "x = qmr(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = qmr(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = qmr(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = qmr(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`qmr` is a variant of biconjugate gradients that minimizes a quantity close to the residual, which smooths the convergence curve that `bicg` produces. Like `bicg` it needs a product with `A'` as well as with `A`, and it accepts a left and a right preconditioner.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`qmr` é uma variante dos gradientes biconjugados que minimiza uma grandeza próxima do resíduo, o que suaviza a curva de convergência produzida pelo `bicg`. Como o `bicg`, precisa de um produto com `A'` além de `A`, e aceita um pré-condicionador à esquerda e outro à direita.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = qmr(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "bicg",
+    "tfqmr",
+    "gmres",
+    "bicgstab"
+   ]
+  },
+  "spalloc": {
+   "summary": {
+    "en": "Creates an empty sparse matrix with room reserved for nonzeros.",
+    "pt": "Cria uma matriz esparsa vazia com espaço reservado para não nulos."
+   },
+   "syntax": [
+    {
+     "code": "S = spalloc(m, n, nzmax)",
+     "en": "Returns an `m`-by-`n` all-zero sparse matrix with space for `nzmax` nonzeros.",
+     "pt": "Retorna uma matriz esparsa `m`-por-`n` toda nula com espaço para `nzmax` não nulos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m, n",
+     "en": "Number of rows and columns.",
+     "pt": "Número de linhas e colunas."
+    },
+    {
+     "name": "nzmax",
+     "en": "Number of nonzeros to reserve space for.",
+     "pt": "Número de não nulos para os quais reservar espaço."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Sparse matrix with `nnz(S) = 0`.",
+     "pt": "Matriz esparsa com `nnz(S) = 0`."
+    }
+   ],
+   "description": {
+    "en": "`spalloc(m, n, nzmax)` is `sparse(m, n)` with a hint about how many entries will be filled in later. When a matrix is built by assigning elements one at a time, reserving the space avoids repeated reallocation. The matrix is still all zeros until you assign to it.",
+    "pt": "`spalloc(m, n, nzmax)` equivale a `sparse(m, n)` com uma dica sobre quantos elementos serão preenchidos depois. Quando a matriz é montada atribuindo elementos um a um, reservar o espaço evita realocações repetidas. A matriz continua toda nula até que você atribua valores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reserve, then fill",
+      "pt": "Reservar e depois preencher"
+     },
+     "code": "S = spalloc(3, 3, 4);\nnnz(S)\nS(1, 1) = 5;\nS(3, 2) = 7;\nnnz(S)\nfull(S)"
+    }
+   ],
+   "see": [
+    "sparse",
+    "nzmax",
+    "nnz",
+    "speye"
+   ]
+  }
+ }
+}

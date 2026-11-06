@@ -1,0 +1,1048 @@
+{
+ "functions": {
+  "cell2sym": {
+   "summary": {
+    "en": "Converts a cell array into a symbolic array.",
+    "pt": "Converte um cell array em um array simbólico."
+   },
+   "syntax": [
+    {
+     "code": "S = cell2sym(C)",
+     "en": "Converts each cell of `C` to a symbolic element.",
+     "pt": "Converte cada célula de `C` em um elemento simbólico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "Cell array holding numbers, text or symbolic values.",
+     "pt": "Cell array com números, texto ou valores simbólicos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic array with the same size as `C`.",
+     "pt": "Array simbólico com o mesmo tamanho de `C`."
+    }
+   ],
+   "description": {
+    "en": "Each cell must hold a scalar. Numbers become exact symbolic numbers, text such as `'x'` is parsed as a symbolic expression, and symbolic scalars are kept. Floating-point values are converted to nearby rational numbers, so `0.1` becomes `1/10` and `0.5` becomes `1/2`.\n\nThe function is the inverse of `sym2cell`, and is useful to turn data read from text or tables into symbolic objects.",
+    "pt": "Cada célula deve conter um escalar. Números viram números simbólicos exatos, texto como `'x'` é interpretado como expressão simbólica, e escalares simbólicos são mantidos. Valores de ponto flutuante são convertidos em racionais próximos, então `0.1` vira `1/10` e `0.5` vira `1/2`.\n\nÉ a inversa de `sym2cell` e serve para transformar dados lidos de texto ou tabelas em objetos simbólicos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers and text",
+      "pt": "Números e texto"
+     },
+     "code": "S = cell2sym({1, 'a'; 2, 'b'})\ncell2sym({0.1, 0.5})\nclass(S)"
+    }
+   ],
+   "see": [
+    "sym2cell",
+    "sym",
+    "double",
+    "str2sym"
+   ]
+  },
+  "sym2cell": {
+   "summary": {
+    "en": "Converts a symbolic array into a cell array.",
+    "pt": "Converte um array simbólico em um cell array."
+   },
+   "syntax": [
+    {
+     "code": "C = sym2cell(S)",
+     "en": "Splits the symbolic array `S` into a cell array of the same size, one symbolic scalar per cell.",
+     "pt": "Divide o array simbólico `S` em um cell array do mesmo tamanho, com um escalar simbólico por célula."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic scalar, vector or matrix.",
+     "pt": "Escalar, vetor ou matriz simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array with the size of `S`. Each cell holds a symbolic scalar.",
+     "pt": "Cell array com o tamanho de `S`. Cada célula guarda um escalar simbólico."
+    }
+   ],
+   "description": {
+    "en": "This turns a symbolic matrix into cells that can be indexed with braces, passed through `cellfun`, or fed to functions that do not accept symbolic arrays. A symbolic scalar gives a `1x1` cell.\n\nThe reverse operation is `cell2sym`.",
+    "pt": "Isso transforma uma matriz simbólica em células que podem ser indexadas com chaves, passadas por `cellfun` ou entregues a funções que não aceitam arrays simbólicos. Um escalar simbólico gera um cell `1x1`.\n\nA operação inversa é `cell2sym`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Matrix to cells",
+      "pt": "Matriz para células"
+     },
+     "code": "syms x\nc = sym2cell([x, 2*x; 3, x^2]);\nclass(c)\nc{1, 2}\nsize(c)"
+    }
+   ],
+   "see": [
+    "cell2sym",
+    "cellfun",
+    "sym",
+    "num2cell"
+   ]
+  },
+  "poly2sym": {
+   "summary": {
+    "en": "Builds a symbolic polynomial from a coefficient vector.",
+    "pt": "Monta um polinômio simbólico a partir de um vetor de coeficientes."
+   },
+   "syntax": [
+    {
+     "code": "p = poly2sym(c)",
+     "en": "Polynomial in the default variable `x`, with coefficients `c`, highest power first.",
+     "pt": "Polinômio na variável padrão `x`, com coeficientes `c`, da maior potência para a menor."
+    },
+    {
+     "code": "p = poly2sym(c, v)",
+     "en": "Uses the symbolic variable `v` instead of `x`.",
+     "pt": "Usa a variável simbólica `v` em vez de `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "c",
+     "en": "Vector of coefficients, numeric or symbolic.",
+     "pt": "Vetor de coeficientes, numéricos ou simbólicos."
+    },
+    {
+     "name": "v",
+     "en": "Symbolic variable or its name (optional).",
+     "pt": "Variável simbólica ou seu nome (opcional)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial `c(1)*v^(n-1) + ... + c(n)`.",
+     "pt": "Polinômio simbólico `c(1)*v^(n-1) + ... + c(n)`."
+    }
+   ],
+   "description": {
+    "en": "The coefficient order is the same as `polyval`, `roots` and `poly`: the first entry multiplies the highest power. Numeric coefficients are converted to exact rational numbers, so `0.5` gives `1/2` instead of a decimal. Leading zeros are dropped.\n\nIt is the inverse of `sym2poly`.",
+    "pt": "A ordem dos coeficientes é a mesma de `polyval`, `roots` e `poly`: o primeiro elemento multiplica a maior potência. Coeficientes numéricos são convertidos em racionais exatos, então `0.5` resulta em `1/2` em vez de decimal. Zeros à esquerda são descartados.\n\nÉ a inversa de `sym2poly`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Default and named variable",
+      "pt": "Variável padrão e variável nomeada"
+     },
+     "code": "poly2sym([1 0 -1])\nsyms t\npoly2sym([2 3], t)\npoly2sym([1 0.5 0.25])"
+    }
+   ],
+   "see": [
+    "sym2poly",
+    "polyval",
+    "roots",
+    "coeffs"
+   ]
+  },
+  "sym2poly": {
+   "summary": {
+    "en": "Extracts the coefficient vector of a symbolic polynomial.",
+    "pt": "Extrai o vetor de coeficientes de um polinômio simbólico."
+   },
+   "syntax": [
+    {
+     "code": "c = sym2poly(p)",
+     "en": "Coefficients of `p` as a row of doubles, highest power first.",
+     "pt": "Coeficientes de `p` como linha de doubles, da maior potência para a menor."
+    },
+    {
+     "code": "c = sym2poly(p, x)",
+     "en": "Treats `x` as the polynomial variable.",
+     "pt": "Trata `x` como a variável do polinômio."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial in one variable with numeric coefficients.",
+     "pt": "Polinômio simbólico em uma variável, com coeficientes numéricos."
+    },
+    {
+     "name": "x",
+     "en": "The variable (optional).",
+     "pt": "A variável (opcional)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Row vector of doubles. Missing powers appear as zeros.",
+     "pt": "Vetor linha de doubles. Potências ausentes aparecem como zeros."
+    }
+   ],
+   "description": {
+    "en": "The vector has one entry per power from the degree down to zero, so it can be passed straight to `polyval`, `roots` or `conv`. Exact rational coefficients are converted to doubles.\n\nAn expression that is not a polynomial (for example `sin(x)`) gives the error \"Not a polynomial\", and symbolic coefficients such as `y*x` give an error since the output must be numeric.",
+    "pt": "O vetor tem um elemento por potência, do grau até zero, e pode ser passado direto a `polyval`, `roots` ou `conv`. Coeficientes racionais exatos são convertidos em doubles.\n\nUma expressão que não é polinômio (por exemplo `sin(x)`) gera o erro \"Not a polynomial\", e coeficientes simbólicos como em `y*x` também geram erro, pois a saída deve ser numérica."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Coefficients and missing powers",
+      "pt": "Coeficientes e potências ausentes"
+     },
+     "code": "syms x\nsym2poly(3*x^3 - x + 2)\nsym2poly(x^2/2)"
+    }
+   ],
+   "see": [
+    "poly2sym",
+    "coeffs",
+    "polyval",
+    "roots"
+   ]
+  },
+  "subs": {
+   "summary": {
+    "en": "Substitutes values or expressions for symbolic variables.",
+    "pt": "Substitui variáveis simbólicas por valores ou expressões."
+   },
+   "syntax": [
+    {
+     "code": "r = subs(s, old, new)",
+     "en": "Replaces `old` by `new` in the expression `s`.",
+     "pt": "Substitui `old` por `new` na expressão `s`."
+    },
+    {
+     "code": "r = subs(s, {old1, old2}, {new1, new2})",
+     "en": "Makes several substitutions at once.",
+     "pt": "Faz várias substituições de uma vez."
+    },
+    {
+     "code": "r = subs(s, new)",
+     "en": "Substitutes `new` for the default variable of `s`.",
+     "pt": "Substitui a variável padrão de `s` por `new`."
+    },
+    {
+     "code": "r = subs(s)",
+     "en": "Substitutes values the variables have in the workspace.",
+     "pt": "Substitui valores que as variáveis possuem no workspace."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Symbolic expression, vector or matrix.",
+     "pt": "Expressão, vetor ou matriz simbólica."
+    },
+    {
+     "name": "old",
+     "en": "Symbolic variable (or expression, or its name as text) to replace.",
+     "pt": "Variável simbólica (ou expressão, ou o nome como texto) a substituir."
+    },
+    {
+     "name": "new",
+     "en": "Number, expression, or array of values.",
+     "pt": "Número, expressão ou array de valores."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Expression with the substitution done. If every variable is replaced by a number, the result is a number.",
+     "pt": "Expressão com a substituição feita. Se toda variável for trocada por número, o resultado é numérico."
+    }
+   ],
+   "description": {
+    "en": "The substitution is performed simultaneously and the result is evaluated: `subs(x^2, x, 3)` gives `9`, and `subs(x + y, x, 2)` gives `y + 2`. If `new` is an array, the result is an array with one value per element, so a single call evaluates an expression on a whole set of points.\n\nWith one variable replaced by an expression in other variables, the result stays symbolic: `subs(x^2, x, y + 1)` gives `(y + 1)^2`. Exact numbers stay exact; pass a double to `vpa` or `double` afterwards if a decimal value is wanted.",
+    "pt": "A substituição é feita simultaneamente e o resultado é avaliado: `subs(x^2, x, 3)` dá `9`, e `subs(x + y, x, 2)` dá `y + 2`. Se `new` é um array, o resultado é um array com um valor por elemento, de modo que uma única chamada avalia a expressão em um conjunto de pontos.\n\nSe uma variável é trocada por uma expressão em outras variáveis, o resultado continua simbólico: `subs(x^2, x, y + 1)` dá `(y + 1)^2`. Números exatos permanecem exatos; use `vpa` ou `double` depois se quiser o valor decimal."
+   },
+   "notes": {
+    "en": "Substituting several array values into several variables at once, as in `subs(x*y, {x,y}, {[1 2],[3 4]})`, is not supported; use `matlabFunction` for numeric evaluation of that kind.",
+    "pt": "Substituir arrays de valores em várias variáveis de uma só vez, como em `subs(x*y, {x,y}, {[1 2],[3 4]})`, não é suportado; use `matlabFunction` para esse tipo de avaliação numérica."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers, expressions and several points",
+      "pt": "Números, expressões e vários pontos"
+     },
+     "code": "syms x y\nsubs(x + y, x, 2)\nsubs(x*y, {x, y}, {2, 3})\nsubs(x^2, x, y + 1)\nsubs(x^2 + 1, x, [1 2 3])"
+    }
+   ],
+   "see": [
+    "sym",
+    "vpa",
+    "double",
+    "matlabFunction",
+    "simplify"
+   ]
+  },
+  "matlabFunction": {
+   "summary": {
+    "en": "Converts a symbolic expression into an ordinary function handle.",
+    "pt": "Converte uma expressão simbólica em um function handle comum."
+   },
+   "syntax": [
+    {
+     "code": "f = matlabFunction(s)",
+     "en": "Function handle with the symbolic variables of `s` as arguments, in alphabetical order.",
+     "pt": "Function handle cujos argumentos são as variáveis simbólicas de `s`, em ordem alfabética."
+    },
+    {
+     "code": "f = matlabFunction(s, 'Vars', v)",
+     "en": "Fixes the arguments and their order with the variables in `v`.",
+     "pt": "Fixa os argumentos e sua ordem com as variáveis em `v`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Symbolic expression or array of expressions.",
+     "pt": "Expressão ou array de expressões simbólicas."
+    },
+    {
+     "name": "'Vars'",
+     "en": "Vector or cell array of symbolic variables that become the inputs of the function.",
+     "pt": "Vetor ou cell array de variáveis simbólicas que viram as entradas da função."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Function handle that evaluates the expression numerically and accepts arrays elementwise.",
+     "pt": "Function handle que avalia a expressão numericamente e aceita arrays elemento a elemento."
+    }
+   ],
+   "description": {
+    "en": "The expression is turned into numeric code so it can be evaluated quickly in loops, plots or solvers such as `fzero` and `ode45`, without symbolic overhead. Operators such as `*`, `/` and `^` are written in their elementwise forms (`.*`, `./`, `.^`), so the handle works on vectors.\n\nWith several variables the argument order is alphabetical unless `'Vars'` is given. A symbolic vector or matrix gives a handle that returns an array of the same shape.",
+    "pt": "A expressão vira código numérico, que pode ser avaliado rapidamente em laços, gráficos ou solvers como `fzero` e `ode45`, sem a sobrecarga simbólica. Operadores como `*`, `/` e `^` são escritos nas formas elemento a elemento (`.*`, `./`, `.^`), e o handle funciona com vetores.\n\nCom várias variáveis, a ordem dos argumentos é alfabética, a menos que `'Vars'` seja dado. Um vetor ou matriz simbólica gera um handle que devolve um array com a mesma forma."
+   },
+   "notes": {
+    "en": "Other options of the MATLAB function, such as writing the code to a file, are not supported.",
+    "pt": "Outras opções da função do MATLAB, como gravar o código em arquivo, não são suportadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Evaluate on a vector and fix the argument order",
+      "pt": "Avaliação em um vetor e ordem dos argumentos"
+     },
+     "code": "syms x y\nf = matlabFunction(x^2 + 1);\nf(1:3)\ng = matlabFunction(x + 2*y, 'Vars', [y x]);\ng(1, 10)\nfunc2str(f)"
+    }
+   ],
+   "see": [
+    "subs",
+    "vpa",
+    "fzero",
+    "func2str",
+    "sym"
+   ]
+  },
+  "vpa": {
+   "summary": {
+    "en": "Variable-precision evaluation of numbers and symbolic expressions.",
+    "pt": "Avaliação em precisão variável de números e expressões simbólicas."
+   },
+   "syntax": [
+    {
+     "code": "r = vpa(x)",
+     "en": "Evaluates `x` with `digits` significant decimal digits (32 by default).",
+     "pt": "Avalia `x` com `digits` dígitos decimais significativos (32 por padrão)."
+    },
+    {
+     "code": "r = vpa(x, d)",
+     "en": "Evaluates with `d` digits for this call only.",
+     "pt": "Avalia com `d` dígitos somente nesta chamada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Number, symbolic expression or array.",
+     "pt": "Número, expressão simbólica ou array."
+    },
+    {
+     "name": "d",
+     "en": "Number of significant digits.",
+     "pt": "Número de dígitos significativos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Symbolic result in which numeric parts are decimals with the requested precision.",
+     "pt": "Resultado simbólico em que as partes numéricas são decimais com a precisão pedida."
+    }
+   ],
+   "description": {
+    "en": "`vpa` turns exact quantities like `sqrt(sym(2))` or `sym(1)/3` into decimal numbers with far more digits than a double offers, while symbols stay symbolic: `vpa(sin(x) + sym(pi), 5)` gives `sin(x) + 3.1416`. The global precision is set by `digits`.\n\nThe result is of class `sym`; convert it to a double with `double` when ordinary arithmetic is needed.",
+    "pt": "`vpa` transforma quantidades exatas como `sqrt(sym(2))` ou `sym(1)/3` em decimais com muito mais dígitos do que um double oferece, enquanto os símbolos continuam simbólicos: `vpa(sin(x) + sym(pi), 5)` dá `sin(x) + 3.1416`. A precisão global é definida por `digits`.\n\nO resultado é da classe `sym`; converta para double com `double` quando precisar de aritmética comum."
+   },
+   "notes": {
+    "en": "In MatLivre an explicit `d` larger than the current `digits` setting is not honored; raise `digits` first. A double argument such as `vpa(pi)` or `vpa(1/3)` is treated as the exact constant or fraction, whereas MATLAB shows the digits of the stored double (for example `0.33333333333333331483`); use `vpa(sym(...))` for portable results.",
+    "pt": "No MatLivre, um `d` explícito maior que a configuração atual de `digits` não é respeitado; aumente `digits` antes. Um argumento double como `vpa(pi)` ou `vpa(1/3)` é tratado como a constante ou a fração exata, enquanto o MATLAB mostra os dígitos do double armazenado (por exemplo `0.33333333333333331483`); use `vpa(sym(...))` para resultados portáveis."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Different precisions",
+      "pt": "Precisões diferentes"
+     },
+     "code": "vpa(sqrt(sym(2)), 20)\nvpa(sym(1)/3, 5)\nvpa(sym(pi))\nsyms x\nvpa(sin(x) + sym(pi), 5)"
+    }
+   ],
+   "see": [
+    "digits",
+    "sym",
+    "double",
+    "subs",
+    "format"
+   ]
+  },
+  "ge": {
+   "summary": {
+    "en": "Greater than or equal to, the function form of the operator >=.",
+    "pt": "Maior ou igual a, a forma de função do operador >=."
+   },
+   "syntax": [
+    {
+     "code": "C = ge(A, B)",
+     "en": "Same as `A >= B`.",
+     "pt": "Equivale a `A >= B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, character or string arrays, or symbolic scalars. Sizes must be compatible (equal, or one is scalar, or broadcasting applies).",
+     "pt": "Arrays numéricos, de caracteres ou strings, ou escalares simbólicos. Os tamanhos devem ser compatíveis (iguais, um deles escalar, ou com broadcast)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array with the broadcast size. With symbolic operands, a symbolic relation such as `x > 1`.",
+     "pt": "Array lógico com o tamanho do broadcast. Com operandos simbólicos, uma relação simbólica como `x > 1`."
+    }
+   ],
+   "description": {
+    "en": "The operator `A >= B` compares element by element. For complex numbers only the real parts are compared. Characters compare by their codes, and `NaN` compared with anything gives `false`.\n\nWith a symbolic variable the relation is returned unevaluated: `ge(x, 1)` prints `x >= 1`.",
+    "pt": "O operador `A >= B` compara elemento a elemento. Para números complexos só as partes reais são comparadas. Caracteres são comparados pelos códigos, e `NaN` comparado com qualquer valor dá `false`.\n\nCom uma variável simbólica a relação é devolvida sem avaliação: `ge(x, 1)` exibe `x >= 1`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalars, arrays and a symbolic relation",
+      "pt": "Escalares, arrays e uma relação simbólica"
+     },
+     "code": "ge([1 2 3], 2)\nge('b', 'a')\nsyms x\nge(x, 1)"
+    }
+   ],
+   "see": [
+    "gt",
+    "le",
+    "lt",
+    "ne",
+    "eq"
+   ]
+  },
+  "gt": {
+   "summary": {
+    "en": "Greater than, the function form of the operator >.",
+    "pt": "Maior que, a forma de função do operador >."
+   },
+   "syntax": [
+    {
+     "code": "C = gt(A, B)",
+     "en": "Same as `A > B`.",
+     "pt": "Equivale a `A > B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, character or string arrays, or symbolic scalars. Sizes must be compatible (equal, or one is scalar, or broadcasting applies).",
+     "pt": "Arrays numéricos, de caracteres ou strings, ou escalares simbólicos. Os tamanhos devem ser compatíveis (iguais, um deles escalar, ou com broadcast)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array with the broadcast size. With symbolic operands, a symbolic relation such as `x > 1`.",
+     "pt": "Array lógico com o tamanho do broadcast. Com operandos simbólicos, uma relação simbólica como `x > 1`."
+    }
+   ],
+   "description": {
+    "en": "The operator `A > B` compares element by element and returns `true` where `A` is strictly greater. For complex numbers only the real parts are compared. A comparison involving `NaN` is `false`.\n\nSizes follow implicit expansion: a scalar is compared with every element of an array, and a row with a column produces a matrix.",
+    "pt": "O operador `A > B` compara elemento a elemento e retorna `true` onde `A` é estritamente maior. Para números complexos só as partes reais são comparadas. Uma comparação com `NaN` dá `false`.\n\nOs tamanhos seguem a expansão implícita: um escalar é comparado com todos os elementos de um array, e uma linha com uma coluna produz uma matriz."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalar against array",
+      "pt": "Escalar contra array"
+     },
+     "code": "gt([1 5 3], 2)\ngt(1, [0 1 2])\ngt([1; 2], [1 2 3])"
+    }
+   ],
+   "see": [
+    "ge",
+    "lt",
+    "le",
+    "ne",
+    "max"
+   ]
+  },
+  "le": {
+   "summary": {
+    "en": "Less than or equal to, the function form of the operator <=.",
+    "pt": "Menor ou igual a, a forma de função do operador <=."
+   },
+   "syntax": [
+    {
+     "code": "C = le(A, B)",
+     "en": "Same as `A <= B`.",
+     "pt": "Equivale a `A <= B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, character or string arrays, or symbolic scalars. Sizes must be compatible (equal, or one is scalar, or broadcasting applies).",
+     "pt": "Arrays numéricos, de caracteres ou strings, ou escalares simbólicos. Os tamanhos devem ser compatíveis (iguais, um deles escalar, ou com broadcast)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array with the broadcast size. With symbolic operands, a symbolic relation such as `x > 1`.",
+     "pt": "Array lógico com o tamanho do broadcast. Com operandos simbólicos, uma relação simbólica como `x > 1`."
+    }
+   ],
+   "description": {
+    "en": "The operator `A <= B` compares element by element and returns `true` where `A` is less than or equal to `B`. For complex numbers only the real parts are compared. Comparisons with `NaN` are `false`.\n\nIt is the usual way to build a mask for logical indexing, as in `x(x <= 3)`.",
+    "pt": "O operador `A <= B` compara elemento a elemento e retorna `true` onde `A` é menor ou igual a `B`. Para números complexos só as partes reais são comparadas. Comparações com `NaN` dão `false`.\n\nÉ a forma usual de montar uma máscara para indexação lógica, como em `x(x <= 3)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Elementwise and as a mask",
+      "pt": "Elemento a elemento e como máscara"
+     },
+     "code": "le([1 2 3], [3 2 1])\nx = [5 1 4 2];\nx(le(x, 3))"
+    }
+   ],
+   "see": [
+    "lt",
+    "ge",
+    "gt",
+    "ne",
+    "eq"
+   ]
+  },
+  "lt": {
+   "summary": {
+    "en": "Less than, the function form of the operator <.",
+    "pt": "Menor que, a forma de função do operador <."
+   },
+   "syntax": [
+    {
+     "code": "C = lt(A, B)",
+     "en": "Same as `A < B`.",
+     "pt": "Equivale a `A < B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, character or string arrays, or symbolic scalars. Sizes must be compatible (equal, or one is scalar, or broadcasting applies).",
+     "pt": "Arrays numéricos, de caracteres ou strings, ou escalares simbólicos. Os tamanhos devem ser compatíveis (iguais, um deles escalar, ou com broadcast)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array with the broadcast size. With symbolic operands, a symbolic relation such as `x > 1`.",
+     "pt": "Array lógico com o tamanho do broadcast. Com operandos simbólicos, uma relação simbólica como `x > 1`."
+    }
+   ],
+   "description": {
+    "en": "The operator `A < B` compares element by element and returns `true` where `A` is strictly less than `B`. For complex numbers only the real parts are compared. Comparisons with `NaN` are `false`.\n\nIncompatible sizes, such as a 2-by-3 and a 3-by-2 array, are an error.",
+    "pt": "O operador `A < B` compara elemento a elemento e retorna `true` onde `A` é estritamente menor que `B`. Para números complexos só as partes reais são comparadas. Comparações com `NaN` dão `false`.\n\nTamanhos incompatíveis, como um array 2 por 3 e outro 3 por 2, geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalar against array",
+      "pt": "Escalar contra array"
+     },
+     "code": "lt([1 2 3], 2)\nlt(2, 3)\nsum(lt([4 8 1 9], 5))"
+    }
+   ],
+   "see": [
+    "le",
+    "gt",
+    "ge",
+    "ne",
+    "eq"
+   ]
+  },
+  "ne": {
+   "summary": {
+    "en": "Not equal to, the function form of the operator ~=.",
+    "pt": "Diferente de, a forma de função do operador ~=."
+   },
+   "syntax": [
+    {
+     "code": "C = ne(A, B)",
+     "en": "Same as `A ~= B`.",
+     "pt": "Equivale a `A ~= B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, character or string arrays, or symbolic scalars. Sizes must be compatible (equal, or one is scalar, or broadcasting applies).",
+     "pt": "Arrays numéricos, de caracteres ou strings, ou escalares simbólicos. Os tamanhos devem ser compatíveis (iguais, um deles escalar, ou com broadcast)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array with the broadcast size. With symbolic operands, a symbolic relation such as `x > 1`.",
+     "pt": "Array lógico com o tamanho do broadcast. Com operandos simbólicos, uma relação simbólica como `x > 1`."
+    }
+   ],
+   "description": {
+    "en": "The operator `A ~= B` is `true` where the elements differ. Unlike the ordered comparisons, complex numbers are compared in both real and imaginary parts, and `NaN ~= NaN` is `true`, since `NaN` is not equal to anything.\n\nFor character arrays the comparison is done per character, so the arrays need the same size or one of them must be scalar.",
+    "pt": "O operador `A ~= B` é `true` onde os elementos diferem. Ao contrário das comparações de ordem, números complexos são comparados nas partes real e imaginária, e `NaN ~= NaN` é `true`, pois `NaN` não é igual a nada.\n\nPara arrays de caracteres a comparação é feita caractere a caractere, então os arrays precisam ter o mesmo tamanho ou um deles ser escalar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers, text and NaN",
+      "pt": "Números, texto e NaN"
+     },
+     "code": "ne([1 2 3], 2)\nne('abc', 'abd')\nne(NaN, NaN)"
+    }
+   ],
+   "see": [
+    "eq",
+    "gt",
+    "lt",
+    "isequal",
+    "not"
+   ]
+  },
+  "minus": {
+   "summary": {
+    "en": "Subtraction, the function form of the operator -.",
+    "pt": "Subtração, a forma de função do operador -."
+   },
+   "syntax": [
+    {
+     "code": "C = minus(A, B)",
+     "en": "Same as `A - B`.",
+     "pt": "Equivale a `A - B`."
+    },
+    {
+     "code": "C = minus(A, B, C, ...)",
+     "en": "Subtracts the later arguments from the first, from left to right.",
+     "pt": "Subtrai os argumentos seguintes do primeiro, da esquerda para a direita."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, logical, datetime or symbolic operands with compatible sizes.",
+     "pt": "Operandos numéricos, lógicos, datetime ou simbólicos com tamanhos compatíveis."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Difference, with the size given by implicit expansion.",
+     "pt": "Diferença, com o tamanho dado pela expansão implícita."
+    }
+   ],
+   "description": {
+    "en": "The subtraction is elementwise and follows implicit expansion: a scalar is subtracted from every element, and a row minus a column gives a matrix. For matrices of equal size it is the ordinary matrix difference.\n\nInteger types saturate instead of wrapping: `minus(uint8(3), 5)` is `0` and `minus(int8(100), int8(-100))` is `127`. An integer cannot be combined with a different integer type.",
+    "pt": "A subtração é elemento a elemento e segue a expansão implícita: um escalar é subtraído de todos os elementos, e uma linha menos uma coluna gera uma matriz. Para matrizes de mesmo tamanho é a diferença matricial comum.\n\nOs tipos inteiros saturam em vez de dar a volta: `minus(uint8(3), 5)` é `0` e `minus(int8(100), int8(-100))` é `127`. Um inteiro não pode ser combinado com outro tipo inteiro diferente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Expansion and saturation",
+      "pt": "Expansão e saturação"
+     },
+     "code": "minus([1 2 3], 1)\nminus([1 2 3], [1; 2])\nminus(uint8(3), 5)"
+    }
+   ],
+   "see": [
+    "plus",
+    "uminus",
+    "times",
+    "diff"
+   ]
+  },
+  "ldivide": {
+   "summary": {
+    "en": "Left array division, the function form of the operator .\\.",
+    "pt": "Divisão à esquerda elemento a elemento, a forma de função do operador .\\."
+   },
+   "syntax": [
+    {
+     "code": "C = ldivide(A, B)",
+     "en": "Same as `A .\\ B`, that is `B ./ A`.",
+     "pt": "Equivale a `A .\\ B`, isto é, `B ./ A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric or symbolic arrays with compatible sizes. `A` is the divisor.",
+     "pt": "Arrays numéricos ou simbólicos com tamanhos compatíveis. `A` é o divisor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Elementwise quotient `B(i)/A(i)`.",
+     "pt": "Quociente elemento a elemento `B(i)/A(i)`."
+    }
+   ],
+   "description": {
+    "en": "The element of `A` divides the matching element of `B`, which is the opposite order of `rdivide`. Dividing by zero gives `Inf` (or `NaN` for `0\\0`). For integer types the result is rounded to an integer and saturates: `ldivide(int8(2), int8(7))` is `4`.\n\nThis is not the matrix left division `A \\ B`, which solves linear systems.",
+    "pt": "O elemento de `A` divide o elemento correspondente de `B`, na ordem oposta à de `rdivide`. Dividir por zero dá `Inf` (ou `NaN` em `0\\0`). Para tipos inteiros o resultado é arredondado e satura: `ldivide(int8(2), int8(7))` é `4`.\n\nNão é a divisão matricial à esquerda `A \\ B`, que resolve sistemas lineares."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Elementwise left division",
+      "pt": "Divisão à esquerda elemento a elemento"
+     },
+     "code": "ldivide(2, [4 6 8])\nldivide([1 2 3], [4 6 9])\nldivide(0, 1)\nldivide(int8(2), int8(7))"
+    }
+   ],
+   "see": [
+    "rdivide",
+    "mldivide",
+    "times",
+    "power"
+   ]
+  },
+  "power": {
+   "summary": {
+    "en": "Elementwise power, the function form of the operator .^",
+    "pt": "Potência elemento a elemento, a forma de função do operador .^"
+   },
+   "syntax": [
+    {
+     "code": "C = power(A, B)",
+     "en": "Same as `A .^ B`.",
+     "pt": "Equivale a `A .^ B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Base: numeric array.",
+     "pt": "Base: array numérico."
+    },
+    {
+     "name": "B",
+     "en": "Exponent: numeric array with compatible size.",
+     "pt": "Expoente: array numérico com tamanho compatível."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Array with `A(i)^B(i)` in each element.",
+     "pt": "Array com `A(i)^B(i)` em cada elemento."
+    }
+   ],
+   "description": {
+    "en": "Each base is raised to the matching exponent, with implicit expansion for scalars and for rows against columns. It differs from the matrix power `A^2`, which multiplies matrices: `power([1 2; 3 4], 2)` squares each entry.\n\nA negative base with a fractional exponent gives a complex result. Integer types saturate (`power(int8(10), 3)` is `127`), and `power(0, 0)` is `1`.",
+    "pt": "Cada base é elevada ao expoente correspondente, com expansão implícita para escalares e para linhas contra colunas. Difere da potência matricial `A^2`, que multiplica matrizes: `power([1 2; 3 4], 2)` eleva cada entrada ao quadrado.\n\nUma base negativa com expoente fracionário dá resultado complexo. Tipos inteiros saturam (`power(int8(10), 3)` é `127`), e `power(0, 0)` vale `1`."
+   },
+   "notes": {
+    "en": "The function form with symbolic variables, as in `power(x, 2)`, is not supported; write `x.^2` or `x^2` instead.",
+    "pt": "A forma de função com variáveis simbólicas, como em `power(x, 2)`, não é suportada; escreva `x.^2` ou `x^2`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Arrays, complex results and saturation",
+      "pt": "Arrays, resultados complexos e saturação"
+     },
+     "code": "power([1 2; 3 4], 2)\npower(2, [1 2 3])\npower(-8, 1/3)\npower(int8(10), 3)"
+    }
+   ],
+   "see": [
+    "mpower",
+    "times",
+    "sqrt",
+    "nthroot"
+   ]
+  },
+  "and": {
+   "summary": {
+    "en": "Logical AND, the function form of the operator &.",
+    "pt": "E lógico (AND), a forma de função do operador &."
+   },
+   "syntax": [
+    {
+     "code": "C = and(A, B)",
+     "en": "Same as `A & B`.",
+     "pt": "Equivale a `A & B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric or logical arrays with compatible sizes. Nonzero means true.",
+     "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis. Diferente de zero significa verdadeiro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array: true where both inputs are nonzero.",
+     "pt": "Array lógico: verdadeiro onde ambas as entradas são diferentes de zero."
+    }
+   ],
+   "description": {
+    "en": "The result is `true` at positions where both operands are nonzero. The operands may be numbers or logicals, and the usual size compatibility applies, so a scalar is combined with every element of an array.\n\nFor `if` and `while` conditions with scalars, `&&` is usually preferred because it short-circuits; `and` and `&` always evaluate both sides.",
+    "pt": "O resultado é `true` nas posições em que ambos os operandos são diferentes de zero. Os operandos podem ser números ou lógicos, vale a compatibilidade usual de tamanhos, e um escalar é combinado com todos os elementos de um array.\n\nEm condições de `if` e `while` com escalares, normalmente se prefere `&&`, que faz curto-circuito; `and` e `&` sempre avaliam os dois lados."
+   },
+   "notes": {
+    "en": "Symbolic operands are not supported (`and(x > 1, x < 3)` raises an error), and with three or more arguments the result may be wrong; combine two at a time.",
+    "pt": "Operandos simbólicos não são suportados (`and(x > 1, x < 3)` gera erro), e com três ou mais argumentos o resultado pode estar errado; combine dois de cada vez."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Elementwise AND",
+      "pt": "E elemento a elemento"
+     },
+     "code": "and([1 0 1], [1 1 0])\nand(true, false)\nx = 1:6;\nx(and(x > 2, x < 5))"
+    }
+   ],
+   "see": [
+    "or",
+    "not",
+    "xor",
+    "all"
+   ]
+  },
+  "or": {
+   "summary": {
+    "en": "Logical OR, the function form of the operator |.",
+    "pt": "OU lógico (OR), a forma de função do operador |."
+   },
+   "syntax": [
+    {
+     "code": "C = or(A, B)",
+     "en": "Same as `A | B`.",
+     "pt": "Equivale a `A | B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric or logical arrays with compatible sizes. Nonzero means true.",
+     "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis. Diferente de zero significa verdadeiro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array: true where at least one input is nonzero.",
+     "pt": "Array lógico: verdadeiro onde pelo menos uma entrada é diferente de zero."
+    }
+   ],
+   "description": {
+    "en": "The result is `true` at positions where at least one operand is nonzero. Operands may be numbers or logicals and are combined with the usual rules for compatible sizes.\n\nFor scalar conditions in `if` and `while`, `||` short-circuits and is generally preferred; `or` and `|` always evaluate both operands.",
+    "pt": "O resultado é `true` nas posições em que pelo menos um operando é diferente de zero. Os operandos podem ser números ou lógicos e são combinados pelas regras usuais de tamanhos compatíveis.\n\nEm condições escalares de `if` e `while`, `||` faz curto-circuito e em geral é preferido; `or` e `|` sempre avaliam os dois operandos."
+   },
+   "notes": {
+    "en": "Symbolic operands are not supported (`or(x > 1, x < 0)` raises an error).",
+    "pt": "Operandos simbólicos não são suportados (`or(x > 1, x < 0)` gera erro)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Elementwise OR",
+      "pt": "OU elemento a elemento"
+     },
+     "code": "or([1 0 0], [0 0 1])\nx = [-5 1 7 12];\nx(or(x < 0, x > 10))"
+    }
+   ],
+   "see": [
+    "and",
+    "not",
+    "xor",
+    "any"
+   ]
+  },
+  "not": {
+   "summary": {
+    "en": "Logical NOT, the function form of the operator ~.",
+    "pt": "NÃO lógico (NOT), a forma de função do operador ~."
+   },
+   "syntax": [
+    {
+     "code": "B = not(A)",
+     "en": "Same as `~A`.",
+     "pt": "Equivale a `~A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array. Zero is false, anything else is true.",
+     "pt": "Array numérico ou lógico. Zero é falso, qualquer outro valor é verdadeiro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Logical array of the same size: true where `A` is zero.",
+     "pt": "Array lógico do mesmo tamanho: verdadeiro onde `A` é zero."
+    }
+   ],
+   "description": {
+    "en": "Every element is replaced by its logical negation. Numbers that are not zero count as true, so `not([1 0 2])` gives `[0 1 0]`. The result is always of class `logical`.\n\nA typical use is to invert a mask: `x(not(isnan(x)))` selects the elements that are not `NaN`.",
+    "pt": "Cada elemento é substituído pela sua negação lógica. Números diferentes de zero contam como verdadeiros, então `not([1 0 2])` dá `[0 1 0]`. O resultado é sempre da classe `logical`.\n\nUm uso típico é inverter uma máscara: `x(not(isnan(x)))` seleciona os elementos que não são `NaN`."
+   },
+   "notes": {
+    "en": "Symbolic operands are not supported (`not(x > 1)` raises an error).",
+    "pt": "Operandos simbólicos não são suportados (`not(x > 1)` gera erro)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Invert logicals and masks",
+      "pt": "Inversão de lógicos e máscaras"
+     },
+     "code": "not(true)\nnot([1 0 2])\nx = [3 NaN 5];\nx(not(isnan(x)))"
+    }
+   ],
+   "see": [
+    "and",
+    "or",
+    "xor",
+    "isnan"
+   ]
+  },
+  "isAlways": {
+   "summary": {
+    "en": "Tests whether a symbolic relation holds for all values of its variables.",
+    "pt": "Testa se uma relação simbólica vale para todos os valores de suas variáveis."
+   },
+   "syntax": [
+    {
+     "code": "tf = isAlways(cond)",
+     "en": "Returns `true` if the relation `cond` is always true, and `false` if it is false or cannot be decided.",
+     "pt": "Retorna `true` se a relação `cond` é sempre verdadeira, e `false` se é falsa ou não pode ser decidida."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cond",
+     "en": "Symbolic equation or inequality, or a logical value.",
+     "pt": "Equação ou inequação simbólica, ou um valor lógico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "An equation or inequality between symbolic expressions is not a plain `true` or `false`, so it cannot be put directly in an `if`. `isAlways` decides whether the relation holds as an identity: `isAlways(x^2 - 1 == (x - 1)*(x + 1))` is `true`, while `isAlways(x > 1)` is `false`, because some values of `x` fail it.\n\nUse it to verify that two expressions are equal after simplification, or that an inequality is always satisfied.",
+    "pt": "Uma equação ou inequação entre expressões simbólicas não é um simples `true` ou `false`, portanto não pode ir direto a um `if`. `isAlways` decide se a relação vale como identidade: `isAlways(x^2 - 1 == (x - 1)*(x + 1))` é `true`, enquanto `isAlways(x > 1)` é `false`, porque alguns valores de `x` a violam.\n\nUse para verificar que duas expressões são iguais após simplificação, ou que uma inequação é sempre satisfeita."
+   },
+   "notes": {
+    "en": "The `'Unknown'` option is not supported, and inequalities that depend on assumptions about the variables (such as `x^2 >= 0` for real `x`) are not resolved and return `false`.",
+    "pt": "A opção `'Unknown'` não é suportada, e inequações que dependem de suposições sobre as variáveis (como `x^2 >= 0` para `x` real) não são resolvidas e retornam `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Identities and a failing inequality",
+      "pt": "Identidades e uma inequação que falha"
+     },
+     "code": "syms x\nisAlways(x^2 - 1 == (x - 1)*(x + 1))\nisAlways(sin(x)^2 + cos(x)^2 == 1)\nisAlways(x > 1)\nisAlways(x < x + 1)"
+    }
+   ],
+   "see": [
+    "simplify",
+    "isequal",
+    "assume",
+    "in"
+   ]
+  },
+  "in": {
+   "summary": {
+    "en": "Symbolic membership relation: tests that an expression lies in a set.",
+    "pt": "Relação simbólica de pertinência: testa se uma expressão está em um conjunto."
+   },
+   "syntax": [
+    {
+     "code": "c = in(x, set)",
+     "en": "Builds the relation \"`x` belongs to `set`\".",
+     "pt": "Constrói a relação \"`x` pertence a `set`\"."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic variable or expression.",
+     "pt": "Variável ou expressão simbólica."
+    },
+    {
+     "name": "set",
+     "en": "Name of the set: `'real'`, `'integer'`, `'rational'` or `'positive'`.",
+     "pt": "Nome do conjunto: `'real'`, `'integer'`, `'rational'` ou `'positive'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Symbolic relation, usable with `assume`, `assumeAlso` or `isAlways`.",
+     "pt": "Relação simbólica, utilizável com `assume`, `assumeAlso` ou `isAlways`."
+    }
+   ],
+   "description": {
+    "en": "`in` expresses that a quantity belongs to a set, for example `in(x, 'integer')`, and is mostly used to state assumptions about a variable for later simplification or solving. Here `'real'` means real numbers, `'rational'` the rational numbers and `'integer'` the integers.\n\nThe relation prints in the form `in(x, 'integer')`.",
+    "pt": "`in` expressa que uma quantidade pertence a um conjunto, por exemplo `in(x, 'integer')`, e é usada principalmente para declarar suposições sobre uma variável para simplificação ou resolução posteriores. Aqui, `'real'` significa reais, `'rational'` os racionais e `'integer'` os inteiros.\n\nA relação é exibida na forma `in(x, 'integer')`."
+   },
+   "notes": {
+    "en": "In MatLivre `in` only builds the relation; it is not evaluated for known values (`in(sym(3), 'integer')` stays unevaluated) and `isAlways` does not resolve it.",
+    "pt": "No MatLivre `in` apenas constrói a relação; ela não é avaliada para valores conhecidos (`in(sym(3), 'integer')` permanece sem avaliação) e `isAlways` não a resolve."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build the relations",
+      "pt": "Construção das relações"
+     },
+     "code": "syms x\nin(x, 'integer')\nin(x, 'real')"
+    }
+   ],
+   "see": [
+    "assume",
+    "isAlways",
+    "isreal",
+    "sym"
+   ]
+  }
+ }
+}

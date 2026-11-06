@@ -1,0 +1,446 @@
+{
+  "functions": {
+    "toeplitz": {
+      "summary": {"en": "Builds a Toeplitz matrix, with constant values along each diagonal.", "pt": "Constrói uma matriz de Toeplitz, com valores constantes ao longo de cada diagonal."},
+      "syntax": [
+        {"code": "T = toeplitz(c)", "en": "Builds a symmetric Toeplitz matrix whose first column and first row are both `c`.", "pt": "Constrói uma matriz de Toeplitz simétrica cuja primeira coluna e primeira linha são ambas `c`."},
+        {"code": "T = toeplitz(c, r)", "en": "Uses `c` as the first column and `r` as the first row.", "pt": "Usa `c` como primeira coluna e `r` como primeira linha."}
+      ],
+      "inputs": [
+        {"name": "c", "en": "Vector with the first column of the matrix.", "pt": "Vetor com a primeira coluna da matriz."},
+        {"name": "r", "en": "Vector with the first row. If `r(1)` differs from `c(1)`, the value in `c` is used for the corner.", "pt": "Vetor com a primeira linha. Se `r(1)` for diferente de `c(1)`, o valor de `c` é usado no canto."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "Matrix with `numel(c)` rows and `numel(r)` columns, where `T(i,j)` depends only on `i-j`.", "pt": "Matriz com `numel(c)` linhas e `numel(r)` colunas, em que `T(i,j)` depende apenas de `i-j`."}
+      ],
+      "description": {
+        "en": "Entry `T(i,j)` equals `c(i-j+1)` on and below the main diagonal and `r(j-i+1)` above it, so every diagonal is constant. Toeplitz matrices describe discrete convolution and show up in autocorrelation and linear prediction problems.\n\nWith a single argument the result is symmetric, which makes `toeplitz(c)` convenient for building covariance-like matrices from a sequence of lags.",
+        "pt": "O elemento `T(i,j)` vale `c(i-j+1)` na diagonal principal e abaixo dela e `r(j-i+1)` acima, de modo que cada diagonal é constante. Matrizes de Toeplitz representam a convolução discreta e aparecem em autocorrelação e em problemas de predição linear.\n\nCom um único argumento o resultado é simétrico, o que torna `toeplitz(c)` prático para montar matrizes do tipo covariância a partir de uma sequência de defasagens."
+      },
+      "examples": [
+        {"title": {"en": "Symmetric and rectangular", "pt": "Simétrica e retangular"}, "code": "toeplitz([1 2 3])\ntoeplitz([1 2 3], [1 5 6 7])"}
+      ],
+      "see": ["hankel", "vander", "conv2", "circshift", "diag"]
+    },
+    "unwrap": {
+      "summary": {"en": "Removes jumps of more than pi in a phase sequence by adding multiples of 2*pi.", "pt": "Remove saltos maiores que pi em uma sequência de fase somando múltiplos de 2*pi."},
+      "syntax": [
+        {"code": "Q = unwrap(P)", "en": "Corrects radian phase angles along the first non-singleton dimension.", "pt": "Corrige ângulos de fase em radianos ao longo da primeira dimensão não singleton."},
+        {"code": "Q = unwrap(P, tol)", "en": "Uses `tol` instead of `pi` as the jump threshold.", "pt": "Usa `tol` em vez de `pi` como limiar de salto."},
+        {"code": "Q = unwrap(P, [], dim)", "en": "Unwraps along dimension `dim`.", "pt": "Faz o unwrap ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "P", "en": "Vector or matrix of phase angles in radians.", "pt": "Vetor ou matriz de ângulos de fase em radianos."},
+        {"name": "tol", "en": "Jump size above which a correction is applied. The default is `pi`.", "pt": "Tamanho do salto acima do qual a correção é aplicada. O padrão é `pi`."},
+        {"name": "dim", "en": "Dimension along which to unwrap.", "pt": "Dimensão ao longo da qual fazer o unwrap."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Array of the same size as `P` with the same values modulo `2*pi`, but continuous.", "pt": "Array do mesmo tamanho de `P`, com os mesmos valores módulo `2*pi`, porém contínuo."}
+      ],
+      "description": {
+        "en": "Functions such as `angle` return phase in the interval from `-pi` to `pi`, so a steadily growing phase appears to jump back at the boundary. `unwrap` looks at the difference between consecutive elements. When that difference exceeds the tolerance in magnitude, it adds or subtracts the multiple of `2*pi` that brings the step back inside the tolerance, and carries that correction forward to all later elements.\n\nThe first element is never changed. The result is useful for plotting the phase response of a filter or for tracking a rotating signal.",
+        "pt": "Funções como `angle` devolvem a fase no intervalo de `-pi` a `pi`, então uma fase que cresce de forma contínua parece saltar de volta no limite. `unwrap` examina a diferença entre elementos consecutivos. Quando essa diferença excede a tolerância em módulo, soma ou subtrai o múltiplo de `2*pi` que traz o passo de volta para dentro da tolerância, e propaga essa correção para todos os elementos seguintes.\n\nO primeiro elemento nunca é alterado. O resultado é útil para plotar a resposta em fase de um filtro ou para acompanhar um sinal que gira."
+      },
+      "examples": [
+        {"title": {"en": "Continuing a phase ramp", "pt": "Continuando uma rampa de fase"}, "code": "t = 0:0.5:6;\nwrapped = angle(exp(1i*t));\nunwrapped = unwrap(wrapped);\ndisp(max(abs(unwrapped - t)) < 1e-12)\nunwrap([0 2.5 5 0.5])", "note": {"en": "The last value, 0.5, is lifted by 2*pi because the step from 5 to 0.5 is larger than pi in magnitude.", "pt": "O último valor, 0.5, sobe 2*pi porque o passo de 5 para 0.5 é maior que pi em módulo."}}
+      ],
+      "see": ["angle", "mod", "rem", "cumsum", "diff"]
+    },
+    "vander": {
+      "summary": {"en": "Vandermonde matrix whose columns are decreasing powers of the input vector.", "pt": "Matriz de Vandermonde cujas colunas são potências decrescentes do vetor de entrada."},
+      "syntax": [
+        {"code": "A = vander(v)", "en": "Returns the square Vandermonde matrix of the vector `v`.", "pt": "Retorna a matriz de Vandermonde quadrada do vetor `v`."}
+      ],
+      "inputs": [
+        {"name": "v", "en": "Vector of `n` values.", "pt": "Vetor com `n` valores."}
+      ],
+      "outputs": [
+        {"name": "A", "en": "Matrix of size `n`-by-`n` with `A(i,j) = v(i)^(n-j)`.", "pt": "Matriz `n`-por-`n` com `A(i,j) = v(i)^(n-j)`."}
+      ],
+      "description": {
+        "en": "The last column is all ones, the one before it is `v` itself, and so on up to `v.^(n-1)` in the first column. A polynomial of degree `n-1` that passes through the points `(v(i), y(i))` has coefficients `vander(v) \\ y(:)`, which is how interpolating polynomials are defined.\n\nVandermonde matrices become very ill conditioned as `n` grows, so for fitting in practice `polyfit` is preferable.",
+        "pt": "A última coluna é toda de uns, a anterior é o próprio `v`, e assim por diante até `v.^(n-1)` na primeira coluna. Um polinômio de grau `n-1` que passa pelos pontos `(v(i), y(i))` tem coeficientes `vander(v) \\ y(:)`, que é como se definem os polinômios interpoladores.\n\nMatrizes de Vandermonde ficam muito mal condicionadas quando `n` cresce, então para ajuste na prática `polyfit` é preferível."
+      },
+      "examples": [
+        {"title": {"en": "Interpolating polynomial", "pt": "Polinômio interpolador"}, "code": "v = [1 2 3];\nA = vander(v)\ny = [2; 5; 10];\ncoef = round(A \\ y).'", "note": {"en": "The coefficients of x^2 + 1: the polynomial passes through (1,2), (2,5) and (3,10).", "pt": "Os coeficientes de x^2 + 1: o polinômio passa por (1,2), (2,5) e (3,10)."}}
+      ],
+      "see": ["polyfit", "polyval", "toeplitz", "hankel", "cond"]
+    },
+    "wilkinson": {
+      "summary": {"en": "Wilkinson's symmetric tridiagonal eigenvalue test matrix of order n.", "pt": "Matriz de teste de autovalores de Wilkinson, tridiagonal simétrica de ordem n."},
+      "syntax": [
+        {"code": "W = wilkinson(n)", "en": "Returns the `n`-by-`n` Wilkinson matrix.", "pt": "Retorna a matriz de Wilkinson `n`-por-`n`."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Nonnegative integer, the order of the matrix.", "pt": "Inteiro não negativo, a ordem da matriz."}
+      ],
+      "outputs": [
+        {"name": "W", "en": "Symmetric tridiagonal matrix with ones on the sub- and superdiagonals and the diagonal `abs(-(n-1)/2 : (n-1)/2)`.", "pt": "Matriz tridiagonal simétrica com uns nas sub e superdiagonais e diagonal `abs(-(n-1)/2 : (n-1)/2)`."}
+      ],
+      "description": {
+        "en": "The diagonal runs down from `(n-1)/2` to the middle and back up, so the matrix is also symmetric about its center. Its eigenvalues come in nearly equal pairs, which makes it a classic test for eigenvalue algorithms.\n\nFor odd `n` the diagonal holds integers, for even `n` it holds half-integers.",
+        "pt": "A diagonal desce de `(n-1)/2` até o meio e volta a subir, então a matriz também é simétrica em relação ao centro. Seus autovalores formam pares quase iguais, o que a torna um teste clássico para algoritmos de autovalores.\n\nPara `n` ímpar a diagonal contém inteiros; para `n` par, meios-inteiros."
+      },
+      "examples": [
+        {"title": {"en": "Orders 3 and 4", "pt": "Ordens 3 e 4"}, "code": "wilkinson(3)\nwilkinson(4)"}
+      ],
+      "see": ["eig", "toeplitz", "diag", "hilb", "magic"]
+    },
+    "conv2": {
+      "summary": {"en": "Two-dimensional convolution of two matrices.", "pt": "Convolução bidimensional de duas matrizes."},
+      "syntax": [
+        {"code": "C = conv2(A, B)", "en": "Returns the full convolution, of size `size(A)+size(B)-1`.", "pt": "Retorna a convolução completa, de tamanho `size(A)+size(B)-1`."},
+        {"code": "C = conv2(A, B, shape)", "en": "Returns the part selected by `shape`: `'full'`, `'same'` or `'valid'`.", "pt": "Retorna a parte escolhida por `shape`: `'full'`, `'same'` ou `'valid'`."},
+        {"code": "C = conv2(u, v, A)", "en": "Convolves the columns of `A` with the vector `u` and then the rows with the vector `v`.", "pt": "Convolui as colunas de `A` com o vetor `u` e depois as linhas com o vetor `v`."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Numeric matrices. `B` is usually the smaller kernel.", "pt": "Matrizes numéricas. `B` costuma ser o kernel menor."},
+        {"name": "shape", "en": "`'full'` (default) returns every point; `'same'` returns the central part with the size of `A`; `'valid'` returns only points computed without zero padding.", "pt": "`'full'` (padrão) retorna todos os pontos; `'same'` retorna a parte central com o tamanho de `A`; `'valid'` retorna apenas os pontos calculados sem preenchimento com zeros."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Convolution result.", "pt": "Resultado da convolução."}
+      ],
+      "description": {
+        "en": "Each output element is a sum of products of `A` with the kernel `B` rotated by 180 degrees, with `A` treated as zero outside its edges. Convolution is the operation behind blurring, edge detection and other image filters.\n\nThe three-argument form with two vectors is a separable filter: it gives the same result as convolving with the outer product `u*v.'`, but costs fewer operations.",
+        "pt": "Cada elemento da saída é uma soma de produtos de `A` com o kernel `B` girado em 180 graus, com `A` tratada como zero fora de suas bordas. A convolução é a operação por trás de desfoque, detecção de bordas e outros filtros de imagem.\n\nA forma de três argumentos com dois vetores é um filtro separável: dá o mesmo resultado que convoluir com o produto externo `u*v.'`, mas com menos operações."
+      },
+      "examples": [
+        {"title": {"en": "Full, same and valid", "pt": "Full, same e valid"}, "code": "A = [1 2 3; 4 5 6; 7 8 9];\nconv2([1 2; 3 4], ones(2))\nconv2(A, [0 1 0; 1 1 1; 0 1 0], 'same')\nconv2(A, [1 0; 0 -1], 'valid')"}
+      ],
+      "see": ["conv", "filter2", "convn", "imfilter", "filter"]
+    },
+    "convn": {
+      "summary": {"en": "N-dimensional convolution of two arrays.", "pt": "Convolução N-dimensional de dois arrays."},
+      "syntax": [
+        {"code": "C = convn(A, B)", "en": "Returns the full N-D convolution.", "pt": "Retorna a convolução N-D completa."},
+        {"code": "C = convn(A, B, shape)", "en": "Returns the `'full'`, `'same'` or `'valid'` part.", "pt": "Retorna a parte `'full'`, `'same'` ou `'valid'`."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Numeric arrays of any number of dimensions.", "pt": "Arrays numéricos com qualquer número de dimensões."},
+        {"name": "shape", "en": "Selects the part of the result to keep, as in `conv2`.", "pt": "Seleciona a parte do resultado a manter, como em `conv2`."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Convolution array. For `'full'` its size is `size(A)+size(B)-1` in every dimension.", "pt": "Array da convolução. Para `'full'` seu tamanho é `size(A)+size(B)-1` em cada dimensão."}
+      ],
+      "description": {
+        "en": "`convn` generalizes `conv` and `conv2` to arrays with any number of dimensions, such as volumes or videos. Missing trailing dimensions count as size 1, so a matrix and a vector can be combined.\n\nThe cost grows with the product of the two array sizes, so large kernels on large volumes are slow; use `fftn` for big problems.",
+        "pt": "`convn` generaliza `conv` e `conv2` para arrays com qualquer número de dimensões, como volumes ou vídeos. Dimensões finais ausentes contam como tamanho 1, então uma matriz e um vetor podem ser combinados.\n\nO custo cresce com o produto dos tamanhos dos dois arrays, então kernels grandes em volumes grandes são lentos; use `fftn` em problemas grandes."
+      },
+      "examples": [
+        {"title": {"en": "3-D box and a smoothing row", "pt": "Caixa 3-D e uma linha de suavização"}, "code": "C = convn(ones(2,2,2), ones(2,2,2));\nsize(C)\nC(:,:,2)\nconvn([1 2; 3 4], [1 1], 'same')"}
+      ],
+      "see": ["conv", "conv2", "fftn", "filter", "smoothdata"]
+    },
+    "fft": {
+      "summary": {"en": "Discrete Fourier transform computed with a fast algorithm.", "pt": "Transformada discreta de Fourier calculada com um algoritmo rápido."},
+      "syntax": [
+        {"code": "Y = fft(X)", "en": "Transforms along the first non-singleton dimension.", "pt": "Transforma ao longo da primeira dimensão não singleton."},
+        {"code": "Y = fft(X, n)", "en": "Zero-pads or truncates the data to length `n` first.", "pt": "Preenche com zeros ou trunca os dados para o comprimento `n` antes."},
+        {"code": "Y = fft(X, n, dim)", "en": "Transforms along dimension `dim`.", "pt": "Transforma ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric vector, matrix or N-D array. Real or complex.", "pt": "Vetor, matriz ou array N-D numérico. Real ou complexo."},
+        {"name": "n", "en": "Transform length. Use `[]` to keep the default.", "pt": "Comprimento da transformada. Use `[]` para manter o padrão."},
+        {"name": "dim", "en": "Dimension to operate along.", "pt": "Dimensão em que operar."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Frequency-domain data, complex in general. `Y(1)` is the sum of the samples (the zero-frequency term).", "pt": "Dados no domínio da frequência, em geral complexos. `Y(1)` é a soma das amostras (o termo de frequência zero)."}
+      ],
+      "description": {
+        "en": "For a vector `x` of length `n`, `Y(k)` is the sum over `j` of `x(j)*exp(-2*pi*1i*(j-1)*(k-1)/n)`. Element `k` measures how much of the frequency `(k-1)/n` cycles per sample is present. For real input the second half of the result mirrors the first as complex conjugates.\n\nThe transform is not normalized: `ifft` divides by `n` to undo it. A matrix is treated column by column. Padding with zeros, as in `fft(x, 1024)`, interpolates the spectrum but adds no new information.",
+        "pt": "Para um vetor `x` de comprimento `n`, `Y(k)` é a soma em `j` de `x(j)*exp(-2*pi*1i*(j-1)*(k-1)/n)`. O elemento `k` mede quanto da frequência `(k-1)/n` ciclos por amostra está presente. Para entrada real, a segunda metade do resultado espelha a primeira como conjugados complexos.\n\nA transformada não é normalizada: `ifft` divide por `n` para desfazê-la. Uma matriz é tratada coluna a coluna. Preencher com zeros, como em `fft(x, 1024)`, interpola o espectro, mas não acrescenta informação nova."
+      },
+      "examples": [
+        {"title": {"en": "Spectrum of a short sequence", "pt": "Espectro de uma sequência curta"}, "code": "fft([1 2 3 4])\nfft([1 0 0 0], 6)"},
+        {"title": {"en": "Finding a tone", "pt": "Encontrando um tom"}, "code": "fs = 64;\nt = (0:fs-1)/fs;\nx = sin(2*pi*5*t);\nP = abs(fft(x));\n[~, k] = max(P(1:fs/2));\nfprintf('peak at %d Hz\\n', k-1)"}
+      ],
+      "see": ["ifft", "fft2", "fftshift", "abs", "filter"]
+    },
+    "fft2": {
+      "summary": {"en": "Two-dimensional discrete Fourier transform.", "pt": "Transformada discreta de Fourier bidimensional."},
+      "syntax": [
+        {"code": "Y = fft2(X)", "en": "Transforms along the first two dimensions.", "pt": "Transforma ao longo das duas primeiras dimensões."},
+        {"code": "Y = fft2(X, m, n)", "en": "Zero-pads or truncates `X` to `m` rows and `n` columns first.", "pt": "Preenche com zeros ou trunca `X` para `m` linhas e `n` colunas antes."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric matrix or N-D array.", "pt": "Matriz ou array N-D numérico."},
+        {"name": "m, n", "en": "Number of rows and columns of the transform.", "pt": "Número de linhas e colunas da transformada."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Two-dimensional spectrum. `Y(1,1)` is the sum of all elements.", "pt": "Espectro bidimensional. `Y(1,1)` é a soma de todos os elementos."}
+      ],
+      "description": {
+        "en": "`fft2(X)` is the same as `fft(fft(X).').'`: a one-dimensional transform down every column followed by one along every row. It is the basis for frequency-domain image filtering and for fast 2-D convolution.\n\nFor N-D input, each page (the slices over dimensions 3 and up) is transformed independently. Use `fftshift` to move the zero-frequency term to the center for display.",
+        "pt": "`fft2(X)` equivale a `fft(fft(X).').'`: uma transformada unidimensional em cada coluna seguida de uma em cada linha. É a base da filtragem de imagens no domínio da frequência e da convolução 2-D rápida.\n\nPara entrada N-D, cada página (as fatias nas dimensões 3 em diante) é transformada de forma independente. Use `fftshift` para levar o termo de frequência zero ao centro na hora de exibir."
+      },
+      "examples": [
+        {"title": {"en": "Small matrix and padding", "pt": "Matriz pequena e preenchimento"}, "code": "fft2([1 2; 3 4])\nsize(fft2([1 2; 3 4], 3, 3))"}
+      ],
+      "see": ["ifft2", "fft", "fftn", "fftshift", "conv2"]
+    },
+    "fftn": {
+      "summary": {"en": "N-dimensional discrete Fourier transform.", "pt": "Transformada discreta de Fourier N-dimensional."},
+      "syntax": [
+        {"code": "Y = fftn(X)", "en": "Transforms along every dimension of `X`.", "pt": "Transforma ao longo de todas as dimensões de `X`."},
+        {"code": "Y = fftn(X, sz)", "en": "Zero-pads or truncates `X` to the size vector `sz` first.", "pt": "Preenche com zeros ou trunca `X` para o vetor de tamanhos `sz` antes."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array of any number of dimensions.", "pt": "Array numérico com qualquer número de dimensões."},
+        {"name": "sz", "en": "Vector with the transform length in each dimension.", "pt": "Vetor com o comprimento da transformada em cada dimensão."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "N-D spectrum of the same size as `sz` (or `X`).", "pt": "Espectro N-D com o tamanho de `sz` (ou de `X`)."}
+      ],
+      "description": {
+        "en": "`fftn` applies `fft` in turn along each dimension, which for a matrix gives the same result as `fft2`. For a volume it transforms along all three axes. `Y(1,1,...,1)` is always the sum of every element.\n\nUndo it with `ifftn`.",
+        "pt": "`fftn` aplica `fft` em sequência ao longo de cada dimensão, o que para uma matriz dá o mesmo resultado de `fft2`. Para um volume, transforma nos três eixos. `Y(1,1,...,1)` é sempre a soma de todos os elementos.\n\nDesfaça com `ifftn`."
+      },
+      "examples": [
+        {"title": {"en": "Matches fft2 on a matrix", "pt": "Coincide com fft2 em uma matriz"}, "code": "X = [1 2; 3 4];\nfftn(X)\nisequal(fftn(X), fft2(X))\nV = ones(2,2,2);\nY = fftn(V);\nY(1)"}
+      ],
+      "see": ["ifftn", "fft", "fft2", "fftshift", "convn"]
+    },
+    "fftshift": {
+      "summary": {"en": "Moves the zero-frequency term of an FFT result to the center.", "pt": "Move o termo de frequência zero de um resultado de FFT para o centro."},
+      "syntax": [
+        {"code": "Y = fftshift(X)", "en": "Swaps the halves of `X` along every dimension.", "pt": "Troca as metades de `X` ao longo de cada dimensão."},
+        {"code": "Y = fftshift(X, dim)", "en": "Shifts only along dimension `dim`.", "pt": "Desloca apenas ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Array, typically the output of `fft`, `fft2` or `fftn`.", "pt": "Array, tipicamente a saída de `fft`, `fft2` ou `fftn`."},
+        {"name": "dim", "en": "Dimension to shift along.", "pt": "Dimensão em que deslocar."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Rearranged array of the same size as `X`.", "pt": "Array reorganizado, do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "FFT output starts with frequency zero and ends with the negative frequencies. `fftshift` circularly shifts each dimension by `floor(n/2)` so that zero frequency lands in the middle and the axis runs from negative to positive, which is the natural order for plotting.\n\nFor even lengths the operation is its own inverse. For odd lengths it is not, and `ifftshift` is needed to go back.",
+        "pt": "A saída da FFT começa na frequência zero e termina nas frequências negativas. `fftshift` desloca circularmente cada dimensão em `floor(n/2)`, de modo que a frequência zero fique no meio e o eixo vá do negativo ao positivo, a ordem natural para plotar.\n\nPara comprimentos pares a operação é a própria inversa. Para comprimentos ímpares não é, e é preciso `ifftshift` para voltar."
+      },
+      "examples": [
+        {"title": {"en": "Even, odd and one dimension", "pt": "Par, ímpar e uma dimensão"}, "code": "fftshift(1:6)\nfftshift(1:5)\nfftshift([1 2 3; 4 5 6; 7 8 9], 1)"}
+      ],
+      "see": ["ifftshift", "fft", "fft2", "circshift", "fftn"]
+    },
+    "fftw": {
+      "summary": {"en": "Gets or sets how the FFT planner optimizes its algorithm.", "pt": "Consulta ou define como o planejador da FFT otimiza o algoritmo."},
+      "syntax": [
+        {"code": "method = fftw('planner')", "en": "Returns the current planner method name.", "pt": "Retorna o nome do método de planejamento atual."},
+        {"code": "fftw('planner', method)", "en": "Sets the planner method, for example `'estimate'` or `'measure'`.", "pt": "Define o método de planejamento, por exemplo `'estimate'` ou `'measure'`."}
+      ],
+      "inputs": [
+        {"name": "'planner'", "en": "Selects the planner setting.", "pt": "Seleciona a configuração do planejador."},
+        {"name": "method", "en": "Planner method name. `'estimate'` is the default and picks a plan with a heuristic.", "pt": "Nome do método de planejamento. `'estimate'` é o padrão e escolhe um plano por heurística."}
+      ],
+      "outputs": [
+        {"name": "method", "en": "Character vector with the current planner method.", "pt": "Vetor de caracteres com o método de planejamento atual."}
+      ],
+      "description": {
+        "en": "In MATLAB, `fftw` tunes the FFTW library behind `fft` and its relatives. Slower planners such as `'measure'` try several algorithms for a given size and can speed up repeated transforms of that size.\n\nThe setting never changes the numerical result, only the speed. It is kept so that code written for MATLAB runs unchanged.",
+        "pt": "No MATLAB, `fftw` ajusta a biblioteca FFTW usada por `fft` e funções relacionadas. Planejadores mais lentos, como `'measure'`, testam vários algoritmos para um dado tamanho e podem acelerar transformadas repetidas desse tamanho.\n\nA configuração nunca altera o resultado numérico, apenas a velocidade. Ela é mantida para que o código escrito para MATLAB rode sem mudanças."
+      },
+      "notes": {
+        "en": "In MatLivre only the `'planner'` query and assignment are meaningful. The transforms do not depend on the setting.",
+        "pt": "No MatLivre, apenas a consulta e a atribuição de `'planner'` têm significado. As transformadas não dependem dessa configuração."
+      },
+      "examples": [
+        {"title": {"en": "Read the planner", "pt": "Ler o planejador"}, "code": "fftw('planner')"}
+      ],
+      "see": ["fft", "ifft", "fft2", "fftn"]
+    },
+    "filter2": {
+      "summary": {"en": "Two-dimensional correlation filter of a matrix with a kernel.", "pt": "Filtro de correlação bidimensional de uma matriz com um kernel."},
+      "syntax": [
+        {"code": "Y = filter2(B, X)", "en": "Filters `X` with kernel `B` and returns the central part, the same size as `X`.", "pt": "Filtra `X` com o kernel `B` e retorna a parte central, do mesmo tamanho de `X`."},
+        {"code": "Y = filter2(B, X, shape)", "en": "Returns the `'same'` (default), `'full'` or `'valid'` part.", "pt": "Retorna a parte `'same'` (padrão), `'full'` ou `'valid'`."}
+      ],
+      "inputs": [
+        {"name": "B", "en": "Filter kernel, a matrix.", "pt": "Kernel do filtro, uma matriz."},
+        {"name": "X", "en": "Data to filter.", "pt": "Dados a filtrar."},
+        {"name": "shape", "en": "Part of the result to return, as in `conv2`.", "pt": "Parte do resultado a retornar, como em `conv2`."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Filtered matrix.", "pt": "Matriz filtrada."}
+      ],
+      "description": {
+        "en": "`filter2(B, X)` is correlation: the kernel slides over `X` without being flipped. It is computed as `conv2(X, rot90(B, 2), shape)`. For symmetric kernels the two operations coincide.\n\nValues outside the edges of `X` are taken as zero.",
+        "pt": "`filter2(B, X)` é correlação: o kernel desliza sobre `X` sem ser invertido. É calculada como `conv2(X, rot90(B, 2), shape)`. Para kernels simétricos as duas operações coincidem.\n\nValores fora das bordas de `X` são tomados como zero."
+      },
+      "examples": [
+        {"title": {"en": "Sum of 2-by-2 neighborhoods", "pt": "Soma de vizinhanças 2 por 2"}, "code": "M = magic(3)\nfilter2(ones(2), M)\nfilter2(ones(2), M, 'valid')"}
+      ],
+      "see": ["conv2", "filter", "imfilter", "fft2"]
+    },
+    "ifft": {
+      "summary": {"en": "Inverse discrete Fourier transform.", "pt": "Transformada discreta de Fourier inversa."},
+      "syntax": [
+        {"code": "X = ifft(Y)", "en": "Inverse transform along the first non-singleton dimension.", "pt": "Transformada inversa ao longo da primeira dimensão não singleton."},
+        {"code": "X = ifft(Y, n)", "en": "Pads or truncates `Y` to length `n` first.", "pt": "Preenche ou trunca `Y` para o comprimento `n` antes."},
+        {"code": "X = ifft(Y, n, dim)", "en": "Operates along dimension `dim`.", "pt": "Opera ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "Y", "en": "Frequency-domain data, usually from `fft`.", "pt": "Dados no domínio da frequência, normalmente vindos de `fft`."},
+        {"name": "n", "en": "Transform length.", "pt": "Comprimento da transformada."},
+        {"name": "dim", "en": "Dimension to operate along.", "pt": "Dimensão em que operar."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Time-domain data. It is real when `Y` is conjugate symmetric.", "pt": "Dados no domínio do tempo. É real quando `Y` é conjugado simétrico."}
+      ],
+      "description": {
+        "en": "`ifft(fft(x))` returns `x`. The inverse uses the opposite sign in the exponent and divides by the transform length. When the input has the conjugate symmetry that the spectrum of a real signal has, the tiny imaginary parts from rounding are dropped and the result is real.\n\nPadding in the frequency domain with `n` larger than the input length adds zeros at the end of the spectrum, not at the middle, so it does not behave as interpolation.",
+        "pt": "`ifft(fft(x))` devolve `x`. A inversa usa o sinal oposto no expoente e divide pelo comprimento da transformada. Quando a entrada tem a simetria conjugada do espectro de um sinal real, as pequenas partes imaginárias de arredondamento são descartadas e o resultado é real.\n\nPreencher no domínio da frequência com `n` maior que o comprimento da entrada acrescenta zeros no fim do espectro, não no meio, então não se comporta como interpolação."
+      },
+      "examples": [
+        {"title": {"en": "Round trip", "pt": "Ida e volta"}, "code": "x = [1 2 3 4];\nifft(fft(x))\nifft([10, -2+2i, -2, -2-2i])"}
+      ],
+      "see": ["fft", "ifft2", "ifftn", "ifftshift"]
+    },
+    "ifft2": {
+      "summary": {"en": "Two-dimensional inverse discrete Fourier transform.", "pt": "Transformada discreta de Fourier inversa bidimensional."},
+      "syntax": [
+        {"code": "X = ifft2(Y)", "en": "Inverse transform along the first two dimensions.", "pt": "Transformada inversa ao longo das duas primeiras dimensões."},
+        {"code": "X = ifft2(Y, m, n)", "en": "Pads or truncates `Y` to `m` rows and `n` columns first.", "pt": "Preenche ou trunca `Y` para `m` linhas e `n` colunas antes."}
+      ],
+      "inputs": [
+        {"name": "Y", "en": "Two-dimensional spectrum, typically from `fft2`.", "pt": "Espectro bidimensional, tipicamente vindo de `fft2`."},
+        {"name": "m, n", "en": "Number of rows and columns of the transform.", "pt": "Número de linhas e colunas da transformada."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Spatial-domain matrix, real when `Y` is conjugate symmetric.", "pt": "Matriz no domínio espacial, real quando `Y` é conjugado simétrico."}
+      ],
+      "description": {
+        "en": "`ifft2(fft2(X))` recovers `X`. Multiplying two spectra element by element and applying `ifft2` gives the circular convolution of the original matrices, which is how frequency-domain image filters are applied.",
+        "pt": "`ifft2(fft2(X))` recupera `X`. Multiplicar dois espectros elemento a elemento e aplicar `ifft2` dá a convolução circular das matrizes originais, que é como se aplicam filtros de imagem no domínio da frequência."
+      },
+      "examples": [
+        {"title": {"en": "Round trip", "pt": "Ida e volta"}, "code": "X = [1 2; 3 4];\nifft2(fft2(X))"}
+      ],
+      "see": ["fft2", "ifft", "ifftn", "ifftshift"]
+    },
+    "ifftn": {
+      "summary": {"en": "N-dimensional inverse discrete Fourier transform.", "pt": "Transformada discreta de Fourier inversa N-dimensional."},
+      "syntax": [
+        {"code": "X = ifftn(Y)", "en": "Inverse transform along every dimension.", "pt": "Transformada inversa ao longo de todas as dimensões."},
+        {"code": "X = ifftn(Y, sz)", "en": "Pads or truncates `Y` to the size vector `sz` first.", "pt": "Preenche ou trunca `Y` para o vetor de tamanhos `sz` antes."}
+      ],
+      "inputs": [
+        {"name": "Y", "en": "N-D spectrum, typically from `fftn`.", "pt": "Espectro N-D, tipicamente vindo de `fftn`."},
+        {"name": "sz", "en": "Vector with the transform length in each dimension.", "pt": "Vetor com o comprimento da transformada em cada dimensão."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "N-D array, real when `Y` is conjugate symmetric.", "pt": "Array N-D, real quando `Y` é conjugado simétrico."}
+      ],
+      "description": {
+        "en": "`ifftn(fftn(X))` returns `X`, up to rounding that is removed for real data. For matrices it agrees with `ifft2`.",
+        "pt": "`ifftn(fftn(X))` devolve `X`, a menos de arredondamentos que são removidos para dados reais. Para matrizes concorda com `ifft2`."
+      },
+      "examples": [
+        {"title": {"en": "Round trip on a volume", "pt": "Ida e volta em um volume"}, "code": "V = reshape(1:8, 2, 2, 2);\nW = ifftn(fftn(V));\nisequal(round(W), V)\nsize(W)"}
+      ],
+      "see": ["fftn", "ifft", "ifft2", "ifftshift"]
+    },
+    "ifftshift": {
+      "summary": {"en": "Undoes fftshift, moving the centered zero frequency back to the start.", "pt": "Desfaz o fftshift, devolvendo a frequência zero centralizada ao início."},
+      "syntax": [
+        {"code": "Y = ifftshift(X)", "en": "Reverses `fftshift` along every dimension.", "pt": "Reverte `fftshift` em todas as dimensões."},
+        {"code": "Y = ifftshift(X, dim)", "en": "Reverses it along dimension `dim` only.", "pt": "Reverte apenas ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Array in centered-spectrum order.", "pt": "Array na ordem de espectro centralizado."},
+        {"name": "dim", "en": "Dimension to shift along.", "pt": "Dimensão em que deslocar."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array in the order that `ifft` expects.", "pt": "Array na ordem esperada por `ifft`."}
+      ],
+      "description": {
+        "en": "It circularly shifts each dimension by `ceil(n/2)`, the inverse of the `floor(n/2)` shift done by `fftshift`. The two agree for even lengths and differ by one position for odd lengths, so use `ifftshift` rather than `fftshift` before an inverse transform to be safe in both cases.",
+        "pt": "Desloca circularmente cada dimensão em `ceil(n/2)`, o inverso do deslocamento de `floor(n/2)` feito por `fftshift`. Os dois coincidem para comprimentos pares e diferem em uma posição para ímpares, então use `ifftshift` e não `fftshift` antes de uma transformada inversa para funcionar nos dois casos."
+      },
+      "examples": [
+        {"title": {"en": "Odd length round trip", "pt": "Ida e volta com comprimento ímpar"}, "code": "x = 1:5;\nifftshift(x)\nifftshift(fftshift(x))"}
+      ],
+      "see": ["fftshift", "ifft", "ifft2", "circshift"]
+    },
+    "nufft": {
+      "summary": {"en": "Fourier transform of data sampled at nonuniform points.", "pt": "Transformada de Fourier de dados amostrados em pontos não uniformes."},
+      "syntax": [
+        {"code": "Y = nufft(X)", "en": "Same as `fft(X)`, with unit-spaced sample points.", "pt": "Igual a `fft(X)`, com pontos de amostragem espaçados de 1."},
+        {"code": "Y = nufft(X, t)", "en": "Samples are located at the points `t`; frequencies are the default `(0:n-1)/n`.", "pt": "As amostras estão nos pontos `t`; as frequências são o padrão `(0:n-1)/n`."},
+        {"code": "Y = nufft(X, t, f)", "en": "Evaluates the transform at the frequencies `f`.", "pt": "Avalia a transformada nas frequências `f`."},
+        {"code": "Y = nufft(X, t, f, dim)", "en": "Operates along dimension `dim`.", "pt": "Opera ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Sample values, vector or array.", "pt": "Valores das amostras, vetor ou array."},
+        {"name": "t", "en": "Sample points, one per element of `X` along the operating dimension. Use `[]` for `0:n-1`.", "pt": "Pontos de amostragem, um por elemento de `X` na dimensão de operação. Use `[]` para `0:n-1`."},
+        {"name": "f", "en": "Frequencies at which to evaluate, in cycles per unit of `t`.", "pt": "Frequências em que avaliar, em ciclos por unidade de `t`."},
+        {"name": "dim", "en": "Dimension to operate along.", "pt": "Dimensão em que operar."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Transform values, one per frequency in `f`.", "pt": "Valores da transformada, um por frequência em `f`."}
+      ],
+      "description": {
+        "en": "The result at frequency `f(k)` is the sum over `j` of `X(j)*exp(-2*pi*1i*t(j)*f(k))`. When the points `t` are evenly spaced and `f` is the default grid, this reduces to the ordinary DFT. The point of `nufft` is that `t` and `f` need not be uniform.\n\nTo analyze unevenly timed measurements, pass the measurement times as `t` and the frequencies of interest as `f`.",
+        "pt": "O resultado na frequência `f(k)` é a soma em `j` de `X(j)*exp(-2*pi*1i*t(j)*f(k))`. Quando os pontos `t` são igualmente espaçados e `f` é a grade padrão, isso se reduz à DFT usual. A razão de ser de `nufft` é que `t` e `f` não precisam ser uniformes.\n\nPara analisar medições com instantes irregulares, passe os instantes como `t` e as frequências de interesse como `f`."
+      },
+      "notes": {
+        "en": "MatLivre evaluates the sum directly, so cost grows with the product of the number of samples and of frequencies, and the result is exact rather than approximated.",
+        "pt": "O MatLivre calcula a soma diretamente, então o custo cresce com o produto entre o número de amostras e o de frequências, e o resultado é exato, não aproximado."
+      },
+      "examples": [
+        {"title": {"en": "Uniform points reproduce fft", "pt": "Pontos uniformes reproduzem fft"}, "code": "v = [1 2 3 4];\nt = [0 0.25 0.5 0.75];\nY = nufft(v, t, 0:3);\nmax(abs(Y - fft(v))) < 1e-12"},
+        {"title": {"en": "Irregular sample times", "pt": "Instantes irregulares"}, "code": "x = [0.1 0.4 0.7];\nnufft([1 1 1], x, [0 1 2 3])"}
+      ],
+      "see": ["fft", "nufftn", "ifft", "fftshift"]
+    },
+    "nufftn": {
+      "summary": {"en": "N-dimensional Fourier transform of data at nonuniform sample points.", "pt": "Transformada de Fourier N-dimensional de dados em pontos de amostragem não uniformes."},
+      "syntax": [
+        {"code": "Y = nufftn(X)", "en": "Same as `fftn(X)`, for unit-spaced points.", "pt": "Igual a `fftn(X)`, para pontos espaçados de 1."},
+        {"code": "Y = nufftn(X, t, f)", "en": "Sample points `t` and query frequencies `f`.", "pt": "Pontos de amostragem `t` e frequências de consulta `f`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Sample values.", "pt": "Valores das amostras."},
+        {"name": "t", "en": "Sample coordinates: a matrix with one row per element of `X` and one column per dimension, or a cell array of one grid vector per dimension.", "pt": "Coordenadas das amostras: uma matriz com uma linha por elemento de `X` e uma coluna por dimensão, ou um cell array com um vetor de grade por dimensão."},
+        {"name": "f", "en": "Query frequencies in the same two forms.", "pt": "Frequências de consulta, nas mesmas duas formas."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Transform values at the query frequencies.", "pt": "Valores da transformada nas frequências de consulta."}
+      ],
+      "description": {
+        "en": "It is the multidimensional version of `nufft`: the exponent is `-2*pi*1i` times the dot product of the sample coordinate with the query frequency. With the default points and frequencies the result matches `fftn`.\n\nThe number of sample points must equal the number of elements of `X`.",
+        "pt": "É a versão multidimensional de `nufft`: o expoente é `-2*pi*1i` vezes o produto escalar da coordenada da amostra pela frequência de consulta. Com os pontos e as frequências padrão, o resultado coincide com `fftn`.\n\nO número de pontos de amostragem deve ser igual ao número de elementos de `X`."
+      },
+      "notes": {
+        "en": "MatLivre evaluates the sums directly instead of using a fast approximation.",
+        "pt": "O MatLivre calcula as somas diretamente, em vez de usar uma aproximação rápida."
+      },
+      "examples": [
+        {"title": {"en": "Default grid equals fftn", "pt": "A grade padrão equivale a fftn"}, "code": "X = [1 2; 3 4];\nY = nufftn(X)\nmax(abs(Y(:) - reshape(fftn(X), [], 1))) < 1e-12"}
+      ],
+      "see": ["nufft", "fftn", "ifftn"]
+    },
+    "ss2tf": {
+      "summary": {"en": "Converts a state-space model to a transfer function.", "pt": "Converte um modelo em espaço de estados em função de transferência."},
+      "syntax": [
+        {"code": "[num, den] = ss2tf(A, B, C, D)", "en": "Transfer function from the first input.", "pt": "Função de transferência a partir da primeira entrada."},
+        {"code": "[num, den] = ss2tf(A, B, C, D, iu)", "en": "Transfer function from input number `iu`.", "pt": "Função de transferência a partir da entrada de número `iu`."}
+      ],
+      "inputs": [
+        {"name": "A, B, C, D", "en": "State-space matrices: `A` is `n`-by-`n`, `B` is `n`-by-`m`, `C` is `p`-by-`n`, `D` is `p`-by-`m`.", "pt": "Matrizes de espaço de estados: `A` é `n`-por-`n`, `B` é `n`-por-`m`, `C` é `p`-por-`n`, `D` é `p`-por-`m`."},
+        {"name": "iu", "en": "Index of the input to use, for systems with several inputs.", "pt": "Índice da entrada a usar, para sistemas com várias entradas."}
+      ],
+      "outputs": [
+        {"name": "num", "en": "Numerator coefficients, one row per output, in descending powers of `s`.", "pt": "Coeficientes do numerador, uma linha por saída, em potências decrescentes de `s`."},
+        {"name": "den", "en": "Denominator coefficients: the characteristic polynomial of `A`.", "pt": "Coeficientes do denominador: o polinômio característico de `A`."}
+      ],
+      "description": {
+        "en": "For the system `x' = A*x + B*u`, `y = C*x + D*u`, the transfer function is `C*(s*I - A)^(-1)*B + D`. The denominator is `poly(A)` and the numerator is built from the same polynomial so that all outputs share it.\n\nThe result is a rational function in descending powers of `s`; a numerator row such as `[0 0 1]` means a constant numerator `1`.",
+        "pt": "Para o sistema `x' = A*x + B*u`, `y = C*x + D*u`, a função de transferência é `C*(s*I - A)^(-1)*B + D`. O denominador é `poly(A)` e o numerador é construído a partir do mesmo polinômio, de modo que todas as saídas o compartilham.\n\nO resultado é uma função racional em potências decrescentes de `s`; uma linha de numerador como `[0 0 1]` indica um numerador constante `1`."
+      },
+      "examples": [
+        {"title": {"en": "Second-order system", "pt": "Sistema de segunda ordem"}, "code": "A = [0 1; -2 -3];\nB = [0; 1];\nC = [1 0];\nD = 0;\n[num, den] = ss2tf(A, B, C, D)", "note": {"en": "This is the transfer function 1/(s^2 + 3s + 2).", "pt": "Esta é a função de transferência 1/(s^2 + 3s + 2)."}}
+      ],
+      "see": ["tf2ss", "poly", "roots", "eig"]
+    }
+  }
+}

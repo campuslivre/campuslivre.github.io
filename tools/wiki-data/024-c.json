@@ -1,0 +1,1451 @@
+{
+ "functions": {
+  "frac": {
+   "summary": {
+    "en": "Fractional part of a symbolic number or expression.",
+    "pt": "Parte fracionária de um número ou expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "f = frac(x)",
+     "en": "Returns `x - fix(x)`: the part after the decimal point, with the sign of `x`.",
+     "pt": "Retorna `x - fix(x)`: a parte depois da vírgula decimal, com o sinal de `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic number, variable or expression.",
+     "pt": "Número, variável ou expressão simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic result, exact for rational input.",
+     "pt": "Resultado simbólico, exato para entrada racional."
+    }
+   ],
+   "description": {
+    "en": "The fractional part keeps the sign of the argument, so `frac(7/3)` is `1/3` and `frac(-7/3)` is `-1/3`. For a symbolic variable the result stays unevaluated as `x - fix(x)`. Unlike `mod(x, 1)`, which is never negative, `frac` is odd in its argument.",
+    "pt": "A parte fracionária mantém o sinal do argumento, então `frac(7/3)` é `1/3` e `frac(-7/3)` é `-1/3`. Para uma variável simbólica o resultado fica sem avaliar como `x - fix(x)`. Diferente de `mod(x, 1)`, que nunca é negativo, `frac` é ímpar no argumento."
+   },
+   "notes": {
+    "en": "`frac` accepts only symbolic arguments in MatLivre; a plain double raises an error. Use `sym` first.",
+    "pt": "No MatLivre `frac` aceita só argumentos simbólicos; um double comum gera erro. Use `sym` antes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fractional parts",
+      "pt": "Partes fracionárias"
+     },
+     "code": "frac(sym(7)/3)\nfrac(sym(-7)/3)\nsyms x\nfrac(x)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "fix",
+    "floor",
+    "mod",
+    "rem",
+    "sym"
+   ]
+  },
+  "latex": {
+   "summary": {
+    "en": "LaTeX source of a symbolic expression.",
+    "pt": "Código LaTeX de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "s = latex(expr)",
+     "en": "Returns the LaTeX markup that typesets `expr`.",
+     "pt": "Retorna a marcação LaTeX que compõe `expr`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression, equation or matrix.",
+     "pt": "Expressão, equação ou matriz simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Character vector with LaTeX code, without surrounding math delimiters.",
+     "pt": "Vetor de caracteres com código LaTeX, sem delimitadores matemáticos."
+    }
+   ],
+   "description": {
+    "en": "`latex` converts the expression structure into LaTeX commands such as `\\frac`, `\\sqrt`, `\\sin` and `{...}^{...}`. The text can be pasted into a document, a web page with MathJax or a label with the `'Interpreter', 'latex'` option. The output is a plain character vector, so it must be placed inside `$...$` by the caller.",
+    "pt": "`latex` converte a estrutura da expressão em comandos LaTeX como `\\frac`, `\\sqrt`, `\\sin` e `{...}^{...}`. O texto pode ser colado em um documento, em uma página web com MathJax ou em um rótulo com a opção `'Interpreter', 'latex'`. A saída é um vetor de caracteres simples, então o chamador deve colocá-lo entre `$...$`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Expressions to LaTeX",
+      "pt": "Expressões para LaTeX"
+     },
+     "code": "syms x\nlatex(x^2/3)\nlatex(sin(x)^2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "mathml",
+    "pretty",
+    "disp",
+    "sym2str",
+    "texlabel"
+   ]
+  },
+  "mathml": {
+   "summary": {
+    "en": "MathML markup of a symbolic expression.",
+    "pt": "Marcação MathML de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "s = mathml(expr)",
+     "en": "Returns MathML (presentation markup) that describes `expr`.",
+     "pt": "Retorna MathML (marcação de apresentação) que descreve `expr`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Character vector with an XML `<math>` element.",
+     "pt": "Vetor de caracteres com um elemento XML `<math>`."
+    }
+   ],
+   "description": {
+    "en": "MathML is the XML standard for math on web pages. `mathml` builds the tree of `<mi>`, `<mn>`, `<mo>`, `<msup>`, `<mfrac>` and related elements for the expression, with indentation so that it can be read. Use `latex` instead when the target is a document or a MathJax page.",
+    "pt": "MathML é o padrão XML para matemática em páginas web. `mathml` monta a árvore de elementos `<mi>`, `<mn>`, `<mo>`, `<msup>`, `<mfrac>` e afins para a expressão, com indentação para facilitar a leitura. Use `latex` quando o destino for um documento ou uma página MathJax."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A square",
+      "pt": "Um quadrado"
+     },
+     "code": "syms x\nmathml(x^2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "latex",
+    "pretty",
+    "sym2str"
+   ]
+  },
+  "assume": {
+   "summary": {
+    "en": "Sets assumptions on symbolic variables.",
+    "pt": "Define suposições sobre variáveis simbólicas."
+   },
+   "syntax": [
+    {
+     "code": "assume(cond)",
+     "en": "Declares that the condition holds, replacing earlier assumptions on the variables involved.",
+     "pt": "Declara que a condição vale, substituindo suposições anteriores sobre as variáveis envolvidas."
+    },
+    {
+     "code": "assume(x, set)",
+     "en": "States that `x` belongs to a set such as `'real'`, `'integer'` or `'positive'`.",
+     "pt": "Declara que `x` pertence a um conjunto como `'real'`, `'integer'` ou `'positive'`."
+    },
+    {
+     "code": "assume(x, 'clear')",
+     "en": "Removes the assumptions on `x`.",
+     "pt": "Remove as suposições sobre `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cond",
+     "en": "Relation such as `x > 0`, or a logical combination of relations.",
+     "pt": "Relação como `x > 0`, ou combinação lógica de relações."
+    },
+    {
+     "name": "set",
+     "en": "Name of a set, as text.",
+     "pt": "Nome de um conjunto, como texto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A symbolic variable is complex by default, so `sqrt(x^2)` cannot be simplified to `x`. Assumptions narrow the domain and let functions such as `simplify`, `int` and `limit` use facts like `x` real or `x` positive. `assume` replaces what was assumed before, whereas `assumeAlso` adds to it.\n\nThe assumptions belong to the variable and stay until they are cleared with `assume(x, 'clear')`, with `assumptions('clear')` or with `clear x`. `assumptions` lists them.",
+    "pt": "Uma variável simbólica é complexa por padrão, então `sqrt(x^2)` não pode ser simplificada para `x`. Suposições estreitam o domínio e permitem que funções como `simplify`, `int` e `limit` usem fatos como `x` real ou `x` positivo. `assume` substitui o que foi suposto antes, enquanto `assumeAlso` acrescenta.\n\nAs suposições pertencem à variável e permanecem até serem limpas com `assume(x, 'clear')`, com `assumptions('clear')` ou com `clear x`. `assumptions` as lista."
+   },
+   "notes": {
+    "en": "Only the `'real'` set is recorded reliably in MatLivre, and the stored assumptions are not yet used by `simplify`. `assume(x, 'clear')` does not clear them; use `assumptions('clear')`.",
+    "pt": "No MatLivre só o conjunto `'real'` é registrado de forma confiável, e as suposições guardadas ainda não são usadas por `simplify`. `assume(x, 'clear')` não as limpa; use `assumptions('clear')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Declare x real",
+      "pt": "Declarando x real"
+     },
+     "code": "syms x\nassume(x, 'real')\nassumptions(x)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "assumeAlso",
+    "assumptions",
+    "syms",
+    "sym",
+    "simplify"
+   ]
+  },
+  "assumeAlso": {
+   "summary": {
+    "en": "Adds an assumption to the ones already set on a symbolic variable.",
+    "pt": "Acrescenta uma suposição às que já existem em uma variável simbólica."
+   },
+   "syntax": [
+    {
+     "code": "assumeAlso(cond)",
+     "en": "Adds the condition to the existing assumptions.",
+     "pt": "Acrescenta a condição às suposições existentes."
+    },
+    {
+     "code": "assumeAlso(x, set)",
+     "en": "Adds the membership of `x` in a set.",
+     "pt": "Acrescenta a pertinência de `x` a um conjunto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cond",
+     "en": "Relation such as `x < 5`.",
+     "pt": "Relação como `x < 5`."
+    },
+    {
+     "name": "set",
+     "en": "Name of a set, as text.",
+     "pt": "Nome de um conjunto, como texto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`assume` discards earlier assumptions on the variables it mentions; `assumeAlso` keeps them and puts the new one next to them. This lets assumptions be built up step by step, for example first that `x` is real and then that it is smaller than 5, and the set of assumptions can be read with `assumptions`.",
+    "pt": "`assume` descarta suposições anteriores sobre as variáveis que menciona; `assumeAlso` as mantém e acrescenta a nova ao lado delas. Isso permite montar as suposições passo a passo, por exemplo primeiro que `x` é real e depois que é menor que 5, e o conjunto pode ser lido com `assumptions`."
+   },
+   "notes": {
+    "en": "In MatLivre, relations such as `x < 5` are not recorded; the set form with `'real'` is.",
+    "pt": "No MatLivre, relações como `x < 5` não são registradas; a forma de conjunto com `'real'` é."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two variables",
+      "pt": "Duas variáveis"
+     },
+     "code": "syms x y\nassume(x, 'real')\nassumeAlso(y, 'real')\nassumptions",
+     "silent": false
+    }
+   ],
+   "see": [
+    "assume",
+    "assumptions",
+    "syms",
+    "simplify"
+   ]
+  },
+  "assumptions": {
+   "summary": {
+    "en": "Lists the assumptions set on symbolic variables.",
+    "pt": "Lista as suposições definidas em variáveis simbólicas."
+   },
+   "syntax": [
+    {
+     "code": "a = assumptions",
+     "en": "Returns all assumptions on all symbolic variables.",
+     "pt": "Retorna todas as suposições de todas as variáveis simbólicas."
+    },
+    {
+     "code": "a = assumptions(x)",
+     "en": "Returns only the assumptions on `x`.",
+     "pt": "Retorna apenas as suposições sobre `x`."
+    },
+    {
+     "code": "assumptions('clear')",
+     "en": "Clears all assumptions.",
+     "pt": "Limpa todas as suposições."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic variable, or an array of them.",
+     "pt": "Variável simbólica, ou array delas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "a",
+     "en": "Symbolic array of conditions. It is empty when nothing was assumed.",
+     "pt": "Array simbólico de condições. Fica vazio quando nada foi suposto."
+    }
+   ],
+   "description": {
+    "en": "Use it to check what has been declared with `assume` and `assumeAlso`, because assumptions persist in the session and can change results far from where they were set. Conditions of the form `in(x, 'real')` mean that `x` belongs to that set.",
+    "pt": "Use para conferir o que foi declarado com `assume` e `assumeAlso`, pois as suposições persistem na sessão e podem alterar resultados longe de onde foram definidas. Condições da forma `in(x, 'real')` significam que `x` pertence ao conjunto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read back",
+      "pt": "Lendo de volta"
+     },
+     "code": "syms x\nassume(x, 'real')\nassumptions(x)\nassumptions('clear')\nassumptions",
+     "silent": false
+    }
+   ],
+   "see": [
+    "assume",
+    "assumeAlso",
+    "syms",
+    "sym"
+   ]
+  },
+  "limit": {
+   "summary": {
+    "en": "Limit of a symbolic expression.",
+    "pt": "Limite de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "L = limit(f, x, a)",
+     "en": "Limit of `f` as `x` approaches `a`.",
+     "pt": "Limite de `f` quando `x` tende a `a`."
+    },
+    {
+     "code": "L = limit(f, x, a, 'left')",
+     "en": "One-sided limit from below.",
+     "pt": "Limite lateral pela esquerda."
+    },
+    {
+     "code": "L = limit(f, x, a, 'right')",
+     "en": "One-sided limit from above.",
+     "pt": "Limite lateral pela direita."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Symbolic variable.",
+     "pt": "Variável simbólica."
+    },
+    {
+     "name": "a",
+     "en": "Point, number or `Inf`.",
+     "pt": "Ponto, número ou `Inf`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Symbolic limit, possibly `Inf`, `-Inf` or `NaN`.",
+     "pt": "Limite simbólico, possivelmente `Inf`, `-Inf` ou `NaN`."
+    }
+   ],
+   "description": {
+    "en": "Without a direction, `limit` returns the two-sided limit, which exists only if both sides agree. For `1/x` at 0 the sides disagree, so asking for `'left'` and `'right'` separately gives `-Inf` and `Inf`. Indeterminate forms such as `(sin(x)-x)/x^3` at 0 are resolved by series expansion, giving `-1/6`.",
+    "pt": "Sem direção, `limit` retorna o limite bilateral, que só existe se os dois lados concordam. Para `1/x` em 0 os lados discordam, então pedir `'left'` e `'right'` separadamente dá `-Inf` e `Inf`. Formas indeterminadas como `(sin(x)-x)/x^3` em 0 são resolvidas por expansão em série, resultando em `-1/6`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Limits",
+      "pt": "Limites"
+     },
+     "code": "syms x\nlimit((sin(x) - x)/x^3, x, 0)\nlimit(1/x, x, 0, 'left')\nlimit(1/x, x, 0, 'right')\nlimit((1 + 1/x)^x, x, Inf)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "series",
+    "diff",
+    "int",
+    "taylor"
+   ]
+  },
+  "int": {
+   "summary": {
+    "en": "Symbolic integral, indefinite or definite.",
+    "pt": "Integral simbólica, indefinida ou definida."
+   },
+   "syntax": [
+    {
+     "code": "F = int(f, x)",
+     "en": "Antiderivative of `f` with respect to `x`, without the constant of integration.",
+     "pt": "Primitiva de `f` em relação a `x`, sem a constante de integração."
+    },
+    {
+     "code": "F = int(f, x, a, b)",
+     "en": "Definite integral from `a` to `b`.",
+     "pt": "Integral definida de `a` a `b`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Integration variable.",
+     "pt": "Variável de integração."
+    },
+    {
+     "name": "a, b",
+     "en": "Limits, possibly `-Inf` or `Inf`.",
+     "pt": "Limites, possivelmente `-Inf` ou `Inf`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Symbolic result. When no closed form is found, the call is returned unevaluated as `int(...)`.",
+     "pt": "Resultado simbólico. Quando não se encontra forma fechada, a chamada volta sem avaliar como `int(...)`."
+    }
+   ],
+   "description": {
+    "en": "`int` applies integration rules, substitutions and integration by parts to find an exact result. Definite integrals are evaluated through the antiderivative, so `int(x^2, x, 0, 3)` gives the exact `9`. The constant of integration is omitted.\n\nWhen the engine cannot find a formula, the unevaluated `int(f, x)` is returned; numeric integration with `integral` is then an alternative.",
+    "pt": "`int` aplica regras de integração, substituições e integração por partes para achar um resultado exato. Integrais definidas são avaliadas pela primitiva, então `int(x^2, x, 0, 3)` dá o exato `9`. A constante de integração é omitida.\n\nQuando o motor não encontra uma fórmula, retorna `int(f, x)` sem avaliar; a integração numérica com `integral` é então uma alternativa."
+   },
+   "notes": {
+    "en": "Some integrals that MATLAB solves, such as `sin(x)^2` or the Gaussian over the real line, are returned unevaluated by MatLivre.",
+    "pt": "Algumas integrais que o MATLAB resolve, como `sin(x)^2` ou a gaussiana na reta real, são retornadas sem avaliar pelo MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Antiderivative and definite integral",
+      "pt": "Primitiva e integral definida"
+     },
+     "code": "syms x\nint(x*exp(x), x)\nint(x^2, x, 0, 3)\nint(1/x, x, 1, 2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "diff",
+    "integral",
+    "symsum",
+    "integrateByParts",
+    "changeIntegrationVariable"
+   ]
+  },
+  "changeIntegrationVariable": {
+   "summary": {
+    "en": "Substitutes a new variable into an integral.",
+    "pt": "Faz uma substituição de variável em uma integral."
+   },
+   "syntax": [
+    {
+     "code": "G = changeIntegrationVariable(F, old, new)",
+     "en": "Rewrites the integral `F` by setting `old` equal to the expression `new` of a new variable.",
+     "pt": "Reescreve a integral `F` fazendo `old` igual à expressão `new` de uma nova variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Unevaluated integral created with `int`.",
+     "pt": "Integral não avaliada criada com `int`."
+    },
+    {
+     "name": "old",
+     "en": "The integration variable of `F`.",
+     "pt": "A variável de integração de `F`."
+    },
+    {
+     "name": "new",
+     "en": "Expression of the new variable, such as `sqrt(z)`.",
+     "pt": "Expressão da nova variável, como `sqrt(z)`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Integral in the new variable, with the integrand multiplied by the derivative of the substitution and the limits transformed.",
+     "pt": "Integral na nova variável, com o integrando multiplicado pela derivada da substituição e os limites transformados."
+    }
+   ],
+   "description": {
+    "en": "The substitution `x = g(u)` turns `int(f(x), x, a, b)` into `int(f(g(u))*g'(u), u, ua, ub)`, where the new limits solve `g(u) = a` and `g(u) = b`. The function does exactly this bookkeeping, which is easy to get wrong by hand.  `F` must be an `int` expression, so an abstract integrand such as `f(x)` is the clearest way to see the effect.",
+    "pt": "A substituição `x = g(u)` transforma `int(f(x), x, a, b)` em `int(f(g(u))*g'(u), u, ua, ub)`, em que os novos limites resolvem `g(u) = a` e `g(u) = b`. A função faz exatamente essa contabilidade, fácil de errar à mão.  `F` deve ser uma expressão `int`, então um integrando abstrato como `f(x)` é a forma mais clara de ver o efeito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Substitute x = sqrt(z)",
+      "pt": "Substituindo x = sqrt(z)"
+     },
+     "code": "syms x u\nF = int(2*x*exp(x^2), x, 0, 1);\nG = changeIntegrationVariable(F, x, sqrt(u))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "int",
+    "integrateByParts",
+    "subs",
+    "solve"
+   ]
+  },
+  "integrateByParts": {
+   "summary": {
+    "en": "Applies integration by parts to an integral.",
+    "pt": "Aplica integração por partes a uma integral."
+   },
+   "syntax": [
+    {
+     "code": "G = integrateByParts(F, dv)",
+     "en": "Rewrites `F = int(u*dv)` as `u*v - int(v*du)`, where `v` is the antiderivative of `dv`.",
+     "pt": "Reescreve `F = int(u*dv)` como `u*v - int(v*du)`, em que `v` é a primitiva de `dv`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "An integral created with `int`.",
+     "pt": "Uma integral criada com `int`."
+    },
+    {
+     "name": "dv",
+     "en": "The factor of the integrand that is integrated; the rest of the integrand becomes `u`.",
+     "pt": "O fator do integrando que será integrado; o restante do integrando vira `u`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Expression with boundary terms and, if needed, a new integral.",
+     "pt": "Expressão com termos de contorno e, se preciso, uma nova integral."
+    }
+   ],
+   "description": {
+    "en": "Integration by parts uses `int(u dv) = u v - int(v du)`. The user chooses which part of the integrand is `dv`; the function divides it out to get `u`, integrates `dv` to get `v` and differentiates `u`. A good choice makes the new integral simpler, for example `dv = exp(x)` when `u = x`.\n\nFor a definite integral the result includes the bracket `u*v` evaluated at the limits.",
+    "pt": "A integração por partes usa `int(u dv) = u v - int(v du)`. O usuário escolhe qual parte do integrando é `dv`; a função divide para obter `u`, integra `dv` para obter `v` e deriva `u`. Uma boa escolha torna a nova integral mais simples, por exemplo `dv = exp(x)` quando `u = x`.\n\nPara uma integral definida, o resultado inclui o termo `u*v` avaliado nos limites."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Definite integral by parts",
+      "pt": "Integral definida por partes"
+     },
+     "code": "syms x\nF = int(x*sin(x), x, 0, pi);\nP = integrateByParts(F, sin(x))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "int",
+    "changeIntegrationVariable",
+    "diff",
+    "simplify"
+   ]
+  },
+  "symsum": {
+   "summary": {
+    "en": "Symbolic sum of a series.",
+    "pt": "Soma simbólica de uma série."
+   },
+   "syntax": [
+    {
+     "code": "S = symsum(f, k, a, b)",
+     "en": "Sum of `f` as the index `k` runs from `a` to `b`.",
+     "pt": "Soma de `f` com o índice `k` de `a` a `b`."
+    },
+    {
+     "code": "S = symsum(f, k)",
+     "en": "Indefinite sum: the function whose difference is `f`.",
+     "pt": "Soma indefinida: a função cuja diferença é `f`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in the index.",
+     "pt": "Expressão simbólica no índice."
+    },
+    {
+     "name": "k",
+     "en": "Summation index.",
+     "pt": "Índice de soma."
+    },
+    {
+     "name": "a, b",
+     "en": "Lower and upper limits, possibly symbolic.",
+     "pt": "Limites inferior e superior, possivelmente simbólicos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic sum, exact for rational terms.",
+     "pt": "Soma simbólica, exata para termos racionais."
+    }
+   ],
+   "description": {
+    "en": "When the limits are numbers the result is the exact value, e.g. `symsum(k^2, k, 1, 10)` is `385`. With a symbolic upper limit `n` the answer is a closed form in `n`, such as `n*(n+1)*(2*n+1)/6`. A sum that has no closed form is returned unevaluated.",
+    "pt": "Quando os limites são números, o resultado é o valor exato, por exemplo `symsum(k^2, k, 1, 10)` é `385`. Com limite superior simbólico `n`, a resposta é uma forma fechada em `n`, como `n*(n+1)*(2*n+1)/6`. Uma soma sem forma fechada é retornada sem avaliar."
+   },
+   "notes": {
+    "en": "Infinite series such as `1/k^2` up to `Inf` are returned unevaluated in MatLivre, where MATLAB answers `pi^2/6`.",
+    "pt": "Séries infinitas como `1/k^2` até `Inf` são retornadas sem avaliar no MatLivre, enquanto o MATLAB responde `pi^2/6`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sum of squares",
+      "pt": "Soma de quadrados"
+     },
+     "code": "syms k n\nsymsum(k^2, k, 1, 10)\nsymsum(k, k, 1, n)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "symprod",
+    "sum",
+    "int",
+    "series"
+   ]
+  },
+  "symprod": {
+   "summary": {
+    "en": "Symbolic product of a sequence.",
+    "pt": "Produto simbólico de uma sequência."
+   },
+   "syntax": [
+    {
+     "code": "P = symprod(f, k, a, b)",
+     "en": "Product of `f` as the index `k` runs from `a` to `b`.",
+     "pt": "Produto de `f` com o índice `k` de `a` a `b`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in the index.",
+     "pt": "Expressão simbólica no índice."
+    },
+    {
+     "name": "k",
+     "en": "Product index.",
+     "pt": "Índice do produto."
+    },
+    {
+     "name": "a, b",
+     "en": "Lower and upper limits, possibly symbolic.",
+     "pt": "Limites inferior e superior, possivelmente simbólicos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Symbolic product.",
+     "pt": "Produto simbólico."
+    }
+   ],
+   "description": {
+    "en": "For numeric limits the product is evaluated exactly: `symprod(k, k, 1, 5)` is `120`. With a symbolic upper limit the result is a closed form when one is known, and `symprod(k, k, 1, n)` is `factorial(n)`.",
+    "pt": "Para limites numéricos o produto é avaliado exatamente: `symprod(k, k, 1, 5)` é `120`. Com limite superior simbólico, o resultado é uma forma fechada quando conhecida, e `symprod(k, k, 1, n)` é `factorial(n)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Factorial as a product",
+      "pt": "Fatorial como produto"
+     },
+     "code": "syms k n\nsymprod(k, k, 1, 5)\nsymprod(k, k, 1, n)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "symsum",
+    "prod",
+    "factorial",
+    "int"
+   ]
+  },
+  "series": {
+   "summary": {
+    "en": "Taylor series expansion of a symbolic expression.",
+    "pt": "Expansão em série de Taylor de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "s = series(f, x)",
+     "en": "Expansion of `f` around `x = 0` up to the default order 6.",
+     "pt": "Expansão de `f` em torno de `x = 0` até a ordem padrão 6."
+    },
+    {
+     "code": "s = series(f, x, a)",
+     "en": "Expansion around the point `a`.",
+     "pt": "Expansão em torno do ponto `a`."
+    },
+    {
+     "code": "s = series(f, x, a, 'Order', n)",
+     "en": "Truncates the expansion before the term of order `n`.",
+     "pt": "Trunca a expansão antes do termo de ordem `n`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Expansion variable.",
+     "pt": "Variável de expansão."
+    },
+    {
+     "name": "a",
+     "en": "Expansion point, 0 by default.",
+     "pt": "Ponto de expansão, 0 por padrão."
+    },
+    {
+     "name": "n",
+     "en": "Number of terms; terms of degree `n` and above are dropped.",
+     "pt": "Número de termos; termos de grau `n` e acima são descartados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Polynomial in `x - a` that approximates `f` near `a`.",
+     "pt": "Polinômio em `x - a` que aproxima `f` perto de `a`."
+    }
+   ],
+   "description": {
+    "en": "The series is the polynomial whose derivatives at `a` match those of `f`: `cos(x)` around 0 gives `1 - x^2/2 + x^4/24 - ...`. With `'Order', 6`, terms up to `x^5` are kept. The result does not carry an `O(x^6)` term; it is an ordinary polynomial that can be evaluated with `subs`.",
+    "pt": "A série é o polinômio cujas derivadas em `a` coincidem com as de `f`: `cos(x)` em torno de 0 dá `1 - x^2/2 + x^4/24 - ...`. Com `'Order', 6`, os termos até `x^5` são mantidos. O resultado não traz um termo `O(x^6)`; é um polinômio comum, que pode ser avaliado com `subs`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cosine and exponential",
+      "pt": "Cosseno e exponencial"
+     },
+     "code": "syms x\nseries(cos(x), x, 'Order', 6)\nseries(exp(x), x, 1, 'Order', 3)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "taylor",
+    "limit",
+    "pade",
+    "diff",
+    "subs"
+   ]
+  },
+  "pade": {
+   "summary": {
+    "en": "Padé approximant: a rational function that approximates an expression.",
+    "pt": "Aproximante de Padé: função racional que aproxima uma expressão."
+   },
+   "syntax": [
+    {
+     "code": "r = pade(f, x)",
+     "en": "Padé approximant of `f` around `x = 0` with the default order.",
+     "pt": "Aproximante de Padé de `f` em torno de `x = 0` com a ordem padrão."
+    },
+    {
+     "code": "r = pade(f, x, 'Order', [m n])",
+     "en": "Numerator of degree `m` and denominator of degree `n`.",
+     "pt": "Numerador de grau `m` e denominador de grau `n`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Symbolic variable.",
+     "pt": "Variável simbólica."
+    },
+    {
+     "name": "Order",
+     "en": "Degrees `[m n]` of numerator and denominator.",
+     "pt": "Graus `[m n]` do numerador e do denominador."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Ratio of two polynomials in `x`.",
+     "pt": "Razão de dois polinômios em `x`."
+    }
+   ],
+   "description": {
+    "en": "A Padé approximant matches the Taylor series of `f` up to order `m + n` using a ratio of polynomials instead of a single polynomial. Rational functions can follow poles and large excursions that a Taylor polynomial misses, so they are common for approximating delays in control theory: the `[2 2]` approximant of `exp(x)` is `(x^2 + 6x + 12)/(x^2 - 6x + 12)`.",
+    "pt": "Um aproximante de Padé coincide com a série de Taylor de `f` até a ordem `m + n`, usando uma razão de polinômios em vez de um único polinômio. Funções racionais acompanham polos e grandes excursões que um polinômio de Taylor não captura, por isso são comuns para aproximar atrasos em controle: o aproximante `[2 2]` de `exp(x)` é `(x^2 + 6x + 12)/(x^2 - 6x + 12)`."
+   },
+   "notes": {
+    "en": "The form with an expansion point, `pade(f, x, a, 'Order', ...)`, is not accepted by MatLivre; expansion is around 0.",
+    "pt": "A forma com ponto de expansão, `pade(f, x, a, 'Order', ...)`, não é aceita pelo MatLivre; a expansão é em torno de 0."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Padé of exp",
+      "pt": "Padé de exp"
+     },
+     "code": "syms x\nr = pade(exp(x), x, 'Order', [2 2])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "series",
+    "taylor",
+    "simplify",
+    "tf"
+   ]
+  },
+  "jacobian": {
+   "summary": {
+    "en": "Jacobian matrix of a symbolic vector function.",
+    "pt": "Matriz jacobiana de uma função vetorial simbólica."
+   },
+   "syntax": [
+    {
+     "code": "J = jacobian(f, v)",
+     "en": "Matrix of the partial derivatives of each component of `f` with respect to each variable in `v`.",
+     "pt": "Matriz das derivadas parciais de cada componente de `f` em relação a cada variável de `v`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Scalar or vector of symbolic expressions.",
+     "pt": "Escalar ou vetor de expressões simbólicas."
+    },
+    {
+     "name": "v",
+     "en": "Vector of symbolic variables.",
+     "pt": "Vetor de variáveis simbólicas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "J",
+     "en": "Matrix with `numel(f)` rows and `numel(v)` columns; entry `(i, j)` is `diff(f(i), v(j))`.",
+     "pt": "Matriz com `numel(f)` linhas e `numel(v)` colunas; a entrada `(i, j)` é `diff(f(i), v(j))`."
+    }
+   ],
+   "description": {
+    "en": "The Jacobian is the linearization of a multi-variable map around a point. It is used in Newton's method for systems, in stability analysis of differential equations and in change of variables for integrals, where its determinant is the scaling factor. For a scalar `f` the Jacobian is the gradient as a row.",
+    "pt": "A jacobiana é a linearização de uma aplicação de várias variáveis em torno de um ponto. É usada no método de Newton para sistemas, na análise de estabilidade de equações diferenciais e na mudança de variáveis em integrais, em que seu determinante é o fator de escala. Para um `f` escalar, a jacobiana é o gradiente como linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A 2-by-3 Jacobian",
+      "pt": "Uma jacobiana 2 por 3"
+     },
+     "code": "syms x y z\nJ = jacobian([x^2*y; x + z], [x y z])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "hessian",
+    "diff",
+    "gradient",
+    "det"
+   ]
+  },
+  "hessian": {
+   "summary": {
+    "en": "Hessian matrix of second partial derivatives of a symbolic scalar function.",
+    "pt": "Matriz hessiana das derivadas parciais segundas de uma função escalar simbólica."
+   },
+   "syntax": [
+    {
+     "code": "H = hessian(f, v)",
+     "en": "Second derivatives of `f` with respect to the variables in `v`.",
+     "pt": "Derivadas segundas de `f` em relação às variáveis de `v`."
+    },
+    {
+     "code": "H = hessian(f)",
+     "en": "Uses all symbolic variables found in `f`.",
+     "pt": "Usa todas as variáveis simbólicas encontradas em `f`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Scalar symbolic expression.",
+     "pt": "Expressão simbólica escalar."
+    },
+    {
+     "name": "v",
+     "en": "Vector of symbolic variables.",
+     "pt": "Vetor de variáveis simbólicas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "H",
+     "en": "Square symmetric matrix; entry `(i, j)` is `diff(f, v(i), v(j))`.",
+     "pt": "Matriz quadrada simétrica; a entrada `(i, j)` é `diff(f, v(i), v(j))`."
+    }
+   ],
+   "description": {
+    "en": "The Hessian describes the curvature of `f`. At a point where the gradient vanishes, a positive definite Hessian means a local minimum, a negative definite one a local maximum, and an indefinite one a saddle. It is also the Jacobian of the gradient.",
+    "pt": "A hessiana descreve a curvatura de `f`. Em um ponto onde o gradiente se anula, uma hessiana definida positiva indica mínimo local, definida negativa indica máximo local e indefinida indica ponto de sela. É também a jacobiana do gradiente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hessian of x^2 y",
+      "pt": "Hessiana de x^2 y"
+     },
+     "code": "syms x y\nH = hessian(x^2*y, [x y])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "jacobian",
+    "diff",
+    "gradient",
+    "eig"
+   ]
+  },
+  "potential": {
+   "summary": {
+    "en": "Potential function of a vector field.",
+    "pt": "Função potencial de um campo vetorial."
+   },
+   "syntax": [
+    {
+     "code": "P = potential(V, X)",
+     "en": "Finds a scalar function `P` whose gradient with respect to `X` is the field `V`.",
+     "pt": "Encontra uma função escalar `P` cujo gradiente em relação a `X` é o campo `V`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "V",
+     "en": "Vector of symbolic expressions: the field.",
+     "pt": "Vetor de expressões simbólicas: o campo."
+    },
+    {
+     "name": "X",
+     "en": "Vector of variables with the same length as `V`.",
+     "pt": "Vetor de variáveis com o mesmo comprimento de `V`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Symbolic potential, with the constant set to zero.",
+     "pt": "Potencial simbólico, com a constante igual a zero."
+    }
+   ],
+   "description": {
+    "en": "A field has a potential only if it is conservative, meaning that the Jacobian of `V` is symmetric. Then the work along any path depends only on the end points. `potential` integrates the components one at a time and matches the terms. For `[y x]` the potential is `x*y`.",
+    "pt": "Um campo só tem potencial se for conservativo, isto é, se a jacobiana de `V` é simétrica. Então o trabalho ao longo de qualquer caminho depende apenas dos extremos. `potential` integra as componentes uma a uma e confere os termos. Para `[y x]`, o potencial é `x*y`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A conservative field",
+      "pt": "Um campo conservativo"
+     },
+     "code": "syms x y\nP = potential([y x], [x y])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "curl",
+    "divergence",
+    "gradient",
+    "jacobian",
+    "int"
+   ]
+  },
+  "functionalDerivative": {
+   "summary": {
+    "en": "Functional derivative (Euler-Lagrange expression) of a functional.",
+    "pt": "Derivada funcional (expressão de Euler-Lagrange) de um funcional."
+   },
+   "syntax": [
+    {
+     "code": "D = functionalDerivative(f, y)",
+     "en": "Functional derivative of `int(f)` with respect to the function `y(x)`.",
+     "pt": "Derivada funcional de `int(f)` em relação à função `y(x)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Integrand, built from `y(x)` and its derivatives.",
+     "pt": "Integrando, construído a partir de `y(x)` e suas derivadas."
+    },
+    {
+     "name": "y",
+     "en": "Symbolic function `y(x)`.",
+     "pt": "Função simbólica `y(x)`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "D",
+     "en": "Symbolic function giving `dF/dy - d/dx(dF/dy') + d^2/dx^2(dF/dy'') - ...`.",
+     "pt": "Função simbólica que dá `dF/dy - d/dx(dF/dy') + d^2/dx^2(dF/dy'') - ...`."
+    }
+   ],
+   "description": {
+    "en": "In the calculus of variations a minimizing function makes the functional derivative zero, which is the Euler-Lagrange equation. For the integrand `y^2 + y'^2` the result is `2*y - 2*y''`, and setting it to zero gives the differential equation `y'' = y`.",
+    "pt": "No cálculo variacional, uma função que minimiza o funcional anula a derivada funcional, o que é a equação de Euler-Lagrange. Para o integrando `y^2 + y'^2` o resultado é `2*y - 2*y''`, e igualá-lo a zero dá a equação diferencial `y'' = y`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Euler-Lagrange expression",
+      "pt": "Expressão de Euler-Lagrange"
+     },
+     "code": "syms y(x)\nf = y^2 + diff(y, x)^2;\nD = functionalDerivative(f, y)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "diff",
+    "dsolve",
+    "int",
+    "jacobian"
+   ]
+  },
+  "laplace": {
+   "summary": {
+    "en": "Laplace transform of a symbolic expression.",
+    "pt": "Transformada de Laplace de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "F = laplace(f, t, s)",
+     "en": "Transforms `f(t)` into `F(s) = int(f(t)*exp(-s*t), t, 0, Inf)`.",
+     "pt": "Transforma `f(t)` em `F(s) = int(f(t)*exp(-s*t), t, 0, Inf)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    },
+    {
+     "name": "t",
+     "en": "Time variable.",
+     "pt": "Variável de tempo."
+    },
+    {
+     "name": "s",
+     "en": "Transform variable.",
+     "pt": "Variável da transformada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `s`.",
+     "pt": "Expressão simbólica em `s`."
+    }
+   ],
+   "description": {
+    "en": "The Laplace transform turns differential equations in `t` into algebraic equations in `s`. Derivatives become multiplication by `s`, and convolution becomes multiplication. For example the transform of `t^2` is `2/s^3` and that of `sin(t)` is `1/(s^2 + 1)`. The result is brought back to time with `ilaplace`.",
+    "pt": "A transformada de Laplace converte equações diferenciais em `t` em equações algébricas em `s`. Derivadas viram multiplicação por `s` e a convolução vira multiplicação. Por exemplo, a transformada de `t^2` é `2/s^3` e a de `sin(t)` é `1/(s^2 + 1)`. O resultado volta ao tempo com `ilaplace`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two transforms",
+      "pt": "Duas transformadas"
+     },
+     "code": "syms t s\nlaplace(t^2, t, s)\nlaplace(sin(t), t, s)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ilaplace",
+    "fourier",
+    "ztrans",
+    "int",
+    "dsolve"
+   ]
+  },
+  "ilaplace": {
+   "summary": {
+    "en": "Inverse Laplace transform.",
+    "pt": "Transformada inversa de Laplace."
+   },
+   "syntax": [
+    {
+     "code": "f = ilaplace(F, s, t)",
+     "en": "Returns the function of `t` whose Laplace transform is `F(s)`.",
+     "pt": "Retorna a função de `t` cuja transformada de Laplace é `F(s)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `s`.",
+     "pt": "Expressão simbólica em `s`."
+    },
+    {
+     "name": "s",
+     "en": "Transform variable.",
+     "pt": "Variável da transformada."
+    },
+    {
+     "name": "t",
+     "en": "Time variable of the result.",
+     "pt": "Variável de tempo do resultado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    }
+   ],
+   "description": {
+    "en": "Typical inputs are rational functions of `s`, which are split into simple terms, each with a known inverse: `1/(s+1)` gives `exp(-t)` and `1/(s^2+1)` gives `sin(t)`. This is the last step in solving a linear ODE with the Laplace method.",
+    "pt": "Entradas típicas são funções racionais de `s`, decompostas em termos simples, cada um com inversa conhecida: `1/(s+1)` dá `exp(-t)` e `1/(s^2+1)` dá `sin(t)`. É o último passo da resolução de uma EDO linear pelo método de Laplace."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Back to time",
+      "pt": "De volta ao tempo"
+     },
+     "code": "syms s t\nilaplace(1/(s + 1), s, t)\nilaplace(1/(s^2 + 1), s, t)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "laplace",
+    "iztrans",
+    "ifourier",
+    "partfrac"
+   ]
+  },
+  "fourier": {
+   "summary": {
+    "en": "Fourier transform of a symbolic expression.",
+    "pt": "Transformada de Fourier de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "F = fourier(f, t, w)",
+     "en": "Transforms `f(t)` into `F(w) = int(f(t)*exp(-1i*w*t), t, -Inf, Inf)`.",
+     "pt": "Transforma `f(t)` em `F(w) = int(f(t)*exp(-1i*w*t), t, -Inf, Inf)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    },
+    {
+     "name": "t",
+     "en": "Original variable.",
+     "pt": "Variável original."
+    },
+    {
+     "name": "w",
+     "en": "Frequency variable.",
+     "pt": "Variável de frequência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `w`.",
+     "pt": "Expressão simbólica em `w`."
+    }
+   ],
+   "description": {
+    "en": "The Fourier transform breaks a signal into its frequencies. With the default parameters (see `sympref('FourierParameters')`), the transform of `exp(-abs(t))` is `2/(w^2 + 1)` and that of `exp(-t^2)` is `pi^(1/2)*exp(-w^2/4)`: the Gaussian stays a Gaussian. The transform of the impulse `dirac(t)` is the constant 1.",
+    "pt": "A transformada de Fourier decompõe um sinal em suas frequências. Com os parâmetros padrão (veja `sympref('FourierParameters')`), a transformada de `exp(-abs(t))` é `2/(w^2 + 1)` e a de `exp(-t^2)` é `pi^(1/2)*exp(-w^2/4)`: a gaussiana continua gaussiana. A transformada do impulso `dirac(t)` é a constante 1."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two signals",
+      "pt": "Dois sinais"
+     },
+     "code": "syms t w\nfourier(exp(-abs(t)), t, w)\nfourier(exp(-t^2), t, w)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ifourier",
+    "laplace",
+    "fft",
+    "int",
+    "dirac"
+   ]
+  },
+  "ifourier": {
+   "summary": {
+    "en": "Inverse Fourier transform.",
+    "pt": "Transformada inversa de Fourier."
+   },
+   "syntax": [
+    {
+     "code": "f = ifourier(F, w, t)",
+     "en": "Returns the function of `t` whose Fourier transform is `F(w)`.",
+     "pt": "Retorna a função de `t` cuja transformada de Fourier é `F(w)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `w`.",
+     "pt": "Expressão simbólica em `w`."
+    },
+    {
+     "name": "w",
+     "en": "Frequency variable.",
+     "pt": "Variável de frequência."
+    },
+    {
+     "name": "t",
+     "en": "Variable of the result.",
+     "pt": "Variável do resultado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    }
+   ],
+   "description": {
+    "en": "It undoes `fourier` under the same convention, so `ifourier(fourier(f))` returns `f` for functions where both integrals exist. For example `exp(-w^2)` goes back to `exp(-t^2/4)/(2*pi^(1/2))`.",
+    "pt": "Desfaz `fourier` sob a mesma convenção, de modo que `ifourier(fourier(f))` retorna `f` para funções em que as duas integrais existem. Por exemplo, `exp(-w^2)` volta a `exp(-t^2/4)/(2*pi^(1/2))`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inverse of a Gaussian",
+      "pt": "Inversa de uma gaussiana"
+     },
+     "code": "syms w t\nifourier(exp(-w^2), w, t)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "fourier",
+    "ilaplace",
+    "ifft",
+    "int"
+   ]
+  },
+  "iztrans": {
+   "summary": {
+    "en": "Inverse Z-transform.",
+    "pt": "Transformada Z inversa."
+   },
+   "syntax": [
+    {
+     "code": "f = iztrans(F, z, n)",
+     "en": "Returns the sequence `f(n)` whose Z-transform is `F(z)`.",
+     "pt": "Retorna a sequência `f(n)` cuja transformada Z é `F(z)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `z`.",
+     "pt": "Expressão simbólica em `z`."
+    },
+    {
+     "name": "z",
+     "en": "Transform variable.",
+     "pt": "Variável da transformada."
+    },
+    {
+     "name": "n",
+     "en": "Index variable of the result.",
+     "pt": "Variável de índice do resultado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `n`.",
+     "pt": "Expressão simbólica em `n`."
+    }
+   ],
+   "description": {
+    "en": "The Z-transform plays for sequences the role that the Laplace transform plays for functions. The inverse of `z/(z-2)` is the geometric sequence `2^n`, and that of `z/(z-1)^2` is `n`. It is used to find the time response of discrete filters from their transfer functions.",
+    "pt": "A transformada Z faz para sequências o papel que a de Laplace faz para funções. A inversa de `z/(z-2)` é a sequência geométrica `2^n`, e a de `z/(z-1)^2` é `n`. É usada para achar a resposta no tempo de filtros discretos a partir de suas funções de transferência."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Geometric and ramp sequences",
+      "pt": "Sequências geométrica e rampa"
+     },
+     "code": "syms z n\niztrans(z/(z - 2), z, n)\niztrans(z/(z - 1)^2, z, n)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ztrans",
+    "ilaplace",
+    "filter",
+    "partfrac"
+   ]
+  },
+  "htrans": {
+   "summary": {
+    "en": "Hilbert-type integral transform of a symbolic expression.",
+    "pt": "Transformada integral do tipo Hilbert de uma expressão simbólica."
+   },
+   "syntax": [
+    {
+     "code": "H = htrans(f, t, s)",
+     "en": "Transforms `f(t)` into a function of `s`.",
+     "pt": "Transforma `f(t)` em uma função de `s`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    },
+    {
+     "name": "t",
+     "en": "Original variable.",
+     "pt": "Variável original."
+    },
+    {
+     "name": "s",
+     "en": "Variable of the result.",
+     "pt": "Variável do resultado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "H",
+     "en": "Symbolic expression in `s`, or the unevaluated `htrans(...)` call if no rule applies.",
+     "pt": "Expressão simbólica em `s`, ou a chamada `htrans(...)` sem avaliar se nenhuma regra se aplica."
+    }
+   ],
+   "description": {
+    "en": "MatLivre evaluates it with the rule of the Hilbert transform on trigonometric terms: `sin` becomes `-cos` and the transform of `cos` is `sin`. Each term is handled by itself, and a function without a known rule stays as the unevaluated call. `ihtrans` is the inverse.",
+    "pt": "O MatLivre a avalia com a regra da transformada de Hilbert sobre termos trigonométricos: `sin` vira `-cos` e a transformada de `cos` é `sin`. Cada termo é tratado separadamente, e uma função sem regra conhecida fica como a chamada sem avaliar. `ihtrans` é a inversa."
+   },
+   "notes": {
+    "en": "This function is not part of the documented MATLAB function reference, and MatLivre supports only a limited set of rules.",
+    "pt": "Esta função não faz parte da referência documentada do MATLAB, e o MatLivre suporta apenas um conjunto limitado de regras."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hilbert transform of a sine",
+      "pt": "Transformada de Hilbert de um seno"
+     },
+     "code": "syms t s\nhtrans(sin(t), t, s)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ihtrans",
+    "fourier",
+    "hilbert",
+    "laplace"
+   ]
+  },
+  "ihtrans": {
+   "summary": {
+    "en": "Inverse of htrans.",
+    "pt": "Inversa de htrans."
+   },
+   "syntax": [
+    {
+     "code": "f = ihtrans(H, s, t)",
+     "en": "Returns the function of `t` whose `htrans` is `H(s)`.",
+     "pt": "Retorna a função de `t` cuja `htrans` é `H(s)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "H",
+     "en": "Symbolic expression in `s`.",
+     "pt": "Expressão simbólica em `s`."
+    },
+    {
+     "name": "s",
+     "en": "Variable of `H`.",
+     "pt": "Variável de `H`."
+    },
+    {
+     "name": "t",
+     "en": "Variable of the result.",
+     "pt": "Variável do resultado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression in `t`.",
+     "pt": "Expressão simbólica em `t`."
+    }
+   ],
+   "description": {
+    "en": "It undoes `htrans`: the inverse of `-cos(s)` is `sin(t)`. The same limits apply, since only terms with a known rule are inverted and the others are left as an unevaluated call.",
+    "pt": "Desfaz `htrans`: a inversa de `-cos(s)` é `sin(t)`. Valem os mesmos limites, pois só termos com regra conhecida são invertidos e os demais ficam como chamada sem avaliar."
+   },
+   "notes": {
+    "en": "Not part of the documented MATLAB function reference.",
+    "pt": "Não faz parte da referência documentada do MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip",
+      "pt": "Ida e volta"
+     },
+     "code": "syms t s\nihtrans(-cos(s), s, t)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "htrans",
+    "ifourier",
+    "ilaplace",
+    "hilbert"
+   ]
+  }
+ }
+}

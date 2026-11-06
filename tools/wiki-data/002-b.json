@@ -1,0 +1,1257 @@
+{
+ "functions": {
+  "bounds": {
+   "summary": {
+    "en": "Smallest and largest elements of an array, returned together.",
+    "pt": "Menor e maior elementos de um array, retornados juntos."
+   },
+   "syntax": [
+    {
+     "code": "[smin, smax] = bounds(A)",
+     "en": "Minimum and maximum along the first non-singleton dimension.",
+     "pt": "Mínimo e máximo ao longo da primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "code": "[smin, smax] = bounds(A, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    },
+    {
+     "code": "[smin, smax] = bounds(A, 'all')",
+     "en": "Over every element of `A`.",
+     "pt": "Sobre todos os elementos de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "smin",
+     "en": "Smallest values.",
+     "pt": "Menores valores."
+    },
+    {
+     "name": "smax",
+     "en": "Largest values.",
+     "pt": "Maiores valores."
+    }
+   ],
+   "description": {
+    "en": "`bounds` is the same as calling `min` and `max` separately, in one pass. For a matrix it returns a row vector of column minima and another of column maxima. `NaN` values are ignored unless every element is `NaN`.",
+    "pt": "`bounds` equivale a chamar `min` e `max` separadamente, em uma só passagem. Para uma matriz, retorna um vetor linha com o mínimo de cada coluna e outro com o máximo. Valores `NaN` são ignorados, a menos que todos os elementos sejam `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Range of a matrix",
+      "pt": "Faixa de valores de uma matriz"
+     },
+     "code": "A = [1 5; 3 2; 4 9];\n[lo, hi] = bounds(A)\n[lo, hi] = bounds(A, 2)"
+    }
+   ],
+   "see": [
+    "min",
+    "max",
+    "range",
+    "maxk",
+    "mink"
+   ]
+  },
+  "corrcoef": {
+   "summary": {
+    "en": "Matrix of Pearson correlation coefficients.",
+    "pt": "Matriz de coeficientes de correlação de Pearson."
+   },
+   "syntax": [
+    {
+     "code": "R = corrcoef(A)",
+     "en": "Correlation between the columns of `A`.",
+     "pt": "Correlação entre as colunas de `A`."
+    },
+    {
+     "code": "R = corrcoef(x, y)",
+     "en": "Correlation between two variables, as a 2-by-2 matrix.",
+     "pt": "Correlação entre duas variáveis, como uma matriz 2 por 2."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Matrix whose columns are variables and rows are observations.",
+     "pt": "Matriz cujas colunas são variáveis e cujas linhas são observações."
+    },
+    {
+     "name": "x, y",
+     "en": "Vectors with the same number of elements.",
+     "pt": "Vetores com o mesmo número de elementos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Symmetric matrix with ones on the diagonal; `R(i,j)` is the correlation of variables `i` and `j`, between -1 and 1.",
+     "pt": "Matriz simétrica com uns na diagonal; `R(i,j)` é a correlação das variáveis `i` e `j`, entre -1 e 1."
+    }
+   ],
+   "description": {
+    "en": "The Pearson coefficient is the covariance of two variables divided by the product of their standard deviations. It measures linear association only: values near 1 or -1 mean the points lie close to a line, and values near 0 mean there is no linear trend.\n\nFor two vectors the answer is a 2-by-2 matrix, and the correlation is the off-diagonal entry `R(1,2)`.",
+    "pt": "O coeficiente de Pearson é a covariância de duas variáveis dividida pelo produto dos desvios padrão. Mede apenas associação linear: valores próximos de 1 ou -1 indicam pontos perto de uma reta, e valores próximos de 0 indicam ausência de tendência linear.\n\nPara dois vetores a resposta é uma matriz 2 por 2, e a correlação é o elemento fora da diagonal `R(1,2)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two variables",
+      "pt": "Duas variáveis"
+     },
+     "code": "x = [1 2 3 4];\ny = [2 4 5 9];\nR = corrcoef(x, y)\nr = R(1,2)"
+    }
+   ],
+   "see": [
+    "cov",
+    "corr",
+    "std",
+    "polyfit"
+   ]
+  },
+  "cov": {
+   "summary": {
+    "en": "Covariance of vectors or of the columns of a matrix.",
+    "pt": "Covariância de vetores ou das colunas de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "C = cov(A)",
+     "en": "Covariance matrix of the columns of `A`; for a vector, its variance.",
+     "pt": "Matriz de covariância das colunas de `A`; para um vetor, sua variância."
+    },
+    {
+     "code": "C = cov(x, y)",
+     "en": "Covariance matrix of the two variables, 2 by 2.",
+     "pt": "Matriz de covariância das duas variáveis, 2 por 2."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix with variables in columns.",
+     "pt": "Vetor ou matriz com variáveis nas colunas."
+    },
+    {
+     "name": "x, y",
+     "en": "Vectors with the same number of elements.",
+     "pt": "Vetores com o mesmo número de elementos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Covariance matrix. The diagonal holds the variances.",
+     "pt": "Matriz de covariância. A diagonal guarda as variâncias."
+    }
+   ],
+   "description": {
+    "en": "`cov` normalizes by `N-1`, where `N` is the number of observations, so the diagonal equals `var` of each column. A positive off-diagonal value means the two variables tend to grow together, a negative one means that one grows as the other falls.\n\nThe covariance depends on the units of the data. To compare strengths of association, use `corrcoef`, which rescales to the range -1 to 1.",
+    "pt": "`cov` normaliza por `N-1`, em que `N` é o número de observações, de modo que a diagonal é igual a `var` de cada coluna. Um valor positivo fora da diagonal indica que as variáveis tendem a crescer juntas, um negativo indica que uma cresce enquanto a outra cai.\n\nA covariância depende das unidades dos dados. Para comparar intensidades de associação, use `corrcoef`, que reescala para a faixa de -1 a 1."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Covariance matrix",
+      "pt": "Matriz de covariância"
+     },
+     "code": "x = [1 2 3 4];\ny = [2 4 5 9];\nC = cov(x, y)"
+    }
+   ],
+   "see": [
+    "corrcoef",
+    "var",
+    "std",
+    "xcov"
+   ]
+  },
+  "cummax": {
+   "summary": {
+    "en": "Cumulative maximum: running largest value along an array.",
+    "pt": "Máximo acumulado: maior valor até cada posição ao longo de um array."
+   },
+   "syntax": [
+    {
+     "code": "M = cummax(A)",
+     "en": "Running maximum along the first non-singleton dimension.",
+     "pt": "Máximo acumulado ao longo da primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "code": "M = cummax(A, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`; `M(k)` is the largest of the first `k` elements.",
+     "pt": "Array do mesmo tamanho de `A`; `M(k)` é o maior dos primeiros `k` elementos."
+    }
+   ],
+   "description": {
+    "en": "The result never decreases. It is useful for tracking a best-so-far value, a high-water mark, or drawdowns in a series (compare the data with its running maximum).\n\nFor a matrix, `cummax(A)` works down each column and `cummax(A, 2)` along each row.",
+    "pt": "O resultado nunca diminui. É útil para acompanhar o melhor valor até o momento, uma marca d'água máxima, ou quedas em uma série (compare os dados com o máximo acumulado).\n\nPara uma matriz, `cummax(A)` atua em cada coluna e `cummax(A, 2)` em cada linha."
+   },
+   "notes": {
+    "en": "The `'reverse'` option is accepted but has no effect in MatLivre: the running maximum is always computed from the start.",
+    "pt": "A opção `'reverse'` é aceita mas não tem efeito no MatLivre: o máximo acumulado é sempre calculado a partir do início."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Running maximum",
+      "pt": "Máximo acumulado"
+     },
+     "code": "x = [1 3 2 5 4];\ncummax(x)\nA = [1 5; 3 2; 4 9];\ncummax(A, 2)"
+    }
+   ],
+   "see": [
+    "cummin",
+    "cumsum",
+    "max",
+    "movmax"
+   ]
+  },
+  "cummin": {
+   "summary": {
+    "en": "Cumulative minimum: running smallest value along an array.",
+    "pt": "Mínimo acumulado: menor valor até cada posição ao longo de um array."
+   },
+   "syntax": [
+    {
+     "code": "M = cummin(A)",
+     "en": "Running minimum along the first non-singleton dimension.",
+     "pt": "Mínimo acumulado ao longo da primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "code": "M = cummin(A, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`; `M(k)` is the smallest of the first `k` elements.",
+     "pt": "Array do mesmo tamanho de `A`; `M(k)` é o menor dos primeiros `k` elementos."
+    }
+   ],
+   "description": {
+    "en": "The result never increases. It is the mirror image of `cummax` and is handy for tracking the lowest price, the best (smallest) error so far in an optimization, or the floor of a series.\n\nFor a matrix, `cummin(A)` works down each column and `cummin(A, 2)` along each row.",
+    "pt": "O resultado nunca aumenta. É o espelho de `cummax` e é útil para acompanhar o menor preço, o melhor (menor) erro até o momento em uma otimização, ou o piso de uma série.\n\nPara uma matriz, `cummin(A)` atua em cada coluna e `cummin(A, 2)` em cada linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Best error so far",
+      "pt": "Melhor erro até o momento"
+     },
+     "code": "err = [5 3 4 1 2];\ncummin(err)"
+    }
+   ],
+   "see": [
+    "cummax",
+    "cumsum",
+    "min",
+    "movmin"
+   ]
+  },
+  "kde": {
+   "summary": {
+    "en": "Kernel density estimate: a smooth estimate of the probability density of a sample.",
+    "pt": "Estimativa de densidade por kernel: estimativa suave da densidade de probabilidade de uma amostra."
+   },
+   "syntax": [
+    {
+     "code": "[f, xi] = kde(x)",
+     "en": "Estimates the density of the data `x` at a grid of 100 points.",
+     "pt": "Estima a densidade dos dados `x` em uma grade de 100 pontos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Vector of observations.",
+     "pt": "Vetor de observações."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Estimated density values.",
+     "pt": "Valores estimados da densidade."
+    },
+    {
+     "name": "xi",
+     "en": "Points at which the density is evaluated, spanning the data with some margin.",
+     "pt": "Pontos em que a densidade é avaliada, cobrindo os dados com alguma margem."
+    }
+   ],
+   "description": {
+    "en": "A kernel density estimate places a small smooth bump on every observation and adds them up, giving a continuous curve that integrates to 1. It is a smoother alternative to a histogram, with no dependence on bin edges. The bandwidth, which sets how wide each bump is, is chosen automatically from the data.\n\nPlot `f` against `xi` to see the shape of the distribution, including multiple peaks.",
+    "pt": "Uma estimativa de densidade por kernel coloca uma pequena elevação suave sobre cada observação e soma todas, gerando uma curva contínua que integra 1. É uma alternativa mais suave ao histograma, sem depender das bordas dos intervalos. A largura de banda, que define a largura de cada elevação, é escolhida automaticamente a partir dos dados.\n\nFaça o gráfico de `f` contra `xi` para ver a forma da distribuição, inclusive vários picos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Density integrates to one",
+      "pt": "A densidade integra um"
+     },
+     "code": "rng(1);\nx = [randn(1,50), 4 + randn(1,50)];\n[f, xi] = kde(x);\nsize(xi)\nround(trapz(xi, f), 2)"
+    }
+   ],
+   "see": [
+    "histcounts",
+    "histogram",
+    "ksdensity",
+    "mean"
+   ]
+  },
+  "mape": {
+   "summary": {
+    "en": "Mean absolute percentage error between forecasts and actual values.",
+    "pt": "Erro percentual absoluto médio entre previsões e valores reais."
+   },
+   "syntax": [
+    {
+     "code": "e = mape(F, A)",
+     "en": "Average of `|F - A| ./ |A|`, expressed as a percentage.",
+     "pt": "Média de `|F - A| ./ |A|`, expressa em porcentagem."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Forecast or estimated values.",
+     "pt": "Valores previstos ou estimados."
+    },
+    {
+     "name": "A",
+     "en": "Actual (reference) values, same size as `F`.",
+     "pt": "Valores reais (de referência), com o mesmo tamanho de `F`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "e",
+     "en": "The error as a percentage. Smaller is better; `0` means a perfect match.",
+     "pt": "O erro em porcentagem. Menor é melhor; `0` indica correspondência perfeita."
+    }
+   ],
+   "description": {
+    "en": "`mape` measures the typical size of the error relative to the actual value, which makes it easy to read: `5` means the forecasts are off by about 5 percent on average. Each term is divided by the actual value, so the measure is undefined when an actual value is zero and is dominated by errors on small values.\n\nUse `rmse` when the error should be in the units of the data.",
+    "pt": "`mape` mede o tamanho típico do erro em relação ao valor real, o que facilita a leitura: `5` significa que as previsões erram cerca de 5 por cento em média. Cada termo é dividido pelo valor real, então a medida é indefinida quando um valor real é zero e é dominada por erros em valores pequenos.\n\nUse `rmse` quando o erro deve estar nas unidades dos dados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Forecast error",
+      "pt": "Erro de previsão"
+     },
+     "code": "actual   = [11 18 33];\nforecast = [10 20 30];\ne = mape(forecast, actual)"
+    }
+   ],
+   "see": [
+    "rmse",
+    "mean",
+    "abs",
+    "rms"
+   ]
+  },
+  "maxk": {
+   "summary": {
+    "en": "The k largest elements of an array, in descending order.",
+    "pt": "Os k maiores elementos de um array, em ordem decrescente."
+   },
+   "syntax": [
+    {
+     "code": "B = maxk(A, k)",
+     "en": "The `k` largest values along the first non-singleton dimension.",
+     "pt": "Os `k` maiores valores ao longo da primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "code": "B = maxk(A, k, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    },
+    {
+     "code": "[B, I] = maxk(___)",
+     "en": "Also returns the indices of those values in `A`.",
+     "pt": "Também retorna os índices desses valores em `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "k",
+     "en": "How many values to return.",
+     "pt": "Quantos valores retornar."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "The `k` largest values, sorted from largest to smallest.",
+     "pt": "Os `k` maiores valores, ordenados do maior para o menor."
+    },
+    {
+     "name": "I",
+     "en": "Indices into `A` of the values in `B`.",
+     "pt": "Índices em `A` dos valores de `B`."
+    }
+   ],
+   "description": {
+    "en": "`maxk` gives the top `k` without sorting the whole array by hand. The result keeps the orientation of the operation: for a row vector it is a row, and for a matrix it holds the top `k` of each column.\n\nIf `k` is larger than the number of elements, all elements are returned.",
+    "pt": "`maxk` entrega os `k` primeiros sem que seja preciso ordenar o array inteiro manualmente. O resultado mantém a orientação da operação: para um vetor linha é uma linha, e para uma matriz traz os `k` maiores de cada coluna.\n\nSe `k` for maior que o número de elementos, todos os elementos são retornados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Top three values",
+      "pt": "Os três maiores valores"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\n[B, I] = maxk(x, 3)"
+    }
+   ],
+   "see": [
+    "mink",
+    "max",
+    "sort",
+    "bounds"
+   ]
+  },
+  "mink": {
+   "summary": {
+    "en": "The k smallest elements of an array, in ascending order.",
+    "pt": "Os k menores elementos de um array, em ordem crescente."
+   },
+   "syntax": [
+    {
+     "code": "B = mink(A, k)",
+     "en": "The `k` smallest values along the first non-singleton dimension.",
+     "pt": "Os `k` menores valores ao longo da primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "code": "B = mink(A, k, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    },
+    {
+     "code": "[B, I] = mink(___)",
+     "en": "Also returns the indices of those values in `A`.",
+     "pt": "Também retorna os índices desses valores em `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "k",
+     "en": "How many values to return.",
+     "pt": "Quantos valores retornar."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "The `k` smallest values, sorted from smallest to largest.",
+     "pt": "Os `k` menores valores, ordenados do menor para o maior."
+    },
+    {
+     "name": "I",
+     "en": "Indices into `A` of the values in `B`.",
+     "pt": "Índices em `A` dos valores de `B`."
+    }
+   ],
+   "description": {
+    "en": "`mink` is the counterpart of `maxk`. Ties are listed in the order they appear in `A`, so with two equal values the one with the smaller index comes first.\n\nFor a matrix the result holds the `k` smallest values of each column; use `dim` = 2 to work along rows.",
+    "pt": "`mink` é o par de `maxk`. Empates são listados na ordem em que aparecem em `A`, então, com dois valores iguais, o de menor índice vem primeiro.\n\nPara uma matriz o resultado traz os `k` menores valores de cada coluna; use `dim` = 2 para atuar nas linhas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three smallest values",
+      "pt": "Os três menores valores"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\n[B, I] = mink(x, 3)"
+    }
+   ],
+   "see": [
+    "maxk",
+    "min",
+    "sort",
+    "bounds"
+   ]
+  },
+  "mode": {
+   "summary": {
+    "en": "Most frequent value in a sample.",
+    "pt": "Valor mais frequente em uma amostra."
+   },
+   "syntax": [
+    {
+     "code": "M = mode(A)",
+     "en": "Most frequent value of a vector, or of each column of a matrix.",
+     "pt": "Valor mais frequente de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "M = mode(A, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    },
+    {
+     "code": "[M, F, C] = mode(___)",
+     "en": "Also returns the occurrence count `F` and the tied values `C` (MATLAB only; see notes).",
+     "pt": "Também retorna a contagem `F` e os valores empatados `C` (só no MATLAB; veja as notas)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array.",
+     "pt": "Array numérico ou lógico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The most frequent value.",
+     "pt": "O valor mais frequente."
+    },
+    {
+     "name": "F",
+     "en": "Number of occurrences of `M`.",
+     "pt": "Número de ocorrências de `M`."
+    },
+    {
+     "name": "C",
+     "en": "Cell array holding every value that ties for most frequent.",
+     "pt": "Cell array com todos os valores empatados como mais frequentes."
+    }
+   ],
+   "description": {
+    "en": "When several values tie for the highest count, `mode` returns the smallest of them. The statistic is mostly meaningful for discrete data, since in continuous data it is rare for a value to repeat.\n\nEmpty input gives `NaN`.",
+    "pt": "Quando vários valores empatam na maior contagem, `mode` retorna o menor deles. A estatística faz mais sentido para dados discretos, já que em dados contínuos é raro um valor se repetir.\n\nEntrada vazia dá `NaN`."
+   },
+   "notes": {
+    "en": "MatLivre's `mode` returns only the first output; asking for `F` or `C` raises a 'Too many output arguments' error.",
+    "pt": "O `mode` do MatLivre retorna apenas a primeira saída; pedir `F` ou `C` gera o erro 'Too many output arguments'."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ties go to the smallest",
+      "pt": "Empates ficam com o menor"
+     },
+     "code": "mode([1 2 2 3 3])\nmode([4 4 4 1 2])\nmode([1 2; 1 3; 2 3])"
+    }
+   ],
+   "see": [
+    "mean",
+    "median",
+    "histcounts",
+    "unique"
+   ]
+  },
+  "movmax": {
+   "summary": {
+    "en": "Moving maximum over a sliding window.",
+    "pt": "Máximo móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "M = movmax(A, wlen)",
+     "en": "Maximum over a window of `wlen` elements centered on each element.",
+     "pt": "Máximo sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "M = movmax(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    },
+    {
+     "name": "[nb na]",
+     "en": "Elements before and after.",
+     "pt": "Elementos antes e depois."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "At each position `movmax` takes the largest value inside the window. Near the ends the window is truncated to the elements that exist (the default `'shrink'` behavior), so the result has the same length as the input.\n\nUse a window `[k 0]` for a trailing maximum, which looks only at the current and the `k` previous elements.",
+    "pt": "Em cada posição `movmax` toma o maior valor dentro da janela. Perto das extremidades a janela é cortada para os elementos que existem (o comportamento padrão `'shrink'`), então o resultado tem o mesmo comprimento da entrada.\n\nUse uma janela `[k 0]` para um máximo à esquerda, que olha só o elemento atual e os `k` anteriores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Centered and trailing windows",
+      "pt": "Janelas centrada e à esquerda"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\nmovmax(x, 3)\nmovmax(x, [2 0])"
+    }
+   ],
+   "see": [
+    "movmin",
+    "movmean",
+    "movmedian",
+    "cummax"
+   ]
+  },
+  "movmin": {
+   "summary": {
+    "en": "Moving minimum over a sliding window.",
+    "pt": "Mínimo móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "M = movmin(A, wlen)",
+     "en": "Minimum over a window of `wlen` elements centered on each element.",
+     "pt": "Mínimo sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "M = movmin(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    },
+    {
+     "name": "[nb na]",
+     "en": "Elements before and after.",
+     "pt": "Elementos antes e depois."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "At each position `movmin` takes the smallest value inside the window. The window shrinks at the ends of the data, so the output has the same length as the input.\n\nCombining `movmin` and `movmax` with the same window gives a rolling envelope of a signal, and applying them one after the other is the basis of morphological opening and closing.",
+    "pt": "Em cada posição `movmin` toma o menor valor dentro da janela. A janela encolhe nas extremidades dos dados, então a saída tem o mesmo comprimento da entrada.\n\nCombinar `movmin` e `movmax` com a mesma janela dá um envelope móvel do sinal, e aplicá-los em sequência é a base da abertura e do fechamento morfológicos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rolling minimum",
+      "pt": "Mínimo móvel"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\nmovmin(x, 3)"
+    }
+   ],
+   "see": [
+    "movmax",
+    "movmean",
+    "movmedian",
+    "cummin"
+   ]
+  },
+  "movprod": {
+   "summary": {
+    "en": "Moving product over a sliding window.",
+    "pt": "Produto móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "P = movprod(A, wlen)",
+     "en": "Product over a window of `wlen` elements centered on each element.",
+     "pt": "Produto sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "P = movprod(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length. For an even length the window is centered between elements, with one more element before than after.",
+     "pt": "Comprimento da janela. Se for par, a janela fica centrada entre elementos, com um elemento a mais antes do que depois."
+    },
+    {
+     "name": "[nb na]",
+     "en": "Elements before and after.",
+     "pt": "Elementos antes e depois."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "P",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "At each position `movprod` multiplies the elements inside the window. At the edges the window is truncated, so the first and last values are products of fewer elements. A typical use is compounding growth factors over a rolling period.",
+    "pt": "Em cada posição `movprod` multiplica os elementos dentro da janela. Nas bordas a janela é cortada, então o primeiro e o último valores são produtos de menos elementos. Um uso típico é compor fatores de crescimento em um período móvel."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Product of pairs",
+      "pt": "Produto de pares"
+     },
+     "code": "movprod([1 2 3 4], 2)\nmovprod([1 2 3 4], 3)"
+    }
+   ],
+   "see": [
+    "prod",
+    "movsum",
+    "movmean",
+    "cumprod"
+   ]
+  },
+  "movstd": {
+   "summary": {
+    "en": "Moving standard deviation over a sliding window.",
+    "pt": "Desvio padrão móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "S = movstd(A, wlen)",
+     "en": "Standard deviation over a window of `wlen` elements centered on each element.",
+     "pt": "Desvio padrão sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "S = movstd(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length.",
+     "pt": "Comprimento da janela."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "`movstd` computes `std` inside each window, normalized by the number of elements minus one, so a window that holds a single element gives `0`. It shows how the variability of a signal changes in time, which makes it a simple volatility measure.\n\nWindows shrink at the ends of the data. `movvar` returns the square of the same quantity.",
+    "pt": "`movstd` calcula `std` dentro de cada janela, normalizado pelo número de elementos menos um, de modo que uma janela com um único elemento dá `0`. Mostra como a variabilidade de um sinal muda no tempo, o que a torna uma medida simples de volatilidade.\n\nAs janelas encolhem nas extremidades dos dados. `movvar` retorna o quadrado da mesma grandeza."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rolling volatility",
+      "pt": "Volatilidade móvel"
+     },
+     "code": "x = [1 2 4 8];\nmovstd(x, 2)\nmovstd([3 1 4 1 5 9 2 6 5 3], 3)"
+    }
+   ],
+   "see": [
+    "movvar",
+    "std",
+    "movmean",
+    "movmad"
+   ]
+  },
+  "movvar": {
+   "summary": {
+    "en": "Moving variance over a sliding window.",
+    "pt": "Variância móvel sobre uma janela deslizante."
+   },
+   "syntax": [
+    {
+     "code": "V = movvar(A, wlen)",
+     "en": "Variance over a window of `wlen` elements centered on each element.",
+     "pt": "Variância sobre uma janela de `wlen` elementos centrada em cada elemento."
+    },
+    {
+     "code": "V = movvar(A, [nb na])",
+     "en": "Window of `nb` elements before and `na` after the current one, plus the element itself.",
+     "pt": "Janela com `nb` elementos antes e `na` depois do atual, mais o próprio elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector or matrix; operates along the first non-singleton dimension.",
+     "pt": "Vetor ou matriz; atua na primeira dimensão de tamanho diferente de 1."
+    },
+    {
+     "name": "wlen",
+     "en": "Window length.",
+     "pt": "Comprimento da janela."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "V",
+     "en": "Array of the same size as `A`.",
+     "pt": "Array do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "`movvar` computes `var` inside each window, normalized by the number of elements minus one. It is the square of `movstd`. The result is zero where the window is constant or holds a single element.\n\nWindows shrink at the ends of the data, so the output has the same size as the input.",
+    "pt": "`movvar` calcula `var` dentro de cada janela, normalizada pelo número de elementos menos um. É o quadrado de `movstd`. O resultado é zero onde a janela é constante ou tem um único elemento.\n\nAs janelas encolhem nas extremidades dos dados, então a saída tem o mesmo tamanho da entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rolling variance",
+      "pt": "Variância móvel"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\nmovvar(x, 3)"
+    }
+   ],
+   "see": [
+    "movstd",
+    "var",
+    "movmean",
+    "movmad"
+   ]
+  },
+  "prctile": {
+   "summary": {
+    "en": "Percentiles of a sample.",
+    "pt": "Percentis de uma amostra."
+   },
+   "syntax": [
+    {
+     "code": "Y = prctile(X, p)",
+     "en": "Percentiles `p` (from 0 to 100) of the vector `X`, or of each column of a matrix.",
+     "pt": "Percentis `p` (de 0 a 100) do vetor `X`, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "Y = prctile(X, p, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric vector or matrix.",
+     "pt": "Vetor ou matriz numérica."
+    },
+    {
+     "name": "p",
+     "en": "Percentages between 0 and 100, scalar or vector.",
+     "pt": "Porcentagens entre 0 e 100, escalar ou vetor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "The requested percentiles.",
+     "pt": "Os percentis pedidos."
+    }
+   ],
+   "description": {
+    "en": "The `p`-th percentile is the value below which about `p` percent of the data fall. The 50th is the median and the 25th and 75th are the quartiles. Between data points the function interpolates linearly, using the convention that the sorted values sit at the midpoints of equal probability bins; values of `p` beyond the first and last of these return the minimum and maximum.\n\n`prctile(X, p)` equals `quantile(X, p/100)`.",
+    "pt": "O percentil `p` é o valor abaixo do qual cerca de `p` por cento dos dados se encontram. O 50 é a mediana e o 25 e o 75 são os quartis. Entre os pontos de dados a função interpola linearmente, adotando a convenção de que os valores ordenados ficam nos pontos médios de intervalos de igual probabilidade; valores de `p` além do primeiro e do último desses pontos retornam o mínimo e o máximo.\n\n`prctile(X, p)` é igual a `quantile(X, p/100)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quartiles",
+      "pt": "Quartis"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\nprctile(x, [25 50 75])"
+    }
+   ],
+   "see": [
+    "quantile",
+    "median",
+    "iqr",
+    "sort"
+   ]
+  },
+  "quantile": {
+   "summary": {
+    "en": "Quantiles of a sample.",
+    "pt": "Quantis de uma amostra."
+   },
+   "syntax": [
+    {
+     "code": "Y = quantile(X, p)",
+     "en": "Quantiles `p` (from 0 to 1) of the vector `X`, or of each column of a matrix.",
+     "pt": "Quantis `p` (de 0 a 1) do vetor `X`, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "Y = quantile(X, p, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric vector or matrix.",
+     "pt": "Vetor ou matriz numérica."
+    },
+    {
+     "name": "p",
+     "en": "Cumulative probabilities between 0 and 1, scalar or vector.",
+     "pt": "Probabilidades acumuladas entre 0 e 1, escalar ou vetor."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "The requested quantiles.",
+     "pt": "Os quantis pedidos."
+    }
+   ],
+   "description": {
+    "en": "The quantile for probability `p` is the value below which a fraction `p` of the data lie. `quantile(X, 0.5)` is the median, and `p` = 0.25, 0.75 give the quartiles. Between observations the function interpolates linearly, treating the sorted values as the midpoints of equal probability bins; below the first and above the last midpoint it returns the minimum and maximum.\n\nQuantiles describe the distribution without assuming a shape, and are resistant to outliers.",
+    "pt": "O quantil para a probabilidade `p` é o valor abaixo do qual uma fração `p` dos dados se encontra. `quantile(X, 0.5)` é a mediana, e `p` = 0,25 e 0,75 dão os quartis. Entre observações a função interpola linearmente, tratando os valores ordenados como pontos médios de intervalos de igual probabilidade; abaixo do primeiro e acima do último ponto médio retorna o mínimo e o máximo.\n\nQuantis descrevem a distribuição sem supor uma forma e são resistentes a valores atípicos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quartiles of a matrix",
+      "pt": "Quartis de uma matriz"
+     },
+     "code": "x = [3 1 4 1 5 9 2 6 5 3];\nquantile(x, [0.25 0.5 0.75])\nA = [1 5; 3 2; 4 9];\nquantile(A, 0.5, 2)"
+    }
+   ],
+   "see": [
+    "prctile",
+    "median",
+    "iqr",
+    "sort"
+   ]
+  },
+  "rms": {
+   "summary": {
+    "en": "Root-mean-square level of a signal.",
+    "pt": "Valor eficaz (raiz da média dos quadrados) de um sinal."
+   },
+   "syntax": [
+    {
+     "code": "y = rms(x)",
+     "en": "RMS of a vector, or of each column of a matrix.",
+     "pt": "RMS de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "y = rms(x, dim)",
+     "en": "Along dimension `dim`.",
+     "pt": "Ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão em que operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "`sqrt(mean(abs(x).^2))` along the chosen dimension.",
+     "pt": "`sqrt(mean(abs(x).^2))` ao longo da dimensão escolhida."
+    }
+   ],
+   "description": {
+    "en": "The RMS value squares each element, averages, and takes the square root. Because of the squaring it is never negative and it weighs large values more than the mean absolute value does. For a signal centered on zero it equals the standard deviation (with divisor `N`); in electrical work it is the effective value of an alternating signal.\n\nComplex elements are handled through their magnitude.",
+    "pt": "O valor RMS eleva cada elemento ao quadrado, tira a média e extrai a raiz quadrada. Por causa do quadrado, nunca é negativo e dá mais peso a valores grandes do que a média dos valores absolutos. Para um sinal centrado em zero é igual ao desvio padrão (com divisor `N`); em eletricidade é o valor eficaz de um sinal alternado.\n\nElementos complexos são tratados por meio do módulo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "RMS of a vector and of matrix rows",
+      "pt": "RMS de um vetor e de linhas de uma matriz"
+     },
+     "code": "rms([3 4])\nA = [1 5; 3 2; 4 9];\nrms(A, 2)"
+    }
+   ],
+   "see": [
+    "mean",
+    "std",
+    "norm",
+    "rmse"
+   ]
+  },
+  "rmse": {
+   "summary": {
+    "en": "Root-mean-square error between two sets of values.",
+    "pt": "Raiz do erro quadrático médio entre dois conjuntos de valores."
+   },
+   "syntax": [
+    {
+     "code": "e = rmse(F, A)",
+     "en": "Square root of the mean of `(F - A).^2`.",
+     "pt": "Raiz quadrada da média de `(F - A).^2`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Forecast or estimated values.",
+     "pt": "Valores previstos ou estimados."
+    },
+    {
+     "name": "A",
+     "en": "Actual (reference) values, same size as `F`.",
+     "pt": "Valores reais (de referência), com o mesmo tamanho de `F`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "e",
+     "en": "The error in the units of the data; `0` means a perfect match.",
+     "pt": "O erro nas unidades dos dados; `0` indica correspondência perfeita."
+    }
+   ],
+   "description": {
+    "en": "`rmse` is the standard way to summarize how far predictions are from observations. Squaring before averaging punishes large misses more than small ones, so a few big errors raise the RMSE noticeably. It is expressed in the same units as the data, unlike the mean squared error.\n\nFor a percentage view of the error relative to the actual values, see `mape`.",
+    "pt": "`rmse` é a forma habitual de resumir quão longe as previsões estão das observações. Elevar ao quadrado antes de tirar a média penaliza mais os erros grandes do que os pequenos, então poucos erros altos elevam o RMSE de forma sensível. Ele é expresso nas mesmas unidades dos dados, ao contrário do erro quadrático médio.\n\nPara uma visão percentual do erro em relação aos valores reais, veja `mape`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Error of a fit",
+      "pt": "Erro de um ajuste"
+     },
+     "code": "actual   = [1 3 5];\nforecast = [1 2 3];\nrmse(forecast, actual)"
+    }
+   ],
+   "see": [
+    "mape",
+    "rms",
+    "mean",
+    "immse"
+   ]
+  },
+  "xcorr": {
+   "summary": {
+    "en": "Cross-correlation of two sequences, or autocorrelation of one.",
+    "pt": "Correlação cruzada de duas sequências, ou autocorrelação de uma."
+   },
+   "syntax": [
+    {
+     "code": "[c, lags] = xcorr(x)",
+     "en": "Autocorrelation of `x` at lags from `-(N-1)` to `N-1`.",
+     "pt": "Autocorrelação de `x` nos atrasos de `-(N-1)` a `N-1`."
+    },
+    {
+     "code": "[c, lags] = xcorr(x, y)",
+     "en": "Cross-correlation of `x` and `y`.",
+     "pt": "Correlação cruzada de `x` e `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Numeric vectors.",
+     "pt": "Vetores numéricos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Correlation values, one per lag.",
+     "pt": "Valores da correlação, um por atraso."
+    },
+    {
+     "name": "lags",
+     "en": "Lag indices, so `c(k)` belongs to `lags(k)`.",
+     "pt": "Índices dos atrasos, de modo que `c(k)` pertence a `lags(k)`."
+    }
+   ],
+   "description": {
+    "en": "Cross-correlation slides `y` over `x` and sums the products of the overlapping samples at each shift. A peak at lag `m` means `x` resembles `y` shifted by `m` samples, which is how delays between two signals are estimated. The autocorrelation of a signal always peaks at lag 0, where it equals the signal energy.\n\nIf the vectors have different lengths, the shorter one is padded with zeros.",
+    "pt": "A correlação cruzada desliza `y` sobre `x` e soma os produtos das amostras sobrepostas a cada deslocamento. Um pico no atraso `m` indica que `x` se parece com `y` deslocado de `m` amostras, que é a forma de estimar atrasos entre dois sinais. A autocorrelação de um sinal sempre tem pico no atraso 0, onde vale a energia do sinal.\n\nSe os vetores têm comprimentos diferentes, o mais curto é completado com zeros."
+   },
+   "notes": {
+    "en": "`xcorr` belongs to the Signal Processing Toolbox in MATLAB. Only the default (unscaled) form is documented here.",
+    "pt": "`xcorr` pertence à Signal Processing Toolbox no MATLAB. Aqui só a forma padrão (sem normalização) está documentada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Autocorrelation and lags",
+      "pt": "Autocorrelação e atrasos"
+     },
+     "code": "x = [1 2 3];\n[c, lags] = xcorr(x)\nxcorr(x, [1 1 1])"
+    }
+   ],
+   "see": [
+    "xcov",
+    "conv",
+    "corrcoef",
+    "cov"
+   ]
+  },
+  "xcov": {
+   "summary": {
+    "en": "Cross-covariance of two sequences, or autocovariance of one.",
+    "pt": "Covariância cruzada de duas sequências, ou autocovariância de uma."
+   },
+   "syntax": [
+    {
+     "code": "[c, lags] = xcov(x)",
+     "en": "Autocovariance of `x` at lags from `-(N-1)` to `N-1`.",
+     "pt": "Autocovariância de `x` nos atrasos de `-(N-1)` a `N-1`."
+    },
+    {
+     "code": "[c, lags] = xcov(x, y)",
+     "en": "Cross-covariance of `x` and `y`.",
+     "pt": "Covariância cruzada de `x` e `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, y",
+     "en": "Numeric vectors.",
+     "pt": "Vetores numéricos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Covariance values, one per lag.",
+     "pt": "Valores da covariância, um por atraso."
+    },
+    {
+     "name": "lags",
+     "en": "Lag indices.",
+     "pt": "Índices dos atrasos."
+    }
+   ],
+   "description": {
+    "en": "`xcov` is `xcorr` applied after the mean of each sequence has been subtracted. Removing the mean keeps a constant offset from dominating the result, so the output reflects how the fluctuations around the average relate to each other at each lag.\n\nThe autocovariance at lag 0 is `N` times the variance (with divisor `N`).",
+    "pt": "`xcov` é `xcorr` aplicada depois de subtrair a média de cada sequência. Retirar a média evita que um deslocamento constante domine o resultado, de modo que a saída reflete como as flutuações em torno da média se relacionam a cada atraso.\n\nA autocovariância no atraso 0 é `N` vezes a variância (com divisor `N`)."
+   },
+   "notes": {
+    "en": "`xcov` belongs to the Signal Processing Toolbox in MATLAB.",
+    "pt": "`xcov` pertence à Signal Processing Toolbox no MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Autocovariance",
+      "pt": "Autocovariância"
+     },
+     "code": "xcov([1 2 3])"
+    }
+   ],
+   "see": [
+    "xcorr",
+    "cov",
+    "corrcoef",
+    "var"
+   ]
+  }
+ }
+}

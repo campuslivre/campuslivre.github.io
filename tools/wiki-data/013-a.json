@@ -1,0 +1,1202 @@
+{
+ "functions": {
+  "weekday": {
+   "summary": {
+    "en": "Day of the week for a date, as a number from 1 (Sunday) to 7 (Saturday).",
+    "pt": "Dia da semana de uma data, como número de 1 (domingo) a 7 (sábado)."
+   },
+   "syntax": [
+    {
+     "code": "n = weekday(t)",
+     "en": "Returns the day-of-week number of each date in `t`.",
+     "pt": "Retorna o número do dia da semana de cada data em `t`."
+    },
+    {
+     "code": "[n, name] = weekday(t, format)",
+     "en": "Also returns the day name; `format` is `'long'` or `'short'`.",
+     "pt": "Também retorna o nome do dia; `format` é `'long'` ou `'short'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "Dates as a `datetime` array. In MATLAB, serial date numbers and date text are also accepted.",
+     "pt": "Datas como array `datetime`. No MATLAB, números seriais de data e texto de data também são aceitos."
+    },
+    {
+     "name": "format",
+     "en": "Optional `'long'` (for example `Friday`) or `'short'` (`Fri`) for the name output.",
+     "pt": "Opcional: `'long'` (por exemplo `Friday`) ou `'short'` (`Fri`) para a saída com o nome."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Array of the same size as `t` with integers from 1 to 7.",
+     "pt": "Array do mesmo tamanho de `t` com inteiros de 1 a 7."
+    },
+    {
+     "name": "name",
+     "en": "Day names, one per date, when two outputs are requested.",
+     "pt": "Nomes dos dias, um por data, quando duas saídas são pedidas."
+    }
+   ],
+   "description": {
+    "en": "The numbering starts on Sunday, so Monday is 2 and Saturday is 7. The calculation depends only on the calendar date, not on the time of day.\n\nThe result is a plain double array, which makes it handy for indexing a table of weekday labels or for testing weekends with `ismember(n, [1 7])`.",
+    "pt": "A numeração começa no domingo, então segunda-feira é 2 e sábado é 7. O cálculo depende apenas da data do calendário, não da hora do dia.\n\nO resultado é um array double simples, útil para indexar uma tabela de rótulos ou para testar fins de semana com `ismember(n, [1 7])`."
+   },
+   "notes": {
+    "en": "MatLivre accepts only `datetime`, `duration` or `calendarDuration` input, so convert serial date numbers with `datetime(n, 'ConvertFrom', 'datenum')` first. The second output (the day name) is not available.",
+    "pt": "O MatLivre aceita apenas entrada `datetime`, `duration` ou `calendarDuration`, então converta números seriais com `datetime(n, 'ConvertFrom', 'datenum')` antes. A segunda saída (nome do dia) não está disponível."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three consecutive days",
+      "pt": "Três dias seguidos"
+     },
+     "code": "t = datetime(2024, 3, 15) + days(0:2);\nweekday(t)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "day",
+    "datenum",
+    "calendarDuration",
+    "weeknum"
+   ]
+  },
+  "weeknum": {
+   "summary": {
+    "en": "Week of the year in which a date falls.",
+    "pt": "Semana do ano em que uma data cai."
+   },
+   "syntax": [
+    {
+     "code": "n = weeknum(d)",
+     "en": "Returns the week number of each serial date number `d`, with weeks starting on Sunday.",
+     "pt": "Retorna o número da semana de cada data serial `d`, com semanas começando no domingo."
+    },
+    {
+     "code": "n = weeknum(d, w)",
+     "en": "Chooses the first day of the week: `w` is 1 for Sunday (default) or 2 for Monday.",
+     "pt": "Escolhe o primeiro dia da semana: `w` é 1 para domingo (padrão) ou 2 para segunda-feira."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Date as a serial date number, as produced by `datenum`.",
+     "pt": "Data como número serial, como o produzido por `datenum`."
+    },
+    {
+     "name": "w",
+     "en": "Week convention: 1 starts the week on Sunday, 2 on Monday.",
+     "pt": "Convenção de semana: 1 começa a semana no domingo, 2 na segunda-feira."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Week numbers, an integer from 1 to 53 for each date.",
+     "pt": "Números de semana, um inteiro de 1 a 53 para cada data."
+    }
+   ],
+   "description": {
+    "en": "Week 1 is the week that contains January 1. The year is cut into consecutive blocks of seven days that begin on the chosen weekday, so the last days of December can already belong to week 53 or week 1 of the next year, depending on the convention.\n\nThis is a simple calendar count, not the ISO 8601 week number.",
+    "pt": "A semana 1 é a que contém 1 de janeiro. O ano é dividido em blocos consecutivos de sete dias começando no dia escolhido, então os últimos dias de dezembro podem já pertencer à semana 53 ou à semana 1 do ano seguinte, conforme a convenção.\n\nÉ uma contagem simples de calendário, não o número de semana da ISO 8601."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Last and first day of 2024",
+      "pt": "Último e primeiro dia de 2024"
+     },
+     "code": "d = datenum(2024, 12, 31);\nweeknum(d)\nweeknum(datenum(2024, 1, 1))"
+    }
+   ],
+   "see": [
+    "weekday",
+    "datenum",
+    "datetime",
+    "day"
+   ]
+  },
+  "whitespaceBoundary": {
+   "summary": {
+    "en": "Pattern that matches the boundary between whitespace and non-whitespace characters.",
+    "pt": "Padrão que casa a fronteira entre espaço em branco e caracteres que não são espaço."
+   },
+   "syntax": [
+    {
+     "code": "pat = whitespaceBoundary",
+     "en": "Creates the boundary pattern.",
+     "pt": "Cria o padrão de fronteira."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object. It matches a position, so the match has zero length.",
+     "pt": "Um objeto `pattern`. Casa uma posição, então o casamento tem comprimento zero."
+    }
+   ],
+   "description": {
+    "en": "A boundary pattern does not consume characters. It matches at a spot where whitespace meets a character that is not whitespace, or at the start or end of the text next to a non-whitespace character. It is combined with other patterns using `+`, `|` and the other pattern operators.\n\nBecause it has no width, it is mostly useful inside a larger pattern or with `replace` and `insertBefore`, to mark where words begin and end.",
+    "pt": "Um padrão de fronteira não consome caracteres. Casa em um ponto onde o espaço em branco encontra um caractere que não é espaço, ou no início ou fim do texto junto de um caractere que não é espaço. É combinado com outros padrões usando `+`, `|` e os demais operadores de padrão.\n\nComo não tem largura, é mais útil dentro de um padrão maior ou com `replace` e `insertBefore`, para marcar onde as palavras começam e terminam."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mark the boundaries",
+      "pt": "Marcar as fronteiras"
+     },
+     "code": "replace(\"ab  cd\", whitespaceBoundary, \"|\")"
+    }
+   ],
+   "see": [
+    "whitespacePattern",
+    "pattern",
+    "replace",
+    "lettersPattern"
+   ]
+  },
+  "whitespacePattern": {
+   "summary": {
+    "en": "Pattern that matches whitespace characters.",
+    "pt": "Padrão que casa caracteres de espaço em branco."
+   },
+   "syntax": [
+    {
+     "code": "pat = whitespacePattern",
+     "en": "Matches one or more consecutive whitespace characters.",
+     "pt": "Casa um ou mais caracteres de espaço em branco consecutivos."
+    },
+    {
+     "code": "pat = whitespacePattern(n)",
+     "en": "Matches exactly `n` whitespace characters.",
+     "pt": "Casa exatamente `n` caracteres de espaço em branco."
+    },
+    {
+     "code": "pat = whitespacePattern(min, max)",
+     "en": "Matches between `min` and `max` whitespace characters; `max` may be `Inf`.",
+     "pt": "Casa entre `min` e `max` caracteres de espaço em branco; `max` pode ser `Inf`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Exact number of whitespace characters to match.",
+     "pt": "Número exato de caracteres de espaço em branco a casar."
+    },
+    {
+     "name": "min, max",
+     "en": "Lower and upper limits on the run length.",
+     "pt": "Limites inferior e superior do comprimento da sequência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object to use with `extract`, `split`, `replace`, `contains`, `count` and similar text functions.",
+     "pt": "Um objeto `pattern` para usar com `extract`, `split`, `replace`, `contains`, `count` e funções de texto semelhantes."
+    }
+   ],
+   "description": {
+    "en": "Spaces, tabs and line breaks all count as whitespace. Without arguments the pattern is greedy, so a run of several spaces is a single match.\n\nIt replaces the regular expression `\\s+` in most text-cleaning code, and can be joined to other patterns with `+`.",
+    "pt": "Espaços, tabulações e quebras de linha contam como espaço em branco. Sem argumentos o padrão é guloso, então uma sequência de vários espaços é um único casamento.\n\nSubstitui a expressão regular `\\s+` na maior parte do código de limpeza de texto, e pode ser unido a outros padrões com `+`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Split on runs of whitespace",
+      "pt": "Dividir em sequências de espaços"
+     },
+     "code": "s = \"a   b  c\";\nsplit(s, whitespacePattern)\ncount(s, whitespacePattern)"
+    }
+   ],
+   "see": [
+    "whitespaceBoundary",
+    "wildcardPattern",
+    "split",
+    "strip",
+    "pattern"
+   ]
+  },
+  "whos": {
+   "summary": {
+    "en": "Lists the variables in the workspace with their size, memory and class.",
+    "pt": "Lista as variáveis do workspace com tamanho, memória e classe."
+   },
+   "syntax": [
+    {
+     "code": "whos",
+     "en": "Prints a table of every variable in the current workspace.",
+     "pt": "Imprime uma tabela com todas as variáveis do workspace atual."
+    },
+    {
+     "code": "whos name1 name2",
+     "en": "Lists only the named variables; wildcards such as `a*` are allowed.",
+     "pt": "Lista apenas as variáveis indicadas; curingas como `a*` são permitidos."
+    },
+    {
+     "code": "s = whos(___)",
+     "en": "Returns a struct array with one element per variable instead of printing.",
+     "pt": "Retorna um array de structs com um elemento por variável, em vez de imprimir."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name or pattern with `*` wildcards.",
+     "pt": "Nome de variável ou padrão com curinga `*`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Struct array with fields `name`, `size`, `bytes`, `class`, `global`, `sparse`, `complex`, `nesting` and `persistent`.",
+     "pt": "Array de structs com os campos `name`, `size`, `bytes`, `class`, `global`, `sparse`, `complex`, `nesting` e `persistent`."
+    }
+   ],
+   "description": {
+    "en": "`whos` is the long form of `who`. For each variable it shows the dimensions, the storage in bytes, the class, and attributes such as `complex`. Calling it with an output returns the same information as data, which is useful for scripts that inspect the workspace.\n\nInside a function the listing refers to that function's own workspace.",
+    "pt": "`whos` é a forma longa de `who`. Para cada variável mostra as dimensões, o armazenamento em bytes, a classe e atributos como `complex`. Chamado com uma saída, retorna as mesmas informações como dados, útil para scripts que inspecionam o workspace.\n\nDentro de uma função, a listagem se refere ao workspace da própria função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspect chosen variables",
+      "pt": "Inspecionar variáveis escolhidas"
+     },
+     "code": "x = 1:3;\ny = 'hi';\nz = int8([1 2; 3 4]);\nwhos x y z"
+    },
+    {
+     "title": {
+      "en": "Get the data as a struct",
+      "pt": "Obter os dados como struct"
+     },
+     "code": "a = ones(3, 4, 'single');\ninfo = whos('a');\ninfo.size\ninfo.bytes\ninfo.class"
+    }
+   ],
+   "see": [
+    "who",
+    "size",
+    "class",
+    "clear",
+    "exist"
+   ]
+  },
+  "width": {
+   "summary": {
+    "en": "Number of variables in a table or timetable.",
+    "pt": "Número de variáveis em uma tabela ou timetable."
+   },
+   "syntax": [
+    {
+     "code": "w = width(T)",
+     "en": "Returns the number of columns of the table `T`, which is the number of variables.",
+     "pt": "Retorna o número de colunas da tabela `T`, que é o número de variáveis."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "A `table` or `timetable`.",
+     "pt": "Uma `table` ou `timetable`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "w",
+     "en": "Nonnegative integer scalar.",
+     "pt": "Escalar inteiro não negativo."
+    }
+   ],
+   "description": {
+    "en": "`width(T)` equals `size(T, 2)`. A table variable can itself have several columns, but it still counts once. For a timetable the row times are not a variable, so they are not counted.\n\nIt pairs with `height`, which gives the number of rows.",
+    "pt": "`width(T)` é igual a `size(T, 2)`. Uma variável de tabela pode ter várias colunas, mas conta uma vez só. Em um timetable os tempos das linhas não são uma variável, então não entram na contagem.\n\nCombina com `height`, que dá o número de linhas."
+   },
+   "notes": {
+    "en": "MatLivre accepts tables and timetables only. For ordinary arrays use `size(A, 2)`.",
+    "pt": "O MatLivre aceita apenas tabelas e timetables. Para arrays comuns use `size(A, 2)`."
+   },
+   "examples": [
+    {
+     "code": "T = table([1;2;3], [4;5;6], 'VariableNames', {'a','b'});\nwidth(T)\nheight(T)"
+    }
+   ],
+   "see": [
+    "height",
+    "size",
+    "table",
+    "numel"
+   ]
+  },
+  "wildcardPattern": {
+   "summary": {
+    "en": "Pattern that matches any run of characters.",
+    "pt": "Padrão que casa qualquer sequência de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "pat = wildcardPattern",
+     "en": "Matches any number of characters, including none.",
+     "pt": "Casa qualquer quantidade de caracteres, inclusive nenhum."
+    },
+    {
+     "code": "pat = wildcardPattern(n)",
+     "en": "Matches exactly `n` characters.",
+     "pt": "Casa exatamente `n` caracteres."
+    },
+    {
+     "code": "pat = wildcardPattern(min, max)",
+     "en": "Matches between `min` and `max` characters.",
+     "pt": "Casa entre `min` e `max` caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Exact number of characters.",
+     "pt": "Número exato de caracteres."
+    },
+    {
+     "name": "min, max",
+     "en": "Limits on how many characters the wildcard may span.",
+     "pt": "Limites de quantos caracteres o curinga pode abranger."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object, combined with literal text using `+`.",
+     "pt": "Um objeto `pattern`, combinado com texto literal usando `+`."
+    }
+   ],
+   "description": {
+    "en": "The wildcard stands in for text you do not care about. It is typically placed between literal pieces, as in `\"report_\" + wildcardPattern + \".csv\"`, so that the whole pattern describes a family of names. The match is lazy: it takes as few characters as it needs for the rest of the pattern to succeed.\n\nWith `matches` the entire text has to fit the pattern, which makes it the usual way to test file names.",
+    "pt": "O curinga representa o texto que não interessa. Costuma ficar entre pedaços literais, como em `\"report_\" + wildcardPattern + \".csv\"`, de modo que o padrão inteiro descreve uma família de nomes. O casamento é preguiçoso: toma o mínimo de caracteres necessário para o restante do padrão ter sucesso.\n\nCom `matches` o texto inteiro precisa se encaixar no padrão, o que o torna a forma usual de testar nomes de arquivo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Test file names",
+      "pt": "Testar nomes de arquivo"
+     },
+     "code": "names = [\"report_2024.csv\" \"report_2024.txt\" \"data.csv\"];\nmatches(names, \"report\" + wildcardPattern + \".csv\")\nstartsWith(names, wildcardPattern(2) + \"ta\")"
+    }
+   ],
+   "see": [
+    "whitespacePattern",
+    "pattern",
+    "matches",
+    "startsWith",
+    "contains"
+   ]
+  },
+  "withinrange": {
+   "summary": {
+    "en": "Tests whether the row times of a timetable lie inside a time range.",
+    "pt": "Testa se os tempos das linhas de um timetable estão dentro de um intervalo de tempo."
+   },
+   "syntax": [
+    {
+     "code": "tf = withinrange(TT, tr)",
+     "en": "Returns true when the whole span of `TT` lies inside the range `tr`.",
+     "pt": "Retorna verdadeiro quando todo o intervalo de `TT` está dentro do intervalo `tr`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "A `timetable`.",
+     "pt": "Um `timetable`."
+    },
+    {
+     "name": "tr",
+     "en": "A time range created with `timerange`.",
+     "pt": "Um intervalo de tempo criado com `timerange`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "A logical scalar.",
+     "pt": "Um escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test compares the first and last row times of `TT` with the limits of `tr`. If both fall inside, the answer is true, otherwise false. It is one of three related checks: `withinrange` (the timetable is inside the range), `containsrange` (the range is inside the timetable) and `overlapsrange` (the two share some time).\n\nThe result is a single logical value for the whole timetable, not one value per row. To pick rows use a time range as a subscript instead.",
+    "pt": "O teste compara os tempos da primeira e da última linha de `TT` com os limites de `tr`. Se ambos estiverem dentro, a resposta é verdadeira, senão falsa. É uma de três verificações parecidas: `withinrange` (o timetable está dentro do intervalo), `containsrange` (o intervalo está dentro do timetable) e `overlapsrange` (os dois compartilham algum tempo).\n\nO resultado é um único valor lógico para o timetable inteiro, não um por linha. Para escolher linhas use um intervalo de tempo como subscrito."
+   },
+   "examples": [
+    {
+     "code": "TT = timetable(seconds([1;3;5]), [10;20;30]);\nwithinrange(TT, timerange(seconds(0), seconds(10)))\nwithinrange(TT, timerange(seconds(2), seconds(10)))"
+    }
+   ],
+   "see": [
+    "containsrange",
+    "overlapsrange",
+    "timerange",
+    "withtol",
+    "timetable"
+   ]
+  },
+  "withtol": {
+   "summary": {
+    "en": "Selects timetable rows whose times are close to given times, within a tolerance.",
+    "pt": "Seleciona linhas de um timetable cujos tempos estão próximos de tempos dados, dentro de uma tolerância."
+   },
+   "syntax": [
+    {
+     "code": "s = withtol(times, tol)",
+     "en": "Creates a subscript that matches row times within `tol` of any of `times`.",
+     "pt": "Cria um subscrito que casa tempos de linha a até `tol` de qualquer um dos `times`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "times",
+     "en": "Target times, as `datetime` or `duration` values, matching the type of the row times.",
+     "pt": "Tempos desejados, como valores `datetime` ou `duration`, do mesmo tipo dos tempos das linhas."
+    },
+    {
+     "name": "tol",
+     "en": "Tolerance as a `duration`. A row matches when its time differs from a target by at most `tol`.",
+     "pt": "Tolerância como `duration`. Uma linha casa quando seu tempo difere de um alvo em no máximo `tol`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A timetable subscript object, used inside the parentheses: `TT(s, :)`.",
+     "pt": "Um objeto de subscrito de timetable, usado dentro dos parênteses: `TT(s, :)`."
+    }
+   ],
+   "description": {
+    "en": "Exact comparison of times is fragile when they come from sampling or rounding. `withtol` lets you ask for \"the rows near 5 seconds\" without writing the arithmetic yourself. Several target times can be given at once, and every row near any of them is selected.\n\nThe object does nothing on its own; it only has meaning as a row subscript of a timetable.",
+    "pt": "A comparação exata de tempos é frágil quando vêm de amostragem ou arredondamento. `withtol` permite pedir \"as linhas perto de 5 segundos\" sem escrever a aritmética. Vários tempos podem ser dados de uma vez, e toda linha próxima de qualquer um deles é selecionada.\n\nO objeto não faz nada sozinho; só tem sentido como subscrito de linha de um timetable."
+   },
+   "examples": [
+    {
+     "code": "TT = timetable(seconds([1;5;9]), [1;2;3]);\nTT(withtol(seconds(5.2), seconds(0.5)), :)\nTT(withtol(seconds([1 9]), seconds(1)), :)"
+    }
+   ],
+   "see": [
+    "timerange",
+    "withinrange",
+    "timetable",
+    "retime"
+   ]
+  },
+  "writetable": {
+   "summary": {
+    "en": "Writes a table to a delimited text file.",
+    "pt": "Grava uma tabela em um arquivo de texto delimitado."
+   },
+   "syntax": [
+    {
+     "code": "writetable(T, filename)",
+     "en": "Writes `T` to `filename`; the extension (`.csv`, `.txt`, `.xlsx`) chooses the format.",
+     "pt": "Grava `T` em `filename`; a extensão (`.csv`, `.txt`, `.xlsx`) escolhe o formato."
+    },
+    {
+     "code": "writetable(T, filename, Name, Value)",
+     "en": "Adjusts the output with options such as `'WriteVariableNames'`.",
+     "pt": "Ajusta a saída com opções como `'WriteVariableNames'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "The `table` to write.",
+     "pt": "A `table` a gravar."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name, as text.",
+     "pt": "Nome do arquivo de saída, como texto."
+    },
+    {
+     "name": "'WriteVariableNames'",
+     "en": "Logical. When `false`, the header line with variable names is omitted.",
+     "pt": "Lógico. Com `false`, a linha de cabeçalho com os nomes das variáveis é omitida."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each table row becomes a line of the file, with values separated by commas for `.csv`. The first line holds the variable names unless you turn that off. Numbers are written in text form and text variables are written as they are.\n\nAn existing file with the same name is overwritten. Read the file back with `readtable`.",
+    "pt": "Cada linha da tabela vira uma linha do arquivo, com valores separados por vírgulas em `.csv`. A primeira linha contém os nomes das variáveis, a menos que isso seja desligado. Números são gravados em forma de texto e variáveis de texto são gravadas como estão.\n\nUm arquivo existente com o mesmo nome é sobrescrito. Leia o arquivo de volta com `readtable`."
+   },
+   "notes": {
+    "en": "The `'Delimiter'` and `'WriteRowNames'` options are not applied in MatLivre: files are always comma separated and row names are not written.",
+    "pt": "As opções `'Delimiter'` e `'WriteRowNames'` não são aplicadas no MatLivre: os arquivos são sempre separados por vírgula e os nomes de linha não são gravados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write and read back",
+      "pt": "Gravar e ler de volta"
+     },
+     "code": "T = table([1;2], {'a';'b'}, 'VariableNames', {'n', 's'});\nwritetable(T, 'out.csv');\nR = readtable('out.csv')"
+    }
+   ],
+   "see": [
+    "readtable",
+    "writetimetable",
+    "writematrix",
+    "table"
+   ]
+  },
+  "writetimetable": {
+   "summary": {
+    "en": "Writes a timetable to a delimited text file.",
+    "pt": "Grava um timetable em um arquivo de texto delimitado."
+   },
+   "syntax": [
+    {
+     "code": "writetimetable(TT, filename)",
+     "en": "Writes `TT` to `filename`, with the row times as the first column.",
+     "pt": "Grava `TT` em `filename`, com os tempos das linhas como primeira coluna."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "The `timetable` to write.",
+     "pt": "O `timetable` a gravar."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name, as text.",
+     "pt": "Nome do arquivo de saída, como texto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The row times are written first, under the name of the time dimension (`Time` by default), followed by the data variables. Datetimes are written in a readable date format.\n\nUse `readtimetable` to read the file back; it recognizes the first column as the row times.",
+    "pt": "Os tempos das linhas são gravados primeiro, sob o nome da dimensão de tempo (`Time` por padrão), seguidos das variáveis de dados. Datetimes são gravados em formato de data legível.\n\nUse `readtimetable` para ler o arquivo de volta; ele reconhece a primeira coluna como os tempos das linhas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Save a timetable",
+      "pt": "Salvar um timetable"
+     },
+     "code": "TT = timetable(datetime(2024,1,1) + days(0:1)', [10; 20]);\nwritetimetable(TT, 'tt.csv');\ntype tt.csv"
+    }
+   ],
+   "see": [
+    "readtimetable",
+    "writetable",
+    "timetable",
+    "readtable"
+   ]
+  },
+  "x2mdate": {
+   "summary": {
+    "en": "Converts Excel serial date numbers to MATLAB serial date numbers.",
+    "pt": "Converte números seriais de data do Excel em números seriais de data do MATLAB."
+   },
+   "syntax": [
+    {
+     "code": "m = x2mdate(x)",
+     "en": "Converts using the 1900 date system of Excel.",
+     "pt": "Converte usando o sistema de datas de 1900 do Excel."
+    },
+    {
+     "code": "m = x2mdate(x, convention)",
+     "en": "Uses `convention` 0 for the 1900 system or 1 for the 1904 system.",
+     "pt": "Usa `convention` 0 para o sistema de 1900 ou 1 para o de 1904."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Excel serial date numbers.",
+     "pt": "Números seriais de data do Excel."
+    },
+    {
+     "name": "convention",
+     "en": "0 (default) for the 1900 system, 1 for the 1904 system used by some Mac workbooks.",
+     "pt": "0 (padrão) para o sistema de 1900, 1 para o de 1904 usado por algumas planilhas de Mac."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Serial date numbers as used by `datenum`, same size as `x`.",
+     "pt": "Números seriais de data como os de `datenum`, mesmo tamanho de `x`."
+    }
+   ],
+   "description": {
+    "en": "Excel and MATLAB count days from different origins. The conversion adds a fixed offset, so fractions of a day (the time of day) are preserved. Pass the result to `datestr` or `datetime(m, 'ConvertFrom', 'datenum')` to see a calendar date.",
+    "pt": "Excel e MATLAB contam dias a partir de origens diferentes. A conversão soma um deslocamento fixo, então as frações de dia (a hora) são preservadas. Passe o resultado a `datestr` ou `datetime(m, 'ConvertFrom', 'datenum')` para ver uma data de calendário."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Excel serial for 1 January 2020",
+      "pt": "Serial do Excel para 1 de janeiro de 2020"
+     },
+     "code": "m = x2mdate(43831)\ndatestr(m)"
+    }
+   ],
+   "see": [
+    "datenum",
+    "datestr",
+    "datetime",
+    "m2xdate"
+   ]
+  },
+  "year": {
+   "summary": {
+    "en": "Year number of each date in a datetime array.",
+    "pt": "Número do ano de cada data em um array datetime."
+   },
+   "syntax": [
+    {
+     "code": "y = year(t)",
+     "en": "Returns the year of each element of `t`.",
+     "pt": "Retorna o ano de cada elemento de `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `datetime` array (or `duration` or `calendarDuration`).",
+     "pt": "Um array `datetime` (ou `duration` ou `calendarDuration`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Double array with the same size as `t`.",
+     "pt": "Array double do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`year(t)` is the first output of `ymd(t)`. For a datetime it gives the calendar year as an integer such as `2024`. For a duration it gives the number of whole fixed-length years of 365.2425 days.",
+    "pt": "`year(t)` é a primeira saída de `ymd(t)`. Para um datetime dá o ano do calendário como inteiro, como `2024`. Para uma duration dá o número de anos de comprimento fixo de 365,2425 dias."
+   },
+   "notes": {
+    "en": "MatLivre requires `datetime`, `duration` or `calendarDuration` input; serial date numbers are rejected.",
+    "pt": "O MatLivre exige entrada `datetime`, `duration` ou `calendarDuration`; números seriais de data são rejeitados."
+   },
+   "examples": [
+    {
+     "code": "t = [datetime(2020,1,1) datetime(1999,5,5)];\nyear(t)"
+    }
+   ],
+   "see": [
+    "ymd",
+    "month",
+    "day",
+    "datetime",
+    "years"
+   ]
+  },
+  "years": {
+   "summary": {
+    "en": "Creates durations measured in fixed-length years, or converts durations to years.",
+    "pt": "Cria durations medidas em anos de comprimento fixo, ou converte durations em anos."
+   },
+   "syntax": [
+    {
+     "code": "d = years(x)",
+     "en": "Returns a `duration` of `x` years for numeric `x`.",
+     "pt": "Retorna uma `duration` de `x` anos para `x` numérico."
+    },
+    {
+     "code": "x = years(d)",
+     "en": "Returns the number of years in the duration `d` as a double.",
+     "pt": "Retorna o número de anos da duration `d` como double."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array of year counts.",
+     "pt": "Array numérico com contagens de anos."
+    },
+    {
+     "name": "d",
+     "en": "A `duration` array.",
+     "pt": "Um array `duration`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "A duration array, displayed with the unit `yrs`.",
+     "pt": "Um array de duration, exibido com a unidade `yrs`."
+    },
+    {
+     "name": "x",
+     "en": "Double array of years.",
+     "pt": "Array double de anos."
+    }
+   ],
+   "description": {
+    "en": "A fixed-length year is exactly 365.2425 days, the mean length of a Gregorian year, so `years(1) == days(365.2425)`. It does not follow the calendar: adding `years(1)` to a date adds that many days, not the same calendar date next year. For calendar-aware steps use `calyears`.\n\nFractions are fine, and durations can be added, scaled and compared like numbers.",
+    "pt": "Um ano de comprimento fixo vale exatamente 365,2425 dias, a duração média de um ano gregoriano, então `years(1) == days(365.2425)`. Ele não acompanha o calendário: somar `years(1)` a uma data soma essa quantidade de dias, não a mesma data do ano seguinte. Para passos que respeitam o calendário use `calyears`.\n\nFrações são aceitas, e durations podem ser somadas, multiplicadas e comparadas como números."
+   },
+   "examples": [
+    {
+     "code": "d = years([1 2.5])\ndays(years(1))"
+    }
+   ],
+   "see": [
+    "days",
+    "hours",
+    "calyears",
+    "duration",
+    "year"
+   ]
+  },
+  "ymd": {
+   "summary": {
+    "en": "Year, month and day of each date.",
+    "pt": "Ano, mês e dia de cada data."
+   },
+   "syntax": [
+    {
+     "code": "[y, m, d] = ymd(t)",
+     "en": "Returns the year, month and day numbers of each element of `t`.",
+     "pt": "Retorna os números de ano, mês e dia de cada elemento de `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `datetime` array.",
+     "pt": "Um array `datetime`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y, m, d",
+     "en": "Double arrays, each the same size as `t`.",
+     "pt": "Arrays double, cada um do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "The three outputs split a date into its calendar fields. The time of day is ignored. It is equivalent to calling `year`, `month` and `day` separately, but needs only one pass over the data.",
+    "pt": "As três saídas separam uma data em seus campos de calendário. A hora do dia é ignorada. É equivalente a chamar `year`, `month` e `day` separadamente, mas faz uma única passada pelos dados."
+   },
+   "examples": [
+    {
+     "code": "[y, m, d] = ymd(datetime(2024, 3, 15) + days(0:1))"
+    }
+   ],
+   "see": [
+    "year",
+    "month",
+    "day",
+    "datetime",
+    "yyyymmdd"
+   ]
+  },
+  "yyyymmdd": {
+   "summary": {
+    "en": "Converts dates to numbers of the form YYYYMMDD.",
+    "pt": "Converte datas em números no formato AAAAMMDD."
+   },
+   "syntax": [
+    {
+     "code": "n = yyyymmdd(t)",
+     "en": "Returns the date of each element of `t` as the number year*10000 + month*100 + day.",
+     "pt": "Retorna a data de cada elemento de `t` como o número ano*10000 + mês*100 + dia."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `datetime` array.",
+     "pt": "Um array `datetime`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Double array, same size as `t`. For 15 March 2024 the value is `20240315`.",
+     "pt": "Array double do mesmo tamanho de `t`. Para 15 de março de 2024 o valor é `20240315`."
+    }
+   ],
+   "description": {
+    "en": "The numbers sort in the same order as the dates, which makes them handy as compact keys for grouping or file names. The time of day is dropped.",
+    "pt": "Os números ordenam na mesma ordem das datas, o que os torna práticos como chaves compactas para agrupamento ou nomes de arquivo. A hora do dia é descartada."
+   },
+   "examples": [
+    {
+     "code": "yyyymmdd(datetime(2024, 3, 15) + days(0:1))"
+    }
+   ],
+   "see": [
+    "ymd",
+    "datetime",
+    "datenum",
+    "datestr"
+   ]
+  },
+  "clc": {
+   "summary": {
+    "en": "Clears the Command Window.",
+    "pt": "Limpa a Janela de Comandos."
+   },
+   "syntax": [
+    {
+     "code": "clc",
+     "en": "Erases the text shown in the command window and moves the prompt to the top.",
+     "pt": "Apaga o texto exibido na janela de comandos e leva o prompt ao topo."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "`clc` only clears what is displayed. Variables stay in the workspace; use `clear` to remove those. It is often placed at the top of a script so that each run starts with a clean display.",
+    "pt": "`clc` apenas limpa o que está exibido. As variáveis permanecem no workspace; use `clear` para removê-las. Costuma ficar no início de um script para que cada execução comece com a exibição limpa."
+   },
+   "notes": {
+    "en": "Typed at the command line, `clc` clears the command history shown there. Inside a running script it has no effect on the output.",
+    "pt": "Digitado na linha de comando, `clc` limpa o histórico exibido ali. Dentro de um script em execução não afeta a saída."
+   },
+   "examples": [
+    {
+     "code": "disp('before')\nclc\ndisp('after')"
+    }
+   ],
+   "see": [
+    "home",
+    "clear",
+    "close",
+    "format"
+   ]
+  },
+  "commandwindow": {
+   "summary": {
+    "en": "Moves the focus to the Command Window.",
+    "pt": "Move o foco para a Janela de Comandos."
+   },
+   "syntax": [
+    {
+     "code": "commandwindow",
+     "en": "Selects the command window so typing goes there.",
+     "pt": "Seleciona a janela de comandos para que a digitação vá para lá."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "In MATLAB this opens the command window if it is hidden and gives it keyboard focus. It is used at the end of programs that created figures or dialogs, so the user can type the next command without clicking.",
+    "pt": "No MATLAB abre a janela de comandos se estiver oculta e lhe dá o foco do teclado. É usado no final de programas que criaram figuras ou diálogos, para que o usuário digite o próximo comando sem clicar."
+   },
+   "notes": {
+    "en": "MatLivre accepts the call and does nothing.",
+    "pt": "O MatLivre aceita a chamada e não faz nada."
+   },
+   "examples": [
+    {
+     "code": "disp('done')\ncommandwindow"
+    }
+   ],
+   "see": [
+    "clc",
+    "home",
+    "figure"
+   ]
+  },
+  "diary": {
+   "summary": {
+    "en": "Records the text of a session to a file.",
+    "pt": "Registra o texto de uma sessão em um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "diary",
+     "en": "Switches logging on or off.",
+     "pt": "Liga ou desliga o registro."
+    },
+    {
+     "code": "diary on / diary off",
+     "en": "Turns the log on or off.",
+     "pt": "Liga ou desliga o registro."
+    },
+    {
+     "code": "diary(filename)",
+     "en": "Starts logging to `filename`.",
+     "pt": "Começa a registrar em `filename`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the log file. The default is `diary` in the current folder.",
+     "pt": "Nome do arquivo de registro. O padrão é `diary` na pasta atual."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "While the diary is on, what appears in the command window is also appended to the file. The commands themselves and their printed output are captured, so the file is a transcript. `diary off` stops recording but keeps the file.",
+    "pt": "Com o diary ligado, o que aparece na janela de comandos também é acrescentado ao arquivo. Os comandos e sua saída impressa são capturados, então o arquivo é uma transcrição. `diary off` interrompe o registro mas mantém o arquivo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Log a short session",
+      "pt": "Registrar uma sessão curta"
+     },
+     "code": "diary('session.txt')\ndisp('logged line')\ndiary off"
+    }
+   ],
+   "see": [
+    "disp",
+    "fprintf",
+    "echo",
+    "more"
+   ]
+  },
+  "format": {
+   "summary": {
+    "en": "Sets how numbers are displayed in output.",
+    "pt": "Define como os números são exibidos na saída."
+   },
+   "syntax": [
+    {
+     "code": "format",
+     "en": "Returns to the default, `short`.",
+     "pt": "Volta ao padrão, `short`."
+    },
+    {
+     "code": "format long",
+     "en": "Shows about 15 significant digits for doubles and 7 for singles.",
+     "pt": "Mostra cerca de 15 dígitos significativos para doubles e 7 para singles."
+    },
+    {
+     "code": "format short",
+     "en": "Shows 5 significant digits, such as `3.1416`.",
+     "pt": "Mostra 5 dígitos significativos, como `3.1416`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "style",
+     "en": "Name of the display style, such as `short` or `long`. It can also be given as `format('long')`.",
+     "pt": "Nome do estilo de exibição, como `short` ou `long`. Também pode ser dado como `format('long')`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`format` changes only how values are printed, never how they are stored or computed. It affects results shown without a semicolon and `disp`, but not `fprintf` or `num2str`, which use their own conversion rules.\n\nThe setting stays until changed again. Integer types are not affected.",
+    "pt": "`format` muda apenas como os valores são impressos, nunca como são armazenados ou calculados. Afeta resultados exibidos sem ponto e vírgula e `disp`, mas não `fprintf` nem `num2str`, que usam regras próprias de conversão.\n\nA configuração vale até ser mudada de novo. Os tipos inteiros não são afetados."
+   },
+   "notes": {
+    "en": "MatLivre supports `short` and `long`. Other styles such as `short e`, `long g`, `bank`, `rat`, `hex` and `compact` are accepted but do not change the display.",
+    "pt": "O MatLivre suporta `short` e `long`. Outros estilos, como `short e`, `long g`, `bank`, `rat`, `hex` e `compact`, são aceitos mas não mudam a exibição."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Short and long",
+      "pt": "Curto e longo"
+     },
+     "code": "format long\npi\nsingle(pi)\nformat short\npi"
+    }
+   ],
+   "see": [
+    "disp",
+    "fprintf",
+    "num2str",
+    "vpa"
+   ]
+  },
+  "home": {
+   "summary": {
+    "en": "Moves the cursor to the top of the Command Window.",
+    "pt": "Leva o cursor ao topo da Janela de Comandos."
+   },
+   "syntax": [
+    {
+     "code": "home",
+     "en": "Sends the cursor to the upper left of the command window.",
+     "pt": "Leva o cursor ao canto superior esquerdo da janela de comandos."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "`home` scrolls the command window so the prompt is at the top, while keeping earlier text in the scroll-back. This differs from `clc`, which erases the text.",
+    "pt": "`home` rola a janela de comandos para que o prompt fique no topo, mantendo o texto anterior no histórico de rolagem. Isso difere de `clc`, que apaga o texto."
+   },
+   "notes": {
+    "en": "MatLivre accepts the call and does nothing.",
+    "pt": "O MatLivre aceita a chamada e não faz nada."
+   },
+   "examples": [
+    {
+     "code": "disp('first')\nhome\ndisp('second')"
+    }
+   ],
+   "see": [
+    "clc",
+    "commandwindow",
+    "more"
+   ]
+  },
+  "iskeyword": {
+   "summary": {
+    "en": "Tests whether text is a MATLAB keyword, or lists all keywords.",
+    "pt": "Testa se um texto é palavra-chave do MATLAB, ou lista todas."
+   },
+   "syntax": [
+    {
+     "code": "tf = iskeyword(s)",
+     "en": "Returns true when `s` is a reserved keyword.",
+     "pt": "Retorna verdadeiro quando `s` é palavra-chave reservada."
+    },
+    {
+     "code": "kw = iskeyword",
+     "en": "Returns all keywords as a cell array of character vectors.",
+     "pt": "Retorna todas as palavras-chave como cell array de vetores de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Character vector or string scalar to test.",
+     "pt": "Vetor de caracteres ou string escalar a testar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    },
+    {
+     "name": "kw",
+     "en": "Cell column listing the keywords, such as `for`, `if`, `while`, `end`.",
+     "pt": "Coluna de cell com as palavras-chave, como `for`, `if`, `while`, `end`."
+    }
+   ],
+   "description": {
+    "en": "Keywords cannot be used as variable or function names. `iskeyword` is useful for checking generated names, for example before building variables from column headers. The check is case sensitive, so `For` is not a keyword.",
+    "pt": "Palavras-chave não podem ser usadas como nomes de variável ou função. `iskeyword` ajuda a verificar nomes gerados, por exemplo antes de criar variáveis a partir de cabeçalhos de coluna. A checagem diferencia maiúsculas de minúsculas, então `For` não é palavra-chave."
+   },
+   "notes": {
+    "en": "MatLivre tests one text value per call; a cell array of words is not accepted.",
+    "pt": "O MatLivre testa um texto por chamada; um cell array de palavras não é aceito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Test words",
+      "pt": "Testar palavras"
+     },
+     "code": "iskeyword('for')\niskeyword('x')\niskeyword('While')"
+    }
+   ],
+   "see": [
+    "isvarname",
+    "matlab.lang.makeValidName",
+    "exist",
+    "which"
+   ]
+  },
+  "more": {
+   "summary": {
+    "en": "Controls paging of long command window output.",
+    "pt": "Controla a paginação de saídas longas na janela de comandos."
+   },
+   "syntax": [
+    {
+     "code": "more off",
+     "en": "Shows output continuously, without pausing.",
+     "pt": "Mostra a saída continuamente, sem pausar."
+    },
+    {
+     "code": "more on",
+     "en": "Pauses after each page of output.",
+     "pt": "Pausa a cada página de saída."
+    },
+    {
+     "code": "more(n)",
+     "en": "Sets the page length to `n` lines.",
+     "pt": "Define o tamanho da página em `n` linhas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Number of lines per page.",
+     "pt": "Número de linhas por página."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "With paging on, long output stops after a page and waits for a key. Scripts that print a lot usually start with `more off` so they run without interaction.",
+    "pt": "Com a paginação ligada, uma saída longa para após uma página e espera uma tecla. Scripts que imprimem muito costumam começar com `more off` para rodar sem interação."
+   },
+   "notes": {
+    "en": "MatLivre has no pager, so output is never held back and `more` has no effect.",
+    "pt": "O MatLivre não tem paginador, então a saída nunca é retida e `more` não tem efeito."
+   },
+   "examples": [
+    {
+     "code": "more off\nfor k = 1:3\n    disp(k)\nend"
+    }
+   ],
+   "see": [
+    "clc",
+    "home",
+    "diary",
+    "disp"
+   ]
+  },
+  "blkdiag": {
+   "summary": {
+    "en": "Block diagonal matrix built from the given matrices.",
+    "pt": "Matriz bloco diagonal construída a partir das matrizes dadas."
+   },
+   "syntax": [
+    {
+     "code": "B = blkdiag(A1, A2, ..., An)",
+     "en": "Places the inputs along the diagonal and fills the rest with zeros.",
+     "pt": "Coloca as entradas ao longo da diagonal e preenche o restante com zeros."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A1, ..., An",
+     "en": "Numeric matrices, vectors or scalars; they need not be square or the same size.",
+     "pt": "Matrizes, vetores ou escalares numéricos; não precisam ser quadrados nem do mesmo tamanho."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Matrix with as many rows as the inputs have in total and as many columns as they have in total.",
+     "pt": "Matriz com tantas linhas quanto o total das linhas das entradas e tantas colunas quanto o total das colunas."
+    }
+   ],
+   "description": {
+    "en": "Each input becomes one block, placed so that blocks do not overlap and touch only at corners. The first block sits at the top left and the last at the bottom right. This is the usual way to assemble a system matrix from independent subsystems.",
+    "pt": "Cada entrada vira um bloco, posicionado de modo que os blocos não se sobreponham e se toquem apenas nos cantos. O primeiro bloco fica no canto superior esquerdo e o último no inferior direito. É a forma usual de montar a matriz de um sistema a partir de subsistemas independentes."
+   },
+   "examples": [
+    {
+     "code": "blkdiag([1 2], 3, [4 5; 6 7])"
+    }
+   ],
+   "see": [
+    "diag",
+    "cat",
+    "horzcat",
+    "vertcat",
+    "kron"
+   ]
+  }
+ }
+}

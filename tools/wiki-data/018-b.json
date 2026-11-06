@@ -1,0 +1,1375 @@
+{
+  "functions": {
+    "addedge": {
+      "summary": {
+        "en": "Adds edges to a graph or digraph, creating new nodes if needed.",
+        "pt": "Adiciona arestas a um grafo ou dígrafo, criando novos nós se necessário."
+      },
+      "syntax": [
+        {
+          "code": "H = addedge(G, s, t)",
+          "en": "Adds an edge from node `s(k)` to node `t(k)` for every k.",
+          "pt": "Adiciona uma aresta do nó `s(k)` ao nó `t(k)` para cada k."
+        },
+        {
+          "code": "H = addedge(G, s, t, w)",
+          "en": "Also sets the edge weights to `w`.",
+          "pt": "Também define os pesos das arestas como `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "s, t",
+          "en": "Source and target nodes, as indices or as node names. Scalars or vectors of equal length.",
+          "pt": "Nós de origem e destino, como índices ou nomes de nós. Escalares ou vetores de mesmo comprimento."
+        },
+        {
+          "name": "w",
+          "en": "Edge weights, one per new edge.",
+          "pt": "Pesos das arestas, um por nova aresta."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "H",
+          "en": "A new graph with the added edges. `G` itself is not modified.",
+          "pt": "Um novo grafo com as arestas adicionadas. O próprio `G` não é modificado."
+        }
+      ],
+      "description": {
+        "en": "Graph objects are values, so `addedge` returns the modified copy and you normally write `G = addedge(G, ...)`. A node index larger than `numnodes(G)` adds the missing nodes. When the graph has node names, an unknown name in `s` or `t` creates a new node with that name.\n\nIf `G` carries weights, pass `w` for the new edges. Edges of an undirected graph are kept in sorted order, so new edges may not end up at the end of `G.Edges`.",
+        "pt": "Objetos de grafo são valores, então `addedge` devolve a cópia modificada e normalmente se escreve `G = addedge(G, ...)`. Um índice de nó maior que `numnodes(G)` adiciona os nós que faltam. Quando o grafo tem nomes de nós, um nome desconhecido em `s` ou `t` cria um novo nó com esse nome.\n\nSe `G` tem pesos, passe `w` para as novas arestas. As arestas de um grafo não direcionado ficam em ordem, então as novas podem não aparecer no fim de `G.Edges`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Add an edge and a weighted edge",
+            "pt": "Adicionar uma aresta e uma aresta com peso"
+          },
+          "code": "G = graph([1 2], [2 3]);\nG = addedge(G, 1, 3);\ndisp(G.Edges.EndNodes)\nW = addedge(graph([1 2], [2 3], [1 1]), 3, 4, 9);\ndisp(W.Edges.Weight')"
+        }
+      ],
+      "see": [
+        "rmedge",
+        "addnode",
+        "graph",
+        "digraph",
+        "findedge"
+      ]
+    },
+    "addnode": {
+      "summary": {
+        "en": "Adds nodes to a graph or digraph.",
+        "pt": "Adiciona nós a um grafo ou dígrafo."
+      },
+      "syntax": [
+        {
+          "code": "H = addnode(G, N)",
+          "en": "Appends `N` unnamed nodes.",
+          "pt": "Acrescenta `N` nós sem nome."
+        },
+        {
+          "code": "H = addnode(G, names)",
+          "en": "Appends one node per name in the cell array or character vector `names`.",
+          "pt": "Acrescenta um nó por nome no cell array ou vetor de caracteres `names`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "N",
+          "en": "Number of nodes to add.",
+          "pt": "Número de nós a adicionar."
+        },
+        {
+          "name": "names",
+          "en": "Names for the new nodes: a character vector, or a cell array of them.",
+          "pt": "Nomes dos novos nós: um vetor de caracteres ou um cell array deles."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "H",
+          "en": "Graph with the extra nodes and the same edges as `G`.",
+          "pt": "Grafo com os nós extras e as mesmas arestas de `G`."
+        }
+      ],
+      "description": {
+        "en": "The new nodes are isolated: they have no edges until you add some with `addedge`. They receive the next indices after the existing nodes.\n\nTo name the nodes of a graph, build it with names from the start or add named nodes to a graph that already has names.",
+        "pt": "Os novos nós ficam isolados: não têm arestas até que você as adicione com `addedge`. Eles recebem os índices seguintes aos dos nós existentes.\n\nPara nomear os nós de um grafo, construa-o com nomes desde o início ou adicione nós nomeados a um grafo que já tem nomes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Isolated nodes",
+            "pt": "Nós isolados"
+          },
+          "code": "G = graph([1 2], [2 3]);\nH = addnode(G, 2);\ndisp([numnodes(H) numedges(H)])\ndisp(degree(H)')\nN = graph({'a','b'}, {'b','c'});\nN = addnode(N, 'z');\ndisp(N.Nodes.Name')"
+        }
+      ],
+      "see": [
+        "rmnode",
+        "addedge",
+        "numnodes",
+        "graph"
+      ]
+    },
+    "adjacency": {
+      "summary": {
+        "en": "Adjacency matrix of a graph.",
+        "pt": "Matriz de adjacência de um grafo."
+      },
+      "syntax": [
+        {
+          "code": "A = adjacency(G)",
+          "en": "Returns the matrix with a 1 where two nodes are joined by an edge.",
+          "pt": "Retorna a matriz com 1 onde dois nós são ligados por uma aresta."
+        },
+        {
+          "code": "A = adjacency(G, 'weighted')",
+          "en": "Uses the edge weights as the matrix entries.",
+          "pt": "Usa os pesos das arestas como entradas da matriz."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "'weighted'",
+          "en": "Request edge weights in place of ones.",
+          "pt": "Pede os pesos das arestas no lugar de uns."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "Square matrix of size `numnodes(G)`. `A(i,j)` is nonzero when an edge goes from node `i` to node `j`.",
+          "pt": "Matriz quadrada de tamanho `numnodes(G)`. `A(i,j)` é diferente de zero quando há uma aresta do nó `i` ao nó `j`."
+        }
+      ],
+      "description": {
+        "en": "For an undirected graph the matrix is symmetric, because each edge joins the nodes in both directions. For a digraph row `i` holds the edges leaving node `i`.\n\nThe row sums of the unweighted matrix are the node degrees, which links `adjacency` with `degree` and `laplacian`. The inverse conversion is `graph(A)` or `digraph(A)`.",
+        "pt": "Em um grafo não direcionado a matriz é simétrica, porque cada aresta liga os nós nos dois sentidos. Em um dígrafo a linha `i` guarda as arestas que saem do nó `i`.\n\nAs somas das linhas da matriz sem pesos são os graus dos nós, o que liga `adjacency` a `degree` e `laplacian`. A conversão inversa é `graph(A)` ou `digraph(A)`."
+      },
+      "notes": {
+        "en": "MatLivre returns full (dense) matrices here, where MATLAB returns sparse ones. Values and sizes are the same.",
+        "pt": "O MatLivre retorna matrizes cheias (densas) aqui, enquanto o MATLAB retorna matrizes esparsas. Valores e tamanhos são os mesmos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Plain and weighted",
+            "pt": "Simples e com pesos"
+          },
+          "code": "G = graph([1 1 2], [2 3 3], [4 6 5]);\nadjacency(G)\nadjacency(G, 'weighted')"
+        }
+      ],
+      "see": [
+        "graph",
+        "digraph",
+        "degree",
+        "laplacian",
+        "incidence"
+      ]
+    },
+    "allcycles": {
+      "summary": {
+        "en": "Finds every simple cycle of a graph or digraph.",
+        "pt": "Encontra todos os ciclos simples de um grafo ou dígrafo."
+      },
+      "syntax": [
+        {
+          "code": "cycles = allcycles(G)",
+          "en": "Returns a cell array with one node list per cycle.",
+          "pt": "Retorna um cell array com uma lista de nós por ciclo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cycles",
+          "en": "Cell array. Each cell holds the nodes of one cycle, in the order they are visited. It is empty when `G` has no cycle.",
+          "pt": "Cell array. Cada célula guarda os nós de um ciclo, na ordem em que são visitados. Fica vazio quando `G` não tem ciclos."
+        }
+      ],
+      "description": {
+        "en": "A simple cycle is a closed walk that never visits a node twice. In an undirected graph each cycle is reported once, not once per direction or starting point. In a digraph the edge directions must be followed.\n\nThe number of cycles can grow very fast with the size of the graph, so use it on small graphs. `cyclebasis` gives a compact set of cycles that generates all the others.",
+        "pt": "Um ciclo simples é um percurso fechado que nunca visita um nó duas vezes. Em um grafo não direcionado cada ciclo é informado uma só vez, e não uma vez por sentido ou ponto de partida. Em um dígrafo as direções das arestas devem ser seguidas.\n\nO número de ciclos pode crescer muito rápido com o tamanho do grafo, então use em grafos pequenos. `cyclebasis` fornece um conjunto compacto de ciclos que gera todos os outros."
+      },
+      "notes": {
+        "en": "In MatLivre `allcycles` returns only the node lists, not the edge lists that MATLAB gives as a second output.",
+        "pt": "No MatLivre, `allcycles` retorna apenas as listas de nós, sem as listas de arestas que o MATLAB oferece como segunda saída."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A triangle with a tail",
+            "pt": "Um triângulo com uma cauda"
+          },
+          "code": "G = graph([1 2 3 3], [2 3 1 4]);\nc = allcycles(G);\nnumel(c)\nc{1}"
+        }
+      ],
+      "see": [
+        "cyclebasis",
+        "hascycles",
+        "isdag",
+        "allpaths"
+      ]
+    },
+    "allpaths": {
+      "summary": {
+        "en": "Finds every simple path between two nodes.",
+        "pt": "Encontra todos os caminhos simples entre dois nós."
+      },
+      "syntax": [
+        {
+          "code": "paths = allpaths(G, s, t)",
+          "en": "Returns the paths from node `s` to node `t` as a cell array.",
+          "pt": "Retorna os caminhos do nó `s` ao nó `t` como um cell array."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "s, t",
+          "en": "Start and end nodes, as indices or names.",
+          "pt": "Nós inicial e final, como índices ou nomes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "paths",
+          "en": "Cell array of row vectors. Each vector lists the nodes of one path from `s` to `t`.",
+          "pt": "Cell array de vetores linha. Cada vetor lista os nós de um caminho de `s` a `t`."
+        }
+      ],
+      "description": {
+        "en": "A path is simple when it does not repeat a node. Weights are ignored: every route counts, not only the cheapest, so use `shortestpath` for that. For a digraph only routes that follow the edge directions appear.\n\nThe count can explode on dense graphs, since the number of simple paths grows faster than exponentially in the worst case.",
+        "pt": "Um caminho é simples quando não repete nenhum nó. Os pesos são ignorados: toda rota conta, não só a mais barata, e para isso existe `shortestpath`. Em um dígrafo só aparecem rotas que seguem as direções das arestas.\n\nA contagem pode explodir em grafos densos, já que o número de caminhos simples cresce, no pior caso, mais rápido que exponencialmente."
+      },
+      "notes": {
+        "en": "MatLivre returns only the node paths, not the edge paths that MATLAB gives as a second output.",
+        "pt": "O MatLivre retorna apenas os caminhos de nós, sem os caminhos de arestas que o MATLAB oferece como segunda saída."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Routes from 1 to 5",
+            "pt": "Rotas de 1 a 5"
+          },
+          "code": "G = graph([1 1 2 2 3 4], [2 3 3 4 4 5]);\nP = allpaths(G, 1, 5);\nfprintf('%d paths\\n', numel(P))\nfor k = 1:numel(P)\n  disp(P{k})\nend"
+        }
+      ],
+      "see": [
+        "shortestpath",
+        "allcycles",
+        "bfsearch",
+        "dfsearch"
+      ]
+    },
+    "bctree": {
+      "summary": {
+        "en": "Block-cut tree of an undirected graph.",
+        "pt": "Árvore de blocos e articulações de um grafo não direcionado."
+      },
+      "syntax": [
+        {
+          "code": "T = bctree(G)",
+          "en": "Returns the block-cut tree of `G`.",
+          "pt": "Retorna a árvore de blocos e articulações de `G`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "An undirected `graph`.",
+          "pt": "Um `graph` não direcionado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "A graph with one node for each biconnected component (block) and one for each cut vertex. Each cut vertex is linked to the blocks that contain it.",
+          "pt": "Um grafo com um nó para cada componente biconexo (bloco) e um para cada vértice de articulação. Cada articulação é ligada aos blocos que a contêm."
+        },
+        {
+          "name": "map",
+          "en": "Optional second output relating the nodes of `G` to nodes of `T`.",
+          "pt": "Segunda saída opcional que relaciona os nós de `G` a nós de `T`."
+        }
+      ],
+      "description": {
+        "en": "A block is a maximal piece of the graph that stays connected if any single node is removed. A cut vertex is a node whose removal disconnects the graph. Gluing blocks along their cut vertices gives a tree (a forest if `G` is disconnected), which is the block-cut tree.\n\nThe tree shows at a glance where a network is fragile: every cut vertex is a single point of failure.",
+        "pt": "Um bloco é um pedaço maximal do grafo que continua conexo se qualquer nó isolado for removido. Um vértice de articulação é um nó cuja remoção desconecta o grafo. Colar os blocos pelas suas articulações dá uma árvore (uma floresta se `G` for desconexo), que é a árvore de blocos e articulações.\n\nA árvore mostra de relance onde uma rede é frágil: cada articulação é um ponto único de falha."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Triangle with a chain",
+            "pt": "Triângulo com uma corrente"
+          },
+          "code": "G = graph([1 2 3 3 4 5], [2 3 1 4 5 6]);\nT = bctree(G);\nfprintf('%d nodes, %d edges\\n', numnodes(T), numedges(T))"
+        }
+      ],
+      "see": [
+        "biconncomp",
+        "conncomp",
+        "minspantree",
+        "graph"
+      ]
+    },
+    "bfsearch": {
+      "summary": {
+        "en": "Breadth-first search: nodes in order of discovery by distance in edges.",
+        "pt": "Busca em largura: nós na ordem em que são descobertos, por distância em número de arestas."
+      },
+      "syntax": [
+        {
+          "code": "v = bfsearch(G, s)",
+          "en": "Returns the nodes reachable from `s` in breadth-first order.",
+          "pt": "Retorna os nós alcançáveis a partir de `s` em ordem de largura."
+        },
+        {
+          "code": "E = bfsearch(G, s, 'edgetonew')",
+          "en": "Returns the edges that lead to newly discovered nodes, as rows `[source target]`.",
+          "pt": "Retorna as arestas que levam a nós recém-descobertos, como linhas `[origem destino]`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "s",
+          "en": "Start node, as index or name.",
+          "pt": "Nó inicial, como índice ou nome."
+        },
+        {
+          "name": "events",
+          "en": "Event name that selects what is reported. `'edgetonew'` gives the tree edges.",
+          "pt": "Nome de evento que escolhe o que é informado. `'edgetonew'` dá as arestas da árvore."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "Column vector of node indices, starting with `s`.",
+          "pt": "Vetor coluna de índices de nós, começando por `s`."
+        },
+        {
+          "name": "E",
+          "en": "Matrix with two columns for the `'edgetonew'` form.",
+          "pt": "Matriz com duas colunas na forma `'edgetonew'`."
+        }
+      ],
+      "description": {
+        "en": "The search visits `s`, then all its neighbors, then all their unvisited neighbors, and so on, one layer at a time. Within a layer, neighbors are taken in index order. Nodes that cannot be reached from `s` are not listed.\n\nThe layers give the minimum number of edges from `s` to each node, which makes breadth-first search the tool for unweighted shortest paths. For weighted ones use `shortestpath`.",
+        "pt": "A busca visita `s`, depois todos os seus vizinhos, depois todos os vizinhos ainda não visitados deles, e assim por diante, uma camada de cada vez. Dentro de uma camada, os vizinhos são tomados em ordem de índice. Nós que não podem ser alcançados a partir de `s` não aparecem.\n\nAs camadas dão o número mínimo de arestas de `s` até cada nó, o que faz da busca em largura a ferramenta para caminhos mínimos sem pesos. Para caminhos com pesos use `shortestpath`."
+      },
+      "notes": {
+        "en": "MatLivre returns plain node lists for `'allevents'` and other event names instead of the event table that MATLAB builds. Use the default and `'edgetonew'` forms for portable code.",
+        "pt": "O MatLivre retorna listas simples de nós para `'allevents'` e outros nomes de evento, em vez da tabela de eventos que o MATLAB monta. Use a forma padrão e `'edgetonew'` para código portável."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order and tree edges",
+            "pt": "Ordem e arestas da árvore"
+          },
+          "code": "D = digraph([1 1 2 3 4], [2 3 4 4 5]);\nbfsearch(D, 1)'\nbfsearch(D, 1, 'edgetonew')"
+        }
+      ],
+      "see": [
+        "dfsearch",
+        "shortestpath",
+        "conncomp",
+        "neighbors"
+      ]
+    },
+    "biconncomp": {
+      "summary": {
+        "en": "Biconnected components (blocks) of an undirected graph.",
+        "pt": "Componentes biconexos (blocos) de um grafo não direcionado."
+      },
+      "syntax": [
+        {
+          "code": "bins = biconncomp(G)",
+          "en": "Labels each edge with the block it belongs to.",
+          "pt": "Rotula cada aresta com o bloco a que pertence."
+        },
+        {
+          "code": "[bins, cut] = biconncomp(G)",
+          "en": "Also returns the cut vertices.",
+          "pt": "Também retorna os vértices de articulação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "An undirected `graph`.",
+          "pt": "Um `graph` não direcionado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bins",
+          "en": "One integer per edge, in the order of `G.Edges`. Edges with the same label lie in the same block.",
+          "pt": "Um inteiro por aresta, na ordem de `G.Edges`. Arestas com o mesmo rótulo estão no mesmo bloco."
+        },
+        {
+          "name": "cut",
+          "en": "Indices of the cut vertices (articulation points).",
+          "pt": "Índices dos vértices de articulação (pontos de articulação)."
+        }
+      ],
+      "description": {
+        "en": "A biconnected component is a maximal set of edges in which any two edges lie on a common cycle, so the component survives the removal of any one node. Components can share a cut vertex but never an edge, which is why the labels belong to edges and not to nodes.\n\nAn edge that is not on any cycle, such as a bridge, forms a block by itself.",
+        "pt": "Um componente biconexo é um conjunto maximal de arestas em que quaisquer duas estão em um ciclo comum, de modo que o componente sobrevive à remoção de qualquer nó. Componentes podem compartilhar um vértice de articulação, mas nunca uma aresta, e por isso os rótulos pertencem a arestas e não a nós.\n\nUma aresta que não está em nenhum ciclo, como uma ponte, forma um bloco sozinha."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Blocks of a triangle with a tail",
+            "pt": "Blocos de um triângulo com cauda"
+          },
+          "code": "G = graph([1 2 3 3 4 5], [2 3 1 4 5 6]);\n[bins, cut] = biconncomp(G);\nfprintf('%d blocks\\n', max(bins))\ndisp(cut)"
+        }
+      ],
+      "see": [
+        "bctree",
+        "conncomp",
+        "hascycles",
+        "cyclebasis"
+      ]
+    },
+    "centrality": {
+      "summary": {
+        "en": "Importance score of each node, by one of several measures.",
+        "pt": "Pontuação de importância de cada nó, por uma entre várias medidas."
+      },
+      "syntax": [
+        {
+          "code": "c = centrality(G, type)",
+          "en": "Computes the centrality measure named by `type` for every node.",
+          "pt": "Calcula, para cada nó, a medida de centralidade indicada por `type`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "type",
+          "en": "Measure: `'degree'`, `'betweenness'`, `'closeness'`, `'pagerank'`, `'eigenvector'`, and for digraphs also the in/out variants such as `'indegree'` and `'outdegree'`.",
+          "pt": "Medida: `'degree'`, `'betweenness'`, `'closeness'`, `'pagerank'`, `'eigenvector'` e, para dígrafos, também as variantes de entrada/saída, como `'indegree'` e `'outdegree'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Vector with one score per node. Larger means more central.",
+          "pt": "Vetor com uma pontuação por nó. Maior significa mais central."
+        }
+      ],
+      "description": {
+        "en": "Each measure answers a different question. `'degree'` counts the edges at a node. `'betweenness'` counts how many shortest paths between other pairs of nodes run through it. `'closeness'` is the inverse of the sum of distances to all other nodes, so it is high for nodes near everything. `'pagerank'` scores a node by the scores of the nodes that point at it, and `'eigenvector'` is the same idea based on the leading eigenvector of the adjacency matrix.\n\nIn a star graph the center has the highest score under every measure, which is a handy sanity check.",
+        "pt": "Cada medida responde a uma pergunta diferente. `'degree'` conta as arestas de um nó. `'betweenness'` conta quantos caminhos mínimos entre outros pares de nós passam por ele. `'closeness'` é o inverso da soma das distâncias até todos os outros nós, sendo alta para nós próximos de tudo. `'pagerank'` pontua um nó pelas pontuações dos nós que apontam para ele, e `'eigenvector'` segue a mesma ideia com base no autovetor dominante da matriz de adjacência.\n\nEm um grafo estrela o centro tem a maior pontuação em todas as medidas, uma boa verificação de sanidade."
+      },
+      "notes": {
+        "en": "The scaling of some scores (for example how `'closeness'` or `'eigenvector'` is normalized) was not checked exhaustively against MATLAB; compare absolute values with care.",
+        "pt": "A escala de algumas pontuações (por exemplo como `'closeness'` ou `'eigenvector'` é normalizada) não foi verificada de forma exaustiva contra o MATLAB; compare valores absolutos com cuidado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Star graph",
+            "pt": "Grafo estrela"
+          },
+          "code": "G = graph([1 1 1], [2 3 4]);\ncentrality(G, 'degree')'\ncentrality(G, 'betweenness')'"
+        }
+      ],
+      "see": [
+        "degree",
+        "shortestpath",
+        "distances",
+        "adjacency"
+      ]
+    },
+    "condensation": {
+      "summary": {
+        "en": "Condensation of a digraph: each strongly connected component becomes one node.",
+        "pt": "Condensação de um dígrafo: cada componente fortemente conexo vira um nó."
+      },
+      "syntax": [
+        {
+          "code": "C = condensation(G)",
+          "en": "Returns the condensed digraph.",
+          "pt": "Retorna o dígrafo condensado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `digraph`.",
+          "pt": "Um `digraph`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "A digraph with one node per strongly connected component of `G`, and an edge between two components when `G` has an edge from one to the other.",
+          "pt": "Um dígrafo com um nó por componente fortemente conexo de `G`, e uma aresta entre dois componentes quando `G` tem uma aresta de um para o outro."
+        }
+      ],
+      "description": {
+        "en": "Two nodes are in the same strongly connected component when each can reach the other. Collapsing every such component into a single node removes all cycles, so the result is always a directed acyclic graph. That makes condensation useful before an ordering or scheduling step.\n\nComponent membership of each original node comes from `conncomp(G, 'Type', 'strong')`.",
+        "pt": "Dois nós estão no mesmo componente fortemente conexo quando cada um alcança o outro. Colapsar cada componente em um único nó elimina todos os ciclos, então o resultado é sempre um grafo acíclico dirigido. Isso torna a condensação útil antes de uma etapa de ordenação ou escalonamento.\n\nA pertinência de cada nó original a um componente vem de `conncomp(G, 'Type', 'strong')`."
+      },
+      "notes": {
+        "en": "MatLivre returns only the condensed digraph, not the component-label vector that MATLAB gives as a second output. Get the labels from `conncomp`.",
+        "pt": "O MatLivre retorna apenas o dígrafo condensado, sem o vetor de rótulos de componente que o MATLAB oferece como segunda saída. Obtenha os rótulos com `conncomp`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Collapsing a cycle",
+            "pt": "Colapsando um ciclo"
+          },
+          "code": "D = digraph([1 2 3 3 4], [2 3 1 4 5]);\nC = condensation(D);\nfprintf('%d nodes, %d edges, dag: %d\\n', numnodes(C), numedges(C), isdag(C))"
+        }
+      ],
+      "see": [
+        "conncomp",
+        "isdag",
+        "digraph",
+        "hascycles"
+      ]
+    },
+    "conncomp": {
+      "summary": {
+        "en": "Connected components of a graph or digraph.",
+        "pt": "Componentes conexos de um grafo ou dígrafo."
+      },
+      "syntax": [
+        {
+          "code": "bins = conncomp(G)",
+          "en": "Labels each node with its component number.",
+          "pt": "Rotula cada nó com o número do seu componente."
+        },
+        {
+          "code": "[bins, binsizes] = conncomp(G)",
+          "en": "Also returns the number of nodes in each component.",
+          "pt": "Também retorna o número de nós em cada componente."
+        },
+        {
+          "code": "bins = conncomp(G, 'Type', 'strong')",
+          "en": "For a digraph, uses strong connectivity instead of weak.",
+          "pt": "Para um dígrafo, usa conectividade forte em vez de fraca."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "'Type'",
+          "en": "`'weak'` (default) ignores edge directions; `'strong'` requires a directed path both ways.",
+          "pt": "`'weak'` (padrão) ignora as direções das arestas; `'strong'` exige caminho dirigido nos dois sentidos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bins",
+          "en": "Row vector with one component label per node.",
+          "pt": "Vetor linha com um rótulo de componente por nó."
+        },
+        {
+          "name": "binsizes",
+          "en": "Number of nodes in each component, indexed by label.",
+          "pt": "Número de nós em cada componente, indexado pelo rótulo."
+        }
+      ],
+      "description": {
+        "en": "In an undirected graph a component is a maximal set of nodes that can all reach each other. Isolated nodes form components of size one. To find the largest component, take `[~, k] = max(binsizes)` and select the nodes where `bins == k`.\n\nIn a digraph the weak version asks only whether the underlying undirected graph is connected, while the strong version asks for directed paths in both directions.",
+        "pt": "Em um grafo não direcionado, um componente é um conjunto maximal de nós que se alcançam mutuamente. Nós isolados formam componentes de tamanho um. Para achar o maior componente, use `[~, k] = max(binsizes)` e selecione os nós em que `bins == k`.\n\nEm um dígrafo, a versão fraca só pergunta se o grafo não direcionado subjacente é conexo, enquanto a forte exige caminhos dirigidos nos dois sentidos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three pieces",
+            "pt": "Três pedaços"
+          },
+          "code": "G = graph([1 2 4 5 7], [2 3 5 6 8]);\n[bins, sizes] = conncomp(G)\n[sbins, ssizes] = conncomp(digraph([1 2 3 4], [2 3 1 3]), 'Type', 'strong')"
+        }
+      ],
+      "see": [
+        "condensation",
+        "biconncomp",
+        "bfsearch",
+        "isdag"
+      ]
+    },
+    "cyclebasis": {
+      "summary": {
+        "en": "A set of independent cycles from which all cycles of a graph can be built.",
+        "pt": "Um conjunto de ciclos independentes a partir do qual se podem construir todos os ciclos de um grafo."
+      },
+      "syntax": [
+        {
+          "code": "cycles = cyclebasis(G)",
+          "en": "Returns a fundamental cycle basis as a cell array of node lists.",
+          "pt": "Retorna uma base fundamental de ciclos como um cell array de listas de nós."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "An undirected `graph`.",
+          "pt": "Um `graph` não direcionado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cycles",
+          "en": "Cell array with one cell per basis cycle. Each cell lists the nodes of the cycle in order.",
+          "pt": "Cell array com uma célula por ciclo da base. Cada célula lista os nós do ciclo, em ordem."
+        }
+      ],
+      "description": {
+        "en": "The number of independent cycles of a graph is `numedges(G) - numnodes(G) + c`, where `c` is the number of connected components. `cyclebasis` returns that many cycles, each one formed by a non-tree edge together with the tree path between its ends. Any other cycle is a combination of these, with shared edges cancelling.\n\nA graph with no cycles returns an empty cell array.",
+        "pt": "O número de ciclos independentes de um grafo é `numedges(G) - numnodes(G) + c`, em que `c` é o número de componentes conexos. `cyclebasis` devolve essa quantidade de ciclos, cada um formado por uma aresta fora da árvore e pelo caminho da árvore entre suas pontas. Qualquer outro ciclo é uma combinação destes, com as arestas compartilhadas se cancelando.\n\nUm grafo sem ciclos devolve um cell array vazio."
+      },
+      "notes": {
+        "en": "MatLivre returns only the node lists, not the edge lists that MATLAB gives as a second output.",
+        "pt": "O MatLivre retorna apenas as listas de nós, sem as listas de arestas que o MATLAB oferece como segunda saída."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two triangles sharing an edge",
+            "pt": "Dois triângulos com uma aresta em comum"
+          },
+          "code": "G = graph([1 1 2 2 3], [2 3 3 4 4]);\nc = cyclebasis(G);\nfprintf('%d independent cycles\\n', numel(c))"
+        }
+      ],
+      "see": [
+        "allcycles",
+        "hascycles",
+        "minspantree",
+        "biconncomp"
+      ]
+    },
+    "degree": {
+      "summary": {
+        "en": "Number of edges at each node of a graph.",
+        "pt": "Número de arestas em cada nó de um grafo."
+      },
+      "syntax": [
+        {
+          "code": "d = degree(G)",
+          "en": "Returns the degree of every node.",
+          "pt": "Retorna o grau de cada nó."
+        },
+        {
+          "code": "d = degree(G, nodeIDs)",
+          "en": "Returns the degree of the listed nodes only.",
+          "pt": "Retorna o grau apenas dos nós indicados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph`. For a `digraph` it counts in and out edges together.",
+          "pt": "Um `graph`. Para um `digraph` conta arestas de entrada e de saída juntas."
+        },
+        {
+          "name": "nodeIDs",
+          "en": "Node indices or names.",
+          "pt": "Índices ou nomes de nós."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Column vector of degrees.",
+          "pt": "Vetor coluna de graus."
+        }
+      ],
+      "description": {
+        "en": "The degree of a node is the number of edges that touch it. The degrees of all nodes of an undirected graph add up to twice the number of edges, because each edge is counted at both ends.\n\nFor a digraph, `indegree` and `outdegree` give the two parts separately.",
+        "pt": "O grau de um nó é o número de arestas que o tocam. Os graus de todos os nós de um grafo não direcionado somam o dobro do número de arestas, porque cada aresta é contada nas duas pontas.\n\nPara um dígrafo, `indegree` e `outdegree` dão as duas partes em separado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Degrees and the handshake rule",
+            "pt": "Graus e a regra do aperto de mão"
+          },
+          "code": "G = graph([1 1 2 3], [2 3 3 4]);\nd = degree(G)'\nsum(d) == 2*numedges(G)\ndegree(G, 3)"
+        }
+      ],
+      "see": [
+        "indegree",
+        "outdegree",
+        "neighbors",
+        "centrality",
+        "adjacency"
+      ]
+    },
+    "dfsearch": {
+      "summary": {
+        "en": "Depth-first search: nodes in the order a depth-first traversal discovers them.",
+        "pt": "Busca em profundidade: nós na ordem em que um percurso em profundidade os descobre."
+      },
+      "syntax": [
+        {
+          "code": "v = dfsearch(G, s)",
+          "en": "Returns the nodes reachable from `s` in depth-first order.",
+          "pt": "Retorna os nós alcançáveis a partir de `s` em ordem de profundidade."
+        },
+        {
+          "code": "E = dfsearch(G, s, 'edgetonew')",
+          "en": "Returns the edges that lead to newly discovered nodes.",
+          "pt": "Retorna as arestas que levam a nós recém-descobertos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "s",
+          "en": "Start node, as index or name.",
+          "pt": "Nó inicial, como índice ou nome."
+        },
+        {
+          "name": "events",
+          "en": "Event name that selects what is reported, such as `'edgetonew'`.",
+          "pt": "Nome de evento que escolhe o que é informado, como `'edgetonew'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "Column vector of node indices, starting with `s`.",
+          "pt": "Vetor coluna de índices de nós, começando por `s`."
+        },
+        {
+          "name": "E",
+          "en": "Two-column matrix for the `'edgetonew'` form.",
+          "pt": "Matriz de duas colunas na forma `'edgetonew'`."
+        }
+      ],
+      "description": {
+        "en": "The search follows one path as far as it goes, then backs up to the most recent node that still has an unvisited neighbor and continues from there. Neighbors are tried in index order. Only nodes reachable from `s` are returned.\n\nDepth-first search underlies topological sorting, cycle detection and the computation of strongly connected components.",
+        "pt": "A busca segue um caminho até onde ele vai e depois volta ao nó mais recente que ainda tem um vizinho não visitado, continuando dali. Os vizinhos são tentados em ordem de índice. Apenas nós alcançáveis a partir de `s` são retornados.\n\nA busca em profundidade está na base da ordenação topológica, da detecção de ciclos e do cálculo de componentes fortemente conexos."
+      },
+      "notes": {
+        "en": "MatLivre returns plain node lists for event names such as `'allevents'` instead of the event table that MATLAB builds. Use the default and `'edgetonew'` forms for portable code.",
+        "pt": "O MatLivre retorna listas simples de nós para nomes de evento como `'allevents'`, em vez da tabela de eventos que o MATLAB monta. Use a forma padrão e `'edgetonew'` para código portável."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Depth-first order",
+            "pt": "Ordem em profundidade"
+          },
+          "code": "D = digraph([1 1 2 3 4], [2 3 4 4 5]);\ndfsearch(D, 1)'\ndfsearch(D, 1, 'edgetonew')"
+        }
+      ],
+      "see": [
+        "bfsearch",
+        "conncomp",
+        "isdag",
+        "hascycles"
+      ]
+    },
+    "digraph": {
+      "summary": {
+        "en": "Creates a directed graph from edges or an adjacency matrix.",
+        "pt": "Cria um grafo dirigido a partir de arestas ou de uma matriz de adjacência."
+      },
+      "syntax": [
+        {
+          "code": "D = digraph(s, t)",
+          "en": "Edge `k` goes from node `s(k)` to node `t(k)`.",
+          "pt": "A aresta `k` vai do nó `s(k)` ao nó `t(k)`."
+        },
+        {
+          "code": "D = digraph(s, t, w)",
+          "en": "Also gives the edges weights `w`.",
+          "pt": "Também dá às arestas os pesos `w`."
+        },
+        {
+          "code": "D = digraph(s, t, w, names)",
+          "en": "Names the nodes.",
+          "pt": "Dá nomes aos nós."
+        },
+        {
+          "code": "D = digraph(A)",
+          "en": "Builds the digraph from a square adjacency matrix; nonzero entries are edges and their values are weights.",
+          "pt": "Constrói o dígrafo a partir de uma matriz de adjacência quadrada; entradas diferentes de zero são arestas e seus valores são pesos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s, t",
+          "en": "Source and target nodes: positive integers, or node names given as cell arrays of text.",
+          "pt": "Nós de origem e destino: inteiros positivos, ou nomes de nós dados como cell arrays de texto."
+        },
+        {
+          "name": "w",
+          "en": "Numeric weights, one per edge.",
+          "pt": "Pesos numéricos, um por aresta."
+        },
+        {
+          "name": "A",
+          "en": "Square matrix. `A(i,j) ~= 0` makes an edge from `i` to `j`.",
+          "pt": "Matriz quadrada. `A(i,j) ~= 0` cria uma aresta de `i` para `j`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "A `digraph` object with the properties `Edges` and `Nodes`, both tables.",
+          "pt": "Um objeto `digraph` com as propriedades `Edges` e `Nodes`, ambas tabelas."
+        }
+      ],
+      "description": {
+        "en": "Unlike `graph`, each edge has a direction, and `s -> t` and `t -> s` are different edges that can coexist. `D.Edges` is a table whose first column `EndNodes` holds the pairs and which gains a `Weight` column when weights are given. `D.Nodes` holds node properties such as `Name`.\n\nDirected graphs model one-way relations: dependencies, flows, links. Functions such as `successors`, `predecessors`, `indegree`, `isdag` and `conncomp(..., 'Type', 'strong')` only make sense with directions.",
+        "pt": "Diferente de `graph`, cada aresta tem um sentido, e `s -> t` e `t -> s` são arestas diferentes que podem coexistir. `D.Edges` é uma tabela cuja primeira coluna `EndNodes` guarda os pares e que ganha uma coluna `Weight` quando há pesos. `D.Nodes` guarda propriedades dos nós, como `Name`.\n\nGrafos dirigidos modelam relações de mão única: dependências, fluxos, links. Funções como `successors`, `predecessors`, `indegree`, `isdag` e `conncomp(..., 'Type', 'strong')` só fazem sentido com direções."
+      },
+      "notes": {
+        "en": "Building a graph from an edge table, as in `digraph(EdgeTable)`, is not supported in MatLivre; use the `s, t, w` or matrix forms.",
+        "pt": "Construir o grafo a partir de uma tabela de arestas, como em `digraph(EdgeTable)`, não é suportado no MatLivre; use as formas `s, t, w` ou com matriz."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "From edge lists and from a matrix",
+            "pt": "De listas de arestas e de uma matriz"
+          },
+          "code": "D = digraph([1 2], [2 3], [5 6]);\ndisp(D.Edges)\nE = digraph([0 1 0; 0 0 1; 1 0 0]);\ndisp(E.Edges)"
+        }
+      ],
+      "see": [
+        "graph",
+        "successors",
+        "predecessors",
+        "isdag",
+        "shortestpath"
+      ]
+    },
+    "distances": {
+      "summary": {
+        "en": "Shortest-path distances between nodes.",
+        "pt": "Distâncias de caminho mínimo entre nós."
+      },
+      "syntax": [
+        {
+          "code": "D = distances(G)",
+          "en": "Returns the distance between every pair of nodes.",
+          "pt": "Retorna a distância entre todos os pares de nós."
+        },
+        {
+          "code": "D = distances(G, s)",
+          "en": "Distances from the nodes `s` to all nodes.",
+          "pt": "Distâncias dos nós `s` a todos os nós."
+        },
+        {
+          "code": "D = distances(G, s, t)",
+          "en": "Distances from the nodes `s` to the nodes `t`.",
+          "pt": "Distâncias dos nós `s` aos nós `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`. Edge weights, if present, are the edge lengths; otherwise each edge has length 1.",
+          "pt": "Um `graph` ou `digraph`. Os pesos das arestas, se existirem, são os comprimentos; caso contrário cada aresta tem comprimento 1."
+        },
+        {
+          "name": "s, t",
+          "en": "Source and target nodes, as indices or names.",
+          "pt": "Nós de origem e destino, como índices ou nomes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Matrix with `D(i,j)` the length of the shortest path from the i-th source to the j-th target. `Inf` marks an unreachable pair.",
+          "pt": "Matriz em que `D(i,j)` é o comprimento do caminho mínimo da i-ésima origem ao j-ésimo destino. `Inf` marca um par inalcançável."
+        }
+      ],
+      "description": {
+        "en": "For an undirected graph the full matrix is symmetric with zeros on the diagonal. For a digraph, `D(i,j)` and `D(j,i)` can differ, and one of them can be `Inf`.\n\nUse `distances` when you need many distances at once; `shortestpath` returns a single path together with its length.",
+        "pt": "Para um grafo não direcionado a matriz completa é simétrica com zeros na diagonal. Para um dígrafo, `D(i,j)` e `D(j,i)` podem diferir, e um deles pode ser `Inf`.\n\nUse `distances` quando precisar de muitas distâncias de uma vez; `shortestpath` devolve um único caminho junto com seu comprimento."
+      },
+      "notes": {
+        "en": "The `'Method'` option is not supported in MatLivre; the algorithm is chosen automatically.",
+        "pt": "A opção `'Method'` não é suportada no MatLivre; o algoritmo é escolhido automaticamente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "All pairs in a small digraph",
+            "pt": "Todos os pares em um dígrafo pequeno"
+          },
+          "code": "D = digraph([1 1 2 3 4], [2 3 4 4 5], [1 4 2 1 3]);\ndistances(D)"
+        }
+      ],
+      "see": [
+        "shortestpath",
+        "shortestpathtree",
+        "nearest",
+        "centrality"
+      ]
+    },
+    "edgecount": {
+      "summary": {
+        "en": "Number of edges between two nodes of a multigraph.",
+        "pt": "Número de arestas entre dois nós de um multigrafo."
+      },
+      "syntax": [
+        {
+          "code": "n = edgecount(G, s, t)",
+          "en": "Counts the edges between node `s` and node `t`.",
+          "pt": "Conta as arestas entre o nó `s` e o nó `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`, possibly with parallel edges.",
+          "pt": "Um `graph` ou `digraph`, possivelmente com arestas paralelas."
+        },
+        {
+          "name": "s, t",
+          "en": "A pair of nodes, as indices or names.",
+          "pt": "Um par de nós, como índices ou nomes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Number of edges joining the pair. `0` if they are not adjacent.",
+          "pt": "Número de arestas que ligam o par. `0` se não forem adjacentes."
+        }
+      ],
+      "description": {
+        "en": "In a simple graph the answer is 0 or 1. Repeated pairs in the edge list create parallel edges, so the count can be larger, and `ismultigraph` reports `true`. In an undirected graph the order of `s` and `t` does not matter; in a digraph only edges from `s` to `t` are counted.",
+        "pt": "Em um grafo simples a resposta é 0 ou 1. Pares repetidos na lista de arestas criam arestas paralelas, então a contagem pode ser maior, e `ismultigraph` informa `true`. Em um grafo não direcionado a ordem de `s` e `t` não importa; em um dígrafo só contam as arestas de `s` para `t`."
+      },
+      "notes": {
+        "en": "MatLivre handles one pair of nodes per call. MATLAB also accepts vectors of node pairs.",
+        "pt": "O MatLivre trata um par de nós por chamada. O MATLAB também aceita vetores de pares de nós."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Parallel edges",
+            "pt": "Arestas paralelas"
+          },
+          "code": "G = graph([1 1 2], [2 2 3]);\nedgecount(G, 1, 2)\nedgecount(G, 2, 3)\nedgecount(G, 1, 3)\nismultigraph(G)"
+        }
+      ],
+      "see": [
+        "ismultigraph",
+        "numedges",
+        "simplify",
+        "findedge"
+      ]
+    },
+    "findedge": {
+      "summary": {
+        "en": "Index of the edge between two nodes.",
+        "pt": "Índice da aresta entre dois nós."
+      },
+      "syntax": [
+        {
+          "code": "idx = findedge(G, s, t)",
+          "en": "Returns the position of the edge `s`-`t` in `G.Edges`.",
+          "pt": "Retorna a posição da aresta `s`-`t` em `G.Edges`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        },
+        {
+          "name": "s, t",
+          "en": "End nodes of the edge, as indices or names.",
+          "pt": "Nós das pontas da aresta, como índices ou nomes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "Edge index, or `0` when no such edge exists.",
+          "pt": "Índice da aresta, ou `0` quando essa aresta não existe."
+        }
+      ],
+      "description": {
+        "en": "The index is the row of `G.Edges` that holds the edge, which lets you read or change its weight with `G.Edges.Weight(idx)`. In an undirected graph `findedge(G, s, t)` and `findedge(G, t, s)` are equal. In a digraph the direction matters.",
+        "pt": "O índice é a linha de `G.Edges` que guarda a aresta, o que permite ler ou alterar seu peso com `G.Edges.Weight(idx)`. Em um grafo não direcionado, `findedge(G, s, t)` e `findedge(G, t, s)` são iguais. Em um dígrafo a direção importa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Locate and read a weight",
+            "pt": "Localizar e ler um peso"
+          },
+          "code": "G = graph([1 2 3], [2 3 4], [10 20 30]);\nk = findedge(G, 3, 2)\nG.Edges.Weight(k)\nfindedge(G, 1, 4)"
+        }
+      ],
+      "see": [
+        "findnode",
+        "rmedge",
+        "addedge",
+        "edgecount"
+      ]
+    },
+    "findnode": {
+      "summary": {
+        "en": "Index of a node given its name.",
+        "pt": "Índice de um nó a partir do seu nome."
+      },
+      "syntax": [
+        {
+          "code": "idx = findnode(G, name)",
+          "en": "Returns the index of the node called `name`.",
+          "pt": "Retorna o índice do nó chamado `name`."
+        },
+        {
+          "code": "idx = findnode(G, names)",
+          "en": "For a cell array of names, returns one index per name.",
+          "pt": "Para um cell array de nomes, retorna um índice por nome."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A graph with node names.",
+          "pt": "Um grafo com nomes de nós."
+        },
+        {
+          "name": "name",
+          "en": "Character vector, or cell array of them.",
+          "pt": "Vetor de caracteres, ou cell array deles."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "Node index, or `0` for a name that is not in the graph.",
+          "pt": "Índice do nó, ou `0` para um nome que não está no grafo."
+        }
+      ],
+      "description": {
+        "en": "Node names are stored in `G.Nodes.Name`. `findnode` is the lookup from name to position, useful because most graph functions return numeric indices.",
+        "pt": "Os nomes dos nós ficam em `G.Nodes.Name`. `findnode` faz a busca de nome para posição, útil porque a maioria das funções de grafo devolve índices numéricos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Names to indices",
+            "pt": "De nomes para índices"
+          },
+          "code": "G = graph({'a','b','c'}, {'b','c','a'});\nfindnode(G, 'b')\nfindnode(G, {'c','a'})\nfindnode(G, 'zz')"
+        }
+      ],
+      "see": [
+        "findedge",
+        "neighbors",
+        "addnode",
+        "graph"
+      ]
+    },
+    "flipedge": {
+      "summary": {
+        "en": "Reverses the direction of edges in a digraph.",
+        "pt": "Inverte o sentido das arestas de um dígrafo."
+      },
+      "syntax": [
+        {
+          "code": "H = flipedge(G)",
+          "en": "Reverses every edge.",
+          "pt": "Inverte todas as arestas."
+        },
+        {
+          "code": "H = flipedge(G, idx)",
+          "en": "Reverses only the edges listed in `idx`.",
+          "pt": "Inverte apenas as arestas listadas em `idx`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `digraph`.",
+          "pt": "Um `digraph`."
+        },
+        {
+          "name": "idx",
+          "en": "Edge indices (positions in `G.Edges`).",
+          "pt": "Índices de arestas (posições em `G.Edges`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "H",
+          "en": "A `digraph` with the same nodes and weights, and the chosen edges pointing the other way.",
+          "pt": "Um `digraph` com os mesmos nós e pesos, e as arestas escolhidas apontando no sentido oposto."
+        }
+      ],
+      "description": {
+        "en": "An edge `s -> t` becomes `t -> s`. Reversing every edge gives the transpose graph, whose adjacency matrix is the transpose of the original; reachability questions of the kind \"who can reach me\" in `G` become \"whom can I reach\" in `H`.\n\nFor an undirected graph there is nothing to flip, so the function is meant for digraphs.",
+        "pt": "Uma aresta `s -> t` vira `t -> s`. Inverter todas as arestas dá o grafo transposto, cuja matriz de adjacência é a transposta da original; perguntas de alcançabilidade do tipo \"quem me alcança\" em `G` viram \"quem eu alcanço\" em `H`.\n\nPara um grafo não direcionado não há o que inverter, então a função se destina a dígrafos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Flip all or one edge",
+            "pt": "Inverter todas ou uma aresta"
+          },
+          "code": "D = digraph([1 2], [2 3]);\nF = flipedge(D);\ndisp(F.Edges.EndNodes)\nE = flipedge(D, 1);\ndisp(E.Edges.EndNodes)"
+        }
+      ],
+      "see": [
+        "digraph",
+        "predecessors",
+        "successors",
+        "adjacency"
+      ]
+    },
+    "graph": {
+      "summary": {
+        "en": "Creates an undirected graph from edges or an adjacency matrix.",
+        "pt": "Cria um grafo não direcionado a partir de arestas ou de uma matriz de adjacência."
+      },
+      "syntax": [
+        {
+          "code": "G = graph(s, t)",
+          "en": "Edge `k` joins nodes `s(k)` and `t(k)`.",
+          "pt": "A aresta `k` liga os nós `s(k)` e `t(k)`."
+        },
+        {
+          "code": "G = graph(s, t, w)",
+          "en": "Also gives the edges weights `w`.",
+          "pt": "Também dá às arestas os pesos `w`."
+        },
+        {
+          "code": "G = graph(s, t, w, names)",
+          "en": "Names the nodes.",
+          "pt": "Dá nomes aos nós."
+        },
+        {
+          "code": "G = graph(A)",
+          "en": "Builds the graph from a symmetric adjacency matrix; nonzero entries are edges and their values are weights.",
+          "pt": "Constrói o grafo a partir de uma matriz de adjacência simétrica; entradas diferentes de zero são arestas e seus valores são pesos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s, t",
+          "en": "End nodes of the edges: positive integers, or names given as cell arrays of text. Names create the nodes automatically.",
+          "pt": "Nós das pontas das arestas: inteiros positivos, ou nomes dados como cell arrays de texto. Os nomes criam os nós automaticamente."
+        },
+        {
+          "name": "w",
+          "en": "Numeric weights, one per edge.",
+          "pt": "Pesos numéricos, um por aresta."
+        },
+        {
+          "name": "A",
+          "en": "Square symmetric matrix. `A(i,j) ~= 0` makes an edge between `i` and `j`.",
+          "pt": "Matriz quadrada simétrica. `A(i,j) ~= 0` cria uma aresta entre `i` e `j`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "G",
+          "en": "A `graph` object. `G.Edges` is a table with the column `EndNodes` (and `Weight` if weights were given); `G.Nodes` is a table of node properties such as `Name`.",
+          "pt": "Um objeto `graph`. `G.Edges` é uma tabela com a coluna `EndNodes` (e `Weight` se houver pesos); `G.Nodes` é uma tabela de propriedades dos nós, como `Name`."
+        }
+      ],
+      "description": {
+        "en": "A graph is a set of nodes joined by edges, and in a `graph` the edges have no direction. The number of nodes is the largest index used. Edge lists may repeat a pair, which creates parallel edges; see `ismultigraph` and `simplify`.\n\nThe edges are kept sorted, so `G.Edges` may list them in a different order from the input. You can read or add columns, for example `G.Edges.Weight = [3; 4]`. Use `plot(G)` to draw the graph and `numnodes`, `numedges`, `neighbors` and `degree` to inspect it.",
+        "pt": "Um grafo é um conjunto de nós ligados por arestas, e em um `graph` as arestas não têm direção. O número de nós é o maior índice usado. Listas de arestas podem repetir um par, o que cria arestas paralelas; veja `ismultigraph` e `simplify`.\n\nAs arestas são mantidas em ordem, então `G.Edges` pode listá-las em ordem diferente da entrada. Você pode ler ou acrescentar colunas, por exemplo `G.Edges.Weight = [3; 4]`. Use `plot(G)` para desenhar o grafo e `numnodes`, `numedges`, `neighbors` e `degree` para inspecioná-lo."
+      },
+      "notes": {
+        "en": "Building from an edge table (`graph(EdgeTable)`) and the `'lower'`/`'upper'` triangle options are not supported in MatLivre. Pass the full symmetric matrix or the `s, t, w` lists.",
+        "pt": "Construir a partir de uma tabela de arestas (`graph(EdgeTable)`) e as opções de triângulo `'lower'`/`'upper'` não são suportadas no MatLivre. Passe a matriz simétrica completa ou as listas `s, t, w`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Edge list, weights, matrix, names",
+            "pt": "Lista de arestas, pesos, matriz, nomes"
+          },
+          "code": "G = graph([1 1 2], [2 3 3], [4 6 5]);\ndisp(G.Edges)\nH = graph([0 1 1; 1 0 0; 1 0 0]);\ndisp(H.Edges.EndNodes)\nN = graph({'a','b','c'}, {'b','c','a'});\ndisp(N.Nodes.Name')"
+        }
+      ],
+      "see": [
+        "digraph",
+        "addedge",
+        "adjacency",
+        "plot",
+        "neighbors",
+        "numnodes"
+      ]
+    },
+    "hascycles": {
+      "summary": {
+        "en": "Tests whether a graph or digraph contains a cycle.",
+        "pt": "Testa se um grafo ou dígrafo contém um ciclo."
+      },
+      "syntax": [
+        {
+          "code": "tf = hascycles(G)",
+          "en": "Returns `true` if `G` has at least one cycle.",
+          "pt": "Retorna `true` se `G` tem pelo menos um ciclo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "G",
+          "en": "A `graph` or `digraph`.",
+          "pt": "Um `graph` ou `digraph`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "In an undirected graph a cycle exists exactly when some connected component has at least as many edges as nodes, that is, when the graph is not a forest. In a digraph the edges must be followed in their direction, so a digraph without cycles is a DAG and `isdag` is the opposite test.",
+        "pt": "Em um grafo não direcionado existe ciclo exatamente quando algum componente conexo tem pelo menos tantas arestas quanto nós, isto é, quando o grafo não é uma floresta. Em um dígrafo as arestas devem ser seguidas no seu sentido, então um dígrafo sem ciclos é um DAG e `isdag` é o teste oposto."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Path versus triangle",
+            "pt": "Caminho contra triângulo"
+          },
+          "code": "hascycles(graph([1 2], [2 3]))\nhascycles(graph([1 2 3], [2 3 1]))\nhascycles(digraph([1 2], [2 3]))"
+        }
+      ],
+      "see": [
+        "isdag",
+        "allcycles",
+        "cyclebasis",
+        "conncomp"
+      ]
+    },
+    "highlight": {
+      "summary": {
+        "en": "Colors chosen nodes or edges of a graph plot.",
+        "pt": "Colore nós ou arestas escolhidos em um gráfico de grafo."
+      },
+      "syntax": [
+        {
+          "code": "highlight(p, nodeIDs)",
+          "en": "Highlights the nodes in the plot `p`.",
+          "pt": "Destaca os nós no gráfico `p`."
+        },
+        {
+          "code": "highlight(p, s, t)",
+          "en": "Highlights the edges between each pair `s(k)`, `t(k)`.",
+          "pt": "Destaca as arestas entre cada par `s(k)`, `t(k)`."
+        },
+        {
+          "code": "highlight(___, Name, Value)",
+          "en": "Sets the look of the highlight: `'NodeColor'`, `'EdgeColor'`, `'LineWidth'`, `'MarkerSize'`.",
+          "pt": "Define o aspecto do destaque: `'NodeColor'`, `'EdgeColor'`, `'LineWidth'`, `'MarkerSize'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "GraphPlot object returned by `plot(G)` for a graph or digraph.",
+          "pt": "Objeto GraphPlot retornado por `plot(G)` para um grafo ou dígrafo."
+        },
+        {
+          "name": "nodeIDs",
+          "en": "Node indices or names.",
+          "pt": "Índices ou nomes de nós."
+        },
+        {
+          "name": "s, t",
+          "en": "End nodes of the edges to highlight.",
+          "pt": "Nós das pontas das arestas a destacar."
+        },
+        {
+          "name": "'NodeColor', 'EdgeColor'",
+          "en": "Color as a letter such as `'r'` or an RGB triplet. The default highlight color is red.",
+          "pt": "Cor como uma letra, como `'r'`, ou um trio RGB. A cor de destaque padrão é o vermelho."
+        }
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`highlight` changes how the plot looks without changing the graph. A typical use is to draw the output of a path or search on top of the whole network: pass the nodes of a `shortestpath` result, then the same list shifted by one as `s` and `t` to color the edges between consecutive nodes.\n\nThe figure appears below the code in the app.",
+        "pt": "`highlight` muda a aparência do gráfico sem alterar o grafo. Um uso típico é desenhar o resultado de um caminho ou de uma busca sobre a rede inteira: passe os nós do resultado de `shortestpath` e depois a mesma lista deslocada de uma posição como `s` e `t` para colorir as arestas entre nós consecutivos.\n\nA figura aparece abaixo do código no app."
+      },
+      "notes": {
+        "en": "Passing a graph object (`highlight(p, H)`) is not supported; give node indices or end-node pairs.",
+        "pt": "Passar um objeto de grafo (`highlight(p, H)`) não é suportado; informe índices de nós ou pares de nós das pontas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Highlight a shortest path",
+            "pt": "Destacar um caminho mínimo"
+          },
+          "code": "G = graph([1 1 2 3 4 4], [2 3 4 4 5 6]);\np = plot(G);\npath = shortestpath(G, 1, 6);\nhighlight(p, path, 'NodeColor', 'r', 'MarkerSize', 8)\nhighlight(p, path(1:end-1), path(2:end), 'EdgeColor', 'r', 'LineWidth', 3)",
+          "silent": true,
+          "note": {
+            "en": "In the app, the path from node 1 to node 6 is drawn in red.",
+            "pt": "No app, o caminho do nó 1 ao nó 6 é desenhado em vermelho."
+          }
+        }
+      ],
+      "see": [
+        "plot",
+        "labelnode",
+        "labeledge",
+        "layout",
+        "shortestpath"
+      ]
+    }
+  }
+}

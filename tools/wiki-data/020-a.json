@@ -1,0 +1,545 @@
+{
+  "functions": {
+    "pagesvd": {
+      "summary": {"en": "Singular value decomposition of every page of a 3-D array.", "pt": "Decomposição em valores singulares de cada página de um array 3-D."},
+      "syntax": [
+        {"code": "S = pagesvd(A)", "en": "Returns the singular values of each page `A(:,:,k)`, in descending order.", "pt": "Retorna os valores singulares de cada página `A(:,:,k)`, em ordem decrescente."},
+        {"code": "[U, S, V] = pagesvd(A)", "en": "Returns the factors of each page, so that every page satisfies `A(:,:,k) = U(:,:,k)*S(:,:,k)*V(:,:,k)'`.", "pt": "Retorna os fatores de cada página, de modo que cada página satisfaz `A(:,:,k) = U(:,:,k)*S(:,:,k)*V(:,:,k)'`."},
+        {"code": "[U, S, V] = pagesvd(A, 'econ')", "en": "Computes the economy-size factors of each page.", "pt": "Calcula os fatores de tamanho econômico de cada página."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric array whose pages (the first two dimensions) are the matrices to decompose.", "pt": "Array numérico cujas páginas (as duas primeiras dimensões) são as matrizes a decompor."},
+        {"name": "'econ'", "en": "Optional flag that drops the singular vectors that do not correspond to a singular value.", "pt": "Opção que descarta os vetores singulares que não correspondem a um valor singular."}
+      ],
+      "outputs": [
+        {"name": "S", "en": "With one output, an array of size `min(m,n)`-by-1-by-`p` holding the singular values of each page. With three outputs, the diagonal matrices of singular values, one per page.", "pt": "Com uma saída, um array de tamanho `min(m,n)`-por-1-por-`p` com os valores singulares de cada página. Com três saídas, as matrizes diagonais de valores singulares, uma por página."},
+        {"name": "U, V", "en": "Orthogonal (unitary) factors of each page.", "pt": "Fatores ortogonais (unitários) de cada página."}
+      ],
+      "description": {
+        "en": "`pagesvd` applies `svd` independently to each `m`-by-`n` page of an `m`-by-`n`-by-`p` array. It avoids writing a loop over the third dimension and returns the results stacked in the same page order.\n\nWith one output the result is a stack of column vectors, which is convenient for comparing the spectra of many matrices at once.",
+        "pt": "`pagesvd` aplica `svd` de forma independente a cada página `m`-por-`n` de um array `m`-por-`n`-por-`p`. Evita escrever um laço sobre a terceira dimensão e devolve os resultados empilhados na mesma ordem das páginas.\n\nCom uma saída o resultado é uma pilha de vetores coluna, útil para comparar os espectros de várias matrizes de uma vez."
+      },
+      "examples": [
+        {"title": {"en": "Singular values of two pages", "pt": "Valores singulares de duas páginas"}, "code": "A = cat(3, [1 2; 3 4], [2 0; 0 1]);\nS = pagesvd(A);\ndisp(S(:,:,1)')\ndisp(S(:,:,2)')"}
+      ],
+      "see": ["svd", "pagemtimes", "pagetranspose", "pageinv"]
+    },
+    "pinv": {
+      "summary": {"en": "Moore-Penrose pseudoinverse of a matrix.", "pt": "Pseudoinversa de Moore-Penrose de uma matriz."},
+      "syntax": [
+        {"code": "B = pinv(A)", "en": "Returns the pseudoinverse of `A` using a default tolerance.", "pt": "Retorna a pseudoinversa de `A` usando uma tolerância padrão."},
+        {"code": "B = pinv(A, tol)", "en": "Treats singular values not larger than `tol` as zero.", "pt": "Trata como zero os valores singulares que não excedem `tol`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix of any shape, not necessarily square or full rank.", "pt": "Matriz numérica de qualquer formato, não necessariamente quadrada nem de posto completo."},
+        {"name": "tol", "en": "Nonnegative scalar. Defaults to `max(size(A)) * eps(norm(A))`.", "pt": "Escalar não negativo. O padrão é `max(size(A)) * eps(norm(A))`."}
+      ],
+      "outputs": [
+        {"name": "B", "en": "Matrix of size `size(A')`. It satisfies `A*B*A = A` and `B*A*B = B`.", "pt": "Matriz de tamanho `size(A')`. Satisfaz `A*B*A = A` e `B*A*B = B`."}
+      ],
+      "description": {
+        "en": "The pseudoinverse is built from the singular value decomposition `A = U*S*V'`: invert the singular values above the tolerance, leave the rest at zero, and form `V*S^+*U'`. For an invertible matrix it equals `inv(A)`.\n\nFor an overdetermined system, `x = pinv(A)*b` is the least-squares solution, and when the solution is not unique it is the one of smallest norm.",
+        "pt": "A pseudoinversa é construída a partir da decomposição em valores singulares `A = U*S*V'`: invertem-se os valores singulares acima da tolerância, os demais ficam em zero, e forma-se `V*S^+*U'`. Para uma matriz inversível, coincide com `inv(A)`.\n\nEm um sistema sobredeterminado, `x = pinv(A)*b` é a solução de mínimos quadrados e, quando a solução não é única, é a de menor norma."
+      },
+      "examples": [
+        {"title": {"en": "A singular matrix", "pt": "Uma matriz singular"}, "code": "A = [1 2; 2 4];\nB = pinv(A)\nA*B*A"}
+      ],
+      "see": ["inv", "svd", "rank", "mldivide", "lsqminnorm"]
+    },
+    "planerot": {
+      "summary": {"en": "Givens plane rotation that zeroes the second component of a 2-element vector.", "pt": "Rotação plana de Givens que zera a segunda componente de um vetor de 2 elementos."},
+      "syntax": [
+        {"code": "[G, Y] = planerot(X)", "en": "Returns the 2-by-2 rotation `G` such that `G*X` has a zero second entry, and that product as `Y`.", "pt": "Retorna a rotação 2 por 2 `G` tal que `G*X` tem a segunda entrada nula, e esse produto como `Y`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Column vector with two elements.", "pt": "Vetor coluna com dois elementos."}
+      ],
+      "outputs": [
+        {"name": "G", "en": "Orthogonal 2-by-2 matrix `[c s; -s c]` (a Givens rotation).", "pt": "Matriz ortogonal 2 por 2 `[c s; -s c]` (uma rotação de Givens)."},
+        {"name": "Y", "en": "The rotated vector `G*X`, whose first entry is `norm(X)` and whose second is zero.", "pt": "O vetor rotacionado `G*X`, cuja primeira entrada é `norm(X)` e a segunda é zero."}
+      ],
+      "description": {
+        "en": "A Givens rotation turns a vector in the plane onto the first axis without changing its length. It is the elementary step used to introduce zeros when triangularizing a matrix, as in QR factorization of Hessenberg or banded matrices.\n\nApplying `G` to two rows of a larger matrix zeroes one entry while touching only those rows.",
+        "pt": "Uma rotação de Givens leva um vetor do plano para o primeiro eixo sem alterar seu comprimento. É o passo elementar usado para introduzir zeros ao triangularizar uma matriz, como na fatoração QR de matrizes de Hessenberg ou em banda.\n\nAplicar `G` a duas linhas de uma matriz maior zera uma entrada mexendo apenas nessas linhas."
+      },
+      "notes": {"en": "The result `Y` can show a tiny rounding value such as `-0.0000` in the second entry instead of an exact zero.", "pt": "O resultado `Y` pode mostrar na segunda entrada um valor minúsculo de arredondamento, como `-0.0000`, em vez de um zero exato."},
+      "examples": [
+        {"title": {"en": "Rotating [3; 4]", "pt": "Rotacionando [3; 4]"}, "code": "G = planerot([3; 4])\nnorm(G*[3; 4])"}
+      ],
+      "see": ["qr", "givens", "hess", "qrupdate"]
+    },
+    "qr": {
+      "summary": {"en": "QR factorization: an orthogonal factor Q and an upper-triangular factor R.", "pt": "Fatoração QR: um fator ortogonal Q e um fator triangular superior R."},
+      "syntax": [
+        {"code": "R = qr(A)", "en": "Returns only the triangular factor.", "pt": "Retorna apenas o fator triangular."},
+        {"code": "[Q, R] = qr(A)", "en": "Returns `Q` and `R` with `A = Q*R`; for an `m`-by-`n` matrix `Q` is `m`-by-`m`.", "pt": "Retorna `Q` e `R` com `A = Q*R`; para uma matriz `m`-por-`n`, `Q` é `m`-por-`m`."},
+        {"code": "[Q, R] = qr(A, 0)", "en": "Economy size: for `m > n`, `Q` is `m`-by-`n` and `R` is `n`-by-`n`.", "pt": "Tamanho econômico: para `m > n`, `Q` é `m`-por-`n` e `R` é `n`-por-`n`."},
+        {"code": "[Q, R, P] = qr(A)", "en": "Adds column pivoting, so that `A*P = Q*R` and the diagonal of `R` is non-increasing in magnitude.", "pt": "Acrescenta pivotamento de colunas, de modo que `A*P = Q*R` e a diagonal de `R` não cresce em módulo."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix of any shape.", "pt": "Matriz numérica de qualquer formato."},
+        {"name": "0 or 'econ'", "en": "Requests the economy-size factorization.", "pt": "Pede a fatoração de tamanho econômico."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Orthogonal (unitary, if `A` is complex) matrix.", "pt": "Matriz ortogonal (unitária, se `A` é complexa)."},
+        {"name": "R", "en": "Upper-triangular (trapezoidal) matrix.", "pt": "Matriz triangular superior (trapezoidal)."},
+        {"name": "P", "en": "Permutation matrix of the column pivoting.", "pt": "Matriz de permutação do pivotamento de colunas."}
+      ],
+      "description": {
+        "en": "The factorization is computed with Householder reflections, which is numerically stable. The signs of the columns of `Q` and the rows of `R` are a convention, so they may differ from other software even though the product is the same.\n\nQR is the standard route to least-squares problems: for an overdetermined system, solve the triangular system `R*x = Q'*b`. Column pivoting additionally reveals the numerical rank.",
+        "pt": "A fatoração é calculada com reflexões de Householder, o que é numericamente estável. Os sinais das colunas de `Q` e das linhas de `R` são uma convenção, então podem diferir de outros programas embora o produto seja o mesmo.\n\nA QR é o caminho padrão para problemas de mínimos quadrados: em um sistema sobredeterminado, resolve-se o sistema triangular `R*x = Q'*b`. O pivotamento de colunas ainda revela o posto numérico."
+      },
+      "examples": [
+        {"title": {"en": "Factor and rebuild", "pt": "Fatorar e reconstruir"}, "code": "A = [1 2; 3 4];\n[Q, R] = qr(A)\nnorm(Q*R - A) < 1e-12"}
+      ],
+      "see": ["lu", "chol", "svd", "qrupdate", "mldivide"]
+    },
+    "qrdelete": {
+      "summary": {"en": "Updates a QR factorization after a column or row is removed from the matrix.", "pt": "Atualiza uma fatoração QR depois que uma coluna ou linha é removida da matriz."},
+      "syntax": [
+        {"code": "[Q1, R1] = qrdelete(Q, R, j)", "en": "Returns the factorization of `A` with column `j` deleted, where `A = Q*R`.", "pt": "Retorna a fatoração de `A` sem a coluna `j`, onde `A = Q*R`."},
+        {"code": "[Q1, R1] = qrdelete(Q, R, j, 'row')", "en": "Returns the factorization of `A` with row `j` deleted.", "pt": "Retorna a fatoração de `A` sem a linha `j`."}
+      ],
+      "inputs": [
+        {"name": "Q, R", "en": "Factors of a QR factorization `A = Q*R`.", "pt": "Fatores de uma fatoração QR `A = Q*R`."},
+        {"name": "j", "en": "Index of the column (default) or row to delete.", "pt": "Índice da coluna (padrão) ou da linha a remover."}
+      ],
+      "outputs": [
+        {"name": "Q1, R1", "en": "Factors of the reduced matrix.", "pt": "Fatores da matriz reduzida."}
+      ],
+      "description": {
+        "en": "Recomputing a factorization from scratch costs on the order of `n^3` operations. Deleting one column only disturbs the triangular shape of `R` near that column, so Givens rotations restore it at a much lower cost.\n\nThis matters in algorithms that add and remove variables repeatedly, such as active-set methods and stepwise regression.",
+        "pt": "Recalcular uma fatoração do zero custa da ordem de `n^3` operações. Remover uma coluna só perturba a forma triangular de `R` perto dessa coluna, e rotações de Givens a restauram a um custo bem menor.\n\nIsso importa em algoritmos que incluem e removem variáveis repetidamente, como métodos de conjunto ativo e regressão passo a passo."
+      },
+      "examples": [
+        {"title": {"en": "Delete the second column", "pt": "Remover a segunda coluna"}, "code": "A = magic(3);\n[Q, R] = qr(A);\n[Q1, R1] = qrdelete(Q, R, 2);\nnorm(Q1*R1 - A(:, [1 3])) < 1e-10"}
+      ],
+      "see": ["qr", "qrinsert", "qrupdate", "givens"]
+    },
+    "qrinsert": {
+      "summary": {"en": "Updates a QR factorization after a column or row is inserted into the matrix.", "pt": "Atualiza uma fatoração QR depois que uma coluna ou linha é inserida na matriz."},
+      "syntax": [
+        {"code": "[Q1, R1] = qrinsert(Q, R, j, x)", "en": "Returns the factorization of `A` with the column `x` inserted before column `j`.", "pt": "Retorna a fatoração de `A` com a coluna `x` inserida antes da coluna `j`."},
+        {"code": "[Q1, R1] = qrinsert(Q, R, j, x, 'row')", "en": "Inserts the row `x` before row `j`.", "pt": "Insere a linha `x` antes da linha `j`."}
+      ],
+      "inputs": [
+        {"name": "Q, R", "en": "Factors of a QR factorization `A = Q*R`.", "pt": "Fatores de uma fatoração QR `A = Q*R`."},
+        {"name": "j", "en": "Position at which the new column or row goes.", "pt": "Posição em que a nova coluna ou linha entra."},
+        {"name": "x", "en": "The column (or row) vector to insert, with the matching length.", "pt": "O vetor coluna (ou linha) a inserir, com o comprimento adequado."}
+      ],
+      "outputs": [
+        {"name": "Q1, R1", "en": "Factors of the enlarged matrix.", "pt": "Fatores da matriz ampliada."}
+      ],
+      "description": {
+        "en": "The new column is transformed by `Q'` and spliced into `R`; Givens rotations then remove the unwanted entries below the diagonal. The cost is much lower than refactoring the whole matrix.\n\nIt is the inverse operation of `qrdelete`: deleting the column just inserted gives back the original factors, up to signs.",
+        "pt": "A nova coluna é transformada por `Q'` e encaixada em `R`; rotações de Givens eliminam então as entradas indesejadas abaixo da diagonal. O custo é bem menor que o de refatorar a matriz inteira.\n\nÉ a operação inversa de `qrdelete`: remover a coluna recém-inserida devolve os fatores originais, a menos de sinais."
+      },
+      "examples": [
+        {"title": {"en": "Insert a column", "pt": "Inserir uma coluna"}, "code": "A = magic(3);\n[Q, R] = qr(A);\nx = [1; 2; 3];\n[Q1, R1] = qrinsert(Q, R, 2, x);\nA1 = [A(:,1) x A(:,2:3)];\nnorm(Q1*R1 - A1) < 1e-10"}
+      ],
+      "see": ["qr", "qrdelete", "qrupdate"]
+    },
+    "qrupdate": {
+      "summary": {"en": "Updates a QR factorization after a rank-1 change of the matrix.", "pt": "Atualiza uma fatoração QR após uma modificação de posto 1 da matriz."},
+      "syntax": [
+        {"code": "[Q1, R1] = qrupdate(Q, R, u, v)", "en": "Returns the factorization of `A + u*v'`, where `A = Q*R`.", "pt": "Retorna a fatoração de `A + u*v'`, onde `A = Q*R`."}
+      ],
+      "inputs": [
+        {"name": "Q, R", "en": "Factors of a QR factorization `A = Q*R`.", "pt": "Fatores de uma fatoração QR `A = Q*R`."},
+        {"name": "u, v", "en": "Column vectors; `u` has as many rows as `A` and `v` as many entries as `A` has columns.", "pt": "Vetores coluna; `u` tem tantas linhas quanto `A` e `v` tantas entradas quanto `A` tem colunas."}
+      ],
+      "outputs": [
+        {"name": "Q1, R1", "en": "Factors of the modified matrix `A + u*v'`.", "pt": "Fatores da matriz modificada `A + u*v'`."}
+      ],
+      "description": {
+        "en": "A rank-1 change `u*v'` can be absorbed into an existing factorization with a sequence of Givens rotations, in order `n^2` operations instead of `n^3` for a fresh factorization.\n\nThe result is a valid QR factorization of the new matrix, but its signs may differ from `qr(A + u*v')`.",
+        "pt": "Uma modificação de posto 1 `u*v'` pode ser absorvida na fatoração existente por uma sequência de rotações de Givens, em ordem de `n^2` operações em vez de `n^3` para uma nova fatoração.\n\nO resultado é uma fatoração QR válida da nova matriz, mas seus sinais podem diferir de `qr(A + u*v')`."
+      },
+      "examples": [
+        {"title": {"en": "Rank-1 update", "pt": "Atualização de posto 1"}, "code": "A = magic(3);\n[Q, R] = qr(A);\nu = [1; 0; 0];\nv = [0; 1; 0];\n[Q1, R1] = qrupdate(Q, R, u, v);\nnorm(Q1*R1 - (A + u*v')) < 1e-10"}
+      ],
+      "see": ["qr", "qrinsert", "qrdelete", "cholupdate"]
+    },
+    "qz": {
+      "summary": {"en": "QZ (generalized Schur) factorization of a pair of square matrices.", "pt": "Fatoração QZ (Schur generalizada) de um par de matrizes quadradas."},
+      "syntax": [
+        {"code": "[AA, BB, Q, Z] = qz(A, B)", "en": "Returns upper quasi-triangular `AA` and upper triangular `BB` with `Q*A*Z = AA` and `Q*B*Z = BB`.", "pt": "Retorna `AA` quase triangular superior e `BB` triangular superior com `Q*A*Z = AA` e `Q*B*Z = BB`."},
+        {"code": "[AA, BB, Q, Z] = qz(A, B, 'complex')", "en": "Forces the complex form, in which `AA` is fully upper triangular.", "pt": "Força a forma complexa, em que `AA` é totalmente triangular superior."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Square matrices of the same size.", "pt": "Matrizes quadradas de mesmo tamanho."}
+      ],
+      "outputs": [
+        {"name": "AA, BB", "en": "The reduced matrices. The generalized eigenvalues are the ratios `diag(AA)./diag(BB)`.", "pt": "As matrizes reduzidas. Os autovalores generalizados são as razões `diag(AA)./diag(BB)`."},
+        {"name": "Q, Z", "en": "Unitary transformation matrices.", "pt": "Matrizes de transformação unitárias."}
+      ],
+      "description": {
+        "en": "The QZ algorithm is the generalized counterpart of the Schur decomposition, and it is the basis for computing generalized eigenvalues `A*x = lambda*B*x`. It works even when `B` is singular, in which case some eigenvalues are infinite.\n\nIn the real form, complex-conjugate eigenvalue pairs appear as 2-by-2 blocks on the diagonal of `AA`.",
+        "pt": "O algoritmo QZ é a versão generalizada da decomposição de Schur e é a base do cálculo dos autovalores generalizados `A*x = lambda*B*x`. Funciona mesmo quando `B` é singular, caso em que alguns autovalores são infinitos.\n\nNa forma real, pares de autovalores complexos conjugados aparecem como blocos 2 por 2 na diagonal de `AA`."
+      },
+      "examples": [
+        {"title": {"en": "Generalized eigenvalues", "pt": "Autovalores generalizados"}, "code": "A = [1 2; 3 4];\nB = [5 6; 7 8];\n[AA, BB, Q, Z] = qz(A, B);\nnorm(Q*A*Z - AA) < 1e-10\nsort(eig(A, B))'"}
+      ],
+      "see": ["eig", "schur", "ordqz", "balance"]
+    },
+    "rank": {
+      "summary": {"en": "Rank of a matrix: the number of singular values above a tolerance.", "pt": "Posto de uma matriz: o número de valores singulares acima de uma tolerância."},
+      "syntax": [
+        {"code": "r = rank(A)", "en": "Returns the rank using the default tolerance.", "pt": "Retorna o posto usando a tolerância padrão."},
+        {"code": "r = rank(A, tol)", "en": "Counts singular values larger than `tol`.", "pt": "Conta os valores singulares maiores que `tol`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix.", "pt": "Matriz numérica."},
+        {"name": "tol", "en": "Nonnegative scalar threshold. Defaults to `max(size(A)) * eps(max(svd(A)))`.", "pt": "Limiar escalar não negativo. O padrão é `max(size(A)) * eps(max(svd(A)))`."}
+      ],
+      "outputs": [
+        {"name": "r", "en": "Nonnegative integer, at most `min(size(A))`.", "pt": "Inteiro não negativo, no máximo `min(size(A))`."}
+      ],
+      "description": {
+        "en": "The rank is the number of linearly independent columns (equivalently rows). Numerically it is estimated from the singular values, since rounding makes an exactly zero value rare: values below the tolerance are treated as zero.\n\nA full-rank square matrix is invertible. `magic(4)`, for example, has rank 3, which is why `inv(magic(4))` warns that the matrix is close to singular.",
+        "pt": "O posto é o número de colunas (ou linhas) linearmente independentes. Numericamente ele é estimado pelos valores singulares, já que o arredondamento torna raro um valor exatamente nulo: valores abaixo da tolerância são tratados como zero.\n\nUma matriz quadrada de posto completo é inversível. `magic(4)`, por exemplo, tem posto 3, e por isso `inv(magic(4))` avisa que a matriz está próxima de singular."
+      },
+      "examples": [
+        {"title": {"en": "Dependent rows", "pt": "Linhas dependentes"}, "code": "rank([1 2; 2 4])\nrank(magic(4))\nrank(eye(3))"}
+      ],
+      "see": ["svd", "null", "orth", "det", "rref"]
+    },
+    "rcond": {
+      "summary": {"en": "Reciprocal condition number estimate of a square matrix in the 1-norm.", "pt": "Estimativa do inverso do número de condição de uma matriz quadrada na norma 1."},
+      "syntax": [
+        {"code": "c = rcond(A)", "en": "Returns an estimate of `1/cond(A,1)`.", "pt": "Retorna uma estimativa de `1/cond(A,1)`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square numeric matrix.", "pt": "Matriz numérica quadrada."}
+      ],
+      "outputs": [
+        {"name": "c", "en": "A value between 0 and 1: near 1 for a well-conditioned matrix, near 0 for a nearly singular one, and `0` for a singular one.", "pt": "Um valor entre 0 e 1: próximo de 1 para uma matriz bem condicionada, próximo de 0 para uma quase singular e `0` para uma singular."}
+      ],
+      "description": {
+        "en": "A small reciprocal condition number warns that solving a linear system with `A` may lose many digits of accuracy; roughly `-log10(c)` digits are lost. `rcond` is the quantity behind the \"close to singular\" warnings of `inv` and `mldivide`.\n\nIt is an estimate, cheaper than `cond`, which needs a full SVD or an explicit inverse. Unlike the determinant, it does not change when the matrix is scaled by a constant.",
+        "pt": "Um inverso do número de condição pequeno avisa que resolver um sistema linear com `A` pode perder muitos dígitos de precisão; cerca de `-log10(c)` dígitos são perdidos. `rcond` é a grandeza por trás dos avisos de \"próxima de singular\" de `inv` e `mldivide`.\n\nÉ uma estimativa, mais barata que `cond`, que exige uma SVD completa ou uma inversa explícita. Ao contrário do determinante, não muda quando a matriz é multiplicada por uma constante."
+      },
+      "examples": [
+        {"title": {"en": "Well and badly conditioned", "pt": "Bem e mal condicionada"}, "code": "rcond(eye(3))\nrcond([1 2; 3 4])\nrcond([1 2; 2 4])"}
+      ],
+      "see": ["cond", "inv", "det", "norm", "condest"]
+    },
+    "rref": {
+      "summary": {"en": "Reduced row echelon form of a matrix, by Gauss-Jordan elimination.", "pt": "Forma escalonada reduzida por linhas de uma matriz, por eliminação de Gauss-Jordan."},
+      "syntax": [
+        {"code": "R = rref(A)", "en": "Returns the reduced row echelon form.", "pt": "Retorna a forma escalonada reduzida por linhas."},
+        {"code": "[R, p] = rref(A)", "en": "Also returns the pivot column indices.", "pt": "Retorna também os índices das colunas de pivô."},
+        {"code": "[R, p] = rref(A, tol)", "en": "Uses `tol` to decide when an entry is treated as zero.", "pt": "Usa `tol` para decidir quando uma entrada é tratada como zero."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix.", "pt": "Matriz numérica."},
+        {"name": "tol", "en": "Pivot tolerance. The default is `eps * max(size(A)) * norm(A, inf)`.", "pt": "Tolerância de pivô. O padrão é `eps * max(size(A)) * norm(A, inf)`."}
+      ],
+      "outputs": [
+        {"name": "R", "en": "Matrix of the same size as `A` with leading ones in the pivot columns and zeros elsewhere in those columns.", "pt": "Matriz do mesmo tamanho de `A`, com uns de liderança nas colunas de pivô e zeros no resto dessas colunas."},
+        {"name": "p", "en": "Row vector of the pivot columns; `numel(p)` is the rank.", "pt": "Vetor linha das colunas de pivô; `numel(p)` é o posto."}
+      ],
+      "description": {
+        "en": "Elimination with partial pivoting brings the matrix to a form in which each pivot is 1 and is the only nonzero entry of its column. Applied to an augmented matrix `[A b]` it solves a linear system and shows whether it has no solution, one, or infinitely many.\n\nBecause it relies on a tolerance to detect zeros, `rref` is a teaching tool rather than a robust numerical method for large or ill-conditioned matrices.",
+        "pt": "A eliminação com pivotamento parcial leva a matriz a uma forma em que cada pivô vale 1 e é a única entrada não nula de sua coluna. Aplicada à matriz aumentada `[A b]`, resolve um sistema linear e mostra se ele não tem solução, tem uma ou infinitas.\n\nPor depender de uma tolerância para detectar zeros, `rref` é uma ferramenta didática, não um método numérico robusto para matrizes grandes ou mal condicionadas."
+      },
+      "examples": [
+        {"title": {"en": "Solving a system", "pt": "Resolvendo um sistema"}, "code": "Ab = [1 1 3; 1 -1 1];\n[R, p] = rref(Ab)"}
+      ],
+      "see": ["rank", "lu", "null", "mldivide"]
+    },
+    "rsf2csf": {
+      "summary": {"en": "Converts a real Schur form into the complex, fully triangular Schur form.", "pt": "Converte a forma de Schur real na forma de Schur complexa, totalmente triangular."},
+      "syntax": [
+        {"code": "[U, T] = rsf2csf(U, T)", "en": "Takes the real Schur factors and returns complex factors with `T` upper triangular.", "pt": "Recebe os fatores da Schur real e devolve fatores complexos com `T` triangular superior."}
+      ],
+      "inputs": [
+        {"name": "U, T", "en": "Real orthogonal `U` and real quasi-triangular `T`, as returned by `schur(A)`.", "pt": "`U` ortogonal real e `T` quase triangular real, como retornados por `schur(A)`."}
+      ],
+      "outputs": [
+        {"name": "U, T", "en": "Unitary `U` and upper-triangular `T` with the same product `U*T*U'`.", "pt": "`U` unitária e `T` triangular superior com o mesmo produto `U*T*U'`."}
+      ],
+      "description": {
+        "en": "The real Schur form of a real matrix may contain 2-by-2 blocks on the diagonal, one for each pair of complex-conjugate eigenvalues. `rsf2csf` splits those blocks with complex rotations so that `T` becomes strictly upper triangular and its diagonal lists the eigenvalues directly.\n\nThe pair still satisfies `A = U*T*U'`, now with complex `U`.",
+        "pt": "A forma de Schur real de uma matriz real pode ter blocos 2 por 2 na diagonal, um para cada par de autovalores complexos conjugados. `rsf2csf` desfaz esses blocos com rotações complexas, de modo que `T` fica triangular superior e sua diagonal lista os autovalores diretamente.\n\nO par continua satisfazendo `A = U*T*U'`, agora com `U` complexa."
+      },
+      "examples": [
+        {"title": {"en": "A rotation matrix", "pt": "Uma matriz de rotação"}, "code": "A = [0 1; -1 0];\n[U, T] = schur(A);\n[U2, T2] = rsf2csf(U, T);\ndiag(T2).'\nnorm(U2*T2*U2' - A) < 1e-12"}
+      ],
+      "see": ["schur", "eig", "ordschur"]
+    },
+    "schur": {
+      "summary": {"en": "Schur decomposition of a square matrix.", "pt": "Decomposição de Schur de uma matriz quadrada."},
+      "syntax": [
+        {"code": "T = schur(A)", "en": "Returns the Schur form `T`.", "pt": "Retorna a forma de Schur `T`."},
+        {"code": "[U, T] = schur(A)", "en": "Also returns the unitary matrix `U`, so that `A = U*T*U'`.", "pt": "Retorna também a matriz unitária `U`, de modo que `A = U*T*U'`."},
+        {"code": "[U, T] = schur(A, 'complex')", "en": "Converts a real matrix to the complex form, with `T` upper triangular.", "pt": "Converte uma matriz real para a forma complexa, com `T` triangular superior."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square numeric matrix.", "pt": "Matriz numérica quadrada."},
+        {"name": "'real' or 'complex'", "en": "For a real `A`, `'real'` (default) gives a quasi-triangular `T`; `'complex'` gives a triangular one.", "pt": "Para `A` real, `'real'` (padrão) dá `T` quase triangular; `'complex'` dá uma triangular."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "Upper-triangular matrix (quasi-triangular in the real case), with the eigenvalues of `A` on the diagonal or in 2-by-2 diagonal blocks.", "pt": "Matriz triangular superior (quase triangular no caso real), com os autovalores de `A` na diagonal ou em blocos diagonais 2 por 2."},
+        {"name": "U", "en": "Orthogonal (unitary) matrix of Schur vectors.", "pt": "Matriz ortogonal (unitária) de vetores de Schur."}
+      ],
+      "description": {
+        "en": "Every square matrix is unitarily similar to a triangular matrix. Unlike the eigenvector matrix, the Schur factor `U` is always orthogonal, so the decomposition is numerically stable even for defective matrices that have no full set of eigenvectors.\n\nFor a real matrix with complex eigenvalues, the real Schur form keeps real arithmetic by using 2-by-2 blocks; a real symmetric matrix gives a diagonal `T`.",
+        "pt": "Toda matriz quadrada é unitariamente semelhante a uma matriz triangular. Ao contrário da matriz de autovetores, o fator de Schur `U` é sempre ortogonal, então a decomposição é numericamente estável mesmo para matrizes defectivas, que não têm um conjunto completo de autovetores.\n\nPara uma matriz real com autovalores complexos, a forma de Schur real mantém a aritmética real usando blocos 2 por 2; uma matriz real simétrica dá `T` diagonal."
+      },
+      "examples": [
+        {"title": {"en": "Schur factors of a 2-by-2 matrix", "pt": "Fatores de Schur de uma matriz 2 por 2"}, "code": "A = [1 2; 3 4];\n[U, T] = schur(A);\nnorm(U*T*U' - A) < 1e-12\nsort(diag(T))'"}
+      ],
+      "see": ["rsf2csf", "eig", "ordschur", "qz", "hess"]
+    },
+    "sqrtm": {
+      "summary": {"en": "Matrix square root: a matrix X with X*X equal to A.", "pt": "Raiz quadrada de matriz: uma matriz X tal que X*X é igual a A."},
+      "syntax": [
+        {"code": "X = sqrtm(A)", "en": "Returns the principal square root of the square matrix `A`.", "pt": "Retorna a raiz quadrada principal da matriz quadrada `A`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square numeric matrix.", "pt": "Matriz numérica quadrada."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Matrix with `X*X = A`, whose eigenvalues have nonnegative real part. It may be complex even for a real `A`.", "pt": "Matriz com `X*X = A`, cujos autovalores têm parte real não negativa. Pode ser complexa mesmo para `A` real."}
+      ],
+      "description": {
+        "en": "This is a matrix function, not an element-wise one: `sqrtm(A)` differs from `sqrt(A)`, which takes the square root of each entry. It is computed from the Schur form of `A` by a recurrence on the triangular factor.\n\nA matrix with a negative real eigenvalue has no real square root, so the result is complex. If `A` is singular, the root may not exist or may be inaccurate, and a warning is issued.",
+        "pt": "É uma função de matriz, não elemento a elemento: `sqrtm(A)` difere de `sqrt(A)`, que tira a raiz de cada entrada. É calculada a partir da forma de Schur de `A`, por uma recorrência sobre o fator triangular.\n\nUma matriz com autovalor real negativo não tem raiz quadrada real, então o resultado é complexo. Se `A` é singular, a raiz pode não existir ou ser imprecisa, e um aviso é emitido."
+      },
+      "examples": [
+        {"title": {"en": "Matrix versus element-wise root", "pt": "Raiz matricial e raiz elemento a elemento"}, "code": "A = [4 0; 0 9];\nX = sqrtm(A)\nX*X\nB = [2 1; 1 2];\nsqrtm(B)^2"}
+      ],
+      "see": ["sqrt", "expm", "logm", "funm", "schur"]
+    },
+    "subspace": {
+      "summary": {"en": "Angle between two subspaces, given by the columns of two matrices.", "pt": "Ângulo entre dois subespaços, dados pelas colunas de duas matrizes."},
+      "syntax": [
+        {"code": "theta = subspace(A, B)", "en": "Returns the largest principal angle between `range(A)` and `range(B)`, in radians.", "pt": "Retorna o maior ângulo principal entre `range(A)` e `range(B)`, em radianos."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Matrices with the same number of rows. Their columns span the two subspaces.", "pt": "Matrizes com o mesmo número de linhas. Suas colunas geram os dois subespaços."}
+      ],
+      "outputs": [
+        {"name": "theta", "en": "Scalar angle between `0` and `pi/2`.", "pt": "Ângulo escalar entre `0` e `pi/2`."}
+      ],
+      "description": {
+        "en": "For two vectors the result is the ordinary angle between them, ignoring orientation, so it never exceeds `pi/2`. For larger subspaces it is the largest of the principal angles, which measures how far the subspaces are from containing one another.\n\nThe angle is `0` when one subspace is contained in the other and has the smaller dimension, and `pi/2` when the subspaces are orthogonal.",
+        "pt": "Para dois vetores o resultado é o ângulo comum entre eles, ignorando a orientação, então nunca passa de `pi/2`. Para subespaços maiores é o maior dos ângulos principais, que mede quão longe os subespaços estão de conter um ao outro.\n\nO ângulo é `0` quando um subespaço está contido no outro e tem a menor dimensão, e `pi/2` quando os subespaços são ortogonais."
+      },
+      "examples": [
+        {"title": {"en": "Angles between lines", "pt": "Ângulos entre retas"}, "code": "subspace([1; 0], [1; 1])\nsubspace([1; 0], [0; 1])\npi/4"}
+      ],
+      "see": ["orth", "null", "svd", "dot", "rank"]
+    },
+    "svd": {
+      "summary": {"en": "Singular value decomposition of a matrix.", "pt": "Decomposição em valores singulares de uma matriz."},
+      "syntax": [
+        {"code": "s = svd(A)", "en": "Returns the singular values as a column vector in descending order.", "pt": "Retorna os valores singulares como vetor coluna em ordem decrescente."},
+        {"code": "[U, S, V] = svd(A)", "en": "Returns orthogonal `U`, `V` and a diagonal `S` with `A = U*S*V'`.", "pt": "Retorna `U` e `V` ortogonais e `S` diagonal com `A = U*S*V'`."},
+        {"code": "[U, S, V] = svd(A, 'econ')", "en": "Economy size: drops the columns of `U` or `V` that multiply zero rows or columns of `S`.", "pt": "Tamanho econômico: descarta as colunas de `U` ou `V` que multiplicam linhas ou colunas nulas de `S`."},
+        {"code": "[U, S, V] = svd(A, 0)", "en": "Like `'econ'` for `m > n`; for `m <= n` it is equivalent to the full form.", "pt": "Como `'econ'` para `m > n`; para `m <= n` equivale à forma completa."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix of any shape. NaN or Inf entries cause an error.", "pt": "Matriz numérica de qualquer formato. Entradas NaN ou Inf causam erro."},
+        {"name": "'econ' or 0", "en": "Request the economy-size decomposition.", "pt": "Pedem a decomposição de tamanho econômico."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "Vector with `min(size(A))` nonnegative singular values.", "pt": "Vetor com `min(size(A))` valores singulares não negativos."},
+        {"name": "U, S, V", "en": "`U` is `m`-by-`m`, `S` is `m`-by-`n` with the singular values on its diagonal, `V` is `n`-by-`n`.", "pt": "`U` é `m`-por-`m`, `S` é `m`-por-`n` com os valores singulares na diagonal, `V` é `n`-por-`n`."}
+      ],
+      "description": {
+        "en": "Every matrix factors as a rotation, a scaling along orthogonal axes, and another rotation. The singular values are the scaling factors: the largest equals `norm(A)`, the ratio of largest to smallest is `cond(A)`, and the number above a tolerance is `rank(A)`.\n\nTruncating the decomposition to the `k` largest singular values gives the best rank-`k` approximation of `A`, which underlies data compression and principal component analysis.",
+        "pt": "Toda matriz se fatora como uma rotação, uma escala ao longo de eixos ortogonais e outra rotação. Os valores singulares são os fatores de escala: o maior é `norm(A)`, a razão entre o maior e o menor é `cond(A)`, e o número deles acima de uma tolerância é `rank(A)`.\n\nTruncar a decomposição nos `k` maiores valores singulares dá a melhor aproximação de posto `k` de `A`, base da compressão de dados e da análise de componentes principais."
+      },
+      "examples": [
+        {"title": {"en": "Values and economy factors", "pt": "Valores e fatores econômicos"}, "code": "A = [4 1; 2 3; 0 5];\ns = svd(A)\n[U, S, V] = svd(A, 'econ');\nsize(U)\nnorm(U*S*V' - A) < 1e-12"}
+      ],
+      "see": ["svds", "pinv", "rank", "norm", "cond", "pagesvd"]
+    },
+    "svdappend": {
+      "summary": {"en": "Updates an existing SVD after columns or rows are appended to the matrix.", "pt": "Atualiza uma SVD existente depois que colunas ou linhas são acrescentadas à matriz."},
+      "syntax": [
+        {"code": "S1 = svdappend(U, S, V, D)", "en": "Returns the singular values of `[U*S*V' D]`.", "pt": "Retorna os valores singulares de `[U*S*V' D]`."},
+        {"code": "[U1, S1, V1] = svdappend(U, S, V, D)", "en": "Returns the economy-size factors of the enlarged matrix.", "pt": "Retorna os fatores de tamanho econômico da matriz ampliada."},
+        {"code": "___ = svdappend(U, S, V, D, 'Shape', 'rows')", "en": "Appends the rows of `D` below the matrix instead of columns beside it.", "pt": "Acrescenta as linhas de `D` abaixo da matriz em vez de colunas ao lado."}
+      ],
+      "inputs": [
+        {"name": "U, S, V", "en": "Factors of an existing SVD; `S` may be a matrix or a vector of singular values.", "pt": "Fatores de uma SVD existente; `S` pode ser uma matriz ou um vetor de valores singulares."},
+        {"name": "D", "en": "New columns (or rows) to append. It needs as many rows as `U` (or as many columns as `V` has rows, with the rows option).", "pt": "Novas colunas (ou linhas) a acrescentar. Precisa ter tantas linhas quanto `U` (ou tantas colunas quanto `V` tem linhas, com a opção de linhas)."},
+        {"name": "'Shape'", "en": "`'columns'` (default) or `'rows'`.", "pt": "`'columns'` (padrão) ou `'rows'`."}
+      ],
+      "outputs": [
+        {"name": "S1", "en": "With one output, the vector of singular values of the enlarged matrix.", "pt": "Com uma saída, o vetor de valores singulares da matriz ampliada."},
+        {"name": "U1, V1", "en": "Singular vectors of the enlarged matrix.", "pt": "Vetores singulares da matriz ampliada."}
+      ],
+      "description": {
+        "en": "When data arrives in batches, it is wasteful to decompose the whole matrix again each time. `svdappend` starts from the factors you already have and returns the economy SVD of the matrix with the new data attached, as a convenient shortcut for the usual update pattern.\n\nThe result is the same, up to signs, as calling `svd` on `[U*S*V' D]` directly.",
+        "pt": "Quando os dados chegam em lotes, é desperdício decompor a matriz inteira de novo a cada vez. `svdappend` parte dos fatores que você já tem e devolve a SVD econômica da matriz com os novos dados anexados, um atalho prático para o padrão usual de atualização.\n\nO resultado é o mesmo, a menos de sinais, que chamar `svd` diretamente em `[U*S*V' D]`."
+      },
+      "notes": {"en": "In MatLivre, with several outputs `S1` comes back as a column vector of singular values, not a diagonal matrix.", "pt": "No MatLivre, com várias saídas `S1` volta como vetor coluna de valores singulares, não como matriz diagonal."},
+      "examples": [
+        {"title": {"en": "Append a column", "pt": "Acrescentar uma coluna"}, "code": "A = magic(3);\n[U, S, V] = svd(A, 'econ');\nd = [1; 2; 3];\ns1 = svdappend(U, S, V, d)'\ns2 = svd([A d])'"}
+      ],
+      "see": ["svd", "svds", "svdsketch", "qrupdate"]
+    },
+    "svds": {
+      "summary": {"en": "A few singular values and vectors of a matrix, typically a large sparse one.", "pt": "Alguns valores e vetores singulares de uma matriz, tipicamente grande e esparsa."},
+      "syntax": [
+        {"code": "s = svds(A)", "en": "Returns the 6 largest singular values.", "pt": "Retorna os 6 maiores valores singulares."},
+        {"code": "s = svds(A, k)", "en": "Returns the `k` largest singular values.", "pt": "Retorna os `k` maiores valores singulares."},
+        {"code": "s = svds(A, k, sigma)", "en": "Returns `k` values selected by `sigma`: `'largest'`, `'smallest'`, or the ones closest to a number.", "pt": "Retorna `k` valores escolhidos por `sigma`: `'largest'`, `'smallest'` ou os mais próximos de um número."},
+        {"code": "[U, S, V] = svds(___)", "en": "Also returns the corresponding singular vectors.", "pt": "Retorna também os vetores singulares correspondentes."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix, dense or sparse.", "pt": "Matriz numérica, densa ou esparsa."},
+        {"name": "k", "en": "Number of singular values wanted. Default 6.", "pt": "Número de valores singulares desejados. Padrão 6."},
+        {"name": "sigma", "en": "`'largest'` (default), `'smallest'`, or a scalar target.", "pt": "`'largest'` (padrão), `'smallest'` ou um alvo escalar."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "Column vector of the requested singular values.", "pt": "Vetor coluna dos valores singulares pedidos."},
+        {"name": "U, S, V", "en": "Singular vectors (`m`-by-`k`, `n`-by-`k`) and the diagonal `k`-by-`k` matrix of values.", "pt": "Vetores singulares (`m`-por-`k`, `n`-por-`k`) e a matriz diagonal `k`-por-`k` de valores."}
+      ],
+      "description": {
+        "en": "For big matrices a full `svd` is wasteful when only the dominant part of the spectrum matters. `svds` computes just the requested subset, which is what low-rank approximation and principal component methods need.\n\nIf `k` is at least `min(size(A))` there is no saving, and `svd` is the better call.",
+        "pt": "Para matrizes grandes, uma `svd` completa é um desperdício quando só importa a parte dominante do espectro. `svds` calcula apenas o subconjunto pedido, que é o que aproximações de baixo posto e métodos de componentes principais precisam.\n\nSe `k` é pelo menos `min(size(A))`, não há economia, e `svd` é a chamada melhor."
+      },
+      "examples": [
+        {"title": {"en": "Largest and smallest", "pt": "Maiores e menores"}, "code": "A = diag(1:10);\nsvds(A, 3)\nsvds(A, 2, 'smallest')"}
+      ],
+      "see": ["svd", "eigs", "svdsketch", "norm"]
+    },
+    "svdsketch": {
+      "summary": {"en": "Low-rank SVD approximation chosen automatically to meet a tolerance.", "pt": "Aproximação SVD de baixo posto escolhida automaticamente para atingir uma tolerância."},
+      "syntax": [
+        {"code": "[U, S, V] = svdsketch(A)", "en": "Returns a truncated SVD whose rank is picked to reach the default tolerance `sqrt(eps)`.", "pt": "Retorna uma SVD truncada cujo posto é escolhido para atingir a tolerância padrão `sqrt(eps)`."},
+        {"code": "[U, S, V] = svdsketch(A, tol)", "en": "Uses the relative tolerance `tol` for `norm(U*S*V' - A, 'fro')/norm(A, 'fro')`.", "pt": "Usa a tolerância relativa `tol` para `norm(U*S*V' - A, 'fro')/norm(A, 'fro')`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric matrix.", "pt": "Matriz numérica."},
+        {"name": "tol", "en": "Relative approximation tolerance, a scalar in `(0, 1)`.", "pt": "Tolerância relativa de aproximação, um escalar em `(0, 1)`."}
+      ],
+      "outputs": [
+        {"name": "U, S, V", "en": "Factors of the approximation `A ~ U*S*V'`, with the same number `k` of columns in `U` and `V`, and `S` a `k`-by-`k` diagonal matrix.", "pt": "Fatores da aproximação `A ~ U*S*V'`, com o mesmo número `k` de colunas em `U` e `V`, e `S` uma matriz diagonal `k`-por-`k`."}
+      ],
+      "description": {
+        "en": "You do not give the rank. The function grows the approximation until the relative error is below the tolerance, so a matrix with fast-decaying singular values yields a small `k`, and a loose tolerance yields an even smaller one.\n\nIt is intended for large matrices where an approximate answer is enough and a full `svd` is too costly.",
+        "pt": "Não se informa o posto. A função faz a aproximação crescer até que o erro relativo fique abaixo da tolerância, então uma matriz cujos valores singulares decaem rápido dá um `k` pequeno, e uma tolerância folgada dá um ainda menor.\n\nDestina-se a matrizes grandes em que uma resposta aproximada basta e uma `svd` completa é cara demais."
+      },
+      "examples": [
+        {"title": {"en": "Rank chosen by tolerance", "pt": "Posto escolhido pela tolerância"}, "code": "A = magic(4);\n[U, S, V] = svdsketch(A);\nsize(S)\nnorm(U*S*V' - A) < 1e-6"}
+      ],
+      "see": ["svd", "svds", "svdappend", "pca"]
+    },
+    "sylvester": {
+      "summary": {"en": "Solves the Sylvester equation A*X + X*B = C.", "pt": "Resolve a equação de Sylvester A*X + X*B = C."},
+      "syntax": [
+        {"code": "X = sylvester(A, B, C)", "en": "Returns the matrix `X` satisfying `A*X + X*B = C`.", "pt": "Retorna a matriz `X` que satisfaz `A*X + X*B = C`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square `m`-by-`m` matrix.", "pt": "Matriz quadrada `m`-por-`m`."},
+        {"name": "B", "en": "Square `n`-by-`n` matrix.", "pt": "Matriz quadrada `n`-por-`n`."},
+        {"name": "C", "en": "Matrix of size `m`-by-`n`.", "pt": "Matriz de tamanho `m`-por-`n`."}
+      ],
+      "outputs": [
+        {"name": "X", "en": "Solution, of size `m`-by-`n`.", "pt": "Solução, de tamanho `m`-por-`n`."}
+      ],
+      "description": {
+        "en": "The equation has a unique solution exactly when `A` and `-B` share no eigenvalue. It is solved through Schur decompositions of `A` and `B`, which is far cheaper than the equivalent `m*n`-by-`m*n` linear system built with Kronecker products.\n\nThe Lyapunov equation of control theory is the special case with `B = A'`.",
+        "pt": "A equação tem solução única exatamente quando `A` e `-B` não têm autovalor em comum. É resolvida por decomposições de Schur de `A` e `B`, bem mais barato que o sistema linear `m*n`-por-`m*n` equivalente montado com produtos de Kronecker.\n\nA equação de Lyapunov da teoria de controle é o caso especial com `B = A'`."
+      },
+      "examples": [
+        {"title": {"en": "Solve and verify", "pt": "Resolver e verificar"}, "code": "A = [1 0; 0 2];\nB = [3 0; 0 4];\nC = [1 1; 1 1];\nX = sylvester(A, B, C)\nA*X + X*B"}
+      ],
+      "see": ["lyap", "kron", "schur", "mldivide"]
+    },
+    "trace": {
+      "summary": {"en": "Sum of the diagonal elements of a square matrix.", "pt": "Soma dos elementos da diagonal de uma matriz quadrada."},
+      "syntax": [
+        {"code": "t = trace(A)", "en": "Returns `sum(diag(A))`.", "pt": "Retorna `sum(diag(A))`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Square numeric matrix.", "pt": "Matriz numérica quadrada."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Scalar equal to the sum of the diagonal, which is also the sum of the eigenvalues of `A`.", "pt": "Escalar igual à soma da diagonal, que é também a soma dos autovalores de `A`."}
+      ],
+      "description": {
+        "en": "The trace is invariant under similarity transformations and satisfies `trace(A*B) = trace(B*A)` whenever both products are defined. Together with the determinant it gives the eigenvalues of a 2-by-2 matrix.\n\nA non-square matrix is an error.",
+        "pt": "O traço é invariante por transformações de semelhança e satisfaz `trace(A*B) = trace(B*A)` sempre que ambos os produtos estão definidos. Junto com o determinante, dá os autovalores de uma matriz 2 por 2.\n\nUma matriz não quadrada gera erro."
+      },
+      "examples": [
+        {"title": {"en": "Trace equals the sum of eigenvalues", "pt": "Traço igual à soma dos autovalores"}, "code": "A = magic(3);\ntrace(A)\nsum(eig(A))"}
+      ],
+      "see": ["diag", "det", "eig", "sum"]
+    },
+    "tril": {
+      "summary": {"en": "Lower triangular part of a matrix.", "pt": "Parte triangular inferior de uma matriz."},
+      "syntax": [
+        {"code": "L = tril(A)", "en": "Keeps the main diagonal and everything below it; the rest becomes zero.", "pt": "Mantém a diagonal principal e tudo abaixo dela; o resto vira zero."},
+        {"code": "L = tril(A, k)", "en": "Keeps the elements on and below the `k`-th diagonal.", "pt": "Mantém os elementos na `k`-ésima diagonal e abaixo dela."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix (any class).", "pt": "Matriz (de qualquer classe)."},
+        {"name": "k", "en": "Integer diagonal offset: `0` is the main diagonal, positive values are above it, negative values below. Default `0`.", "pt": "Deslocamento inteiro da diagonal: `0` é a principal, valores positivos ficam acima, negativos abaixo. Padrão `0`."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "Matrix of the same size and class as `A`.", "pt": "Matriz do mesmo tamanho e classe de `A`."}
+      ],
+      "description": {
+        "en": "`tril(A)` zeroes the elements above the main diagonal. With `k = -1` the diagonal is removed as well, giving the strictly lower part, so `A = tril(A,-1) + diag(diag(A)) + triu(A,1)`.\n\nIt is handy for building triangular systems and for extracting the part of a symmetric matrix that is stored once.",
+        "pt": "`tril(A)` zera os elementos acima da diagonal principal. Com `k = -1` a diagonal também é removida, dando a parte estritamente inferior, de modo que `A = tril(A,-1) + diag(diag(A)) + triu(A,1)`.\n\nÉ útil para montar sistemas triangulares e para extrair a parte armazenada uma só vez de uma matriz simétrica."
+      },
+      "examples": [
+        {"title": {"en": "Lower part with offsets", "pt": "Parte inferior com deslocamentos"}, "code": "A = magic(3);\ntril(A)\ntril(A, -1)"}
+      ],
+      "see": ["triu", "diag", "istril", "lu"]
+    },
+    "triu": {
+      "summary": {"en": "Upper triangular part of a matrix.", "pt": "Parte triangular superior de uma matriz."},
+      "syntax": [
+        {"code": "U = triu(A)", "en": "Keeps the main diagonal and everything above it; the rest becomes zero.", "pt": "Mantém a diagonal principal e tudo acima dela; o resto vira zero."},
+        {"code": "U = triu(A, k)", "en": "Keeps the elements on and above the `k`-th diagonal.", "pt": "Mantém os elementos na `k`-ésima diagonal e acima dela."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Matrix (any class).", "pt": "Matriz (de qualquer classe)."},
+        {"name": "k", "en": "Integer diagonal offset: `0` is the main diagonal, positive values are above it, negative values below. Default `0`.", "pt": "Deslocamento inteiro da diagonal: `0` é a principal, valores positivos ficam acima, negativos abaixo. Padrão `0`."}
+      ],
+      "outputs": [
+        {"name": "U", "en": "Matrix of the same size and class as `A`.", "pt": "Matriz do mesmo tamanho e classe de `A`."}
+      ],
+      "description": {
+        "en": "`triu(A)` zeroes the elements below the main diagonal. With `k = 1` the diagonal is removed too, leaving the strictly upper part.\n\nThe matrix need not be square. For a wide or tall matrix the diagonal is still the set of positions `(i, i + k)`.",
+        "pt": "`triu(A)` zera os elementos abaixo da diagonal principal. Com `k = 1` a diagonal também é removida, restando a parte estritamente superior.\n\nA matriz não precisa ser quadrada. Para uma matriz larga ou alta, a diagonal continua sendo o conjunto das posições `(i, i + k)`."
+      },
+      "examples": [
+        {"title": {"en": "Upper part with offsets", "pt": "Parte superior com deslocamentos"}, "code": "A = magic(3);\ntriu(A)\ntriu(A, 1)"}
+      ],
+      "see": ["tril", "diag", "istriu", "lu"]
+    },
+    "vecnorm": {
+      "summary": {"en": "Vector norm of each column or row of a matrix.", "pt": "Norma vetorial de cada coluna ou linha de uma matriz."},
+      "syntax": [
+        {"code": "N = vecnorm(A)", "en": "Returns the 2-norm of each column of `A`.", "pt": "Retorna a norma 2 de cada coluna de `A`."},
+        {"code": "N = vecnorm(A, p)", "en": "Uses the `p`-norm.", "pt": "Usa a norma `p`."},
+        {"code": "N = vecnorm(A, p, dim)", "en": "Takes the norm along dimension `dim`; `dim = 2` works on rows.", "pt": "Calcula a norma ao longo da dimensão `dim`; `dim = 2` opera nas linhas."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric array.", "pt": "Array numérico."},
+        {"name": "p", "en": "Positive real scalar or `Inf`. Default `2`.", "pt": "Escalar real positivo ou `Inf`. Padrão `2`."},
+        {"name": "dim", "en": "Dimension along which to operate. Default: the first non-singleton dimension.", "pt": "Dimensão em que operar. Padrão: a primeira dimensão não singleton."}
+      ],
+      "outputs": [
+        {"name": "N", "en": "Array of norms; the operated dimension has size 1.", "pt": "Array de normas; a dimensão operada tem tamanho 1."}
+      ],
+      "description": {
+        "en": "Unlike `norm`, which treats a matrix as an operator, `vecnorm` treats every column (or row) as a separate vector and returns all the lengths at once. It replaces the common idiom `sqrt(sum(abs(A).^2))`.\n\nWith `p = Inf` it returns the largest absolute value, and with `p = 1` the sum of absolute values.",
+        "pt": "Ao contrário de `norm`, que trata a matriz como um operador, `vecnorm` trata cada coluna (ou linha) como um vetor separado e devolve todos os comprimentos de uma vez. Substitui o idioma comum `sqrt(sum(abs(A).^2))`.\n\nCom `p = Inf` retorna o maior valor absoluto, e com `p = 1` a soma dos valores absolutos."
+      },
+      "examples": [
+        {"title": {"en": "Columns and rows", "pt": "Colunas e linhas"}, "code": "A = [3 4; 6 8];\nvecnorm(A)\nvecnorm(A, 1, 2)\nvecnorm(A, Inf, 2)"}
+      ],
+      "see": ["norm", "normalize", "dot", "cross", "sum"]
+    }
+  }
+}

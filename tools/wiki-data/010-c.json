@@ -1,0 +1,1318 @@
+{
+ "functions": {
+  "lookBehindBoundary": {
+   "summary": {
+    "en": "Pattern that requires a given pattern to precede, without consuming it.",
+    "pt": "Padrão que exige que um dado padrão venha antes, sem consumi-lo."
+   },
+   "syntax": [
+    {
+     "code": "pat = lookBehindBoundary(p)",
+     "en": "Matches a position that is preceded by text matching `p`.",
+     "pt": "Casa uma posição precedida por texto que case com `p`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Pattern or text that must come immediately before.",
+     "pt": "Padrão ou texto que deve vir imediatamente antes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object of zero width: the text matched by `p` is checked but not included in the result.",
+     "pt": "Um objeto `pattern` de largura zero: o texto casado por `p` é verificado, mas não entra no resultado."
+    }
+   ],
+   "description": {
+    "en": "A look-behind makes a match depend on what is to its left. `lookBehindBoundary('dog') + 'cat'` matches `cat` only when it is directly preceded by `dog`, and the result contains only `cat`. The related `lookAheadBoundary` checks what follows instead.",
+    "pt": "Um look-behind faz um casamento depender do que está à sua esquerda. `lookBehindBoundary('dog') + 'cat'` casa `cat` apenas quando vem logo depois de `dog`, e o resultado contém só `cat`. O `lookAheadBoundary` relacionado verifica o que vem depois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Match only after a context",
+      "pt": "Casar somente depois de um contexto"
+     },
+     "code": "s = 'dogcat catfish';\nextract(s, lookBehindBoundary('dog') + 'cat')"
+    }
+   ],
+   "see": [
+    "lookAheadBoundary",
+    "pattern",
+    "extract",
+    "contains",
+    "regexp"
+   ]
+  },
+  "lookup": {
+   "summary": {
+    "en": "Reads the value for a key in a dictionary, with an optional fallback.",
+    "pt": "Lê o valor de uma chave em um dictionary, com um valor alternativo opcional."
+   },
+   "syntax": [
+    {
+     "code": "v = lookup(D, key)",
+     "en": "Returns the value stored under `key`. An error is raised if the key is absent.",
+     "pt": "Retorna o valor guardado sob `key`. Gera erro se a chave não existir."
+    },
+    {
+     "code": "v = lookup(D, key, FallbackValue=fv)",
+     "en": "Returns `fv` for keys that are not in the dictionary.",
+     "pt": "Retorna `fv` para chaves que não estão no dictionary."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "D",
+     "en": "A `dictionary` object.",
+     "pt": "Um objeto `dictionary`."
+    },
+    {
+     "name": "key",
+     "en": "A key, or an array of keys.",
+     "pt": "Uma chave, ou um array de chaves."
+    },
+    {
+     "name": "FallbackValue",
+     "en": "Value to return for missing keys, instead of an error.",
+     "pt": "Valor a retornar para chaves ausentes, em vez de erro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "The value, or an array of values with the shape of `key`.",
+     "pt": "O valor, ou um array de valores com a forma de `key`."
+    }
+   ],
+   "description": {
+    "en": "`lookup(D, key)` does the same as `D(key)`, but the function form accepts `FallbackValue`, which makes it convenient for counting or default settings: `lookup(D, k, FallbackValue=0)` never fails on a new key. Combine it with `isKey` when a different action is needed for missing keys.",
+    "pt": "`lookup(D, key)` faz o mesmo que `D(key)`, mas a forma de função aceita `FallbackValue`, o que ajuda em contagens ou configurações padrão: `lookup(D, k, FallbackValue=0)` nunca falha com uma chave nova. Combine com `isKey` quando for preciso outra ação para chaves ausentes."
+   },
+   "notes": {
+    "en": "This entry describes the `dictionary` method. For a `containers.Map`, read values with `M(key)` and `values(M, keys)`.",
+    "pt": "Este verbete descreve o método de `dictionary`. Para um `containers.Map`, leia valores com `M(key)` e `values(M, keys)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A lookup with fallback",
+      "pt": "Consulta com valor alternativo"
+     },
+     "code": "d = dictionary([\"a\" \"b\"], [10 20]);\nlookup(d, \"a\")\nlookup(d, \"z\", FallbackValue=-1)"
+    }
+   ],
+   "see": [
+    "dictionary",
+    "isKey",
+    "keys",
+    "values",
+    "containers.Map"
+   ]
+  },
+  "lower": {
+   "summary": {
+    "en": "Converts text to lowercase.",
+    "pt": "Converte texto para minúsculas."
+   },
+   "syntax": [
+    {
+     "code": "s2 = lower(s)",
+     "en": "Returns `s` with every uppercase letter changed to lowercase.",
+     "pt": "Retorna `s` com toda letra maiúscula trocada por minúscula."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Character array, string array, or cell array of character vectors.",
+     "pt": "Array de caracteres, array de strings ou cell array de vetores de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s2",
+     "en": "Text of the same class and size as `s`.",
+     "pt": "Texto da mesma classe e tamanho de `s`."
+    }
+   ],
+   "description": {
+    "en": "Only letters change; digits, punctuation and characters without a case stay as they are. Accented letters are converted too, so `lower('Ç')` gives `'ç'`. A cell array is processed element by element.\n\nIt is typically used to compare text without regard to case, as in `strcmp(lower(a), lower(b))`, though `strcmpi` does that directly.",
+    "pt": "Só as letras mudam; dígitos, pontuação e caracteres sem caixa permanecem iguais. Letras acentuadas também são convertidas, então `lower('Ç')` dá `'ç'`. Um cell array é processado elemento a elemento.\n\nCostuma servir para comparar texto sem diferenciar maiúsculas de minúsculas, como em `strcmp(lower(a), lower(b))`, embora `strcmpi` faça isso diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Text of different classes",
+      "pt": "Texto de diferentes classes"
+     },
+     "code": "lower('Hello World 1')\nlower(\"ABC\")\nlower({'AB', 'Cd'})"
+    }
+   ],
+   "see": [
+    "upper",
+    "strcmpi",
+    "regexprep",
+    "string"
+   ]
+  },
+  "lweekdate": {
+   "summary": {
+    "en": "Date of the last occurrence of a weekday in a month.",
+    "pt": "Data da última ocorrência de um dia da semana em um mês."
+   },
+   "syntax": [
+    {
+     "code": "d = lweekdate(weekday, year, month)",
+     "en": "Returns the serial date number of the last given weekday of `month` in `year`.",
+     "pt": "Retorna o número de data serial do último dia da semana informado de `month` em `year`."
+    },
+    {
+     "code": "d = lweekdate(weekday, year, month, nextDay)",
+     "en": "Returns the last `weekday` that is followed by a `nextDay` in the same month.",
+     "pt": "Retorna o último `weekday` que é seguido de um `nextDay` no mesmo mês."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "weekday",
+     "en": "Day of the week as a number: 1 is Sunday, 2 Monday, ..., 7 Saturday.",
+     "pt": "Dia da semana como número: 1 é domingo, 2 segunda, ..., 7 sábado."
+    },
+    {
+     "name": "year, month",
+     "en": "Four-digit year and month number from 1 to 12.",
+     "pt": "Ano com quatro dígitos e número do mês de 1 a 12."
+    },
+    {
+     "name": "nextDay",
+     "en": "Optional weekday number (1 to 7) restricting which month-end dates are valid.",
+     "pt": "Número opcional do dia da semana (1 a 7) que restringe as datas de fim de mês válidas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Serial date number (as returned by `datenum`). Use `datestr` or `datetime(d, 'ConvertFrom', 'datenum')` to display it.",
+     "pt": "Número de data serial (como o retornado por `datenum`). Use `datestr` ou `datetime(d, 'ConvertFrom', 'datenum')` para exibi-lo."
+    }
+   ],
+   "description": {
+    "en": "Rules such as \"the last Friday of May\" or \"the last Monday of the month\" are common in calendars and financial schedules. `lweekdate` finds them without looping over days. Its counterpart for the n-th occurrence is `nweekdate`.\n\nThe function belongs to the Financial Toolbox in MATLAB.",
+    "pt": "Regras como \"a última sexta-feira de maio\" ou \"a última segunda do mês\" são comuns em calendários e cronogramas financeiros. `lweekdate` as encontra sem percorrer os dias. Sua contrapartida para a n-ésima ocorrência é `nweekdate`.\n\nNo MATLAB, a função pertence ao Financial Toolbox."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Last Friday and last Monday of May 2024",
+      "pt": "Última sexta e última segunda de maio de 2024"
+     },
+     "code": "datestr(lweekdate(6, 2024, 5))\ndatestr(lweekdate(2, 2024, 5))"
+    }
+   ],
+   "see": [
+    "nweekdate",
+    "datenum",
+    "datestr",
+    "weekday",
+    "eomday"
+   ]
+  },
+  "m2xdate": {
+   "summary": {
+    "en": "Converts MATLAB date numbers to Excel date numbers.",
+    "pt": "Converte números de data do MATLAB em números de data do Excel."
+   },
+   "syntax": [
+    {
+     "code": "x = m2xdate(m)",
+     "en": "Converts the serial date numbers `m` to the Excel 1900 date system.",
+     "pt": "Converte os números de data serial `m` para o sistema de datas 1900 do Excel."
+    },
+    {
+     "code": "x = m2xdate(m, basis)",
+     "en": "Selects the Excel date system: `0` for 1900 (default) or `1` for 1904.",
+     "pt": "Escolhe o sistema de datas do Excel: `0` para 1900 (padrão) ou `1` para 1904."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Array of MATLAB serial date numbers, as given by `datenum`.",
+     "pt": "Array de números de data serial do MATLAB, como dados por `datenum`."
+    },
+    {
+     "name": "basis",
+     "en": "`0` or `1`.",
+     "pt": "`0` ou `1`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "Array of Excel serial dates, the same size as `m`.",
+     "pt": "Array de datas seriais do Excel, do mesmo tamanho de `m`."
+    }
+   ],
+   "description": {
+    "en": "MATLAB counts days from year 0 and Excel from 1900 (or 1904 in the Macintosh system), so the two numbering schemes differ by a fixed offset. `m2xdate` subtracts it and `x2mdate` adds it back. Fractions of a day, which hold the time of day, carry over unchanged.\n\nThe function belongs to the Financial Toolbox in MATLAB.",
+    "pt": "O MATLAB conta dias desde o ano 0 e o Excel desde 1900 (ou 1904 no sistema Macintosh), então as duas numerações diferem por um deslocamento fixo. `m2xdate` o subtrai e `x2mdate` o soma de volta. As frações de dia, que guardam a hora, passam sem alteração.\n\nNo MATLAB, a função pertence ao Financial Toolbox."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip with Excel dates",
+      "pt": "Ida e volta com datas do Excel"
+     },
+     "code": "m = datenum(2024, 1, 1);\nx = m2xdate(m)\nx2mdate(x) == m"
+    }
+   ],
+   "see": [
+    "x2mdate",
+    "datenum",
+    "exceltime",
+    "datetime"
+   ]
+  },
+  "maskedPattern": {
+   "summary": {
+    "en": "Pattern that matches like another pattern but displays as chosen text.",
+    "pt": "Padrão que casa como outro padrão, mas é exibido como um texto escolhido."
+   },
+   "syntax": [
+    {
+     "code": "pat = maskedPattern(p, mask)",
+     "en": "Matches the same text as `p`, and shows `mask` when the pattern is displayed.",
+     "pt": "Casa o mesmo texto que `p` e mostra `mask` quando o padrão é exibido."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "The pattern or text that does the matching.",
+     "pt": "O padrão ou texto que faz o casamento."
+    },
+    {
+     "name": "mask",
+     "en": "Text used to represent the pattern in its display.",
+     "pt": "Texto usado para representar o padrão na exibição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "Large patterns built from many pieces can be hard to read when displayed. Wrapping a piece in `maskedPattern` gives it a short label, such as `N` for a number, so that the whole pattern prints in a readable form. Matching is not affected by the mask.",
+    "pt": "Padrões grandes, montados com muitas peças, podem ficar difíceis de ler quando exibidos. Envolver uma peça em `maskedPattern` dá a ela um rótulo curto, como `N` para um número, de modo que o padrão inteiro seja impresso de forma legível. O casamento não é afetado pela máscara."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Labeling part of a pattern",
+      "pt": "Rotulando parte de um padrão"
+     },
+     "code": "p = 'a' + maskedPattern(digitsPattern, 'N')\nextract('a12 b3', p)"
+    }
+   ],
+   "see": [
+    "pattern",
+    "namedPattern",
+    "digitsPattern",
+    "extract"
+   ]
+  },
+  "mat2cell": {
+   "summary": {
+    "en": "Splits an array into a cell array of sub-blocks.",
+    "pt": "Divide um array em um cell array de subblocos."
+   },
+   "syntax": [
+    {
+     "code": "C = mat2cell(A, r)",
+     "en": "Splits `A` along the rows into blocks of `r(1)`, `r(2)`, ... rows, keeping all columns.",
+     "pt": "Divide `A` ao longo das linhas em blocos de `r(1)`, `r(2)`, ... linhas, mantendo todas as colunas."
+    },
+    {
+     "code": "C = mat2cell(A, r, c)",
+     "en": "Splits along rows and columns, giving a `numel(r)`-by-`numel(c)` cell array.",
+     "pt": "Divide ao longo de linhas e colunas, dando um cell array `numel(r)` por `numel(c)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Array of any type.",
+     "pt": "Array de qualquer tipo."
+    },
+    {
+     "name": "r, c",
+     "en": "Vectors with the number of rows, and of columns, of each block. Their sums must equal the size of `A` in that dimension.",
+     "pt": "Vetores com o número de linhas, e de colunas, de cada bloco. Suas somas devem ser iguais ao tamanho de `A` naquela dimensão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array whose element `C{i,j}` is a block of `A`.",
+     "pt": "Cell array cujo elemento `C{i,j}` é um bloco de `A`."
+    }
+   ],
+   "description": {
+    "en": "`mat2cell` is the inverse of concatenation: `[C{:,:}]` style joins undo it. It is the usual way to cut a matrix into uneven pieces. When the sums in `r` or `c` do not match the size of `A`, the call is an error.",
+    "pt": "`mat2cell` é o inverso da concatenação: juntar com `[C{:,:}]` o desfaz. É o modo habitual de cortar uma matriz em pedaços desiguais. Quando as somas em `r` ou `c` não batem com o tamanho de `A`, a chamada gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cutting a 4-by-4 matrix",
+      "pt": "Cortando uma matriz 4 por 4"
+     },
+     "code": "A = magic(4);\nC = mat2cell(A, [2 2], [3 1]);\nC{1,1}\nC{2,2}"
+    }
+   ],
+   "see": [
+    "cell2mat",
+    "num2cell",
+    "cell",
+    "reshape"
+   ]
+  },
+  "mat2str": {
+   "summary": {
+    "en": "Converts a matrix to text that evaluates back to the matrix.",
+    "pt": "Converte uma matriz em texto que, avaliado, recria a matriz."
+   },
+   "syntax": [
+    {
+     "code": "s = mat2str(A)",
+     "en": "Returns a character vector such as `'[1 2;3 4]'`.",
+     "pt": "Retorna um vetor de caracteres como `'[1 2;3 4]'`."
+    },
+    {
+     "code": "s = mat2str(A, n)",
+     "en": "Uses `n` significant digits for each number (15 by default).",
+     "pt": "Usa `n` dígitos significativos em cada número (15 por padrão)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char matrix (two dimensions at most).",
+     "pt": "Matriz numérica, lógica ou de char (no máximo duas dimensões)."
+    },
+    {
+     "name": "n",
+     "en": "Number of significant digits.",
+     "pt": "Número de dígitos significativos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Character vector. Passing it to `eval` rebuilds `A`.",
+     "pt": "Vetor de caracteres. Passá-lo a `eval` reconstrói `A`."
+    }
+   ],
+   "description": {
+    "en": "Columns are separated by spaces and rows by semicolons. Logical values appear as `true` and `false`, complex numbers as `1+2i`, and integer classes are wrapped in their constructor, as in `int8([1 2])`. A char vector is returned in quotes.\n\nWith the default 15 digits the text reproduces ordinary doubles; a smaller `n` gives a shorter, rounded form.",
+    "pt": "As colunas são separadas por espaços e as linhas por ponto e vírgula. Valores lógicos aparecem como `true` e `false`, números complexos como `1+2i`, e as classes de inteiros vêm dentro do construtor, como em `int8([1 2])`. Um vetor de char é devolvido entre aspas.\n\nCom os 15 dígitos padrão o texto reproduz doubles comuns; um `n` menor dá uma forma mais curta, arredondada."
+   },
+   "notes": {
+    "en": "For `single` input MATLAB wraps the text in `single(...)`; MatLivre prints the bare number.",
+    "pt": "Para entrada `single`, o MATLAB envolve o texto em `single(...)`; o MatLivre imprime apenas o número."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Matrices as text",
+      "pt": "Matrizes como texto"
+     },
+     "code": "mat2str([1 2; 3 4.5])\nmat2str([true false])\nmat2str(pi, 4)\nmat2str(int8([1 2]))"
+    }
+   ],
+   "see": [
+    "num2str",
+    "sprintf",
+    "disp",
+    "eval",
+    "str2num"
+   ]
+  },
+  "matches": {
+   "summary": {
+    "en": "Tests whether text matches a pattern in its entirety.",
+    "pt": "Testa se um texto casa inteiramente com um padrão."
+   },
+   "syntax": [
+    {
+     "code": "tf = matches(str, pat)",
+     "en": "Returns `true` for each element of `str` that is exactly equal to `pat`, or matched completely by it.",
+     "pt": "Retorna `true` para cada elemento de `str` que é exatamente igual a `pat`, ou casado completamente por ele."
+    },
+    {
+     "code": "tf = matches(str, pat, IgnoreCase=true)",
+     "en": "Ignores case when comparing.",
+     "pt": "Ignora maiúsculas e minúsculas na comparação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String array, character vector, or cell array of character vectors.",
+     "pt": "Array de strings, vetor de caracteres ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "pat",
+     "en": "Text, array of texts, or a `pattern` object. If it is an array, the result is `true` when any element matches.",
+     "pt": "Texto, array de textos ou objeto `pattern`. Se for um array, o resultado é `true` quando qualquer elemento casa."
+    },
+    {
+     "name": "IgnoreCase",
+     "en": "Logical option; `false` by default.",
+     "pt": "Opção lógica; `false` por padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array with one value per element of `str`.",
+     "pt": "Array lógico com um valor por elemento de `str`."
+    }
+   ],
+   "description": {
+    "en": "Unlike `contains`, which asks for the pattern to appear anywhere in the text, `matches` requires that the whole text be matched. So `matches('abc12', lettersPattern)` is `false` because of the digits, while `contains` would be `true`.",
+    "pt": "Diferente de `contains`, que pede que o padrão apareça em qualquer parte do texto, `matches` exige que o texto inteiro seja casado. Assim `matches('abc12', lettersPattern)` é `false` por causa dos dígitos, enquanto `contains` seria `true`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Whole-text matching",
+      "pt": "Casamento do texto inteiro"
+     },
+     "code": "matches([\"apple\", \"fig\"], \"fig\")\nmatches('abc', lettersPattern)\nmatches('abc12', lettersPattern)\nmatches(\"Abc\", \"abc\", IgnoreCase=true)"
+    }
+   ],
+   "see": [
+    "contains",
+    "startsWith",
+    "endsWith",
+    "strcmp",
+    "pattern"
+   ]
+  },
+  "matlab.datetime.compatibility.convertDatenum": {
+   "summary": {
+    "en": "Converts serial date numbers to datetime values.",
+    "pt": "Converte números de data serial em valores datetime."
+   },
+   "syntax": [
+    {
+     "code": "t = matlab.datetime.compatibility.convertDatenum(d)",
+     "en": "Returns the datetime array corresponding to the datenum values `d`.",
+     "pt": "Retorna o array datetime correspondente aos valores datenum `d`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Numeric array of serial date numbers, as produced by `datenum`.",
+     "pt": "Array numérico de números de data serial, como os produzidos por `datenum`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "datetime array the same size as `d`.",
+     "pt": "Array datetime do mesmo tamanho de `d`."
+    }
+   ],
+   "description": {
+    "en": "This helper is meant for code that still stores dates as serial numbers and has to feed them to functions that expect `datetime`. It is a thin wrapper for `datetime(d, 'ConvertFrom', 'datenum')`. The fractional part of each number becomes the time of day.",
+    "pt": "Este auxiliar serve a códigos que ainda guardam datas como números seriais e precisam entregá-las a funções que esperam `datetime`. É um envoltório simples de `datetime(d, 'ConvertFrom', 'datenum')`. A parte fracionária de cada número vira a hora do dia."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "From datenum to datetime",
+      "pt": "De datenum para datetime"
+     },
+     "code": "matlab.datetime.compatibility.convertDatenum(738000.5)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "datenum",
+    "datestr",
+    "posixtime"
+   ]
+  },
+  "max": {
+   "summary": {
+    "en": "Largest element, along a dimension, or the larger of two arrays.",
+    "pt": "Maior elemento, ao longo de uma dimensão, ou o maior entre dois arrays."
+   },
+   "syntax": [
+    {
+     "code": "M = max(A)",
+     "en": "Largest element of a vector, or of each column of a matrix.",
+     "pt": "Maior elemento de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "[M, I] = max(A)",
+     "en": "Also returns the index of the largest element; the first one when there are ties.",
+     "pt": "Retorna também o índice do maior elemento; o primeiro quando há empates."
+    },
+    {
+     "code": "M = max(A, [], dim)",
+     "en": "Largest along dimension `dim`.",
+     "pt": "Maior ao longo da dimensão `dim`."
+    },
+    {
+     "code": "M = max(A, [], 'all')",
+     "en": "Largest of all elements.",
+     "pt": "Maior de todos os elementos."
+    },
+    {
+     "code": "M = max(A, B)",
+     "en": "Element-wise larger of `A` and `B`, with implicit expansion.",
+     "pt": "Maior elemento a elemento entre `A` e `B`, com expansão implícita."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, logical or char arrays, or datetime or duration arrays.",
+     "pt": "Arrays numéricos, lógicos ou de char, ou arrays datetime ou duration."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to work along.",
+     "pt": "Dimensão ao longo da qual operar."
+    },
+    {
+     "name": "'omitnan' | 'includenan'",
+     "en": "Whether NaN values are skipped (the default) or make the result NaN.",
+     "pt": "Se valores NaN são ignorados (o padrão) ou tornam o resultado NaN."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The largest values.",
+     "pt": "Os maiores valores."
+    },
+    {
+     "name": "I",
+     "en": "Indices of the maxima along the working dimension.",
+     "pt": "Índices dos máximos ao longo da dimensão de trabalho."
+    }
+   ],
+   "description": {
+    "en": "By default `NaN` values are ignored: `max([1 NaN 3])` is `3`. The result is `NaN` only when all values are NaN. The empty matrix gives `[]`. For complex numbers the comparison uses the absolute value, and for ties the angle.\n\nThe two-array form never returns the index, and the result has the class of the integer operand when one is an integer, saturating where needed.",
+    "pt": "Por padrão valores `NaN` são ignorados: `max([1 NaN 3])` é `3`. O resultado é `NaN` apenas quando todos os valores são NaN. A matriz vazia dá `[]`. Para números complexos a comparação usa o valor absoluto e, em empates, o ângulo.\n\nA forma de dois arrays nunca devolve o índice, e o resultado tem a classe do operando inteiro quando um deles é inteiro."
+   },
+   "notes": {
+    "en": "`max` of a character array returns a character in MatLivre, while MATLAB returns a double.",
+    "pt": "`max` de um array de caracteres retorna um caractere no MatLivre, enquanto o MATLAB retorna um double."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Maxima of a matrix",
+      "pt": "Máximos de uma matriz"
+     },
+     "code": "A = [1 5; 7 2];\nmax(A)\nmax(A, [], 2)\nmax(A, [], 'all')\n[m, i] = max([3 9 2 9])\nmax([1 NaN 3])\nmax(4, [1 6 2])"
+    }
+   ],
+   "see": [
+    "min",
+    "maxk",
+    "cummax",
+    "sort",
+    "mean"
+   ]
+  },
+  "mean": {
+   "summary": {
+    "en": "Arithmetic mean along a dimension.",
+    "pt": "Média aritmética ao longo de uma dimensão."
+   },
+   "syntax": [
+    {
+     "code": "M = mean(A)",
+     "en": "Mean of a vector, or of each column of a matrix.",
+     "pt": "Média de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "M = mean(A, dim)",
+     "en": "Mean along dimension `dim`.",
+     "pt": "Média ao longo da dimensão `dim`."
+    },
+    {
+     "code": "M = mean(A, 'all')",
+     "en": "Mean of all elements.",
+     "pt": "Média de todos os elementos."
+    },
+    {
+     "code": "M = mean(___, nanflag)",
+     "en": "Controls how NaN is treated: `'includenan'` (default) or `'omitnan'`.",
+     "pt": "Controla o tratamento de NaN: `'includenan'` (padrão) ou `'omitnan'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array, or duration or datetime array.",
+     "pt": "Array numérico ou lógico, ou array duration ou datetime."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to average along.",
+     "pt": "Dimensão ao longo da qual calcular a média."
+    },
+    {
+     "name": "nanflag",
+     "en": "`'omitnan'` to ignore NaN values.",
+     "pt": "`'omitnan'` para ignorar valores NaN."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The means. The averaged dimension has size 1.",
+     "pt": "As médias. A dimensão tomada tem tamanho 1."
+    }
+   ],
+   "description": {
+    "en": "The mean is the sum divided by the count. One `NaN` in the data makes the result `NaN` unless `'omitnan'` is given. The mean of an empty array is `NaN`. Integer inputs are averaged in floating point and the result is double, so `mean(int8([100 100]))` does not overflow; a logical input gives the fraction of `true` values.\n\nFor a skewed data set the median is often more representative than the mean.",
+    "pt": "A média é a soma dividida pela contagem. Um único `NaN` nos dados torna o resultado `NaN`, a menos que se use `'omitnan'`. A média de um array vazio é `NaN`. Entradas inteiras são calculadas em ponto flutuante e o resultado é double, então `mean(int8([100 100]))` não estoura; uma entrada lógica dá a fração de valores `true`.\n\nPara dados assimétricos, a mediana costuma ser mais representativa que a média."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Means along dimensions",
+      "pt": "Médias ao longo de dimensões"
+     },
+     "code": "A = [1 2; 3 4];\nmean(A)\nmean(A, 2)\nmean(A, 'all')\nmean([1 NaN 3], 'omitnan')\nmean([1 NaN 3])"
+    }
+   ],
+   "see": [
+    "median",
+    "mode",
+    "std",
+    "var",
+    "sum"
+   ]
+  },
+  "median": {
+   "summary": {
+    "en": "Median value along a dimension.",
+    "pt": "Valor mediano ao longo de uma dimensão."
+   },
+   "syntax": [
+    {
+     "code": "M = median(A)",
+     "en": "Median of a vector, or of each column of a matrix.",
+     "pt": "Mediana de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "M = median(A, dim)",
+     "en": "Median along dimension `dim`.",
+     "pt": "Mediana ao longo da dimensão `dim`."
+    },
+    {
+     "code": "M = median(A, 'all')",
+     "en": "Median of all elements.",
+     "pt": "Mediana de todos os elementos."
+    },
+    {
+     "code": "M = median(___, nanflag)",
+     "en": "`'omitnan'` ignores NaN values; `'includenan'` (default) lets them make the result NaN.",
+     "pt": "`'omitnan'` ignora valores NaN; `'includenan'` (padrão) deixa que tornem o resultado NaN."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array.",
+     "pt": "Array numérico ou lógico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to work along.",
+     "pt": "Dimensão ao longo da qual operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The medians; the working dimension has size 1.",
+     "pt": "As medianas; a dimensão de trabalho tem tamanho 1."
+    }
+   ],
+   "description": {
+    "en": "The median is the middle value after sorting. With an even count it is the average of the two middle values, so `median([3 1 2 10])` is `2.5`. Because it ignores how extreme the largest and smallest values are, a few outliers hardly move it, unlike the mean. A `NaN` in the data gives `NaN` unless `'omitnan'` is used; the median of an empty array is `NaN`.",
+    "pt": "A mediana é o valor do meio depois de ordenar. Com quantidade par é a média dos dois valores centrais, então `median([3 1 2 10])` é `2.5`. Como ignora o quão extremos são os maiores e menores valores, poucos outliers quase não a movem, ao contrário da média. Um `NaN` nos dados dá `NaN`, a menos que se use `'omitnan'`; a mediana de um array vazio é `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Median versus mean",
+      "pt": "Mediana versus média"
+     },
+     "code": "x = [3 1 2 10];\nmedian(x)\nmedian([1 2; 3 4])\nmedian([1 NaN 3], 'omitnan')\nmean([1 2 3 100])\nmedian([1 2 3 100])"
+    }
+   ],
+   "see": [
+    "mean",
+    "mode",
+    "sort",
+    "prctile",
+    "quantile"
+   ]
+  },
+  "mergecats": {
+   "summary": {
+    "en": "Merges categories of a categorical array into one.",
+    "pt": "Une categorias de um array categorical em uma só."
+   },
+   "syntax": [
+    {
+     "code": "B = mergecats(A, oldcats)",
+     "en": "Merges the categories in `oldcats` into the first of them.",
+     "pt": "Une as categorias de `oldcats` na primeira delas."
+    },
+    {
+     "code": "B = mergecats(A, oldcats, newcat)",
+     "en": "Merges them into a new category called `newcat`.",
+     "pt": "Une-as em uma nova categoria chamada `newcat`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "A categorical array.",
+     "pt": "Um array categorical."
+    },
+    {
+     "name": "oldcats",
+     "en": "Names of the categories to merge: a string array or cell array of character vectors.",
+     "pt": "Nomes das categorias a unir: array de strings ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "newcat",
+     "en": "Name of the merged category. The default is the first name in `oldcats`.",
+     "pt": "Nome da categoria unida. O padrão é o primeiro nome de `oldcats`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "A categorical array of the same size; elements that had any of the merged categories now carry the merged one.",
+     "pt": "Um array categorical do mesmo tamanho; os elementos que tinham alguma das categorias unidas agora carregam a unida."
+    }
+   ],
+   "description": {
+    "en": "Merging is the usual way to coarsen a classification, for instance joining several rare labels into `other`. The data keep their order and number; only the labels change, and the merged categories disappear from `categories(B)`. For an ordinal array the categories to merge must be adjacent in the order.",
+    "pt": "Unir é o modo habitual de tornar uma classificação mais grossa, por exemplo juntando vários rótulos raros em `other`. Os dados mantêm ordem e quantidade; só os rótulos mudam, e as categorias unidas somem de `categories(B)`. Em um array ordinal, as categorias a unir devem ser adjacentes na ordem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Joining two categories",
+      "pt": "Unindo duas categorias"
+     },
+     "code": "c = categorical({'a','b','c','a'});\nm = mergecats(c, {'a','b'}, 'ab')\ncategories(m)"
+    }
+   ],
+   "see": [
+    "categorical",
+    "categories",
+    "renamecats",
+    "addcats",
+    "removecats"
+   ]
+  },
+  "mergevars": {
+   "summary": {
+    "en": "Combines several table variables into a single multi-column variable.",
+    "pt": "Combina várias variáveis de uma table em uma única variável com várias colunas."
+   },
+   "syntax": [
+    {
+     "code": "T2 = mergevars(T, vars)",
+     "en": "Merges the variables `vars` of the table `T` into one variable.",
+     "pt": "Une as variáveis `vars` da table `T` em uma única variável."
+    },
+    {
+     "code": "T2 = mergevars(T, vars, 'NewVariableName', name)",
+     "en": "Names the merged variable.",
+     "pt": "Dá nome à variável unida."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "A table or timetable.",
+     "pt": "Uma table ou timetable."
+    },
+    {
+     "name": "vars",
+     "en": "Variables to merge: names, positions or a logical mask.",
+     "pt": "Variáveis a unir: nomes, posições ou uma máscara lógica."
+    },
+    {
+     "name": "NewVariableName",
+     "en": "Name for the new variable. By default a name is built from the originals.",
+     "pt": "Nome da nova variável. Por padrão, um nome é montado a partir dos originais."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T2",
+     "en": "A table in which the chosen variables are replaced by one, placed where the first of them was.",
+     "pt": "Uma table em que as variáveis escolhidas são substituídas por uma só, colocada onde estava a primeira delas."
+    }
+   ],
+   "description": {
+    "en": "The merged variable is a matrix with one column per original variable, so the variables must have the same number of rows and compatible types. It is the opposite of splitting a matrix variable with `splitvars`, and it is handy for treating coordinates or measurements as a single unit.",
+    "pt": "A variável unida é uma matriz com uma coluna por variável original, então elas precisam ter o mesmo número de linhas e tipos compatíveis. É o oposto de dividir uma variável matricial com `splitvars` e serve para tratar coordenadas ou medidas como uma unidade."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two variables into one",
+      "pt": "Duas variáveis em uma"
+     },
+     "code": "T = table([1;2], [3;4], [5;6], 'VariableNames', {'a','b','c'});\nM = mergevars(T, {'a','b'}, 'NewVariableName', 'ab')\nsize(M.ab)"
+    }
+   ],
+   "see": [
+    "splitvars",
+    "movevars",
+    "table",
+    "removevars",
+    "addvars"
+   ]
+  },
+  "milliseconds": {
+   "summary": {
+    "en": "Creates durations from numbers of milliseconds, or converts durations to milliseconds.",
+    "pt": "Cria durations a partir de milissegundos, ou converte durations em milissegundos."
+   },
+   "syntax": [
+    {
+     "code": "d = milliseconds(x)",
+     "en": "Returns a duration array in which each value of `x` is a number of milliseconds.",
+     "pt": "Retorna um array duration em que cada valor de `x` é um número de milissegundos."
+    },
+    {
+     "code": "x = milliseconds(d)",
+     "en": "Returns the number of milliseconds in the duration array `d`, as a double.",
+     "pt": "Retorna o número de milissegundos do array duration `d`, como double."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "d",
+     "en": "A duration array.",
+     "pt": "Um array duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "duration array, same size as `x`.",
+     "pt": "Array duration, do mesmo tamanho de `x`."
+    },
+    {
+     "name": "x",
+     "en": "Double array, same size as `d`.",
+     "pt": "Array double, do mesmo tamanho de `d`."
+    }
+   ],
+   "description": {
+    "en": "A duration stores a length of time independent of the unit used to show it. `milliseconds(1500)` is displayed as `1.5 sec` because the display picks a convenient unit, but the value is the same. Durations can be added to each other and to datetimes.",
+    "pt": "Uma duration guarda um intervalo de tempo independente da unidade usada para exibi-lo. `milliseconds(1500)` é exibido como `1.5 sec` porque a exibição escolhe uma unidade conveniente, mas o valor é o mesmo. Durations podem ser somadas entre si e a datetimes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Milliseconds in and out",
+      "pt": "Milissegundos de entrada e saída"
+     },
+     "code": "d = milliseconds(1500)\nmilliseconds(minutes(1))\nd + seconds(1)"
+    }
+   ],
+   "see": [
+    "seconds",
+    "minutes",
+    "hours",
+    "days",
+    "duration"
+   ]
+  },
+  "min": {
+   "summary": {
+    "en": "Smallest element, along a dimension, or the smaller of two arrays.",
+    "pt": "Menor elemento, ao longo de uma dimensão, ou o menor entre dois arrays."
+   },
+   "syntax": [
+    {
+     "code": "M = min(A)",
+     "en": "Smallest element of a vector, or of each column of a matrix.",
+     "pt": "Menor elemento de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "[M, I] = min(A)",
+     "en": "Also returns the index of the smallest element; the first one when there are ties.",
+     "pt": "Retorna também o índice do menor elemento; o primeiro quando há empates."
+    },
+    {
+     "code": "M = min(A, [], dim)",
+     "en": "Smallest along dimension `dim`.",
+     "pt": "Menor ao longo da dimensão `dim`."
+    },
+    {
+     "code": "M = min(A, [], 'all')",
+     "en": "Smallest of all elements.",
+     "pt": "Menor de todos os elementos."
+    },
+    {
+     "code": "M = min(A, B)",
+     "en": "Element-wise smaller of `A` and `B`, with implicit expansion.",
+     "pt": "Menor elemento a elemento entre `A` e `B`, com expansão implícita."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, logical or char arrays, or datetime or duration arrays.",
+     "pt": "Arrays numéricos, lógicos ou de char, ou arrays datetime ou duration."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to work along.",
+     "pt": "Dimensão ao longo da qual operar."
+    },
+    {
+     "name": "'omitnan' | 'includenan'",
+     "en": "Whether NaN values are skipped (the default) or make the result NaN.",
+     "pt": "Se valores NaN são ignorados (o padrão) ou tornam o resultado NaN."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "The smallest values.",
+     "pt": "Os menores valores."
+    },
+    {
+     "name": "I",
+     "en": "Indices of the minima along the working dimension.",
+     "pt": "Índices dos mínimos ao longo da dimensão de trabalho."
+    }
+   ],
+   "description": {
+    "en": "`min` mirrors `max`. `NaN` values are ignored unless every value is `NaN`, so `min([4 NaN 2])` is `2`. Integer types keep their class, and the empty matrix gives `[]`.\n\nWith one output the first minimum wins on ties; with the two-array form there is no index output.",
+    "pt": "`min` espelha `max`. Valores `NaN` são ignorados, a menos que todos sejam `NaN`, então `min([4 NaN 2])` é `2`. Tipos inteiros mantêm a classe, e a matriz vazia dá `[]`.\n\nEm caso de empate vale o primeiro mínimo; na forma de dois arrays não há saída de índice."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Minima of a matrix",
+      "pt": "Mínimos de uma matriz"
+     },
+     "code": "A = [1 5; 7 2];\nmin(A)\nmin(A, [], 2)\n[m, i] = min([3 1 2 1])\nmin([4 NaN 2])\nmin(int8([5 -3 9]))"
+    }
+   ],
+   "see": [
+    "max",
+    "mink",
+    "cummin",
+    "sort",
+    "mean"
+   ]
+  },
+  "minute": {
+   "summary": {
+    "en": "Minute component of a datetime.",
+    "pt": "Componente de minutos de um datetime."
+   },
+   "syntax": [
+    {
+     "code": "m = minute(t)",
+     "en": "Returns the minute, from 0 to 59, of each element of `t`.",
+     "pt": "Retorna o minuto, de 0 a 59, de cada elemento de `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Double array of the same size as `t`.",
+     "pt": "Array double do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "Only the minute within the hour is returned, not a total: 14:45:30 gives `45`. The companions `hour` and `second` extract the other time-of-day fields. For total elapsed time use durations, as in `minutes(d)`.",
+    "pt": "Retorna apenas o minuto dentro da hora, não um total: 14:45:30 dá `45`. Os companheiros `hour` e `second` extraem os outros campos da hora do dia. Para tempo total decorrido, use durations, como em `minutes(d)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Minute of the hour",
+      "pt": "Minuto da hora"
+     },
+     "code": "t = datetime(2024,3,5,14,45,30);\nminute(t)\nminute([t, t + minutes(20)])"
+    }
+   ],
+   "see": [
+    "hour",
+    "second",
+    "minutes",
+    "datetime"
+   ]
+  },
+  "minutes": {
+   "summary": {
+    "en": "Creates durations from numbers of minutes, or converts durations to minutes.",
+    "pt": "Cria durations a partir de minutos, ou converte durations em minutos."
+   },
+   "syntax": [
+    {
+     "code": "d = minutes(x)",
+     "en": "Returns a duration array in which each value of `x` is a number of minutes.",
+     "pt": "Retorna um array duration em que cada valor de `x` é um número de minutos."
+    },
+    {
+     "code": "x = minutes(d)",
+     "en": "Returns the number of minutes in the duration array `d`, as a double.",
+     "pt": "Retorna o número de minutos do array duration `d`, como double."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "d",
+     "en": "A duration array.",
+     "pt": "Um array duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "duration array, same size as `x`.",
+     "pt": "Array duration, do mesmo tamanho de `x`."
+    },
+    {
+     "name": "x",
+     "en": "Double array, same size as `d`.",
+     "pt": "Array double, do mesmo tamanho de `d`."
+    }
+   ],
+   "description": {
+    "en": "The function works in both directions, so `minutes(hours(1.5))` converts 1.5 hours into `90`. A duration shows in minutes when its length is between 1 minute and 1 hour, but the stored value does not depend on the display unit. Adding it to a datetime shifts the time.",
+    "pt": "A função funciona nos dois sentidos, então `minutes(hours(1.5))` converte 1,5 hora em `90`. Uma duration é exibida em minutos quando seu tamanho está entre 1 minuto e 1 hora, mas o valor armazenado não depende da unidade de exibição. Somá-la a um datetime desloca o horário."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Minutes in and out",
+      "pt": "Minutos de entrada e saída"
+     },
+     "code": "minutes(90)\nminutes(hours(1.5))\ndatetime(2024,1,1,10,0,0) + minutes(75)"
+    }
+   ],
+   "see": [
+    "hours",
+    "seconds",
+    "milliseconds",
+    "days",
+    "duration"
+   ]
+  },
+  "month": {
+   "summary": {
+    "en": "Month number of a datetime.",
+    "pt": "Número do mês de um datetime."
+   },
+   "syntax": [
+    {
+     "code": "m = month(t)",
+     "en": "Returns the month, 1 for January to 12 for December, of each element of `t`.",
+     "pt": "Retorna o mês, 1 para janeiro a 12 para dezembro, de cada elemento de `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Double array of the same size as `t`.",
+     "pt": "Array double do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`month` is a shortcut for the month field of `datetime`. Its companions `year`, `day`, `hour`, `minute` and `second` return the other fields. The number is used to group data by month or to build date conditions such as `month(t) == 12`.",
+    "pt": "`month` é um atalho para o campo de mês de `datetime`. Seus companheiros `year`, `day`, `hour`, `minute` e `second` retornam os outros campos. O número serve para agrupar dados por mês ou montar condições de data como `month(t) == 12`."
+   },
+   "notes": {
+    "en": "MatLivre accepts only datetime, duration or calendarDuration input. The `'name'` and `'shortname'` options of MATLAB return the month number instead of text, so build names with `datestr` or `string(t, 'MMMM')`.",
+    "pt": "O MatLivre aceita apenas entrada datetime, duration ou calendarDuration. As opções `'name'` e `'shortname'` do MATLAB retornam o número do mês em vez de texto, então monte nomes com `datestr` ou `string(t, 'MMMM')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Months of some dates",
+      "pt": "Meses de algumas datas"
+     },
+     "code": "t = datetime(2024,3,5) + calmonths(0:3);\nmonth(t)\nmonth(datetime(2024,12,25)) == 12"
+    }
+   ],
+   "see": [
+    "year",
+    "day",
+    "quarter",
+    "datetime",
+    "calmonths"
+   ]
+  },
+  "months": {
+   "summary": {
+    "en": "Whole months between two dates.",
+    "pt": "Meses completos entre duas datas."
+   },
+   "syntax": [
+    {
+     "code": "n = months(d1, d2)",
+     "en": "Returns the number of whole months from `d1` to `d2`.",
+     "pt": "Retorna o número de meses completos de `d1` até `d2`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d1, d2",
+     "en": "Start and end dates: datetime arrays, serial date numbers or date text.",
+     "pt": "Datas inicial e final: arrays datetime, números de data serial ou texto de data."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Column vector with the whole months between each pair.",
+     "pt": "Vetor coluna com os meses completos entre cada par."
+    }
+   ],
+   "description": {
+    "en": "Months are counted by the calendar, not by dividing days. From January 15 to June 15 there are 5 months. A partial month is not counted, so from January 31 to March 30 gives 1, because the second date falls before the day of the month of the first. The result is negative when `d2` precedes `d1`.\n\nThe function belongs to the Financial Toolbox in MATLAB. For a month duration, use `calmonths`.",
+    "pt": "Os meses são contados pelo calendário, não dividindo dias. De 15 de janeiro a 15 de junho há 5 meses. Um mês parcial não é contado, então de 31 de janeiro a 30 de março dá 1, porque a segunda data cai antes do dia do mês da primeira. O resultado é negativo quando `d2` precede `d1`.\n\nNo MATLAB, a função pertence ao Financial Toolbox. Para uma duração em meses, use `calmonths`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Whole months",
+      "pt": "Meses completos"
+     },
+     "code": "months(datetime(2024,1,15), datetime(2024,6,15))\nmonths(datetime(2024,1,31), datetime(2024,3,30))"
+    }
+   ],
+   "see": [
+    "calmonths",
+    "between",
+    "caldiff",
+    "datenum",
+    "month"
+   ]
+  },
+  "movevars": {
+   "summary": {
+    "en": "Moves table variables to a new position.",
+    "pt": "Move variáveis de uma table para uma nova posição."
+   },
+   "syntax": [
+    {
+     "code": "T2 = movevars(T, vars, 'Before', ref)",
+     "en": "Places the variables `vars` just before the variable `ref`.",
+     "pt": "Coloca as variáveis `vars` logo antes da variável `ref`."
+    },
+    {
+     "code": "T2 = movevars(T, vars, 'After', ref)",
+     "en": "Places them just after `ref`.",
+     "pt": "Coloca-as logo depois de `ref`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "A table or timetable.",
+     "pt": "Uma table ou timetable."
+    },
+    {
+     "name": "vars",
+     "en": "Variables to move: a name, cell array of names, positions or a logical mask.",
+     "pt": "Variáveis a mover: um nome, cell array de nomes, posições ou máscara lógica."
+    },
+    {
+     "name": "ref",
+     "en": "Reference variable, by name or position.",
+     "pt": "Variável de referência, por nome ou posição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T2",
+     "en": "A table with the same data and a new variable order.",
+     "pt": "Uma table com os mesmos dados e uma nova ordem de variáveis."
+    }
+   ],
+   "description": {
+    "en": "Only the order of the columns changes; no data are modified. When several variables are moved, they keep their relative order. It is a neat way to bring an identifier column to the front before displaying or exporting a table.",
+    "pt": "Muda apenas a ordem das colunas; nenhum dado é modificado. Quando várias variáveis são movidas, mantêm a ordem relativa entre si. É um jeito prático de trazer uma coluna de identificador para a frente antes de exibir ou exportar uma table."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reordering columns",
+      "pt": "Reordenando colunas"
+     },
+     "code": "T = table([1;2], [3;4], [5;6], 'VariableNames', {'x','y','z'});\nmovevars(T, 'z', 'Before', 'x')\nmovevars(T, 'x', 'After', 'z')"
+    }
+   ],
+   "see": [
+    "mergevars",
+    "splitvars",
+    "removevars",
+    "addvars",
+    "table"
+   ]
+  }
+ }
+}

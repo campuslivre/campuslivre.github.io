@@ -1,0 +1,1182 @@
+{
+ "functions": {
+  "taylor": {
+   "summary": {
+    "en": "Taylor series expansion of a symbolic expression about a point.",
+    "pt": "Expansão em série de Taylor de uma expressão simbólica em torno de um ponto."
+   },
+   "syntax": [
+    {
+     "code": "T = taylor(f, x)",
+     "en": "Expands `f` in powers of `x` about 0, keeping terms below degree 6.",
+     "pt": "Expande `f` em potências de `x` em torno de 0, mantendo termos abaixo do grau 6."
+    },
+    {
+     "code": "T = taylor(f, x, a)",
+     "en": "Expands about the point `a`.",
+     "pt": "Expande em torno do ponto `a`."
+    },
+    {
+     "code": "T = taylor(___, Name, Value)",
+     "en": "Sets `'Order'` or `'ExpansionPoint'` by name.",
+     "pt": "Define `'Order'` ou `'ExpansionPoint'` por nome."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression or symbolic function.",
+     "pt": "Expressão simbólica ou função simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Symbolic variable to expand in.",
+     "pt": "Variável simbólica da expansão."
+    },
+    {
+     "name": "'Order'",
+     "en": "Number of terms: the result has degree at most `Order - 1`. Default 6.",
+     "pt": "Número de termos: o resultado tem grau no máximo `Order - 1`. Padrão 6."
+    },
+    {
+     "name": "'ExpansionPoint'",
+     "en": "Point `a` the series is centered on. Default 0.",
+     "pt": "Ponto `a` em torno do qual a série é centrada. Padrão 0."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Symbolic polynomial in `x` (or in `x - a`).",
+     "pt": "Polinômio simbólico em `x` (ou em `x - a`)."
+    }
+   ],
+   "description": {
+    "en": "`taylor` builds the truncated series `f(a) + f'(a)(x-a) + f''(a)(x-a)^2/2! + ...` by differentiating `f` symbolically and evaluating the derivatives at the expansion point. The remainder term is not returned.\n\nThe `Order` option counts terms, not the degree of the last term, so `'Order', 4` stops at the cubic term.",
+    "pt": "`taylor` monta a série truncada `f(a) + f'(a)(x-a) + f''(a)(x-a)^2/2! + ...` derivando `f` simbolicamente e avaliando as derivadas no ponto de expansão. O termo de resto não é retornado.\n\nA opção `Order` conta termos, não o grau do último termo: com `'Order', 4` a série termina no termo cúbico."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Maclaurin and shifted series",
+      "pt": "Série de Maclaurin e série deslocada"
+     },
+     "code": "syms x\ntaylor(exp(x), x, 'Order', 4)\ntaylor(cos(x), x, 'ExpansionPoint', 1, 'Order', 3)"
+    }
+   ],
+   "see": [
+    "series",
+    "diff",
+    "symsum",
+    "limit",
+    "polyfit"
+   ]
+  },
+  "vectorPotential": {
+   "summary": {
+    "en": "Vector potential whose curl is a given divergence-free vector field.",
+    "pt": "Potencial vetor cujo rotacional é um campo vetorial dado de divergência nula."
+   },
+   "syntax": [
+    {
+     "code": "A = vectorPotential(V, X)",
+     "en": "Returns a vector field `A` of variables `X` with `curl(A, X) == V`.",
+     "pt": "Retorna um campo vetorial `A` nas variáveis `X` com `curl(A, X) == V`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "V",
+     "en": "Three-component symbolic vector field. It must have zero divergence.",
+     "pt": "Campo vetorial simbólico de três componentes. Deve ter divergência nula."
+    },
+    {
+     "name": "X",
+     "en": "Vector of the three symbolic variables, for example `[x y z]`.",
+     "pt": "Vetor das três variáveis simbólicas, por exemplo `[x y z]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Column vector of three symbolic expressions.",
+     "pt": "Vetor coluna com três expressões simbólicas."
+    }
+   ],
+   "description": {
+    "en": "A vector field has a vector potential only when its divergence vanishes. `vectorPotential` integrates the components of `V` along the coordinates to build one such `A`; the answer is not unique, since the gradient of any scalar function can be added to `A` without changing its curl.\n\nCheck a result with `curl(A, X)`.",
+    "pt": "Um campo vetorial só tem potencial vetor quando seu divergente é nulo. `vectorPotential` integra as componentes de `V` ao longo das coordenadas para construir um `A`; a resposta não é única, pois o gradiente de qualquer função escalar pode ser somado a `A` sem alterar o rotacional.\n\nConfira o resultado com `curl(A, X)`."
+   },
+   "notes": {
+    "en": "If the field is not divergence-free MATLAB reports an error, while MatLivre returns `NaN` entries.",
+    "pt": "Se o campo não tiver divergência nula, o MATLAB gera um erro, enquanto o MatLivre retorna entradas `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Potential of a rotation field",
+      "pt": "Potencial de um campo de rotação"
+     },
+     "code": "syms x y z\nV = [2*y, -2*x, 0];\nA = vectorPotential(V, [x y z])"
+    }
+   ],
+   "see": [
+    "curl",
+    "divergence",
+    "gradient",
+    "potential",
+    "scalarPotential"
+   ]
+  },
+  "vpaintegral": {
+   "summary": {
+    "en": "Numerical definite integral of a symbolic expression in variable-precision arithmetic.",
+    "pt": "Integral definida numérica de uma expressão simbólica em aritmética de precisão variável."
+   },
+   "syntax": [
+    {
+     "code": "q = vpaintegral(f, x, a, b)",
+     "en": "Integrates `f` with respect to `x` from `a` to `b`.",
+     "pt": "Integra `f` em relação a `x` de `a` até `b`."
+    },
+    {
+     "code": "q = vpaintegral(f, a, b)",
+     "en": "Integrates with respect to the default variable of `f`.",
+     "pt": "Integra em relação à variável padrão de `f`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression to integrate.",
+     "pt": "Expressão simbólica a integrar."
+    },
+    {
+     "name": "x",
+     "en": "Integration variable.",
+     "pt": "Variável de integração."
+    },
+    {
+     "name": "a, b",
+     "en": "Limits of integration, numbers or symbolic numbers.",
+     "pt": "Limites de integração, números ou números simbólicos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "q",
+     "en": "Symbolic number holding the numerical value of the integral.",
+     "pt": "Número simbólico com o valor numérico da integral."
+    }
+   ],
+   "description": {
+    "en": "Unlike `int`, which looks for a closed form, `vpaintegral` evaluates the integral numerically, so it works for integrands with no elementary antiderivative such as `exp(-x^2)`. The result is a symbolic number, which can be converted with `double`.",
+    "pt": "Ao contrário de `int`, que procura uma forma fechada, `vpaintegral` calcula a integral numericamente, e por isso funciona com integrandos sem primitiva elementar, como `exp(-x^2)`. O resultado é um número simbólico, que pode ser convertido com `double`."
+   },
+   "notes": {
+    "en": "The tolerance options of MATLAB are not covered.",
+    "pt": "As opções de tolerância do MATLAB não são cobertas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Integral without a closed form",
+      "pt": "Integral sem forma fechada"
+     },
+     "code": "syms x\nq = vpaintegral(exp(-x^2), x, 0, 1)"
+    }
+   ],
+   "see": [
+    "int",
+    "integral",
+    "vpa",
+    "vpasum",
+    "double"
+   ]
+  },
+  "vpasum": {
+   "summary": {
+    "en": "Numerical sum of a series in variable-precision arithmetic.",
+    "pt": "Soma numérica de uma série em aritmética de precisão variável."
+   },
+   "syntax": [
+    {
+     "code": "S = vpasum(f, k, a, b)",
+     "en": "Adds the terms of `f` for the integer index `k` from `a` to `b`.",
+     "pt": "Soma os termos de `f` para o índice inteiro `k` de `a` até `b`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression for the general term.",
+     "pt": "Expressão simbólica do termo geral."
+    },
+    {
+     "name": "k",
+     "en": "Summation index.",
+     "pt": "Índice da soma."
+    },
+    {
+     "name": "a, b",
+     "en": "First and last index.",
+     "pt": "Primeiro e último índice."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic number with the numerical value of the sum.",
+     "pt": "Número simbólico com o valor numérico da soma."
+    }
+   ],
+   "description": {
+    "en": "`vpasum` evaluates every term numerically with `vpa` and adds them, in contrast with `symsum`, which tries to find an exact closed form. It is the tool for sums whose exact value is unknown or unwieldy.\n\nThe result is shown with the working precision of `digits`, 32 significant digits by default.",
+    "pt": "`vpasum` avalia cada termo numericamente com `vpa` e os soma, em contraste com `symsum`, que tenta achar uma forma fechada exata. É a ferramenta para somas cujo valor exato é desconhecido ou trabalhoso.\n\nO resultado aparece com a precisão de trabalho de `digits`, 32 dígitos significativos por padrão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Partial sum of 1/k^2",
+      "pt": "Soma parcial de 1/k^2"
+     },
+     "code": "syms k\nS = vpasum(1/k^2, k, 1, 1000)"
+    }
+   ],
+   "see": [
+    "symsum",
+    "vpa",
+    "digits",
+    "sum",
+    "vpaintegral"
+   ]
+  },
+  "ztrans": {
+   "summary": {
+    "en": "Z-transform of a symbolic sequence.",
+    "pt": "Transformada Z de uma sequência simbólica."
+   },
+   "syntax": [
+    {
+     "code": "F = ztrans(f)",
+     "en": "Transforms `f` in its default index, returning a function of `z`.",
+     "pt": "Transforma `f` no índice padrão, retornando uma função de `z`."
+    },
+    {
+     "code": "F = ztrans(f, n, z)",
+     "en": "Transforms `f(n)` to `F(z)` using the stated variables.",
+     "pt": "Transforma `f(n)` em `F(z)` usando as variáveis indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression, function or sequence in the index `n`.",
+     "pt": "Expressão, função ou sequência simbólica no índice `n`."
+    },
+    {
+     "name": "n",
+     "en": "Index variable (discrete time).",
+     "pt": "Variável de índice (tempo discreto)."
+    },
+    {
+     "name": "z",
+     "en": "Transform variable.",
+     "pt": "Variável da transformada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Symbolic expression in `z`.",
+     "pt": "Expressão simbólica em `z`."
+    }
+   ],
+   "description": {
+    "en": "The Z-transform of a sequence `f(n)` is the sum of `f(n) z^(-n)` for `n` from 0 to infinity. `ztrans` returns the closed form, for example `z/(z - a)` for `a^n`. It is the discrete counterpart of `laplace`, and `iztrans` inverts it.",
+    "pt": "A transformada Z de uma sequência `f(n)` é a soma de `f(n) z^(-n)` para `n` de 0 a infinito. `ztrans` retorna a forma fechada, por exemplo `z/(z - a)` para `a^n`. É o equivalente discreto de `laplace`, e `iztrans` a inverte."
+   },
+   "notes": {
+    "en": "MatLivre covers the common transform pairs (polynomials, exponentials, sines and cosines, Dirac and Heaviside); other inputs stay unevaluated even when MATLAB finds a closed form.",
+    "pt": "O MatLivre cobre os pares de transformadas comuns (polinômios, exponenciais, senos e cossenos, Dirac e Heaviside); outras entradas ficam sem avaliar mesmo quando o MATLAB acha uma forma fechada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Geometric and ramp sequences",
+      "pt": "Sequências geométrica e rampa"
+     },
+     "code": "syms n z\nztrans(2^n, n, z)\nztrans(n, n, z)"
+    }
+   ],
+   "see": [
+    "iztrans",
+    "laplace",
+    "fourier",
+    "symsum"
+   ]
+  },
+  "daeFunction": {
+   "summary": {
+    "en": "Converts symbolic differential algebraic equations into a numeric residual function handle.",
+    "pt": "Converte equações algébrico-diferenciais simbólicas em um function handle numérico de resíduos."
+   },
+   "syntax": [
+    {
+     "code": "f = daeFunction(eqs, vars)",
+     "en": "Returns a handle `f(t, y, yp)` that evaluates the residual of every equation.",
+     "pt": "Retorna um handle `f(t, y, yp)` que avalia o resíduo de cada equação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic equations of a DAE system.",
+     "pt": "Vetor de equações simbólicas de um sistema DAE."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of the unknown symbolic functions, such as `[x(t) y(t)]`.",
+     "pt": "Vetor das funções simbólicas incógnitas, como `[x(t) y(t)]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Function handle taking time `t`, the state vector `y` and its derivative `yp`, and returning a column of residuals.",
+     "pt": "Function handle que recebe o tempo `t`, o vetor de estados `y` e sua derivada `yp`, e retorna uma coluna de resíduos."
+    }
+   ],
+   "description": {
+    "en": "Each residual is the left side minus the right side of an equation, with the symbolic functions replaced by entries of `y` and their derivatives by entries of `yp`. The handle is the form expected by `ode15i` and `decic`, which solve fully implicit systems `F(t, y, y') = 0`.",
+    "pt": "Cada resíduo é o lado esquerdo menos o lado direito de uma equação, com as funções simbólicas trocadas por elementos de `y` e suas derivadas por elementos de `yp`. O handle tem a forma esperada por `ode15i` e `decic`, que resolvem sistemas totalmente implícitos `F(t, y, y') = 0`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Residual of a small DAE",
+      "pt": "Resíduo de uma pequena DAE"
+     },
+     "code": "syms x(t) y(t)\neqs = [diff(x,t) == y, x^2 + y^2 == 1];\nf = daeFunction(eqs, [x y]);\nf(0, [1; 0], [2; 0])"
+    }
+   ],
+   "see": [
+    "odeFunction",
+    "massMatrixForm",
+    "isLowIndexDAE",
+    "ode15i",
+    "decic"
+   ]
+  },
+  "dsolve": {
+   "summary": {
+    "en": "Solves ordinary differential equations symbolically.",
+    "pt": "Resolve equações diferenciais ordinárias simbolicamente."
+   },
+   "syntax": [
+    {
+     "code": "S = dsolve(eqn)",
+     "en": "General solution, with arbitrary constants `C1`, `C2`, and so on.",
+     "pt": "Solução geral, com constantes arbitrárias `C1`, `C2` etc."
+    },
+    {
+     "code": "S = dsolve(eqn, cond)",
+     "en": "Particular solution that meets the initial or boundary conditions `cond`.",
+     "pt": "Solução particular que atende às condições iniciais ou de contorno `cond`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqn",
+     "en": "Equation using `diff` of a symbolic function, such as `diff(y,t,2) + y == 0`.",
+     "pt": "Equação com `diff` de uma função simbólica, como `diff(y,t,2) + y == 0`."
+    },
+    {
+     "name": "cond",
+     "en": "Conditions such as `y(0) == 1`. A derivative condition is written with `subs(diff(y,t), t, 0) == 1`, or with a variable `Dy = diff(y,t)` and `Dy(0) == 1`.",
+     "pt": "Condições como `y(0) == 1`. Uma condição de derivada se escreve com `subs(diff(y,t), t, 0) == 1`, ou com uma variável `Dy = diff(y,t)` e `Dy(0) == 1`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression for the solution.",
+     "pt": "Expressão simbólica da solução."
+    }
+   ],
+   "description": {
+    "en": "The unknown must be declared as a symbolic function, for instance `syms y(t)`. Without conditions the answer contains integration constants; each condition fixes one of them. Equations the solver cannot handle are returned unsolved with a warning.\n\nFor a numerical answer use `ode45` and friends, after turning the equation into a first-order system with `odeToVectorField`.",
+    "pt": "A incógnita deve ser declarada como função simbólica, por exemplo `syms y(t)`. Sem condições a resposta contém constantes de integração; cada condição fixa uma delas. Equações que o solver não consegue tratar são devolvidas sem resolver, com um aviso.\n\nPara uma resposta numérica use `ode45` e afins, depois de converter a equação em um sistema de primeira ordem com `odeToVectorField`."
+   },
+   "notes": {
+    "en": "Linear equations and the common first-order types are handled; systems of coupled differential equations are not supported in MatLivre.",
+    "pt": "Equações lineares e os tipos comuns de primeira ordem são tratados; sistemas de equações diferenciais acopladas não são suportados no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First order with an initial value",
+      "pt": "Primeira ordem com valor inicial"
+     },
+     "code": "syms y(t)\ndsolve(diff(y,t) == -2*y, y(0) == 1)"
+    },
+    {
+     "title": {
+      "en": "General solution with a parameter",
+      "pt": "Solução geral com um parâmetro"
+     },
+     "code": "syms y(t) a\ndsolve(diff(y,t) == a*y)"
+    }
+   ],
+   "see": [
+    "solve",
+    "odeToVectorField",
+    "ode45",
+    "diff",
+    "laplace"
+   ]
+  },
+  "eliminate": {
+   "summary": {
+    "en": "Eliminates variables from a system of equations.",
+    "pt": "Elimina variáveis de um sistema de equações."
+   },
+   "syntax": [
+    {
+     "code": "E = eliminate(eqs, vars)",
+     "en": "Removes the variables `vars` and returns equations in the remaining ones.",
+     "pt": "Remove as variáveis `vars` e retorna equações nas restantes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic equations.",
+     "pt": "Vetor de equações simbólicas."
+    },
+    {
+     "name": "vars",
+     "en": "Variables to eliminate.",
+     "pt": "Variáveis a eliminar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "Reduced equations that do not involve `vars`. An expression like `x - 3*z` stands for `x - 3*z == 0`.",
+     "pt": "Equações reduzidas que não envolvem `vars`. Uma expressão como `x - 3*z` representa `x - 3*z == 0`."
+    }
+   ],
+   "description": {
+    "en": "`eliminate` combines the equations algebraically, substituting the eliminated variables, so that what is left relates only the other unknowns. It needs at least as many equations as eliminated variables.",
+    "pt": "`eliminate` combina as equações algebricamente, substituindo as variáveis eliminadas, de modo que o resultado relacione apenas as demais incógnitas. São necessárias pelo menos tantas equações quanto variáveis eliminadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Eliminate one variable",
+      "pt": "Eliminar uma variável"
+     },
+     "code": "syms x y z\neliminate([x == y + z, y == 2*z], y)"
+    }
+   ],
+   "see": [
+    "solve",
+    "equationsToMatrix",
+    "isolate",
+    "subs"
+   ]
+  },
+  "equationsToMatrix": {
+   "summary": {
+    "en": "Coefficient matrix and right-hand side of a linear system.",
+    "pt": "Matriz de coeficientes e lado direito de um sistema linear."
+   },
+   "syntax": [
+    {
+     "code": "[A, b] = equationsToMatrix(eqs, vars)",
+     "en": "Writes the linear system as `A*vars.' == b`.",
+     "pt": "Escreve o sistema linear como `A*vars.' == b`."
+    },
+    {
+     "code": "A = equationsToMatrix(eqs, vars)",
+     "en": "Returns only the coefficient matrix.",
+     "pt": "Retorna apenas a matriz de coeficientes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of linear symbolic equations or expressions.",
+     "pt": "Vetor de equações ou expressões simbólicas lineares."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of the unknowns, which fixes the column order.",
+     "pt": "Vetor das incógnitas, que define a ordem das colunas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Coefficient matrix, one row per equation and one column per variable.",
+     "pt": "Matriz de coeficientes, uma linha por equação e uma coluna por variável."
+    },
+    {
+     "name": "b",
+     "en": "Column vector of constants.",
+     "pt": "Vetor coluna das constantes."
+    }
+   ],
+   "description": {
+    "en": "The equations must be linear in `vars`; anything not multiplying a variable moves to `b`. The matrices can then be handed to `linsolve`, `rank` or `det`.",
+    "pt": "As equações devem ser lineares em `vars`; tudo que não multiplica uma variável vai para `b`. As matrizes podem então ser passadas a `linsolve`, `rank` ou `det`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two equations in two unknowns",
+      "pt": "Duas equações e duas incógnitas"
+     },
+     "code": "syms x y\n[A, b] = equationsToMatrix([x + 2*y == 3, 4*x - y == 1], [x y])"
+    }
+   ],
+   "see": [
+    "linsolve",
+    "solve",
+    "jacobian",
+    "eliminate"
+   ]
+  },
+  "findDecoupledBlocks": {
+   "summary": {
+    "en": "Splits a system of equations into blocks that can be solved independently.",
+    "pt": "Divide um sistema de equações em blocos que podem ser resolvidos de forma independente."
+   },
+   "syntax": [
+    {
+     "code": "[eqBlocks, varBlocks] = findDecoupledBlocks(eqs, vars)",
+     "en": "Returns the groups of equations and variables that do not depend on each other.",
+     "pt": "Retorna os grupos de equações e variáveis que não dependem uns dos outros."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of equations in the symbolic functions `vars`.",
+     "pt": "Vetor de equações nas funções simbólicas `vars`."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of symbolic functions such as `[x1(t) x2(t)]`.",
+     "pt": "Vetor de funções simbólicas como `[x1(t) x2(t)]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "eqBlocks",
+     "en": "Cell array; each cell holds the indices of the equations in one block.",
+     "pt": "Cell array; cada célula guarda os índices das equações de um bloco."
+    },
+    {
+     "name": "varBlocks",
+     "en": "Cell array of the indices of the variables of each block.",
+     "pt": "Cell array dos índices das variáveis de cada bloco."
+    }
+   ],
+   "description": {
+    "en": "The function inspects which variables appear in which equations and finds the connected groups. Each block can be solved on its own, which shrinks large DAE or ODE systems into smaller ones.",
+    "pt": "A função examina quais variáveis aparecem em quais equações e encontra os grupos conectados. Cada bloco pode ser resolvido por si só, o que reduz sistemas grandes de DAEs ou EDOs a sistemas menores."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A coupled pair and an isolated equation",
+      "pt": "Um par acoplado e uma equação isolada"
+     },
+     "code": "syms x1(t) x2(t) x3(t)\neqs = [x1 + x2 == 1, x1 - x2 == 0, x3 == 2];\n[eqb, varb] = findDecoupledBlocks(eqs, [x1 x2 x3]);\neqb\nvarb"
+    }
+   ],
+   "see": [
+    "incidenceMatrix",
+    "massMatrixForm",
+    "daeFunction",
+    "isLowIndexDAE"
+   ]
+  },
+  "finverse": {
+   "summary": {
+    "en": "Inverse of a function of one variable.",
+    "pt": "Função inversa de uma função de uma variável."
+   },
+   "syntax": [
+    {
+     "code": "g = finverse(f)",
+     "en": "Returns the inverse of `f` in its default variable.",
+     "pt": "Retorna a inversa de `f` na sua variável padrão."
+    },
+    {
+     "code": "g = finverse(f, x)",
+     "en": "Inverts with respect to the variable `x`.",
+     "pt": "Inverte em relação à variável `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic expression that is one-to-one in `x`.",
+     "pt": "Expressão simbólica injetora em `x`."
+    },
+    {
+     "name": "x",
+     "en": "Variable to invert for.",
+     "pt": "Variável em relação à qual inverter."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "g",
+     "en": "Symbolic expression such that `f(g(x))` is `x`.",
+     "pt": "Expressão simbólica tal que `f(g(x))` é `x`."
+    }
+   ],
+   "description": {
+    "en": "`finverse` solves `y = f(x)` for `x` and returns the result written in the variable `x` again. The inverse is valid on the branch where `f` is one-to-one; for a non-injective `f` such as `x^2` only one branch is given.",
+    "pt": "`finverse` resolve `y = f(x)` para `x` e devolve o resultado escrito novamente na variável `x`. A inversa vale no ramo em que `f` é injetora; para uma `f` não injetora, como `x^2`, apenas um ramo é dado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inverting linear and exponential functions",
+      "pt": "Invertendo funções linear e exponencial"
+     },
+     "code": "syms x\nfinverse(2*x + 3, x)\nfinverse(exp(x))"
+    }
+   ],
+   "see": [
+    "solve",
+    "compose",
+    "isolate",
+    "subs"
+   ]
+  },
+  "incidenceMatrix": {
+   "summary": {
+    "en": "Incidence matrix showing which variables appear in which equations.",
+    "pt": "Matriz de incidência que mostra quais variáveis aparecem em quais equações."
+   },
+   "syntax": [
+    {
+     "code": "M = incidenceMatrix(eqs, vars)",
+     "en": "Returns a 0-1 matrix with a 1 where an equation contains a variable.",
+     "pt": "Retorna uma matriz de 0 e 1 com 1 onde uma equação contém uma variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic equations.",
+     "pt": "Vetor de equações simbólicas."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of symbolic functions, such as `[x1(t) x2(t)]`.",
+     "pt": "Vetor de funções simbólicas, como `[x1(t) x2(t)]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Matrix with one row per equation and one column per variable.",
+     "pt": "Matriz com uma linha por equação e uma coluna por variável."
+    }
+   ],
+   "description": {
+    "en": "The matrix records only the structure of the system, not the coefficients. It is used to judge whether a DAE can be split into blocks or whether its index is high, as `findDecoupledBlocks` and `isLowIndexDAE` do.",
+    "pt": "A matriz registra apenas a estrutura do sistema, não os coeficientes. Serve para julgar se uma DAE pode ser dividida em blocos ou se seu índice é alto, como fazem `findDecoupledBlocks` e `isLowIndexDAE`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Structure of two equations",
+      "pt": "Estrutura de duas equações"
+     },
+     "code": "syms x1(t) x2(t) x3(t)\neqs = [x1 + x2 == 1, x2*x3 == 0];\nincidenceMatrix(eqs, [x1 x2 x3])"
+    }
+   ],
+   "see": [
+    "findDecoupledBlocks",
+    "isLowIndexDAE",
+    "massMatrixForm",
+    "equationsToMatrix"
+   ]
+  },
+  "isLowIndexDAE": {
+   "summary": {
+    "en": "Tests whether a DAE system has differential index 0 or 1.",
+    "pt": "Testa se um sistema DAE tem índice diferencial 0 ou 1."
+   },
+   "syntax": [
+    {
+     "code": "tf = isLowIndexDAE(eqs, vars)",
+     "en": "Returns true if the system is of low index and can be solved numerically as is.",
+     "pt": "Retorna verdadeiro se o sistema tem índice baixo e pode ser resolvido numericamente como está."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic equations.",
+     "pt": "Vetor de equações simbólicas."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of the unknown symbolic functions.",
+     "pt": "Vetor das funções simbólicas incógnitas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Numerical DAE solvers such as `ode15s` and `ode15i` cope with index 0 or 1, but not with higher indices. A `false` result means the system must first be reduced, for instance with `reduceDAEIndex`, before it is converted with `daeFunction` or `massMatrixForm`.",
+    "pt": "Os solvers numéricos de DAE, como `ode15s` e `ode15i`, lidam com índice 0 ou 1, mas não com índices maiores. Um resultado `false` indica que o sistema precisa antes ser reduzido, por exemplo com `reduceDAEIndex`, antes da conversão com `daeFunction` ou `massMatrixForm`."
+   },
+   "notes": {
+    "en": "`reduceDAEIndex` is not yet implemented in MatLivre.",
+    "pt": "`reduceDAEIndex` ainda não está implementada no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A semi-explicit system of index 1",
+      "pt": "Um sistema semiexplícito de índice 1"
+     },
+     "code": "syms x(t) y(t)\neqs = [diff(x,t) == y, x + y == 1];\nisLowIndexDAE(eqs, [x y])"
+    }
+   ],
+   "see": [
+    "daeFunction",
+    "massMatrixForm",
+    "incidenceMatrix",
+    "reduceDifferentialOrder"
+   ]
+  },
+  "isolate": {
+   "summary": {
+    "en": "Rearranges an equation to isolate one variable on the left side.",
+    "pt": "Reorganiza uma equação para isolar uma variável no lado esquerdo."
+   },
+   "syntax": [
+    {
+     "code": "E = isolate(eqn, var)",
+     "en": "Returns an equation of the form `var == expression`.",
+     "pt": "Retorna uma equação da forma `var == expressão`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqn",
+     "en": "Symbolic equation, linear in `var` for a guaranteed result.",
+     "pt": "Equação simbólica, linear em `var` para um resultado garantido."
+    },
+    {
+     "name": "var",
+     "en": "Variable (or expression) to isolate.",
+     "pt": "Variável (ou expressão) a isolar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "Symbolic equation with `var` alone on the left.",
+     "pt": "Equação simbólica com `var` sozinha à esquerda."
+    }
+   ],
+   "description": {
+    "en": "Unlike `solve`, `isolate` does not return the solution set; it rewrites the single equation, moving terms across the equals sign. It is handy for expressing one symbol of a formula in terms of the others.",
+    "pt": "Ao contrário de `solve`, `isolate` não retorna o conjunto solução; ela reescreve a equação, passando termos de um lado para o outro do sinal de igual. É útil para exprimir um símbolo de uma fórmula em função dos demais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Solve a formula for x",
+      "pt": "Isolar x em uma fórmula"
+     },
+     "code": "syms x a b\nisolate(a*x + b == 2*x, x)"
+    }
+   ],
+   "see": [
+    "solve",
+    "lhs",
+    "rhs",
+    "eliminate"
+   ]
+  },
+  "massMatrixForm": {
+   "summary": {
+    "en": "Writes a DAE system in mass-matrix form M*y' = F(t, y).",
+    "pt": "Escreve um sistema DAE na forma de matriz de massa M*y' = F(t, y)."
+   },
+   "syntax": [
+    {
+     "code": "[M, F] = massMatrixForm(eqs, vars)",
+     "en": "Returns the mass matrix `M` and the right-hand side `F`.",
+     "pt": "Retorna a matriz de massa `M` e o lado direito `F`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic equations.",
+     "pt": "Vetor de equações simbólicas."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of unknown symbolic functions, in the order of the columns of `M`.",
+     "pt": "Vetor das funções simbólicas incógnitas, na ordem das colunas de `M`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Symbolic mass matrix. Rows of zeros mark algebraic equations.",
+     "pt": "Matriz de massa simbólica. Linhas de zeros indicam equações algébricas."
+    },
+    {
+     "name": "F",
+     "en": "Column vector of expressions in `t` and the variables.",
+     "pt": "Vetor coluna de expressões em `t` e nas variáveis."
+    }
+   ],
+   "description": {
+    "en": "Many solvers (`ode15s`, `ode23t`) accept problems as `M(t,y) y' = f(t,y)`. `massMatrixForm` extracts that structure from the equations. It works only if the system is linear in the derivatives, and the result can feed `odeFunction` and the `Mass` option of `odeset`.",
+    "pt": "Vários solvers (`ode15s`, `ode23t`) aceitam problemas na forma `M(t,y) y' = f(t,y)`. `massMatrixForm` extrai essa estrutura das equações. Só funciona se o sistema for linear nas derivadas, e o resultado pode alimentar `odeFunction` e a opção `Mass` de `odeset`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One differential and one algebraic equation",
+      "pt": "Uma equação diferencial e uma algébrica"
+     },
+     "code": "syms x(t) y(t)\neqs = [diff(x,t) == y, x + y == 1];\n[M, F] = massMatrixForm(eqs, [x y])"
+    }
+   ],
+   "see": [
+    "daeFunction",
+    "odeFunction",
+    "isLowIndexDAE",
+    "odeset"
+   ]
+  },
+  "odeFunction": {
+   "summary": {
+    "en": "Converts symbolic expressions into a numeric function handle for ODE solvers.",
+    "pt": "Converte expressões simbólicas em um function handle numérico para os solvers de EDO."
+   },
+   "syntax": [
+    {
+     "code": "f = odeFunction(expr, vars)",
+     "en": "Returns a handle `f(t, Y)` that evaluates the vector `expr` for the state `Y`.",
+     "pt": "Retorna um handle `f(t, Y)` que avalia o vetor `expr` para o estado `Y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Vector of symbolic expressions: the right-hand side of `y' = expr`.",
+     "pt": "Vetor de expressões simbólicas: o lado direito de `y' = expr`."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of symbolic functions that make up the state, such as `[x(t); y(t)]`.",
+     "pt": "Vetor das funções simbólicas que formam o estado, como `[x(t); y(t)]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Function handle with the signature `f(t, Y)` expected by `ode45`, returning a column vector.",
+     "pt": "Function handle com a assinatura `f(t, Y)` esperada por `ode45`, que retorna um vetor coluna."
+    }
+   ],
+   "description": {
+    "en": "`odeFunction` does for ODEs what `matlabFunction` does for plain expressions: it generates a numeric function in which the state variables become the entries of `Y`. Parameters that are symbolic variables become extra arguments after `Y`.",
+    "pt": "`odeFunction` faz para EDOs o que `matlabFunction` faz para expressões comuns: gera uma função numérica em que as variáveis de estado viram elementos de `Y`. Parâmetros que sejam variáveis simbólicas viram argumentos extras depois de `Y`."
+   },
+   "notes": {
+    "en": "Passing the output of `odeToVectorField` (whose state is written `Y[1]`, `Y[2]`) is not accepted in MatLivre; pass the symbolic functions as `vars` instead.",
+    "pt": "Passar a saída de `odeToVectorField` (cujo estado se escreve `Y[1]`, `Y[2]`) não é aceito no MatLivre; passe as funções simbólicas como `vars`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Harmonic oscillator right-hand side",
+      "pt": "Lado direito do oscilador harmônico"
+     },
+     "code": "syms x(t) y(t)\nf = odeFunction([y; -x], [x; y]);\nf(0, [1; 2])"
+    }
+   ],
+   "see": [
+    "odeToVectorField",
+    "daeFunction",
+    "matlabFunction",
+    "ode45",
+    "massMatrixForm"
+   ]
+  },
+  "odeToVectorField": {
+   "summary": {
+    "en": "Rewrites a higher-order ODE as an equivalent first-order system.",
+    "pt": "Reescreve uma EDO de ordem superior como um sistema equivalente de primeira ordem."
+   },
+   "syntax": [
+    {
+     "code": "V = odeToVectorField(eqn)",
+     "en": "Returns the right-hand side `V` of the first-order system `Y' = V`.",
+     "pt": "Retorna o lado direito `V` do sistema de primeira ordem `Y' = V`."
+    },
+    {
+     "code": "[V, S] = odeToVectorField(eqn)",
+     "en": "Also returns `S`, the list of state variables.",
+     "pt": "Também retorna `S`, a lista de variáveis de estado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqn",
+     "en": "Differential equation using `diff` of a symbolic function.",
+     "pt": "Equação diferencial com `diff` de uma função simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "V",
+     "en": "Symbolic column vector; entries are written with `Y[1]`, `Y[2]`, and so on.",
+     "pt": "Vetor coluna simbólico; os elementos são escritos com `Y[1]`, `Y[2]` etc."
+    },
+    {
+     "name": "S",
+     "en": "State variables: the function and its derivatives up to one order lower than the equation.",
+     "pt": "Variáveis de estado: a função e suas derivadas até uma ordem abaixo da equação."
+    }
+   ],
+   "description": {
+    "en": "A solver such as `ode45` takes first-order systems only. The substitution used here treats `y`, `y'`, ... as separate states: for `y'' + y = 0` the state is `[y; Dy]` and the system is `[Dy; -y]`. The equation must be solvable for its highest derivative.",
+    "pt": "Um solver como `ode45` aceita apenas sistemas de primeira ordem. A substituição usada trata `y`, `y'`, ... como estados separados: para `y'' + y = 0` o estado é `[y; Dy]` e o sistema é `[Dy; -y]`. A equação precisa poder ser resolvida para a derivada de maior ordem."
+   },
+   "notes": {
+    "en": "A single equation is supported; systems of several equations are not accepted in MatLivre.",
+    "pt": "Há suporte a uma única equação; sistemas de várias equações não são aceitos no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Second-order oscillator",
+      "pt": "Oscilador de segunda ordem"
+     },
+     "code": "syms y(t)\n[V, S] = odeToVectorField(diff(y,t,2) + y == 0)"
+    }
+   ],
+   "see": [
+    "odeFunction",
+    "dsolve",
+    "ode45",
+    "reduceDifferentialOrder"
+   ]
+  },
+  "poles": {
+   "summary": {
+    "en": "Poles of a rational expression and their multiplicities.",
+    "pt": "Polos de uma expressão racional e suas multiplicidades."
+   },
+   "syntax": [
+    {
+     "code": "p = poles(f)",
+     "en": "Returns the poles of `f` in its default variable.",
+     "pt": "Retorna os polos de `f` na sua variável padrão."
+    },
+    {
+     "code": "[p, n] = poles(f, x)",
+     "en": "Returns the poles in `x` and the order of each.",
+     "pt": "Retorna os polos em `x` e a ordem de cada um."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic rational expression or function.",
+     "pt": "Expressão ou função racional simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Variable in which the poles are sought.",
+     "pt": "Variável em que os polos são procurados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Column vector of the poles, each listed once.",
+     "pt": "Vetor coluna dos polos, cada um listado uma vez."
+    },
+    {
+     "name": "n",
+     "en": "Column vector with the multiplicity (order) of each pole.",
+     "pt": "Vetor coluna com a multiplicidade (ordem) de cada polo."
+    }
+   ],
+   "description": {
+    "en": "A pole is a point where the denominator vanishes and is not cancelled by the numerator. `poles` cancels common factors first, so `(x+1)/(x^2-1)` has the single pole `1`, not `-1`. The multiplicity tells how fast the function blows up near the pole.",
+    "pt": "Um polo é um ponto em que o denominador se anula sem ser cancelado pelo numerador. `poles` cancela antes os fatores comuns, de modo que `(x+1)/(x^2-1)` tem um único polo, `1`, e não `-1`. A multiplicidade indica a rapidez com que a função diverge perto do polo."
+   },
+   "notes": {
+    "en": "In MatLivre `poles` handles rational functions only, not poles of functions such as `tan(x)`.",
+    "pt": "No MatLivre, `poles` trata apenas funções racionais, não polos de funções como `tan(x)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Poles with multiplicity",
+      "pt": "Polos com multiplicidade"
+     },
+     "code": "syms x\n[p, n] = poles(1/((x-1)*(x+2)^2), x)"
+    }
+   ],
+   "see": [
+    "partfrac",
+    "limit",
+    "numden",
+    "residue",
+    "roots"
+   ]
+  },
+  "reduceDifferentialOrder": {
+   "summary": {
+    "en": "Reduces a system of higher-order differential equations to first order.",
+    "pt": "Reduz um sistema de equações diferenciais de ordem superior a primeira ordem."
+   },
+   "syntax": [
+    {
+     "code": "[eqs1, vars1] = reduceDifferentialOrder(eqs, vars)",
+     "en": "Returns equivalent first-order equations and the enlarged variable list.",
+     "pt": "Retorna equações equivalentes de primeira ordem e a lista ampliada de variáveis."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqs",
+     "en": "Vector of symbolic differential equations.",
+     "pt": "Vetor de equações diferenciais simbólicas."
+    },
+    {
+     "name": "vars",
+     "en": "Vector of the unknown symbolic functions.",
+     "pt": "Vetor das funções simbólicas incógnitas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "eqs1",
+     "en": "System of first-order equations.",
+     "pt": "Sistema de equações de primeira ordem."
+    },
+    {
+     "name": "vars1",
+     "en": "Original variables plus the new ones, named like `Dyt(t)`, that stand for derivatives.",
+     "pt": "Variáveis originais mais as novas, com nomes como `Dyt(t)`, que representam derivadas."
+    }
+   ],
+   "description": {
+    "en": "For each derivative of order two or more, a new variable is introduced for the next lower derivative and the equations are rewritten with it. For `y'' + y = 0` the output has the equations `Dyt' + y = 0` and `Dyt - y' = 0`. This is the first step before `massMatrixForm` or `daeFunction`.",
+    "pt": "Para cada derivada de ordem dois ou mais, introduz-se uma nova variável para a derivada de ordem imediatamente inferior e as equações são reescritas com ela. Para `y'' + y = 0`, a saída tem as equações `Dyt' + y = 0` e `Dyt - y' = 0`. É o primeiro passo antes de `massMatrixForm` ou `daeFunction`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Second-order equation",
+      "pt": "Equação de segunda ordem"
+     },
+     "code": "syms y(t)\n[eq1, vars1] = reduceDifferentialOrder(diff(y,t,2) + y == 0, y)"
+    }
+   ],
+   "see": [
+    "odeToVectorField",
+    "massMatrixForm",
+    "daeFunction",
+    "isLowIndexDAE"
+   ]
+  },
+  "vpasolve": {
+   "summary": {
+    "en": "Numerical solution of equations in variable-precision arithmetic.",
+    "pt": "Solução numérica de equações em aritmética de precisão variável."
+   },
+   "syntax": [
+    {
+     "code": "s = vpasolve(eqn, x)",
+     "en": "Finds a numerical solution of one equation in `x`.",
+     "pt": "Encontra uma solução numérica de uma equação em `x`."
+    },
+    {
+     "code": "s = vpasolve(eqn, x, range)",
+     "en": "Searches inside the interval `[a b]`.",
+     "pt": "Procura dentro do intervalo `[a b]`."
+    },
+    {
+     "code": "S = vpasolve(eqns, vars)",
+     "en": "Solves a system, returning a struct with one field per variable.",
+     "pt": "Resolve um sistema, retornando um struct com um campo por variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eqn",
+     "en": "Equation or expression (taken equal to 0).",
+     "pt": "Equação ou expressão (tomada igual a 0)."
+    },
+    {
+     "name": "x",
+     "en": "Variable to solve for.",
+     "pt": "Variável a resolver."
+    },
+    {
+     "name": "range",
+     "en": "Interval `[a b]` that steers the search.",
+     "pt": "Intervalo `[a b]` que direciona a busca."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Symbolic numbers with 32 significant digits by default.",
+     "pt": "Números simbólicos com 32 dígitos significativos por padrão."
+    }
+   ],
+   "description": {
+    "en": "`vpasolve` uses a numerical search rather than algebra, so it handles equations that `solve` cannot put in closed form, such as `cos(x) == x`. For polynomials it returns all roots; for other equations it returns one root unless a range is given, and different ranges give different roots.",
+    "pt": "`vpasolve` usa uma busca numérica em vez de álgebra, de modo que trata equações que `solve` não consegue escrever em forma fechada, como `cos(x) == x`. Para polinômios retorna todas as raízes; para outras equações retorna uma raiz, a menos que se dê um intervalo, e intervalos diferentes levam a raízes diferentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Polynomial and transcendental equations",
+      "pt": "Equações polinomial e transcendente"
+     },
+     "code": "syms x\nvpasolve(x^2 - 2 == 0, x)\nvpasolve(cos(x) == x, x)"
+    }
+   ],
+   "see": [
+    "solve",
+    "fzero",
+    "vpa",
+    "digits",
+    "fsolve"
+   ]
+  }
+ }
+}

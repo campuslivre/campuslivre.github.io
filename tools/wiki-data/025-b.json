@@ -1,0 +1,1014 @@
+{
+ "functions": {
+  "coeffs": {
+   "summary": {
+    "en": "Coefficients of a polynomial in one or more variables.",
+    "pt": "Coeficientes de um polinômio em uma ou mais variáveis."
+   },
+   "syntax": [
+    {
+     "code": "c = coeffs(p, x)",
+     "en": "Returns the coefficients of `p` as a polynomial in `x`, lowest power first.",
+     "pt": "Retorna os coeficientes de `p` como polinômio em `x`, da menor potência para a maior."
+    },
+    {
+     "code": "[c, t] = coeffs(p, x)",
+     "en": "Also returns the terms `t` that each coefficient multiplies.",
+     "pt": "Também retorna os termos `t` que cada coeficiente multiplica."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic polynomial expression.",
+     "pt": "Expressão polinomial simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Variable (or vector of variables) of the polynomial.",
+     "pt": "Variável (ou vetor de variáveis) do polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Row vector of coefficients; they may contain the other symbols.",
+     "pt": "Vetor linha de coeficientes; podem conter os demais símbolos."
+    },
+    {
+     "name": "t",
+     "en": "Row vector of the powers of `x` matching `c`.",
+     "pt": "Vetor linha das potências de `x` correspondentes a `c`."
+    }
+   ],
+   "description": {
+    "en": "`coeffs` first expands `p` and then collects the terms by power of `x`. Terms with a zero coefficient are skipped, which is why the second output is useful: it says which power each coefficient belongs to. Coefficients that depend on other symbols stay symbolic.",
+    "pt": "`coeffs` expande `p` e depois reúne os termos por potência de `x`. Termos de coeficiente zero são omitidos, e por isso a segunda saída é útil: ela diz a que potência pertence cada coeficiente. Coeficientes que dependem de outros símbolos permanecem simbólicos."
+   },
+   "notes": {
+    "en": "Only the single-variable form with an explicit variable was checked in MatLivre; the multivariable form with a vector of variables is not supported.",
+    "pt": "No MatLivre foi verificada apenas a forma de uma variável explícita; a forma multivariável com um vetor de variáveis não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Coefficients with their terms",
+      "pt": "Coeficientes com seus termos"
+     },
+     "code": "syms x\n[c, t] = coeffs(3*x^2 + 2*x + 1, x)\ncoeffs(x^3 + 2*x, x)"
+    }
+   ],
+   "see": [
+    "collect",
+    "sym2poly",
+    "poly2sym",
+    "polyfit",
+    "expand"
+   ]
+  },
+  "collect": {
+   "summary": {
+    "en": "Collects the terms of an expression by powers of a variable.",
+    "pt": "Agrupa os termos de uma expressão por potências de uma variável."
+   },
+   "syntax": [
+    {
+     "code": "R = collect(p)",
+     "en": "Collects in the default variable.",
+     "pt": "Agrupa na variável padrão."
+    },
+    {
+     "code": "R = collect(p, x)",
+     "en": "Collects in powers of `x`.",
+     "pt": "Agrupa em potências de `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Symbolic expression or array of expressions.",
+     "pt": "Expressão simbólica ou array de expressões."
+    },
+    {
+     "name": "x",
+     "en": "Variable whose powers group the terms.",
+     "pt": "Variável cujas potências agrupam os termos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Equivalent expression written as a polynomial in `x`, with the other symbols inside the coefficients.",
+     "pt": "Expressão equivalente escrita como polinômio em `x`, com os demais símbolos dentro dos coeficientes."
+    }
+   ],
+   "description": {
+    "en": "`collect` does not change the value of the expression, only its form. Like terms in `x` are added, and each power of `x` is multiplied by a factored coefficient. It is the inverse view of `expand`: where `expand` removes parentheses, `collect` reorganizes by variable.",
+    "pt": "`collect` não altera o valor da expressão, apenas sua forma. Termos semelhantes em `x` são somados e cada potência de `x` é multiplicada por um coeficiente fatorado. É a visão inversa de `expand`: onde `expand` remove parênteses, `collect` reorganiza por variável."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Group by x",
+      "pt": "Agrupar por x"
+     },
+     "code": "syms x y\ncollect(x^2*y + x*y + x^2 + 3, x)\ncollect((x+1)*(x+2) + x*y, x)"
+    }
+   ],
+   "see": [
+    "expand",
+    "coeffs",
+    "simplify",
+    "factor",
+    "horner"
+   ]
+  },
+  "combine": {
+   "summary": {
+    "en": "Combines terms of an expression using rules for powers, logarithms and trigonometric functions.",
+    "pt": "Combina termos de uma expressão com regras de potências, logaritmos e funções trigonométricas."
+   },
+   "syntax": [
+    {
+     "code": "R = combine(S)",
+     "en": "Applies the available combination rules.",
+     "pt": "Aplica as regras de combinação disponíveis."
+    },
+    {
+     "code": "R = combine(S, target)",
+     "en": "Applies the rules for one target: `'sincos'`, `'exp'`, `'log'` or `'powers'`.",
+     "pt": "Aplica as regras de um alvo: `'sincos'`, `'exp'`, `'log'` ou `'powers'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    },
+    {
+     "name": "target",
+     "en": "Optional string naming the rule set.",
+     "pt": "String opcional que nomeia o conjunto de regras."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Rewritten expression, equal to `S`.",
+     "pt": "Expressão reescrita, igual a `S`."
+    }
+   ],
+   "description": {
+    "en": "`combine` works in the opposite direction of `expand`. It turns products of sines and cosines into sines or cosines of sums of angles, products of powers with the same base into a single power, and so on. For example `sin(x)*cos(x)` becomes `sin(2*x)/2` with the `'sincos'` target.",
+    "pt": "`combine` atua no sentido oposto ao de `expand`. Transforma produtos de senos e cossenos em senos ou cossenos de somas de ângulos, produtos de potências de mesma base em uma só potência, e assim por diante. Por exemplo, `sin(x)*cos(x)` vira `sin(2*x)/2` com o alvo `'sincos'`."
+   },
+   "notes": {
+    "en": "Combination of logarithms with numeric constants (`log(x) + log(2)`) is not reliable in MatLivre, so prefer the trigonometric and power rules.",
+    "pt": "A combinação de logaritmos com constantes numéricas (`log(x) + log(2)`) não é confiável no MatLivre; prefira as regras trigonométricas e de potências."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Trigonometric and power rules",
+      "pt": "Regras trigonométricas e de potências"
+     },
+     "code": "syms x\ncombine(sin(x)*cos(x), 'sincos')\ncombine(sin(x)*sin(2*x), 'sincos')\ncombine(x^2*x^3, 'powers')"
+    }
+   ],
+   "see": [
+    "expand",
+    "simplify",
+    "collect",
+    "rewrite"
+   ]
+  },
+  "displayFormula": {
+   "summary": {
+    "en": "Displays a symbolic formula given as text.",
+    "pt": "Exibe uma fórmula simbólica dada como texto."
+   },
+   "syntax": [
+    {
+     "code": "displayFormula(str)",
+     "en": "Parses the text `str` as a symbolic expression and displays it.",
+     "pt": "Interpreta o texto `str` como uma expressão simbólica e a exibe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String or string array with one expression per element, for example `\"x^2 + 1\"`.",
+     "pt": "String ou array de strings com uma expressão por elemento, por exemplo `\"x^2 + 1\"`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "In live scripts the formula appears in typeset mathematical form, which makes long expressions easier to read than the one-line text output. Nothing is returned. Each element of a string array is shown as a separate formula.\n\nThe argument is text, so the variables in it do not need to exist in the workspace.",
+    "pt": "Em live scripts a fórmula aparece em notação matemática tipográfica, o que facilita a leitura de expressões longas em comparação com a saída de texto em uma linha. Nada é retornado. Cada elemento de um array de strings é exibido como uma fórmula separada.\n\nO argumento é um texto, de modo que as variáveis nele não precisam existir no workspace."
+   },
+   "notes": {
+    "en": "MatLivre prints the parsed expression as plain text instead of typeset mathematics, and does not take extra name-value arguments.",
+    "pt": "O MatLivre imprime a expressão interpretada como texto simples, em vez de matemática tipográfica, e não aceita argumentos nome-valor adicionais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Show an expression",
+      "pt": "Exibir uma expressão"
+     },
+     "code": "displayFormula(\"x^2 + 1\")\ndisplayFormula([\"x == 1\"; \"y^2\"])"
+    }
+   ],
+   "see": [
+    "disp",
+    "pretty",
+    "latex",
+    "mathml",
+    "sym"
+   ]
+  },
+  "divisors": {
+   "summary": {
+    "en": "All positive divisors of an integer.",
+    "pt": "Todos os divisores positivos de um inteiro."
+   },
+   "syntax": [
+    {
+     "code": "d = divisors(n)",
+     "en": "Returns the divisors of `n` in ascending order.",
+     "pt": "Retorna os divisores de `n` em ordem crescente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Integer, numeric or symbolic. The sign is ignored.",
+     "pt": "Inteiro, numérico ou simbólico. O sinal é ignorado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Row vector: numeric when `n` is numeric, symbolic when `n` is symbolic.",
+     "pt": "Vetor linha: numérico se `n` é numérico, simbólico se `n` é simbólico."
+    }
+   ],
+   "description": {
+    "en": "The divisors are found from the prime factorization of `n`, so the cost depends on how hard `n` is to factor, not on its size alone. The list always starts with 1 and ends with `abs(n)`.",
+    "pt": "Os divisores são obtidos da fatoração de `n` em primos, de modo que o custo depende da dificuldade de fatorar `n`, não só do seu tamanho. A lista sempre começa em 1 e termina em `abs(n)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric and symbolic input",
+      "pt": "Entrada numérica e simbólica"
+     },
+     "code": "divisors(12)\ndivisors(sym(30))"
+    }
+   ],
+   "see": [
+    "factor",
+    "primes",
+    "isprime",
+    "gcd",
+    "nchoosek"
+   ]
+  },
+  "expand": {
+   "summary": {
+    "en": "Expands products and powers into sums of terms.",
+    "pt": "Expande produtos e potências em somas de termos."
+   },
+   "syntax": [
+    {
+     "code": "R = expand(S)",
+     "en": "Multiplies out products and integer powers.",
+     "pt": "Efetua produtos e potências inteiras."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression, array, or equation.",
+     "pt": "Expressão, array ou equação simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Expanded expression equal to `S`.",
+     "pt": "Expressão expandida, igual a `S`."
+    }
+   ],
+   "description": {
+    "en": "`expand` distributes multiplication over addition, so `(x+y)^3` becomes a sum of four terms. It also splits exponentials of sums, `exp(x+y)`, in MATLAB, and applies angle-sum and multiple-angle identities to trigonometric functions. The opposite operations are `factor` and `collect`.",
+    "pt": "`expand` distribui a multiplicação sobre a adição, de modo que `(x+y)^3` vira uma soma de quatro termos. Também separa exponenciais de somas, `exp(x+y)`, no MATLAB, e aplica identidades de soma de ângulos e de ângulo múltiplo a funções trigonométricas. As operações opostas são `factor` e `collect`."
+   },
+   "notes": {
+    "en": "In MatLivre `expand` multiplies out polynomials, but identities for trigonometric, exponential and logarithmic functions (`sin(x+y)`, `cos(2*x)`, `exp(x+y)`) are not applied.",
+    "pt": "No MatLivre, `expand` efetua produtos de polinômios, mas identidades de funções trigonométricas, exponenciais e logarítmicas (`sin(x+y)`, `cos(2*x)`, `exp(x+y)`) não são aplicadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Expand a polynomial",
+      "pt": "Expandir um polinômio"
+     },
+     "code": "syms x y\nexpand((x + y)^3)\nexpand((x + 1)^2*(x - 2))"
+    }
+   ],
+   "see": [
+    "factor",
+    "collect",
+    "simplify",
+    "combine",
+    "horner"
+   ]
+  },
+  "horner": {
+   "summary": {
+    "en": "Horner (nested) form of a polynomial.",
+    "pt": "Forma de Horner (aninhada) de um polinômio."
+   },
+   "syntax": [
+    {
+     "code": "R = horner(P)",
+     "en": "Rewrites the polynomial `P` in nested multiplication form.",
+     "pt": "Reescreve o polinômio `P` na forma de multiplicação aninhada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "P",
+     "en": "Symbolic polynomial.",
+     "pt": "Polinômio simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Equivalent expression with the nesting `x*(x*(a*x + b) + c) + d`.",
+     "pt": "Expressão equivalente com o aninhamento `x*(x*(a*x + b) + c) + d`."
+    }
+   ],
+   "description": {
+    "en": "Writing `x^3 + 2*x^2 + 3*x + 4` as `x*(x*(x + 2) + 3) + 4` evaluates the polynomial with only additions and multiplications and no powers. This takes fewer operations and is numerically better behaved, which is why it is the usual way to evaluate polynomials by machine.",
+    "pt": "Escrever `x^3 + 2*x^2 + 3*x + 4` como `x*(x*(x + 2) + 3) + 4` avalia o polinômio apenas com somas e multiplicações, sem potências. Isso exige menos operações e é numericamente mais bem comportado, e por isso é a maneira usual de avaliar polinômios em máquina."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Nested form of a cubic",
+      "pt": "Forma aninhada de uma cúbica"
+     },
+     "code": "syms x\nhorner(x^3 + 2*x^2 + 3*x + 4)"
+    }
+   ],
+   "see": [
+    "polyval",
+    "expand",
+    "collect",
+    "poly2sym",
+    "matlabFunction"
+   ]
+  },
+  "lhs": {
+   "summary": {
+    "en": "Left side of an equation.",
+    "pt": "Lado esquerdo de uma equação."
+   },
+   "syntax": [
+    {
+     "code": "L = lhs(eq)",
+     "en": "Returns the left-hand side of `eq`, element by element for an array of equations.",
+     "pt": "Retorna o lado esquerdo de `eq`, elemento a elemento para um array de equações."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eq",
+     "en": "Symbolic equation or array of equations.",
+     "pt": "Equação simbólica ou array de equações."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Symbolic expression or array.",
+     "pt": "Expressão ou array simbólico."
+    }
+   ],
+   "description": {
+    "en": "Equations are built with `==`, for example `x^2 == 4*x + 1`. `lhs` and `rhs` take them apart, which helps when post-processing the result of `solve` or when moving everything to one side with `lhs(eq) - rhs(eq)`.",
+    "pt": "Equações são construídas com `==`, por exemplo `x^2 == 4*x + 1`. `lhs` e `rhs` as desmontam, o que ajuda ao processar o resultado de `solve` ou ao levar tudo para um lado com `lhs(eq) - rhs(eq)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Both sides of an equation",
+      "pt": "Os dois lados de uma equação"
+     },
+     "code": "syms x\neq = x^2 == 4*x + 1;\nlhs(eq)\nrhs(eq)"
+    }
+   ],
+   "see": [
+    "rhs",
+    "isolate",
+    "solve",
+    "isequal"
+   ]
+  },
+  "numden": {
+   "summary": {
+    "en": "Numerator and denominator of a rational expression.",
+    "pt": "Numerador e denominador de uma expressão racional."
+   },
+   "syntax": [
+    {
+     "code": "[n, d] = numden(A)",
+     "en": "Returns the numerator and denominator after combining `A` into one fraction in lowest terms.",
+     "pt": "Retorna numerador e denominador depois de combinar `A` em uma única fração irredutível."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Symbolic expression, array, or numeric value.",
+     "pt": "Expressão simbólica, array ou valor numérico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Numerator.",
+     "pt": "Numerador."
+    },
+    {
+     "name": "d",
+     "en": "Denominator.",
+     "pt": "Denominador."
+    }
+   ],
+   "description": {
+    "en": "`numden` first brings the terms to a common denominator and cancels common factors. For numeric input, the value is converted to a rational number first, so `numden(0.75)` gives `3` and `4`.",
+    "pt": "`numden` primeiro leva os termos a um denominador comum e cancela fatores comuns. Para entrada numérica, o valor é antes convertido em número racional, de modo que `numden(0.75)` dá `3` e `4`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rational expression and number",
+      "pt": "Expressão racional e número"
+     },
+     "code": "syms x\n[n, d] = numden(x/3 + 1/x)\n[n2, d2] = numden(0.75)"
+    }
+   ],
+   "see": [
+    "rat",
+    "partfrac",
+    "simplifyFraction",
+    "simplify",
+    "factor"
+   ]
+  },
+  "partfrac": {
+   "summary": {
+    "en": "Partial fraction decomposition of a rational expression.",
+    "pt": "Decomposição em frações parciais de uma expressão racional."
+   },
+   "syntax": [
+    {
+     "code": "R = partfrac(f)",
+     "en": "Decomposes `f` in its default variable.",
+     "pt": "Decompõe `f` na sua variável padrão."
+    },
+    {
+     "code": "R = partfrac(f, x)",
+     "en": "Decomposes with respect to `x`.",
+     "pt": "Decompõe em relação a `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Rational expression.",
+     "pt": "Expressão racional."
+    },
+    {
+     "name": "x",
+     "en": "Variable of the decomposition.",
+     "pt": "Variável da decomposição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Sum of fractions with simple denominators, plus a polynomial part if the degree of the numerator is not smaller.",
+     "pt": "Soma de frações com denominadores simples, mais uma parte polinomial se o grau do numerador não for menor."
+    }
+   ],
+   "description": {
+    "en": "The denominator is factored and the fraction is split into one term per factor, with its multiplicity. The technique is the basis for integrating rational functions and for inverting Laplace and Z-transforms by table lookup.",
+    "pt": "O denominador é fatorado e a fração é dividida em um termo por fator, respeitando a multiplicidade. A técnica é a base para integrar funções racionais e para inverter transformadas de Laplace e Z por consulta de tabela."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Proper and improper fractions",
+      "pt": "Frações próprias e impróprias"
+     },
+     "code": "syms x\npartfrac((x + 3)/((x - 1)*(x + 2)))\npartfrac(x^3/(x^2 - 1))"
+    }
+   ],
+   "see": [
+    "numden",
+    "residue",
+    "int",
+    "ilaplace",
+    "simplifyFraction"
+   ]
+  },
+  "rhs": {
+   "summary": {
+    "en": "Right side of an equation.",
+    "pt": "Lado direito de uma equação."
+   },
+   "syntax": [
+    {
+     "code": "R = rhs(eq)",
+     "en": "Returns the right-hand side of `eq`, element by element for an array of equations.",
+     "pt": "Retorna o lado direito de `eq`, elemento a elemento para um array de equações."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "eq",
+     "en": "Symbolic equation or array of equations.",
+     "pt": "Equação simbólica ou array de equações."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Symbolic expression or array.",
+     "pt": "Expressão ou array simbólico."
+    }
+   ],
+   "description": {
+    "en": "`rhs` is the companion of `lhs`. It is often used to read a value out of a solution written as an equation, such as the output of `isolate`, `rhs(isolate(eq, x))`.",
+    "pt": "`rhs` é o par de `lhs`. É muito usada para extrair um valor de uma solução escrita como equação, como a saída de `isolate`, em `rhs(isolate(eq, x))`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Right sides of a system",
+      "pt": "Lados direitos de um sistema"
+     },
+     "code": "syms x y\neq = [x + y == 2, x - y == 0];\nlhs(eq)\nrhs(eq)"
+    }
+   ],
+   "see": [
+    "lhs",
+    "isolate",
+    "solve",
+    "isequal"
+   ]
+  },
+  "simplifyFraction": {
+   "summary": {
+    "en": "Reduces a rational expression to lowest terms.",
+    "pt": "Reduz uma expressão racional a termos mínimos."
+   },
+   "syntax": [
+    {
+     "code": "R = simplifyFraction(f)",
+     "en": "Cancels the common factors of numerator and denominator.",
+     "pt": "Cancela os fatores comuns do numerador e do denominador."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Symbolic rational expression.",
+     "pt": "Expressão racional simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Equivalent fraction in which numerator and denominator share no factor.",
+     "pt": "Fração equivalente em que numerador e denominador não têm fator comum."
+    }
+   ],
+   "description": {
+    "en": "The function computes the greatest common divisor of the numerator and denominator polynomials and divides it out. It is cheaper and more predictable than `simplify`, which tries many rewriting rules.",
+    "pt": "A função calcula o máximo divisor comum dos polinômios do numerador e do denominador e o divide. É mais barata e previsível que `simplify`, que tenta muitas regras de reescrita."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cancel a common factor",
+      "pt": "Cancelar um fator comum"
+     },
+     "code": "syms x\nsimplifyFraction((x^2 - 1)/(x - 1))"
+    }
+   ],
+   "see": [
+    "simplify",
+    "numden",
+    "partfrac",
+    "factor",
+    "gcd"
+   ]
+  },
+  "adjoint": {
+   "summary": {
+    "en": "Classical adjoint (adjugate) of a square matrix.",
+    "pt": "Adjunta clássica (adjugada) de uma matriz quadrada."
+   },
+   "syntax": [
+    {
+     "code": "X = adjoint(A)",
+     "en": "Returns the transpose of the cofactor matrix of `A`.",
+     "pt": "Retorna a transposta da matriz de cofatores de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square symbolic or numeric matrix.",
+     "pt": "Matriz quadrada simbólica ou numérica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "X",
+     "en": "Matrix satisfying `A*X == det(A)*eye(n)`.",
+     "pt": "Matriz que satisfaz `A*X == det(A)*eye(n)`."
+    }
+   ],
+   "description": {
+    "en": "The adjugate exists even when `A` is singular, unlike the inverse. When `A` is invertible, `inv(A)` equals `adjoint(A)/det(A)`. For a 2-by-2 matrix `[a b; c d]` the adjugate is `[d -b; -c a]`.",
+    "pt": "A adjugada existe mesmo quando `A` é singular, ao contrário da inversa. Quando `A` é inversível, `inv(A)` é igual a `adjoint(A)/det(A)`. Para uma matriz 2 por 2 `[a b; c d]`, a adjugada é `[d -b; -c a]`."
+   },
+   "notes": {
+    "en": "In MATLAB, `adjoint` is the classical adjoint, not the conjugate transpose; use `A'` for that.",
+    "pt": "No MATLAB, `adjoint` é a adjunta clássica, não a transposta conjugada; use `A'` para esta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Adjugate of a 2-by-2 matrix",
+      "pt": "Adjugada de uma matriz 2 por 2"
+     },
+     "code": "A = sym([1 2; 3 4]);\nX = adjoint(A)\nA*X"
+    }
+   ],
+   "see": [
+    "det",
+    "inv",
+    "cofactor",
+    "transpose",
+    "rank"
+   ]
+  },
+  "bernsteinMatrix": {
+   "summary": {
+    "en": "Matrix of Bernstein polynomial basis functions.",
+    "pt": "Matriz das funções-base dos polinômios de Bernstein."
+   },
+   "syntax": [
+    {
+     "code": "B = bernsteinMatrix(n, t)",
+     "en": "Returns the `n+1` Bernstein basis polynomials of degree `n` evaluated at `t`.",
+     "pt": "Retorna os `n+1` polinômios-base de Bernstein de grau `n` avaliados em `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Non-negative integer degree.",
+     "pt": "Grau inteiro não negativo."
+    },
+    {
+     "name": "t",
+     "en": "Symbolic variable or numeric vector of parameter values, typically in `[0, 1]`.",
+     "pt": "Variável simbólica ou vetor numérico de valores do parâmetro, em geral em `[0, 1]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Matrix with `n+1` columns, one per basis polynomial `b(k,n)(t) = nchoosek(n,k)*t^k*(1-t)^(n-k)`; one row per value of `t`.",
+     "pt": "Matriz com `n+1` colunas, uma por polinômio-base `b(k,n)(t) = nchoosek(n,k)*t^k*(1-t)^(n-k)`; uma linha por valor de `t`."
+    }
+   ],
+   "description": {
+    "en": "The Bernstein polynomials are non-negative on `[0, 1]` and add up to 1, which makes them the weights of Bezier curves: a curve is `B * P`, where `P` lists the control points. With a symbolic `t` the result is a symbolic row vector.",
+    "pt": "Os polinômios de Bernstein são não negativos em `[0, 1]` e somam 1, o que os torna os pesos das curvas de Bezier: uma curva é `B * P`, em que `P` lista os pontos de controle. Com `t` simbólico, o resultado é um vetor linha simbólico."
+   },
+   "notes": {
+    "en": "Symbolic output is written in factored form, for example `(t - 1)^2` for `(1 - t)^2`.",
+    "pt": "A saída simbólica aparece na forma fatorada, por exemplo `(t - 1)^2` para `(1 - t)^2`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Degree 2 basis",
+      "pt": "Base de grau 2"
+     },
+     "code": "syms t\nbernsteinMatrix(2, t)\nbernsteinMatrix(2, [0 0.5 1])"
+    }
+   ],
+   "see": [
+    "nchoosek",
+    "polyfit",
+    "interp1",
+    "poly2sym"
+   ]
+  },
+  "charpoly": {
+   "summary": {
+    "en": "Characteristic polynomial of a matrix.",
+    "pt": "Polinômio característico de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "p = charpoly(A)",
+     "en": "Returns the coefficients of `det(x*I - A)`, highest power first.",
+     "pt": "Retorna os coeficientes de `det(x*I - A)`, da maior potência para a menor."
+    },
+    {
+     "code": "p = charpoly(A, x)",
+     "en": "Returns the polynomial itself as an expression in `x`.",
+     "pt": "Retorna o próprio polinômio como expressão em `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square matrix, numeric or symbolic.",
+     "pt": "Matriz quadrada, numérica ou simbólica."
+    },
+    {
+     "name": "x",
+     "en": "Symbolic variable for the polynomial.",
+     "pt": "Variável simbólica do polinômio."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Coefficient vector (one input) or symbolic polynomial (with `x`).",
+     "pt": "Vetor de coeficientes (uma entrada) ou polinômio simbólico (com `x`)."
+    }
+   ],
+   "description": {
+    "en": "The roots of the characteristic polynomial are the eigenvalues of `A`. The coefficient vector begins with 1, the second entry is `-trace(A)` and the last is `(-1)^n*det(A)`. For a symbolic matrix the computation is exact, so the coefficients can contain parameters.",
+    "pt": "As raízes do polinômio característico são os autovalores de `A`. O vetor de coeficientes começa em 1, o segundo elemento é `-trace(A)` e o último é `(-1)^n*det(A)`. Para uma matriz simbólica o cálculo é exato, e os coeficientes podem conter parâmetros."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Characteristic polynomial of a 2-by-2 matrix",
+      "pt": "Polinômio característico de uma matriz 2 por 2"
+     },
+     "code": "A = sym([1 2; 3 4]);\ncharpoly(A)\nsyms x\ncharpoly(A, x)"
+    }
+   ],
+   "see": [
+    "eig",
+    "poly",
+    "roots",
+    "det",
+    "jordan"
+   ]
+  },
+  "colspace": {
+   "summary": {
+    "en": "Basis for the column space of a matrix.",
+    "pt": "Base do espaço das colunas de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "B = colspace(A)",
+     "en": "Returns a matrix whose columns are a basis of the column space of `A`.",
+     "pt": "Retorna uma matriz cujas colunas formam uma base do espaço das colunas de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Symbolic or numeric matrix.",
+     "pt": "Matriz simbólica ou numérica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Matrix with `rank(A)` columns, each lying in the span of the columns of `A`.",
+     "pt": "Matriz com `rank(A)` colunas, todas no espaço gerado pelas colunas de `A`."
+    }
+   ],
+   "description": {
+    "en": "The column space is the set of all vectors `A*v`. Its dimension is the rank of `A`, which is the number of columns that `colspace` returns. A matrix whose columns are dependent, such as one column being twice another, gives fewer columns than `A` has.",
+    "pt": "O espaço das colunas é o conjunto de todos os vetores `A*v`. Sua dimensão é o posto de `A`, que é o número de colunas retornado por `colspace`. Uma matriz de colunas dependentes, como uma coluna igual ao dobro de outra, dá menos colunas do que `A` possui."
+   },
+   "notes": {
+    "en": "The basis is not unique, so MATLAB and MatLivre may return different but equivalent bases.",
+    "pt": "A base não é única, e por isso MATLAB e MatLivre podem retornar bases diferentes, porém equivalentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rank-2 matrix",
+      "pt": "Matriz de posto 2"
+     },
+     "code": "A = sym([1 2 3; 2 4 6; 1 0 1]);\nB = colspace(A)\nrank(A)"
+    }
+   ],
+   "see": [
+    "null",
+    "rank",
+    "rref",
+    "orth"
+   ]
+  },
+  "hermiteForm": {
+   "summary": {
+    "en": "Hermite normal form of an integer matrix.",
+    "pt": "Forma normal de Hermite de uma matriz de inteiros."
+   },
+   "syntax": [
+    {
+     "code": "H = hermiteForm(A)",
+     "en": "Returns the upper triangular Hermite form of `A`.",
+     "pt": "Retorna a forma de Hermite triangular superior de `A`."
+    },
+    {
+     "code": "[U, H] = hermiteForm(A)",
+     "en": "Also returns the unimodular matrix `U` with `U*A == H`.",
+     "pt": "Também retorna a matriz unimodular `U` com `U*A == H`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Matrix of integers (symbolic).",
+     "pt": "Matriz de inteiros (simbólica)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "H",
+     "en": "Upper triangular matrix with non-negative pivots; entries above a pivot are reduced modulo that pivot.",
+     "pt": "Matriz triangular superior com pivôs não negativos; os elementos acima de um pivô são reduzidos módulo esse pivô."
+    },
+    {
+     "name": "U",
+     "en": "Integer matrix with determinant 1 or -1.",
+     "pt": "Matriz de inteiros com determinante 1 ou -1."
+    }
+   ],
+   "description": {
+    "en": "The Hermite form plays the role of the row echelon form over the integers: only integer row operations are allowed, so no division occurs. It is used to solve linear Diophantine systems and to find bases of integer lattices.",
+    "pt": "A forma de Hermite faz o papel da forma escalonada por linhas nos inteiros: só são permitidas operações de linha inteiras, sem divisão. É usada para resolver sistemas diofantinos lineares e para achar bases de reticulados inteiros."
+   },
+   "notes": {
+    "en": "MatLivre handles integer matrices only.",
+    "pt": "O MatLivre trata apenas matrizes de inteiros."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hermite form with its transform",
+      "pt": "Forma de Hermite com sua transformação"
+     },
+     "code": "A = sym([2 3; 4 5]);\n[U, H] = hermiteForm(A)\nU*A"
+    }
+   ],
+   "see": [
+    "smithForm",
+    "rref",
+    "lu",
+    "det"
+   ]
+  },
+  "jordan": {
+   "summary": {
+    "en": "Jordan canonical form of a matrix.",
+    "pt": "Forma canônica de Jordan de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "J = jordan(A)",
+     "en": "Returns the Jordan form of `A`.",
+     "pt": "Retorna a forma de Jordan de `A`."
+    },
+    {
+     "code": "[V, J] = jordan(A)",
+     "en": "Also returns the generalized eigenvector matrix `V` with `V\\A*V == J`.",
+     "pt": "Também retorna a matriz `V` de autovetores generalizados com `V\\A*V == J`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square matrix, numeric or symbolic; exact entries work best.",
+     "pt": "Matriz quadrada, numérica ou simbólica; entradas exatas funcionam melhor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "J",
+     "en": "Block diagonal matrix: each block has an eigenvalue on its diagonal and ones just above it.",
+     "pt": "Matriz bloco-diagonal: cada bloco tem um autovalor na diagonal e uns logo acima dela."
+    },
+    {
+     "name": "V",
+     "en": "Invertible matrix whose columns are the generalized eigenvectors.",
+     "pt": "Matriz inversível cujas colunas são os autovetores generalizados."
+    }
+   ],
+   "description": {
+    "en": "Every square matrix is similar to a Jordan form. When `A` is diagonalizable, `J` is diagonal; a larger Jordan block signals a repeated eigenvalue without enough independent eigenvectors, as in `[1 1; 0 1]`. The computation is exact and depends on the eigenvalues being found in closed form.",
+    "pt": "Toda matriz quadrada é semelhante a uma forma de Jordan. Quando `A` é diagonalizável, `J` é diagonal; um bloco maior sinaliza um autovalor repetido sem autovetores independentes suficientes, como em `[1 1; 0 1]`. O cálculo é exato e depende de os autovalores terem forma fechada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A single Jordan block",
+      "pt": "Um único bloco de Jordan"
+     },
+     "code": "A = sym([2 1; 0 2]);\nJ = jordan(A)\n[V, J2] = jordan(sym([1 1; 0 1]));\nJ2"
+    }
+   ],
+   "see": [
+    "eig",
+    "charpoly",
+    "expm",
+    "null"
+   ]
+  },
+  "smithForm": {
+   "summary": {
+    "en": "Smith normal form of an integer matrix.",
+    "pt": "Forma normal de Smith de uma matriz de inteiros."
+   },
+   "syntax": [
+    {
+     "code": "D = smithForm(A)",
+     "en": "Returns the diagonal Smith form of `A`.",
+     "pt": "Retorna a forma de Smith diagonal de `A`."
+    },
+    {
+     "code": "[U, V, D] = smithForm(A)",
+     "en": "Also returns unimodular matrices with `U*A*V == D`.",
+     "pt": "Também retorna matrizes unimodulares com `U*A*V == D`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Matrix of integers.",
+     "pt": "Matriz de inteiros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "D",
+     "en": "Diagonal matrix in which each diagonal entry divides the next.",
+     "pt": "Matriz diagonal em que cada elemento da diagonal divide o seguinte."
+    },
+    {
+     "name": "U, V",
+     "en": "Integer matrices of determinant 1 or -1.",
+     "pt": "Matrizes de inteiros de determinante 1 ou -1."
+    }
+   ],
+   "description": {
+    "en": "The diagonal entries, the invariant factors of `A`, describe the structure of the integer lattice and of the quotient group `Z^n / A*Z^n`. The product of the diagonal equals the absolute value of `det(A)` for a square nonsingular matrix.",
+    "pt": "Os elementos da diagonal, os fatores invariantes de `A`, descrevem a estrutura do reticulado inteiro e do grupo quociente `Z^n / A*Z^n`. O produto da diagonal é igual ao valor absoluto de `det(A)` para uma matriz quadrada não singular."
+   },
+   "notes": {
+    "en": "MatLivre handles integer matrices only.",
+    "pt": "O MatLivre trata apenas matrizes de inteiros."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Invariant factors",
+      "pt": "Fatores invariantes"
+     },
+     "code": "A = sym([2 4; 6 8]);\nD = smithForm(A)\n[U, V, D2] = smithForm(A);\nU*A*V"
+    }
+   ],
+   "see": [
+    "hermiteForm",
+    "det",
+    "svd",
+    "rank"
+   ]
+  }
+ }
+}

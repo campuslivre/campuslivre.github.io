@@ -1,0 +1,1136 @@
+{
+ "functions": {
+  "audioinfo": {
+   "summary": {
+    "en": "Reads the metadata of an audio file without loading its samples.",
+    "pt": "Lê os metadados de um arquivo de áudio sem carregar as amostras."
+   },
+   "syntax": [
+    {
+     "code": "info = audioinfo(filename)",
+     "en": "Returns a struct describing the file.",
+     "pt": "Retorna uma struct que descreve o arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the audio file, as a character vector or string.",
+     "pt": "Nome do arquivo de áudio, como vetor de caracteres ou string."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "info",
+     "en": "Struct with fields such as `Filename`, `CompressionMethod`, `NumChannels`, `SampleRate`, `TotalSamples`, `Duration` and `BitsPerSample`.",
+     "pt": "Struct com campos como `Filename`, `CompressionMethod`, `NumChannels`, `SampleRate`, `TotalSamples`, `Duration` e `BitsPerSample`."
+    }
+   ],
+   "description": {
+    "en": "Only the file header is read, so the call is cheap even for long recordings. Use it to learn the sample rate and length before deciding how much to load with `audioread`. `Duration` is `TotalSamples / SampleRate`, in seconds.",
+    "pt": "Só o cabeçalho do arquivo é lido, então a chamada é barata mesmo para gravações longas. Use-a para saber a taxa de amostragem e a duração antes de decidir quanto carregar com `audioread`. `Duration` é `TotalSamples / SampleRate`, em segundos."
+   },
+   "notes": {
+    "en": "MatLivre reads and writes WAV files in this family of functions.",
+    "pt": "O MatLivre lê e grava arquivos WAV nesta família de funções."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Header of a WAV file",
+      "pt": "Cabeçalho de um arquivo WAV"
+     },
+     "code": "y = sin(2*pi*440*(0:7999)'/8000);\naudiowrite('tone.wav', y, 8000);\ninfo = audioinfo('tone.wav');\nfprintf('%d Hz, %d channel(s), %d samples, %g s\\n', ...\n    info.SampleRate, info.NumChannels, info.TotalSamples, info.Duration);"
+    }
+   ],
+   "see": [
+    "audioread",
+    "audiowrite",
+    "sound"
+   ]
+  },
+  "audioread": {
+   "summary": {
+    "en": "Reads an audio file into a matrix of samples and returns its sample rate.",
+    "pt": "Lê um arquivo de áudio em uma matriz de amostras e retorna a taxa de amostragem."
+   },
+   "syntax": [
+    {
+     "code": "[y, Fs] = audioread(filename)",
+     "en": "Reads the whole file as doubles scaled to the range -1 to 1.",
+     "pt": "Lê o arquivo inteiro como doubles escalados para o intervalo de -1 a 1."
+    },
+    {
+     "code": "[y, Fs] = audioread(filename, [start finish])",
+     "en": "Reads only samples `start` through `finish`.",
+     "pt": "Lê apenas as amostras de `start` até `finish`."
+    },
+    {
+     "code": "[y, Fs] = audioread(filename, 'native')",
+     "en": "Returns the samples in the type stored in the file, for example `int16`.",
+     "pt": "Retorna as amostras no tipo gravado no arquivo, por exemplo `int16`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the audio file.",
+     "pt": "Nome do arquivo de áudio."
+    },
+    {
+     "name": "[start finish]",
+     "en": "Two sample indices, counted from 1, selecting a segment.",
+     "pt": "Dois índices de amostra, contados a partir de 1, que escolhem um trecho."
+    },
+    {
+     "name": "'native'",
+     "en": "Skips the conversion to double.",
+     "pt": "Dispensa a conversão para double."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Samples, one row per sample and one column per channel.",
+     "pt": "Amostras, uma linha por amostra e uma coluna por canal."
+    },
+    {
+     "name": "Fs",
+     "en": "Sample rate in hertz.",
+     "pt": "Taxa de amostragem em hertz."
+    }
+   ],
+   "description": {
+    "en": "A 16-bit file is mapped so that the integer range becomes roughly -1 to 1, which is the same convention `audiowrite` uses when it writes. Stereo files give a two-column matrix.\n\nWith `'native'` the integers are returned untouched, which is useful when you need the exact stored values.",
+    "pt": "Um arquivo de 16 bits é mapeado de modo que a faixa dos inteiros vire aproximadamente -1 a 1, a mesma convenção que `audiowrite` usa ao gravar. Arquivos estéreo geram uma matriz de duas colunas.\n\nCom `'native'` os inteiros voltam sem alteração, o que serve quando se precisam dos valores exatos armazenados."
+   },
+   "notes": {
+    "en": "Stick to 16-bit and 24-bit WAV files: in MatLivre, reading an 8-bit WAV does not give the values that were written.",
+    "pt": "Prefira arquivos WAV de 16 e 24 bits: no MatLivre, a leitura de um WAV de 8 bits não devolve os valores gravados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write, then read back",
+      "pt": "Gravar e reler"
+     },
+     "code": "audiowrite('s.wav', [0 0.5 -0.5 1]', 8000);\n[y, fs] = audioread('s.wav');\ny'\nfs\nz = audioread('s.wav', [2 3])'\n[n, ~] = audioread('s.wav', 'native'); class(n)"
+    }
+   ],
+   "see": [
+    "audiowrite",
+    "audioinfo",
+    "sound"
+   ]
+  },
+  "audiowrite": {
+   "summary": {
+    "en": "Writes a matrix of samples to an audio file.",
+    "pt": "Grava uma matriz de amostras em um arquivo de áudio."
+   },
+   "syntax": [
+    {
+     "code": "audiowrite(filename, y, Fs)",
+     "en": "Writes `y` at sample rate `Fs` as 16-bit audio.",
+     "pt": "Grava `y` com taxa de amostragem `Fs` em 16 bits."
+    },
+    {
+     "code": "audiowrite(filename, y, Fs, 'BitsPerSample', n)",
+     "en": "Chooses the bit depth of the file.",
+     "pt": "Escolhe a profundidade de bits do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Output file name. The extension selects the format, for example `.wav`.",
+     "pt": "Nome do arquivo de saída. A extensão define o formato, por exemplo `.wav`."
+    },
+    {
+     "name": "y",
+     "en": "Samples, one column per channel. Floating-point data should lie between -1 and 1.",
+     "pt": "Amostras, uma coluna por canal. Dados de ponto flutuante devem ficar entre -1 e 1."
+    },
+    {
+     "name": "Fs",
+     "en": "Sample rate in hertz.",
+     "pt": "Taxa de amostragem em hertz."
+    },
+    {
+     "name": "'BitsPerSample'",
+     "en": "Bit depth, such as 16 or 24.",
+     "pt": "Profundidade de bits, como 16 ou 24."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Values outside -1 to 1 are clipped when converted to integers, so normalize the signal first if it can exceed that range. Every column of `y` becomes a channel of the file.",
+    "pt": "Valores fora de -1 a 1 são cortados na conversão para inteiros, então normalize o sinal antes se ele puder passar desse intervalo. Cada coluna de `y` vira um canal do arquivo."
+   },
+   "notes": {
+    "en": "Use 16 or 24 bits per sample; 8-bit output is not read back correctly by MatLivre.",
+    "pt": "Use 16 ou 24 bits por amostra; a saída de 8 bits não é relida corretamente pelo MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Stereo file",
+      "pt": "Arquivo estéreo"
+     },
+     "code": "t = (0:99)'/8000;\ny = [sin(2*pi*440*t), sin(2*pi*660*t)];\naudiowrite('st.wav', y, 8000);\ninfo = audioinfo('st.wav');\ndisp([info.NumChannels info.TotalSamples info.SampleRate])"
+    }
+   ],
+   "see": [
+    "audioread",
+    "audioinfo",
+    "sound"
+   ]
+  },
+  "clear": {
+   "summary": {
+    "en": "Removes variables from the workspace.",
+    "pt": "Remove variáveis do workspace."
+   },
+   "syntax": [
+    {
+     "code": "clear",
+     "en": "Removes every variable from the current workspace.",
+     "pt": "Remove todas as variáveis do workspace atual."
+    },
+    {
+     "code": "clear name1 name2",
+     "en": "Removes the named variables. Wildcards such as `x*` are accepted.",
+     "pt": "Remove as variáveis indicadas. Curingas como `x*` são aceitos."
+    },
+    {
+     "code": "clear all",
+     "en": "Removes variables and also resets cached functions and state.",
+     "pt": "Remove as variáveis e também redefine funções em cache e estado."
+    },
+    {
+     "code": "clear('name')",
+     "en": "Function form, convenient when the name is held in a string.",
+     "pt": "Forma de função, útil quando o nome está guardado em uma string."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Variable name or pattern. `*` matches any run of characters.",
+     "pt": "Nome de variável ou padrão. `*` casa qualquer sequência de caracteres."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`clear` is usually written in command syntax, without parentheses or quotes. Clearing a name that does not exist is not an error. After clearing, using the variable raises the usual undefined-variable error.\n\nTo drop everything except a few variables, use `clearvars` with `-except`.",
+    "pt": "`clear` costuma ser escrito na sintaxe de comando, sem parênteses nem aspas. Limpar um nome que não existe não gera erro. Depois de limpar, usar a variável provoca o erro habitual de variável indefinida.\n\nPara apagar tudo menos algumas variáveis, use `clearvars` com `-except`."
+   },
+   "notes": {
+    "en": "The `-regexp` option is not supported: it leaves the variables in place.",
+    "pt": "A opção `-regexp` não é suportada: as variáveis continuam no lugar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clear by name and pattern",
+      "pt": "Limpar por nome e padrão"
+     },
+     "code": "xa = 1; xb = 2; yy = 3;\nclear x*\nexist('xa')\nexist('yy')\nclear yy\nexist('yy')"
+    }
+   ],
+   "see": [
+    "clearvars",
+    "exist",
+    "who",
+    "whos"
+   ]
+  },
+  "clearvars": {
+   "summary": {
+    "en": "Clears selected variables from the workspace, with options to keep some.",
+    "pt": "Limpa variáveis escolhidas do workspace, com opções para manter algumas."
+   },
+   "syntax": [
+    {
+     "code": "clearvars",
+     "en": "Clears every variable.",
+     "pt": "Limpa todas as variáveis."
+    },
+    {
+     "code": "clearvars x y",
+     "en": "Clears only the named variables. Patterns with `*` are allowed.",
+     "pt": "Limpa apenas as variáveis indicadas. Padrões com `*` são permitidos."
+    },
+    {
+     "code": "clearvars -except x y",
+     "en": "Clears everything except the listed variables.",
+     "pt": "Limpa tudo, exceto as variáveis listadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "-except",
+     "en": "Keyword that turns the list into variables to keep.",
+     "pt": "Palavra-chave que transforma a lista em variáveis a manter."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`clearvars` works only on variables, unlike `clear`, which also resets functions and other state. The `-except` form is the quickest way to clean a workspace after an experiment while holding on to results.",
+    "pt": "`clearvars` atua só sobre variáveis, ao contrário de `clear`, que também redefine funções e outros estados. A forma com `-except` é a maneira mais rápida de limpar o workspace após um experimento mantendo os resultados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Keep one variable",
+      "pt": "Manter uma variável"
+     },
+     "code": "a = 1; b = 2; c = 3;\nclearvars -except b\nexist('a')\nexist('b')\nexist('c')"
+    }
+   ],
+   "see": [
+    "clear",
+    "exist",
+    "who",
+    "whos"
+   ]
+  },
+  "close": {
+   "summary": {
+    "en": "Closes figure windows.",
+    "pt": "Fecha janelas de figura."
+   },
+   "syntax": [
+    {
+     "code": "close",
+     "en": "Closes the current figure.",
+     "pt": "Fecha a figura atual."
+    },
+    {
+     "code": "close(fig)",
+     "en": "Closes the figure with handle `fig`.",
+     "pt": "Fecha a figura com o handle `fig`."
+    },
+    {
+     "code": "close all",
+     "en": "Closes every open figure.",
+     "pt": "Fecha todas as figuras abertas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fig",
+     "en": "Figure handle or figure number.",
+     "pt": "Handle ou número de figura."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A closed figure's handle becomes invalid, which `isvalid` reports as false. Closing a figure that is not open does nothing. Use `close all` at the top of a script to start from a clean slate.",
+    "pt": "O handle de uma figura fechada deixa de ser válido, o que `isvalid` informa como falso. Fechar uma figura que não está aberta não faz nada. Use `close all` no início de um script para começar do zero."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Close one figure, then all",
+      "pt": "Fechar uma figura e depois todas"
+     },
+     "code": "f1 = figure('Visible', 'off');\nf2 = figure('Visible', 'off');\nclose(f1);\n[isvalid(f1) isvalid(f2)]\nclose all\n[isvalid(f1) isvalid(f2)]"
+    }
+   ],
+   "see": [
+    "figure",
+    "gcf",
+    "clf",
+    "isvalid"
+   ]
+  },
+  "csvread": {
+   "summary": {
+    "en": "Reads a comma-separated numeric file into a matrix.",
+    "pt": "Lê um arquivo numérico separado por vírgulas em uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "M = csvread(filename)",
+     "en": "Reads all numeric data in the file.",
+     "pt": "Lê todos os dados numéricos do arquivo."
+    },
+    {
+     "code": "M = csvread(filename, R1, C1)",
+     "en": "Starts reading at zero-based row `R1` and column `C1`.",
+     "pt": "Começa a leitura na linha `R1` e na coluna `C1`, contadas a partir de zero."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the file.",
+     "pt": "Nome do arquivo."
+    },
+    {
+     "name": "R1, C1",
+     "en": "Row and column offsets, counted from 0, of the first value to read.",
+     "pt": "Deslocamentos de linha e coluna, contados a partir de 0, do primeiro valor a ler."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Numeric matrix. Missing fields are read as `0`.",
+     "pt": "Matriz numérica. Campos ausentes são lidos como `0`."
+    }
+   ],
+   "description": {
+    "en": "`csvread` is `dlmread` with the delimiter fixed to a comma. It accepts only numbers, so a file with text headers or text columns should be read with `readmatrix` or `readtable` instead.\n\nThe offsets are zero-based, unlike MATLAB indexing: `csvread(f, 1, 0)` skips one header row.",
+    "pt": "`csvread` é o `dlmread` com o delimitador fixado em vírgula. Aceita apenas números, então um arquivo com cabeçalhos ou colunas de texto deve ser lido com `readmatrix` ou `readtable`.\n\nOs deslocamentos começam em zero, ao contrário da indexação do MATLAB: `csvread(f, 1, 0)` pula uma linha de cabeçalho."
+   },
+   "notes": {
+    "en": "MathWorks recommends `readmatrix` for new code.",
+    "pt": "A recomendação atual é usar `readmatrix` em código novo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Skip a header row and a column",
+      "pt": "Pular uma linha de cabeçalho e uma coluna"
+     },
+     "code": "fid = fopen('d.csv', 'w');\nfprintf(fid, 'a,b,c\\n1,2,3\\n4,5,6\\n');\nfclose(fid);\ncsvread('d.csv', 1, 1)"
+    }
+   ],
+   "see": [
+    "csvwrite",
+    "dlmread",
+    "readmatrix",
+    "readtable"
+   ]
+  },
+  "csvwrite": {
+   "summary": {
+    "en": "Writes a numeric matrix to a comma-separated file.",
+    "pt": "Grava uma matriz numérica em um arquivo separado por vírgulas."
+   },
+   "syntax": [
+    {
+     "code": "csvwrite(filename, M)",
+     "en": "Writes `M`, one matrix row per line.",
+     "pt": "Grava `M`, com uma linha da matriz por linha do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the output file. An existing file is overwritten.",
+     "pt": "Nome do arquivo de saída. Um arquivo existente é sobrescrito."
+    },
+    {
+     "name": "M",
+     "en": "Numeric matrix.",
+     "pt": "Matriz numérica."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "This is `dlmwrite` with a comma as the delimiter. Values are written with up to five significant digits, so it is not suited to data that needs full precision. For that, use `dlmwrite` with the `'precision'` option or `writematrix`.",
+    "pt": "É o `dlmwrite` com vírgula como delimitador. Os valores são gravados com até cinco algarismos significativos, então não serve para dados que exigem precisão total. Para isso, use `dlmwrite` com a opção `'precision'` ou `writematrix`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write and show the file",
+      "pt": "Gravar e mostrar o arquivo"
+     },
+     "code": "csvwrite('m.csv', [1 2 3; 4 5 6]);\ndisp(fileread('m.csv'))\ncsvread('m.csv')"
+    }
+   ],
+   "see": [
+    "csvread",
+    "dlmwrite",
+    "writematrix"
+   ]
+  },
+  "delimitedTextImportOptions": {
+   "summary": {
+    "en": "Creates an options object that describes how to import a delimited text file.",
+    "pt": "Cria um objeto de opções que descreve como importar um arquivo de texto delimitado."
+   },
+   "syntax": [
+    {
+     "code": "opts = delimitedTextImportOptions",
+     "en": "Returns default options for a delimited file.",
+     "pt": "Retorna as opções padrão para um arquivo delimitado."
+    },
+    {
+     "code": "opts = delimitedTextImportOptions('NumVariables', n)",
+     "en": "Declares the number of columns.",
+     "pt": "Declara o número de colunas."
+    },
+    {
+     "code": "opts = delimitedTextImportOptions(..., Name, Value)",
+     "en": "Sets properties such as `VariableNames`, `VariableTypes` and `Delimiter` at creation.",
+     "pt": "Define propriedades como `VariableNames`, `VariableTypes` e `Delimiter` na criação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'NumVariables'",
+     "en": "Number of columns in the file.",
+     "pt": "Número de colunas do arquivo."
+    },
+    {
+     "name": "'VariableNames'",
+     "en": "Cell array of column names for the resulting table.",
+     "pt": "Cell array com os nomes das colunas da tabela resultante."
+    },
+    {
+     "name": "'VariableTypes'",
+     "en": "Cell array of types: `'double'`, `'string'`, `'char'`, `'datetime'`, and so on.",
+     "pt": "Cell array de tipos: `'double'`, `'string'`, `'char'`, `'datetime'` etc."
+    },
+    {
+     "name": "'Delimiter'",
+     "en": "Character or cell array of characters that separate fields.",
+     "pt": "Caractere ou cell array de caracteres que separam os campos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "opts",
+     "en": "Import options object, passed as the second argument of `readtable`, `readmatrix` or `readcell`.",
+     "pt": "Objeto de opções de importação, passado como segundo argumento de `readtable`, `readmatrix` ou `readcell`."
+    }
+   ],
+   "description": {
+    "en": "Import options give you full control over a text import: which columns exist, what type each one has, and which are selected. The object can be inspected, changed, and reused across many files with the same layout.\n\nTo let the library guess the layout instead, call `detectImportOptions` on a sample file and adjust only what it got wrong.",
+    "pt": "As opções de importação dão controle total sobre uma leitura de texto: quais colunas existem, o tipo de cada uma e quais são selecionadas. O objeto pode ser inspecionado, alterado e reutilizado em vários arquivos de mesmo formato.\n\nPara deixar a biblioteca adivinhar o formato, chame `detectImportOptions` em um arquivo de amostra e ajuste só o que ela errou."
+   },
+   "notes": {
+    "en": "In MatLivre, `DataLines` passed to the constructor is ignored, and assigning `VariableNames` to the object afterwards (`opts.VariableNames = ...`) makes `readtable` fail with an unknown-variable error. Pass names and types as constructor arguments, as in the example, and use header-free data.",
+    "pt": "No MatLivre, `DataLines` passado ao construtor é ignorado, e atribuir `VariableNames` ao objeto depois (`opts.VariableNames = ...`) faz `readtable` falhar com erro de variável desconhecida. Passe nomes e tipos como argumentos do construtor, como no exemplo, e use dados sem cabeçalho."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read a headerless file with chosen types",
+      "pt": "Ler um arquivo sem cabeçalho com tipos escolhidos"
+     },
+     "code": "fid = fopen('p.csv', 'w');\nfprintf(fid, 'Ann,30\\nBob,25\\n');\nfclose(fid);\nopts = delimitedTextImportOptions('NumVariables', 2, ...\n    'VariableNames', {'name', 'age'}, ...\n    'VariableTypes', {'string', 'double'}, ...\n    'Delimiter', ',');\nT = readtable('p.csv', opts)"
+    }
+   ],
+   "see": [
+    "detectImportOptions",
+    "readtable",
+    "readmatrix",
+    "readcell"
+   ]
+  },
+  "disp": {
+   "summary": {
+    "en": "Displays a value in the command window without printing its name.",
+    "pt": "Exibe um valor na janela de comandos sem imprimir o nome."
+   },
+   "syntax": [
+    {
+     "code": "disp(X)",
+     "en": "Prints the value of `X`, with no `X =` label and no extra blank lines.",
+     "pt": "Imprime o valor de `X`, sem o rótulo `X =` e sem linhas em branco extras."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Any value: numeric array, text, cell array, struct, table, and so on.",
+     "pt": "Qualquer valor: array numérico, texto, cell array, struct, tabela etc."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`disp` formats numbers like the command window does, but leaves out the variable name, which makes it handy for messages. Text is printed as is, and an empty array prints nothing.\n\nFor formatted numbers inside a sentence, use `fprintf` or `sprintf`. To capture what a display would print as a string, use `formattedDisplayText`.",
+    "pt": "`disp` formata os números como a janela de comandos, mas omite o nome da variável, o que serve para mensagens. Texto é impresso como está, e um array vazio não imprime nada.\n\nPara números formatados dentro de uma frase, use `fprintf` ou `sprintf`. Para capturar como string o que uma exibição imprimiria, use `formattedDisplayText`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Different kinds of values",
+      "pt": "Diferentes tipos de valor"
+     },
+     "code": "disp(pi)\ndisp('hello')\ndisp([1.5 2; 3 4])\ndisp({1, 'a'})\ndisp(int8(5))"
+    }
+   ],
+   "see": [
+    "fprintf",
+    "display",
+    "formattedDisplayText",
+    "sprintf"
+   ]
+  },
+  "dlmread": {
+   "summary": {
+    "en": "Reads a delimited numeric file into a matrix.",
+    "pt": "Lê um arquivo numérico delimitado em uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "M = dlmread(filename)",
+     "en": "Reads the file, guessing the delimiter.",
+     "pt": "Lê o arquivo, deduzindo o delimitador."
+    },
+    {
+     "code": "M = dlmread(filename, delimiter)",
+     "en": "Uses the given delimiter, for example `';'` or `'\\t'`.",
+     "pt": "Usa o delimitador informado, por exemplo `';'` ou `'\\t'`."
+    },
+    {
+     "code": "M = dlmread(filename, delimiter, R, C)",
+     "en": "Starts at zero-based row `R` and column `C`.",
+     "pt": "Começa na linha `R` e coluna `C`, contadas a partir de zero."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the file.",
+     "pt": "Nome do arquivo."
+    },
+    {
+     "name": "delimiter",
+     "en": "Field separator. Escape sequences such as `'\\t'` are understood.",
+     "pt": "Separador de campos. Sequências de escape como `'\\t'` são entendidas."
+    },
+    {
+     "name": "R, C",
+     "en": "Zero-based offsets of the first value to read.",
+     "pt": "Deslocamentos, contados a partir de zero, do primeiro valor a ler."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Numeric matrix. Empty fields become `0`.",
+     "pt": "Matriz numérica. Campos vazios viram `0`."
+    }
+   ],
+   "description": {
+    "en": "When the delimiter is omitted it is inferred from the first line, so comma-, space-, tab- and semicolon-separated files all load without configuration. Lines shorter than the widest line are padded with zeros.\n\n`readmatrix` is the modern replacement and also handles headers and missing values as `NaN`.",
+    "pt": "Quando o delimitador é omitido, ele é deduzido da primeira linha, então arquivos separados por vírgula, espaço, tabulação ou ponto e vírgula são lidos sem configuração. Linhas mais curtas que a mais larga são completadas com zeros.\n\n`readmatrix` é o substituto moderno e também trata cabeçalhos e valores ausentes como `NaN`."
+   },
+   "notes": {
+    "en": "The rectangular range form `dlmread(f, d, [r1 c1 r2 c2])` returns the whole file in MatLivre instead of the sub-block.",
+    "pt": "A forma com intervalo retangular `dlmread(f, d, [r1 c1 r2 c2])` retorna o arquivo inteiro no MatLivre, em vez do sub-bloco."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Semicolon-separated data",
+      "pt": "Dados separados por ponto e vírgula"
+     },
+     "code": "dlmwrite('s.txt', [1 2 3; 4 5 6], ';');\ndisp(fileread('s.txt'))\ndlmread('s.txt', ';')\ndlmread('s.txt', ';', 1, 1)"
+    }
+   ],
+   "see": [
+    "dlmwrite",
+    "csvread",
+    "readmatrix",
+    "importdata"
+   ]
+  },
+  "dlmwrite": {
+   "summary": {
+    "en": "Writes a numeric matrix to a delimited text file.",
+    "pt": "Grava uma matriz numérica em um arquivo de texto delimitado."
+   },
+   "syntax": [
+    {
+     "code": "dlmwrite(filename, M)",
+     "en": "Writes `M` with comma separators.",
+     "pt": "Grava `M` com vírgulas como separadores."
+    },
+    {
+     "code": "dlmwrite(filename, M, delimiter)",
+     "en": "Uses the given delimiter.",
+     "pt": "Usa o delimitador informado."
+    },
+    {
+     "code": "dlmwrite(filename, M, Name, Value)",
+     "en": "Sets `'delimiter'`, `'precision'` or `'-append'`.",
+     "pt": "Define `'delimiter'`, `'precision'` ou `'-append'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Output file name.",
+     "pt": "Nome do arquivo de saída."
+    },
+    {
+     "name": "M",
+     "en": "Numeric matrix.",
+     "pt": "Matriz numérica."
+    },
+    {
+     "name": "'delimiter'",
+     "en": "Field separator, for example `';'` or `'\\t'`.",
+     "pt": "Separador de campos, por exemplo `';'` ou `'\\t'`."
+    },
+    {
+     "name": "'precision'",
+     "en": "Number of significant digits, or a format such as `'%.4f'`.",
+     "pt": "Número de algarismos significativos, ou um formato como `'%.4f'`."
+    },
+    {
+     "name": "'-append'",
+     "en": "Adds to the end of an existing file instead of overwriting it.",
+     "pt": "Acrescenta ao fim de um arquivo existente em vez de sobrescrevê-lo."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each matrix row becomes one line. The default precision is five significant digits, so pass `'precision'` when you need more. `writematrix` is the recommended function for new code.",
+    "pt": "Cada linha da matriz vira uma linha do arquivo. A precisão padrão é de cinco algarismos significativos, então passe `'precision'` quando precisar de mais. `writematrix` é a função recomendada para código novo."
+   },
+   "notes": {
+    "en": "The `'roffset'` and `'coffset'` options are not applied in MatLivre.",
+    "pt": "As opções `'roffset'` e `'coffset'` não são aplicadas no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Delimiter, precision and append",
+      "pt": "Delimitador, precisão e acréscimo"
+     },
+     "code": "dlmwrite('o.txt', [1.23456789 2; 3 4], 'delimiter', ' ', 'precision', 4);\ndlmwrite('o.txt', [10 20], '-append', 'delimiter', ' ');\ndisp(fileread('o.txt'))"
+    }
+   ],
+   "see": [
+    "dlmread",
+    "csvwrite",
+    "writematrix",
+    "fprintf"
+   ]
+  },
+  "fclose": {
+   "summary": {
+    "en": "Closes an open file.",
+    "pt": "Fecha um arquivo aberto."
+   },
+   "syntax": [
+    {
+     "code": "status = fclose(fid)",
+     "en": "Closes the file with identifier `fid`.",
+     "pt": "Fecha o arquivo de identificador `fid`."
+    },
+    {
+     "code": "status = fclose('all')",
+     "en": "Closes every file opened with `fopen`.",
+     "pt": "Fecha todos os arquivos abertos com `fopen`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier returned by `fopen`.",
+     "pt": "Identificador de arquivo retornado por `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`0` on success, `-1` if the identifier was not valid.",
+     "pt": "`0` em caso de sucesso, `-1` se o identificador não era válido."
+    }
+   ],
+   "description": {
+    "en": "Always close files you write to: data may sit in a buffer until the file is closed, and another program may not be able to open it meanwhile. After `fclose`, the identifier can no longer be used.",
+    "pt": "Feche sempre os arquivos em que escreve: os dados podem ficar em um buffer até o fechamento, e outro programa pode não conseguir abri-lo nesse meio tempo. Depois de `fclose`, o identificador não pode mais ser usado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write, close, read",
+      "pt": "Gravar, fechar e ler"
+     },
+     "code": "fid = fopen('c.txt', 'w');\nfprintf(fid, 'saved\\n');\nstatus = fclose(fid)\ndisp(fileread('c.txt'))"
+    }
+   ],
+   "see": [
+    "fopen",
+    "fprintf",
+    "fread",
+    "fileread"
+   ]
+  },
+  "feof": {
+   "summary": {
+    "en": "Tests whether the read position is at the end of a file.",
+    "pt": "Testa se a posição de leitura está no fim de um arquivo."
+   },
+   "syntax": [
+    {
+     "code": "tf = feof(fid)",
+     "en": "Returns `true` once a read has hit the end of the file.",
+     "pt": "Retorna `true` quando uma leitura já atingiu o fim do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The usual use is a read loop: `while ~feof(fid)`. The indicator is set by a read that reaches the end, not merely by sitting at the last byte, so the loop reads every line, including a last line with no trailing newline.",
+    "pt": "O uso típico é um laço de leitura: `while ~feof(fid)`. O indicador é ativado por uma leitura que chega ao fim, e não apenas por estar no último byte, então o laço lê todas as linhas, inclusive uma última sem quebra de linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read a file line by line",
+      "pt": "Ler um arquivo linha a linha"
+     },
+     "code": "fid = fopen('w.txt', 'w');\nfprintf(fid, 'alpha\\nbeta\\ngamma');\nfclose(fid);\nfid = fopen('w.txt');\nwhile ~feof(fid)\n    fprintf('[%s]\\n', fgetl(fid));\nend\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fgetl",
+    "fgets",
+    "fopen",
+    "frewind"
+   ]
+  },
+  "ferror": {
+   "summary": {
+    "en": "Returns the error message and code of the last file operation.",
+    "pt": "Retorna a mensagem e o código de erro da última operação de arquivo."
+   },
+   "syntax": [
+    {
+     "code": "msg = ferror(fid)",
+     "en": "Returns the message text.",
+     "pt": "Retorna o texto da mensagem."
+    },
+    {
+     "code": "[msg, errnum] = ferror(fid)",
+     "en": "Also returns a numeric error code.",
+     "pt": "Retorna também um código numérico de erro."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "msg",
+     "en": "Error message, empty when there is no error.",
+     "pt": "Mensagem de erro, vazia quando não há erro."
+    },
+    {
+     "name": "errnum",
+     "en": "Error code, `0` when there is no error.",
+     "pt": "Código de erro, `0` quando não há erro."
+    }
+   ],
+   "description": {
+    "en": "`ferror` reports the state of the file after the most recent input or output call. For a file that has been used without problems the message is empty and the code is `0`. It is most useful right after a read or write that appeared to fail.",
+    "pt": "`ferror` informa o estado do arquivo após a chamada de entrada ou saída mais recente. Para um arquivo usado sem problemas a mensagem é vazia e o código é `0`. É mais útil logo depois de uma leitura ou gravação que parece ter falhado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A healthy file",
+      "pt": "Um arquivo sem problemas"
+     },
+     "code": "fid = fopen('e.txt', 'w');\nfprintf(fid, 'x');\n[msg, code] = ferror(fid)\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fopen",
+    "fclose",
+    "feof"
+   ]
+  },
+  "fgetl": {
+   "summary": {
+    "en": "Reads one line from a file and drops the newline.",
+    "pt": "Lê uma linha de um arquivo e descarta a quebra de linha."
+   },
+   "syntax": [
+    {
+     "code": "tline = fgetl(fid)",
+     "en": "Returns the next line without its line terminator.",
+     "pt": "Retorna a próxima linha sem o terminador de linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tline",
+     "en": "Character vector with the line, or the number `-1` when the end of the file has been reached.",
+     "pt": "Vetor de caracteres com a linha, ou o número `-1` quando o fim do arquivo foi atingido."
+    }
+   ],
+   "description": {
+    "en": "Each call advances the read position by one line. Because the end is signalled by the number `-1` rather than text, a loop that does not use `feof` can test `ischar(tline)`. Use `fgets` instead to keep the newline.",
+    "pt": "Cada chamada avança a posição de leitura em uma linha. Como o fim é sinalizado pelo número `-1` e não por texto, um laço que não use `feof` pode testar `ischar(tline)`. Use `fgets` para manter a quebra de linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read lines until the end",
+      "pt": "Ler linhas até o fim"
+     },
+     "code": "fid = fopen('g.txt', 'w');\nfprintf(fid, 'one\\ntwo');\nfclose(fid);\nfid = fopen('g.txt');\na = fgetl(fid)\nb = fgetl(fid)\nc = fgetl(fid)\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fgets",
+    "feof",
+    "fopen",
+    "readlines"
+   ]
+  },
+  "fgets": {
+   "summary": {
+    "en": "Reads one line from a file and keeps the newline character.",
+    "pt": "Lê uma linha de um arquivo e mantém o caractere de quebra de linha."
+   },
+   "syntax": [
+    {
+     "code": "tline = fgets(fid)",
+     "en": "Returns the next line including its terminator.",
+     "pt": "Retorna a próxima linha, incluindo o terminador."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fid",
+     "en": "File identifier from `fopen`.",
+     "pt": "Identificador de arquivo obtido de `fopen`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tline",
+     "en": "Character vector with the line, or `-1` at the end of the file.",
+     "pt": "Vetor de caracteres com a linha, ou `-1` no fim do arquivo."
+    }
+   ],
+   "description": {
+    "en": "`fgets` is the same as `fgetl` except that the line terminator stays in the result, so the length of the text tells you whether the last line ended with a newline. This matters when you are copying data byte for byte.",
+    "pt": "`fgets` é igual a `fgetl`, exceto que o terminador de linha permanece no resultado, de modo que o comprimento do texto indica se a última linha terminava com quebra de linha. Isso importa ao copiar dados byte a byte."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Newline kept",
+      "pt": "Quebra de linha mantida"
+     },
+     "code": "fid = fopen('h.txt', 'w');\nfprintf(fid, 'abc\\n');\nfclose(fid);\nfid = fopen('h.txt');\ns = fgets(fid);\nfclose(fid);\nnumel(s)\ndouble(s(end))"
+    }
+   ],
+   "see": [
+    "fgetl",
+    "fopen",
+    "feof",
+    "fread"
+   ]
+  },
+  "fileread": {
+   "summary": {
+    "en": "Reads a whole text file into a character vector.",
+    "pt": "Lê um arquivo de texto inteiro em um vetor de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "text = fileread(filename)",
+     "en": "Returns the entire contents of the file.",
+     "pt": "Retorna todo o conteúdo do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the file.",
+     "pt": "Nome do arquivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "text",
+     "en": "Character row vector holding every character, including newlines.",
+     "pt": "Vetor linha de caracteres com todos os caracteres, inclusive as quebras de linha."
+    }
+   ],
+   "description": {
+    "en": "This is the simplest way to load a small file: no `fopen` and `fclose` pair is needed. Split the result into lines with `splitlines` or `strsplit`, or parse it with `jsondecode`, `str2double` and friends. For big files, read incrementally instead.",
+    "pt": "É a forma mais simples de carregar um arquivo pequeno: não precisa do par `fopen` e `fclose`. Divida o resultado em linhas com `splitlines` ou `strsplit`, ou interprete-o com `jsondecode`, `str2double` e afins. Para arquivos grandes, prefira a leitura incremental."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Load and split a file",
+      "pt": "Carregar e dividir um arquivo"
+     },
+     "code": "fid = fopen('f.txt', 'w');\nfprintf(fid, 'red\\ngreen\\nblue\\n');\nfclose(fid);\ns = fileread('f.txt');\nnumel(s)\nsplitlines(strtrim(s))"
+    }
+   ],
+   "see": [
+    "readlines",
+    "fopen",
+    "fgetl",
+    "splitlines",
+    "jsondecode"
+   ]
+  },
+  "fopen": {
+   "summary": {
+    "en": "Opens a file and returns a file identifier.",
+    "pt": "Abre um arquivo e retorna um identificador de arquivo."
+   },
+   "syntax": [
+    {
+     "code": "fid = fopen(filename)",
+     "en": "Opens the file for reading.",
+     "pt": "Abre o arquivo para leitura."
+    },
+    {
+     "code": "fid = fopen(filename, permission)",
+     "en": "Opens with a mode such as `'w'`, `'a'`, `'r+'`; add `t` for text mode.",
+     "pt": "Abre com um modo como `'w'`, `'a'`, `'r+'`; acrescente `t` para modo texto."
+    },
+    {
+     "code": "[fid, msg] = fopen(...)",
+     "en": "Also returns an error message when the open fails.",
+     "pt": "Retorna também uma mensagem de erro quando a abertura falha."
+    },
+    {
+     "code": "[name, perm, machinefmt, enc] = fopen(fid)",
+     "en": "Queries the properties of an open file.",
+     "pt": "Consulta as propriedades de um arquivo aberto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the file.",
+     "pt": "Nome do arquivo."
+    },
+    {
+     "name": "permission",
+     "en": "`'r'` read (default), `'w'` write and truncate, `'a'` append, `'r+'` read and write, `'w+'` and `'a+'` for update variants.",
+     "pt": "`'r'` leitura (padrão), `'w'` escrita com truncamento, `'a'` acréscimo, `'r+'` leitura e escrita, `'w+'` e `'a+'` para variantes de atualização."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "fid",
+     "en": "Integer identifier, 3 or greater, to pass to other file functions; `-1` if the file could not be opened.",
+     "pt": "Identificador inteiro, 3 ou maior, para passar às demais funções de arquivo; `-1` se o arquivo não pôde ser aberto."
+    },
+    {
+     "name": "msg",
+     "en": "Text describing why opening failed.",
+     "pt": "Texto que descreve por que a abertura falhou."
+    }
+   ],
+   "description": {
+    "en": "`fopen` does not raise an error when a file is missing. It returns `-1`, so check the result before reading. The identifiers `0`, `1` and `2` are reserved for standard input, standard output and standard error.\n\nEvery file opened should be closed with `fclose`.",
+    "pt": "`fopen` não gera erro quando o arquivo não existe. Ela retorna `-1`, então verifique o resultado antes de ler. Os identificadores `0`, `1` e `2` são reservados à entrada padrão, à saída padrão e ao erro padrão.\n\nTodo arquivo aberto deve ser fechado com `fclose`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Open for reading, with a failing case",
+      "pt": "Abrir para leitura, com um caso que falha"
+     },
+     "code": "[fid, msg] = fopen('missing.txt')\nfid = fopen('ok.txt', 'w');\nfprintf(fid, 'hi');\nfclose(fid);\nfid = fopen('ok.txt');\n[name, perm] = fopen(fid)\nfclose(fid);"
+    }
+   ],
+   "see": [
+    "fclose",
+    "fprintf",
+    "fread",
+    "fgetl",
+    "fileread"
+   ]
+  },
+  "formattedDisplayText": {
+   "summary": {
+    "en": "Returns, as a string, the text that displaying a value would print.",
+    "pt": "Retorna, como string, o texto que a exibição de um valor imprimiria."
+   },
+   "syntax": [
+    {
+     "code": "str = formattedDisplayText(X)",
+     "en": "Captures the display of `X`.",
+     "pt": "Captura a exibição de `X`."
+    },
+    {
+     "code": "str = formattedDisplayText(X, Name, Value)",
+     "en": "Controls the format with options such as `'NumericFormat'` and `'LineSpacing'`.",
+     "pt": "Controla o formato com opções como `'NumericFormat'` e `'LineSpacing'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    },
+    {
+     "name": "'NumericFormat'",
+     "en": "Display format such as `'short'` or `'long'`.",
+     "pt": "Formato de exibição, como `'short'` ou `'long'`."
+    },
+    {
+     "name": "'LineSpacing'",
+     "en": "`'loose'` or `'compact'`.",
+     "pt": "`'loose'` ou `'compact'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "str",
+     "en": "String scalar with the displayed text, line breaks included.",
+     "pt": "String escalar com o texto exibido, inclusive as quebras de linha."
+    }
+   ],
+   "description": {
+    "en": "The result is exactly what the command window would show for the value, but kept as data. It is useful for building log messages, writing results to a file, or testing the look of a display without the value being echoed. The `'NumericFormat'` option acts like `format` for this single call only.",
+    "pt": "O resultado é exatamente o que a janela de comandos mostraria para o valor, mas mantido como dado. Serve para montar mensagens de log, gravar resultados em arquivo ou testar a aparência de uma exibição sem ecoar o valor. A opção `'NumericFormat'` age como `format` apenas nessa chamada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Capture a display",
+      "pt": "Capturar uma exibição"
+     },
+     "code": "s = formattedDisplayText([1 2; 3 4]);\nclass(s)\nfprintf('%s', s)\nformattedDisplayText(pi, 'NumericFormat', 'long')"
+    }
+   ],
+   "see": [
+    "disp",
+    "format",
+    "sprintf",
+    "string"
+   ]
+  }
+ }
+}

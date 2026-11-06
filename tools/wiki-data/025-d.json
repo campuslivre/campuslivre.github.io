@@ -1,0 +1,807 @@
+{
+ "functions": {
+  "erfi": {
+   "summary": {
+    "en": "Imaginary error function.",
+    "pt": "Função erro imaginária."
+   },
+   "syntax": [
+    {
+     "code": "Y = erfi(X)",
+     "en": "Evaluates `erfi(x) = -i*erf(i*x)` for each element.",
+     "pt": "Avalia `erfi(x) = -i*erf(i*x)` para cada elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric or symbolic array.",
+     "pt": "Array numérico ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array of the same size. It is real for real `X`.",
+     "pt": "Array do mesmo tamanho. É real para `X` real."
+    }
+   ],
+   "description": {
+    "en": "The function equals `2/sqrt(pi)` times the integral from 0 to `x` of `exp(t^2)`. Unlike `erf`, which saturates at 1, `erfi` grows without bound, roughly like `exp(x^2)/x`. It is odd, and `erfi(0)` is 0.",
+    "pt": "A função é igual a `2/sqrt(pi)` vezes a integral de 0 a `x` de `exp(t^2)`. Ao contrário de `erf`, que satura em 1, `erfi` cresce sem limite, aproximadamente como `exp(x^2)/x`. É ímpar, e `erfi(0)` vale 0."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values",
+      "pt": "Valores"
+     },
+     "code": "erfi([0 0.5 1])\nerfi(sym(0))"
+    }
+   ],
+   "see": [
+    "erf",
+    "erfc",
+    "dawson",
+    "fresnelc"
+   ]
+  },
+  "eulergamma": {
+   "summary": {
+    "en": "Euler-Mascheroni constant, 0.5772, as a symbolic constant.",
+    "pt": "Constante de Euler-Mascheroni, 0,5772, como constante simbólica."
+   },
+   "syntax": [
+    {
+     "code": "eulergamma",
+     "en": "Symbolic constant equal to the limit of `1 + 1/2 + ... + 1/n - log(n)`.",
+     "pt": "Constante simbólica igual ao limite de `1 + 1/2 + ... + 1/n - log(n)`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "g",
+     "en": "Symbolic constant, exact until converted with `double` or `vpa`.",
+     "pt": "Constante simbólica, exata até ser convertida com `double` ou `vpa`."
+    }
+   ],
+   "description": {
+    "en": "The constant measures how far the harmonic sum is from the logarithm. It shows up in the series of the exponential and cosine integrals, in the gamma function (`-gamma'(1)`) and in number theory. It is unknown whether it is rational.",
+    "pt": "A constante mede a distância entre a soma harmônica e o logaritmo. Aparece nas séries das integrais exponencial e cosseno, na função gama (`-gamma'(1)`) e na teoria dos números. Não se sabe se é racional."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Symbolic and numeric value",
+      "pt": "Valor simbólico e numérico"
+     },
+     "code": "eulergamma\nvpa(eulergamma, 10)\nsum(1./(1:1000)) - log(1000)"
+    }
+   ],
+   "see": [
+    "catalan",
+    "cosint",
+    "gamma",
+    "vpa",
+    "psi"
+   ]
+  },
+  "fresnelc": {
+   "summary": {
+    "en": "Fresnel cosine integral.",
+    "pt": "Integral cosseno de Fresnel."
+   },
+   "syntax": [
+    {
+     "code": "C = fresnelc(X)",
+     "en": "Evaluates the integral from 0 to `x` of `cos(pi*t^2/2)`.",
+     "pt": "Avalia a integral de 0 a `x` de `cos(pi*t^2/2)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric or symbolic array.",
+     "pt": "Array numérico ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Array of the same size; odd in `x`, with limit 0.5 as `x` goes to `Inf`.",
+     "pt": "Array do mesmo tamanho; ímpar em `x`, com limite 0,5 quando `x` tende a `Inf`."
+    }
+   ],
+   "description": {
+    "en": "Together with `fresnels` it describes the Euler (Cornu) spiral, the curve `(C(t), S(t))`, and appears in diffraction at a straight edge and in the design of transition curves in roads and railways. This definition uses the `pi/2` scaling in the argument; other texts omit it.",
+    "pt": "Junto com `fresnels`, descreve a espiral de Euler (Cornu), a curva `(C(t), S(t))`, e aparece na difração por uma borda reta e no projeto de curvas de transição em estradas e ferrovias. Esta definição usa a escala `pi/2` no argumento; outros textos a omitem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the limit",
+      "pt": "Valores e o limite"
+     },
+     "code": "fresnelc([0 0.5 1])\nfresnelc(Inf)"
+    }
+   ],
+   "see": [
+    "fresnels",
+    "erf",
+    "erfi",
+    "cosint"
+   ]
+  },
+  "fresnels": {
+   "summary": {
+    "en": "Fresnel sine integral.",
+    "pt": "Integral seno de Fresnel."
+   },
+   "syntax": [
+    {
+     "code": "S = fresnels(X)",
+     "en": "Evaluates the integral from 0 to `x` of `sin(pi*t^2/2)`.",
+     "pt": "Avalia a integral de 0 a `x` de `sin(pi*t^2/2)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric or symbolic array.",
+     "pt": "Array numérico ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Array of the same size; odd in `x`, with limit 0.5 as `x` goes to `Inf`.",
+     "pt": "Array do mesmo tamanho; ímpar em `x`, com limite 0,5 quando `x` tende a `Inf`."
+    }
+   ],
+   "description": {
+    "en": "`fresnels` is the companion of `fresnelc`. Both oscillate around 0.5 for large `x` with decreasing amplitude, which makes the Euler spiral wind toward the point `(0.5, 0.5)`. Near the origin `S(x)` behaves like `pi*x^3/6`.",
+    "pt": "`fresnels` é o par de `fresnelc`. Ambas oscilam em torno de 0,5 para `x` grande, com amplitude decrescente, o que faz a espiral de Euler se enrolar em direção ao ponto `(0,5; 0,5)`. Perto da origem, `S(x)` se comporta como `pi*x^3/6`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the limit",
+      "pt": "Valores e o limite"
+     },
+     "code": "fresnels([0 0.5 1])\nfresnels(Inf)"
+    }
+   ],
+   "see": [
+    "fresnelc",
+    "erf",
+    "sinint",
+    "erfi"
+   ]
+  },
+  "heaviside": {
+   "summary": {
+    "en": "Heaviside step function.",
+    "pt": "Função degrau de Heaviside."
+   },
+   "syntax": [
+    {
+     "code": "Y = heaviside(X)",
+     "en": "Returns 0 for negative, 1/2 at zero and 1 for positive values.",
+     "pt": "Retorna 0 para valores negativos, 1/2 em zero e 1 para valores positivos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric or symbolic array (real).",
+     "pt": "Array numérico ou simbólico (real)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array of the same size. For a symbolic `X` the call `heaviside(x)` stays unevaluated.",
+     "pt": "Array do mesmo tamanho. Para `X` simbólico a chamada `heaviside(x)` permanece sem avaliar."
+    }
+   ],
+   "description": {
+    "en": "The step function switches a signal on at the origin. Shifted copies such as `heaviside(t - 2)` turn on at `t = 2`, and differences of steps build rectangular pulses. Its derivative is `dirac`. The value at the jump is 1/2 by default, and the choice can be changed with `sympref('HeavisideAtOrigin', value)`.",
+    "pt": "A função degrau liga um sinal na origem. Cópias deslocadas, como `heaviside(t - 2)`, ligam em `t = 2`, e diferenças de degraus formam pulsos retangulares. Sua derivada é `dirac`. O valor no salto é 1/2 por padrão, e essa escolha pode ser mudada com `sympref('HeavisideAtOrigin', valor)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Step and rectangular pulse",
+      "pt": "Degrau e pulso retangular"
+     },
+     "code": "heaviside([-2 0 3])\nt = -1:4;\nheaviside(t - 1) - heaviside(t - 3)"
+    }
+   ],
+   "see": [
+    "dirac",
+    "sign",
+    "laplace",
+    "piecewise",
+    "sympref"
+   ]
+  },
+  "hurwitzZeta": {
+   "summary": {
+    "en": "Hurwitz zeta function.",
+    "pt": "Função zeta de Hurwitz."
+   },
+   "syntax": [
+    {
+     "code": "Z = hurwitzZeta(s, a)",
+     "en": "Evaluates the sum of `1/(k + a)^s` for `k = 0, 1, 2, ...`",
+     "pt": "Avalia a soma de `1/(k + a)^s` para `k = 0, 1, 2, ...`"
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Exponent, with `s > 1` for convergence of the sum.",
+     "pt": "Expoente, com `s > 1` para a soma convergir."
+    },
+    {
+     "name": "a",
+     "en": "Offset, `a > 0`.",
+     "pt": "Deslocamento, `a > 0`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Z",
+     "en": "Array formed by broadcasting `s` and `a`.",
+     "pt": "Array formado pela expansão de `s` e `a`."
+    }
+   ],
+   "description": {
+    "en": "For `a = 1` the Hurwitz zeta function is the Riemann zeta function, so `hurwitzZeta(2, 1)` is `pi^2/6`. For other offsets the terms are shifted along the number line: `hurwitzZeta(s, 0.5)` equals `(2^s - 1)*zeta(s)`. It generalizes `zeta` and is related to the polygamma functions.",
+    "pt": "Para `a = 1` a função zeta de Hurwitz é a função zeta de Riemann, de modo que `hurwitzZeta(2, 1)` vale `pi^2/6`. Para outros deslocamentos os termos são deslocados ao longo da reta: `hurwitzZeta(s, 0.5)` é igual a `(2^s - 1)*zeta(s)`. Generaliza `zeta` e relaciona-se com as funções poligama."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Zeta as a special case",
+      "pt": "Zeta como caso particular"
+     },
+     "code": "hurwitzZeta(2, 1)\npi^2/6\nhurwitzZeta(3, 0.5)\n(2^3 - 1)*zeta(3)"
+    }
+   ],
+   "see": [
+    "zeta",
+    "psi",
+    "gamma",
+    "dilog"
+   ]
+  },
+  "hypergeom": {
+   "summary": {
+    "en": "Generalized hypergeometric function.",
+    "pt": "Função hipergeométrica generalizada."
+   },
+   "syntax": [
+    {
+     "code": "F = hypergeom(a, b, z)",
+     "en": "Evaluates `pFq` with numerator parameters `a` and denominator parameters `b`.",
+     "pt": "Avalia `pFq` com parâmetros de numerador `a` e de denominador `b`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Vector of `p` upper parameters; may be empty.",
+     "pt": "Vetor de `p` parâmetros superiores; pode ser vazio."
+    },
+    {
+     "name": "b",
+     "en": "Vector of `q` lower parameters; may be empty.",
+     "pt": "Vetor de `q` parâmetros inferiores; pode ser vazio."
+    },
+    {
+     "name": "z",
+     "en": "Argument, numeric or symbolic.",
+     "pt": "Argumento, numérico ou simbólico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Array of the same size as `z`.",
+     "pt": "Array do mesmo tamanho de `z`."
+    }
+   ],
+   "description": {
+    "en": "The function is the series whose term ratio is a rational function of the index: `sum( prod(pochhammer(a,k)) / prod(pochhammer(b,k)) * z^k / k! )`. Many special functions are particular cases: `hypergeom([], [], z)` is `exp(z)`, and with `a = [a1 a2]`, `b = c` the Gauss function `2F1` results. Convergence of the series for `p = q + 1` requires `abs(z) < 1`, but the function is continued analytically.",
+    "pt": "A função é a série cuja razão entre termos é uma função racional do índice: `sum( prod(pochhammer(a,k)) / prod(pochhammer(b,k)) * z^k / k! )`. Muitas funções especiais são casos particulares: `hypergeom([], [], z)` é `exp(z)`, e com `a = [a1 a2]`, `b = c` resulta a função de Gauss `2F1`. A convergência da série para `p = q + 1` exige `abs(z) < 1`, mas a função é prolongada analiticamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Gauss function and exp",
+      "pt": "Função de Gauss e exp"
+     },
+     "code": "hypergeom([1 2], 3, 0.5)\nhypergeom([], [], 1)\nexp(1)"
+    }
+   ],
+   "see": [
+    "gamma",
+    "pochhammer",
+    "beta",
+    "legendreP",
+    "besselj"
+   ]
+  },
+  "igamma": {
+   "summary": {
+    "en": "Upper incomplete gamma function.",
+    "pt": "Função gama incompleta superior."
+   },
+   "syntax": [
+    {
+     "code": "Y = igamma(a, x)",
+     "en": "Evaluates the integral from `x` to infinity of `t^(a-1)*exp(-t)`.",
+     "pt": "Avalia a integral de `x` ao infinito de `t^(a-1)*exp(-t)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "Shape parameter.",
+     "pt": "Parâmetro de forma."
+    },
+    {
+     "name": "x",
+     "en": "Lower limit of the integral, `x >= 0` for real results.",
+     "pt": "Limite inferior da integral, `x >= 0` para resultados reais."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `a` and `x`.",
+     "pt": "Array formado pela expansão de `a` e `x`."
+    }
+   ],
+   "description": {
+    "en": "This is the unregularized form: `igamma(a, 0)` is `gamma(a)`. The regularized upper function is `gammainc(x, a, 'upper')`, which equals `igamma(a, x)/gamma(a)`. For integer `a`, `igamma(a, x)` is `(a-1)!*exp(-x)*(1 + x + ... + x^(a-1)/(a-1)!)`, so `igamma(2, 1)` is `2/e`.",
+    "pt": "Esta é a forma não regularizada: `igamma(a, 0)` é `gamma(a)`. A função superior regularizada é `gammainc(x, a, 'upper')`, igual a `igamma(a, x)/gamma(a)`. Para `a` inteiro, `igamma(a, x)` é `(a-1)!*exp(-x)*(1 + x + ... + x^(a-1)/(a-1)!)`, de modo que `igamma(2, 1)` é `2/e`."
+   },
+   "notes": {
+    "en": "Complex-valued results (negative arguments) return `NaN` in MatLivre.",
+    "pt": "Resultados complexos (argumentos negativos) retornam `NaN` no MatLivre."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Integer shape and the regularized form",
+      "pt": "Parâmetro inteiro e a forma regularizada"
+     },
+     "code": "igamma(2, 1)\n2*exp(-1)\nigamma(0.5, [1 2])\ngammainc([1 2], 0.5, 'upper')*gamma(0.5)"
+    }
+   ],
+   "see": [
+    "gamma",
+    "gammainc",
+    "gammaln",
+    "expint",
+    "erfc"
+   ]
+  },
+  "jacobiAM": {
+   "summary": {
+    "en": "Jacobi amplitude function.",
+    "pt": "Função amplitude de Jacobi."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiAM(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiAM` returns the angle `phi` for which `ellipticF(phi, m) = u`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiAM` retorna o ângulo `phi` para o qual `ellipticF(phi, m) = u`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiAM(u, 0.3)\nellipticF(jacobiAM(0.5, 0.3), 0.3)"
+    }
+   ],
+   "see": [
+    "ellipticF",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticK"
+   ]
+  },
+  "jacobiCD": {
+   "summary": {
+    "en": "Jacobi elliptic function `cd(u, m) = cn/dn`.",
+    "pt": "Função elíptica de Jacobi `cd(u, m) = cn/dn`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiCD(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiCD` returns the quotient `cn(u,m)/dn(u,m)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiCD` retorna o quociente `cn(u,m)/dn(u,m)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiCD(u, 0.3)\njacobiCD(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCN",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiCN": {
+   "summary": {
+    "en": "Jacobi elliptic function `cn(u, m)`.",
+    "pt": "Função elíptica de Jacobi `cn(u, m)`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiCN(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiCN` returns the cosine of the amplitude, `cos(am(u, m))`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiCN` retorna o cosseno da amplitude, `cos(am(u, m))`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiCN(u, 0.3)\njacobiCN(0.5, [0 0.3 0.9])"
+    }
+   ],
+   "see": [
+    "jacobiDN",
+    "jacobiSN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiCS": {
+   "summary": {
+    "en": "Jacobi elliptic function `cs(u, m) = cn/sn`.",
+    "pt": "Função elíptica de Jacobi `cs(u, m) = cn/sn`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiCS(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiCS` returns the quotient `cn(u,m)/sn(u,m)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiCS` retorna o quociente `cn(u,m)/sn(u,m)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiCS(u, 0.3)\njacobiCS(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCN",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiDC": {
+   "summary": {
+    "en": "Jacobi elliptic function `dc(u, m) = dn/cn`.",
+    "pt": "Função elíptica de Jacobi `dc(u, m) = dn/cn`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiDC(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiDC` returns the quotient `dn(u,m)/cn(u,m)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiDC` retorna o quociente `dn(u,m)/cn(u,m)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiDC(u, 0.3)\njacobiDC(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCD",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiDN": {
+   "summary": {
+    "en": "Jacobi elliptic function `dn(u, m)`.",
+    "pt": "Função elíptica de Jacobi `dn(u, m)`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiDN(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiDN` returns `sqrt(1 - m*sin(am(u, m))^2)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiDN` retorna `sqrt(1 - m*sin(am(u, m))^2)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiDN(u, 0.3)\njacobiDN(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCN",
+    "jacobiSN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiDS": {
+   "summary": {
+    "en": "Jacobi elliptic function `ds(u, m) = dn/sn`.",
+    "pt": "Função elíptica de Jacobi `ds(u, m) = dn/sn`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiDS(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiDS` returns the quotient `dn(u,m)/sn(u,m)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiDS` retorna o quociente `dn(u,m)/sn(u,m)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiDS(u, 0.3)\njacobiDS(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCS",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  },
+  "jacobiNC": {
+   "summary": {
+    "en": "Jacobi elliptic function `nc(u, m) = 1/cn`.",
+    "pt": "Função elíptica de Jacobi `nc(u, m) = 1/cn`."
+   },
+   "syntax": [
+    {
+     "code": "Y = jacobiNC(u, m)",
+     "en": "Evaluates the function at `u` for the parameter `m`.",
+     "pt": "Avalia a função em `u` para o parâmetro `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "Argument, numeric or symbolic; may be an array.",
+     "pt": "Argumento, numérico ou simbólico; pode ser um array."
+    },
+    {
+     "name": "m",
+     "en": "Parameter (`m = k^2`), with `0 <= m <= 1` for real behavior.",
+     "pt": "Parâmetro (`m = k^2`), com `0 <= m <= 1` para comportamento real."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Array formed by broadcasting `u` and `m`.",
+     "pt": "Array formado pela expansão de `u` e `m`."
+    }
+   ],
+   "description": {
+    "en": "`jacobiNC` returns the reciprocal `1/cn(u,m)`. The Jacobi functions generalize the circular functions: they are doubly periodic and arise as inverses of the incomplete elliptic integral of the first kind, `ellipticF`. When `m = 0` they reduce to ordinary trigonometric functions of `u`, and when `m` approaches 1 to hyperbolic ones.",
+    "pt": "`jacobiNC` retorna o inverso `1/cn(u,m)`. As funções de Jacobi generalizam as funções circulares: são duplamente periódicas e surgem como inversas da integral elíptica incompleta de primeira espécie, `ellipticF`. Quando `m = 0`, reduzem-se às funções trigonométricas comuns de `u`, e quando `m` se aproxima de 1, às hiperbólicas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Values and the circular limit",
+      "pt": "Valores e o limite circular"
+     },
+     "code": "u = [0.2 0.5 1];\njacobiNC(u, 0.3)\njacobiNC(0.5, 0)"
+    }
+   ],
+   "see": [
+    "jacobiCN",
+    "jacobiSN",
+    "jacobiDN",
+    "ellipticF",
+    "ellipticK"
+   ]
+  }
+ }
+}

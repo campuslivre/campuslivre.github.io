@@ -1,0 +1,512 @@
+{
+  "functions": {
+    "lcm": {
+      "summary": {"en": "Least common multiple of integers.", "pt": "Mínimo múltiplo comum de inteiros."},
+      "syntax": [
+        {"code": "L = lcm(A, B)", "en": "Returns the smallest positive integer that is a multiple of both `A` and `B`, element by element.", "pt": "Retorna o menor inteiro positivo que é múltiplo de `A` e de `B`, elemento a elemento."}
+      ],
+      "inputs": [
+        {"name": "A, B", "en": "Integer-valued arrays of compatible sizes. A scalar is expanded to match an array.", "pt": "Arrays de valores inteiros com tamanhos compatíveis. Um escalar é expandido para casar com um array."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "Array of nonnegative integers. If either input is `0` the result is `0`. Integer inputs of one class give a result of that class.", "pt": "Array de inteiros não negativos. Se uma das entradas é `0`, o resultado é `0`. Entradas inteiras de uma classe dão resultado dessa classe."}
+      ],
+      "description": {
+        "en": "The result equals `abs(A.*B)./gcd(A, B)`. Signs are ignored. The function is what you need to add fractions with different denominators: the common denominator of `1/4` and `1/6` is `lcm(4, 6) = 12`.\n\nWith an array and a scalar, each element is paired with the scalar. To get the least common multiple of a whole vector, apply the function repeatedly, as in `lcm(lcm(a, b), c)`.",
+        "pt": "O resultado é igual a `abs(A.*B)./gcd(A, B)`. Os sinais são ignorados. É a função necessária para somar frações com denominadores diferentes: o denominador comum de `1/4` e `1/6` é `lcm(4, 6) = 12`.\n\nCom um array e um escalar, cada elemento é pareado com o escalar. Para obter o mínimo múltiplo comum de um vetor inteiro, aplique a função repetidamente, como em `lcm(lcm(a, b), c)`."
+      },
+      "examples": [
+        {"title": {"en": "Pairs and arrays", "pt": "Pares e arrays"}, "code": "lcm(4, 6)\nlcm([4 6 10], 15)\nlcm(0, 5)"}
+      ],
+      "see": ["gcd", "factor", "primes", "rat"]
+    },
+    "legendre": {
+      "summary": {"en": "Associated Legendre functions of degree n.", "pt": "Funções de Legendre associadas de grau n."},
+      "syntax": [
+        {"code": "P = legendre(n, X)", "en": "Returns the functions `P(n, m)(x)` for orders `m = 0` to `n` at every point of `X`.", "pt": "Retorna as funções `P(n, m)(x)` para as ordens `m = 0` a `n` em cada ponto de `X`."},
+        {"code": "P = legendre(n, X, normalization)", "en": "Chooses the normalization: `'unnorm'` (default), `'sch'` (Schmidt semi-normalized) or `'norm'` (fully normalized).", "pt": "Escolhe a normalização: `'unnorm'` (padrão), `'sch'` (semi-normalizada de Schmidt) ou `'norm'` (totalmente normalizada)."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Degree: a nonnegative integer scalar.", "pt": "Grau: um escalar inteiro não negativo."},
+        {"name": "X", "en": "Real values in the interval from -1 to 1.", "pt": "Valores reais no intervalo de -1 a 1."},
+        {"name": "normalization", "en": "`'unnorm'`, `'sch'` or `'norm'`.", "pt": "`'unnorm'`, `'sch'` ou `'norm'`."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "Array with `n+1` rows (the orders `m = 0, 1, ..., n`) and one column per element of `X`.", "pt": "Array com `n+1` linhas (as ordens `m = 0, 1, ..., n`) e uma coluna por elemento de `X`."}
+      ],
+      "description": {
+        "en": "Row `m+1` of the result holds the associated Legendre function of degree `n` and order `m`. The first row (`m = 0`) is the ordinary Legendre polynomial. These functions appear in the angular part of solutions of Laplace's equation in spherical coordinates, hence in gravity, geomagnetism and the hydrogen atom.\n\nIn the unnormalized form the Condon-Shortley phase `(-1)^m` is included, which is why the odd orders come out negative for positive `x` in the example below.",
+        "pt": "A linha `m+1` do resultado guarda a função de Legendre associada de grau `n` e ordem `m`. A primeira linha (`m = 0`) é o polinômio de Legendre comum. Essas funções aparecem na parte angular das soluções da equação de Laplace em coordenadas esféricas, e portanto em gravidade, geomagnetismo e no átomo de hidrogênio.\n\nNa forma não normalizada a fase de Condon-Shortley `(-1)^m` está incluída, e por isso as ordens ímpares saem negativas para `x` positivo no exemplo abaixo."
+      },
+      "examples": [
+        {"title": {"en": "Degree 2 at three points", "pt": "Grau 2 em três pontos"}, "code": "legendre(2, [0 0.5 1])\nlegendre(2, 0.5, 'norm')"}
+      ],
+      "see": ["polyval", "gamma", "ellipke", "besselj"]
+    },
+    "log": {
+      "summary": {"en": "Natural logarithm, element by element.", "pt": "Logaritmo natural, elemento a elemento."},
+      "syntax": [
+        {"code": "Y = log(X)", "en": "Returns the natural logarithm (base `e`) of each element of `X`.", "pt": "Retorna o logaritmo natural (base `e`) de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. `log(0)` is `-Inf`; the logarithm of a negative real number is complex.", "pt": "Array do mesmo tamanho de `X`. `log(0)` é `-Inf`; o logaritmo de um real negativo é complexo."}
+      ],
+      "description": {
+        "en": "`log` is the inverse of `exp`. For a negative real `x` the principal value is `log(abs(x)) + i*pi`, so `log(-1)` is `0 + 3.1416i`, which is the identity `exp(i*pi) = -1` read backwards. The result is complex as soon as any element needs it.\n\nOther bases follow from the change of base rule: `log(x)/log(b)`, or directly with `log2` and `log10`. For small `x`, `log1p(x)` is more accurate than `log(1 + x)`.",
+        "pt": "`log` é a inversa de `exp`. Para um `x` real negativo o valor principal é `log(abs(x)) + i*pi`, de modo que `log(-1)` vale `0 + 3.1416i`, que é a identidade `exp(i*pi) = -1` lida ao contrário. O resultado é complexo assim que algum elemento exige.\n\nOutras bases seguem da mudança de base: `log(x)/log(b)`, ou diretamente com `log2` e `log10`. Para `x` pequeno, `log1p(x)` é mais preciso que `log(1 + x)`."
+      },
+      "notes": {
+        "en": "Integer classes such as `int8` are not accepted by `log` in MatLivre.",
+        "pt": "Classes inteiras como `int8` não são aceitas por `log` no MatLivre."
+      },
+      "examples": [
+        {"title": {"en": "Positive, zero and negative arguments", "pt": "Argumentos positivos, zero e negativos"}, "code": "log([1 exp(1) 10])\nlog(0)\nlog(-1)"}
+      ],
+      "see": ["exp", "log10", "log2", "log1p", "reallog"]
+    },
+    "log10": {
+      "summary": {"en": "Common (base 10) logarithm.", "pt": "Logaritmo comum (base 10)."},
+      "syntax": [
+        {"code": "Y = log10(X)", "en": "Returns the base-10 logarithm of each element of `X`.", "pt": "Retorna o logaritmo na base 10 de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. Zero gives `-Inf`, a negative real gives a complex result.", "pt": "Array do mesmo tamanho de `X`. Zero dá `-Inf`, um real negativo dá resultado complexo."}
+      ],
+      "description": {
+        "en": "`log10(x)` is the exponent to which 10 must be raised to get `x`, so `log10(1000)` is exactly `3`. It is the natural scale for decibels (`20*log10(ratio)`), pH, the Richter scale and any quantity spanning many orders of magnitude, and `floor(log10(x))` gives the order of magnitude of `x`.",
+        "pt": "`log10(x)` é o expoente ao qual 10 deve ser elevado para obter `x`, portanto `log10(1000)` é exatamente `3`. É a escala natural para decibéis (`20*log10(razao)`), pH, a escala Richter e qualquer grandeza que cobre muitas ordens de grandeza, e `floor(log10(x))` dá a ordem de grandeza de `x`."
+      },
+      "examples": [
+        {"title": {"en": "Powers of ten and decibels", "pt": "Potências de dez e decibéis"}, "code": "log10([1 10 1000])\nlog10(2)\n20*log10(10)"}
+      ],
+      "see": ["log", "log2", "log1p", "exp", "nextpow2"]
+    },
+    "log1p": {
+      "summary": {"en": "Accurate log(1 + x) for small x.", "pt": "Calcula log(1 + x) com precisão para x pequeno."},
+      "syntax": [
+        {"code": "Y = log1p(X)", "en": "Returns `log(1 + X)` for each element, without the rounding error of forming `1 + X` first.", "pt": "Retorna `log(1 + X)` para cada elemento, sem o erro de arredondamento de formar `1 + X` antes."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. `log1p(-1)` is `-Inf`; values below `-1` give `NaN` for real input.", "pt": "Array do mesmo tamanho de `X`. `log1p(-1)` é `-Inf`; valores abaixo de `-1` dão `NaN` para entrada real."}
+      ],
+      "description": {
+        "en": "If `x` is smaller than the machine epsilon (about `2.2e-16`), then `1 + x` rounds to exactly 1 and `log(1 + x)` returns 0, while the true answer is close to `x`. `log1p` evaluates the function without that intermediate sum and keeps full relative accuracy.\n\nIt is the inverse of `expm1` and is the right choice for compound interest rates and log-likelihoods of rare events.",
+        "pt": "Se `x` é menor que o epsilon de máquina (cerca de `2.2e-16`), então `1 + x` arredonda para exatamente 1 e `log(1 + x)` devolve 0, enquanto a resposta verdadeira é próxima de `x`. `log1p` calcula a função sem essa soma intermediária e mantém a precisão relativa total.\n\nÉ a inversa de `expm1` e a escolha certa para taxas de juros compostos e log-verossimilhanças de eventos raros."
+      },
+      "examples": [
+        {"title": {"en": "Where log(1+x) fails", "pt": "Onde log(1+x) falha"}, "code": "x = 1e-17;\nlog(1 + x)\nlog1p(x)\nlog1p(-1)"}
+      ],
+      "see": ["expm1", "log", "log10", "exp"]
+    },
+    "log2": {
+      "summary": {"en": "Base-2 logarithm.", "pt": "Logaritmo na base 2."},
+      "syntax": [
+        {"code": "Y = log2(X)", "en": "Returns the base-2 logarithm of each element of `X`.", "pt": "Retorna o logaritmo na base 2 de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. Exact powers of 2 give exact integers.", "pt": "Array do mesmo tamanho de `X`. Potências exatas de 2 dão inteiros exatos."}
+      ],
+      "description": {
+        "en": "`log2(x)` tells how many times 2 must be doubled to reach `x`: `log2(8)` is 3 and `log2(10)` is about 3.32. It measures information in bits and the number of binary digits needed, as in `ceil(log2(n+1))` bits to store the integer `n`.\n\nFor a negative real `x` the result is complex. `nextpow2(x)` is `ceil(log2(abs(x)))`, handy for choosing FFT lengths.",
+        "pt": "`log2(x)` indica quantas vezes 2 deve ser dobrado para chegar a `x`: `log2(8)` é 3 e `log2(10)` é cerca de 3,32. Mede informação em bits e o número de dígitos binários necessários, como em `ceil(log2(n+1))` bits para guardar o inteiro `n`.\n\nPara `x` real negativo o resultado é complexo. `nextpow2(x)` é `ceil(log2(abs(x)))`, útil para escolher comprimentos de FFT."
+      },
+      "notes": {
+        "en": "The two-output form `[F, E] = log2(X)`, which splits a number into mantissa and exponent, is not available in MatLivre. `log2(0)` is `-Inf`.",
+        "pt": "A forma com duas saídas `[F, E] = log2(X)`, que separa um número em mantissa e expoente, não está disponível no MatLivre. `log2(0)` é `-Inf`."
+      },
+      "examples": [
+        {"title": {"en": "Powers of two and bits", "pt": "Potências de dois e bits"}, "code": "log2([1 8 10 1024])\nceil(log2(1000 + 1))"}
+      ],
+      "see": ["log", "log10", "pow2", "nextpow2", "log1p"]
+    },
+    "magic": {
+      "summary": {"en": "Magic square: equal row, column and diagonal sums.", "pt": "Quadrado mágico: somas iguais nas linhas, colunas e diagonais."},
+      "syntax": [
+        {"code": "M = magic(n)", "en": "Returns an `n`-by-`n` matrix built from the integers `1` to `n^2` whose rows, columns and both main diagonals add up to the same number.", "pt": "Retorna uma matriz `n`-por-`n` formada pelos inteiros de `1` a `n^2` cujas linhas, colunas e as duas diagonais principais somam o mesmo valor."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Nonnegative integer scalar. `magic(0)` is empty and `magic(1)` is `1`.", "pt": "Escalar inteiro não negativo. `magic(0)` é vazio e `magic(1)` é `1`."}
+      ],
+      "outputs": [
+        {"name": "M", "en": "The magic square, with common sum `n*(n^2+1)/2`.", "pt": "O quadrado mágico, com soma comum `n*(n^2+1)/2`."}
+      ],
+      "description": {
+        "en": "A different construction is used for odd orders, for orders divisible by 4, and for orders that are twice an odd number. The matrix returned is one particular magic square, not the only one of that size; for `n = 2` no true magic square exists.\n\nMagic squares are a convenient source of small test matrices of known sum, with integer entries and often nonzero determinant.",
+        "pt": "Usa-se uma construção diferente para ordens ímpares, para ordens divisíveis por 4 e para ordens iguais ao dobro de um ímpar. A matriz retornada é um quadrado mágico específico, não o único desse tamanho; para `n = 2` não existe quadrado mágico verdadeiro.\n\nQuadrados mágicos são uma fonte prática de matrizes de teste pequenas com soma conhecida, entradas inteiras e, em geral, determinante não nulo."
+      },
+      "examples": [
+        {"title": {"en": "Checking the sums", "pt": "Conferindo as somas"}, "code": "M = magic(4)\nsum(M)\nsum(M, 2)'\ntrace(M)\nsum(diag(fliplr(M)))"}
+      ],
+      "see": ["hilb", "pascal", "hadamard", "gallery", "rosser"]
+    },
+    "matchpairs": {
+      "summary": {"en": "Optimal assignment of rows to columns of a cost matrix.", "pt": "Atribuição ótima de linhas a colunas de uma matriz de custos."},
+      "syntax": [
+        {"code": "M = matchpairs(Cost, costUnmatched)", "en": "Returns the row/column pairs of the minimum-cost matching.", "pt": "Retorna os pares linha/coluna da correspondência de custo mínimo."},
+        {"code": "[M, uR, uC] = matchpairs(Cost, costUnmatched)", "en": "Also returns the indices of the rows and columns left unmatched.", "pt": "Também retorna os índices das linhas e colunas que ficaram sem par."}
+      ],
+      "inputs": [
+        {"name": "Cost", "en": "Matrix where `Cost(i, j)` is the cost of pairing row `i` with column `j`.", "pt": "Matriz em que `Cost(i, j)` é o custo de parear a linha `i` com a coluna `j`."},
+        {"name": "costUnmatched", "en": "Positive scalar: the penalty paid for leaving a row or a column without a partner.", "pt": "Escalar positivo: a penalidade paga por deixar uma linha ou uma coluna sem parceira."}
+      ],
+      "outputs": [
+        {"name": "M", "en": "Two-column matrix; each row `[i j]` pairs row `i` with column `j`.", "pt": "Matriz de duas colunas; cada linha `[i j]` pareia a linha `i` com a coluna `j`."},
+        {"name": "uR, uC", "en": "Column vectors with the unmatched rows and unmatched columns.", "pt": "Vetores coluna com as linhas e as colunas sem par."}
+      ],
+      "description": {
+        "en": "This is the linear assignment problem with an option to skip. A pair is accepted only if its cost is lower than leaving both partners unmatched, so a small `costUnmatched` produces fewer pairs. The total cost minimized is the sum of the chosen entries plus `costUnmatched` for every unmatched row or column.\n\nTypical uses are tracking objects between frames, matching two lists of points, and pairing workers with tasks.",
+        "pt": "É o problema de atribuição linear com a opção de deixar itens de fora. Um par só é aceito se seu custo for menor que deixar os dois sem parceiro, de modo que um `costUnmatched` pequeno produz menos pares. O custo total minimizado é a soma das entradas escolhidas mais `costUnmatched` para cada linha ou coluna sem par.\n\nUsos típicos são rastrear objetos entre quadros, casar duas listas de pontos e atribuir trabalhadores a tarefas."
+      },
+      "examples": [
+        {"title": {"en": "A row left unmatched", "pt": "Uma linha sem par"}, "code": "C = [1 5; 6 2; 9 9];\n[M, uR, uC] = matchpairs(C, 4)"}
+      ],
+      "see": ["min", "sortrows", "unique", "pdist2"]
+    },
+    "nchoosek": {
+      "summary": {"en": "Binomial coefficient: the number of ways to choose k of n items.", "pt": "Coeficiente binomial: número de maneiras de escolher k entre n itens."},
+      "syntax": [
+        {"code": "C = nchoosek(n, k)", "en": "Returns the binomial coefficient `n!/(k!*(n-k)!)`.", "pt": "Retorna o coeficiente binomial `n!/(k!*(n-k)!)`."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Nonnegative integer scalar, the number of items.", "pt": "Escalar inteiro não negativo, o número de itens."},
+        {"name": "k", "en": "Integer scalar from 0 to `n`, the size of each selection.", "pt": "Escalar inteiro de 0 a `n`, o tamanho de cada seleção."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Scalar count of the unordered selections.", "pt": "Contagem escalar das seleções sem ordem."}
+      ],
+      "description": {
+        "en": "Order does not matter and no item is repeated, so `nchoosek(5, 2)` counts the 10 pairs from five items. The values form Pascal's triangle: `nchoosek(n, k)` equals `nchoosek(n-1, k-1) + nchoosek(n-1, k)`. The result is exact only while it stays below `2^53`; for larger values the number is rounded and MATLAB warns about it.\n\nIn MATLAB, passing a vector as the first argument lists all combinations of its elements as rows of a matrix.",
+        "pt": "A ordem não importa e nenhum item se repete, então `nchoosek(5, 2)` conta os 10 pares de cinco itens. Os valores formam o triângulo de Pascal: `nchoosek(n, k)` é igual a `nchoosek(n-1, k-1) + nchoosek(n-1, k)`. O resultado só é exato enquanto fica abaixo de `2^53`; acima disso o número é arredondado e o MATLAB emite um aviso.\n\nNo MATLAB, passar um vetor como primeiro argumento lista todas as combinações de seus elementos como linhas de uma matriz."
+      },
+      "notes": {
+        "en": "In MatLivre only the scalar form is reliable. The vector form `nchoosek(v, k)` does not list combinations: it returns a row of binomial coefficients instead. Cell array input is not supported either.",
+        "pt": "No MatLivre só a forma escalar é confiável. A forma vetorial `nchoosek(v, k)` não lista as combinações: retorna uma linha de coeficientes binomiais. Entrada em cell array também não é suportada."
+      },
+      "examples": [
+        {"title": {"en": "Counting selections", "pt": "Contando seleções"}, "code": "nchoosek(5, 2)\nnchoosek(30, 15)\nnchoosek(5, 0)"}
+      ],
+      "see": ["factorial", "perms", "gamma", "gammaln", "primes"]
+    },
+    "nextpow2": {
+      "summary": {"en": "Exponent of the next power of two at or above abs(x).", "pt": "Expoente da próxima potência de dois igual ou maior que abs(x)."},
+      "syntax": [
+        {"code": "P = nextpow2(X)", "en": "Returns the smallest integer `P` such that `2^P >= abs(X)`.", "pt": "Retorna o menor inteiro `P` tal que `2^P >= abs(X)`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array. Signs are ignored.", "pt": "Array numérico. Os sinais são ignorados."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "Array of integer-valued doubles. Values of `X` below 1 give zero or negative exponents.", "pt": "Array de doubles com valores inteiros. Valores de `X` abaixo de 1 dão expoentes nulos ou negativos."}
+      ],
+      "description": {
+        "en": "It is the ceiling of the base-2 logarithm of the magnitude, with exact powers of two returned exactly: `nextpow2(1024)` is `10` and `nextpow2(1025)` is `11`. The classic use is padding a signal to a power-of-two length before an FFT: `fft(x, 2^nextpow2(numel(x)))`.",
+        "pt": "É o teto do logaritmo na base 2 do módulo, com potências exatas de dois devolvidas exatamente: `nextpow2(1024)` é `10` e `nextpow2(1025)` é `11`. O uso clássico é completar um sinal até um comprimento de potência de dois antes de uma FFT: `fft(x, 2^nextpow2(numel(x)))`."
+      },
+      "examples": [
+        {"title": {"en": "Padding length for an FFT", "pt": "Comprimento de preenchimento para FFT"}, "code": "nextpow2([1 5 100 1000 1025])\nn = 2^nextpow2(100)"}
+      ],
+      "see": ["log2", "pow2", "fft", "ceil"]
+    },
+    "nthroot": {
+      "summary": {"en": "Real n-th root of a real number.", "pt": "Raiz n-ésima real de um número real."},
+      "syntax": [
+        {"code": "Y = nthroot(X, n)", "en": "Returns the real `n`-th root of each element of `X`.", "pt": "Retorna a raiz `n`-ésima real de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."},
+        {"name": "n", "en": "Nonzero integer-valued scalar or array of a compatible size. A negative value gives the reciprocal root.", "pt": "Escalar ou array de valor inteiro não nulo com tamanho compatível. Um valor negativo dá a raiz recíproca."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Real array.", "pt": "Array real."}
+      ],
+      "description": {
+        "en": "The expression `x^(1/3)` returns a complex number for negative `x`, because it takes the principal complex root. `nthroot(x, 3)` instead returns the real cube root, so `nthroot(-27, 3)` is `-3`. An even root of a negative number has no real value.\n\nUse it whenever a real answer is wanted from an odd root, and `^` or `sqrt` when the complex principal value is fine.",
+        "pt": "A expressão `x^(1/3)` devolve um número complexo para `x` negativo, pois toma a raiz complexa principal. `nthroot(x, 3)` devolve a raiz cúbica real, então `nthroot(-27, 3)` é `-3`. Uma raiz de índice par de um número negativo não tem valor real.\n\nUse-a quando se quer uma resposta real de uma raiz de índice ímpar, e `^` ou `sqrt` quando o valor principal complexo serve."
+      },
+      "examples": [
+        {"title": {"en": "Real cube root of a negative number", "pt": "Raiz cúbica real de um número negativo"}, "code": "nthroot(-27, 3)\n(-27)^(1/3)\nnthroot([8 16], [3 4])"}
+      ],
+      "see": ["sqrt", "realsqrt", "power", "exp", "log"]
+    },
+    "pascal": {
+      "summary": {"en": "Pascal matrix built from binomial coefficients.", "pt": "Matriz de Pascal formada por coeficientes binomiais."},
+      "syntax": [
+        {"code": "P = pascal(n)", "en": "Returns the symmetric `n`-by-`n` Pascal matrix.", "pt": "Retorna a matriz de Pascal simétrica `n`-por-`n`."},
+        {"code": "P = pascal(n, 1)", "en": "Returns the lower-triangular Cholesky factor, with signs alternating down the columns.", "pt": "Retorna o fator de Cholesky triangular inferior, com sinais alternados nas colunas."},
+        {"code": "P = pascal(n, 2)", "en": "Returns a transposed and permuted version of `pascal(n, 1)`; for `n` = 3 it is a cube root of the identity.", "pt": "Retorna uma versão transposta e permutada de `pascal(n, 1)`; para `n` = 3 é uma raiz cúbica da identidade."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Order of the matrix.", "pt": "Ordem da matriz."},
+        {"name": "k", "en": "Optional `0` (default), `1` or `2`, selecting the variant.", "pt": "Opcional: `0` (padrão), `1` ou `2`, que seleciona a variante."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "Integer matrix. In the default form `P(i, j) = nchoosek(i+j-2, j-1)`.", "pt": "Matriz de inteiros. Na forma padrão `P(i, j) = nchoosek(i+j-2, j-1)`."}
+      ],
+      "description": {
+        "en": "The symmetric matrix holds Pascal's triangle along its anti-diagonals. Its Cholesky factorization is the matrix `pascal(n, 1)`, which is why `pascal(n, 1)*pascal(n, 1)'` reproduces `pascal(n)`. Its determinant is always 1, and it becomes increasingly ill conditioned as `n` grows.",
+        "pt": "A matriz simétrica guarda o triângulo de Pascal ao longo de suas antidiagonais. Sua fatoração de Cholesky é a matriz `pascal(n, 1)`, e por isso `pascal(n, 1)*pascal(n, 1)'` reproduz `pascal(n)`. Seu determinante é sempre 1, e ela fica cada vez mais mal condicionada conforme `n` cresce."
+      },
+      "examples": [
+        {"title": {"en": "Symmetric matrix and its Cholesky factor", "pt": "Matriz simétrica e seu fator de Cholesky"}, "code": "P = pascal(4)\nL = pascal(4, 1)\nL * L'"}
+      ],
+      "see": ["nchoosek", "hilb", "magic", "chol", "gallery"]
+    },
+    "perms": {
+      "summary": {"en": "All permutations of the elements of a vector.", "pt": "Todas as permutações dos elementos de um vetor."},
+      "syntax": [
+        {"code": "P = perms(v)", "en": "Returns every ordering of the elements of `v`, one per row.", "pt": "Retorna todas as ordenações dos elementos de `v`, uma por linha."}
+      ],
+      "inputs": [
+        {"name": "v", "en": "Vector of numbers, characters or other values. Repeated values are treated as distinct.", "pt": "Vetor de números, caracteres ou outros valores. Valores repetidos são tratados como distintos."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "Matrix with `factorial(numel(v))` rows and `numel(v)` columns, of the same class as `v`. A char vector gives a char matrix.", "pt": "Matriz com `factorial(numel(v))` linhas e `numel(v)` colunas, da mesma classe de `v`. Um vetor char dá uma matriz char."}
+      ],
+      "description": {
+        "en": "The rows come out in reverse lexicographic order of the positions: the first row is `v` reversed and the last is `v` itself. The number of rows grows as `n!`, so `perms(1:10)` already has 3,628,800 rows and `perms(1:12)` is too large for memory.\n\nBecause repeated values count as different, `perms([1 1 2])` has 6 rows with duplicates; apply `unique(..., 'rows')` to remove them.",
+        "pt": "As linhas saem em ordem lexicográfica reversa das posições: a primeira linha é `v` invertido e a última é o próprio `v`. O número de linhas cresce como `n!`, então `perms(1:10)` já tem 3.628.800 linhas e `perms(1:12)` é grande demais para a memória.\n\nComo valores repetidos contam como diferentes, `perms([1 1 2])` tem 6 linhas com duplicatas; aplique `unique(..., 'rows')` para removê-las."
+      },
+      "examples": [
+        {"title": {"en": "Numbers and characters", "pt": "Números e caracteres"}, "code": "perms([1 2 3])\nperms('abc')"}
+      ],
+      "see": ["nchoosek", "factorial", "randperm", "unique", "sortrows"]
+    },
+    "pi": {
+      "summary": {"en": "The constant pi, the ratio of a circle's circumference to its diameter.", "pt": "A constante pi, razão entre a circunferência de um círculo e seu diâmetro."},
+      "syntax": [
+        {"code": "x = pi", "en": "Returns the double-precision value closest to pi, `3.141592653589793`.", "pt": "Retorna o valor em precisão dupla mais próximo de pi, `3.141592653589793`."},
+        {"code": "X = pi(n)", "en": "Returns an `n`-by-`n` matrix in which every element is pi.", "pt": "Retorna uma matriz `n`-por-`n` em que todo elemento é pi."},
+        {"code": "X = pi(sz1, ..., szN)", "en": "Returns an array of the given size in which every element is pi.", "pt": "Retorna um array do tamanho dado em que todo elemento é pi."}
+      ],
+      "inputs": [
+        {"name": "n, sz1, ..., szN", "en": "Optional dimensions of the result.", "pt": "Dimensões opcionais do resultado."}
+      ],
+      "outputs": [
+        {"name": "x", "en": "Double value or array filled with pi.", "pt": "Valor double ou array preenchido com pi."}
+      ],
+      "description": {
+        "en": "`pi` is a function, not a true constant, but it takes no arguments in normal use and is written without parentheses. It is a floating-point approximation: `sin(pi)` is about `1.2246e-16`, not zero, because pi itself is slightly off. When exact results at multiples of pi matter, use the degree functions (`sind`, `cosd`) or `sinpi` and `cospi`.\n\nSince `pi` can be overwritten by assigning a variable with that name, avoid using it as a variable.",
+        "pt": "`pi` é uma função, não uma constante verdadeira, mas em uso normal não recebe argumentos e é escrita sem parênteses. É uma aproximação em ponto flutuante: `sin(pi)` vale cerca de `1.2246e-16`, não zero, porque o próprio pi é ligeiramente impreciso. Quando resultados exatos em múltiplos de pi importam, use as funções em graus (`sind`, `cosd`) ou `sinpi` e `cospi`.\n\nComo `pi` pode ser sobrescrita ao atribuir uma variável com esse nome, evite usá-la como variável."
+      },
+      "examples": [
+        {"title": {"en": "Area, angle conversion and rounding error", "pt": "Área, conversão de ângulo e erro de arredondamento"}, "code": "r = 2;\narea = pi * r^2\nrad2deg(pi/3)\nsin(pi)\nsinpi(1)"}
+      ],
+      "see": ["sinpi", "rad2deg", "exp", "eps", "sind"]
+    },
+    "pol2cart": {
+      "summary": {"en": "Converts polar or cylindrical coordinates to Cartesian.", "pt": "Converte coordenadas polares ou cilíndricas para cartesianas."},
+      "syntax": [
+        {"code": "[x, y] = pol2cart(theta, rho)", "en": "Converts polar coordinates (angle `theta` in radians, radius `rho`) to `x` and `y`.", "pt": "Converte coordenadas polares (ângulo `theta` em radianos, raio `rho`) em `x` e `y`."},
+        {"code": "[x, y, z] = pol2cart(theta, rho, z)", "en": "Converts cylindrical coordinates; the height `z` passes through unchanged.", "pt": "Converte coordenadas cilíndricas; a altura `z` passa sem alteração."}
+      ],
+      "inputs": [
+        {"name": "theta", "en": "Angle in radians, measured counterclockwise from the positive x axis.", "pt": "Ângulo em radianos, medido no sentido anti-horário a partir do eixo x positivo."},
+        {"name": "rho", "en": "Distance from the origin (or from the z axis in cylindrical coordinates).", "pt": "Distância à origem (ou ao eixo z em coordenadas cilíndricas)."},
+        {"name": "z", "en": "Height, for the cylindrical form.", "pt": "Altura, para a forma cilíndrica."}
+      ],
+      "outputs": [
+        {"name": "x, y, z", "en": "Cartesian coordinates, with the size given by implicit expansion of the inputs.", "pt": "Coordenadas cartesianas, com o tamanho dado pela expansão implícita das entradas."}
+      ],
+      "description": {
+        "en": "The conversion is `x = rho.*cos(theta)` and `y = rho.*sin(theta)`. Inputs must have compatible sizes, and a scalar is expanded to match an array, so one radius can serve many angles.\n\nBecause of rounding, results that should be zero often appear as tiny values like `6.1232e-17`. The inverse conversion is `cart2pol`.",
+        "pt": "A conversão é `x = rho.*cos(theta)` e `y = rho.*sin(theta)`. As entradas devem ter tamanhos compatíveis, e um escalar é expandido para casar com um array, de modo que um mesmo raio serve a vários ângulos.\n\nPor causa do arredondamento, resultados que deveriam ser zero costumam aparecer como valores minúsculos, como `6.1232e-17`. A conversão inversa é `cart2pol`."
+      },
+      "examples": [
+        {"title": {"en": "Points on a circle", "pt": "Pontos em uma circunferência"}, "code": "theta = [0 pi/2 pi];\n[x, y] = pol2cart(theta, 2);\nround([x; y], 10)"}
+      ],
+      "see": ["cart2pol", "sph2cart", "cart2sph", "cos", "sin"]
+    },
+    "poly": {
+      "summary": {"en": "Coefficients of the polynomial with given roots, or the characteristic polynomial of a matrix.", "pt": "Coeficientes do polinômio com raízes dadas, ou o polinômio característico de uma matriz."},
+      "syntax": [
+        {"code": "p = poly(r)", "en": "For a vector `r`, returns the coefficients of the monic polynomial whose roots are the elements of `r`.", "pt": "Para um vetor `r`, retorna os coeficientes do polinômio mônico cujas raízes são os elementos de `r`."},
+        {"code": "p = poly(A)", "en": "For a square matrix `A`, returns the coefficients of its characteristic polynomial `det(s*I - A)`.", "pt": "Para uma matriz quadrada `A`, retorna os coeficientes de seu polinômio característico `det(s*I - A)`."}
+      ],
+      "inputs": [
+        {"name": "r", "en": "Vector of roots.", "pt": "Vetor de raízes."},
+        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "Row vector of `n+1` coefficients, highest power first, with leading coefficient 1.", "pt": "Vetor linha de `n+1` coeficientes, da maior potência para a menor, com coeficiente líder 1."}
+      ],
+      "description": {
+        "en": "For roots `r1, r2, ...` the result is the expansion of `(s - r1)*(s - r2)*...`. When the roots come in complex-conjugate pairs the coefficients are real, and `poly` returns real numbers; otherwise the output is complex. For a matrix, the roots used are its eigenvalues.\n\n`poly` and `roots` are inverses of each other, up to the order of the roots, but the round trip loses accuracy for high degrees or clustered roots.",
+        "pt": "Para raízes `r1, r2, ...` o resultado é a expansão de `(s - r1)*(s - r2)*...`. Quando as raízes aparecem em pares complexos conjugados os coeficientes são reais, e `poly` devolve números reais; caso contrário a saída é complexa. Para uma matriz, as raízes usadas são seus autovalores.\n\n`poly` e `roots` são inversas uma da outra, a menos da ordem das raízes, mas a ida e volta perde precisão em graus altos ou raízes agrupadas."
+      },
+      "examples": [
+        {"title": {"en": "From roots and from a matrix", "pt": "A partir de raízes e de uma matriz"}, "code": "poly([1 2 3])\npoly([1+2i 1-2i])\npoly([1 2; 3 4])"}
+      ],
+      "see": ["roots", "polyval", "conv", "eig", "polyfit"]
+    },
+    "polyder": {
+      "summary": {"en": "Derivative of a polynomial, or of a product or quotient of polynomials.", "pt": "Derivada de um polinômio, ou de um produto ou quociente de polinômios."},
+      "syntax": [
+        {"code": "k = polyder(p)", "en": "Returns the coefficients of the derivative of `p`.", "pt": "Retorna os coeficientes da derivada de `p`."},
+        {"code": "k = polyder(a, b)", "en": "Returns the derivative of the product `conv(a, b)`.", "pt": "Retorna a derivada do produto `conv(a, b)`."},
+        {"code": "[q, d] = polyder(b, a)", "en": "Returns the derivative of the quotient `b/a` as numerator `q` and denominator `d`.", "pt": "Retorna a derivada do quociente `b/a` como numerador `q` e denominador `d`."}
+      ],
+      "inputs": [
+        {"name": "p, a, b", "en": "Coefficient vectors, highest power first.", "pt": "Vetores de coeficientes, da maior potência para a menor."}
+      ],
+      "outputs": [
+        {"name": "k", "en": "Coefficients of the derivative; a constant polynomial gives `0`.", "pt": "Coeficientes da derivada; um polinômio constante dá `0`."},
+        {"name": "q, d", "en": "Numerator and denominator of the derivative of a quotient.", "pt": "Numerador e denominador da derivada de um quociente."}
+      ],
+      "description": {
+        "en": "For `p = [p1 p2 ... pn]` representing `p1*x^(n-1) + ... + pn`, each coefficient is multiplied by its power and the degree drops by one. The two-input form avoids forming the product first, and the quotient form applies `(b'a - b a')/a^2`, giving a denominator `a^2` (not reduced).\n\nTo integrate instead, use `polyint`.",
+        "pt": "Para `p = [p1 p2 ... pn]` representando `p1*x^(n-1) + ... + pn`, cada coeficiente é multiplicado por sua potência e o grau diminui em um. A forma com duas entradas evita formar o produto antes, e a forma de quociente aplica `(b'a - b a')/a^2`, dando o denominador `a^2` (sem simplificar).\n\nPara integrar, use `polyint`."
+      },
+      "examples": [
+        {"title": {"en": "Polynomial, product and quotient", "pt": "Polinômio, produto e quociente"}, "code": "polyder([1 2 3 4])\npolyder([1 1], [1 -1])\n[q, d] = polyder([1 2], [1 3])"}
+      ],
+      "see": ["polyint", "polyval", "conv", "deconv", "roots"]
+    },
+    "polyeig": {
+      "summary": {"en": "Eigenvalues of a polynomial eigenvalue problem.", "pt": "Autovalores de um problema de autovalores polinomial."},
+      "syntax": [
+        {"code": "e = polyeig(A0, A1, ..., Ap)", "en": "Returns the values `e` for which `(A0 + e*A1 + ... + e^p*Ap)*x = 0` has a nonzero solution `x`.", "pt": "Retorna os valores `e` para os quais `(A0 + e*A1 + ... + e^p*Ap)*x = 0` tem solução `x` não nula."}
+      ],
+      "inputs": [
+        {"name": "A0, ..., Ap", "en": "Square matrices of the same order `n`, the coefficients of the matrix polynomial, lowest power first.", "pt": "Matrizes quadradas de mesma ordem `n`, os coeficientes do polinômio matricial, da menor potência para a maior."}
+      ],
+      "outputs": [
+        {"name": "e", "en": "Column vector with `n*p` eigenvalues (some may be `Inf` if `Ap` is singular).", "pt": "Vetor coluna com `n*p` autovalores (alguns podem ser `Inf` se `Ap` for singular)."}
+      ],
+      "description": {
+        "en": "With `p = 1` the problem is `(A0 + e*A1)x = 0`, a generalized eigenproblem; with `A1 = eye(n)` it gives the negatives of the eigenvalues of `A0`. With `p = 2` it is the quadratic eigenvalue problem that models vibrating systems with mass, damping and stiffness: `polyeig(K, C, M)`.\n\nThe problem is solved by linearization into a larger generalized eigenvalue problem of size `n*p`.",
+        "pt": "Com `p = 1` o problema é `(A0 + e*A1)x = 0`, um problema de autovalores generalizado; com `A1 = eye(n)` dá os negativos dos autovalores de `A0`. Com `p = 2` é o problema de autovalores quadrático que modela sistemas vibratórios com massa, amortecimento e rigidez: `polyeig(K, C, M)`.\n\nO problema é resolvido por linearização em um problema de autovalores generalizado maior, de tamanho `n*p`."
+      },
+      "notes": {
+        "en": "A second output, `[X, e] = polyeig(...)`, also returns the eigenvectors as the columns of `X`.",
+        "pt": "Uma segunda saída, `[X, e] = polyeig(...)`, também retorna os autovetores nas colunas de `X`."
+      },
+      "examples": [
+        {"title": {"en": "A linear case equals minus eig", "pt": "Um caso linear é igual a menos eig"}, "code": "A0 = [1 2; 3 4];\ne = polyeig(A0, eye(2))\n-eig(A0)"}
+      ],
+      "see": ["eig", "roots", "poly", "polyval"]
+    },
+    "polyfit": {
+      "summary": {"en": "Least-squares polynomial fit to data.", "pt": "Ajuste polinomial de mínimos quadrados a dados."},
+      "syntax": [
+        {"code": "p = polyfit(x, y, n)", "en": "Returns the coefficients of the degree-`n` polynomial that best fits `y` as a function of `x` in the least-squares sense.", "pt": "Retorna os coeficientes do polinômio de grau `n` que melhor ajusta `y` em função de `x` no sentido de mínimos quadrados."}
+      ],
+      "inputs": [
+        {"name": "x, y", "en": "Vectors of the same length: sample points and measured values.", "pt": "Vetores do mesmo comprimento: pontos de amostragem e valores medidos."},
+        {"name": "n", "en": "Degree of the polynomial. It needs at least `n+1` distinct points for a unique fit.", "pt": "Grau do polinômio. São necessários ao menos `n+1` pontos distintos para um ajuste único."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "Row vector of `n+1` coefficients, highest power first, ready for `polyval`.", "pt": "Vetor linha de `n+1` coeficientes, da maior potência para a menor, pronto para `polyval`."}
+      ],
+      "description": {
+        "en": "The function builds the Vandermonde matrix of `x` and solves the over-determined system by QR factorization. With `n+1` points the polynomial passes exactly through the data (interpolation); with more points it minimizes the sum of squared residuals.\n\nHigh degrees are numerically fragile because powers of `x` become nearly dependent. Keep the degree low, or center and scale `x` before fitting.",
+        "pt": "A função monta a matriz de Vandermonde de `x` e resolve o sistema sobredeterminado por fatoração QR. Com `n+1` pontos o polinômio passa exatamente pelos dados (interpolação); com mais pontos minimiza a soma dos quadrados dos resíduos.\n\nGraus altos são numericamente frágeis porque as potências de `x` ficam quase dependentes. Mantenha o grau baixo, ou centre e escale `x` antes de ajustar."
+      },
+      "notes": {
+        "en": "MatLivre returns only the coefficient vector `p`. The structure output `S` and the centering and scaling output `mu` are not available.",
+        "pt": "O MatLivre retorna apenas o vetor de coeficientes `p`. A saída de estrutura `S` e a saída `mu` de centralização e escala não estão disponíveis."
+      },
+      "examples": [
+        {"title": {"en": "Line and parabola", "pt": "Reta e parábola"}, "code": "x = [1 2 3 4];\ny = [2 4 6 8.5];\np = polyfit(x, y, 1)\npolyval(p, 5)\npolyfit([0 1 2], [1 3 7], 2)"}
+      ],
+      "see": ["polyval", "polyder", "polyint", "roots", "interp1"]
+    },
+    "polyint": {
+      "summary": {"en": "Integral of a polynomial.", "pt": "Integral de um polinômio."},
+      "syntax": [
+        {"code": "q = polyint(p)", "en": "Returns the coefficients of the antiderivative of `p` with constant term 0.", "pt": "Retorna os coeficientes da primitiva de `p` com termo constante 0."},
+        {"code": "q = polyint(p, k)", "en": "Uses `k` as the constant of integration.", "pt": "Usa `k` como constante de integração."}
+      ],
+      "inputs": [
+        {"name": "p", "en": "Coefficient vector, highest power first.", "pt": "Vetor de coeficientes, da maior potência para a menor."},
+        {"name": "k", "en": "Scalar constant of integration (default `0`).", "pt": "Constante de integração escalar (padrão `0`)."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Coefficients of the antiderivative, one element longer than `p`.", "pt": "Coeficientes da primitiva, um elemento mais longo que `p`."}
+      ],
+      "description": {
+        "en": "Each coefficient `p(i)` of `x^m` is divided by `m+1` and the degree goes up by one. For a definite integral between `a` and `b`, evaluate the antiderivative at both ends: `diff(polyval(polyint(p), [a b]))`.\n\nThe operation is the inverse of `polyder`, apart from the constant.",
+        "pt": "Cada coeficiente `p(i)` de `x^m` é dividido por `m+1` e o grau aumenta em um. Para uma integral definida entre `a` e `b`, avalie a primitiva nos dois extremos: `diff(polyval(polyint(p), [a b]))`.\n\nA operação é a inversa de `polyder`, a menos da constante."
+      },
+      "examples": [
+        {"title": {"en": "Antiderivative and definite integral", "pt": "Primitiva e integral definida"}, "code": "q = polyint([3 2 1])\npolyint([3 2 1], 5)\ndiff(polyval(q, [0 2]))"}
+      ],
+      "see": ["polyder", "polyval", "integral", "trapz"]
+    },
+    "polyval": {
+      "summary": {"en": "Evaluates a polynomial at given points.", "pt": "Avalia um polinômio em pontos dados."},
+      "syntax": [
+        {"code": "y = polyval(p, x)", "en": "Evaluates the polynomial with coefficients `p` at each element of `x`.", "pt": "Avalia o polinômio com coeficientes `p` em cada elemento de `x`."}
+      ],
+      "inputs": [
+        {"name": "p", "en": "Coefficient vector, highest power first. An empty `p` gives `0`.", "pt": "Vetor de coeficientes, da maior potência para a menor. Um `p` vazio dá `0`."},
+        {"name": "x", "en": "Array of points: real or complex, any size.", "pt": "Array de pontos: reais ou complexos, de qualquer tamanho."}
+      ],
+      "outputs": [
+        {"name": "y", "en": "Array of the same size as `x`.", "pt": "Array do mesmo tamanho de `x`."}
+      ],
+      "description": {
+        "en": "For `p = [p1 p2 ... pn]` the value is `p1*x^(n-1) + p2*x^(n-2) + ... + pn`, computed by Horner's scheme, which needs only `n-1` multiplications and is more accurate than summing powers. The evaluation is element by element: a matrix `x` gives a matrix of values, not a matrix polynomial (for that, see `polyvalm`).",
+        "pt": "Para `p = [p1 p2 ... pn]` o valor é `p1*x^(n-1) + p2*x^(n-2) + ... + pn`, calculado pelo esquema de Horner, que usa apenas `n-1` multiplicações e é mais preciso que somar potências. A avaliação é elemento a elemento: uma matriz `x` dá uma matriz de valores, e não um polinômio matricial (para isso, veja `polyvalm`)."
+      },
+      "examples": [
+        {"title": {"en": "Vector and matrix of points", "pt": "Vetor e matriz de pontos"}, "code": "p = [1 2 3];\npolyval(p, [0 1 2])\npolyval([2 0 -1], [1 2; 3 4])"}
+      ],
+      "see": ["polyfit", "polyvalm", "roots", "polyder", "poly"]
+    },
+    "polyvalm": {
+      "summary": {"en": "Evaluates a polynomial with a square matrix as the variable.", "pt": "Avalia um polinômio tendo uma matriz quadrada como variável."},
+      "syntax": [
+        {"code": "Y = polyvalm(p, X)", "en": "Evaluates `p(1)*X^n + ... + p(n)*I` using matrix products.", "pt": "Avalia `p(1)*X^n + ... + p(n)*I` usando produtos matriciais."}
+      ],
+      "inputs": [
+        {"name": "p", "en": "Coefficient vector, highest power first.", "pt": "Vetor de coeficientes, da maior potência para a menor."},
+        {"name": "X", "en": "Square matrix.", "pt": "Matriz quadrada."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Square matrix of the same size as `X`.", "pt": "Matriz quadrada do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "Where `polyval` squares each entry, `polyvalm` uses true matrix powers, and the constant term is multiplied by the identity matrix. The Cayley-Hamilton theorem says that a matrix annihilates its own characteristic polynomial, so `polyvalm(poly(A), A)` is the zero matrix, up to rounding.",
+        "pt": "Onde `polyval` eleva cada entrada ao quadrado, `polyvalm` usa potências matriciais verdadeiras, e o termo constante é multiplicado pela matriz identidade. O teorema de Cayley-Hamilton diz que uma matriz anula seu próprio polinômio característico, portanto `polyvalm(poly(A), A)` é a matriz nula, a menos de arredondamento."
+      },
+      "examples": [
+        {"title": {"en": "Matrix polynomial", "pt": "Polinômio matricial"}, "code": "A = [1 2; 3 4];\npolyvalm([1 0 1], A)\nA^2 + eye(2)"}
+      ],
+      "see": ["polyval", "poly", "expm", "mpower"]
+    },
+    "pow2": {
+      "summary": {"en": "Power of two, or a number scaled by a power of two.", "pt": "Potência de dois, ou um número multiplicado por uma potência de dois."},
+      "syntax": [
+        {"code": "Y = pow2(X)", "en": "Returns `2.^X`.", "pt": "Retorna `2.^X`."},
+        {"code": "Y = pow2(F, E)", "en": "Returns `F .* 2.^E`.", "pt": "Retorna `F .* 2.^E`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Exponent array.", "pt": "Array de expoentes."},
+        {"name": "F, E", "en": "Mantissa and exponent arrays of compatible sizes.", "pt": "Arrays de mantissa e expoente com tamanhos compatíveis."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array with the size given by implicit expansion of the inputs.", "pt": "Array com o tamanho dado pela expansão implícita das entradas."}
+      ],
+      "description": {
+        "en": "Multiplying by a power of two only changes the exponent of a floating-point number, so `pow2(F, E)` is exact: no rounding error is introduced. This is why it is used to rebuild a number from a mantissa and exponent. Fractional exponents work as well: `pow2(0.5)` is `sqrt(2)`.",
+        "pt": "Multiplicar por uma potência de dois só altera o expoente de um número de ponto flutuante, então `pow2(F, E)` é exata: nenhum erro de arredondamento é introduzido. Por isso é usada para reconstruir um número a partir de mantissa e expoente. Expoentes fracionários também funcionam: `pow2(0.5)` é `sqrt(2)`."
+      },
+      "examples": [
+        {"title": {"en": "One and two arguments", "pt": "Um e dois argumentos"}, "code": "pow2(3)\npow2([1 2 3], 2)\npow2(-1)"}
+      ],
+      "see": ["log2", "nextpow2", "power", "exp"]
+    }
+  }
+}

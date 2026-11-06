@@ -1,0 +1,1477 @@
+{
+ "functions": {
+  "fcnchk": {
+   "summary": {
+    "en": "Turns a function name or expression into a callable function.",
+    "pt": "Transforma um nome de função ou uma expressão em uma função chamável."
+   },
+   "syntax": [
+    {
+     "code": "f = fcnchk(fun)",
+     "en": "Returns `fun` unchanged if it is already a function handle, or builds a function from text.",
+     "pt": "Retorna `fun` sem mudança se já for um function handle, ou cria uma função a partir de texto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "A function handle, a function name as text, or an expression in `x` as text such as `'x^2+1'`.",
+     "pt": "Um function handle, o nome de uma função como texto, ou uma expressão em `x` como texto, como `'x^2+1'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Something that can be called with `f(value)`.",
+     "pt": "Algo que pode ser chamado com `f(valor)`."
+    }
+   ],
+   "description": {
+    "en": "`fcnchk` was written so that older numerical routines could accept either a handle or a string. A function name such as `'sin'` becomes a handle to that function. A string containing an expression is turned into a function of its free variable, `x` by default, so `fcnchk('x^2+1')` can be evaluated at any value.\n\nNew code should pass handles (`@sin`, `@(x) x.^2 + 1`) and skip this check.",
+    "pt": "`fcnchk` foi escrita para que rotinas numéricas antigas aceitassem tanto um handle quanto uma string. Um nome de função como `'sin'` vira um handle para essa função. Uma string com uma expressão vira uma função da sua variável livre, `x` por padrão, de modo que `fcnchk('x^2+1')` pode ser avaliada em qualquer valor.\n\nCódigo novo deve passar handles (`@sin`, `@(x) x.^2 + 1`) e dispensar essa verificação."
+   },
+   "notes": {
+    "en": "MatLivre returns an inline function for text expressions, as older MATLAB releases do.",
+    "pt": "O MatLivre retorna uma função inline para expressões em texto, como versões antigas do MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Handle or text",
+      "pt": "Handle ou texto"
+     },
+     "code": "f = fcnchk(@sin);\nf(0)\ng = fcnchk('x^2+1');\ng(2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "str2func",
+    "inline",
+    "feval",
+    "func2str",
+    "is_function_handle"
+   ]
+  },
+  "numjac": {
+   "summary": {
+    "en": "Numerical Jacobian matrix of a function, by finite differences.",
+    "pt": "Matriz jacobiana numérica de uma função, por diferenças finitas."
+   },
+   "syntax": [
+    {
+     "code": "[dFdy, fac] = numjac(F, t, y, Fty, thresh, fac, vectorized)",
+     "en": "Estimates the matrix of partial derivatives of `F(t, y)` with respect to `y`.",
+     "pt": "Estima a matriz de derivadas parciais de `F(t, y)` em relação a `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "F",
+     "en": "Function handle `F(t, y)` returning a column vector.",
+     "pt": "Function handle `F(t, y)` que retorna um vetor coluna."
+    },
+    {
+     "name": "t, y",
+     "en": "Point where the Jacobian is wanted: a scalar time and a column vector.",
+     "pt": "Ponto onde a jacobiana é desejada: um tempo escalar e um vetor coluna."
+    },
+    {
+     "name": "Fty",
+     "en": "The value `F(t, y)`, already computed, to save one evaluation.",
+     "pt": "O valor `F(t, y)`, já calculado, para poupar uma avaliação."
+    },
+    {
+     "name": "thresh",
+     "en": "Vector of lower limits for the size of each component of `y` when choosing the step.",
+     "pt": "Vetor de limites inferiores para o tamanho de cada componente de `y` ao escolher o passo."
+    },
+    {
+     "name": "fac",
+     "en": "Vector of relative step sizes; each step is `fac(j)` times the larger of `abs(y(j))` and `thresh(j)`.",
+     "pt": "Vetor de passos relativos; cada passo é `fac(j)` vezes o maior entre `abs(y(j))` e `thresh(j)`."
+    },
+    {
+     "name": "vectorized",
+     "en": "Nonzero if `F` can take several columns of `y` at once.",
+     "pt": "Diferente de zero se `F` aceita várias colunas de `y` de uma vez."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "dFdy",
+     "en": "The `n`-by-`n` Jacobian, entry `(i, j)` being the derivative of component `i` of `F` with respect to `y(j)`.",
+     "pt": "A jacobiana `n` por `n`, em que a entrada `(i, j)` é a derivada da componente `i` de `F` em relação a `y(j)`."
+    },
+    {
+     "name": "fac",
+     "en": "Step sizes to reuse on the next call.",
+     "pt": "Passos para reaproveitar na próxima chamada."
+    }
+   ],
+   "description": {
+    "en": "`numjac` perturbs one component of `y` at a time, re-evaluates `F` and divides the change by the step. This is what stiff ODE solvers need when the user does not supply an analytic Jacobian. The step is relative, so `fac` should be small, around `1e-7`, for an accurate result; a large value gives a coarse slope, not the derivative.\n\nFor a linear `F` the finite difference is exact, up to rounding.",
+    "pt": "`numjac` perturba uma componente de `y` por vez, reavalia `F` e divide a variação pelo passo. É o que solvers de EDOs rígidas precisam quando não há uma jacobiana analítica. O passo é relativo, então `fac` deve ser pequeno, perto de `1e-7`, para um resultado preciso; um valor grande dá uma inclinação grosseira, não a derivada.\n\nPara um `F` linear a diferença finita é exata, a menos de arredondamento."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Jacobian of a two-variable system",
+      "pt": "Jacobiana de um sistema de duas variáveis"
+     },
+     "code": "F = @(t, y) [y(1)*y(2); y(1) + y(2)];\ny0 = [2; 3];\nJ = numjac(F, 0, y0, F(0, y0), [1e-6; 1e-6], 1e-7*ones(2, 1), 0);\ndisp(round(J, 3))",
+     "silent": false,
+     "note": {
+      "en": "The exact Jacobian at (2, 3) is [3 2; 1 1].",
+      "pt": "A jacobiana exata em (2, 3) é [3 2; 1 1]."
+     }
+    }
+   ],
+   "see": [
+    "ode45",
+    "ode15s",
+    "odeset",
+    "jacobian"
+   ]
+  },
+  "ode": {
+   "summary": {
+    "en": "Object that describes an initial value problem and holds its solver settings.",
+    "pt": "Objeto que descreve um problema de valor inicial e guarda as configurações do solver."
+   },
+   "syntax": [
+    {
+     "code": "f = ode",
+     "en": "Creates an empty problem to be filled in through its properties.",
+     "pt": "Cria um problema vazio, a ser preenchido pelas propriedades."
+    },
+    {
+     "code": "f = ode(Name=Value)",
+     "en": "Creates the problem with properties given as name-value pairs, such as `ODEFcn` and `InitialValue`.",
+     "pt": "Cria o problema com propriedades dadas em pares nome-valor, como `ODEFcn` e `InitialValue`."
+    },
+    {
+     "code": "sol = solve(f, t0, tf)",
+     "en": "Integrates from `t0` to `tf` and returns an `ODEResults` object.",
+     "pt": "Integra de `t0` a `tf` e retorna um objeto `ODEResults`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ODEFcn",
+     "en": "Function handle `@(t, y)` giving the derivative of the state.",
+     "pt": "Function handle `@(t, y)` que dá a derivada do estado."
+    },
+    {
+     "name": "InitialValue",
+     "en": "State at the initial time.",
+     "pt": "Estado no instante inicial."
+    },
+    {
+     "name": "InitialTime",
+     "en": "Initial time, 0 by default.",
+     "pt": "Instante inicial, 0 por padrão."
+    },
+    {
+     "name": "Solver",
+     "en": "A specific solver such as `'ode15s'`, or `'auto'` (default) to let the object choose.",
+     "pt": "Um solver específico como `'ode15s'`, ou `'auto'` (padrão) para o objeto escolher."
+    },
+    {
+     "name": "RelativeTolerance, AbsoluteTolerance",
+     "en": "Error tolerances, `1e-3` and `1e-6` by default.",
+     "pt": "Tolerâncias de erro, `1e-3` e `1e-6` por padrão."
+    },
+    {
+     "name": "Jacobian, MassMatrix, EventDefinition",
+     "en": "Optional `odeJacobian`, `odeMassMatrix` and `odeEvent` objects.",
+     "pt": "Objetos opcionais `odeJacobian`, `odeMassMatrix` e `odeEvent`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "An `ode` object. Its `SelectedSolver` property tells which solver `'auto'` picked.",
+     "pt": "Um objeto `ode`. A propriedade `SelectedSolver` indica qual solver o modo `'auto'` escolheu."
+    }
+   ],
+   "description": {
+    "en": "The `ode` object is the newer interface to the ODE solvers: instead of one long call to `ode45` with a pile of options, the problem and its settings are stored in one object that can be inspected, changed and solved again. `solve(f, t0, tf)` returns an object whose `Time` and `Solution` properties hold the time points and the states, with one column per time point.\n\nThe features that older code passed through `odeset` are now objects of their own: `odeEvent` for events, `odeJacobian` for the Jacobian and `odeMassMatrix` for a mass matrix.",
+    "pt": "O objeto `ode` é a interface mais nova para os solvers de EDOs: em vez de uma chamada longa a `ode45` com várias opções, o problema e suas configurações ficam em um só objeto, que pode ser inspecionado, alterado e resolvido de novo. `solve(f, t0, tf)` retorna um objeto cujas propriedades `Time` e `Solution` guardam os instantes e os estados, com uma coluna por instante.\n\nOs recursos que o código antigo passava por `odeset` agora são objetos próprios: `odeEvent` para eventos, `odeJacobian` para a jacobiana e `odeMassMatrix` para a matriz de massa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Solve y' = -y",
+      "pt": "Resolvendo y' = -y"
+     },
+     "code": "f = ode(ODEFcn=@(t, y) -y, InitialValue=1);\nsol = solve(f, 0, 2);\nfprintf('y(2) = %.3f\\n', sol.Solution(end))\nfprintf('exact  %.3f\\n', exp(-2))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ode45",
+    "ode15s",
+    "odeset",
+    "odeEvent",
+    "odeJacobian",
+    "odeMassMatrix"
+   ]
+  },
+  "odeEvent": {
+   "summary": {
+    "en": "Event definition for an ode object: stop or note when a quantity crosses zero.",
+    "pt": "Definição de evento para um objeto ode: parar ou registrar quando uma grandeza cruza zero."
+   },
+   "syntax": [
+    {
+     "code": "E = odeEvent(EventFcn=fcn)",
+     "en": "Creates an event from a function `@(t, y)` whose zero crossings are the events.",
+     "pt": "Cria um evento a partir de uma função `@(t, y)` cujos cruzamentos de zero são os eventos."
+    },
+    {
+     "code": "E = odeEvent(EventFcn=fcn, Direction=d, Response=r)",
+     "en": "Also sets which crossings count and what the solver does.",
+     "pt": "Define também quais cruzamentos contam e o que o solver faz."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "EventFcn",
+     "en": "Function handle returning one or more values; an event occurs when a value crosses zero.",
+     "pt": "Function handle que retorna um ou mais valores; um evento ocorre quando um valor cruza zero."
+    },
+    {
+     "name": "Direction",
+     "en": "`'both'` (default), `'ascending'` or `'descending'`.",
+     "pt": "`'both'` (padrão), `'ascending'` ou `'descending'`."
+    },
+    {
+     "name": "Response",
+     "en": "`'proceed'` (default) records the event and goes on, `'stop'` ends the integration.",
+     "pt": "`'proceed'` (padrão) registra o evento e continua, `'stop'` encerra a integração."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "An `odeEvent` object, to be assigned to the `EventDefinition` property of an `ode` object.",
+     "pt": "Um objeto `odeEvent`, a ser atribuído à propriedade `EventDefinition` de um objeto `ode`."
+    }
+   ],
+   "description": {
+    "en": "Each element of the event function is monitored while the solver steps. When it changes sign in an allowed direction, the solver locates the crossing time accurately and stores it. After `solve`, the result has the event times in `EventTime` and the index of the event function that fired in `EventIndex`.\n\nTypical uses are finding when a falling object hits the ground or when a concentration passes a threshold.",
+    "pt": "Cada elemento da função de evento é monitorado enquanto o solver avança. Quando muda de sinal em uma direção permitida, o solver localiza o instante do cruzamento com precisão e o armazena. Após `solve`, o resultado traz os instantes em `EventTime` e o índice da função de evento que disparou em `EventIndex`.\n\nUsos típicos são achar quando um objeto em queda toca o chão ou quando uma concentração passa de um limiar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "When does y reach 0.5",
+      "pt": "Quando y chega a 0,5"
+     },
+     "code": "e = odeEvent(EventFcn=@(t, y) y - 0.5);\nf = ode(ODEFcn=@(t, y) -y, InitialValue=1, EventDefinition=e);\nsol = solve(f, 0, 3);\nfprintf('%.4f\\n', sol.EventTime)\nfprintf('%.4f\\n', log(2))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ode",
+    "odeset",
+    "ode45",
+    "odeMassMatrix",
+    "odeJacobian"
+   ]
+  },
+  "odeJacobian": {
+   "summary": {
+    "en": "Supplies the Jacobian of an ODE to an ode object.",
+    "pt": "Fornece a jacobiana de uma EDO a um objeto ode."
+   },
+   "syntax": [
+    {
+     "code": "J = odeJacobian(Jacobian=fcn)",
+     "en": "Creates a Jacobian definition from a function `@(t, y)` returning the matrix of derivatives.",
+     "pt": "Cria uma definição de jacobiana a partir de uma função `@(t, y)` que retorna a matriz de derivadas."
+    },
+    {
+     "code": "J = odeJacobian(Jacobian=fcn, SparsityPattern=S)",
+     "en": "Also declares which entries can be nonzero.",
+     "pt": "Declara também quais entradas podem ser diferentes de zero."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Jacobian",
+     "en": "Function handle, or a constant matrix, with the derivative of the right-hand side with respect to the state.",
+     "pt": "Function handle, ou matriz constante, com a derivada do lado direito em relação ao estado."
+    },
+    {
+     "name": "SparsityPattern",
+     "en": "Sparse logical matrix marking the entries that may be nonzero.",
+     "pt": "Matriz lógica esparsa que marca as entradas que podem ser diferentes de zero."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "J",
+     "en": "An `odeJacobian` object, assigned to the `Jacobian` property of an `ode` object.",
+     "pt": "Um objeto `odeJacobian`, atribuído à propriedade `Jacobian` de um objeto `ode`."
+    }
+   ],
+   "description": {
+    "en": "Implicit solvers such as `ode15s` solve a nonlinear system at every step and need the Jacobian of the right-hand side. If it is not given, it is estimated by finite differences, which costs extra evaluations. Giving the exact Jacobian makes stiff problems faster and more reliable. For large systems the sparsity pattern lets the solver skip entries that are always zero.",
+    "pt": "Solvers implícitos como `ode15s` resolvem um sistema não linear a cada passo e precisam da jacobiana do lado direito. Se ela não é dada, é estimada por diferenças finitas, o que custa avaliações extras. Fornecer a jacobiana exata torna problemas rígidos mais rápidos e confiáveis. Em sistemas grandes, o padrão de esparsidade permite ao solver ignorar entradas sempre nulas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Exact Jacobian for a stiff solver",
+      "pt": "Jacobiana exata para um solver rígido"
+     },
+     "code": "J = odeJacobian(Jacobian=@(t, y) -1);\nf = ode(ODEFcn=@(t, y) -y, InitialValue=1, Jacobian=J, Solver='ode15s');\nsol = solve(f, 0, 1);\nfprintf('%.3f\\n', sol.Solution(end))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ode",
+    "odeEvent",
+    "odeMassMatrix",
+    "ode15s",
+    "numjac"
+   ]
+  },
+  "odeMassMatrix": {
+   "summary": {
+    "en": "Mass matrix definition for an ode object, for problems M y' = f(t, y).",
+    "pt": "Definição de matriz de massa para um objeto ode, em problemas M y' = f(t, y)."
+   },
+   "syntax": [
+    {
+     "code": "M = odeMassMatrix(MassMatrix=A)",
+     "en": "Uses a constant matrix `A` as the mass matrix.",
+     "pt": "Usa uma matriz constante `A` como matriz de massa."
+    },
+    {
+     "code": "M = odeMassMatrix(MassMatrix=fcn, StateDependence=sd)",
+     "en": "Uses a function handle for a time or state dependent mass matrix.",
+     "pt": "Usa um function handle para uma matriz de massa que depende do tempo ou do estado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "MassMatrix",
+     "en": "Square matrix, or a function handle returning one.",
+     "pt": "Matriz quadrada, ou function handle que retorna uma."
+    },
+    {
+     "name": "Singular",
+     "en": "`'yes'` for a differential-algebraic system whose matrix is singular; `'no'` by default.",
+     "pt": "`'yes'` para um sistema algébrico-diferencial cuja matriz é singular; `'no'` por padrão."
+    },
+    {
+     "name": "StateDependence",
+     "en": "`'none'` (default), `'weak'` or `'strong'`.",
+     "pt": "`'none'` (padrão), `'weak'` ou `'strong'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "An `odeMassMatrix` object, assigned to the `MassMatrix` property of an `ode` object.",
+     "pt": "Um objeto `odeMassMatrix`, atribuído à propriedade `MassMatrix` de um objeto `ode`."
+    }
+   ],
+   "description": {
+    "en": "Some models come naturally as `M*y' = f(t, y)` with a matrix `M` on the left, for example when conservation laws mix the states. Passing `M` lets the solver handle that form directly instead of requiring an inverse. When `M` is singular, some equations are algebraic constraints and the problem is differential-algebraic, which only some solvers (such as `ode15s`) accept.",
+    "pt": "Alguns modelos aparecem naturalmente como `M*y' = f(t, y)` com uma matriz `M` à esquerda, por exemplo quando leis de conservação misturam os estados. Passar `M` permite ao solver tratar essa forma diretamente, sem exigir uma inversa. Quando `M` é singular, algumas equações são restrições algébricas e o problema é algébrico-diferencial, o que só alguns solvers (como `ode15s`) aceitam."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scaled equations",
+      "pt": "Equações escaladas"
+     },
+     "code": "M = odeMassMatrix(MassMatrix=[2 0; 0 1]);\nf = ode(ODEFcn=@(t, y) -y, InitialValue=[1; 1], MassMatrix=M);\nsol = solve(f, 0, 1);\nfprintf('%.4f %.4f\\n', sol.Solution(:, end))\nfprintf('%.4f %.4f\\n', exp(-0.5), exp(-1))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ode",
+    "odeEvent",
+    "odeJacobian",
+    "ode15s",
+    "odeset"
+   ]
+  },
+  "odephas2": {
+   "summary": {
+    "en": "ODE output function: 2-D phase plane plot, drawn while the solver runs.",
+    "pt": "Função de saída de EDO: gráfico do plano de fase 2-D, desenhado enquanto o solver executa."
+   },
+   "syntax": [
+    {
+     "code": "status = odephas2(t, y, flag)",
+     "en": "Output-function form: called by the solver at the start, at each accepted step and at the end.",
+     "pt": "Forma de função de saída: chamada pelo solver no início, a cada passo aceito e no fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t, y",
+     "en": "Time points and state columns passed in by the solver.",
+     "pt": "Instantes e colunas de estado passados pelo solver."
+    },
+    {
+     "name": "flag",
+     "en": "`'init'`, `''` or `'done'`, telling which phase the solver is in.",
+     "pt": "`'init'`, `''` ou `'done'`, indicando em que fase o solver está."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Logical, `true` to ask the solver to stop. The plotting functions always return `false`.",
+     "pt": "Lógico, `true` para pedir que o solver pare. As funções de gráfico sempre retornam `false`."
+    }
+   ],
+   "description": {
+    "en": "Pass `@odephas2` as the `'OutputFcn'` option of `odeset` and the solver calls it at every step. It draws the first state component against the second, which shows the trajectory of a two-variable system, such as an oscillator, as a curve in the phase plane. The solver, not the user, normally invokes it.\n\nFor three states use `odephas3`. To plot every component against time use `odeplot`.",
+    "pt": "Passe `@odephas2` como opção `'OutputFcn'` de `odeset` e o solver a chama a cada passo. Ela desenha a primeira componente do estado contra a segunda, o que mostra a trajetória de um sistema de duas variáveis, como um oscilador, como uma curva no plano de fase. Normalmente quem a invoca é o solver, não o usuário.\n\nPara três estados, use `odephas3`. Para plotar cada componente contra o tempo, use `odeplot`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Phase portrait of an oscillator",
+      "pt": "Retrato de fase de um oscilador"
+     },
+     "code": "opts = odeset('OutputFcn', @odephas2);\n[t, y] = ode45(@(t, y) [y(2); -y(1)], [0 10], [1; 0], opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the phase-plane curve (a circle) is drawn below the code.",
+      "pt": "No app, a curva do plano de fase (um círculo) é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "odephas3",
+    "odeplot",
+    "odeprint",
+    "odeset",
+    "ode45"
+   ]
+  },
+  "odephas3": {
+   "summary": {
+    "en": "ODE output function: 3-D phase space plot, drawn while the solver runs.",
+    "pt": "Função de saída de EDO: gráfico do espaço de fase 3-D, desenhado enquanto o solver executa."
+   },
+   "syntax": [
+    {
+     "code": "status = odephas3(t, y, flag)",
+     "en": "Output-function form: called by the solver at the start, at each accepted step and at the end.",
+     "pt": "Forma de função de saída: chamada pelo solver no início, a cada passo aceito e no fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t, y",
+     "en": "Time points and state columns passed in by the solver.",
+     "pt": "Instantes e colunas de estado passados pelo solver."
+    },
+    {
+     "name": "flag",
+     "en": "`'init'`, `''` or `'done'`.",
+     "pt": "`'init'`, `''` ou `'done'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Logical, `true` to stop the solver. Always `false` here.",
+     "pt": "Lógico, `true` para parar o solver. Aqui sempre `false`."
+    }
+   ],
+   "description": {
+    "en": "Used through `odeset('OutputFcn', @odephas3)`. At each step it extends a 3-D curve that plots the first three components of the state against each other, which is the usual way to look at a system such as the Lorenz equations. The system must have at least three components.",
+    "pt": "Usada por meio de `odeset('OutputFcn', @odephas3)`. A cada passo, estende uma curva 3-D que traça as três primeiras componentes do estado umas contra as outras, a forma usual de olhar um sistema como as equações de Lorenz. O sistema precisa ter ao menos três componentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Lorenz attractor",
+      "pt": "Atrator de Lorenz"
+     },
+     "code": "lorenz = @(t, y) [10*(y(2) - y(1)); y(1)*(28 - y(3)) - y(2); y(1)*y(2) - 8/3*y(3)];\nopts = odeset('OutputFcn', @odephas3);\n[t, y] = ode45(lorenz, [0 5], [1; 1; 1], opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the 3-D trajectory is drawn below the code.",
+      "pt": "No app, a trajetória 3-D é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "odephas2",
+    "odeplot",
+    "odeprint",
+    "odeset",
+    "ode45"
+   ]
+  },
+  "odeplot": {
+   "summary": {
+    "en": "ODE output function: plots the solution components against time as the solver runs.",
+    "pt": "Função de saída de EDO: plota as componentes da solução contra o tempo enquanto o solver executa."
+   },
+   "syntax": [
+    {
+     "code": "status = odeplot(t, y, flag)",
+     "en": "Output-function form: called by the solver at the start, at each accepted step and at the end.",
+     "pt": "Forma de função de saída: chamada pelo solver no início, a cada passo aceito e no fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t, y",
+     "en": "Time points and state columns passed in by the solver.",
+     "pt": "Instantes e colunas de estado passados pelo solver."
+    },
+    {
+     "name": "flag",
+     "en": "`'init'`, `''` or `'done'`.",
+     "pt": "`'init'`, `''` ou `'done'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Logical, `true` to stop the solver. Always `false` here.",
+     "pt": "Lógico, `true` para parar o solver. Aqui sempre `false`."
+    }
+   ],
+   "description": {
+    "en": "This is the default output function when an ODE solver is called without output arguments. It can also be requested explicitly with `odeset('OutputFcn', @odeplot)`. Each accepted step adds a segment to the lines of all components, so the plot grows as the integration advances and shows progress on a long run.",
+    "pt": "É a função de saída padrão quando um solver de EDO é chamado sem argumentos de saída. Também pode ser pedida explicitamente com `odeset('OutputFcn', @odeplot)`. Cada passo aceito acrescenta um segmento às linhas de todas as componentes, de modo que o gráfico cresce com a integração e mostra o progresso de uma execução longa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Watch a decay",
+      "pt": "Acompanhando um decaimento"
+     },
+     "code": "opts = odeset('OutputFcn', @odeplot);\n[t, y] = ode45(@(t, y) -y, [0 5], 1, opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the curve is drawn below the code.",
+      "pt": "No app, a curva é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "odephas2",
+    "odephas3",
+    "odeprint",
+    "odeset",
+    "ode45"
+   ]
+  },
+  "odeprint": {
+   "summary": {
+    "en": "ODE output function: prints the time and state at each step.",
+    "pt": "Função de saída de EDO: imprime o tempo e o estado a cada passo."
+   },
+   "syntax": [
+    {
+     "code": "status = odeprint(t, y, flag)",
+     "en": "Output-function form: called by the solver at the start, at each accepted step and at the end.",
+     "pt": "Forma de função de saída: chamada pelo solver no início, a cada passo aceito e no fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t, y",
+     "en": "Time points and state columns passed in by the solver.",
+     "pt": "Instantes e colunas de estado passados pelo solver."
+    },
+    {
+     "name": "flag",
+     "en": "`'init'`, `''` or `'done'`.",
+     "pt": "`'init'`, `''` ou `'done'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "Logical, `true` to stop the solver. Always `false` here.",
+     "pt": "Lógico, `true` para parar o solver. Aqui sempre `false`."
+    }
+   ],
+   "description": {
+    "en": "Set it with `odeset('OutputFcn', @odeprint)` to see the numbers the solver produces while it runs, which is handy to debug a model or to see the step size choice. With a `tspan` of more than two elements the solver reports exactly at those times.",
+    "pt": "Defina com `odeset('OutputFcn', @odeprint)` para ver os números que o solver produz enquanto executa, útil para depurar um modelo ou observar a escolha do tamanho do passo. Com um `tspan` de mais de dois elementos, o solver informa exatamente nesses instantes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Print at chosen times",
+      "pt": "Imprimindo em instantes escolhidos"
+     },
+     "code": "opts = odeset('OutputFcn', @odeprint);\n[t, y] = ode45(@(t, y) -y, [0 0.1 0.2], 1, opts);",
+     "silent": false
+    }
+   ],
+   "see": [
+    "odeplot",
+    "odephas2",
+    "odephas3",
+    "odeset",
+    "ode45"
+   ]
+  },
+  "matlabpath": {
+   "summary": {
+    "en": "Gets or sets the folders that make up the search path.",
+    "pt": "Obtém ou define as pastas que formam o caminho de busca."
+   },
+   "syntax": [
+    {
+     "code": "p = matlabpath",
+     "en": "Returns the search path as one character vector, folders separated by `pathsep`.",
+     "pt": "Retorna o caminho de busca como um vetor de caracteres, com pastas separadas por `pathsep`."
+    },
+    {
+     "code": "matlabpath(newpath)",
+     "en": "Replaces the search path with `newpath`.",
+     "pt": "Substitui o caminho de busca por `newpath`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "newpath",
+     "en": "Folders separated by `pathsep`.",
+     "pt": "Pastas separadas por `pathsep`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Row character vector with the current path.",
+     "pt": "Vetor de caracteres linha com o caminho atual."
+    }
+   ],
+   "description": {
+    "en": "The path is the ordered list of folders where a name typed by the user is searched for as a function or script. `matlabpath` is the low-level accessor that `path` wraps. Prefer `addpath` and `rmpath` to change it, because assigning a whole new path can hide the built-in functions.",
+    "pt": "O caminho é a lista ordenada de pastas em que um nome digitado pelo usuário é procurado como função ou script. `matlabpath` é o acesso de baixo nível que `path` envolve. Prefira `addpath` e `rmpath` para alterá-lo, pois atribuir um caminho inteiro novo pode esconder as funções internas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspect the path",
+      "pt": "Inspecionando o caminho"
+     },
+     "code": "p = matlabpath;\ndisp(ischar(p))\ndisp(isrow(p))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "path",
+    "addpath",
+    "rmpath",
+    "pathsep",
+    "which"
+   ]
+  },
+  "getcolumn": {
+   "summary": {
+    "en": "Extracts one column of a matrix as a column vector.",
+    "pt": "Extrai uma coluna de uma matriz como vetor coluna."
+   },
+   "syntax": [
+    {
+     "code": "c = getcolumn(A, k)",
+     "en": "Returns column `k` of `A`.",
+     "pt": "Retorna a coluna `k` de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "A matrix.",
+     "pt": "Uma matriz."
+    },
+    {
+     "name": "k",
+     "en": "Index of the column.",
+     "pt": "Índice da coluna."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Column vector with the `k`-th column of `A`.",
+     "pt": "Vetor coluna com a `k`-ésima coluna de `A`."
+    }
+   ],
+   "description": {
+    "en": "It is a helper that does the same as `A(:, k)`, handy where an indexing expression cannot be written inline. It is not documented in the function reference, so new code should write the indexing directly.",
+    "pt": "É um auxiliar que faz o mesmo que `A(:, k)`, útil onde uma expressão de indexação não pode ser escrita diretamente. Não consta da referência de funções, então código novo deve escrever a indexação."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Second column",
+      "pt": "Segunda coluna"
+     },
+     "code": "A = [1 2; 3 4];\nc = getcolumn(A, 2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "colon",
+    "size",
+    "reshape",
+    "diag"
+   ]
+  },
+  "caxis": {
+   "summary": {
+    "en": "Gets or sets the color limits of the current axes.",
+    "pt": "Obtém ou define os limites de cor dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "caxis([cmin cmax])",
+     "en": "Maps colors so that `cmin` is the first color of the colormap and `cmax` the last.",
+     "pt": "Mapeia as cores de modo que `cmin` seja a primeira cor do colormap e `cmax` a última."
+    },
+    {
+     "code": "lims = caxis",
+     "en": "Returns the current limits as a two-element vector.",
+     "pt": "Retorna os limites atuais como um vetor de dois elementos."
+    },
+    {
+     "code": "caxis auto, caxis manual",
+     "en": "Lets the limits follow the data again, or freezes them.",
+     "pt": "Faz os limites voltarem a seguir os dados, ou os congela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[cmin cmax]",
+     "en": "Two increasing values.",
+     "pt": "Dois valores crescentes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Two-element vector `[cmin cmax]`.",
+     "pt": "Vetor de dois elementos `[cmin cmax]`."
+    }
+   ],
+   "description": {
+    "en": "Surfaces, images and patches pick their colors by scaling their data into the colormap. The color limits set the data values at the two ends of that scale; values outside are drawn with the end colors. Narrowing the limits increases contrast around the values of interest, and using the same limits on several plots makes their colors comparable.\n\n`caxis` is the older name of `clim`, which does the same thing.",
+    "pt": "Superfícies, imagens e patches escolhem suas cores escalando os dados para o colormap. Os limites de cor definem os valores dos dados nas duas pontas dessa escala; valores fora dela são desenhados com as cores das pontas. Estreitar os limites aumenta o contraste em torno dos valores de interesse, e usar os mesmos limites em vários gráficos torna suas cores comparáveis.\n\n`caxis` é o nome antigo de `clim`, que faz o mesmo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fix the color range",
+      "pt": "Fixando a faixa de cores"
+     },
+     "code": "surf(peaks(20))\ncaxis([-3 3])\nlims = caxis",
+     "silent": false
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "surf",
+    "imagesc",
+    "clim"
+   ]
+  },
+  "objbounds": {
+   "summary": {
+    "en": "Data limits of the objects in an axes.",
+    "pt": "Limites dos dados dos objetos em um axes."
+   },
+   "syntax": [
+    {
+     "code": "b = objbounds(ax)",
+     "en": "Returns the extent of the data drawn in `ax`.",
+     "pt": "Retorna a extensão dos dados desenhados em `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ax",
+     "en": "Axes handle.",
+     "pt": "Handle de axes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Row vector `[xmin xmax ymin ymax zmin zmax]`. For 2-D data the z limits are 0.",
+     "pt": "Vetor linha `[xmin xmax ymin ymax zmin zmax]`. Para dados 2-D os limites de z são 0."
+    }
+   ],
+   "description": {
+    "en": "The function scans the children of the axes and reports the smallest box that contains their data. It is the information that automatic axis limits are based on, which makes it useful when a script needs the real extent of a plot rather than the current `xlim` and `ylim`. It is an internal helper without public documentation.",
+    "pt": "A função percorre os filhos do axes e informa a menor caixa que contém seus dados. É a informação em que os limites automáticos dos eixos se baseiam, o que a torna útil quando um script precisa da extensão real de um gráfico e não dos valores atuais de `xlim` e `ylim`. É um auxiliar interno, sem documentação pública."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extent of a line",
+      "pt": "Extensão de uma linha"
+     },
+     "code": "plot(1:3, [2 5 3])\nb = objbounds(gca)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "xlim",
+    "ylim",
+    "axis",
+    "gca"
+   ]
+  },
+  "is2D": {
+   "summary": {
+    "en": "Tests whether an axes is shown as a flat 2-D plot.",
+    "pt": "Testa se um axes é exibido como gráfico plano 2-D."
+   },
+   "syntax": [
+    {
+     "code": "tf = is2D(ax)",
+     "en": "Returns `true` if the axes are in a 2-D view.",
+     "pt": "Retorna `true` se os eixos estão em vista 2-D."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ax",
+     "en": "Axes handle.",
+     "pt": "Handle de axes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "An axes is 2-D when it looks straight down the z axis, as after `plot`. A surface or `plot3` makes it 3-D, and so does rotating the view. Code that adds decorations can use `is2D` to choose between 2-D and 3-D variants of a call.",
+    "pt": "Um axes é 2-D quando olha diretamente ao longo do eixo z, como após `plot`. Uma superfície ou `plot3` o torna 3-D, e girar a vista também. Código que acrescenta decorações pode usar `is2D` para escolher entre variantes 2-D e 3-D de uma chamada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "2-D and 3-D axes",
+      "pt": "Eixos 2-D e 3-D"
+     },
+     "code": "plot(1:5)\nis2D(gca)\nsurf(peaks(5))\nis2D(gca)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "view",
+    "plot",
+    "surf",
+    "gca"
+   ]
+  },
+  "white": {
+   "summary": {
+    "en": "All-white colormap.",
+    "pt": "Colormap todo branco."
+   },
+   "syntax": [
+    {
+     "code": "map = white(m)",
+     "en": "Returns an `m`-by-3 matrix with every row equal to `[1 1 1]`.",
+     "pt": "Retorna uma matriz `m` por 3 com todas as linhas iguais a `[1 1 1]`."
+    },
+    {
+     "code": "map = white",
+     "en": "Uses the length of the current colormap for `m`.",
+     "pt": "Usa o comprimento do colormap atual como `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors.",
+     "pt": "Número de cores."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "RGB matrix with values in `[0, 1]`.",
+     "pt": "Matriz RGB com valores em `[0, 1]`."
+    }
+   ],
+   "description": {
+    "en": "A colormap is an `m`-by-3 matrix of red, green and blue levels. `white` fills it with ones, so everything drawn through it is white. It is useful to hide a surface while keeping its edges, or as an invisible background layer.",
+    "pt": "Um colormap é uma matriz `m` por 3 de níveis de vermelho, verde e azul. `white` a preenche com uns, de modo que tudo desenhado com ele fica branco. Serve para esconder uma superfície mantendo as arestas, ou como camada de fundo invisível."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three white entries",
+      "pt": "Três entradas brancas"
+     },
+     "code": "map = white(3)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "colormap",
+    "gray",
+    "jet",
+    "ones"
+   ]
+  },
+  "display": {
+   "summary": {
+    "en": "Shows the value of a variable or object.",
+    "pt": "Mostra o valor de uma variável ou objeto."
+   },
+   "syntax": [
+    {
+     "code": "display(x)",
+     "en": "Prints `x` the way an unsuppressed statement would, labeled with the variable name.",
+     "pt": "Imprime `x` como faria uma instrução sem ponto e vírgula, com o nome da variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Any value or object.",
+     "pt": "Qualquer valor ou objeto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "MATLAB calls `display` automatically when a statement without a semicolon produces a value, so writing `x` and `display(x)` normally print the same thing. Defining a `display` method for a class changes what is shown for its objects. Its usual role is therefore to be overloaded, while `disp` is the function used to print a value without the name.",
+    "pt": "O MATLAB chama `display` automaticamente quando uma instrução sem ponto e vírgula produz um valor, então escrever `x` e `display(x)` normalmente imprime o mesmo. Definir um método `display` em uma classe muda o que é mostrado para seus objetos. Seu papel usual é, portanto, ser sobrecarregada, enquanto `disp` é a função usada para imprimir um valor sem o nome."
+   },
+   "notes": {
+    "en": "MatLivre labels the printed value `ans` instead of the variable name, and MATLAB prints a variable with its own name.",
+    "pt": "O MatLivre rotula o valor impresso como `ans` em vez do nome da variável, enquanto o MATLAB imprime a variável com o próprio nome."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Display a matrix",
+      "pt": "Exibindo uma matriz"
+     },
+     "code": "x = [1 2 3];\ndisplay(x)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "disp",
+    "fprintf",
+    "format",
+    "inputname"
+   ]
+  },
+  "handle": {
+   "summary": {
+    "en": "Abstract base class for objects that are shared by reference.",
+    "pt": "Classe base abstrata para objetos compartilhados por referência."
+   },
+   "syntax": [
+    {
+     "code": "classdef MyClass < handle",
+     "en": "Declares a class whose objects are handle objects.",
+     "pt": "Declara uma classe cujos objetos são objetos handle."
+    },
+    {
+     "code": "isa(obj, 'handle')",
+     "en": "Tests whether an object is a handle object.",
+     "pt": "Testa se um objeto é um objeto handle."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Objects of ordinary (value) classes are copied on assignment: changing the copy leaves the original alone. Objects of a class that inherits from `handle` are references: the assignment `b = a` makes both variables point to the same object, so a change through either is seen through both. This suits things that have an identity, such as a window, a connection or a shared cache.\n\n`handle` objects also provide `delete`, `isvalid` and events. `containers.Map` and `memoize` objects are examples of handle objects that need no class definition.",
+    "pt": "Objetos de classes comuns (de valor) são copiados na atribuição: alterar a cópia não afeta o original. Objetos de uma classe que herda de `handle` são referências: a atribuição `b = a` faz as duas variáveis apontarem para o mesmo objeto, então uma mudança por uma delas é vista pela outra. Serve para coisas com identidade, como uma janela, uma conexão ou um cache compartilhado.\n\nObjetos `handle` oferecem também `delete`, `isvalid` e eventos. `containers.Map` e objetos de `memoize` são exemplos de objetos handle que dispensam definir uma classe."
+   },
+   "notes": {
+    "en": "Called as a function with no argument, `handle` raises an error in MatLivre; it is used only as a superclass and with `isa`.",
+    "pt": "Chamada como função sem argumento, `handle` gera erro no MatLivre; serve apenas como superclasse e com `isa`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reference behavior",
+      "pt": "Comportamento por referência"
+     },
+     "code": "a = containers.Map();\nb = a;\nb('k') = 5;\ndisp(a.isKey('k'))\ndisp(isa(a, 'handle'))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "containers.Map",
+    "isa",
+    "delete",
+    "isvalid",
+    "classdef"
+   ]
+  },
+  "message": {
+   "summary": {
+    "en": "Creates a message object from a message identifier.",
+    "pt": "Cria um objeto de mensagem a partir de um identificador de mensagem."
+   },
+   "syntax": [
+    {
+     "code": "m = message(id)",
+     "en": "Looks up the message `id` in the message catalog.",
+     "pt": "Procura a mensagem `id` no catálogo de mensagens."
+    },
+    {
+     "code": "m = message(id, a1, ..., aN)",
+     "en": "Fills the placeholders of the message with the arguments.",
+     "pt": "Preenche os campos da mensagem com os argumentos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "id",
+     "en": "Message identifier of the form `'component:mnemonic'`, as text.",
+     "pt": "Identificador de mensagem no formato `'componente:mnemônico'`, como texto."
+    },
+    {
+     "name": "a1, ..., aN",
+     "en": "Values that replace the numbered holes of the message text.",
+     "pt": "Valores que substituem os campos numerados do texto da mensagem."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "A `message` object with properties `Identifier` and `Arguments`. `getString(m)` returns the text.",
+     "pt": "Um objeto `message` com as propriedades `Identifier` e `Arguments`. `getString(m)` retorna o texto."
+    }
+   ],
+   "description": {
+    "en": "Message objects keep the identifier of a message separate from its text, which allows text to be looked up in a catalog, for example for translation. They can be passed to `error` and `warning` in place of a format string, and `getString` or `string` convert one to text.\n\nAn identifier that is not in the catalog is an error.",
+    "pt": "Objetos de mensagem mantêm o identificador separado do texto, o que permite buscar o texto em um catálogo, por exemplo para tradução. Podem ser passados a `error` e `warning` no lugar de uma string de formato, e `getString` ou `string` os convertem em texto.\n\nUm identificador que não esteja no catálogo é um erro."
+   },
+   "notes": {
+    "en": "MatLivre has only a catalog of MATLAB's own messages; a custom identifier raises \"Invalid Message ID format\".",
+    "pt": "O MatLivre tem apenas o catálogo das mensagens do próprio MATLAB; um identificador próprio gera \"Invalid Message ID format\"."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Message from the catalog",
+      "pt": "Mensagem do catálogo"
+     },
+     "code": "m = message('MATLAB:minrhs');\ns = getString(m)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "error",
+    "warning",
+    "MException",
+    "getString",
+    "string"
+   ]
+  },
+  "ltitr": {
+   "summary": {
+    "en": "Response of a discrete linear system to an input sequence.",
+    "pt": "Resposta de um sistema linear discreto a uma sequência de entrada."
+   },
+   "syntax": [
+    {
+     "code": "x = ltitr(a, b, u)",
+     "en": "Simulates `x(k+1) = a*x(k) + b*u(k)` from a zero initial state.",
+     "pt": "Simula `x(k+1) = a*x(k) + b*u(k)` a partir do estado inicial nulo."
+    },
+    {
+     "code": "x = ltitr(a, b, u, x0)",
+     "en": "Starts from the state `x0`.",
+     "pt": "Começa do estado `x0`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a",
+     "en": "`n`-by-`n` state matrix.",
+     "pt": "Matriz de estado `n` por `n`."
+    },
+    {
+     "name": "b",
+     "en": "`n`-by-`m` input matrix.",
+     "pt": "Matriz de entrada `n` por `m`."
+    },
+    {
+     "name": "u",
+     "en": "Input sequence: one row per time step, one column per input.",
+     "pt": "Sequência de entrada: uma linha por passo de tempo, uma coluna por entrada."
+    },
+    {
+     "name": "x0",
+     "en": "Initial state, a column of length `n`.",
+     "pt": "Estado inicial, uma coluna de comprimento `n`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "State history, one row per step. Row `k` is the state before input `u(k)` is applied.",
+     "pt": "Histórico de estados, uma linha por passo. A linha `k` é o estado antes da aplicação da entrada `u(k)`."
+    }
+   ],
+   "description": {
+    "en": "`ltitr` is the simple iteration behind the simulation of state-space models. Each row of the output is computed from the previous one, so the first row is the initial state itself. With `a = 0.5`, `b = 1` and a constant input of 1, the state approaches the fixed point 2.",
+    "pt": "`ltitr` é a iteração simples por trás da simulação de modelos em espaço de estados. Cada linha da saída é calculada a partir da anterior, então a primeira linha é o próprio estado inicial. Com `a = 0.5`, `b = 1` e entrada constante igual a 1, o estado se aproxima do ponto fixo 2."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Step response of a first-order system",
+      "pt": "Resposta ao degrau de um sistema de primeira ordem"
+     },
+     "code": "x = ltitr(0.5, 1, ones(5, 1))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "filter",
+    "lsim",
+    "dlsim",
+    "ss"
+   ]
+  },
+  "normest1": {
+   "summary": {
+    "en": "Estimate of the 1-norm of a matrix.",
+    "pt": "Estimativa da norma-1 de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "est = normest1(A)",
+     "en": "Estimates `norm(A, 1)`, the largest absolute column sum.",
+     "pt": "Estima `norm(A, 1)`, a maior soma absoluta de coluna."
+    },
+    {
+     "code": "[est, v] = normest1(A)",
+     "en": "Also returns a vector `v` for which the estimate is attained.",
+     "pt": "Retorna também um vetor `v` para o qual a estimativa é atingida."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square matrix, which may be sparse.",
+     "pt": "Matriz quadrada, que pode ser esparsa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "est",
+     "en": "Estimated 1-norm.",
+     "pt": "Norma-1 estimada."
+    },
+    {
+     "name": "v",
+     "en": "Vector related to the estimate.",
+     "pt": "Vetor associado à estimativa."
+    }
+   ],
+   "description": {
+    "en": "The 1-norm of a large matrix costs time proportional to the number of entries. `normest1` uses a few matrix-vector products instead, which is cheaper for large or sparse matrices, and is the building block of `condest`. For small matrices the answer is usually the exact value.",
+    "pt": "A norma-1 de uma matriz grande custa tempo proporcional ao número de entradas. `normest1` usa alguns produtos matriz-vetor, o que é mais barato para matrizes grandes ou esparsas, e é o bloco básico de `condest`. Para matrizes pequenas, o resultado costuma ser o valor exato."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compare with norm",
+      "pt": "Comparando com norm"
+     },
+     "code": "A = magic(4);\nnormest1(A)\nnorm(A, 1)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "norm",
+    "condest",
+    "normest",
+    "cond"
+   ]
+  },
+  "optimplotfunccount": {
+   "summary": {
+    "en": "Optimization plot function: bar chart of the function evaluation count.",
+    "pt": "Função de gráfico de otimização: barras com a contagem de avaliações da função."
+   },
+   "syntax": [
+    {
+     "code": "optimset('PlotFcns', @optimplotfunccount)",
+     "en": "Selects the plot for use with solvers such as `fminsearch`.",
+     "pt": "Seleciona o gráfico para uso com solvers como `fminsearch`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Passed in the `PlotFcns` option, it is called by the solver at each iteration and draws a bar with the number of times the objective function has been evaluated so far. It is a quick way to see how costly a minimization is. It is meant to be called by the solver, not directly.",
+    "pt": "Passada na opção `PlotFcns`, é chamada pelo solver a cada iteração e desenha uma barra com o número de vezes que a função objetivo foi avaliada até o momento. É uma forma rápida de ver quão cara é uma minimização. Deve ser chamada pelo solver, não diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Count evaluations",
+      "pt": "Contando avaliações"
+     },
+     "code": "opts = optimset('PlotFcns', @optimplotfunccount);\nx = fminsearch(@(x) (x - 1)^2, 0, opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the bar chart is drawn below the code.",
+      "pt": "No app, o gráfico de barras é desenhado abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "optimplotfval",
+    "optimplotx",
+    "optimset",
+    "fminsearch"
+   ]
+  },
+  "optimplotfval": {
+   "summary": {
+    "en": "Optimization plot function: objective value at each iteration.",
+    "pt": "Função de gráfico de otimização: valor do objetivo a cada iteração."
+   },
+   "syntax": [
+    {
+     "code": "optimset('PlotFcns', @optimplotfval)",
+     "en": "Selects the plot for use with solvers such as `fminsearch`.",
+     "pt": "Seleciona o gráfico para uso com solvers como `fminsearch`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Passed in the `PlotFcns` option, it plots the current best objective value against the iteration number. A curve that flattens shows that the search is converging, while one that keeps falling suggests it has not finished. It is meant to be called by the solver, not directly.",
+    "pt": "Passada na opção `PlotFcns`, plota o melhor valor atual do objetivo contra o número da iteração. Uma curva que se achata mostra que a busca converge, enquanto uma que continua caindo sugere que ainda não terminou. Deve ser chamada pelo solver, não diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Watch convergence",
+      "pt": "Acompanhando a convergência"
+     },
+     "code": "opts = optimset('PlotFcns', @optimplotfval);\nx = fminsearch(@(x) (x - 1)^2, 0, opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the plot of the objective value is drawn below the code.",
+      "pt": "No app, o gráfico do valor do objetivo é desenhado abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "optimplotfunccount",
+    "optimplotx",
+    "optimset",
+    "fminsearch"
+   ]
+  },
+  "optimplotx": {
+   "summary": {
+    "en": "Optimization plot function: current point at each iteration.",
+    "pt": "Função de gráfico de otimização: ponto atual a cada iteração."
+   },
+   "syntax": [
+    {
+     "code": "optimset('PlotFcns', @optimplotx)",
+     "en": "Selects the plot for use with solvers such as `fminsearch`.",
+     "pt": "Seleciona o gráfico para uso com solvers como `fminsearch`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Passed in the `PlotFcns` option, it draws a bar for each component of the current point, so the position of the search can be followed as it moves. It is meant to be called by the solver, not directly.",
+    "pt": "Passada na opção `PlotFcns`, desenha uma barra para cada componente do ponto atual, de modo que a posição da busca possa ser acompanhada enquanto se move. Deve ser chamada pelo solver, não diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Follow the point",
+      "pt": "Seguindo o ponto"
+     },
+     "code": "opts = optimset('PlotFcns', @optimplotx);\nx = fminsearch(@(x) (x(1) - 1)^2 + x(2)^2, [0 0], opts);",
+     "silent": true,
+     "note": {
+      "en": "In the app, the bars are drawn below the code.",
+      "pt": "No app, as barras são desenhadas abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "optimplotfval",
+    "optimplotfunccount",
+    "optimset",
+    "fminsearch"
+   ]
+  },
+  "delsq": {
+   "summary": {
+    "en": "Discrete Laplacian on a grid, as a sparse matrix.",
+    "pt": "Laplaciano discreto em uma malha, como matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "L = delsq(G)",
+     "en": "Builds the five-point Laplacian for the grid numbered by `G`, with Dirichlet boundary.",
+     "pt": "Constrói o Laplaciano de cinco pontos para a malha numerada por `G`, com contorno de Dirichlet."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "G",
+     "en": "Grid numbering from `numgrid`: nonzero entries number the interior points, zeros are outside.",
+     "pt": "Numeração da malha vinda de `numgrid`: entradas diferentes de zero numeram os pontos internos, zeros ficam fora."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "L",
+     "en": "Sparse matrix with 4 on the diagonal and -1 for each neighbor.",
+     "pt": "Matriz esparsa com 4 na diagonal e -1 para cada vizinho."
+    }
+   ],
+   "description": {
+    "en": "For each interior point, row `k` of `L` holds 4 on the diagonal and -1 in the column of every neighbor that is also interior. This is the matrix of the finite-difference approximation of the Laplace operator, scaled by the squared grid spacing. Combined with `numgrid` it gives test matrices for the Poisson equation on a square, L-shape or disk.",
+    "pt": "Para cada ponto interno, a linha `k` de `L` tem 4 na diagonal e -1 na coluna de cada vizinho que também é interno. É a matriz da aproximação por diferenças finitas do operador de Laplace, multiplicada pelo quadrado do espaçamento da malha. Combinada com `numgrid`, dá matrizes de teste para a equação de Poisson em um quadrado, em L ou em um disco."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Square grid",
+      "pt": "Malha quadrada"
+     },
+     "code": "G = numgrid('S', 4);\nL = full(delsq(G))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "numgrid",
+    "gallery",
+    "spdiags",
+    "sparse"
+   ]
+  },
+  "numgrid": {
+   "summary": {
+    "en": "Numbers the points of a two-dimensional grid region.",
+    "pt": "Numera os pontos de uma região de malha bidimensional."
+   },
+   "syntax": [
+    {
+     "code": "G = numgrid(region, n)",
+     "en": "Returns an `n`-by-`n` matrix that numbers the interior points of the region and has zeros elsewhere.",
+     "pt": "Retorna uma matriz `n` por `n` que numera os pontos internos da região e tem zeros nos demais."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "region",
+     "en": "`'S'` square, `'L'` L-shape, `'C'` circle, `'D'` disk, `'A'` annulus or `'H'` hexagon.",
+     "pt": "`'S'` quadrado, `'L'` em L, `'C'` círculo, `'D'` disco, `'A'` anel ou `'H'` hexágono."
+    },
+    {
+     "name": "n",
+     "en": "Number of points per side of the enclosing square.",
+     "pt": "Número de pontos por lado do quadrado envolvente."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Integer matrix. Interior points are numbered 1, 2, ... down the columns; boundary and outside points are 0.",
+     "pt": "Matriz de inteiros. Os pontos internos são numerados 1, 2, ... descendo as colunas; pontos de contorno e de fora são 0."
+    }
+   ],
+   "description": {
+    "en": "The numbering says which unknowns a finite-difference method on that region will have, and in which order. Pass `G` to `delsq` to get the matching Laplacian. Boundary points are not numbered, because their values are known in a Dirichlet problem.",
+    "pt": "A numeração diz quais incógnitas um método de diferenças finitas terá naquela região e em que ordem. Passe `G` a `delsq` para obter o Laplaciano correspondente. Os pontos de contorno não são numerados, pois seus valores são conhecidos em um problema de Dirichlet."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "L-shaped region",
+      "pt": "Região em L"
+     },
+     "code": "G = numgrid('L', 6)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "delsq",
+    "gallery",
+    "meshgrid",
+    "spy"
+   ]
+  },
+  "setstr": {
+   "summary": {
+    "en": "Converts character codes into text (obsolete name of char).",
+    "pt": "Converte códigos de caracteres em texto (nome obsoleto de char)."
+   },
+   "syntax": [
+    {
+     "code": "s = setstr(x)",
+     "en": "Returns the characters whose codes are the elements of `x`.",
+     "pt": "Retorna os caracteres cujos códigos são os elementos de `x`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array of non-negative integer character codes.",
+     "pt": "Array numérico de códigos de caracteres inteiros não negativos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A char array of the same size as `x`.",
+     "pt": "Um array de char do mesmo tamanho de `x`."
+    }
+   ],
+   "description": {
+    "en": "`setstr` comes from the earliest versions of MATLAB and does what `char` does for numeric input. New code should call `char`, which also accepts text and cell arrays.",
+    "pt": "`setstr` vem das primeiras versões do MATLAB e faz o que `char` faz com entrada numérica. Código novo deve usar `char`, que também aceita texto e cell arrays."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Codes to text",
+      "pt": "Códigos para texto"
+     },
+     "code": "s = setstr([72 101 108 108 111])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "char",
+    "double",
+    "string",
+    "blanks"
+   ]
+  }
+ }
+}

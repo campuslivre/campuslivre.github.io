@@ -1,0 +1,1294 @@
+{
+ "functions": {
+  "metaclass": {
+   "summary": {
+    "en": "Returns the meta.class object that describes the class of an object.",
+    "pt": "Retorna o objeto meta.class que descreve a classe de um objeto."
+   },
+   "syntax": [
+    {
+     "code": "mc = metaclass(obj)",
+     "en": "Returns the class description of `obj`, which can be a built-in value or an object.",
+     "pt": "Retorna a descrição da classe de `obj`, que pode ser um valor interno ou um objeto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Any value. Its class is described, not the value itself.",
+     "pt": "Qualquer valor. É descrita a classe dele, e não o valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "mc",
+     "en": "A `meta.class` object with properties such as `Name`, `SuperclassList`, `PropertyList`, `MethodList` and `HandleCompatible`.",
+     "pt": "Um objeto `meta.class` com propriedades como `Name`, `SuperclassList`, `PropertyList`, `MethodList` e `HandleCompatible`."
+    }
+   ],
+   "description": {
+    "en": "`metaclass` is the programmatic form of the `?ClassName` syntax: it gives access to the reflection data of a class. Use `mc.Name` for the class name, `mc.SuperclassList` for the direct superclasses, and the property and method lists to inspect what a class defines.\n\nBecause it takes an instance, `metaclass(x)` always describes `class(x)`. To start from a class name only, create or pass an instance of that class.",
+    "pt": "`metaclass` é a forma programática da sintaxe `?NomeDaClasse`: dá acesso aos dados de reflexão de uma classe. Use `mc.Name` para o nome da classe, `mc.SuperclassList` para as superclasses diretas e as listas de propriedades e métodos para ver o que a classe define.\n\nComo recebe uma instância, `metaclass(x)` sempre descreve `class(x)`. Para partir apenas de um nome de classe, crie ou passe uma instância dessa classe."
+   },
+   "notes": {
+    "en": "MatLivre does not parse the `?ClassName` syntax; call `metaclass` with an instance instead. The property and method lists contain the members MatLivre knows, so their lengths can differ from MATLAB's.",
+    "pt": "O MatLivre não interpreta a sintaxe `?NomeDaClasse`; chame `metaclass` com uma instância. As listas de propriedades e métodos contêm os membros que o MatLivre conhece, então seus tamanhos podem diferir dos do MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspecting a built-in class",
+      "pt": "Inspecionando uma classe interna"
+     },
+     "code": "mc = metaclass(containers.Map);\ndisp(mc.Name)\ndisp({mc.SuperclassList.Name})\ndisp(mc.HandleCompatible)"
+    }
+   ],
+   "see": [
+    "superclasses",
+    "methods",
+    "properties",
+    "class",
+    "isa"
+   ]
+  },
+  "methods": {
+   "summary": {
+    "en": "Lists the methods of a class or object.",
+    "pt": "Lista os métodos de uma classe ou objeto."
+   },
+   "syntax": [
+    {
+     "code": "m = methods(obj)",
+     "en": "Returns the method names of the class of `obj` as a cell array of character vectors.",
+     "pt": "Retorna os nomes dos métodos da classe de `obj` como cell array de vetores de caracteres."
+    },
+    {
+     "code": "m = methods('ClassName')",
+     "en": "Does the same starting from a class name.",
+     "pt": "Faz o mesmo a partir do nome de uma classe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object whose class is inspected.",
+     "pt": "Um objeto cuja classe é inspecionada."
+    },
+    {
+     "name": "'ClassName'",
+     "en": "Name of a class on the path, as text.",
+     "pt": "Nome de uma classe no path, como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Column cell array of method names, including the constructor.",
+     "pt": "Cell array coluna com os nomes dos métodos, incluindo o construtor."
+    }
+   ],
+   "description": {
+    "en": "`methods` tells you what you can call on an object. The list includes the constructor, whose name equals the class name, and the public methods the class defines or inherits. Hidden and private methods are left out.\n\nWith an output argument the names come back as a cell array, which is convenient for tests such as `ismember('keys', methods(obj))`.",
+    "pt": "`methods` diz o que se pode chamar em um objeto. A lista inclui o construtor, cujo nome é igual ao da classe, e os métodos públicos que a classe define ou herda. Métodos ocultos e privados ficam de fora.\n\nCom um argumento de saída, os nomes voltam em um cell array, o que facilita testes como `ismember('keys', methods(obj))`."
+   },
+   "notes": {
+    "en": "The list holds the methods MatLivre implements for each class, which for built-in classes such as `containers.Map` is shorter than MATLAB's. A class name given as text must name a class defined in a file on the path or a class MatLivre provides; names like `'double'` are not accepted.",
+    "pt": "A lista contém os métodos que o MatLivre implementa em cada classe, que para classes internas como `containers.Map` é mais curta que a do MATLAB. Um nome de classe dado como texto deve ser de uma classe definida em arquivo no path ou fornecida pelo MatLivre; nomes como `'double'` não são aceitos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Checking for methods",
+      "pt": "Verificando métodos"
+     },
+     "code": "m = methods(containers.Map);\nismember('keys', m)\nismember('remove', m)"
+    }
+   ],
+   "see": [
+    "properties",
+    "metaclass",
+    "superclasses",
+    "ismethod",
+    "isprop"
+   ]
+  },
+  "notify": {
+   "summary": {
+    "en": "Triggers an event of a handle object and runs the listeners attached to it.",
+    "pt": "Dispara um evento de um objeto handle e executa os listeners ligados a ele."
+   },
+   "syntax": [
+    {
+     "code": "notify(obj, 'EventName')",
+     "en": "Fires the event and calls every enabled listener with the source object and event data.",
+     "pt": "Dispara o evento e chama cada listener habilitado com o objeto de origem e os dados do evento."
+    },
+    {
+     "code": "notify(obj, 'EventName', eventData)",
+     "en": "Passes a custom `event.EventData` object to the listeners.",
+     "pt": "Passa aos listeners um objeto `event.EventData` personalizado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Handle object whose class declares the event.",
+     "pt": "Objeto handle cuja classe declara o evento."
+    },
+    {
+     "name": "'EventName'",
+     "en": "Name of an event declared in an `events` block of the class.",
+     "pt": "Nome de um evento declarado em um bloco `events` da classe."
+    },
+    {
+     "name": "eventData",
+     "en": "Optional object of a subclass of `event.EventData`.",
+     "pt": "Objeto opcional de uma subclasse de `event.EventData`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Events let an object announce that something happened without knowing who is interested. A client registers a callback with `addlistener(obj, 'EventName', callback)`; `notify` then calls it synchronously, in the order the listeners were created, before `notify` returns.\n\nThe callback receives two arguments: the source object and an event data object whose `EventName` and `Source` properties identify what fired. Notifying an event that the class does not declare is an error. Disabled or deleted listeners are skipped.",
+    "pt": "Eventos permitem que um objeto anuncie que algo aconteceu sem saber quem se interessa. Um cliente registra um callback com `addlistener(obj, 'EventName', callback)`; `notify` então o chama de forma síncrona, na ordem de criação dos listeners, antes de retornar.\n\nO callback recebe dois argumentos: o objeto de origem e um objeto de dados do evento, cujas propriedades `EventName` e `Source` identificam o que disparou. Notificar um evento que a classe não declara é um erro. Listeners desabilitados ou apagados são ignorados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A listener reacting to an event",
+      "pt": "Um listener reagindo a um evento"
+     },
+     "code": "writelines([\"classdef Btn < handle\", \"  events\", \"    Pressed\", \"  end\", \"end\"], 'Btn.m');\nb = Btn;\nL = addlistener(b, 'Pressed', @(src, evt) fprintf('%s fired on a %s\\n', evt.EventName, class(src)));\nnotify(b, 'Pressed')\nnotify(b, 'Pressed')",
+     "note": {
+      "en": "The example writes the class file `Btn.m` to the current folder first; in a project you would keep the class in its own file.",
+      "pt": "O exemplo grava antes o arquivo de classe `Btn.m` na pasta atual; em um projeto, a classe ficaria em seu próprio arquivo."
+     }
+    }
+   ],
+   "see": [
+    "addlistener",
+    "events",
+    "handle",
+    "delete"
+   ]
+  },
+  "numArgumentsFromSubscript": {
+   "summary": {
+    "en": "Method a class can overload to say how many outputs an indexing expression returns.",
+    "pt": "Método que uma classe pode sobrecarregar para dizer quantas saídas uma expressão de indexação retorna."
+   },
+   "syntax": [
+    {
+     "code": "n = numArgumentsFromSubscript(obj, s, indexingContext)",
+     "en": "Returns the number of values produced when `obj` is indexed with the chain `s` in the given context.",
+     "pt": "Retorna o número de valores produzidos quando `obj` é indexado com a cadeia `s` no contexto dado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "The object being indexed.",
+     "pt": "O objeto sendo indexado."
+    },
+    {
+     "name": "s",
+     "en": "Indexing structure array with fields `type` and `subs`, as built by `substruct`.",
+     "pt": "Array de structs de indexação com os campos `type` e `subs`, como o construído por `substruct`."
+    },
+    {
+     "name": "indexingContext",
+     "en": "A member of `matlab.indexing.IndexingContext`: `Statement`, `Expression` or `Assignment`.",
+     "pt": "Um membro de `matlab.indexing.IndexingContext`: `Statement`, `Expression` ou `Assignment`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Number of outputs (or inputs, for an assignment) the expression represents.",
+     "pt": "Número de saídas (ou entradas, em uma atribuição) que a expressão representa."
+    }
+   ],
+   "description": {
+    "en": "When a class overloads `subsref` or `subsasgn`, MATLAB must know how many values an expression such as `obj.list{:}` yields before it can call the overloaded method with the right `nargout`. The default rule counts the elements an ordinary index would select. A class overrides `numArgumentsFromSubscript` to apply its own rule, for instance to return `1` for any index into a container.\n\nThe language normally calls this method itself, not user code.",
+    "pt": "Quando uma classe sobrecarrega `subsref` ou `subsasgn`, o MATLAB precisa saber quantos valores uma expressão como `obj.list{:}` produz antes de chamar o método sobrecarregado com o `nargout` correto. A regra padrão conta os elementos que um índice comum selecionaria. Uma classe sobrescreve `numArgumentsFromSubscript` para aplicar sua própria regra, por exemplo retornando `1` para qualquer índice em um contêiner.\n\nQuem costuma chamar este método é a própria linguagem, e não o código do usuário."
+   },
+   "notes": {
+    "en": "MatLivre does not provide the `matlab.indexing.IndexingContext` enumeration, so calling `numArgumentsFromSubscript` directly always reports an error. A class can still define the method, and indexing of such classes works.",
+    "pt": "O MatLivre não oferece a enumeração `matlab.indexing.IndexingContext`, então chamar `numArgumentsFromSubscript` diretamente sempre informa um erro. Uma classe ainda pode definir o método, e a indexação dessas classes funciona."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A class that indexes into its own list",
+      "pt": "Uma classe que indexa a própria lista"
+     },
+     "code": "writelines([\"classdef Bag\", \"  properties\", \"    Items = {}\", \"  end\", \"  methods\", \"    function n = numArgumentsFromSubscript(obj, s, ctx)\", \"      n = 1;\", \"    end\", \"    function out = subsref(obj, s)\", \"      out = obj.Items{s(1).subs{1}};\", \"    end\", \"  end\", \"end\"], 'Bag.m');\nb = Bag;\nb.Items = {10, 20, 30};\nb(2)",
+     "note": {
+      "en": "`b(2)` calls the overloaded `subsref`; `numArgumentsFromSubscript` tells the language it returns exactly one value.",
+      "pt": "`b(2)` chama o `subsref` sobrecarregado; `numArgumentsFromSubscript` informa à linguagem que ele retorna exatamente um valor."
+     }
+    }
+   ],
+   "see": [
+    "subsref",
+    "subsasgn",
+    "substruct",
+    "subsindex"
+   ]
+  },
+  "properties": {
+   "summary": {
+    "en": "Lists the public properties of a class or object.",
+    "pt": "Lista as propriedades públicas de uma classe ou objeto."
+   },
+   "syntax": [
+    {
+     "code": "properties(obj)",
+     "en": "Displays the property names of `obj`.",
+     "pt": "Exibe os nomes das propriedades de `obj`."
+    },
+    {
+     "code": "p = properties(obj)",
+     "en": "Returns the names as a column cell array.",
+     "pt": "Retorna os nomes como cell array coluna."
+    },
+    {
+     "code": "p = properties('ClassName')",
+     "en": "Does the same starting from a class name.",
+     "pt": "Faz o mesmo a partir do nome de uma classe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object, or the name of a class as text.",
+     "pt": "Um objeto, ou o nome de uma classe como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Column cell array of property names.",
+     "pt": "Cell array coluna com os nomes das propriedades."
+    }
+   ],
+   "description": {
+    "en": "`properties` reports the names a user can read through `obj.Name`. Properties with private or protected access and hidden properties are not listed. The order is the order of declaration in the class, with inherited properties included.\n\nThe function lists names only. To read the values use dot indexing with a dynamic name, `obj.(p{1})`; to see attributes such as `Dependent` or `SetAccess`, look at the property list of `metaclass`.",
+    "pt": "`properties` informa os nomes que um usuário pode ler por `obj.Nome`. Propriedades com acesso privado ou protegido e propriedades ocultas não aparecem. A ordem é a da declaração na classe, incluindo as propriedades herdadas.\n\nA função lista apenas nomes. Para ler os valores use indexação com ponto e nome dinâmico, `obj.(p{1})`; para ver atributos como `Dependent` ou `SetAccess`, consulte a lista de propriedades de `metaclass`."
+   },
+   "notes": {
+    "en": "Called with no output argument, MatLivre prints the names as a cell array instead of MATLAB's list headed `Properties for class ...`. Use an output argument to get the same result in both.",
+    "pt": "Chamada sem argumento de saída, o MatLivre imprime os nomes como cell array, em vez da lista com o cabeçalho `Properties for class ...` do MATLAB. Use um argumento de saída para obter o mesmo resultado em ambos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Properties of a built-in class",
+      "pt": "Propriedades de uma classe interna"
+     },
+     "code": "p = properties(containers.Map)"
+    }
+   ],
+   "see": [
+    "methods",
+    "metaclass",
+    "fieldnames",
+    "isprop",
+    "get"
+   ]
+  },
+  "release": {
+   "summary": {
+    "en": "Releases the resources of a System object and unlocks it.",
+    "pt": "Libera os recursos de um objeto System e o destrava."
+   },
+   "syntax": [
+    {
+     "code": "release(obj)",
+     "en": "Calls the object's `releaseImpl`, if any, and unlocks it so that properties and input sizes can change again.",
+     "pt": "Chama o `releaseImpl` do objeto, se existir, e o destrava para que propriedades e tamanhos de entrada possam mudar de novo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object, an instance of a class derived from `matlab.System`.",
+     "pt": "Um objeto System, instância de uma classe derivada de `matlab.System`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A System object becomes locked on the first call to `step` or `setup`. While locked, nontunable properties cannot be changed and the input data types and sizes are fixed. `release` ends that state: it runs the `releaseImpl` method, where a class closes files or frees buffers, and unlocks the object.\n\nThe object keeps its property values. The next `step` calls `setupImpl` again.",
+    "pt": "Um objeto System fica travado na primeira chamada a `step` ou `setup`. Enquanto travado, propriedades não ajustáveis não podem mudar e os tipos e tamanhos dos dados de entrada ficam fixos. `release` encerra esse estado: executa o método `releaseImpl`, em que a classe fecha arquivos ou libera buffers, e destrava o objeto.\n\nO objeto mantém os valores das propriedades. O próximo `step` chama `setupImpl` outra vez."
+   },
+   "notes": {
+    "en": "`release` as described here applies to System objects.",
+    "pt": "`release` como descrito aqui vale para objetos System."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Locking and releasing",
+      "pt": "Travando e liberando"
+     },
+     "code": "writelines([ ...\n  \"classdef Counter < matlab.System\", ...\n  \"  properties\", \"    Total = 0\", \"  end\", ...\n  \"  methods (Access = protected)\", ...\n  \"    function setupImpl(obj)\", \"      obj.Total = 100;\", \"    end\", ...\n  \"    function y = stepImpl(obj, u)\", \"      obj.Total = obj.Total + u;\", \"      y = obj.Total;\", \"    end\", ...\n  \"    function releaseImpl(obj)\", \"      disp('released')\", \"    end\", ...\n  \"  end\", \"end\"], 'Counter.m');\nc = Counter;\nstep(c, 5);\nisLocked(c)\nrelease(c)\nisLocked(c)",
+     "note": {
+      "en": "The example first writes the small System class `Counter` to the current folder.",
+      "pt": "O exemplo grava antes a pequena classe System `Counter` na pasta atual."
+     }
+    }
+   ],
+   "see": [
+    "step",
+    "setup",
+    "reset",
+    "isLocked",
+    "clone"
+   ]
+  },
+  "setup": {
+   "summary": {
+    "en": "Prepares a System object for execution, locking it, before the first call to step.",
+    "pt": "Prepara um objeto System para execução, travando-o, antes da primeira chamada a step."
+   },
+   "syntax": [
+    {
+     "code": "setup(obj, x1, ..., xn)",
+     "en": "Runs the object's `setupImpl` using inputs like those that `step` will receive, and locks the object.",
+     "pt": "Executa o `setupImpl` do objeto com entradas como as que `step` receberá, e trava o objeto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object.",
+     "pt": "Um objeto System."
+    },
+    {
+     "name": "x1, ..., xn",
+     "en": "Example inputs, used to fix their data types and sizes. They are not processed.",
+     "pt": "Entradas de exemplo, usadas para fixar tipos e tamanhos. Não são processadas."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`step` calls `setupImpl` by itself on its first call, so `setup` is only needed when initialization must happen at a chosen moment, for example before a timing loop. After `setup` the object is locked and the next `step` skips the initialization.\n\nCalling `setup` on an object that is already locked is an error; call `release` first.",
+    "pt": "`step` chama `setupImpl` sozinho na primeira chamada, então `setup` só é necessário quando a inicialização deve ocorrer em um momento escolhido, por exemplo antes de um laço cronometrado. Depois de `setup`, o objeto fica travado e o próximo `step` pula a inicialização.\n\nChamar `setup` em um objeto já travado é um erro; chame `release` antes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Initializing before the first step",
+      "pt": "Inicializando antes do primeiro step"
+     },
+     "code": "writelines([ ...\n  \"classdef Counter < matlab.System\", ...\n  \"  properties\", \"    Total = 0\", \"  end\", ...\n  \"  methods (Access = protected)\", ...\n  \"    function setupImpl(obj)\", \"      obj.Total = 100;\", \"    end\", ...\n  \"    function y = stepImpl(obj, u)\", \"      obj.Total = obj.Total + u;\", \"      y = obj.Total;\", \"    end\", ...\n  \"    function releaseImpl(obj)\", \"      disp('released')\", \"    end\", ...\n  \"  end\", \"end\"], 'Counter.m');\nc = Counter;\nc.Total\nsetup(c);\nc.Total\nisLocked(c)",
+     "note": {
+      "en": "`setupImpl` of the example class sets `Total` to 100.",
+      "pt": "O `setupImpl` da classe do exemplo ajusta `Total` para 100."
+     }
+    }
+   ],
+   "see": [
+    "step",
+    "release",
+    "reset",
+    "isLocked"
+   ]
+  },
+  "step": {
+   "summary": {
+    "en": "Runs one processing step of a System object.",
+    "pt": "Executa um passo de processamento de um objeto System."
+   },
+   "syntax": [
+    {
+     "code": "y = step(obj, x)",
+     "en": "Processes the input `x` and returns the output of one step. Equivalent to `y = obj(x)`.",
+     "pt": "Processa a entrada `x` e retorna a saída de um passo. Equivale a `y = obj(x)`."
+    },
+    {
+     "code": "[y1, y2] = step(obj, x1, x2)",
+     "en": "Passes several inputs and collects several outputs, as the class's `stepImpl` defines.",
+     "pt": "Passa várias entradas e coleta várias saídas, conforme o `stepImpl` da classe."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object.",
+     "pt": "Um objeto System."
+    },
+    {
+     "name": "x, x1, x2",
+     "en": "Input arguments, as many as `stepImpl` declares.",
+     "pt": "Argumentos de entrada, tantos quantos o `stepImpl` declara."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y, y1, y2",
+     "en": "Outputs returned by `stepImpl`.",
+     "pt": "Saídas retornadas por `stepImpl`."
+    }
+   ],
+   "description": {
+    "en": "A System object is a handle class derived from `matlab.System` whose work is done by `stepImpl`. The first call to `step` runs `setupImpl`, locks the object and then runs `stepImpl`; later calls run `stepImpl` only, so the object can keep state between calls, such as the running total in a counter.\n\n`step` can be written as a function call on the object itself: `y = obj(x)` does the same. To start over without discarding the object, call `reset`; to unlock it, call `release`.",
+    "pt": "Um objeto System é uma classe handle derivada de `matlab.System`, cujo trabalho é feito por `stepImpl`. A primeira chamada a `step` executa `setupImpl`, trava o objeto e depois executa `stepImpl`; as seguintes executam só `stepImpl`, de modo que o objeto guarda estado entre as chamadas, como o total acumulado de um contador.\n\n`step` pode ser escrito como chamada de função no próprio objeto: `y = obj(x)` faz o mesmo. Para recomeçar sem descartar o objeto, chame `reset`; para destravá-lo, `release`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Stateful processing",
+      "pt": "Processamento com estado"
+     },
+     "code": "writelines([ ...\n  \"classdef Counter < matlab.System\", ...\n  \"  properties\", \"    Total = 0\", \"  end\", ...\n  \"  methods (Access = protected)\", ...\n  \"    function setupImpl(obj)\", \"      obj.Total = 100;\", \"    end\", ...\n  \"    function y = stepImpl(obj, u)\", \"      obj.Total = obj.Total + u;\", \"      y = obj.Total;\", \"    end\", ...\n  \"    function releaseImpl(obj)\", \"      disp('released')\", \"    end\", ...\n  \"  end\", \"end\"], 'Counter.m');\nc = Counter;\ny1 = step(c, 5)\ny2 = c(7)",
+     "note": {
+      "en": "The first step runs `setupImpl` (total 100) and then adds 5; the second call, written as `c(7)`, adds 7.",
+      "pt": "O primeiro passo executa `setupImpl` (total 100) e soma 5; a segunda chamada, escrita como `c(7)`, soma 7."
+     }
+    }
+   ],
+   "see": [
+    "setup",
+    "release",
+    "reset",
+    "isLocked",
+    "clone"
+   ]
+  },
+  "subsasgn": {
+   "summary": {
+    "en": "Assignment through an index structure, the function behind `A(i) = v`, `A.f = v` and `A{i} = v`.",
+    "pt": "Atribuição por meio de uma estrutura de índices, a função por trás de `A(i) = v`, `A.f = v` e `A{i} = v`."
+   },
+   "syntax": [
+    {
+     "code": "B = subsasgn(A, S, V)",
+     "en": "Returns a copy of `A` with the elements selected by `S` replaced by `V`.",
+     "pt": "Retorna uma cópia de `A` com os elementos selecionados por `S` substituídos por `V`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The array, struct, cell array or object to modify.",
+     "pt": "O array, struct, cell array ou objeto a modificar."
+    },
+    {
+     "name": "S",
+     "en": "Structure array with fields `type` (`'()'`, `'{}'` or `'.'`) and `subs`, usually built with `substruct`. Several elements describe a chain.",
+     "pt": "Array de structs com os campos `type` (`'()'`, `'{}'` ou `'.'`) e `subs`, em geral construído com `substruct`. Vários elementos descrevem uma cadeia."
+    },
+    {
+     "name": "V",
+     "en": "The value to assign.",
+     "pt": "O valor a atribuir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "The modified copy. `A` itself is not changed.",
+     "pt": "A cópia modificada. O próprio `A` não é alterado."
+    }
+   ],
+   "description": {
+    "en": "`subsasgn` is what the interpreter calls for an assignment with an index. Calling it directly is useful when the indexing is built at run time, for example when the field names or the number of levels are not known in advance.\n\nEach element of `S` is one level: `substruct('.', 'a', '()', {2})` stands for `.a(2)`. A class can overload `subsasgn` to give its own meaning to assignment.",
+    "pt": "`subsasgn` é o que o interpretador chama em uma atribuição com índice. Chamá-la diretamente é útil quando a indexação é montada em tempo de execução, por exemplo quando os nomes dos campos ou o número de níveis não são conhecidos de antemão.\n\nCada elemento de `S` é um nível: `substruct('.', 'a', '()', {2})` representa `.a(2)`. Uma classe pode sobrecarregar `subsasgn` para dar significado próprio à atribuição."
+   },
+   "notes": {
+    "en": "MatLivre does not call a user-defined `subsasgn` for parenthesis assignment on objects, so a class overload does not take effect for `obj(i) = v`.",
+    "pt": "O MatLivre não chama um `subsasgn` definido pelo usuário em atribuições com parênteses sobre objetos, então a sobrecarga de uma classe não vale para `obj(i) = v`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Changing an element and a nested cell",
+      "pt": "Alterando um elemento e uma célula aninhada"
+     },
+     "code": "a = [10 20 30];\nb = subsasgn(a, substruct('()', {2}), 99)\nS.f = {1, 2};\nT = subsasgn(S, substruct('.', 'f', '{}', {2}), 'new');\nT.f"
+    }
+   ],
+   "see": [
+    "subsref",
+    "substruct",
+    "numArgumentsFromSubscript",
+    "setfield"
+   ]
+  },
+  "subsindex": {
+   "summary": {
+    "en": "Method a class overloads so that its objects can be used as array indices.",
+    "pt": "Método que uma classe sobrecarrega para que seus objetos possam servir de índices de array."
+   },
+   "syntax": [
+    {
+     "code": "ind = subsindex(obj)",
+     "en": "Returns the zero-based index that `obj` stands for when it appears inside parentheses.",
+     "pt": "Retorna o índice base zero que `obj` representa quando aparece entre parênteses."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object of a class that defines `subsindex`.",
+     "pt": "Um objeto de uma classe que define `subsindex`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ind",
+     "en": "Numeric array of zero-based indices, so the value `0` selects the first element.",
+     "pt": "Array numérico de índices base zero, de modo que o valor `0` seleciona o primeiro elemento."
+    }
+   ],
+   "description": {
+    "en": "When an object appears as an index, as in `v(obj)`, MATLAB calls the class's `subsindex` method and adds one to the result. The method returns zero-based values, which is a historical convention, so a class that wraps a one-based position must subtract one.\n\nOrdinary numeric, logical and char arrays have no `subsindex`; calling it on one is an error that names the class of the argument.",
+    "pt": "Quando um objeto aparece como índice, como em `v(obj)`, o MATLAB chama o método `subsindex` da classe e soma um ao resultado. O método devolve valores base zero, uma convenção histórica, então uma classe que guarda uma posição base um precisa subtrair um.\n\nArrays numéricos, lógicos e de char comuns não têm `subsindex`; chamá-lo neles é um erro que cita a classe do argumento."
+   },
+   "notes": {
+    "en": "MatLivre does not support objects as indices: `v(obj)` reports that indexing with that class is not supported, even if the class defines `subsindex`. The wording of the error in the example may differ from MATLAB's.",
+    "pt": "O MatLivre não aceita objetos como índices: `v(obj)` informa que a indexação com essa classe não é suportada, mesmo que a classe defina `subsindex`. O texto do erro do exemplo pode diferir do do MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The method does not exist for plain numbers",
+      "pt": "O método não existe para números comuns"
+     },
+     "code": "try\n    subsindex(5)\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "subsref",
+    "numArgumentsFromSubscript",
+    "substruct",
+    "find"
+   ]
+  },
+  "subsref": {
+   "summary": {
+    "en": "Reads through an index structure, the function behind `A(i)`, `A.f` and `A{i}`.",
+    "pt": "Lê por meio de uma estrutura de índices, a função por trás de `A(i)`, `A.f` e `A{i}`."
+   },
+   "syntax": [
+    {
+     "code": "B = subsref(A, S)",
+     "en": "Returns the value selected by the index chain `S`.",
+     "pt": "Retorna o valor selecionado pela cadeia de índices `S`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "The array, struct, cell array or object to index.",
+     "pt": "O array, struct, cell array ou objeto a indexar."
+    },
+    {
+     "name": "S",
+     "en": "Structure array with fields `type` (`'()'`, `'{}'` or `'.'`) and `subs`, usually built with `substruct`.",
+     "pt": "Array de structs com os campos `type` (`'()'`, `'{}'` ou `'.'`) e `subs`, em geral construído com `substruct`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "The selected value; with a `{}` index on a cell array the output is the contents.",
+     "pt": "O valor selecionado; com um índice `{}` em cell array, a saída é o conteúdo."
+    }
+   ],
+   "description": {
+    "en": "The interpreter turns every index expression into a call to `subsref`. Calling it yourself lets you index with a chain built at run time. Each element of `S` is applied to the result of the previous one, so `substruct('()', {2}, '.', 'name')` means `A(2).name`.\n\nA class overloads `subsref` to control what `obj(i)`, `obj.name` or `obj{i}` mean. Inside the overload, `builtin('subsref', obj, S)` falls back to the standard behavior.",
+    "pt": "O interpretador transforma toda expressão com índice em uma chamada a `subsref`. Chamá-la diretamente permite indexar com uma cadeia montada em tempo de execução. Cada elemento de `S` é aplicado ao resultado do anterior, então `substruct('()', {2}, '.', 'name')` significa `A(2).name`.\n\nUma classe sobrecarrega `subsref` para controlar o que `obj(i)`, `obj.name` ou `obj{i}` significam. Dentro da sobrecarga, `builtin('subsref', obj, S)` volta ao comportamento padrão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three kinds of index",
+      "pt": "Três tipos de índice"
+     },
+     "code": "M = magic(4);\nsubsref(M, substruct('()', {2, ':'}))\nS.a = [1 2 3];\nsubsref(S, substruct('.', 'a', '()', {2}))\nc = {1, 'two', [3 4 5]};\nsubsref(c, substruct('{}', {3}, '()', {2}))"
+    }
+   ],
+   "see": [
+    "subsasgn",
+    "substruct",
+    "numArgumentsFromSubscript",
+    "getfield"
+   ]
+  },
+  "substruct": {
+   "summary": {
+    "en": "Builds the index structure expected by `subsref` and `subsasgn`.",
+    "pt": "Monta a estrutura de índices esperada por `subsref` e `subsasgn`."
+   },
+   "syntax": [
+    {
+     "code": "S = substruct(type1, subs1, ..., typeN, subsN)",
+     "en": "Returns an N-element struct array, one element per indexing level.",
+     "pt": "Retorna um array de structs com N elementos, um por nível de indexação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "type",
+     "en": "One of `'()'`, `'{}'` or `'.'`.",
+     "pt": "Um entre `'()'`, `'{}'` ou `'.'`."
+    },
+    {
+     "name": "subs",
+     "en": "For `'()'` and `'{}'`, a cell array with one entry per dimension (`':'` for all). For `'.'`, a field name as text.",
+     "pt": "Para `'()'` e `'{}'`, um cell array com uma entrada por dimensão (`':'` para todos). Para `'.'`, um nome de campo como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Struct array with fields `type` and `subs`.",
+     "pt": "Array de structs com os campos `type` e `subs`."
+    }
+   ],
+   "description": {
+    "en": "`substruct` only packages the arguments: the result is a struct array whose `type` and `subs` fields are the ones `subsref` and `subsasgn` read. The call `substruct('.', 'a', '()', {2})` describes the chain `.a(2)`.\n\nA colon is written as the text `':'` inside the cell, so `substruct('()', {':', 1})` stands for `(:, 1)`.",
+    "pt": "`substruct` apenas empacota os argumentos: o resultado é um array de structs cujos campos `type` e `subs` são os que `subsref` e `subsasgn` leem. A chamada `substruct('.', 'a', '()', {2})` descreve a cadeia `.a(2)`.\n\nOs dois-pontos são escritos como o texto `':'` dentro do cell, então `substruct('()', {':', 1})` representa `(:, 1)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A two-level chain",
+      "pt": "Uma cadeia de dois níveis"
+     },
+     "code": "S = substruct('.', 'a', '()', {2})\nS(1)\nS(2)"
+    }
+   ],
+   "see": [
+    "subsref",
+    "subsasgn",
+    "struct",
+    "numArgumentsFromSubscript"
+   ]
+  },
+  "superclasses": {
+   "summary": {
+    "en": "Lists the superclasses of a class, from the nearest to the farthest.",
+    "pt": "Lista as superclasses de uma classe, da mais próxima à mais distante."
+   },
+   "syntax": [
+    {
+     "code": "superclasses(obj)",
+     "en": "Displays the superclasses of the class of `obj`.",
+     "pt": "Exibe as superclasses da classe de `obj`."
+    },
+    {
+     "code": "s = superclasses('ClassName')",
+     "en": "Returns the names as a column cell array.",
+     "pt": "Retorna os nomes como cell array coluna."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object, or the name of a class as text.",
+     "pt": "Um objeto, ou o nome de uma classe como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Cell array of class names, ordered from the direct superclass up to the root.",
+     "pt": "Cell array de nomes de classes, ordenado da superclasse direta até a raiz."
+    }
+   ],
+   "description": {
+    "en": "`superclasses` follows the inheritance chain of a class. For a class declared as `classdef B < A`, where `A` itself derives from `handle`, it lists `A` and then `handle`. It answers a different question from `isa`, which tests one name; here you get the whole list.\n\nA class that derives from nothing returns an empty list.",
+    "pt": "`superclasses` percorre a cadeia de herança de uma classe. Para uma classe declarada como `classdef B < A`, em que `A` deriva de `handle`, lista `A` e depois `handle`. Responde a uma pergunta diferente da de `isa`, que testa um nome; aqui vem a lista inteira.\n\nUma classe que não deriva de nada retorna uma lista vazia."
+   },
+   "notes": {
+    "en": "Called with no output argument, MatLivre prints a `Superclasses for class ...` block. Built-in value classes such as `double` are not accepted by name.",
+    "pt": "Chamada sem argumento de saída, o MatLivre imprime um bloco `Superclasses for class ...`. Classes de valor internas, como `double`, não são aceitas pelo nome."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Superclasses of a built-in class",
+      "pt": "Superclasses de uma classe interna"
+     },
+     "code": "s = superclasses(containers.Map)"
+    }
+   ],
+   "see": [
+    "metaclass",
+    "methods",
+    "properties",
+    "isa",
+    "class"
+   ]
+  },
+  "addpath": {
+   "summary": {
+    "en": "Adds folders to the top of the search path.",
+    "pt": "Adiciona pastas ao início do caminho de busca."
+   },
+   "syntax": [
+    {
+     "code": "addpath(folder)",
+     "en": "Puts `folder` at the front of the path.",
+     "pt": "Coloca `folder` no início do path."
+    },
+    {
+     "code": "addpath(folder1, ..., folderN)",
+     "en": "Adds several folders; the first one ends up at the very front.",
+     "pt": "Adiciona várias pastas; a primeira fica bem no início."
+    },
+    {
+     "code": "addpath(___, '-end')",
+     "en": "Appends the folders at the end of the path instead.",
+     "pt": "Anexa as pastas ao fim do path."
+    },
+    {
+     "code": "oldpath = addpath(___)",
+     "en": "Also returns the path as it was before the change.",
+     "pt": "Também retorna o path como estava antes da mudança."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder name as text, relative or absolute. Several folders can be given in one text separated by `pathsep`.",
+     "pt": "Nome da pasta como texto, relativo ou absoluto. Várias pastas podem ser passadas em um só texto separadas por `pathsep`."
+    },
+    {
+     "name": "'-end'",
+     "en": "Option that appends instead of prepending.",
+     "pt": "Opção que anexa em vez de pôr no início."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "oldpath",
+     "en": "The previous path, a character vector.",
+     "pt": "O path anterior, um vetor de caracteres."
+    }
+   ],
+   "description": {
+    "en": "When a function name is used, the interpreter looks in the current folder first and then in each folder of the path, in order. `addpath` puts a folder in that list so that the `.m` files inside it can be called by name. A folder placed at the front shadows functions of the same name found later.\n\n`addpath` does not search inside subfolders; combine it with `genpath` to add a whole tree. The change lasts for the session, and `rmpath` undoes it.",
+    "pt": "Quando um nome de função é usado, o interpretador procura primeiro na pasta atual e depois em cada pasta do path, em ordem. `addpath` coloca uma pasta nessa lista para que os arquivos `.m` dentro dela possam ser chamados pelo nome. Uma pasta no início ofusca funções de mesmo nome encontradas depois.\n\n`addpath` não busca dentro de subpastas; combine com `genpath` para adicionar uma árvore inteira. A mudança dura a sessão, e `rmpath` a desfaz."
+   },
+   "notes": {
+    "en": "The path keeps the folder text as given, so a relative folder stays relative.",
+    "pt": "O path guarda o texto da pasta como foi dado, então uma pasta relativa continua relativa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Making a folder's functions callable",
+      "pt": "Tornando chamáveis as funções de uma pasta"
+     },
+     "code": "mkdir mylib\nwritelines('function y = triple(x), y = 3*x; end', 'mylib/triple.m');\nexist('triple')\naddpath('mylib')\nexist('triple')\ntriple(4)",
+     "note": {
+      "en": "`exist` returns 2 once the file is found on the path.",
+      "pt": "`exist` retorna 2 quando o arquivo é encontrado no path."
+     }
+    }
+   ],
+   "see": [
+    "rmpath",
+    "path",
+    "genpath",
+    "exist",
+    "which"
+   ]
+  },
+  "cd": {
+   "summary": {
+    "en": "Shows or changes the current folder.",
+    "pt": "Mostra ou muda a pasta atual."
+   },
+   "syntax": [
+    {
+     "code": "cd",
+     "en": "Displays the current folder.",
+     "pt": "Exibe a pasta atual."
+    },
+    {
+     "code": "cd(folder)",
+     "en": "Changes the current folder to `folder`.",
+     "pt": "Muda a pasta atual para `folder`."
+    },
+    {
+     "code": "oldfolder = cd(folder)",
+     "en": "Changes folder and returns the previous one.",
+     "pt": "Muda de pasta e retorna a anterior."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder name as text, relative or absolute. `'..'` is the parent folder.",
+     "pt": "Nome da pasta como texto, relativo ou absoluto. `'..'` é a pasta pai."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "oldfolder",
+     "en": "Full path of the folder that was current before the call.",
+     "pt": "Caminho completo da pasta que era a atual antes da chamada."
+    }
+   ],
+   "description": {
+    "en": "The current folder is where relative file names are resolved and where function files are searched first. `cd` is how a script moves between data folders. Saving the returned `oldfolder` makes it easy to go back with `cd(oldfolder)`.\n\nWith no output argument and no input, `cd` prints the current folder. Changing to a folder that does not exist is an error.",
+    "pt": "A pasta atual é onde nomes relativos de arquivo são resolvidos e onde os arquivos de função são procurados primeiro. `cd` é como um script se move entre pastas de dados. Guardar o `oldfolder` retornado facilita voltar com `cd(oldfolder)`.\n\nSem argumento de saída e sem entrada, `cd` imprime a pasta atual. Mudar para uma pasta que não existe é um erro."
+   },
+   "notes": {
+    "en": "MatLivre does not accept `cd ..` in command syntax; write `cd('..')`.",
+    "pt": "O MatLivre não aceita `cd ..` na sintaxe de comando; escreva `cd('..')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Entering a folder and coming back",
+      "pt": "Entrando em uma pasta e voltando"
+     },
+     "code": "mkdir work\nold = cd('work');\n[~, name] = fileparts(pwd)\ncd(old);\nstrcmp(old, pwd)"
+    }
+   ],
+   "see": [
+    "pwd",
+    "mkdir",
+    "dir",
+    "addpath",
+    "ls"
+   ]
+  },
+  "copyfile": {
+   "summary": {
+    "en": "Copies a file or a folder.",
+    "pt": "Copia um arquivo ou uma pasta."
+   },
+   "syntax": [
+    {
+     "code": "copyfile(source, destination)",
+     "en": "Copies `source` to `destination`.",
+     "pt": "Copia `source` para `destination`."
+    },
+    {
+     "code": "[status, message, messageid] = copyfile(___)",
+     "en": "Returns a status flag and a message describing the outcome.",
+     "pt": "Retorna um sinalizador de status e uma mensagem que descreve o resultado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "source",
+     "en": "File, folder or wildcard pattern such as `'*.txt'`.",
+     "pt": "Arquivo, pasta ou padrão com curinga, como `'*.txt'`."
+    },
+    {
+     "name": "destination",
+     "en": "Target file name or existing folder.",
+     "pt": "Nome do arquivo de destino ou pasta existente."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`true` when the copy succeeded.",
+     "pt": "`true` quando a cópia deu certo."
+    },
+    {
+     "name": "message",
+     "en": "Text describing the problem, empty on success.",
+     "pt": "Texto que descreve o problema, vazio em caso de sucesso."
+    },
+    {
+     "name": "messageid",
+     "en": "Message identifier, empty on success.",
+     "pt": "Identificador da mensagem, vazio em caso de sucesso."
+    }
+   ],
+   "description": {
+    "en": "When `source` is a file and `destination` is an existing folder, the file keeps its name inside that folder; when `destination` is a new name, the copy gets that name. A wildcard source copies every match, and the destination should then be a folder. A folder source is copied together with its contents.\n\nWithout output arguments a failure is an error; with them the outcome is reported in `status` and `message`.",
+    "pt": "Quando `source` é um arquivo e `destination` é uma pasta existente, o arquivo mantém o nome dentro dela; quando `destination` é um nome novo, a cópia recebe esse nome. Uma origem com curinga copia todas as correspondências, e o destino deve então ser uma pasta. Uma pasta de origem é copiada com todo o conteúdo.\n\nSem argumentos de saída, uma falha é um erro; com eles, o resultado é informado em `status` e `message`."
+   },
+   "notes": {
+    "en": "When the source matches nothing, MatLivre raises the error `No matching files were found.` even if output arguments were requested, whereas MATLAB returns a false `status`.",
+    "pt": "Quando a origem não corresponde a nada, o MatLivre gera o erro `No matching files were found.` mesmo com argumentos de saída pedidos, enquanto o MATLAB retorna `status` falso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Copying to a new name and into a folder",
+      "pt": "Copiando para um novo nome e para uma pasta"
+     },
+     "code": "writelines([\"alpha\"; \"beta\"], 'a.txt');\n[ok, msg] = copyfile('a.txt', 'b.txt')\nmkdir backup\ncopyfile('a.txt', 'backup');\nisfile('backup/a.txt')"
+    }
+   ],
+   "see": [
+    "movefile",
+    "delete",
+    "mkdir",
+    "dir",
+    "isfile"
+   ]
+  },
+  "dir": {
+   "summary": {
+    "en": "Lists the files and folders that match a name or pattern.",
+    "pt": "Lista os arquivos e pastas que correspondem a um nome ou padrão."
+   },
+   "syntax": [
+    {
+     "code": "dir",
+     "en": "Displays the contents of the current folder.",
+     "pt": "Exibe o conteúdo da pasta atual."
+    },
+    {
+     "code": "dir(name)",
+     "en": "Lists the items matching `name`, which can be a folder or a pattern with `*` wildcards.",
+     "pt": "Lista os itens que correspondem a `name`, que pode ser uma pasta ou um padrão com curingas `*`."
+    },
+    {
+     "code": "d = dir(name)",
+     "en": "Returns a struct array with one element per item.",
+     "pt": "Retorna um array de structs com um elemento por item."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Folder, file name or pattern such as `'data/*.csv'`.",
+     "pt": "Pasta, nome de arquivo ou padrão como `'data/*.csv'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Struct array with fields `name`, `folder`, `date`, `bytes`, `isdir` and `datenum`.",
+     "pt": "Array de structs com os campos `name`, `folder`, `date`, `bytes`, `isdir` e `datenum`."
+    }
+   ],
+   "description": {
+    "en": "The result of a folder listing starts with the entries `.` and `..`. Use the `isdir` field to filter them out: `d = d(~[d.isdir])` keeps only files. Collecting a field over the array with `{d.name}` gives a cell array of names, and `[d.bytes]` a numeric vector of sizes.\n\nAn item that does not exist produces an empty struct array with the same fields, so `isempty(dir(name))` is a test for existence of a pattern.",
+    "pt": "O resultado da listagem de uma pasta começa com as entradas `.` e `..`. Use o campo `isdir` para filtrá-las: `d = d(~[d.isdir])` mantém só os arquivos. Reunir um campo de todo o array com `{d.name}` dá um cell array de nomes, e `[d.bytes]` um vetor numérico de tamanhos.\n\nUm item que não existe produz um array de structs vazio com os mesmos campos, então `isempty(dir(name))` testa a existência de um padrão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listing files that match a pattern",
+      "pt": "Listando arquivos que correspondem a um padrão"
+     },
+     "code": "mkdir data\nwritelines('1', 'data/x.txt');\nwritelines('22', 'data/y.csv');\nd = dir('data/*.csv');\nd.name\nd.bytes\nd.isdir"
+    }
+   ],
+   "see": [
+    "ls",
+    "what",
+    "exist",
+    "isfile",
+    "isfolder"
+   ]
+  },
+  "exist": {
+   "summary": {
+    "en": "Checks whether a variable, file, folder or function exists, and what kind it is.",
+    "pt": "Verifica se existe uma variável, arquivo, pasta ou função, e de que tipo."
+   },
+   "syntax": [
+    {
+     "code": "n = exist(name)",
+     "en": "Searches variables first, then files, folders and functions, and returns a code.",
+     "pt": "Procura primeiro variáveis, depois arquivos, pastas e funções, e retorna um código."
+    },
+    {
+     "code": "n = exist(name, type)",
+     "en": "Restricts the search to `'var'`, `'file'`, `'dir'` or `'builtin'`.",
+     "pt": "Restringe a busca a `'var'`, `'file'`, `'dir'` ou `'builtin'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name to look for, as text.",
+     "pt": "Nome a procurar, como texto."
+    },
+    {
+     "name": "type",
+     "en": "Optional category: `'var'`, `'file'`, `'dir'` or `'builtin'`.",
+     "pt": "Categoria opcional: `'var'`, `'file'`, `'dir'` ou `'builtin'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "`0` not found, `1` variable, `2` file, `5` built-in function, `7` folder.",
+     "pt": "`0` não encontrado, `1` variável, `2` arquivo, `5` função interna, `7` pasta."
+    }
+   ],
+   "description": {
+    "en": "The numeric code tells the kind of item, and zero means nothing was found. A variable in the workspace wins over a file of the same name unless `type` says otherwise. File names are resolved against the current folder and the path.\n\nFor tests that only need a yes or no, `isfile`, `isfolder` and `isvarname` are clearer, and `isfile` and `isfolder` do not search the path.",
+    "pt": "O código numérico diz o tipo do item, e zero significa que nada foi encontrado. Uma variável do workspace vence um arquivo de mesmo nome, a menos que `type` diga outra coisa. Nomes de arquivo são resolvidos na pasta atual e no path.\n\nPara testes que só precisam de sim ou não, `isfile`, `isfolder` e `isvarname` são mais claros, e `isfile` e `isfolder` não consultam o path."
+   },
+   "notes": {
+    "en": "MatLivre reports `5` for every function it implements natively, including some that are M-files in MATLAB (for example `median`, which MATLAB reports as `2`).",
+    "pt": "O MatLivre informa `5` para toda função que implementa de forma nativa, inclusive algumas que são arquivos M no MATLAB (por exemplo `median`, que o MATLAB informa como `2`)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Codes for different kinds of item",
+      "pt": "Códigos para diferentes tipos de item"
+     },
+     "code": "x = 1;\nwritelines('hi', 'note.txt');\nmkdir results\n[exist('x'), exist('note.txt'), exist('results'), exist('sin'), exist('nothing_here')]\nexist('results', 'dir')"
+    }
+   ],
+   "see": [
+    "isfile",
+    "isfolder",
+    "which",
+    "isvarname",
+    "who"
+   ]
+  },
+  "fileattrib": {
+   "summary": {
+    "en": "Reads the attributes of a file or folder.",
+    "pt": "Lê os atributos de um arquivo ou pasta."
+   },
+   "syntax": [
+    {
+     "code": "[status, attrs] = fileattrib(name)",
+     "en": "Returns whether `name` was found and a struct of its attributes.",
+     "pt": "Retorna se `name` foi encontrado e uma struct com seus atributos."
+    },
+    {
+     "code": "fileattrib(name)",
+     "en": "Displays the attributes.",
+     "pt": "Exibe os atributos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "File or folder.",
+     "pt": "Arquivo ou pasta."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "status",
+     "en": "`true` if the item exists.",
+     "pt": "`true` se o item existe."
+    },
+    {
+     "name": "attrs",
+     "en": "Struct with `Name`, `archive`, `system`, `hidden`, `directory`, and the permission fields `UserRead`, `UserWrite`, `UserExecute`, `GroupRead` and the like. On Windows the group and other fields are `NaN`.",
+     "pt": "Struct com `Name`, `archive`, `system`, `hidden`, `directory` e os campos de permissão `UserRead`, `UserWrite`, `UserExecute`, `GroupRead` e semelhantes. No Windows, os campos de grupo e outros são `NaN`."
+    }
+   ],
+   "description": {
+    "en": "The attribute struct has one field for each property of the item. `Name` holds the full path, `directory` is 1 for a folder, and the `User...` fields tell whether the current user can read, write or execute it.\n\nUse the first output to test existence without raising an error: a name that does not exist gives a false status.",
+    "pt": "A struct de atributos tem um campo para cada propriedade do item. `Name` guarda o caminho completo, `directory` é 1 para uma pasta, e os campos `User...` dizem se o usuário atual pode ler, gravar ou executar.\n\nUse a primeira saída para testar a existência sem gerar erro: um nome que não existe dá status falso."
+   },
+   "notes": {
+    "en": "MatLivre reads attributes; changing them with a mode string such as `'+w'` is not covered.",
+    "pt": "O MatLivre lê atributos; alterá-los com uma string de modo como `'+w'` não é coberto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Attributes of a file and a folder",
+      "pt": "Atributos de um arquivo e de uma pasta"
+     },
+     "code": "mkdir box\nwritelines('x', 'box/f.txt');\n[ok, a] = fileattrib('box/f.txt');\nok\na.directory\na.UserRead\n[~, b] = fileattrib('box');\nb.directory"
+    }
+   ],
+   "see": [
+    "dir",
+    "isfile",
+    "isfolder",
+    "exist"
+   ]
+  },
+  "filemarker": {
+   "summary": {
+    "en": "Returns the character that separates a file name from a local function name.",
+    "pt": "Retorna o caractere que separa o nome de um arquivo do nome de uma função local."
+   },
+   "syntax": [
+    {
+     "code": "m = filemarker",
+     "en": "Returns the marker as a character vector.",
+     "pt": "Retorna o marcador como vetor de caracteres."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "The text `'>'`.",
+     "pt": "O texto `'>'`."
+    }
+   ],
+   "description": {
+    "en": "Some functions accept a name of the form `file>localfunction` to point at a local function inside a file; the separator is the file marker. Code that builds such names can call `filemarker` instead of hard-coding the character.\n\nLike `filesep` and `pathsep`, the value is fixed for the platform.",
+    "pt": "Algumas funções aceitam um nome no formato `arquivo>funcaolocal` para apontar para uma função local dentro de um arquivo; o separador é o marcador de arquivo. O código que monta esses nomes pode chamar `filemarker` em vez de escrever o caractere direto.\n\nComo `filesep` e `pathsep`, o valor é fixo para a plataforma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Building a local function reference",
+      "pt": "Montando uma referência a função local"
+     },
+     "code": "m = filemarker\nname = ['myfile' filemarker 'helper']"
+    }
+   ],
+   "see": [
+    "filesep",
+    "pathsep",
+    "fileparts",
+    "fullfile"
+   ]
+  },
+  "fileparts": {
+   "summary": {
+    "en": "Splits a file path into folder, name and extension.",
+    "pt": "Divide um caminho de arquivo em pasta, nome e extensão."
+   },
+   "syntax": [
+    {
+     "code": "[folder, name, ext] = fileparts(filename)",
+     "en": "Returns the three parts of `filename`.",
+     "pt": "Retorna as três partes de `filename`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Path as text. The file does not need to exist.",
+     "pt": "Caminho como texto. O arquivo não precisa existir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "folder",
+     "en": "Everything before the last file separator, without the separator.",
+     "pt": "Tudo antes do último separador de arquivo, sem o separador."
+    },
+    {
+     "name": "name",
+     "en": "File name without the extension.",
+     "pt": "Nome do arquivo sem a extensão."
+    },
+    {
+     "name": "ext",
+     "en": "The extension, including the leading dot; empty if there is none.",
+     "pt": "A extensão, incluindo o ponto inicial; vazia se não houver."
+    }
+   ],
+   "description": {
+    "en": "`fileparts` works on the text only and never touches the disk. The extension starts at the last dot of the file name, so `'archive.tar.gz'` gives name `'archive.tar'` and extension `'.gz'`. A name that starts with a dot and has no other dot, such as `'.hidden'`, is returned as an extension with an empty name.\n\nBoth `/` and `\\` are accepted as separators. The output class follows the input: a string gives strings. `fullfile` does the reverse.",
+    "pt": "`fileparts` trabalha só com o texto e nunca acessa o disco. A extensão começa no último ponto do nome do arquivo, então `'archive.tar.gz'` dá nome `'archive.tar'` e extensão `'.gz'`. Um nome que começa com ponto e não tem outro, como `'.hidden'`, é devolvido como extensão com nome vazio.\n\nTanto `/` quanto `\\` são aceitos como separadores. A classe da saída segue a da entrada: uma string dá strings. `fullfile` faz o inverso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Splitting a path",
+      "pt": "Dividindo um caminho"
+     },
+     "code": "[folder, name, ext] = fileparts('C:\\data\\run3\\results.tar.gz')\n[~, n, e] = fileparts('notes')"
+    }
+   ],
+   "see": [
+    "fullfile",
+    "filesep",
+    "fileread",
+    "exist"
+   ]
+  },
+  "filesep": {
+   "summary": {
+    "en": "Returns the file separator of the platform.",
+    "pt": "Retorna o separador de arquivos da plataforma."
+   },
+   "syntax": [
+    {
+     "code": "f = filesep",
+     "en": "Returns `'\\'` on Windows and `'/'` elsewhere.",
+     "pt": "Retorna `'\\'` no Windows e `'/'` nos demais sistemas."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "A one-character vector.",
+     "pt": "Um vetor de um caractere."
+    }
+   ],
+   "description": {
+    "en": "Use `filesep` when you glue path pieces together yourself, so that the code keeps working on other systems. For most cases `fullfile` is better because it also avoids doubled separators.\n\nMatLivre runs on Windows, where the separator is the backslash, though `/` is accepted in file names as well.",
+    "pt": "Use `filesep` quando você mesmo junta partes de um caminho, para que o código continue funcionando em outros sistemas. Na maioria dos casos `fullfile` é melhor, pois também evita separadores duplicados.\n\nO MatLivre roda no Windows, onde o separador é a barra invertida, embora `/` também seja aceita em nomes de arquivo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Joining with the separator",
+      "pt": "Juntando com o separador"
+     },
+     "code": "f = filesep\np = ['data' filesep 'run1']"
+    }
+   ],
+   "see": [
+    "fullfile",
+    "pathsep",
+    "fileparts",
+    "filemarker"
+   ]
+  },
+  "fullfile": {
+   "summary": {
+    "en": "Builds a file path from folder and file name parts.",
+    "pt": "Monta um caminho de arquivo a partir de partes de pasta e nome."
+   },
+   "syntax": [
+    {
+     "code": "f = fullfile(part1, ..., partN)",
+     "en": "Joins the parts with the platform separator.",
+     "pt": "Junta as partes com o separador da plataforma."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "part",
+     "en": "Text pieces: folders and a final file name. A cell array in one argument produces a cell array of paths.",
+     "pt": "Pedaços de texto: pastas e um nome de arquivo final. Um cell array em um argumento produz um cell array de caminhos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "The joined path, of the same kind as the inputs.",
+     "pt": "O caminho unido, do mesmo tipo das entradas."
+    }
+   ],
+   "description": {
+    "en": "`fullfile` inserts exactly one separator between parts and removes the doubled ones that appear when a part already ends or starts with a separator, so `fullfile('a/', '/b')` is `a\\b` on Windows. Empty parts are skipped.\n\nIt does not check that the path exists, and it does not resolve `'..'`. If one argument is a cell array, the other parts are combined with each of its elements in turn.",
+    "pt": "`fullfile` insere exatamente um separador entre as partes e remove os duplicados que surgem quando uma parte já termina ou começa com separador, de modo que `fullfile('a/', '/b')` resulta em `a\\b` no Windows. Partes vazias são ignoradas.\n\nNão verifica se o caminho existe e não resolve `'..'`. Se um argumento for um cell array, as outras partes são combinadas com cada um dos seus elementos em sequência."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Joining and the cell form",
+      "pt": "Juntando e a forma com cell"
+     },
+     "code": "fullfile('data', 'run1', 'out.csv')\nfullfile('a/', '/b')\nfullfile({'a', 'b'}, 'x.m')"
+    }
+   ],
+   "see": [
+    "fileparts",
+    "filesep",
+    "pathsep",
+    "exist"
+   ]
+  }
+ }
+}

@@ -1,0 +1,924 @@
+{
+ "functions": {
+  "tar": {
+   "summary": {
+    "en": "Packs files and folders into a tar archive.",
+    "pt": "Reúne arquivos e pastas em um arquivo tar."
+   },
+   "syntax": [
+    {
+     "code": "tar(tarfilename, files)",
+     "en": "Creates `tarfilename` containing `files`.",
+     "pt": "Cria `tarfilename` contendo `files`."
+    },
+    {
+     "code": "tar(tarfilename, files, rootfolder)",
+     "en": "Takes `files` relative to `rootfolder`.",
+     "pt": "Toma `files` relativos a `rootfolder`."
+    },
+    {
+     "code": "entries = tar(___)",
+     "en": "Also returns the names stored in the archive.",
+     "pt": "Também retorna os nomes guardados no arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "tarfilename",
+     "en": "Name of the archive. The extensions `.tar`, `.tgz` and `.tar.gz` are recognized; `.tgz` and `.tar.gz` compress the archive.",
+     "pt": "Nome do arquivo. As extensões `.tar`, `.tgz` e `.tar.gz` são reconhecidas; `.tgz` e `.tar.gz` compactam o arquivo."
+    },
+    {
+     "name": "files",
+     "en": "A file or folder name, a wildcard pattern, or a cell array of them. A folder is added with its contents.",
+     "pt": "Nome de arquivo ou pasta, padrão com curinga, ou cell array deles. Uma pasta é adicionada com seu conteúdo."
+    },
+    {
+     "name": "rootfolder",
+     "en": "Folder in which `files` are looked up.",
+     "pt": "Pasta em que `files` são procurados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "entries",
+     "en": "Cell array of the files stored.",
+     "pt": "Cell array dos arquivos guardados."
+    }
+   ],
+   "description": {
+    "en": "A tar archive stores many files and folders, with their relative paths, in a single file. By itself it does not compress; the gzip variants do. Use `untar` to extract it, and `zip` when you need the more widespread zip format.",
+    "pt": "Um arquivo tar guarda muitos arquivos e pastas, com seus caminhos relativos, em um único arquivo. Sozinho ele não compacta; as variantes gzip compactam. Use `untar` para extraí-lo, e `zip` quando precisar do formato zip, mais difundido."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Archiving a folder",
+      "pt": "Arquivando uma pasta"
+     },
+     "code": "mkdir data\nwritelines('1', 'data/a.txt');\nwritelines('2', 'data/b.txt');\nentries = tar('bundle.tar', 'data')"
+    }
+   ],
+   "see": [
+    "untar",
+    "zip",
+    "unzip",
+    "gzip"
+   ]
+  },
+  "tempdir": {
+   "summary": {
+    "en": "Returns the folder for temporary files.",
+    "pt": "Retorna a pasta para arquivos temporários."
+   },
+   "syntax": [
+    {
+     "code": "d = tempdir",
+     "en": "Returns the path of the system's temporary folder.",
+     "pt": "Retorna o caminho da pasta temporária do sistema."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Folder path, ending with a file separator.",
+     "pt": "Caminho da pasta, terminando com um separador de arquivo."
+    }
+   ],
+   "description": {
+    "en": "The value depends on the machine and on the user, so it is meant for building paths, as in `fullfile(tempdir, 'scratch.dat')`, and not for printing. Files left in the temporary folder are not removed automatically by the program; delete the ones you create.",
+    "pt": "O valor depende da máquina e do usuário, então serve para montar caminhos, como em `fullfile(tempdir, 'scratch.dat')`, e não para imprimir. Arquivos deixados na pasta temporária não são removidos automaticamente pelo programa; apague os que criar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The temporary folder",
+      "pt": "A pasta temporária"
+     },
+     "code": "d = tempdir;\nisfolder(d)\nd(end) == filesep"
+    }
+   ],
+   "see": [
+    "tempname",
+    "fullfile",
+    "delete",
+    "mkdir"
+   ]
+  },
+  "tempname": {
+   "summary": {
+    "en": "Returns a unique name for a temporary file.",
+    "pt": "Retorna um nome único para um arquivo temporário."
+   },
+   "syntax": [
+    {
+     "code": "f = tempname",
+     "en": "Returns a full path inside the temporary folder.",
+     "pt": "Retorna um caminho completo dentro da pasta temporária."
+    },
+    {
+     "code": "f = tempname(folder)",
+     "en": "Builds the name inside `folder` instead.",
+     "pt": "Monta o nome dentro de `folder`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder to use instead of the temporary folder.",
+     "pt": "Pasta a usar em vez da pasta temporária."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Path of a file that does not exist yet.",
+     "pt": "Caminho de um arquivo que ainda não existe."
+    }
+   ],
+   "description": {
+    "en": "`tempname` only chooses a name; it does not create the file. Every call returns a new name, so two calls never collide. After using the file, remove it with `delete`.",
+    "pt": "`tempname` apenas escolhe um nome; não cria o arquivo. Cada chamada retorna um nome novo, de modo que duas chamadas nunca colidem. Depois de usar o arquivo, remova-o com `delete`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A name, a file, and cleanup",
+      "pt": "Um nome, um arquivo e a limpeza"
+     },
+     "code": "f = tempname;\nisfile(f)\nwritelines('scratch', f);\nisfile(f)\ndelete(f);\nisfile(f)"
+    }
+   ],
+   "see": [
+    "tempdir",
+    "delete",
+    "fullfile",
+    "fileparts"
+   ]
+  },
+  "toolboxdir": {
+   "summary": {
+    "en": "Returns the folder of a toolbox.",
+    "pt": "Retorna a pasta de um toolbox."
+   },
+   "syntax": [
+    {
+     "code": "d = toolboxdir(toolboxname)",
+     "en": "Returns the root folder of the named toolbox.",
+     "pt": "Retorna a pasta raiz do toolbox indicado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "toolboxname",
+     "en": "Toolbox folder name as text, such as `'matlab'`.",
+     "pt": "Nome da pasta do toolbox como texto, como `'matlab'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Path of the toolbox folder.",
+     "pt": "Caminho da pasta do toolbox."
+    }
+   ],
+   "description": {
+    "en": "`toolboxdir` locates the files of a toolbox without hard-coding where the program was installed. It is the toolbox counterpart of `matlabroot`. The value depends on the machine, so use it to build paths and not as output.",
+    "pt": "`toolboxdir` localiza os arquivos de um toolbox sem fixar o lugar onde o programa foi instalado. É o equivalente por toolbox de `matlabroot`. O valor depende da máquina, então use-o para montar caminhos e não como saída."
+   },
+   "notes": {
+    "en": "MatLivre knows only a few toolbox folders such as `'matlab'`; an unknown name raises the error `Could not locate the base directory`.",
+    "pt": "O MatLivre conhece apenas algumas pastas de toolbox, como `'matlab'`; um nome desconhecido gera o erro `Could not locate the base directory`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Asking for a toolbox folder",
+      "pt": "Pedindo a pasta de um toolbox"
+     },
+     "code": "d = toolboxdir('matlab');\nischar(d)"
+    }
+   ],
+   "see": [
+    "matlabroot",
+    "fullfile",
+    "which",
+    "path"
+   ]
+  },
+  "untar": {
+   "summary": {
+    "en": "Extracts the files of a tar archive.",
+    "pt": "Extrai os arquivos de um arquivo tar."
+   },
+   "syntax": [
+    {
+     "code": "untar(tarfilename)",
+     "en": "Extracts into the current folder.",
+     "pt": "Extrai na pasta atual."
+    },
+    {
+     "code": "untar(tarfilename, outputfolder)",
+     "en": "Extracts into `outputfolder`, creating it if needed.",
+     "pt": "Extrai em `outputfolder`, criando-a se preciso."
+    },
+    {
+     "code": "filenames = untar(___)",
+     "en": "Also returns the names of the extracted files.",
+     "pt": "Também retorna os nomes dos arquivos extraídos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "tarfilename",
+     "en": "Archive name, with extension `.tar`, `.tgz` or `.tar.gz`.",
+     "pt": "Nome do arquivo, com extensão `.tar`, `.tgz` ou `.tar.gz`."
+    },
+    {
+     "name": "outputfolder",
+     "en": "Destination folder.",
+     "pt": "Pasta de destino."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "filenames",
+     "en": "Cell array with the names of the extracted files.",
+     "pt": "Cell array com os nomes dos arquivos extraídos."
+    }
+   ],
+   "description": {
+    "en": "The directory structure stored in the archive is recreated below the output folder. Existing files with the same names are overwritten. `untar` is the inverse of `tar`.",
+    "pt": "A estrutura de diretórios guardada no arquivo é recriada abaixo da pasta de saída. Arquivos existentes com o mesmo nome são sobrescritos. `untar` é o inverso de `tar`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Archiving and restoring",
+      "pt": "Arquivando e restaurando"
+     },
+     "code": "mkdir data\nwritelines('1', 'data/a.txt');\ntar('bundle.tar', 'data');\nfiles = untar('bundle.tar', 'restored')\nisfile('restored/data/a.txt')"
+    }
+   ],
+   "see": [
+    "tar",
+    "unzip",
+    "gunzip",
+    "zip"
+   ]
+  },
+  "unzip": {
+   "summary": {
+    "en": "Extracts the files of a zip archive.",
+    "pt": "Extrai os arquivos de um arquivo zip."
+   },
+   "syntax": [
+    {
+     "code": "unzip(zipfilename)",
+     "en": "Extracts into the current folder.",
+     "pt": "Extrai na pasta atual."
+    },
+    {
+     "code": "unzip(zipfilename, outputfolder)",
+     "en": "Extracts into `outputfolder`, creating it if needed.",
+     "pt": "Extrai em `outputfolder`, criando-a se preciso."
+    },
+    {
+     "code": "filenames = unzip(___)",
+     "en": "Also returns the names of the extracted files.",
+     "pt": "Também retorna os nomes dos arquivos extraídos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "zipfilename",
+     "en": "Name of the `.zip` file.",
+     "pt": "Nome do arquivo `.zip`."
+    },
+    {
+     "name": "outputfolder",
+     "en": "Destination folder.",
+     "pt": "Pasta de destino."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "filenames",
+     "en": "Cell array with the names of the extracted files.",
+     "pt": "Cell array com os nomes dos arquivos extraídos."
+    }
+   ],
+   "description": {
+    "en": "The paths stored in the archive are recreated below the output folder, and files with the same names are overwritten. `unzip` is the inverse of `zip`.",
+    "pt": "Os caminhos guardados no arquivo são recriados abaixo da pasta de saída, e arquivos de mesmo nome são sobrescritos. `unzip` é o inverso de `zip`."
+   },
+   "notes": {
+    "en": "In MatLivre the returned names are relative to the current folder (such as `out\\a.txt`).",
+    "pt": "No MatLivre, os nomes retornados são relativos à pasta atual (como `out\\a.txt`)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extracting to a folder",
+      "pt": "Extraindo para uma pasta"
+     },
+     "code": "writelines('red', 'a.txt');\nwritelines('blue', 'b.txt');\nzip('colors.zip', {'a.txt', 'b.txt'});\nfiles = unzip('colors.zip', 'out');\nnumel(files)\nisfile('out/b.txt')"
+    }
+   ],
+   "see": [
+    "zip",
+    "untar",
+    "gunzip",
+    "tar"
+   ]
+  },
+  "userpath": {
+   "summary": {
+    "en": "Returns or sets the user's default working folder.",
+    "pt": "Retorna ou define a pasta de trabalho padrão do usuário."
+   },
+   "syntax": [
+    {
+     "code": "p = userpath",
+     "en": "Returns the folder as a character vector.",
+     "pt": "Retorna a pasta como vetor de caracteres."
+    },
+    {
+     "code": "userpath(folder)",
+     "en": "Sets it to `folder`.",
+     "pt": "Define como `folder`."
+    },
+    {
+     "code": "userpath('reset')",
+     "en": "Restores the default value.",
+     "pt": "Restaura o valor padrão."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder name, or `'reset'` / `'clear'`.",
+     "pt": "Nome da pasta, ou `'reset'` / `'clear'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "The user folder, usually `Documents/MATLAB` in the home folder.",
+     "pt": "A pasta do usuário, em geral `Documents/MATLAB` na pasta pessoal."
+    }
+   ],
+   "description": {
+    "en": "The user path is the folder where the program starts and the one that is always on the search path. It is where personal scripts and functions usually live. The value depends on the user, so use it to build paths rather than to compare against a literal text.",
+    "pt": "O userpath é a pasta onde o programa inicia e a que sempre está no path de busca. É onde costumam ficar scripts e funções pessoais. O valor depende do usuário, então use-o para montar caminhos e não para comparar com um texto literal."
+   },
+   "notes": {
+    "en": "MatLivre supports reading the value.",
+    "pt": "O MatLivre oferece a leitura do valor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading the user folder",
+      "pt": "Lendo a pasta do usuário"
+     },
+     "code": "p = userpath;\nischar(p)"
+    }
+   ],
+   "see": [
+    "pwd",
+    "cd",
+    "path",
+    "addpath"
+   ]
+  },
+  "what": {
+   "summary": {
+    "en": "Lists the MATLAB files in a folder, grouped by type.",
+    "pt": "Lista os arquivos MATLAB de uma pasta, agrupados por tipo."
+   },
+   "syntax": [
+    {
+     "code": "what",
+     "en": "Displays the code files, MAT-files and class folders of the current folder.",
+     "pt": "Exibe os arquivos de código, MAT-files e pastas de classe da pasta atual."
+    },
+    {
+     "code": "what folder",
+     "en": "Does the same for `folder`.",
+     "pt": "Faz o mesmo para `folder`."
+    },
+    {
+     "code": "s = what(folder)",
+     "en": "Returns a struct with one field per file type.",
+     "pt": "Retorna uma struct com um campo por tipo de arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "folder",
+     "en": "Folder name; relative to the current folder or a folder on the path.",
+     "pt": "Nome da pasta; relativo à pasta atual ou uma pasta do path."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Struct with fields `path`, `m`, `mlx`, `mat`, `mex`, `p`, `classes`, `packages` and others; each is a cell array of names.",
+     "pt": "Struct com os campos `path`, `m`, `mlx`, `mat`, `mex`, `p`, `classes`, `packages` e outros; cada um é um cell array de nomes."
+    }
+   ],
+   "description": {
+    "en": "`what` filters a folder down to the files that matter to the program: scripts and functions (`.m`), live scripts (`.mlx`), data (`.mat`) and so on, hiding everything else. With an output, the struct fields can be passed to other functions, for instance `s.m` to loop over the function files.",
+    "pt": "`what` filtra uma pasta e deixa só os arquivos que interessam ao programa: scripts e funções (`.m`), live scripts (`.mlx`), dados (`.mat`) e assim por diante, escondendo o resto. Com uma saída, os campos da struct podem ser passados a outras funções, por exemplo `s.m` para percorrer os arquivos de função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Only the code files are listed",
+      "pt": "Somente os arquivos de código são listados"
+     },
+     "code": "mkdir lib\nwritelines('function y = f(x), y = x; end', 'lib/f.m');\nwritelines('plain', 'lib/notes.txt');\ns = what('lib');\ns.m"
+    }
+   ],
+   "see": [
+    "dir",
+    "ls",
+    "which",
+    "exist"
+   ]
+  },
+  "which": {
+   "summary": {
+    "en": "Locates a function, script, file or variable.",
+    "pt": "Localiza uma função, script, arquivo ou variável."
+   },
+   "syntax": [
+    {
+     "code": "which name",
+     "en": "Displays where `name` is defined.",
+     "pt": "Exibe onde `name` está definido."
+    },
+    {
+     "code": "p = which(name)",
+     "en": "Returns the path of the file, or text describing a built-in or variable.",
+     "pt": "Retorna o caminho do arquivo, ou um texto que descreve uma função interna ou variável."
+    },
+    {
+     "code": "which name -all",
+     "en": "Lists every definition that exists, including shadowed ones.",
+     "pt": "Lista todas as definições existentes, inclusive as ofuscadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Function, script, class or file name, or a variable.",
+     "pt": "Nome de função, script, classe ou arquivo, ou uma variável."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Path of the file that would run for `name`; empty if nothing is found.",
+     "pt": "Caminho do arquivo que seria executado para `name`; vazio se nada for encontrado."
+    }
+   ],
+   "description": {
+    "en": "`which` follows the same lookup rules as a call, so it shows what a name will really run. It is the first tool to use when a function behaves unexpectedly because a different file of the same name sits earlier on the path. For a workspace variable it says that the name is a variable.",
+    "pt": "`which` segue as mesmas regras de busca de uma chamada, então mostra o que um nome de fato vai executar. É a primeira ferramenta a usar quando uma função se comporta de modo inesperado porque outro arquivo de mesmo nome está antes no path. Para uma variável do workspace, informa que o nome é uma variável."
+   },
+   "notes": {
+    "en": "For functions implemented inside MatLivre, `which` reports `built-in (MatLivre)` even where MATLAB would show an M-file path.",
+    "pt": "Para funções implementadas dentro do MatLivre, `which` informa `built-in (MatLivre)` mesmo onde o MATLAB mostraria o caminho de um arquivo M."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Finding a function file and a variable",
+      "pt": "Encontrando um arquivo de função e uma variável"
+     },
+     "code": "mkdir lib\nwritelines('function y = triple(x), y = 3*x; end', 'lib/triple.m');\naddpath('lib')\nwhich triple\nx = 5;\nwhich x"
+    }
+   ],
+   "see": [
+    "exist",
+    "what",
+    "addpath",
+    "path",
+    "dir"
+   ]
+  },
+  "zip": {
+   "summary": {
+    "en": "Compresses files and folders into a zip archive.",
+    "pt": "Compacta arquivos e pastas em um arquivo zip."
+   },
+   "syntax": [
+    {
+     "code": "zip(zipfilename, files)",
+     "en": "Creates `zipfilename` with the given files.",
+     "pt": "Cria `zipfilename` com os arquivos indicados."
+    },
+    {
+     "code": "zip(zipfilename, files, rootfolder)",
+     "en": "Takes `files` relative to `rootfolder`.",
+     "pt": "Toma `files` relativos a `rootfolder`."
+    },
+    {
+     "code": "entries = zip(___)",
+     "en": "Also returns the names stored in the archive.",
+     "pt": "Também retorna os nomes guardados no arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "zipfilename",
+     "en": "Archive name; `.zip` is added if missing.",
+     "pt": "Nome do arquivo; `.zip` é adicionado se faltar."
+    },
+    {
+     "name": "files",
+     "en": "A file or folder name, a wildcard pattern, or a cell array of them. A folder is added with its contents.",
+     "pt": "Nome de arquivo ou pasta, padrão com curinga, ou cell array deles. Uma pasta é adicionada com seu conteúdo."
+    },
+    {
+     "name": "rootfolder",
+     "en": "Folder in which `files` are looked up.",
+     "pt": "Pasta em que `files` são procurados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "entries",
+     "en": "Cell array with the files stored.",
+     "pt": "Cell array com os arquivos guardados."
+    }
+   ],
+   "description": {
+    "en": "A zip archive gathers many files, with their relative paths, into one compressed file. Folder structure is kept, so extracting with `unzip` recreates it. The original files stay where they are.",
+    "pt": "Um arquivo zip reúne muitos arquivos, com seus caminhos relativos, em um só arquivo compactado. A estrutura de pastas é mantida, então extrair com `unzip` a recria. Os arquivos originais ficam onde estão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Zipping two files",
+      "pt": "Compactando dois arquivos"
+     },
+     "code": "writelines('red', 'a.txt');\nwritelines('blue', 'b.txt');\nentries = zip('colors', {'a.txt', 'b.txt'})\nisfile('colors.zip')"
+    }
+   ],
+   "see": [
+    "unzip",
+    "tar",
+    "gzip",
+    "untar"
+   ]
+  },
+  "addRequired": {
+   "summary": {
+    "en": "Adds a required positional argument to an inputParser.",
+    "pt": "Adiciona um argumento posicional obrigatório a um inputParser."
+   },
+   "syntax": [
+    {
+     "code": "addRequired(p, name)",
+     "en": "Declares the argument `name`.",
+     "pt": "Declara o argumento `name`."
+    },
+    {
+     "code": "addRequired(p, name, validationFcn)",
+     "en": "Also checks the value with a validation function.",
+     "pt": "Também confere o valor com uma função de validação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "An `inputParser` object.",
+     "pt": "Um objeto `inputParser`."
+    },
+    {
+     "name": "name",
+     "en": "Argument name, as text.",
+     "pt": "Nome do argumento, como texto."
+    },
+    {
+     "name": "validationFcn",
+     "en": "Handle to a function that returns `true` for a valid value, or errors.",
+     "pt": "Handle de uma função que retorna `true` para um valor válido, ou gera erro."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Required arguments come first in the call and are matched by position, in the order they were added. If the call supplies too few, `parse` stops with an error. After `parse`, the value is available as a field of `p.Results` under the given name.\n\nAdd required arguments before optional ones and name-value pairs.",
+    "pt": "Os argumentos obrigatórios vêm primeiro na chamada e são associados por posição, na ordem em que foram adicionados. Se a chamada fornecer poucos, `parse` termina com erro. Depois de `parse`, o valor fica disponível como campo de `p.Results` com o nome dado.\n\nAdicione os argumentos obrigatórios antes dos opcionais e dos pares nome-valor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A validated required argument",
+      "pt": "Um argumento obrigatório validado"
+     },
+     "code": "p = inputParser;\naddRequired(p, 'n', @isnumeric);\nparse(p, 7);\np.Results.n\ntry\n    parse(p, 'text');\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "inputParser",
+    "addOptional",
+    "addParameter",
+    "validateattributes"
+   ]
+  },
+  "addOptional": {
+   "summary": {
+    "en": "Adds an optional positional argument to an inputParser.",
+    "pt": "Adiciona um argumento posicional opcional a um inputParser."
+   },
+   "syntax": [
+    {
+     "code": "addOptional(p, name, default)",
+     "en": "Declares an optional argument with a default value.",
+     "pt": "Declara um argumento opcional com valor padrão."
+    },
+    {
+     "code": "addOptional(p, name, default, validationFcn)",
+     "en": "Also validates the value.",
+     "pt": "Também valida o valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "An `inputParser` object.",
+     "pt": "Um objeto `inputParser`."
+    },
+    {
+     "name": "name",
+     "en": "Argument name, as text.",
+     "pt": "Nome do argumento, como texto."
+    },
+    {
+     "name": "default",
+     "en": "Value used when the argument is omitted.",
+     "pt": "Valor usado quando o argumento é omitido."
+    },
+    {
+     "name": "validationFcn",
+     "en": "Handle to a function that returns `true` for a valid value, or errors.",
+     "pt": "Handle de uma função que retorna `true` para um valor válido, ou gera erro."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Optional arguments follow the required ones and are matched by position. When the call has a value at that position, `parse` checks it with the validation function. A text value that matches the name of a declared parameter is not taken as the optional argument: it starts the name-value pairs and the optional keeps its default.\n\nOmitted optionals appear in `p.UsingDefaults`.",
+    "pt": "Os argumentos opcionais vêm depois dos obrigatórios e são associados por posição. Quando a chamada traz um valor naquela posição, `parse` o confere com a função de validação. Um texto que coincide com o nome de um parâmetro declarado não é tomado como o argumento opcional: ele inicia os pares nome-valor e o opcional fica com o padrão.\n\nOs opcionais omitidos aparecem em `p.UsingDefaults`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Default and supplied values",
+      "pt": "Valor padrão e valor fornecido"
+     },
+     "code": "p = inputParser;\naddRequired(p, 'x');\naddOptional(p, 'mode', 'fast', @ischar);\nparse(p, 1);\np.Results.mode\nparse(p, 1, 'slow');\np.Results.mode\np.UsingDefaults"
+    }
+   ],
+   "see": [
+    "inputParser",
+    "addRequired",
+    "addParameter",
+    "validatestring"
+   ]
+  },
+  "addParameter": {
+   "summary": {
+    "en": "Adds a name-value argument to an inputParser.",
+    "pt": "Adiciona um argumento nome-valor a um inputParser."
+   },
+   "syntax": [
+    {
+     "code": "addParameter(p, name, default)",
+     "en": "Declares a name-value argument with a default.",
+     "pt": "Declara um argumento nome-valor com um padrão."
+    },
+    {
+     "code": "addParameter(p, name, default, validationFcn)",
+     "en": "Also validates the value.",
+     "pt": "Também valida o valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "An `inputParser` object.",
+     "pt": "Um objeto `inputParser`."
+    },
+    {
+     "name": "name",
+     "en": "Parameter name, as text. Callers write it in the call followed by its value.",
+     "pt": "Nome do parâmetro, como texto. Quem chama o escreve seguido do valor."
+    },
+    {
+     "name": "default",
+     "en": "Value used when the parameter is not given.",
+     "pt": "Valor usado quando o parâmetro não é fornecido."
+    },
+    {
+     "name": "validationFcn",
+     "en": "Handle to a function that returns `true` for a valid value, or errors.",
+     "pt": "Handle de uma função que retorna `true` para um valor válido, ou gera erro."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Name-value pairs can appear in any order after the positional arguments. Names are matched without regard to case (unless `CaseSensitive` is set) and a unique abbreviation is accepted while `PartialMatching` is on. A name that was never declared is an error, unless `KeepUnmatched` is true, in which case it is collected in `p.Unmatched`.",
+    "pt": "Os pares nome-valor podem aparecer em qualquer ordem depois dos argumentos posicionais. Os nomes são comparados sem diferenciar maiúsculas (a menos que `CaseSensitive` esteja ativo) e uma abreviação única é aceita enquanto `PartialMatching` estiver ligado. Um nome nunca declarado é erro, a menos que `KeepUnmatched` seja verdadeiro, caso em que fica em `p.Unmatched`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Parameters with defaults",
+      "pt": "Parâmetros com padrão"
+     },
+     "code": "p = inputParser;\naddParameter(p, 'Tol', 1e-3, @(v) v > 0);\naddParameter(p, 'Verbose', false);\nparse(p, 'Tol', 0.5);\np.Results"
+    }
+   ],
+   "see": [
+    "inputParser",
+    "addRequired",
+    "addOptional",
+    "addParamValue"
+   ]
+  },
+  "addParamValue": {
+   "summary": {
+    "en": "Older name of addParameter for adding a name-value argument.",
+    "pt": "Nome antigo de addParameter para adicionar um argumento nome-valor."
+   },
+   "syntax": [
+    {
+     "code": "addParamValue(p, name, default)",
+     "en": "Declares a name-value argument with a default.",
+     "pt": "Declara um argumento nome-valor com um padrão."
+    },
+    {
+     "code": "addParamValue(p, name, default, validationFcn)",
+     "en": "Also validates the value.",
+     "pt": "Também valida o valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "An `inputParser` object.",
+     "pt": "Um objeto `inputParser`."
+    },
+    {
+     "name": "name",
+     "en": "Parameter name, as text.",
+     "pt": "Nome do parâmetro, como texto."
+    },
+    {
+     "name": "default",
+     "en": "Value used when the parameter is not given.",
+     "pt": "Valor usado quando o parâmetro não é fornecido."
+    },
+    {
+     "name": "validationFcn",
+     "en": "Validation function handle.",
+     "pt": "Handle da função de validação."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`addParamValue` was the original way to declare a name-value argument and still works. New code should use `addParameter`, which behaves the same in this respect and is the form the documentation uses today.",
+    "pt": "`addParamValue` era a forma original de declarar um argumento nome-valor e ainda funciona. Código novo deve usar `addParameter`, que se comporta do mesmo modo neste ponto e é a forma usada hoje na documentação."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Same effect as addParameter",
+      "pt": "Mesmo efeito que addParameter"
+     },
+     "code": "p = inputParser;\naddParamValue(p, 'Scale', 1);\nparse(p, 'Scale', 3);\np.Results.Scale"
+    }
+   ],
+   "see": [
+    "addParameter",
+    "inputParser",
+    "addOptional",
+    "addRequired"
+   ]
+  },
+  "assert": {
+   "summary": {
+    "en": "Raises an error if a condition is false.",
+    "pt": "Gera um erro se uma condição for falsa."
+   },
+   "syntax": [
+    {
+     "code": "assert(cond)",
+     "en": "Errors with `Assertion failed.` unless every element of `cond` is true.",
+     "pt": "Gera o erro `Assertion failed.` a menos que todo elemento de `cond` seja verdadeiro."
+    },
+    {
+     "code": "assert(cond, msg, A1, ..., An)",
+     "en": "Errors with the message `msg`, formatted like `sprintf`, when the condition fails.",
+     "pt": "Gera erro com a mensagem `msg`, formatada como `sprintf`, quando a condição falha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "cond",
+     "en": "Logical or numeric array. The check passes when all elements are nonzero.",
+     "pt": "Array lógico ou numérico. A verificação passa quando todos os elementos são diferentes de zero."
+    },
+    {
+     "name": "msg",
+     "en": "Error message, with `sprintf` format fields.",
+     "pt": "Mensagem de erro, com campos de formato de `sprintf`."
+    },
+    {
+     "name": "A1, ..., An",
+     "en": "Values for the format fields.",
+     "pt": "Valores para os campos de formato."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`assert` documents assumptions and stops early when one is broken, which is easier to debug than a wrong result several lines later. A non-scalar condition passes only if all of its elements are true, so `assert(all(x > 0))` can be written as `assert(x > 0)`. When the condition is true the call does nothing.\n\nMATLAB also accepts the forms `assert(actual, expected)` and `assert(actual, expected, tol)`, which compare values, and an identifier before the message.",
+    "pt": "`assert` documenta suposições e interrompe cedo quando alguma é violada, o que é mais fácil de depurar do que um resultado errado várias linhas depois. Uma condição não escalar passa apenas se todos os elementos forem verdadeiros, então `assert(all(x > 0))` pode ser escrito como `assert(x > 0)`. Quando a condição é verdadeira, a chamada não faz nada.\n\nO MATLAB também aceita as formas `assert(actual, expected)` e `assert(actual, expected, tol)`, que comparam valores, e um identificador antes da mensagem."
+   },
+   "notes": {
+    "en": "MatLivre implements the condition forms only. The comparison forms (`actual`, `expected`, `tol`) are not supported: a second argument is always read as the message. An identifier given before the message is not separated from it, so the error has no identifier.",
+    "pt": "O MatLivre implementa apenas as formas com condição. As formas de comparação (`actual`, `expected`, `tol`) não são suportadas: o segundo argumento é sempre lido como mensagem. Um identificador dado antes da mensagem não é separado dela, então o erro fica sem identificador."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A failed check with a formatted message",
+      "pt": "Uma verificação que falha com mensagem formatada"
+     },
+     "code": "x = [3 -1 2];\ntry\n    assert(all(x > 0), 'Found %d non-positive values', sum(x <= 0));\ncatch err\n    disp(err.message)\nend\nassert(true)"
+    }
+   ],
+   "see": [
+    "error",
+    "validateattributes",
+    "MException",
+    "isequal"
+   ]
+  },
+  "assignin": {
+   "summary": {
+    "en": "Assigns a value to a variable in the base or caller workspace.",
+    "pt": "Atribui um valor a uma variável no workspace base ou do chamador."
+   },
+   "syntax": [
+    {
+     "code": "assignin(ws, name, value)",
+     "en": "Creates or replaces variable `name` in workspace `ws`.",
+     "pt": "Cria ou substitui a variável `name` no workspace `ws`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ws",
+     "en": "`'base'` for the base workspace or `'caller'` for the workspace of the calling function.",
+     "pt": "`'base'` para o workspace base ou `'caller'` para o workspace da função chamadora."
+    },
+    {
+     "name": "name",
+     "en": "Variable name; it must be a valid name.",
+     "pt": "Nome da variável; deve ser um nome válido."
+    },
+    {
+     "name": "value",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A function has its own workspace, so it cannot normally change the variables of the code that called it. `assignin` is the exception: it writes into the base workspace or into the caller's. This makes data flow invisible in the code, so prefer returning values from the function. It is mainly used in callbacks and debugging helpers.",
+    "pt": "Uma função tem workspace próprio, então normalmente não pode mudar as variáveis do código que a chamou. `assignin` é a exceção: grava no workspace base ou no do chamador. Isso torna o fluxo de dados invisível no código, então prefira devolver valores da função. É usada principalmente em callbacks e ferramentas de depuração."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A function writing into the caller",
+      "pt": "Uma função gravando no chamador"
+     },
+     "code": "writelines([\"function setit()\", \"  assignin('base', 'fromfn', 42);\", \"  assignin('caller', 'c1', 7);\", \"end\"], 'setit.m');\nsetit\nfromfn\nc1"
+    }
+   ],
+   "see": [
+    "evalin",
+    "inputname",
+    "eval",
+    "who"
+   ]
+  }
+ }
+}

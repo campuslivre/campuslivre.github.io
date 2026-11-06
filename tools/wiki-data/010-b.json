@@ -1,0 +1,1177 @@
+{
+ "functions": {
+  "issparse": {
+   "summary": {
+    "en": "Tests whether an array uses sparse storage.",
+    "pt": "Testa se um array usa armazenamento esparso."
+   },
+   "syntax": [
+    {
+     "code": "tf = issparse(A)",
+     "en": "Returns `true` if `A` is a sparse matrix.",
+     "pt": "Retorna `true` se `A` é uma matriz esparsa."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A sparse matrix stores only its nonzero entries. It is created by `sparse` or by functions such as `speye`, and many operations keep the result sparse. A full matrix that happens to contain mostly zeros is still full, so `issparse` is `false` for it.",
+    "pt": "Uma matriz esparsa armazena apenas as entradas diferentes de zero. É criada por `sparse` ou por funções como `speye`, e muitas operações mantêm o resultado esparso. Uma matriz cheia que por acaso tem quase só zeros continua cheia, então `issparse` dá `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sparse and full storage",
+      "pt": "Armazenamento esparso e cheio"
+     },
+     "code": "issparse(sparse([1 0 0 2]))\nissparse([1 0 0 2])\nissparse(full(sparse([1 0 0 2])))"
+    }
+   ],
+   "see": [
+    "sparse",
+    "full",
+    "nnz",
+    "speye"
+   ]
+  },
+  "isstr": {
+   "summary": {
+    "en": "Obsolete test for character arrays; use ischar instead.",
+    "pt": "Teste obsoleto para arrays de caracteres; use ischar."
+   },
+   "syntax": [
+    {
+     "code": "tf = isstr(A)",
+     "en": "Returns `true` if `A` is a character array.",
+     "pt": "Retorna `true` se `A` é um array de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`isstr` predates the `string` class and behaves like `ischar`: it is `true` for character vectors and arrays, and `false` for string objects, numbers and cell arrays. New code should call `ischar`, or `isstring` when string objects are meant.",
+    "pt": "`isstr` é anterior à classe `string` e se comporta como `ischar`: é `true` para vetores e arrays de caracteres e `false` para objetos string, números e cell arrays. Código novo deve chamar `ischar`, ou `isstring` quando a intenção são objetos string."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Characters versus strings",
+      "pt": "Caracteres versus strings"
+     },
+     "code": "isstr('abc')\nisstr(\"abc\")\nisstr(65)"
+    }
+   ],
+   "see": [
+    "ischar",
+    "isstring",
+    "iscellstr",
+    "char"
+   ]
+  },
+  "isstring": {
+   "summary": {
+    "en": "Tests whether a value is a string array.",
+    "pt": "Testa se um valor é um array de strings."
+   },
+   "syntax": [
+    {
+     "code": "tf = isstring(A)",
+     "en": "Returns `true` if `A` is a string array, including a single string.",
+     "pt": "Retorna `true` se `A` é um array de strings, inclusive uma única string."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Text in double quotes, such as `\"abc\"`, creates a string. Text in single quotes creates a character vector, a different class, so `isstring('abc')` is `false`. A cell array of character vectors is not a string array either.\n\nConvert between them with `string` and `char`.",
+    "pt": "Texto entre aspas duplas, como `\"abc\"`, cria uma string. Texto entre aspas simples cria um vetor de caracteres, outra classe, então `isstring('abc')` é `false`. Um cell array de vetores de caracteres também não é um array de strings.\n\nConverta entre eles com `string` e `char`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strings, characters and cells",
+      "pt": "Strings, caracteres e cells"
+     },
+     "code": "isstring(\"abc\")\nisstring('abc')\nisstring({\"abc\"})\nisstring([\"a\" \"b\"])"
+    }
+   ],
+   "see": [
+    "isStringScalar",
+    "ischar",
+    "iscellstr",
+    "string"
+   ]
+  },
+  "isStringScalar": {
+   "summary": {
+    "en": "Tests whether a value is a string array with exactly one element.",
+    "pt": "Testa se um valor é um array de strings com exatamente um elemento."
+   },
+   "syntax": [
+    {
+     "code": "tf = isStringScalar(A)",
+     "en": "Returns `true` if `A` is a 1-by-1 string array.",
+     "pt": "Retorna `true` se `A` é um array de strings 1 por 1."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The function is useful for validating arguments that must be one piece of text. A character vector gives `false` even though it is one text value, and so does a string array with several elements or none. A string holding `missing` still counts as a scalar string.",
+    "pt": "A função serve para validar argumentos que devem ser um único texto. Um vetor de caracteres dá `false`, embora seja um valor de texto, e o mesmo vale para um array de strings com vários elementos ou nenhum. Uma string com `missing` ainda conta como string escalar."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "One string or many",
+      "pt": "Uma string ou várias"
+     },
+     "code": "isStringScalar(\"hello\")\nisStringScalar('hello')\nisStringScalar([\"a\" \"b\"])\nisStringScalar(strings(0,1))"
+    }
+   ],
+   "see": [
+    "isstring",
+    "ischar",
+    "mustBeTextScalar",
+    "string"
+   ]
+  },
+  "isstrprop": {
+   "summary": {
+    "en": "Classifies each character of a text by a property such as alphabetic or digit.",
+    "pt": "Classifica cada caractere de um texto por uma propriedade, como alfabético ou dígito."
+   },
+   "syntax": [
+    {
+     "code": "tf = isstrprop(str, category)",
+     "en": "Returns a logical array that is `true` where the character belongs to `category`.",
+     "pt": "Retorna um array lógico que é `true` onde o caractere pertence à `category`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Character array.",
+     "pt": "Array de caracteres."
+    },
+    {
+     "name": "category",
+     "en": "One of `'alpha'`, `'alphanum'`, `'digit'`, `'lower'`, `'upper'`, `'punct'`, `'wspace'`, `'cntrl'`, `'graphic'`, `'print'`, `'ascii'`, `'xdigit'`.",
+     "pt": "Um entre `'alpha'`, `'alphanum'`, `'digit'`, `'lower'`, `'upper'`, `'punct'`, `'wspace'`, `'cntrl'`, `'graphic'`, `'print'`, `'ascii'`, `'xdigit'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `str`.",
+     "pt": "Array lógico do mesmo tamanho de `str`."
+    }
+   ],
+   "description": {
+    "en": "`isstrprop` generalizes `isletter` and `isspace`: one call, many character classes. The categories are not mutually exclusive, for example a letter is both `'alpha'` and `'alphanum'`, and a digit is both `'digit'` and `'xdigit'`.\n\nIndexing the text with the result extracts or removes characters of a kind, such as `s(isstrprop(s, 'digit'))`.",
+    "pt": "`isstrprop` generaliza `isletter` e `isspace`: uma chamada, várias classes de caracteres. As categorias não são exclusivas; uma letra é `'alpha'` e `'alphanum'`, e um dígito é `'digit'` e `'xdigit'`.\n\nIndexar o texto com o resultado extrai ou remove caracteres de um tipo, como em `s(isstrprop(s, 'digit'))`."
+   },
+   "notes": {
+    "en": "In MatLivre `isstrprop` takes character arrays only; string objects and cell arrays raise an error.",
+    "pt": "No MatLivre, `isstrprop` aceita apenas arrays de caracteres; objetos string e cell arrays geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Digits and punctuation",
+      "pt": "Dígitos e pontuação"
+     },
+     "code": "s = 'Ab 1,!';\nisstrprop(s, 'alpha')\nisstrprop(s, 'punct')\ns(isstrprop(s, 'digit'))"
+    }
+   ],
+   "see": [
+    "isletter",
+    "isspace",
+    "regexp",
+    "contains",
+    "upper"
+   ]
+  },
+  "isstruct": {
+   "summary": {
+    "en": "Tests whether a value is a struct.",
+    "pt": "Testa se um valor é um struct."
+   },
+   "syntax": [
+    {
+     "code": "tf = isstruct(A)",
+     "en": "Returns `true` if `A` is a structure array.",
+     "pt": "Retorna `true` se `A` é um array de structs."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A struct and a struct array both count. Tables, objects and cell arrays do not, even though a table can be converted with `table2struct`. Use `isfield` afterwards to see which fields exist.",
+    "pt": "Um struct e um array de structs contam. Tables, objetos e cell arrays não, embora uma table possa ser convertida com `table2struct`. Use `isfield` depois para ver quais campos existem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Structs and look-alikes",
+      "pt": "Structs e parecidos"
+     },
+     "code": "isstruct(struct('a', 1))\nisstruct(struct('a', {1, 2}))\nisstruct({1})\nisstruct(table(1))"
+    }
+   ],
+   "see": [
+    "isfield",
+    "struct",
+    "fieldnames",
+    "iscell"
+   ]
+  },
+  "istable": {
+   "summary": {
+    "en": "Tests whether a value is a table.",
+    "pt": "Testa se um valor é uma table."
+   },
+   "syntax": [
+    {
+     "code": "tf = istable(A)",
+     "en": "Returns `true` if `A` is a table.",
+     "pt": "Retorna `true` se `A` é uma table."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Only the `table` class gives `true`. A timetable is a different class, so `istable(timetable(...))` is `false`; use `istabular` to accept both.",
+    "pt": "Apenas a classe `table` dá `true`. Um timetable é outra classe, então `istable(timetable(...))` é `false`; use `istabular` para aceitar ambos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Table or not",
+      "pt": "Table ou não"
+     },
+     "code": "T = table([1;2], {'a';'b'});\nistable(T)\nistable(T.Var1)\nistable(struct())"
+    }
+   ],
+   "see": [
+    "istabular",
+    "istimetable",
+    "table",
+    "array2table"
+   ]
+  },
+  "istabular": {
+   "summary": {
+    "en": "Tests whether a value is a table or a timetable.",
+    "pt": "Testa se um valor é uma table ou um timetable."
+   },
+   "syntax": [
+    {
+     "code": "tf = istabular(A)",
+     "en": "Returns `true` if `A` is a table or a timetable.",
+     "pt": "Retorna `true` se `A` é uma table ou um timetable."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Both containers share much of their interface: variables in columns, row selection, `height` and `width`. `istabular` lets code accept either, where `istable` would reject a timetable.",
+    "pt": "Os dois contêineres compartilham grande parte da interface: variáveis em colunas, seleção de linhas, `height` e `width`. `istabular` permite aceitar qualquer um, onde `istable` rejeitaria um timetable."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Table and timetable",
+      "pt": "Table e timetable"
+     },
+     "code": "T = table([1;2]);\nTT = timetable(seconds([0;1]), [1;2]);\nistabular(T)\nistabular(TT)\nistabular([1 2])"
+    }
+   ],
+   "see": [
+    "istable",
+    "istimetable",
+    "table",
+    "timetable"
+   ]
+  },
+  "istimetable": {
+   "summary": {
+    "en": "Tests whether a value is a timetable.",
+    "pt": "Testa se um valor é um timetable."
+   },
+   "syntax": [
+    {
+     "code": "tf = istimetable(A)",
+     "en": "Returns `true` if `A` is a timetable.",
+     "pt": "Retorna `true` se `A` é um timetable."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A timetable is a table whose rows are labeled by datetime or duration values. A plain table gives `false`. Convert a table that has a time column with `table2timetable`.",
+    "pt": "Um timetable é uma table cujas linhas são rotuladas por valores datetime ou duration. Uma table comum dá `false`. Converta uma table que tenha uma coluna de tempo com `table2timetable`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Timetable or table",
+      "pt": "Timetable ou table"
+     },
+     "code": "TT = timetable(seconds([0;1]), [5;6]);\nistimetable(TT)\nistimetable(timetable2table(TT))"
+    }
+   ],
+   "see": [
+    "istable",
+    "istabular",
+    "timetable",
+    "table2timetable"
+   ]
+  },
+  "isundefined": {
+   "summary": {
+    "en": "Marks elements of a categorical array that have no category.",
+    "pt": "Marca os elementos de um array categorical que não têm categoria."
+   },
+   "syntax": [
+    {
+     "code": "tf = isundefined(C)",
+     "en": "Returns a logical array that is `true` where the element of `C` is undefined.",
+     "pt": "Retorna um array lógico que é `true` onde o elemento de `C` é indefinido."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "A categorical array.",
+     "pt": "Um array categorical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `C`.",
+     "pt": "Array lógico do mesmo tamanho de `C`."
+    }
+   ],
+   "description": {
+    "en": "An element is undefined when it was created from empty text, from a value not in the list of categories, or from `missing`. It displays as `<undefined>` and is not counted by `countcats`. `isundefined(C)` is the categorical form of `ismissing`.",
+    "pt": "Um elemento é indefinido quando foi criado a partir de texto vazio, de um valor fora da lista de categorias ou de `missing`. Aparece como `<undefined>` e não é contado por `countcats`. `isundefined(C)` é a forma categorical de `ismissing`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Spotting undefined values",
+      "pt": "Localizando valores indefinidos"
+     },
+     "code": "c = categorical({'a', 'b', ''})\nisundefined(c)"
+    }
+   ],
+   "see": [
+    "categorical",
+    "ismissing",
+    "countcats",
+    "rmmissing"
+   ]
+  },
+  "isUnderlyingType": {
+   "summary": {
+    "en": "Tests whether a value has a given underlying data type.",
+    "pt": "Testa se um valor tem um dado tipo de dado subjacente."
+   },
+   "syntax": [
+    {
+     "code": "tf = isUnderlyingType(A, typename)",
+     "en": "Returns `true` if the underlying type of `A` is `typename`.",
+     "pt": "Retorna `true` se o tipo subjacente de `A` é `typename`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value, including objects that wrap a built-in type.",
+     "pt": "Qualquer valor, inclusive objetos que encapsulam um tipo nativo."
+    },
+    {
+     "name": "typename",
+     "en": "A class name such as `'double'` or `'int8'`, or a category: `'numeric'`, `'float'`, `'integer'`.",
+     "pt": "Um nome de classe como `'double'` ou `'int8'`, ou uma categoria: `'numeric'`, `'float'`, `'integer'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "For ordinary arrays the underlying type is just the class, so `isUnderlyingType(x, 'double')` agrees with `isa(x, 'double')`. The function matters for classes that wrap another type, such as a `gpuArray`, where it reports the type of the wrapped data. Category names accept any class that belongs to the group.",
+    "pt": "Em arrays comuns o tipo subjacente é só a classe, então `isUnderlyingType(x, 'double')` concorda com `isa(x, 'double')`. A função importa para classes que encapsulam outro tipo, como `gpuArray`, onde informa o tipo dos dados encapsulados. Nomes de categoria aceitam qualquer classe do grupo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Class and category names",
+      "pt": "Nomes de classe e de categoria"
+     },
+     "code": "isUnderlyingType(int8(1), 'int8')\nisUnderlyingType(1, 'single')\nisUnderlyingType(1, 'float')\nisUnderlyingType(int8(1), 'float')"
+    }
+   ],
+   "see": [
+    "isa",
+    "class",
+    "underlyingType",
+    "isfloat"
+   ]
+  },
+  "isweekend": {
+   "summary": {
+    "en": "Tests whether datetime values fall on a Saturday or Sunday.",
+    "pt": "Testa se valores datetime caem num sábado ou domingo."
+   },
+   "syntax": [
+    {
+     "code": "tf = isweekend(t)",
+     "en": "Returns a logical array that is `true` for dates on a Saturday or Sunday.",
+     "pt": "Retorna um array lógico que é `true` para datas em um sábado ou domingo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `t`.",
+     "pt": "Array lógico do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "The test uses the calendar day only; the time of day does not matter. It treats Saturday and Sunday as the weekend regardless of locale.",
+    "pt": "O teste usa só o dia do calendário; a hora do dia não importa. Considera sábado e domingo como fim de semana, independentemente da localidade."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Friday to Sunday",
+      "pt": "De sexta a domingo"
+     },
+     "code": "t = datetime(2024,1,5) + days(0:2)\nisweekend(t)"
+    }
+   ],
+   "see": [
+    "weekday",
+    "datetime",
+    "isbetween",
+    "day"
+   ]
+  },
+  "join": {
+   "summary": {
+    "en": "Joins the elements of a string or cell array of text into one piece of text.",
+    "pt": "Junta os elementos de um array de strings ou de texto em um único texto."
+   },
+   "syntax": [
+    {
+     "code": "newStr = join(str)",
+     "en": "Joins the elements of `str` with a single space between them.",
+     "pt": "Junta os elementos de `str` com um espaço entre eles."
+    },
+    {
+     "code": "newStr = join(str, delimiter)",
+     "en": "Joins them with `delimiter` between neighbors.",
+     "pt": "Junta com `delimiter` entre os vizinhos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String array or cell array of character vectors.",
+     "pt": "Array de strings ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "delimiter",
+     "en": "Text placed between elements. The default is one space.",
+     "pt": "Texto colocado entre os elementos. O padrão é um espaço."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "A string when `str` is a string array, or a character vector when `str` is a cell array.",
+     "pt": "Uma string quando `str` é um array de strings, ou um vetor de caracteres quando `str` é um cell array."
+    }
+   ],
+   "description": {
+    "en": "`join` is the reverse of `split`. For a vector it concatenates all elements in order; the delimiter goes only between elements, never at the ends. The class of the result follows the class of the input, so a cell array of character vectors gives a character vector.\n\nIn MATLAB `join` also combines two tables by matching key variables, like a database join.",
+    "pt": "`join` é o inverso de `split`. Para um vetor, concatena todos os elementos em ordem; o delimitador vai só entre os elementos, nunca nas pontas. A classe do resultado segue a da entrada, então um cell array de vetores de caracteres dá um vetor de caracteres.\n\nNo MATLAB, `join` também combina duas tables casando variáveis-chave, como um join de banco de dados."
+   },
+   "notes": {
+    "en": "MatLivre implements `join` for text only. Joining two tables raises an error; use `innerjoin` or `outerjoin` instead. A matrix of strings is joined across all elements in storage order, not row by row.",
+    "pt": "O MatLivre implementa `join` apenas para texto. Juntar duas tables gera erro; use `innerjoin` ou `outerjoin`. Uma matriz de strings é juntada com todos os elementos na ordem de armazenamento, não linha a linha."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Joining text",
+      "pt": "Juntando textos"
+     },
+     "code": "join([\"a\", \"b\", \"c\"], \"-\")\njoin({'one', 'two', 'three'})\njoin({'x', 'y'}, ', ')"
+    }
+   ],
+   "see": [
+    "split",
+    "strjoin",
+    "strcat",
+    "plus",
+    "innerjoin"
+   ]
+  },
+  "juliandate": {
+   "summary": {
+    "en": "Converts dates to Julian dates.",
+    "pt": "Converte datas em datas julianas."
+   },
+   "syntax": [
+    {
+     "code": "jd = juliandate(t)",
+     "en": "Returns the Julian date of each element of the datetime array `t`.",
+     "pt": "Retorna a data juliana de cada elemento do array datetime `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "jd",
+     "en": "Double array the same size as `t`: days, with fraction, since noon on January 1, 4713 BC.",
+     "pt": "Array double do mesmo tamanho de `t`: dias, com fração, desde o meio-dia de 1 de janeiro de 4713 a.C."
+    }
+   ],
+   "description": {
+    "en": "The Julian date is a continuous count of days used in astronomy. Its day starts at noon, so midnight corresponds to a fraction of `.5`. The date and time `2000-01-01 12:00` is exactly `2451545`, a common reference epoch.\n\nSubtracting two Julian dates gives the elapsed days directly, without calendar rules.",
+    "pt": "A data juliana é uma contagem contínua de dias usada em astronomia. Seu dia começa ao meio-dia, então a meia-noite corresponde a uma fração de `.5`. A data e hora `2000-01-01 12:00` vale exatamente `2451545`, uma época de referência comum.\n\nSubtrair duas datas julianas dá os dias decorridos diretamente, sem regras de calendário."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The J2000 epoch",
+      "pt": "A época J2000"
+     },
+     "code": "juliandate(datetime(2000,1,1,12,0,0))\njuliandate(datetime(2000,1,2,12,0,0)) - juliandate(datetime(2000,1,1,12,0,0))"
+    }
+   ],
+   "see": [
+    "datenum",
+    "datetime",
+    "posixtime",
+    "mjd"
+   ]
+  },
+  "keyHash": {
+   "summary": {
+    "en": "Computes the hash code used to look up a key in a dictionary.",
+    "pt": "Calcula o código hash usado para localizar uma chave em um dictionary."
+   },
+   "syntax": [
+    {
+     "code": "h = keyHash(key)",
+     "en": "Returns a `uint64` hash value for `key`.",
+     "pt": "Retorna um valor hash `uint64` para `key`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "key",
+     "en": "A key value: numeric, text, datetime, and other supported types.",
+     "pt": "Um valor de chave: numérico, texto, datetime e outros tipos suportados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "`uint64` scalar. Equal keys always give equal hashes.",
+     "pt": "Escalar `uint64`. Chaves iguais sempre dão hashes iguais."
+    }
+   ],
+   "description": {
+    "en": "A `dictionary` uses `keyHash` to find the slot for a key quickly, and then `keyMatch` to confirm the hit, since different keys can share a hash. The exact numbers are an implementation detail and may differ between releases, so compare hashes only with each other and never store them.\n\nA class that defines its own `keyHash` and `keyMatch` methods can be used as a dictionary key.",
+    "pt": "Um `dictionary` usa `keyHash` para achar rapidamente o espaço de uma chave e depois `keyMatch` para confirmar o acerto, já que chaves diferentes podem ter o mesmo hash. Os números exatos são detalhe de implementação e podem mudar entre versões, então compare hashes apenas entre si e nunca os guarde.\n\nUma classe que define seus próprios métodos `keyHash` e `keyMatch` pode ser usada como chave de dictionary."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Equal keys, equal hashes",
+      "pt": "Chaves iguais, hashes iguais"
+     },
+     "code": "keyHash('abc') == keyHash('abc')\nclass(keyHash(42))"
+    }
+   ],
+   "see": [
+    "keyMatch",
+    "dictionary",
+    "isKey",
+    "keys"
+   ]
+  },
+  "keyMatch": {
+   "summary": {
+    "en": "Tests whether two keys are equal for dictionary purposes.",
+    "pt": "Testa se duas chaves são iguais para fins de dictionary."
+   },
+   "syntax": [
+    {
+     "code": "tf = keyMatch(k1, k2)",
+     "en": "Returns `true` if `k1` and `k2` are the same key.",
+     "pt": "Retorna `true` se `k1` e `k2` são a mesma chave."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "k1, k2",
+     "en": "Two key values.",
+     "pt": "Dois valores de chave."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`keyMatch` is the equality test of a dictionary lookup. It is stricter than `isequal` in the sense that the two keys must be of the same kind, and text is compared case-sensitively. Together with `keyHash` it defines when two keys count as one entry.",
+    "pt": "`keyMatch` é o teste de igualdade de uma consulta em dictionary. Os dois valores precisam ser do mesmo tipo de chave, e o texto é comparado com distinção entre maiúsculas e minúsculas. Junto com `keyHash`, define quando duas chaves contam como uma só entrada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Comparing keys",
+      "pt": "Comparando chaves"
+     },
+     "code": "keyMatch('ab', 'ab')\nkeyMatch('ab', 'AB')\nkeyMatch(1, 1)"
+    }
+   ],
+   "see": [
+    "keyHash",
+    "dictionary",
+    "isequal",
+    "isKey"
+   ]
+  },
+  "keys": {
+   "summary": {
+    "en": "Returns the keys of a containers.Map or dictionary.",
+    "pt": "Retorna as chaves de um containers.Map ou dictionary."
+   },
+   "syntax": [
+    {
+     "code": "k = keys(M)",
+     "en": "Returns the keys of the map `M`.",
+     "pt": "Retorna as chaves do mapa `M`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "M",
+     "en": "A `containers.Map` or a `dictionary`.",
+     "pt": "Um `containers.Map` ou um `dictionary`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "k",
+     "en": "For a `containers.Map`, a 1-by-n cell array sorted by key (alphabetically for text, numerically for numbers). For a `dictionary`, an array of the key type in insertion order.",
+     "pt": "Para um `containers.Map`, um cell array 1 por n ordenado pela chave (alfabeticamente para texto, numericamente para números). Para um `dictionary`, um array do tipo da chave, na ordem de inserção."
+    }
+   ],
+   "description": {
+    "en": "The keys of a `containers.Map` always come back sorted, no matter in what order they were added. Use `values(M)` to get the matching values in the same order. To loop over a map, iterate over `keys(M)` and index with each key.",
+    "pt": "As chaves de um `containers.Map` sempre voltam ordenadas, não importa a ordem em que foram adicionadas. Use `values(M)` para obter os valores correspondentes na mesma ordem. Para percorrer um mapa, itere sobre `keys(M)` e indexe com cada chave."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Sorted keys of a map",
+      "pt": "Chaves ordenadas de um mapa"
+     },
+     "code": "m = containers.Map({'b', 'a', 'c'}, [2 1 3]);\nk = keys(m)\nvalues(m)"
+    }
+   ],
+   "see": [
+    "values",
+    "isKey",
+    "containers.Map",
+    "remove",
+    "dictionary"
+   ]
+  },
+  "lag": {
+   "summary": {
+    "en": "Shifts the data of a timetable down by a number of rows, keeping the times.",
+    "pt": "Desloca os dados de um timetable algumas linhas para baixo, mantendo os tempos."
+   },
+   "syntax": [
+    {
+     "code": "TT2 = lag(TT)",
+     "en": "Shifts the data by one row; the first row becomes missing.",
+     "pt": "Desloca os dados em uma linha; a primeira linha fica ausente."
+    },
+    {
+     "code": "TT2 = lag(TT, k)",
+     "en": "Shifts by `k` rows. A negative `k` shifts upward (a lead).",
+     "pt": "Desloca em `k` linhas. Um `k` negativo desloca para cima (um avanço)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "A timetable.",
+     "pt": "Um timetable."
+    },
+    {
+     "name": "k",
+     "en": "Integer number of rows, or a duration for a regular timetable. The default is 1.",
+     "pt": "Número inteiro de linhas, ou uma duração para um timetable regular. O padrão é 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT2",
+     "en": "A timetable with the same row times. The rows that have no source value are filled with the missing value of each variable, such as `NaN`.",
+     "pt": "Um timetable com os mesmos tempos de linha. As linhas sem valor de origem recebem o valor ausente de cada variável, como `NaN`."
+    }
+   ],
+   "description": {
+    "en": "After `lag(TT)`, the value on row `n` is the value that `TT` had on row `n - 1`. That lines up each observation with the previous one, which is convenient for computing differences or testing a variable against its own past. The row times are not touched, only the data move.",
+    "pt": "Depois de `lag(TT)`, o valor da linha `n` é o que `TT` tinha na linha `n - 1`. Isso alinha cada observação com a anterior, o que ajuda a calcular diferenças ou comparar uma variável com o próprio passado. Os tempos de linha não mudam, apenas os dados se movem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Previous value and next value",
+      "pt": "Valor anterior e valor seguinte"
+     },
+     "code": "tt = timetable(seconds([0;1;2]), [10;20;30], 'VariableNames', {'v'});\nlag(tt)\nlag(tt, -1)"
+    }
+   ],
+   "see": [
+    "timetable",
+    "retime",
+    "diff",
+    "circshift",
+    "isregular"
+   ]
+  },
+  "leapseconds": {
+   "summary": {
+    "en": "Lists the leap seconds that have been added to UTC.",
+    "pt": "Lista os segundos intercalares adicionados ao UTC."
+   },
+   "syntax": [
+    {
+     "code": "T = leapseconds",
+     "en": "Returns a timetable with one row per leap second.",
+     "pt": "Retorna um timetable com uma linha por segundo intercalar."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "A timetable with the variables `Type` (`+` for an inserted second) and `CumulativeAdjustment`, the running total, with the date of each leap second as the row time.",
+     "pt": "Um timetable com as variáveis `Type` (`+` para um segundo inserido) e `CumulativeAdjustment`, o total acumulado, tendo a data de cada segundo intercalar como tempo de linha."
+    }
+   ],
+   "description": {
+    "en": "A leap second is added to UTC now and then to keep it near the Earth's rotation time. The table lists every one since 1972, when the system began. Each is applied at the end of June 30 or December 31. The `CumulativeAdjustment` column shows how many seconds UTC differs from the continuous atomic time scale because of them, apart from the fixed initial offset.",
+    "pt": "Um segundo intercalar é acrescentado ao UTC de vez em quando para mantê-lo próximo do tempo de rotação da Terra. A tabela lista todos desde 1972, quando o sistema começou. Cada um é aplicado ao final de 30 de junho ou de 31 de dezembro. A coluna `CumulativeAdjustment` mostra quantos segundos o UTC difere da escala contínua de tempo atômico por causa deles, além do deslocamento inicial fixo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The most recent leap second",
+      "pt": "O segundo intercalar mais recente"
+     },
+     "code": "L = leapseconds;\nsize(L)\nL(end, :)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "posixtime",
+    "timetable",
+    "juliandate"
+   ]
+  },
+  "letterBoundary": {
+   "summary": {
+    "en": "Pattern that matches the edge between a letter and a non-letter.",
+    "pt": "Padrão que casa a fronteira entre uma letra e um não letra."
+   },
+   "syntax": [
+    {
+     "code": "pat = letterBoundary",
+     "en": "Returns a pattern matching a zero-width position at the start or end of a run of letters.",
+     "pt": "Retorna um padrão que casa uma posição de largura zero no início ou no fim de uma sequência de letras."
+    },
+    {
+     "code": "pat = letterBoundary('start')",
+     "en": "Matches only where a letter run begins.",
+     "pt": "Casa apenas onde uma sequência de letras começa."
+    },
+    {
+     "code": "pat = letterBoundary('end')",
+     "en": "Matches only where a letter run ends.",
+     "pt": "Casa apenas onde uma sequência de letras termina."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'start' | 'end'",
+     "en": "Optional. Restricts the boundary to the beginning or the end of a run of letters.",
+     "pt": "Opcional. Restringe a fronteira ao começo ou ao fim de uma sequência de letras."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object. It consumes no characters.",
+     "pt": "Um objeto `pattern`. Não consome nenhum caractere."
+    }
+   ],
+   "description": {
+    "en": "A boundary pattern matches a position, not text, so it is combined with other patterns using `+` to anchor them. `letterBoundary + 'cat'` finds `cat` only at the beginning of a word, and `'cat' + letterBoundary` only at its end. Putting the boundary on both sides asks for the whole word.",
+    "pt": "Um padrão de fronteira casa uma posição, não texto, então é combinado com outros padrões usando `+` para ancorá-los. `letterBoundary + 'cat'` encontra `cat` apenas no começo de uma palavra, e `'cat' + letterBoundary` só no fim. Colocar a fronteira dos dois lados pede a palavra inteira."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Whole-word matching",
+      "pt": "Casando palavras inteiras"
+     },
+     "code": "str = 'cat concat cat!';\nextract(str, letterBoundary + 'cat' + letterBoundary)"
+    }
+   ],
+   "see": [
+    "lettersPattern",
+    "lineBoundary",
+    "pattern",
+    "extract",
+    "contains"
+   ]
+  },
+  "lettersPattern": {
+   "summary": {
+    "en": "Pattern that matches runs of letters.",
+    "pt": "Padrão que casa sequências de letras."
+   },
+   "syntax": [
+    {
+     "code": "pat = lettersPattern",
+     "en": "Matches one or more letters.",
+     "pt": "Casa uma ou mais letras."
+    },
+    {
+     "code": "pat = lettersPattern(n)",
+     "en": "Matches exactly `n` letters.",
+     "pt": "Casa exatamente `n` letras."
+    },
+    {
+     "code": "pat = lettersPattern(minN, maxN)",
+     "en": "Matches between `minN` and `maxN` letters.",
+     "pt": "Casa entre `minN` e `maxN` letras."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Number of letters to match.",
+     "pt": "Quantidade de letras a casar."
+    },
+    {
+     "name": "minN, maxN",
+     "en": "Lower and upper limits for the run length.",
+     "pt": "Limites inferior e superior para o comprimento da sequência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "The pattern is greedy: without limits it takes the longest run of letters it can. Use it with functions that accept patterns, such as `extract`, `split`, `replace`, `contains` and `matches`. Digits, spaces and punctuation end a run.\n\nPatterns combine with `+` for sequence and `|` for alternatives.",
+    "pt": "O padrão é guloso: sem limites, pega a maior sequência de letras possível. Use-o com funções que aceitam padrões, como `extract`, `split`, `replace`, `contains` e `matches`. Dígitos, espaços e pontuação encerram uma sequência.\n\nOs padrões se combinam com `+` para sequência e `|` para alternativas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extracting words",
+      "pt": "Extraindo palavras"
+     },
+     "code": "s = 'abc12 d3';\nextract(s, lettersPattern)\nextract(s, lettersPattern(2))"
+    }
+   ],
+   "see": [
+    "digitsPattern",
+    "alphanumericsPattern",
+    "extract",
+    "split",
+    "matches"
+   ]
+  },
+  "lineBoundary": {
+   "summary": {
+    "en": "Pattern that matches the start or end of a line.",
+    "pt": "Padrão que casa o início ou o fim de uma linha."
+   },
+   "syntax": [
+    {
+     "code": "pat = lineBoundary",
+     "en": "Matches the start or the end of a line.",
+     "pt": "Casa o início ou o fim de uma linha."
+    },
+    {
+     "code": "pat = lineBoundary('start')",
+     "en": "Matches only at the start of a line.",
+     "pt": "Casa apenas no início de uma linha."
+    },
+    {
+     "code": "pat = lineBoundary('end')",
+     "en": "Matches only at the end of a line.",
+     "pt": "Casa apenas no fim de uma linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'start' | 'end'",
+     "en": "Optional. Restricts the match to line starts or line ends.",
+     "pt": "Opcional. Restringe o casamento a inícios ou fins de linha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object. It consumes no characters.",
+     "pt": "Um objeto `pattern`. Não consome nenhum caractere."
+    }
+   ],
+   "description": {
+    "en": "Lines are separated by newline characters. The boundary also matches at the very beginning and end of the text. Like other boundaries it has zero width, so it anchors a neighboring pattern: `lineBoundary('start') + lettersPattern` takes the letters at the beginning of each line.\n\nCompare with `textBoundary`, which matches only at the ends of the whole text.",
+    "pt": "As linhas são separadas por caracteres de nova linha. A fronteira também casa no começo e no fim do texto. Como as outras fronteiras, tem largura zero, então ancora um padrão vizinho: `lineBoundary('start') + lettersPattern` pega as letras do começo de cada linha.\n\nCompare com `textBoundary`, que casa apenas nas pontas do texto inteiro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First word of each line",
+      "pt": "Primeira palavra de cada linha"
+     },
+     "code": "s = sprintf('one two\\nthree four');\nextract(s, lineBoundary('start') + lettersPattern)"
+    }
+   ],
+   "see": [
+    "textBoundary",
+    "letterBoundary",
+    "pattern",
+    "extract",
+    "splitlines"
+   ]
+  },
+  "localfunctions": {
+   "summary": {
+    "en": "Returns handles to the local functions defined in the current file.",
+    "pt": "Retorna handles das funções locais definidas no arquivo atual."
+   },
+   "syntax": [
+    {
+     "code": "c = localfunctions",
+     "en": "Returns a cell array of function handles, one per local function.",
+     "pt": "Retorna um cell array de function handles, um para cada função local."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Column cell array of function handles. It is empty when the file has no local functions.",
+     "pt": "Cell array coluna de function handles. Fica vazio quando o arquivo não tem funções locais."
+    }
+   ],
+   "description": {
+    "en": "Local functions can be called only from inside their own file, so the handles from `localfunctions` are the way to hand them to code elsewhere, for example to run a set of test functions in a loop. The call must be made from inside the file whose functions are wanted.",
+    "pt": "Funções locais só podem ser chamadas de dentro do próprio arquivo, então os handles de `localfunctions` são o modo de entregá-las a código externo, por exemplo para executar um conjunto de funções de teste em um laço. A chamada deve ser feita de dentro do arquivo cujas funções se quer obter."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listing local functions",
+      "pt": "Listando funções locais"
+     },
+     "code": "c = localfunctions;\nnumel(c)\nfor k = 1:numel(c)\n  disp(c{k}())\nend\n\nfunction r = first()\n  r = 'one';\nend\n\nfunction r = second()\n  r = 'two';\nend"
+    }
+   ],
+   "see": [
+    "func2str",
+    "str2func",
+    "feval",
+    "function_handle"
+   ]
+  },
+  "lookAheadBoundary": {
+   "summary": {
+    "en": "Pattern that requires a given pattern to follow, without consuming it.",
+    "pt": "Padrão que exige que um dado padrão venha em seguida, sem consumi-lo."
+   },
+   "syntax": [
+    {
+     "code": "pat = lookAheadBoundary(p)",
+     "en": "Matches a position that is followed by text matching `p`.",
+     "pt": "Casa uma posição seguida de texto que case com `p`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Pattern or text that must come next.",
+     "pt": "Padrão ou texto que deve vir em seguida."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object of zero width: the text matched by `p` is checked but not included in the result.",
+     "pt": "Um objeto `pattern` de largura zero: o texto casado por `p` é verificado, mas não entra no resultado."
+    }
+   ],
+   "description": {
+    "en": "A look-ahead lets a pattern depend on its context. `'cat' + lookAheadBoundary('fish')` matches `cat` only when `fish` comes right after it, and returns just `cat`. The related `lookBehindBoundary` checks what comes before instead.",
+    "pt": "Um look-ahead faz um padrão depender do contexto. `'cat' + lookAheadBoundary('fish')` casa `cat` apenas quando `fish` vem logo depois, e retorna só `cat`. O `lookBehindBoundary` relacionado verifica o que vem antes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Match only before a context",
+      "pt": "Casar somente antes de um contexto"
+     },
+     "code": "s = 'catfish dogcat';\nextract(s, 'cat' + lookAheadBoundary('fish'))"
+    }
+   ],
+   "see": [
+    "lookBehindBoundary",
+    "pattern",
+    "extract",
+    "contains",
+    "regexp"
+   ]
+  }
+ }
+}

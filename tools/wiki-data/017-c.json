@@ -1,0 +1,531 @@
+{
+  "functions": {
+    "primes": {
+      "summary": {"en": "List of all prime numbers up to a limit.", "pt": "Lista de todos os números primos até um limite."},
+      "syntax": [
+        {"code": "p = primes(n)", "en": "Returns a row vector with every prime less than or equal to `n`.", "pt": "Retorna um vetor linha com todos os primos menores ou iguais a `n`."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Real scalar upper limit. It need not be an integer.", "pt": "Limite superior escalar real. Não precisa ser inteiro."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "Row vector of primes in increasing order. It is empty if `n < 2`.", "pt": "Vetor linha de primos em ordem crescente. É vazio se `n < 2`."}
+      ],
+      "description": {
+        "en": "The primes are produced by the sieve of Eratosthenes: all integers up to `n` start as candidates, and the multiples of each prime found are crossed out. The method is fast, but its memory use grows with `n`, so very large limits are limited by available memory.\n\nThe count of primes up to `n` is `numel(primes(n))`, which grows roughly like `n/log(n)`.",
+        "pt": "Os primos são produzidos pelo crivo de Eratóstenes: todos os inteiros até `n` começam como candidatos, e os múltiplos de cada primo encontrado são riscados. O método é rápido, mas o uso de memória cresce com `n`, de modo que limites muito grandes dependem da memória disponível.\n\nA quantidade de primos até `n` é `numel(primes(n))`, que cresce aproximadamente como `n/log(n)`."
+      },
+      "examples": [
+        {"title": {"en": "Primes up to 50", "pt": "Primos até 50"}, "code": "p = primes(50)\nnumel(primes(1000))\nprimes(1)"}
+      ],
+      "see": ["isprime", "factor", "gcd", "nchoosek"]
+    },
+    "psi": {
+      "summary": {"en": "Digamma function and its higher derivatives (polygamma).", "pt": "Função digama e suas derivadas de ordem superior (poligama)."},
+      "syntax": [
+        {"code": "Y = psi(X)", "en": "Returns the digamma function, the derivative of `log(gamma(X))`.", "pt": "Retorna a função digama, a derivada de `log(gamma(X))`."},
+        {"code": "Y = psi(k, X)", "en": "Returns the `k`-th derivative of the digamma function (polygamma of order `k`).", "pt": "Retorna a `k`-ésima derivada da função digama (poligama de ordem `k`)."}
+      ],
+      "inputs": [
+        {"name": "k", "en": "Nonnegative integer scalar, the order of the derivative. `psi(0, X)` is the same as `psi(X)`.", "pt": "Escalar inteiro não negativo, a ordem da derivada. `psi(0, X)` é igual a `psi(X)`."},
+        {"name": "X", "en": "Real array.", "pt": "Array real."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "Because `gamma` extends the factorial, `psi` extends the harmonic numbers: `psi(n+1)` equals the sum `1 + 1/2 + ... + 1/n` minus the Euler-Mascheroni constant, and `psi(1)` is that constant negated, about `-0.5772`. It has poles at zero and at the negative integers.\n\nThe higher orders arise in series expansions: `psi(1, 1)` equals `pi^2/6`, the sum of the reciprocal squares.",
+        "pt": "Assim como `gamma` estende o fatorial, `psi` estende os números harmônicos: `psi(n+1)` é igual à soma `1 + 1/2 + ... + 1/n` menos a constante de Euler-Mascheroni, e `psi(1)` é essa constante com sinal trocado, cerca de `-0.5772`. Tem polos em zero e nos inteiros negativos.\n\nAs ordens superiores surgem em expansões em série: `psi(1, 1)` é igual a `pi^2/6`, a soma dos inversos dos quadrados."
+      },
+      "examples": [
+        {"title": {"en": "Digamma and trigamma", "pt": "Digama e trigama"}, "code": "psi([1 2 0.5])\npsi(1, 1)\npi^2/6"}
+      ],
+      "see": ["gamma", "gammaln", "gammainc", "expint"]
+    },
+    "rad2deg": {
+      "summary": {"en": "Converts angles from radians to degrees.", "pt": "Converte ângulos de radianos para graus."},
+      "syntax": [
+        {"code": "D = rad2deg(R)", "en": "Multiplies each element of `R` by `180/pi`.", "pt": "Multiplica cada elemento de `R` por `180/pi`."}
+      ],
+      "inputs": [
+        {"name": "R", "en": "Angles in radians, as a real floating-point array.", "pt": "Ângulos em radianos, como array real de ponto flutuante."}
+      ],
+      "outputs": [
+        {"name": "D", "en": "Angles in degrees, same size as `R`.", "pt": "Ângulos em graus, com o mesmo tamanho de `R`."}
+      ],
+      "description": {
+        "en": "A full turn is `2*pi` radians or 360 degrees, so one radian is about 57.2958 degrees. The conversion is a plain multiplication, which means rounding errors can appear: the result for `pi/6` is very near 30 but may differ from it in the last bits.\n\nThe opposite conversion is `deg2rad`. For trigonometry directly in degrees, `sind`, `cosd` and `tand` are more accurate than converting first.",
+        "pt": "Uma volta completa tem `2*pi` radianos ou 360 graus, então um radiano vale cerca de 57,2958 graus. A conversão é uma simples multiplicação, o que significa que podem aparecer erros de arredondamento: o resultado para `pi/6` é muito próximo de 30, mas pode diferir nos últimos bits.\n\nA conversão oposta é `deg2rad`. Para trigonometria diretamente em graus, `sind`, `cosd` e `tand` são mais precisas que converter antes."
+      },
+      "notes": {
+        "en": "Integer-class input such as `int8` is not accepted.",
+        "pt": "Entrada de classe inteira, como `int8`, não é aceita."
+      },
+      "examples": [
+        {"title": {"en": "Common angles", "pt": "Ângulos comuns"}, "code": "rad2deg([0 pi/2 pi 2*pi])\nround(rad2deg(pi/6))"}
+      ],
+      "see": ["deg2rad", "sind", "cosd", "pi", "angle"]
+    },
+    "rat": {
+      "summary": {"en": "Rational approximation of a number by continued fractions.", "pt": "Aproximação racional de um número por frações contínuas."},
+      "syntax": [
+        {"code": "S = rat(X)", "en": "Returns a character vector with the continued fraction expansion of `X`.", "pt": "Retorna um vetor de caracteres com a expansão em fração contínua de `X`."},
+        {"code": "[N, D] = rat(X)", "en": "Returns numerators `N` and denominators `D` so that `N./D` approximates `X`.", "pt": "Retorna numeradores `N` e denominadores `D` tais que `N./D` aproxima `X`."},
+        {"code": "[N, D] = rat(X, tol)", "en": "Uses the tolerance `tol` on the relative error.", "pt": "Usa a tolerância `tol` sobre o erro relativo."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array.", "pt": "Array real."},
+        {"name": "tol", "en": "Tolerance for the approximation. The default is `1e-6*norm(X(:), 1)`.", "pt": "Tolerância da aproximação. O padrão é `1e-6*norm(X(:), 1)`."}
+      ],
+      "outputs": [
+        {"name": "S", "en": "Text such as `3 + 1/(7 + 1/(16))`: each term is a rounded value, so some of them are negative.", "pt": "Texto como `3 + 1/(7 + 1/(16))`: cada termo é um valor arredondado, por isso alguns são negativos."},
+        {"name": "N, D", "en": "Integer-valued arrays of the same size as `X`; the denominator is positive.", "pt": "Arrays de valores inteiros do mesmo tamanho de `X`; o denominador é positivo."}
+      ],
+      "description": {
+        "en": "The algorithm repeatedly takes the nearest integer and inverts the remainder, which yields the convergents of the continued fraction. It stops once the approximation is within the tolerance. Thus `pi` becomes `355/113`, a famously good approximation.\n\nThe text form uses rounding to the nearest integer, not truncation, so `rat(0.75)` is written `1 + 1/(-4)`, which is equal to `0.75`. Use `rats` for a display of fractions.",
+        "pt": "O algoritmo toma repetidamente o inteiro mais próximo e inverte o resto, o que produz as convergentes da fração contínua. Para quando a aproximação está dentro da tolerância. Assim `pi` vira `355/113`, uma aproximação famosamente boa.\n\nA forma em texto usa arredondamento para o inteiro mais próximo, e não truncamento, então `rat(0.75)` é escrito `1 + 1/(-4)`, que é igual a `0.75`. Use `rats` para exibir frações."
+      },
+      "examples": [
+        {"title": {"en": "Fractions from decimals", "pt": "Frações a partir de decimais"}, "code": "[n, d] = rat(0.75)\n[n, d] = rat(pi)\nrat(pi)"}
+      ],
+      "see": ["rats", "gcd", "format", "round"]
+    },
+    "rats": {
+      "summary": {"en": "Rational output: a number formatted as a fraction in a string.", "pt": "Saída racional: um número formatado como fração em uma string."},
+      "syntax": [
+        {"code": "s = rats(X)", "en": "Returns a character vector showing each element of `X` as a ratio of integers.", "pt": "Retorna um vetor de caracteres que mostra cada elemento de `X` como razão de inteiros."},
+        {"code": "s = rats(X, strlen)", "en": "Limits the width of each field to `strlen` characters (default 13).", "pt": "Limita a largura de cada campo a `strlen` caracteres (padrão 13)."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real numeric array.", "pt": "Array numérico real."},
+        {"name": "strlen", "en": "Maximum field width. A narrower width forces a coarser fraction.", "pt": "Largura máxima do campo. Uma largura menor força uma fração mais grosseira."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "Character vector, padded with blanks on both sides of each fraction.", "pt": "Vetor de caracteres, preenchido com espaços dos dois lados de cada fração."}
+      ],
+      "description": {
+        "en": "`rats(0.75)` gives `3/4` surrounded by blanks. The approximation is found by continued fractions, with as large a denominator as the field width allows, so `rats(pi)` gives `355/113`. Elements with no good short ratio are shown as the closest fraction that fits.\n\nThe same display is produced by `format rat` when printing matrices. Because the string is padded, use `strtrim` if the exact text is needed.",
+        "pt": "`rats(0.75)` dá `3/4` cercado por espaços. A aproximação é obtida por frações contínuas, com o maior denominador que a largura do campo permite, então `rats(pi)` dá `355/113`. Elementos sem uma razão curta boa são mostrados como a fração mais próxima que cabe.\n\nA mesma exibição é produzida por `format rat` ao imprimir matrizes. Como a string tem preenchimento, use `strtrim` se o texto exato for necessário."
+      },
+      "examples": [
+        {"title": {"en": "Fractions and field width", "pt": "Frações e largura do campo"}, "code": "strtrim(rats(0.75))\nstrtrim(rats(pi))\nstrtrim(rats(pi, 8))"}
+      ],
+      "see": ["rat", "format", "strtrim", "num2str"]
+    },
+    "real": {
+      "summary": {"en": "Real part of a complex number.", "pt": "Parte real de um número complexo."},
+      "syntax": [
+        {"code": "Y = real(Z)", "en": "Returns the real part of each element of `Z`.", "pt": "Retorna a parte real de cada elemento de `Z`."}
+      ],
+      "inputs": [
+        {"name": "Z", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Real array of the same size as `Z`. A real input is returned unchanged.", "pt": "Array real do mesmo tamanho de `Z`. Uma entrada real é devolvida sem alteração."}
+      ],
+      "description": {
+        "en": "For `z = a + b*i`, `real(z)` is `a`. The function is also a convenient way to discard the tiny imaginary parts that rounding can leave in a result that should be real, for instance the eigenvalues of a symmetric matrix computed by a roundabout route. Do this only when the leftover imaginary part is really negligible.\n\nThe class of integer input is preserved.",
+        "pt": "Para `z = a + b*i`, `real(z)` é `a`. A função também é um jeito prático de descartar as partes imaginárias minúsculas que o arredondamento pode deixar em um resultado que deveria ser real, por exemplo nos autovalores de uma matriz simétrica calculados por um caminho indireto. Faça isso apenas quando a parte imaginária restante for realmente desprezível.\n\nA classe de uma entrada inteira é preservada."
+      },
+      "examples": [
+        {"title": {"en": "Real part of complex values", "pt": "Parte real de valores complexos"}, "code": "real([1+2i 3 -4i])\nreal(3+4i)\nreal(int8(4))"}
+      ],
+      "see": ["imag", "complex", "conj", "abs", "angle"]
+    },
+    "reallog": {
+      "summary": {"en": "Natural logarithm that errors on complex results.", "pt": "Logaritmo natural que gera erro se o resultado for complexo."},
+      "syntax": [
+        {"code": "Y = reallog(X)", "en": "Returns `log(X)` for nonnegative real `X`, and an error if any element is negative.", "pt": "Retorna `log(X)` para `X` real não negativo, e um erro se algum elemento for negativo."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array whose elements are expected to be nonnegative.", "pt": "Array real cujos elementos devem ser não negativos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Real array of the same size as `X`.", "pt": "Array real do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`log` quietly returns a complex number when it meets a negative argument, which can hide a bug further upstream. `reallog` turns that situation into an error (`Reallog produced complex result.`), so a program that must stay in the reals fails early instead of carrying complex values forward.\n\nWhen all the elements are nonnegative it gives exactly the same answer as `log`.",
+        "pt": "`log` retorna silenciosamente um número complexo ao encontrar um argumento negativo, o que pode esconder um erro mais acima. `reallog` transforma essa situação em um erro (`Reallog produced complex result.`), de modo que um programa que deve ficar nos reais falha cedo, em vez de levar valores complexos adiante.\n\nQuando todos os elementos são não negativos, dá exatamente a mesma resposta que `log`."
+      },
+      "examples": [
+        {"title": {"en": "Strict logarithm", "pt": "Logaritmo estrito"}, "code": "reallog([1 exp(1) 10])\nlog(-1)"}
+      ],
+      "see": ["log", "realsqrt", "realpow", "exp"]
+    },
+    "realpow": {
+      "summary": {"en": "Element-wise power that errors on complex results.", "pt": "Potência elemento a elemento que gera erro se o resultado for complexo."},
+      "syntax": [
+        {"code": "Z = realpow(X, Y)", "en": "Returns `X.^Y`, or an error if any result would be complex.", "pt": "Retorna `X.^Y`, ou um erro se algum resultado fosse complexo."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Real arrays of compatible sizes: base and exponent.", "pt": "Arrays reais de tamanhos compatíveis: base e expoente."}
+      ],
+      "outputs": [
+        {"name": "Z", "en": "Real array.", "pt": "Array real."}
+      ],
+      "description": {
+        "en": "A negative base with a non-integer exponent, such as `(-8)^(1/3)`, has no real value, and the `.^` operator answers with a complex principal root. `realpow` raises the error `Realpow produced complex result.` in that case, which is useful as a guard in code that assumes real numbers.\n\nOtherwise it behaves exactly like `.^`.",
+        "pt": "Uma base negativa com expoente não inteiro, como `(-8)^(1/3)`, não tem valor real, e o operador `.^` responde com uma raiz principal complexa. `realpow` gera o erro `Realpow produced complex result.` nesse caso, o que serve de proteção em código que supõe números reais.\n\nFora isso, comporta-se exatamente como `.^`."
+      },
+      "examples": [
+        {"title": {"en": "Real powers", "pt": "Potências reais"}, "code": "realpow([2 3], 2)\nrealpow(2, [1 2 3])\n(-8)^(1/3)"}
+      ],
+      "see": ["power", "nthroot", "realsqrt", "reallog"]
+    },
+    "realsqrt": {
+      "summary": {"en": "Square root that errors on complex results.", "pt": "Raiz quadrada que gera erro se o resultado for complexo."},
+      "syntax": [
+        {"code": "Y = realsqrt(X)", "en": "Returns `sqrt(X)` for nonnegative real `X`, and an error if any element is negative.", "pt": "Retorna `sqrt(X)` para `X` real não negativo, e um erro se algum elemento for negativo."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array whose elements are expected to be nonnegative.", "pt": "Array real cujos elementos devem ser não negativos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Real array of the same size as `X`.", "pt": "Array real do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`sqrt(-4)` is `0 + 2i`. `realsqrt(-4)` instead stops with `Realsqrt produced complex result.`, which catches the case in which a negative value reaches a square root by mistake, for example a variance that rounding made slightly negative. For nonnegative input the result is identical to `sqrt`.",
+        "pt": "`sqrt(-4)` vale `0 + 2i`. `realsqrt(-4)` para com `Realsqrt produced complex result.`, o que pega o caso em que um valor negativo chega a uma raiz quadrada por engano, por exemplo uma variância que o arredondamento deixou ligeiramente negativa. Para entrada não negativa o resultado é idêntico ao de `sqrt`."
+      },
+      "examples": [
+        {"title": {"en": "Strict square root", "pt": "Raiz quadrada estrita"}, "code": "realsqrt([4 9 16])\nsqrt(-4)"}
+      ],
+      "see": ["sqrt", "reallog", "realpow", "nthroot"]
+    },
+    "residue": {
+      "summary": {"en": "Partial fraction expansion of a ratio of polynomials.", "pt": "Expansão em frações parciais de uma razão de polinômios."},
+      "syntax": [
+        {"code": "[r, p, k] = residue(b, a)", "en": "Expands `b(s)/a(s)` into residues `r`, poles `p` and the direct polynomial term `k`.", "pt": "Expande `b(s)/a(s)` em resíduos `r`, polos `p` e o termo polinomial direto `k`."},
+        {"code": "[b, a] = residue(r, p, k)", "en": "Converts back: combines the partial fractions into numerator `b` and denominator `a`.", "pt": "Converte de volta: combina as frações parciais em numerador `b` e denominador `a`."}
+      ],
+      "inputs": [
+        {"name": "b, a", "en": "Coefficient vectors of the numerator and denominator, highest power first.", "pt": "Vetores de coeficientes do numerador e do denominador, da maior potência para a menor."},
+        {"name": "r, p, k", "en": "Residues, poles and direct term, as returned by the first form.", "pt": "Resíduos, polos e termo direto, como retornados pela primeira forma."}
+      ],
+      "outputs": [
+        {"name": "r, p", "en": "Column vectors of residues and poles of the same length.", "pt": "Vetores coluna de resíduos e polos, de mesmo comprimento."},
+        {"name": "k", "en": "Coefficients of the polynomial part; empty when the degree of `b` is less than that of `a`.", "pt": "Coeficientes da parte polinomial; vazio quando o grau de `b` é menor que o de `a`."}
+      ],
+      "description": {
+        "en": "The decomposition is `b(s)/a(s) = r(1)/(s - p(1)) + ... + r(n)/(s - p(n)) + k(s)`. A repeated pole `p` appears several times in `p`, and its residues correspond to the terms `1/(s-p)`, `1/(s-p)^2`, and so on. It is the standard tool for inverse Laplace and Z transforms, where each term is inverted separately.\n\nClose or repeated poles make the result sensitive to rounding, because they are found with `roots`.",
+        "pt": "A decomposição é `b(s)/a(s) = r(1)/(s - p(1)) + ... + r(n)/(s - p(n)) + k(s)`. Um polo repetido `p` aparece várias vezes em `p`, e seus resíduos correspondem aos termos `1/(s-p)`, `1/(s-p)^2` e assim por diante. É a ferramenta padrão para transformadas inversas de Laplace e Z, em que cada termo é invertido separadamente.\n\nPolos próximos ou repetidos tornam o resultado sensível a arredondamentos, pois são obtidos com `roots`."
+      },
+      "examples": [
+        {"title": {"en": "Expand and rebuild", "pt": "Expandir e reconstruir"}, "code": "[r, p, k] = residue([1 0 0 1], [1 3 2])\n[b, a] = residue(r, p, k)"}
+      ],
+      "see": ["roots", "poly", "conv", "deconv", "polyval"]
+    },
+    "roots": {
+      "summary": {"en": "Roots of a polynomial.", "pt": "Raízes de um polinômio."},
+      "syntax": [
+        {"code": "r = roots(p)", "en": "Returns the roots of the polynomial with coefficient vector `p`, as a column.", "pt": "Retorna as raízes do polinômio com vetor de coeficientes `p`, em uma coluna."}
+      ],
+      "inputs": [
+        {"name": "p", "en": "Coefficient vector, highest power first. Leading zeros are dropped, and trailing zeros give zero roots.", "pt": "Vetor de coeficientes, da maior potência para a menor. Zeros à esquerda são descartados, e zeros à direita dão raízes nulas."}
+      ],
+      "outputs": [
+        {"name": "r", "en": "Column vector of `n` roots for a polynomial of degree `n`; complex when some roots are complex. A constant or empty `p` gives `[]`.", "pt": "Vetor coluna de `n` raízes para um polinômio de grau `n`; complexo quando há raízes complexas. Um `p` constante ou vazio dá `[]`."}
+      ],
+      "description": {
+        "en": "The roots are the eigenvalues of the companion matrix of the polynomial, which is built from the normalized coefficients. For real coefficients, complex roots come in conjugate pairs.\n\nThe problem can be badly conditioned. Roots of high-degree polynomials, and multiple roots, are found with large errors even though the algorithm is stable, because small changes in the coefficients move the roots a lot.",
+        "pt": "As raízes são os autovalores da matriz companheira do polinômio, construída a partir dos coeficientes normalizados. Para coeficientes reais, as raízes complexas aparecem em pares conjugados.\n\nO problema pode ser muito mal condicionado. Raízes de polinômios de grau alto, e raízes múltiplas, são obtidas com erros grandes mesmo que o algoritmo seja estável, pois pequenas mudanças nos coeficientes deslocam muito as raízes."
+      },
+      "examples": [
+        {"title": {"en": "Real, complex and zero roots", "pt": "Raízes reais, complexas e nulas"}, "code": "roots([1 -6 11 -6])\nroots([1 2 5])\nroots([2 -4 0])"}
+      ],
+      "see": ["poly", "polyval", "polyfit", "eig", "residue"]
+    },
+    "rosser": {
+      "summary": {"en": "Rosser matrix, a classic eigenvalue test matrix.", "pt": "Matriz de Rosser, uma matriz de teste clássica para autovalores."},
+      "syntax": [
+        {"code": "R = rosser", "en": "Returns the fixed 8-by-8 symmetric Rosser matrix.", "pt": "Retorna a matriz de Rosser simétrica 8-por-8, que é fixa."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "R", "en": "Symmetric 8-by-8 matrix of integers.", "pt": "Matriz simétrica 8-por-8 de inteiros."}
+      ],
+      "description": {
+        "en": "The matrix was designed to be hard for eigenvalue algorithms. Its eigenvalues form tight clusters near 1000 and 1020, include a pair of equal size and opposite sign, and one that is very close to zero. Methods that are not careful with such clusters lose accuracy.\n\nIt has no parameters; calling it with or without parentheses gives the same matrix.",
+        "pt": "A matriz foi projetada para ser difícil para algoritmos de autovalores. Seus autovalores formam grupos compactos perto de 1000 e 1020, incluem um par de mesmo tamanho e sinais opostos, e um muito próximo de zero. Métodos pouco cuidadosos com esses agrupamentos perdem precisão.\n\nNão tem parâmetros; chamá-la com ou sem parênteses dá a mesma matriz."
+      },
+      "examples": [
+        {"title": {"en": "The matrix and its spectrum", "pt": "A matriz e seu espectro"}, "code": "R = rosser();\nR(1:3, 1:3)\nissymmetric(R)\nround(eig(R))'"}
+      ],
+      "see": ["eig", "hilb", "magic", "gallery", "issymmetric"]
+    },
+    "sec": {
+      "summary": {"en": "Secant of an angle in radians, 1/cos(x).", "pt": "Secante de um ângulo em radianos, 1/cos(x)."},
+      "syntax": [
+        {"code": "Y = sec(X)", "en": "Returns `1./cos(X)` for each element of `X`, with `X` in radians.", "pt": "Retorna `1./cos(X)` para cada elemento de `X`, com `X` em radianos."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in radians; real or complex.", "pt": "Ângulos em radianos; reais ou complexos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`, with absolute value at least 1 for real input.", "pt": "Array do mesmo tamanho de `X`, com valor absoluto de pelo menos 1 para entrada real."}
+      ],
+      "description": {
+        "en": "The secant is the reciprocal of the cosine, so it has vertical asymptotes where the cosine vanishes, at odd multiples of `pi/2`. Because `pi/2` is not represented exactly, `sec(pi/2)` gives a huge number rather than `Inf`.\n\nFor angles in degrees use `secd`; the hyperbolic counterpart is `sech`.",
+        "pt": "A secante é o inverso do cosseno, portanto tem assíntotas verticais onde o cosseno se anula, nos múltiplos ímpares de `pi/2`. Como `pi/2` não é representado exatamente, `sec(pi/2)` dá um número enorme em vez de `Inf`.\n\nPara ângulos em graus use `secd`; a contraparte hiperbólica é `sech`."
+      },
+      "examples": [
+        {"title": {"en": "Values at common angles", "pt": "Valores em ângulos comuns"}, "code": "sec([0 pi/3 pi])\nsec(pi/2)"}
+      ],
+      "see": ["cos", "secd", "sech", "csc", "asec"]
+    },
+    "secd": {
+      "summary": {"en": "Secant of an angle in degrees.", "pt": "Secante de um ângulo em graus."},
+      "syntax": [
+        {"code": "Y = secd(X)", "en": "Returns the secant of each element of `X`, with `X` in degrees.", "pt": "Retorna a secante de cada elemento de `X`, com `X` em graus."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in degrees.", "pt": "Ângulos em graus."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. Odd multiples of 90 give `Inf`.", "pt": "Array do mesmo tamanho de `X`. Múltiplos ímpares de 90 dão `Inf`."}
+      ],
+      "description": {
+        "en": "`secd(x)` is `1./cosd(x)`. Since `cosd` is exact at multiples of 90 degrees, `secd` gives exact values there, unlike `sec(x*pi/180)`, which carries the rounding error of the conversion. For instance, `secd(60)` is exactly `2`.",
+        "pt": "`secd(x)` é `1./cosd(x)`. Como `cosd` é exato em múltiplos de 90 graus, `secd` dá valores exatos ali, ao contrário de `sec(x*pi/180)`, que carrega o erro de arredondamento da conversão. Por exemplo, `secd(60)` é exatamente `2`."
+      },
+      "examples": [
+        {"title": {"en": "Degrees directly", "pt": "Diretamente em graus"}, "code": "secd([0 45 60])\nsecd(90)"}
+      ],
+      "see": ["sec", "cosd", "sind", "tand"]
+    },
+    "sech": {
+      "summary": {"en": "Hyperbolic secant, 1/cosh(x).", "pt": "Secante hiperbólica, 1/cosh(x)."},
+      "syntax": [
+        {"code": "Y = sech(X)", "en": "Returns `1./cosh(X)` for each element of `X`.", "pt": "Retorna `1./cosh(X)` para cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. For real input the values lie in the interval from 0 to 1.", "pt": "Array do mesmo tamanho de `X`. Para entrada real os valores ficam no intervalo de 0 a 1."}
+      ],
+      "description": {
+        "en": "`sech` is a smooth bell-shaped curve with maximum value 1 at `x = 0`, even in `x`, and decaying to zero in both directions. It appears as the profile of a soliton in the nonlinear Schrodinger and Korteweg-de Vries equations, and as a heavy-tailed probability density when scaled.",
+        "pt": "`sech` é uma curva suave em forma de sino, com valor máximo 1 em `x = 0`, par em `x`, e que decai a zero nos dois sentidos. Aparece como perfil de um sóliton nas equações de Schrödinger não linear e de Korteweg-de Vries, e, com escala adequada, como densidade de probabilidade de cauda pesada."
+      },
+      "examples": [
+        {"title": {"en": "A symmetric bump", "pt": "Um pico simétrico"}, "code": "sech([-2 -1 0 1 2])"}
+      ],
+      "see": ["cosh", "sinh", "tanh", "sec", "asech"]
+    },
+    "sign": {
+      "summary": {"en": "Sign of each element: -1, 0 or 1.", "pt": "Sinal de cada elemento: -1, 0 ou 1."},
+      "syntax": [
+        {"code": "Y = sign(X)", "en": "Returns `-1` for negative, `0` for zero and `1` for positive elements of `X`.", "pt": "Retorna `-1` para elementos negativos, `0` para zero e `1` para positivos de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric or logical array.", "pt": "Array numérico ou lógico."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size and class as `X` (logical input gives double). `sign(NaN)` is `NaN`.", "pt": "Array do mesmo tamanho e classe de `X` (entrada lógica dá double). `sign(NaN)` é `NaN`."}
+      ],
+      "description": {
+        "en": "For real input `x == sign(x).*abs(x)`, so `sign` isolates the direction of a number from its magnitude. It is handy for implementing piecewise rules, step functions and the sign of a derivative or residual.\n\nFor a complex number MATLAB defines the sign as `z./abs(z)`, a unit-length number that points in the same direction.",
+        "pt": "Para entrada real, `x == sign(x).*abs(x)`, então `sign` separa a direção de um número de sua magnitude. É útil para regras por partes, funções degrau e para o sinal de uma derivada ou de um resíduo.\n\nPara um número complexo o MATLAB define o sinal como `z./abs(z)`, um número de comprimento unitário que aponta na mesma direção."
+      },
+      "notes": {
+        "en": "MatLivre currently returns `1` for a nonzero complex input instead of `z./abs(z)`; use that expression explicitly when working with complex values.",
+        "pt": "O MatLivre atualmente retorna `1` para uma entrada complexa não nula, em vez de `z./abs(z)`; use essa expressão explicitamente ao trabalhar com valores complexos."
+      },
+      "examples": [
+        {"title": {"en": "Negative, zero, positive", "pt": "Negativo, zero, positivo"}, "code": "sign([-2.5 0 7 NaN])\nsign(int8([-5 0 5]))"}
+      ],
+      "see": ["abs", "floor", "heaviside", "cumsum"]
+    },
+    "sin": {
+      "summary": {"en": "Sine of an angle in radians.", "pt": "Seno de um ângulo em radianos."},
+      "syntax": [
+        {"code": "Y = sin(X)", "en": "Returns the sine of each element of `X`, with `X` in radians.", "pt": "Retorna o seno de cada elemento de `X`, com `X` em radianos."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in radians; real or complex.", "pt": "Ângulos em radianos; reais ou complexos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. For real input the values lie between -1 and 1.", "pt": "Array do mesmo tamanho de `X`. Para entrada real os valores ficam entre -1 e 1."}
+      ],
+      "description": {
+        "en": "`sin` is odd and periodic with period `2*pi`. Since `pi` is a rounded number, `sin(pi)` is about `1.2246e-16` rather than exactly zero. For exact results at multiples of a half turn, use `sinpi`, or `sind` for degrees.\n\nFor a complex argument, `sin(x + iy)` is `sin(x)*cosh(y) + i*cos(x)*sinh(y)`, so the magnitude is no longer bounded by 1.",
+        "pt": "`sin` é ímpar e periódica com período `2*pi`. Como `pi` é um número arredondado, `sin(pi)` vale cerca de `1.2246e-16` e não exatamente zero. Para resultados exatos em múltiplos de meia volta, use `sinpi`, ou `sind` para graus.\n\nPara um argumento complexo, `sin(x + iy)` é `sin(x)*cosh(y) + i*cos(x)*sinh(y)`, e portanto o módulo deixa de ser limitado por 1."
+      },
+      "notes": {
+        "en": "Integer classes such as `int8` are not accepted.",
+        "pt": "Classes inteiras como `int8` não são aceitas."
+      },
+      "examples": [
+        {"title": {"en": "Values and rounding at pi", "pt": "Valores e arredondamento em pi"}, "code": "sin([0 pi/6 pi/2])\nsin(pi)\nsin(1 + 1i)"}
+      ],
+      "see": ["cos", "tan", "sind", "sinpi", "sinh", "asin"]
+    },
+    "sind": {
+      "summary": {"en": "Sine of an angle in degrees.", "pt": "Seno de um ângulo em graus."},
+      "syntax": [
+        {"code": "Y = sind(X)", "en": "Returns the sine of each element of `X`, with `X` in degrees.", "pt": "Retorna o seno de cada elemento de `X`, com `X` em graus."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in degrees.", "pt": "Ângulos em graus."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`, with values between -1 and 1.", "pt": "Array do mesmo tamanho de `X`, com valores entre -1 e 1."}
+      ],
+      "description": {
+        "en": "`sind(x)` avoids the conversion error of `sin(x*pi/180)`: it returns exactly `0` at multiples of 180 degrees and exactly `1` or `-1` at 90 and 270. Compare `sind(180)`, which is `0`, with `sin(pi)`, which is `1.2246e-16`.\n\nThe other trigonometric functions have degree versions too: `cosd`, `tand`, `secd`.",
+        "pt": "`sind(x)` evita o erro de conversão de `sin(x*pi/180)`: retorna exatamente `0` em múltiplos de 180 graus e exatamente `1` ou `-1` em 90 e 270. Compare `sind(180)`, que é `0`, com `sin(pi)`, que é `1.2246e-16`.\n\nAs demais funções trigonométricas também têm versões em graus: `cosd`, `tand`, `secd`."
+      },
+      "examples": [
+        {"title": {"en": "Exact at special angles", "pt": "Exato em ângulos especiais"}, "code": "sind([0 30 90 180 270])\nsin(180*pi/180)"}
+      ],
+      "see": ["sin", "cosd", "tand", "sinpi", "asind"]
+    },
+    "sinh": {
+      "summary": {"en": "Hyperbolic sine.", "pt": "Seno hiperbólico."},
+      "syntax": [
+        {"code": "Y = sinh(X)", "en": "Returns `(exp(X) - exp(-X))/2` for each element of `X`.", "pt": "Retorna `(exp(X) - exp(-X))/2` para cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`sinh` is odd, increasing, and grows like `exp(x)/2` for large positive `x`. It is the sine function for the hyperbola, in the same way that `sin` is for the circle: `cosh(x)^2 - sinh(x)^2` is always 1.\n\nIt describes the shape of a hanging cable (together with `cosh`) and the velocity addition of relativity through rapidities.",
+        "pt": "`sinh` é ímpar, crescente, e cresce como `exp(x)/2` para `x` positivo grande. É a função seno da hipérbole, assim como `sin` é a do círculo: `cosh(x)^2 - sinh(x)^2` é sempre 1.\n\nDescreve a forma de um cabo suspenso (junto com `cosh`) e a soma de velocidades da relatividade por meio das rapidezes."
+      },
+      "examples": [
+        {"title": {"en": "Real and complex arguments", "pt": "Argumentos reais e complexos"}, "code": "sinh([0 1 2])\nsinh(1 + 1i)"}
+      ],
+      "see": ["cosh", "tanh", "asinh", "sin", "exp"]
+    },
+    "sinpi": {
+      "summary": {"en": "Sine of pi times x, exact at integer and half-integer multiples.", "pt": "Seno de pi vezes x, exato em múltiplos inteiros e meio-inteiros."},
+      "syntax": [
+        {"code": "Y = sinpi(X)", "en": "Returns `sin(pi*X)` for each element, with the product `pi*X` never rounded.", "pt": "Retorna `sin(pi*X)` para cada elemento, sem que o produto `pi*X` seja arredondado."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Real array, measured in half-turns (multiples of pi).", "pt": "Array real, medido em meias voltas (múltiplos de pi)."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`, with values between -1 and 1.", "pt": "Array do mesmo tamanho de `X`, com valores entre -1 e 1."}
+      ],
+      "description": {
+        "en": "`sin(pi*x)` suffers from the fact that `pi*x` is only approximately a multiple of pi. `sinpi` reduces `x` to a small range before using pi, so the result is exactly `0` for every integer `x`, and exactly `1` or `-1` at odd half-integers: `sinpi(1)` is `0`, whereas `sin(pi)` is `1.2246e-16`.\n\nIt is natural in code that uses frequencies in cycles, as in `sinpi(2*f*t)`.",
+        "pt": "`sin(pi*x)` sofre do fato de `pi*x` ser só aproximadamente um múltiplo de pi. `sinpi` reduz `x` a uma faixa pequena antes de usar pi, de modo que o resultado é exatamente `0` para todo `x` inteiro, e exatamente `1` ou `-1` em meio-inteiros ímpares: `sinpi(1)` vale `0`, enquanto `sin(pi)` vale `1.2246e-16`.\n\nÉ natural em código que usa frequências em ciclos, como em `sinpi(2*f*t)`."
+      },
+      "examples": [
+        {"title": {"en": "Exact multiples", "pt": "Múltiplos exatos"}, "code": "sinpi([0 0.5 1 1.5 2])\nsin(pi)"}
+      ],
+      "see": ["sin", "sind", "cospi", "pi"]
+    },
+    "sph2cart": {
+      "summary": {"en": "Converts spherical coordinates to Cartesian.", "pt": "Converte coordenadas esféricas para cartesianas."},
+      "syntax": [
+        {"code": "[x, y, z] = sph2cart(azimuth, elevation, r)", "en": "Converts spherical coordinates to Cartesian `x`, `y` and `z`.", "pt": "Converte coordenadas esféricas em coordenadas cartesianas `x`, `y` e `z`."}
+      ],
+      "inputs": [
+        {"name": "azimuth", "en": "Angle in radians in the xy plane, counterclockwise from the positive x axis.", "pt": "Ângulo em radianos no plano xy, no sentido anti-horário a partir do eixo x positivo."},
+        {"name": "elevation", "en": "Angle in radians up from the xy plane: 0 on the plane and `pi/2` at the positive z axis.", "pt": "Ângulo em radianos acima do plano xy: 0 no plano e `pi/2` no eixo z positivo."},
+        {"name": "r", "en": "Distance from the origin.", "pt": "Distância à origem."}
+      ],
+      "outputs": [
+        {"name": "x, y, z", "en": "Cartesian coordinates, with the size given by implicit expansion of the inputs.", "pt": "Coordenadas cartesianas, com o tamanho dado pela expansão implícita das entradas."}
+      ],
+      "description": {
+        "en": "The formulas are `x = r.*cos(elevation).*cos(azimuth)`, `y = r.*cos(elevation).*sin(azimuth)` and `z = r.*sin(elevation)`. The elevation is measured from the equator, not from the pole as in the physics convention of a polar angle, so the north pole is at `pi/2`.\n\nThe inverse is `cart2sph`.",
+        "pt": "As fórmulas são `x = r.*cos(elevation).*cos(azimuth)`, `y = r.*cos(elevation).*sin(azimuth)` e `z = r.*sin(elevation)`. A elevação é medida a partir do equador, e não do polo como na convenção de ângulo polar da física, então o polo norte fica em `pi/2`.\n\nA inversa é `cart2sph`."
+      },
+      "examples": [
+        {"title": {"en": "Points on a sphere", "pt": "Pontos em uma esfera"}, "code": "[x, y, z] = sph2cart([0 pi/2], [0 0], 2);\nround([x; y; z], 10)\n[x, y, z] = sph2cart(0, pi/2, 1);\nround([x y z], 10)"}
+      ],
+      "see": ["cart2sph", "pol2cart", "cart2pol", "sin", "cos"]
+    },
+    "sqrt": {
+      "summary": {"en": "Square root, element by element.", "pt": "Raiz quadrada, elemento a elemento."},
+      "syntax": [
+        {"code": "Y = sqrt(X)", "en": "Returns the principal square root of each element of `X`.", "pt": "Retorna a raiz quadrada principal de cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. Negative real elements make the result complex.", "pt": "Array do mesmo tamanho de `X`. Elementos reais negativos tornam o resultado complexo."}
+      ],
+      "description": {
+        "en": "The principal root is the one with nonnegative real part, so `sqrt(-4)` is `0 + 2i`. If any element is negative, the whole result array becomes complex, and the entries that were nonnegative show a zero imaginary part.\n\nThe result of `sqrt` is a floating-point approximation: `sqrt(2)^2 == 2` is false. For the square root of a matrix as a matrix use `sqrtm`; for an error when the result would be complex, use `realsqrt`.",
+        "pt": "A raiz principal é a de parte real não negativa, então `sqrt(-4)` é `0 + 2i`. Se algum elemento for negativo, o array de resultado inteiro se torna complexo, e as entradas que eram não negativas mostram parte imaginária zero.\n\nO resultado de `sqrt` é uma aproximação de ponto flutuante: `sqrt(2)^2 == 2` é falso. Para a raiz quadrada de uma matriz como matriz use `sqrtm`; para obter um erro quando o resultado seria complexo, use `realsqrt`."
+      },
+      "notes": {
+        "en": "Integer classes such as `int8` are not accepted.",
+        "pt": "Classes inteiras como `int8` não são aceitas."
+      },
+      "examples": [
+        {"title": {"en": "Real, negative and inexact", "pt": "Real, negativo e inexato"}, "code": "sqrt([1 4 9])\nsqrt([4 -4 2])\nsqrt(2)^2 == 2"}
+      ],
+      "see": ["realsqrt", "nthroot", "sqrtm", "hypot", "power"]
+    },
+    "tan": {
+      "summary": {"en": "Tangent of an angle in radians.", "pt": "Tangente de um ângulo em radianos."},
+      "syntax": [
+        {"code": "Y = tan(X)", "en": "Returns the tangent of each element of `X`, with `X` in radians.", "pt": "Retorna a tangente de cada elemento de `X`, com `X` em radianos."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in radians; real or complex.", "pt": "Ângulos em radianos; reais ou complexos."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`.", "pt": "Array do mesmo tamanho de `X`."}
+      ],
+      "description": {
+        "en": "`tan(x)` is `sin(x)./cos(x)`. It is periodic with period `pi` and has vertical asymptotes at odd multiples of `pi/2`. Since `pi/2` cannot be stored exactly, `tan(pi/2)` returns a very large number (about `1.6331e+16`) rather than `Inf`.\n\nTo recover the angle of a point from both coordinates, use `atan2(y, x)`, which handles all quadrants, instead of `atan(y/x)`.",
+        "pt": "`tan(x)` é `sin(x)./cos(x)`. É periódica com período `pi` e tem assíntotas verticais nos múltiplos ímpares de `pi/2`. Como `pi/2` não pode ser armazenado exatamente, `tan(pi/2)` retorna um número muito grande (cerca de `1.6331e+16`) e não `Inf`.\n\nPara recuperar o ângulo de um ponto a partir das duas coordenadas, use `atan2(y, x)`, que trata todos os quadrantes, em vez de `atan(y/x)`."
+      },
+      "examples": [
+        {"title": {"en": "Slopes and the asymptote", "pt": "Inclinações e a assíntota"}, "code": "tan([0 pi/4 pi/3])\ntan(pi/2)"}
+      ],
+      "see": ["sin", "cos", "tand", "tanh", "atan2"]
+    },
+    "tand": {
+      "summary": {"en": "Tangent of an angle in degrees.", "pt": "Tangente de um ângulo em graus."},
+      "syntax": [
+        {"code": "Y = tand(X)", "en": "Returns the tangent of each element of `X`, with `X` in degrees.", "pt": "Retorna a tangente de cada elemento de `X`, com `X` em graus."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Angles in degrees.", "pt": "Ângulos em graus."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. At odd multiples of 90 the result is `Inf`; at multiples of 180 it is exactly `0`.", "pt": "Array do mesmo tamanho de `X`. Em múltiplos ímpares de 90 o resultado é `Inf`; em múltiplos de 180 é exatamente `0`."}
+      ],
+      "description": {
+        "en": "Unlike `tan(x*pi/180)`, `tand` knows the exact special angles: `tand(90)` is `Inf` and `tand(180)` is `0`. This matters in slope and surveying calculations, where the angle arrives in degrees and the asymptote at 90 degrees must be recognized as such.",
+        "pt": "Diferente de `tan(x*pi/180)`, `tand` conhece os ângulos especiais exatos: `tand(90)` é `Inf` e `tand(180)` é `0`. Isso importa em cálculos de inclinação e de topografia, em que o ângulo chega em graus e a assíntota em 90 graus deve ser reconhecida como tal."
+      },
+      "examples": [
+        {"title": {"en": "Special angles", "pt": "Ângulos especiais"}, "code": "tand([0 30 45 60 90])\ntan(90*pi/180)"}
+      ],
+      "see": ["tan", "sind", "cosd", "secd", "atand"]
+    },
+    "tanh": {
+      "summary": {"en": "Hyperbolic tangent.", "pt": "Tangente hiperbólica."},
+      "syntax": [
+        {"code": "Y = tanh(X)", "en": "Returns `sinh(X)./cosh(X)` for each element of `X`.", "pt": "Retorna `sinh(X)./cosh(X)` para cada elemento de `X`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric array, real or complex.", "pt": "Array numérico, real ou complexo."}
+      ],
+      "outputs": [
+        {"name": "Y", "en": "Array of the same size as `X`. For real input the values lie strictly between -1 and 1 (they reach the limits only through rounding).", "pt": "Array do mesmo tamanho de `X`. Para entrada real os valores ficam estritamente entre -1 e 1 (só atingem os limites por arredondamento)."}
+      ],
+      "description": {
+        "en": "`tanh` is an S-shaped curve: odd, increasing, close to `x` near zero and saturating at -1 and 1 for large arguments. It is a classic activation function in neural networks, and it also gives the magnetization of a spin in a mean-field model.\n\nThe identity `tanh(x) = 2./(1 + exp(-2*x)) - 1` shows the relation to the logistic function.",
+        "pt": "`tanh` é uma curva em S: ímpar, crescente, próxima de `x` perto de zero e saturando em -1 e 1 para argumentos grandes. É uma função de ativação clássica em redes neurais, e também descreve a magnetização de um spin em um modelo de campo médio.\n\nA identidade `tanh(x) = 2./(1 + exp(-2*x)) - 1` mostra a relação com a função logística."
+      },
+      "examples": [
+        {"title": {"en": "Saturation", "pt": "Saturação"}, "code": "tanh([0 0.5 1 3 20])\ntanh(-100)"}
+      ],
+      "see": ["sinh", "cosh", "atanh", "tan", "exp"]
+    }
+  }
+}

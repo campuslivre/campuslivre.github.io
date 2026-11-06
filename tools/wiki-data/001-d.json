@@ -1,0 +1,181 @@
+{
+ "functions": {
+  "readmatrix": {
+   "summary": {
+    "en": "Reads a numeric matrix from a text or spreadsheet file.",
+    "pt": "Lê uma matriz numérica de um arquivo de texto ou de planilha."
+   },
+   "syntax": [
+    {
+     "code": "A = readmatrix(filename)",
+     "en": "Reads the file, detecting the delimiter and skipping header lines of text.",
+     "pt": "Lê o arquivo, detectando o delimitador e pulando linhas de cabeçalho em texto."
+    },
+    {
+     "code": "A = readmatrix(filename, Name, Value)",
+     "en": "Sets options such as `'NumHeaderLines'`, `'Delimiter'` or, for spreadsheets, `'Sheet'`.",
+     "pt": "Define opções como `'NumHeaderLines'`, `'Delimiter'` ou, para planilhas, `'Sheet'`."
+    },
+    {
+     "code": "A = readmatrix(filename, opts)",
+     "en": "Uses an import options object.",
+     "pt": "Usa um objeto de opções de importação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Text, CSV or spreadsheet file name.",
+     "pt": "Nome de um arquivo de texto, CSV ou planilha."
+    },
+    {
+     "name": "'NumHeaderLines'",
+     "en": "Number of lines to skip at the top.",
+     "pt": "Número de linhas a pular no topo."
+    },
+    {
+     "name": "'Delimiter'",
+     "en": "Field separator; detected automatically when omitted.",
+     "pt": "Separador de campos; detectado automaticamente se omitido."
+    },
+    {
+     "name": "'Sheet'",
+     "en": "Sheet name or number in a spreadsheet file.",
+     "pt": "Nome ou número da planilha em um arquivo de planilha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Numeric matrix. Empty or non-numeric fields become `NaN`.",
+     "pt": "Matriz numérica. Campos vazios ou não numéricos viram `NaN`."
+    }
+   ],
+   "description": {
+    "en": "`readmatrix` is the standard way to load a table of numbers. It looks at the file, drops a leading header made of text, and returns a `double` matrix. Fields it cannot read as numbers, such as empty cells or the word `NaN`, are stored as `NaN`.\n\nWhen the file mixes text and numbers, use `readtable` or `readcell` so the text is kept.",
+    "pt": "`readmatrix` é a forma padrão de carregar uma tabela de números. Ela examina o arquivo, descarta um cabeçalho de texto no início e retorna uma matriz `double`. Campos que não podem ser lidos como número, como células vazias ou a palavra `NaN`, ficam como `NaN`.\n\nQuando o arquivo mistura texto e números, use `readtable` ou `readcell` para preservar o texto."
+   },
+   "notes": {
+    "en": "The `'Range'` option and `'OutputType', 'string'` are not honored by MatLivre: the first returns more than the requested block and the second still returns numbers.",
+    "pt": "As opções `'Range'` e `'OutputType', 'string'` não são respeitadas pelo MatLivre: a primeira devolve mais que o bloco pedido e a segunda ainda devolve números."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Header and missing values",
+      "pt": "Cabeçalho e valores ausentes"
+     },
+     "code": "fid = fopen('h.csv', 'w'); fprintf(fid, 't,v\\n1,NaN\\n2,5\\n,7\\n'); fclose(fid);\nA = readmatrix('h.csv')\nB = readmatrix('h.csv', 'NumHeaderLines', 1);\nisequaln(A, B)"
+    }
+   ],
+   "see": [
+    "writematrix",
+    "readtable",
+    "readcell",
+    "csvread",
+    "dlmread"
+   ]
+  },
+  "readstruct": {
+   "summary": {
+    "en": "Reads an XML file into a scalar struct.",
+    "pt": "Lê um arquivo estruturado em XML para uma struct escalar."
+   },
+   "syntax": [
+    {
+     "code": "S = readstruct(filename)",
+     "en": "Parses the file and returns a struct with one field per element.",
+     "pt": "Interpreta o arquivo e retorna uma struct com um campo por elemento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name of the file. XML is the format covered here.",
+     "pt": "Nome do arquivo. O XML é o formato abordado aqui."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Scalar struct. Text values become strings, numeric text becomes numbers, and repeated elements become arrays.",
+     "pt": "Struct escalar. Valores de texto viram strings, texto numérico vira números e elementos repetidos viram arrays."
+    }
+   ],
+   "description": {
+    "en": "Each child element of the root becomes a field named after the tag. Text that looks like a number is converted to a `double`, other text is returned as a string, and elements with the same name collapse into one array-valued field. Nested elements give nested structs.",
+    "pt": "Cada elemento filho da raiz vira um campo com o nome da tag. Texto com aparência de número é convertido em `double`, os demais textos voltam como string, e elementos de mesmo nome se juntam em um único campo com array. Elementos aninhados geram structs aninhadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read an XML file",
+      "pt": "Ler um arquivo XML"
+     },
+     "code": "fid = fopen('p.xml', 'w');\nfprintf(fid, '<p><name>Ann</name><age>30</age><tag>a</tag><tag>b</tag></p>');\nfclose(fid);\nS = readstruct('p.xml')\nS.age + 1\nS.tag"
+    }
+   ],
+   "see": [
+    "readtable",
+    "jsondecode",
+    "fileread",
+    "struct"
+   ]
+  },
+  "readvars": {
+   "summary": {
+    "en": "Reads the columns of a file into separate variables.",
+    "pt": "Lê as colunas de um arquivo em variáveis separadas."
+   },
+   "syntax": [
+    {
+     "code": "[v1, v2, ...] = readvars(filename)",
+     "en": "Returns one output per column.",
+     "pt": "Retorna uma saída por coluna."
+    },
+    {
+     "code": "[v1, v2, ...] = readvars(filename, opts)",
+     "en": "Uses import options.",
+     "pt": "Usa opções de importação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Text or spreadsheet file name.",
+     "pt": "Nome de um arquivo de texto ou de planilha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v1, v2, ...",
+     "en": "One column vector per variable, in file order, each with the type detected for that column.",
+     "pt": "Um vetor coluna por variável, na ordem do arquivo, cada um com o tipo detectado para a coluna."
+    }
+   ],
+   "description": {
+    "en": "`readvars` is like `readtable` followed by pulling each column out of the table, in one step. A header row, if present, supplies the names but they are not returned: the outputs are positional.",
+    "pt": "`readvars` equivale a `readtable` seguido da extração de cada coluna da tabela, em um só passo. Uma linha de cabeçalho, se existir, fornece os nomes, mas eles não são retornados: as saídas são posicionais."
+   },
+   "notes": {
+    "en": "In MatLivre, a text column comes back as `NaN` values; use `readtable` or `readcell` for files with text.",
+    "pt": "No MatLivre, uma coluna de texto volta como valores `NaN`; use `readtable` ou `readcell` para arquivos com texto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two numeric columns",
+      "pt": "Duas colunas numéricas"
+     },
+     "code": "fid = fopen('q.csv', 'w'); fprintf(fid, 'x,y\\n1,2\\n3,4\\n'); fclose(fid);\n[x, y] = readvars('q.csv');\nx', y'"
+    }
+   ],
+   "see": [
+    "readtable",
+    "readmatrix",
+    "readcell",
+    "textscan"
+   ]
+  }
+ }
+}

@@ -1,0 +1,629 @@
+{
+ "functions": {
+  "computer": {
+   "summary": {
+    "en": "Identifies the computer platform that is running the program.",
+    "pt": "Identifica a plataforma do computador em que o programa está rodando."
+   },
+   "syntax": [
+    {
+     "code": "c = computer",
+     "en": "Returns the platform code as a character vector.",
+     "pt": "Retorna o código da plataforma como vetor de caracteres."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Platform code such as `'PCWIN64'` (Windows), `'GLNXA64'` (Linux), `'MACI64'` (Intel Mac) or `'MACA64'` (Apple silicon).",
+     "pt": "Código da plataforma, como `'PCWIN64'` (Windows), `'GLNXA64'` (Linux), `'MACI64'` (Mac Intel) ou `'MACA64'` (Mac com Apple silicon)."
+    }
+   ],
+   "description": {
+    "en": "`computer` is used by scripts that must choose a file path, a compiled library or a command depending on the operating system. For a simple test of the family of systems, `ispc`, `ismac` and `isunix` are shorter and read better.\n\nThe code is determined by the machine that runs the program, so the printed value differs between computers.",
+    "pt": "`computer` é usado por scripts que precisam escolher um caminho de arquivo, uma biblioteca compilada ou um comando de acordo com o sistema operacional. Para um teste simples da família do sistema, `ispc`, `ismac` e `isunix` são mais curtos e mais legíveis.\n\nO código é determinado pela máquina que executa o programa, então o valor impresso muda de um computador para outro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Check the platform code",
+      "pt": "Verificar o código da plataforma"
+     },
+     "code": "c = computer;\nclass(c)\nismember(c, {'PCWIN64','GLNXA64','MACI64','MACA64'})"
+    }
+   ],
+   "see": [
+    "ispc",
+    "ismac",
+    "isunix",
+    "version",
+    "ver"
+   ]
+  },
+  "ismac": {
+   "summary": {
+    "en": "Tests whether the program runs on macOS.",
+    "pt": "Testa se o programa roda no macOS."
+   },
+   "syntax": [
+    {
+     "code": "tf = ismac",
+     "en": "Returns `true` on a Mac and `false` elsewhere.",
+     "pt": "Retorna `true` em um Mac e `false` nos demais sistemas."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Use `ismac` to branch on platform-specific behavior, such as a different default font or shell command. Note that macOS is also a Unix system, so `isunix` is `true` on a Mac as well.",
+    "pt": "Use `ismac` para ramificar em comportamentos específicos de plataforma, como outra fonte padrão ou outro comando de shell. Note que o macOS também é um sistema Unix, então `isunix` também é `true` em um Mac."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A logical flag",
+      "pt": "Um indicador lógico"
+     },
+     "code": "tf = ismac;\nclass(tf)\nisscalar(tf)"
+    }
+   ],
+   "see": [
+    "ispc",
+    "isunix",
+    "computer"
+   ]
+  },
+  "ispc": {
+   "summary": {
+    "en": "Tests whether the program runs on Windows.",
+    "pt": "Testa se o programa roda no Windows."
+   },
+   "syntax": [
+    {
+     "code": "tf = ispc",
+     "en": "Returns `true` on Windows and `false` elsewhere.",
+     "pt": "Retorna `true` no Windows e `false` nos demais sistemas."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`ispc` is the usual way to handle differences such as the path separator, line endings or the command used to open a file. For portable paths prefer `fullfile`, which inserts the correct separator for the platform.",
+    "pt": "`ispc` é a forma habitual de lidar com diferenças como o separador de caminho, o fim de linha ou o comando que abre um arquivo. Para caminhos portáveis prefira `fullfile`, que insere o separador correto da plataforma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Branch on the operating system",
+      "pt": "Ramificar pelo sistema operacional"
+     },
+     "code": "if ispc\n  disp('Windows')\nelseif ismac\n  disp('macOS')\nelse\n  disp('Linux')\nend"
+    }
+   ],
+   "see": [
+    "ismac",
+    "isunix",
+    "computer",
+    "fullfile",
+    "filesep"
+   ]
+  },
+  "isunix": {
+   "summary": {
+    "en": "Tests whether the program runs on a Unix-based system such as Linux or macOS.",
+    "pt": "Testa se o programa roda em um sistema baseado em Unix, como Linux ou macOS."
+   },
+   "syntax": [
+    {
+     "code": "tf = isunix",
+     "en": "Returns `true` on Linux or macOS and `false` on Windows.",
+     "pt": "Retorna `true` no Linux ou macOS e `false` no Windows."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`isunix` groups every system that is not Windows, including macOS. To tell Linux from macOS, combine it with `ismac`: `isunix && ~ismac`. It is commonly used before calling shell commands such as `ls`.",
+    "pt": "`isunix` agrupa todos os sistemas que não são Windows, inclusive o macOS. Para distinguir Linux de macOS, combine com `ismac`: `isunix && ~ismac`. É usado com frequência antes de chamar comandos de shell como `ls`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Windows and Unix are exclusive",
+      "pt": "Windows e Unix são excludentes"
+     },
+     "code": "tf = isunix;\nclass(tf)\nispc ~= isunix"
+    }
+   ],
+   "see": [
+    "ispc",
+    "ismac",
+    "computer",
+    "system"
+   ]
+  },
+  "isMATLABReleaseOlderThan": {
+   "summary": {
+    "en": "Tests whether the running MATLAB release is older than a given release.",
+    "pt": "Testa se a versão do MATLAB em execução é anterior a uma versão dada."
+   },
+   "syntax": [
+    {
+     "code": "tf = isMATLABReleaseOlderThan(release)",
+     "en": "`true` if the current release was published before `release`.",
+     "pt": "`true` se a versão atual foi publicada antes de `release`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "release",
+     "en": "Release name such as `'R2024a'`.",
+     "pt": "Nome da versão, como `'R2024a'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The comparison is made on release dates, so it works across `a` and `b` releases of different years. It is the recommended way to guard code that depends on a function introduced in a given release, in place of parsing the text from `version`.\n\nThe current release is never older than itself, so asking about the same release returns `false`.",
+    "pt": "A comparação é feita pelas datas das versões, então funciona entre versões `a` e `b` de anos diferentes. É a forma recomendada de proteger código que depende de uma função introduzida em certa versão, no lugar de analisar o texto de `version`.\n\nA versão atual nunca é mais antiga que ela mesma, então perguntar pela mesma versão retorna `false`."
+   },
+   "notes": {
+    "en": "MatLivre reports itself as MATLAB R2023b, so the first call above returns `true`.",
+    "pt": "O MatLivre se identifica como MATLAB R2023b, por isso a primeira chamada acima retorna `true`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compare with other releases",
+      "pt": "Comparar com outras versões"
+     },
+     "code": "isMATLABReleaseOlderThan('R2024a')\nisMATLABReleaseOlderThan('R2023b')\nisMATLABReleaseOlderThan('R2020a')"
+    }
+   ],
+   "see": [
+    "matlabRelease",
+    "verLessThan",
+    "version",
+    "ver"
+   ]
+  },
+  "isstudent": {
+   "summary": {
+    "en": "Tests whether the running MATLAB is a Student Version.",
+    "pt": "Testa se o MATLAB em execução é uma Student Version."
+   },
+   "syntax": [
+    {
+     "code": "tf = isstudent",
+     "en": "Returns `true` for a student license and `false` otherwise.",
+     "pt": "Retorna `true` para uma licença de estudante e `false` caso contrário."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`isstudent` is a legacy check used by old code to adjust features for the student edition. The Student Version was discontinued, and the function remains for compatibility; modern licenses do not set it.",
+    "pt": "`isstudent` é uma verificação antiga usada por códigos legados para ajustar recursos à edição de estudante. A Student Version foi descontinuada e a função permanece por compatibilidade; as licenças atuais não a ativam."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Always false in MatLivre",
+      "pt": "Sempre falso no MatLivre"
+     },
+     "code": "isstudent"
+    }
+   ],
+   "see": [
+    "license",
+    "version",
+    "ver",
+    "computer"
+   ]
+  },
+  "javachk": {
+   "summary": {
+    "en": "Checks whether a Java feature is available and returns a message if it is not.",
+    "pt": "Verifica se um recurso Java está disponível e retorna uma mensagem se não estiver."
+   },
+   "syntax": [
+    {
+     "code": "msg = javachk(feature)",
+     "en": "Checks the feature, such as `'jvm'`, `'awt'`, `'swing'` or `'desktop'`.",
+     "pt": "Verifica o recurso, como `'jvm'`, `'awt'`, `'swing'` ou `'desktop'`."
+    },
+    {
+     "code": "msg = javachk(feature, component)",
+     "en": "Uses `component` in the message so it names what needs the feature.",
+     "pt": "Usa `component` na mensagem para que ela indique o que precisa do recurso."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "feature",
+     "en": "Name of the Java feature to test.",
+     "pt": "Nome do recurso Java a testar."
+    },
+    {
+     "name": "component",
+     "en": "Optional name of the code or tool that needs the feature.",
+     "pt": "Nome opcional do código ou ferramenta que precisa do recurso."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "msg",
+     "en": "Structure with the fields `message` and `identifier`, describing why the feature is unavailable; empty when the feature is available.",
+     "pt": "Estrutura com os campos `message` e `identifier`, que descreve por que o recurso está indisponível; vazia quando o recurso está disponível."
+    }
+   ],
+   "description": {
+    "en": "`javachk` lets code fail gracefully before it calls into Java. The typical pattern is to test `isempty(msg)`, and if it is not empty, show `msg.message` or pass the structure to `error`.\n\nMatLivre does not run a Java virtual machine, so every feature check reports that Java is not available.",
+    "pt": "`javachk` permite que o código falhe com elegância antes de chamar Java. O padrão típico é testar `isempty(msg)` e, se não estiver vazia, mostrar `msg.message` ou passar a estrutura a `error`.\n\nO MatLivre não executa uma máquina virtual Java, então toda verificação informa que Java não está disponível."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ask for a Java feature",
+      "pt": "Pedir um recurso Java"
+     },
+     "code": "msg = javachk('awt', 'Plot');\nisempty(msg)\ndisp(msg.message)"
+    }
+   ],
+   "see": [
+    "usejava",
+    "error",
+    "version",
+    "computer"
+   ]
+  },
+  "license": {
+   "summary": {
+    "en": "Reports license information, or tests whether a product license is available.",
+    "pt": "Informa dados de licença, ou testa se a licença de um produto está disponível."
+   },
+   "syntax": [
+    {
+     "code": "license",
+     "en": "Returns the license number or type of the running MATLAB.",
+     "pt": "Retorna o número ou tipo de licença do MATLAB em execução."
+    },
+    {
+     "code": "tf = license('test', feature)",
+     "en": "Returns `true` if a license for `feature` exists, for example `'MATLAB'` or `'Statistics_Toolbox'`.",
+     "pt": "Retorna `true` se existe licença para `feature`, por exemplo `'MATLAB'` ou `'Statistics_Toolbox'`."
+    },
+    {
+     "code": "tf = license('checkout', feature)",
+     "en": "Tries to check out a license and returns whether it succeeded.",
+     "pt": "Tenta obter uma licença e retorna se conseguiu."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "feature",
+     "en": "License name of a product or toolbox.",
+     "pt": "Nome de licença de um produto ou toolbox."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "`1` when the license is available, `0` otherwise.",
+     "pt": "`1` quando a licença está disponível, `0` caso contrário."
+    }
+   ],
+   "description": {
+    "en": "Scripts use `license('test', ...)` to guard code that needs a toolbox, so they can offer a fallback instead of failing in the middle of a computation. The feature names are the license identifiers of each product, which are not always the same as the product's display name.\n\nMatLivre is free software without license management, so the function does not apply to it.",
+    "pt": "Scripts usam `license('test', ...)` para proteger código que precisa de uma toolbox, oferecendo uma alternativa em vez de falhar no meio de um cálculo. Os nomes de recurso são os identificadores de licença de cada produto, que nem sempre coincidem com o nome exibido.\n\nO MatLivre é software livre sem gestão de licenças, de modo que a função não se aplica a ele."
+   },
+   "notes": {
+    "en": "`license` is not implemented in MatLivre: any call fails with an 'Unrecognized function or variable' error, which is what the example above prints.",
+    "pt": "`license` não está implementada no MatLivre: qualquer chamada falha com o erro 'Unrecognized function or variable', que é o que o exemplo acima imprime."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Guarded call",
+      "pt": "Chamada protegida"
+     },
+     "code": "try\n  ok = license('test', 'MATLAB')\ncatch err\n  disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "ver",
+    "version",
+    "isstudent",
+    "usejava"
+   ]
+  },
+  "matlabRelease": {
+   "summary": {
+    "en": "Describes the running MATLAB release as a structure.",
+    "pt": "Descreve a versão do MATLAB em execução como uma estrutura."
+   },
+   "syntax": [
+    {
+     "code": "r = matlabRelease",
+     "en": "Returns the release name, stage, update number and date.",
+     "pt": "Retorna o nome da versão, o estágio, o número da atualização e a data."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Scalar structure with the fields `Release`, `Stage`, `Update` and `Date`.",
+     "pt": "Estrutura escalar com os campos `Release`, `Stage`, `Update` e `Date`."
+    }
+   ],
+   "description": {
+    "en": "`matlabRelease` gives release information in a form that is easy to use in code: `r.Release` is a string such as `\"R2023b\"`, which can be passed to `isMATLABReleaseOlderThan`. It is a cleaner alternative to extracting the release from the text returned by `version` or `ver`.",
+    "pt": "`matlabRelease` fornece dados da versão em uma forma fácil de usar no código: `r.Release` é uma string como `\"R2023b\"`, que pode ser passada a `isMATLABReleaseOlderThan`. É uma alternativa mais limpa a extrair a versão do texto retornado por `version` ou `ver`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Release fields",
+      "pt": "Campos da versão"
+     },
+     "code": "r = matlabRelease\nr.Release"
+    }
+   ],
+   "see": [
+    "isMATLABReleaseOlderThan",
+    "version",
+    "ver",
+    "verLessThan"
+   ]
+  },
+  "usejava": {
+   "summary": {
+    "en": "Tests whether a Java feature is available.",
+    "pt": "Testa se um recurso Java está disponível."
+   },
+   "syntax": [
+    {
+     "code": "tf = usejava(feature)",
+     "en": "Returns `true` if the feature is present, for example `'jvm'`, `'awt'`, `'swing'` or `'desktop'`.",
+     "pt": "Retorna `true` se o recurso está presente, por exemplo `'jvm'`, `'awt'`, `'swing'` ou `'desktop'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "feature",
+     "en": "Name of the Java feature.",
+     "pt": "Nome do recurso Java."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`usejava` is the simple yes/no form of `javachk`. Scripts check `usejava('desktop')` to know whether the interactive desktop is running, and `usejava('jvm')` before calling Java classes.\n\nMatLivre has no Java virtual machine, so every feature reports `false`.",
+    "pt": "`usejava` é a forma simples de sim ou não de `javachk`. Scripts verificam `usejava('desktop')` para saber se a área de trabalho interativa está em execução, e `usejava('jvm')` antes de chamar classes Java.\n\nO MatLivre não tem máquina virtual Java, então todo recurso retorna `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Features that need Java",
+      "pt": "Recursos que precisam de Java"
+     },
+     "code": "usejava('jvm')\nusejava('desktop')"
+    }
+   ],
+   "see": [
+    "javachk",
+    "version",
+    "computer",
+    "ispc"
+   ]
+  },
+  "ver": {
+   "summary": {
+    "en": "Displays or returns version information for MATLAB and its products.",
+    "pt": "Exibe ou retorna informações de versão do MATLAB e de seus produtos."
+   },
+   "syntax": [
+    {
+     "code": "ver",
+     "en": "Prints a version report with the installed products.",
+     "pt": "Imprime um relatório de versões com os produtos instalados."
+    },
+    {
+     "code": "v = ver",
+     "en": "Returns a structure array describing each product.",
+     "pt": "Retorna um array de estruturas que descreve cada produto."
+    },
+    {
+     "code": "v = ver(product)",
+     "en": "Returns the entry of a single product, such as `'matlab'`.",
+     "pt": "Retorna a entrada de um único produto, como `'matlab'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "product",
+     "en": "Name of the product or toolbox.",
+     "pt": "Nome do produto ou toolbox."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Structure with the fields `Name`, `Version`, `Release` and `Date`.",
+     "pt": "Estrutura com os campos `Name`, `Version`, `Release` e `Date`."
+    }
+   ],
+   "description": {
+    "en": "`ver` is useful when reporting a problem, since the printed report names the platform and every toolbox with its version. Programmatically, use the structure form to compare the version of a given product against a requirement.\n\nThe `Version` field is a text such as `'23.2'`; `verLessThan` does the numeric comparison for you.",
+    "pt": "`ver` é útil ao relatar um problema, já que o relatório impresso nomeia a plataforma e cada toolbox com sua versão. Em código, use a forma de estrutura para comparar a versão de um produto com um requisito.\n\nO campo `Version` é um texto como `'23.2'`; `verLessThan` faz a comparação numérica por você."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Version of the base product",
+      "pt": "Versão do produto base"
+     },
+     "code": "v = ver('matlab');\nv.Name\nv.Version\nv.Release"
+    }
+   ],
+   "see": [
+    "version",
+    "verLessThan",
+    "matlabRelease",
+    "computer"
+   ]
+  },
+  "verLessThan": {
+   "summary": {
+    "en": "Tests whether a product's version is older than a given version.",
+    "pt": "Testa se a versão de um produto é anterior a uma versão dada."
+   },
+   "syntax": [
+    {
+     "code": "tf = verLessThan(product, version)",
+     "en": "`true` if the installed `product` is older than `version`.",
+     "pt": "`true` se o `product` instalado é anterior a `version`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "product",
+     "en": "Product name, such as `'matlab'` or a toolbox name.",
+     "pt": "Nome do produto, como `'matlab'` ou o nome de uma toolbox."
+    },
+    {
+     "name": "version",
+     "en": "Version text such as `'9.0'` or `'23.2'`.",
+     "pt": "Texto de versão, como `'9.0'` ou `'23.2'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The comparison is made number by number, so `'9.10'` is later than `'9.9'`. An unknown product name raises an error ('Unknown product'). The function is used to protect code that needs a minimum version, though `isMATLABReleaseOlderThan` is easier to read when you know the release name.\n\nVersion numbers are not release names: MATLAB R2023b is version 23.2.",
+    "pt": "A comparação é feita número a número, então `'9.10'` é posterior a `'9.9'`. Um nome de produto desconhecido gera erro ('Unknown product'). A função serve para proteger código que exige uma versão mínima, embora `isMATLABReleaseOlderThan` seja mais legível quando se conhece o nome da versão.\n\nNúmeros de versão não são nomes de versão: o MATLAB R2023b é a versão 23.2."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Compare with version numbers",
+      "pt": "Comparar com números de versão"
+     },
+     "code": "verLessThan('matlab', '9.0')\nverLessThan('matlab', '23.2')\nverLessThan('matlab', '23.3')"
+    }
+   ],
+   "see": [
+    "version",
+    "ver",
+    "matlabRelease",
+    "isMATLABReleaseOlderThan"
+   ]
+  },
+  "version": {
+   "summary": {
+    "en": "Returns the version of the running MATLAB.",
+    "pt": "Retorna a versão do MATLAB em execução."
+   },
+   "syntax": [
+    {
+     "code": "v = version",
+     "en": "Version number with build, release name and update level.",
+     "pt": "Número de versão com build, nome da versão e nível de atualização."
+    },
+    {
+     "code": "v = version('-release')",
+     "en": "Only the release, as a text like `'2023b'`.",
+     "pt": "Apenas a versão, como um texto do tipo `'2023b'`."
+    },
+    {
+     "code": "[v, d] = version",
+     "en": "Also returns the release date.",
+     "pt": "Também retorna a data da versão."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "option",
+     "en": "`'-release'`, `'-date'` or `'-java'`.",
+     "pt": "`'-release'`, `'-date'` ou `'-java'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Version text.",
+     "pt": "Texto da versão."
+    },
+    {
+     "name": "d",
+     "en": "Release date as text.",
+     "pt": "Data da versão como texto."
+    }
+   ],
+   "description": {
+    "en": "The plain call returns something like `'23.2.0.2409890 (R2023b) Update 3'`: the version number, the build and the release name. Use the options to get one piece at a time; for comparisons, `verLessThan` and `isMATLABReleaseOlderThan` are safer than parsing the text.\n\nThe version number of MATLAB R2023b is 23.2.",
+    "pt": "A chamada simples retorna algo como `'23.2.0.2409890 (R2023b) Update 3'`: o número de versão, o build e o nome da versão. Use as opções para obter uma parte por vez; para comparações, `verLessThan` e `isMATLABReleaseOlderThan` são mais seguros do que analisar o texto.\n\nO número de versão do MATLAB R2023b é 23.2."
+   },
+   "notes": {
+    "en": "`version('-java')` reports 'Java is not enabled', since MatLivre has no Java virtual machine.",
+    "pt": "`version('-java')` informa 'Java is not enabled', pois o MatLivre não tem máquina virtual Java."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Version, release and date",
+      "pt": "Versão, release e data"
+     },
+     "code": "version\nversion('-release')\n[v, d] = version"
+    }
+   ],
+   "see": [
+    "ver",
+    "verLessThan",
+    "matlabRelease",
+    "isMATLABReleaseOlderThan"
+   ]
+  }
+ }
+}

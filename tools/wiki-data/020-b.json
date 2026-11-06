@@ -1,0 +1,549 @@
+{
+  "functions": {
+    "bvp4c": {
+      "summary": {"en": "Solves boundary value problems for ordinary differential equations.", "pt": "Resolve problemas de valor de contorno para equações diferenciais ordinárias."},
+      "syntax": [
+        {"code": "sol = bvp4c(odefun, bcfun, solinit)", "en": "Solves `y' = odefun(x, y)` subject to the boundary conditions `bcfun(y(a), y(b)) = 0`, starting from the guess `solinit`.", "pt": "Resolve `y' = odefun(x, y)` sujeito às condições de contorno `bcfun(y(a), y(b)) = 0`, partindo do palpite `solinit`."},
+        {"code": "sol = bvp4c(odefun, bcfun, solinit, options)", "en": "Also applies options created with `bvpset`.", "pt": "Aplica também opções criadas com `bvpset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Function handle `dydx = odefun(x, y)` returning a column vector.", "pt": "Handle de função `dydx = odefun(x, y)` que retorna um vetor coluna."},
+        {"name": "bcfun", "en": "Function handle `res = bcfun(ya, yb)` returning the residuals of the boundary conditions.", "pt": "Handle de função `res = bcfun(ya, yb)` que retorna os resíduos das condições de contorno."},
+        {"name": "solinit", "en": "Initial mesh and guess, built with `bvpinit`.", "pt": "Malha inicial e palpite, construídos com `bvpinit`."},
+        {"name": "options", "en": "Structure from `bvpset` (tolerances, maximum mesh size, and so on).", "pt": "Estrutura de `bvpset` (tolerâncias, tamanho máximo da malha etc.)."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Structure with the mesh `sol.x`, the solution `sol.y` (one row per component), the derivative `sol.yp` and `sol.stats`.", "pt": "Estrutura com a malha `sol.x`, a solução `sol.y` (uma linha por componente), a derivada `sol.yp` e `sol.stats`."}
+      ],
+      "description": {
+        "en": "Write the equation as a first-order system, then give the boundary conditions as a function of the values at both ends. The solver adapts the mesh until the residual is below the tolerance, so `sol.x` is generally finer than `solinit.x`.\n\nUse `deval(sol, x)` to evaluate the solution at any point, since the mesh points are not chosen by you. Boundary value problems can have several solutions or none, and the initial guess decides which one is found.",
+        "pt": "Escreve-se a equação como um sistema de primeira ordem e dão-se as condições de contorno como função dos valores nas duas extremidades. O solver adapta a malha até o resíduo ficar abaixo da tolerância, então `sol.x` costuma ser mais fina que `solinit.x`.\n\nUse `deval(sol, x)` para avaliar a solução em qualquer ponto, já que os pontos da malha não são escolhidos por você. Problemas de valor de contorno podem ter várias soluções ou nenhuma, e o palpite inicial decide qual é encontrada."
+      },
+      "examples": [
+        {"title": {"en": "y'' + y = 0 with y(0) = 0, y(1) = 1", "pt": "y'' + y = 0 com y(0) = 0, y(1) = 1"}, "code": "odefun = @(x, y) [y(2); -y(1)];\nbcfun = @(ya, yb) [ya(1); yb(1) - 1];\nsolinit = bvpinit(linspace(0, 1, 5), [0; 1]);\nsol = bvp4c(odefun, bcfun, solinit);\ny = deval(sol, 0.5);\nfprintf('%.4f %.4f\\n', y(1), sin(0.5)/sin(1))"}
+      ],
+      "see": ["bvp5c", "bvpinit", "bvpset", "deval", "ode45"]
+    },
+    "bvp5c": {
+      "summary": {"en": "Solves boundary value problems with a fourth-order method that controls the true error.", "pt": "Resolve problemas de valor de contorno com um método de quarta ordem que controla o erro verdadeiro."},
+      "syntax": [
+        {"code": "sol = bvp5c(odefun, bcfun, solinit)", "en": "Solves the system `y' = odefun(x, y)` with boundary conditions `bcfun(y(a), y(b)) = 0`.", "pt": "Resolve o sistema `y' = odefun(x, y)` com condições de contorno `bcfun(y(a), y(b)) = 0`."},
+        {"code": "sol = bvp5c(odefun, bcfun, solinit, options)", "en": "Also applies options from `bvpset`.", "pt": "Aplica também opções de `bvpset`."}
+      ],
+      "inputs": [
+        {"name": "odefun, bcfun", "en": "Function handles for the equations and for the boundary residuals, as for `bvp4c`.", "pt": "Handles de função para as equações e para os resíduos de contorno, como em `bvp4c`."},
+        {"name": "solinit", "en": "Initial mesh and guess from `bvpinit`.", "pt": "Malha inicial e palpite de `bvpinit`."},
+        {"name": "options", "en": "Structure from `bvpset`.", "pt": "Estrutura de `bvpset`."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Structure with the fields `x`, `y`, `yp` and `stats`, usable with `deval`.", "pt": "Estrutura com os campos `x`, `y`, `yp` e `stats`, utilizável com `deval`."}
+      ],
+      "description": {
+        "en": "`bvp5c` has the same calling pattern as `bvp4c`, so one can often be swapped for the other. The difference is in the error control: `bvp4c` limits the residual of the collocation polynomial, while `bvp5c` limits the error in the solution itself, which can matter when a tight tolerance is required.\n\nIf one solver stalls on a hard problem, try the other, and improve the initial guess.",
+        "pt": "`bvp5c` tem o mesmo padrão de chamada de `bvp4c`, então muitas vezes uma pode ser trocada pela outra. A diferença está no controle do erro: `bvp4c` limita o resíduo do polinômio de colocação, enquanto `bvp5c` limita o erro na própria solução, o que pode importar quando se exige tolerância apertada.\n\nSe um solver trava em um problema difícil, experimente o outro e melhore o palpite inicial."
+      },
+      "examples": [
+        {"title": {"en": "Same problem as bvp4c", "pt": "Mesmo problema de bvp4c"}, "code": "odefun = @(x, y) [y(2); -y(1)];\nbcfun = @(ya, yb) [ya(1); yb(1) - 1];\nsolinit = bvpinit(linspace(0, 1, 5), [0; 1]);\nsol = bvp5c(odefun, bcfun, solinit);\ny = deval(sol, 0.5);\nfprintf('%.4f\\n', y(1))"}
+      ],
+      "see": ["bvp4c", "bvpinit", "bvpset", "deval"]
+    },
+    "bvpget": {
+      "summary": {"en": "Reads a named option from a boundary value problem options structure.", "pt": "Lê uma opção nomeada de uma estrutura de opções de problema de valor de contorno."},
+      "syntax": [
+        {"code": "val = bvpget(options, 'name')", "en": "Returns the value of the option, or `[]` if it is not set.", "pt": "Retorna o valor da opção, ou `[]` se ela não estiver definida."},
+        {"code": "val = bvpget(options, 'name', default)", "en": "Returns `default` when the option is empty.", "pt": "Retorna `default` quando a opção está vazia."}
+      ],
+      "inputs": [
+        {"name": "options", "en": "Structure created by `bvpset`.", "pt": "Estrutura criada por `bvpset`."},
+        {"name": "'name'", "en": "Option name, such as `'RelTol'`.", "pt": "Nome da opção, como `'RelTol'`."},
+        {"name": "default", "en": "Value to return if the option is empty.", "pt": "Valor a retornar se a opção está vazia."}
+      ],
+      "outputs": [
+        {"name": "val", "en": "The option value.", "pt": "O valor da opção."}
+      ],
+      "description": {
+        "en": "The solvers use `bvpget` internally to read their settings, falling back on defaults. It is shorthand for accessing the field directly, with the added behavior of the default value.",
+        "pt": "Os solvers usam `bvpget` internamente para ler suas configurações, recorrendo a valores padrão. É um atalho para acessar o campo diretamente, com o comportamento adicional do valor padrão."
+      },
+      "examples": [
+        {"title": {"en": "Reading an option", "pt": "Lendo uma opção"}, "code": "opts = bvpset('RelTol', 1e-5);\nbvpget(opts, 'RelTol')\nbvpget(opts, 'AbsTol', 1e-8)"}
+      ],
+      "see": ["bvpset", "bvp4c", "odeget", "odeset"]
+    },
+    "bvpinit": {
+      "summary": {"en": "Builds the initial mesh and guess for a boundary value problem solver.", "pt": "Constrói a malha inicial e o palpite para um solver de problema de valor de contorno."},
+      "syntax": [
+        {"code": "solinit = bvpinit(x, yinit)", "en": "Uses the mesh `x` and a constant guess vector `yinit`.", "pt": "Usa a malha `x` e um vetor de palpite constante `yinit`."},
+        {"code": "solinit = bvpinit(x, yinitfun)", "en": "Computes the guess at each mesh point with a function handle `y = yinitfun(x)`.", "pt": "Calcula o palpite em cada ponto da malha com um handle `y = yinitfun(x)`."},
+        {"code": "solinit = bvpinit(x, yinit, params)", "en": "Also supplies initial values for unknown parameters.", "pt": "Fornece também valores iniciais para parâmetros desconhecidos."}
+      ],
+      "inputs": [
+        {"name": "x", "en": "Vector of mesh points; its first and last entries are the boundary points `a` and `b`.", "pt": "Vetor de pontos da malha; a primeira e a última entrada são os pontos de contorno `a` e `b`."},
+        {"name": "yinit", "en": "Vector with one guess per solution component, or a function handle.", "pt": "Vetor com um palpite por componente da solução, ou um handle de função."},
+        {"name": "params", "en": "Vector of guesses for unknown parameters.", "pt": "Vetor de palpites para parâmetros desconhecidos."}
+      ],
+      "outputs": [
+        {"name": "solinit", "en": "Structure with fields `x` and `y` (and `parameters`), to pass to `bvp4c` or `bvp5c`.", "pt": "Estrutura com os campos `x` e `y` (e `parameters`), para passar a `bvp4c` ou `bvp5c`."}
+      ],
+      "description": {
+        "en": "Nonlinear boundary value problems depend on the starting guess, so choosing it well is part of the solution. A constant guess is the simplest; a function handle lets you encode what you know of the shape of the answer.\n\nThe mesh only needs to be reasonable, because the solver refines it. More points help where the solution is expected to vary quickly.",
+        "pt": "Problemas de contorno não lineares dependem do palpite inicial, então escolhê-lo bem faz parte da solução. Um palpite constante é o mais simples; um handle de função permite codificar o que se sabe da forma da resposta.\n\nA malha só precisa ser razoável, pois o solver a refina. Mais pontos ajudam onde se espera que a solução varie rápido."
+      },
+      "examples": [
+        {"title": {"en": "Constant guess", "pt": "Palpite constante"}, "code": "solinit = bvpinit(linspace(0, 1, 5), [0; 1]);\nsolinit.x\nsolinit.y"}
+      ],
+      "see": ["bvp4c", "bvp5c", "bvpset", "bvpxtend"]
+    },
+    "bvpset": {
+      "summary": {"en": "Creates or updates the options structure used by the boundary value problem solvers.", "pt": "Cria ou atualiza a estrutura de opções usada pelos solvers de problemas de valor de contorno."},
+      "syntax": [
+        {"code": "options = bvpset('name1', value1, 'name2', value2, ...)", "en": "Returns a structure with the given options set.", "pt": "Retorna uma estrutura com as opções indicadas definidas."},
+        {"code": "options = bvpset(oldopts, 'name', value)", "en": "Copies `oldopts` and changes the listed options.", "pt": "Copia `oldopts` e altera as opções listadas."}
+      ],
+      "inputs": [
+        {"name": "'RelTol'", "en": "Relative tolerance of the residual. Default `1e-3`.", "pt": "Tolerância relativa do resíduo. Padrão `1e-3`."},
+        {"name": "'AbsTol'", "en": "Absolute tolerance, a scalar or one value per component. Default `1e-6`.", "pt": "Tolerância absoluta, um escalar ou um valor por componente. Padrão `1e-6`."},
+        {"name": "'Vectorized'", "en": "`'on'` if `odefun` accepts a vector of `x` values and returns a matrix.", "pt": "`'on'` se `odefun` aceita um vetor de valores de `x` e retorna uma matriz."},
+        {"name": "'Stats'", "en": "`'on'` to print solver statistics.", "pt": "`'on'` para exibir estatísticas do solver."}
+      ],
+      "outputs": [
+        {"name": "options", "en": "Options structure to pass as the last argument of `bvp4c` or `bvp5c`.", "pt": "Estrutura de opções para passar como último argumento de `bvp4c` ou `bvp5c`."}
+      ],
+      "description": {
+        "en": "Option names are matched without regard to case. Options not mentioned keep their default behavior, represented as empty fields. Tightening `RelTol` makes the solver refine the mesh further, at higher cost.",
+        "pt": "Os nomes das opções são comparados sem distinção entre maiúsculas e minúsculas. Opções não mencionadas mantêm o comportamento padrão, representado por campos vazios. Reduzir `RelTol` faz o solver refinar mais a malha, a um custo maior."
+      },
+      "examples": [
+        {"title": {"en": "Tighter tolerance", "pt": "Tolerância mais apertada"}, "code": "opts = bvpset('RelTol', 1e-6, 'AbsTol', 1e-8);\nopts.RelTol\nopts.AbsTol"}
+      ],
+      "see": ["bvpget", "bvp4c", "bvp5c", "odeset"]
+    },
+    "bvpxtend": {
+      "summary": {"en": "Extends a boundary value problem solution to a new interval end.", "pt": "Estende a solução de um problema de valor de contorno para uma nova extremidade do intervalo."},
+      "syntax": [
+        {"code": "solext = bvpxtend(sol, xnew, ynew)", "en": "Returns a guess on the interval extended to `xnew`, starting from `sol` and the value `ynew` at the new point.", "pt": "Retorna um palpite no intervalo estendido até `xnew`, a partir de `sol` e do valor `ynew` no novo ponto."}
+      ],
+      "inputs": [
+        {"name": "sol", "en": "Solution structure from `bvp4c` or `bvp5c`.", "pt": "Estrutura de solução de `bvp4c` ou `bvp5c`."},
+        {"name": "xnew", "en": "New end point, outside the current interval.", "pt": "Novo ponto extremo, fora do intervalo atual."},
+        {"name": "ynew", "en": "Guess for the solution at `xnew` (optional).", "pt": "Palpite para a solução em `xnew` (opcional)."}
+      ],
+      "outputs": [
+        {"name": "solext", "en": "Structure usable as the `solinit` argument of a new solver call on the longer interval.", "pt": "Estrutura utilizável como argumento `solinit` de uma nova chamada do solver no intervalo mais longo."}
+      ],
+      "description": {
+        "en": "This is the basis of continuation: solve an easy problem on a short interval, extend the guess, and solve again on a longer one, repeating until the target interval is reached. It helps with problems that are hard to start from a crude guess.\n\nThe extension is only a guess; you must still call the solver with the new boundary conditions.",
+        "pt": "É a base da continuação: resolve-se um problema fácil em um intervalo curto, estende-se o palpite e resolve-se de novo em um intervalo maior, repetindo até chegar ao intervalo desejado. Ajuda em problemas difíceis de iniciar com um palpite grosseiro.\n\nA extensão é apenas um palpite; ainda é preciso chamar o solver com as novas condições de contorno."
+      },
+      "examples": [
+        {"title": {"en": "Extending the interval", "pt": "Estendendo o intervalo"}, "code": "odefun = @(x, y) [y(2); -y(1)];\nbcfun = @(ya, yb) [ya(1); yb(1) - 1];\nsol = bvp4c(odefun, bcfun, bvpinit(linspace(0, 1, 5), [0; 1]));\nsolext = bvpxtend(sol, 2, [1; 0]);\nsolext.x(end)"}
+      ],
+      "see": ["bvp4c", "bvp5c", "bvpinit", "odextend"]
+    },
+    "cumtrapz": {
+      "summary": {"en": "Cumulative integral by the trapezoidal rule.", "pt": "Integral acumulada pela regra do trapézio."},
+      "syntax": [
+        {"code": "Q = cumtrapz(Y)", "en": "Cumulative integral of `Y` with unit spacing.", "pt": "Integral acumulada de `Y` com espaçamento unitário."},
+        {"code": "Q = cumtrapz(X, Y)", "en": "Integrates against the sample points `X`.", "pt": "Integra em relação aos pontos de amostragem `X`."},
+        {"code": "Q = cumtrapz(X, Y, dim)", "en": "Integrates along dimension `dim`.", "pt": "Integra ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Vector of sample points, same length as `Y` along the integration dimension.", "pt": "Vetor de pontos de amostragem, com o mesmo comprimento de `Y` na dimensão de integração."},
+        {"name": "Y", "en": "Vector or array of function values.", "pt": "Vetor ou array de valores da função."},
+        {"name": "dim", "en": "Dimension to integrate along.", "pt": "Dimensão ao longo da qual integrar."}
+      ],
+      "outputs": [
+        {"name": "Q", "en": "Array of the same size as `Y`; its first element along `dim` is `0`.", "pt": "Array do mesmo tamanho de `Y`; seu primeiro elemento ao longo de `dim` é `0`."}
+      ],
+      "description": {
+        "en": "Each output element is the area under the piecewise-linear interpolant from the first sample up to that point. The last element therefore equals `trapz(X, Y)`.\n\nIt is exact for linear data and has error proportional to the square of the spacing for smooth data. It is a quick way to get a running integral, such as distance from sampled speed.",
+        "pt": "Cada elemento da saída é a área sob o interpolante linear por partes, da primeira amostra até aquele ponto. O último elemento é, portanto, igual a `trapz(X, Y)`.\n\nÉ exata para dados lineares e tem erro proporcional ao quadrado do espaçamento para dados suaves. É um jeito rápido de obter uma integral corrente, como a distância a partir da velocidade amostrada."
+      },
+      "examples": [
+        {"title": {"en": "Running integral of x", "pt": "Integral corrente de x"}, "code": "x = 0:0.5:2;\ncumtrapz(x, x)\ncumtrapz([1 2 3])"}
+      ],
+      "see": ["trapz", "cumsum", "integral", "diff"]
+    },
+    "dblquad": {
+      "summary": {"en": "Numerical double integral over a rectangle (older interface).", "pt": "Integral dupla numérica sobre um retângulo (interface antiga)."},
+      "syntax": [
+        {"code": "q = dblquad(fun, xmin, xmax, ymin, ymax)", "en": "Integrates `fun(x, y)` over the rectangle.", "pt": "Integra `fun(x, y)` sobre o retângulo."},
+        {"code": "q = dblquad(fun, xmin, xmax, ymin, ymax, tol)", "en": "Uses the absolute tolerance `tol`.", "pt": "Usa a tolerância absoluta `tol`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle accepting a vector `x` and a scalar `y`, returning a vector of values.", "pt": "Handle que aceita um vetor `x` e um escalar `y`, e retorna um vetor de valores."},
+        {"name": "xmin, xmax, ymin, ymax", "en": "Finite limits of the rectangle.", "pt": "Limites finitos do retângulo."},
+        {"name": "tol", "en": "Absolute tolerance. Default `1e-6`.", "pt": "Tolerância absoluta. Padrão `1e-6`."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "`dblquad` is retained for compatibility; new code should prefer `integral2`, which is more accurate and supports non-rectangular regions and infinite limits.\n\nWrite the integrand with element-wise operators (`.*`, `.^`), because it is called with a vector in `x`.",
+        "pt": "`dblquad` é mantida por compatibilidade; código novo deve preferir `integral2`, que é mais precisa e aceita regiões não retangulares e limites infinitos.\n\nEscreva o integrando com operadores elemento a elemento (`.*`, `.^`), pois ele é chamado com um vetor em `x`."
+      },
+      "examples": [
+        {"title": {"en": "Integral of x*y on the unit square", "pt": "Integral de x*y no quadrado unitário"}, "code": "dblquad(@(x, y) x.*y, 0, 1, 0, 1)"}
+      ],
+      "see": ["integral2", "quad2d", "triplequad", "integral"]
+    },
+    "dde23": {
+      "summary": {"en": "Solves delay differential equations with constant delays.", "pt": "Resolve equações diferenciais com atraso de atrasos constantes."},
+      "syntax": [
+        {"code": "sol = dde23(ddefun, lags, history, tspan)", "en": "Solves `y'(t) = ddefun(t, y, Z)`, where column `j` of `Z` is `y(t - lags(j))`.", "pt": "Resolve `y'(t) = ddefun(t, y, Z)`, em que a coluna `j` de `Z` é `y(t - lags(j))`."},
+        {"code": "sol = dde23(ddefun, lags, history, tspan, options)", "en": "Also applies options from `ddeset`.", "pt": "Aplica também opções de `ddeset`."}
+      ],
+      "inputs": [
+        {"name": "ddefun", "en": "Handle `dydt = ddefun(t, y, Z)`.", "pt": "Handle `dydt = ddefun(t, y, Z)`."},
+        {"name": "lags", "en": "Vector of positive constant delays.", "pt": "Vetor de atrasos constantes positivos."},
+        {"name": "history", "en": "Constant vector, or a function `y = history(t)`, giving the solution for `t <= t0`.", "pt": "Vetor constante, ou função `y = history(t)`, que dá a solução para `t <= t0`."},
+        {"name": "tspan", "en": "Interval `[t0 tf]`.", "pt": "Intervalo `[t0 tf]`."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Structure with `sol.x`, `sol.y` (one column per time) and `sol.yp`, usable with `deval`.", "pt": "Estrutura com `sol.x`, `sol.y` (uma coluna por instante) e `sol.yp`, utilizável com `deval`."}
+      ],
+      "description": {
+        "en": "A delay equation depends on the state at earlier times, so a whole history function, not just an initial value, is needed to start. The solver is a Runge-Kutta method with step control that also handles the derivative discontinuities that delays propagate.\n\nFor delays that depend on `t` or `y`, use `ddesd`; for neutral equations, `ddensd`.",
+        "pt": "Uma equação com atraso depende do estado em instantes anteriores, por isso é preciso uma função de histórico inteira, não apenas um valor inicial. O solver é um método de Runge-Kutta com controle de passo que também trata as descontinuidades de derivada que os atrasos propagam.\n\nPara atrasos que dependem de `t` ou de `y`, use `ddesd`; para equações neutras, `ddensd`."
+      },
+      "examples": [
+        {"title": {"en": "y'(t) = -y(t-1), history 1", "pt": "y'(t) = -y(t-1), histórico 1"}, "code": "sol = dde23(@(t, y, Z) -Z, 1, 1, [0 2]);\nfprintf('%.4f\\n', sol.y(end))"}
+      ],
+      "see": ["ddesd", "ddensd", "ddeset", "deval", "ode45"]
+    },
+    "ddeget": {
+      "summary": {"en": "Reads a named option from a delay differential equation options structure.", "pt": "Lê uma opção nomeada de uma estrutura de opções de equação diferencial com atraso."},
+      "syntax": [
+        {"code": "val = ddeget(options, 'name')", "en": "Returns the value of the option, or `[]` if it is not set.", "pt": "Retorna o valor da opção, ou `[]` se não estiver definida."},
+        {"code": "val = ddeget(options, 'name', default)", "en": "Returns `default` when the option is empty.", "pt": "Retorna `default` quando a opção está vazia."}
+      ],
+      "inputs": [
+        {"name": "options", "en": "Structure created by `ddeset`.", "pt": "Estrutura criada por `ddeset`."},
+        {"name": "'name'", "en": "Option name, such as `'RelTol'`.", "pt": "Nome da opção, como `'RelTol'`."},
+        {"name": "default", "en": "Value to return if the option is empty.", "pt": "Valor a retornar se a opção está vazia."}
+      ],
+      "outputs": [
+        {"name": "val", "en": "The option value.", "pt": "O valor da opção."}
+      ],
+      "description": {
+        "en": "The delay solvers use `ddeget` to read their settings, applying defaults for options left empty. In your own code it is useful when writing a function that accepts an options structure and needs a fallback value.",
+        "pt": "Os solvers de atraso usam `ddeget` para ler suas configurações, aplicando padrões às opções vazias. No seu próprio código é útil ao escrever uma função que recebe uma estrutura de opções e precisa de um valor de reserva."
+      },
+      "examples": [
+        {"title": {"en": "Reading with a default", "pt": "Lendo com um padrão"}, "code": "opts = ddeset('RelTol', 1e-5);\nddeget(opts, 'RelTol')\nddeget(opts, 'AbsTol', 1e-9)"}
+      ],
+      "see": ["ddeset", "dde23", "odeget", "bvpget"]
+    },
+    "ddensd": {
+      "summary": {"en": "Solves neutral delay differential equations with state-dependent delays.", "pt": "Resolve equações diferenciais neutras com atraso dependente do estado."},
+      "syntax": [
+        {"code": "sol = ddensd(ddefun, dely, delyp, history, tspan)", "en": "Solves `y'(t) = ddefun(t, y, ydel, ypdel)`, where `ydel` holds delayed values of `y` and `ypdel` delayed values of `y'`.", "pt": "Resolve `y'(t) = ddefun(t, y, ydel, ypdel)`, em que `ydel` contém valores atrasados de `y` e `ypdel` valores atrasados de `y'`."},
+        {"code": "sol = ddensd(ddefun, dely, delyp, history, tspan, options)", "en": "Also applies options from `ddeset`.", "pt": "Aplica também opções de `ddeset`."}
+      ],
+      "inputs": [
+        {"name": "ddefun", "en": "Handle `dydt = ddefun(t, y, ydel, ypdel)`.", "pt": "Handle `dydt = ddefun(t, y, ydel, ypdel)`."},
+        {"name": "dely", "en": "Delay for `y`: a constant, or a function `dely(t, y)`.", "pt": "Atraso para `y`: uma constante, ou uma função `dely(t, y)`."},
+        {"name": "delyp", "en": "Delay for `y'`, or `[]` if the equation has no delayed derivative term.", "pt": "Atraso para `y'`, ou `[]` se a equação não tem termo de derivada atrasada."},
+        {"name": "history", "en": "Constant vector or function giving the solution before `t0`.", "pt": "Vetor constante ou função que dá a solução antes de `t0`."},
+        {"name": "tspan", "en": "Interval `[t0 tf]`.", "pt": "Intervalo `[t0 tf]`."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Solution structure with `sol.x` and `sol.y`, usable with `deval`.", "pt": "Estrutura de solução com `sol.x` e `sol.y`, utilizável com `deval`."}
+      ],
+      "description": {
+        "en": "A neutral equation contains delayed derivatives, which makes it more delicate than an ordinary delay equation. Delays may depend on time and on the solution itself.\n\nWhen the equation has no delayed derivative term, pass `[]` for `delyp` and ignore the fourth argument of `ddefun`; this reduces to the problem handled by `ddesd`.",
+        "pt": "Uma equação neutra contém derivadas atrasadas, o que a torna mais delicada que uma equação de atraso comum. Os atrasos podem depender do tempo e da própria solução.\n\nQuando a equação não tem termo de derivada atrasada, passe `[]` em `delyp` e ignore o quarto argumento de `ddefun`; o problema se reduz ao tratado por `ddesd`."
+      },
+      "examples": [
+        {"title": {"en": "A plain delay problem", "pt": "Um problema de atraso simples"}, "code": "sol = ddensd(@(t, y, ydel, ypdel) -ydel, 1, [], 1, [0 2]);\nfprintf('%.4f\\n', sol.y(end))"}
+      ],
+      "see": ["ddesd", "dde23", "ddeset", "deval"]
+    },
+    "ddesd": {
+      "summary": {"en": "Solves delay differential equations with time- or state-dependent delays.", "pt": "Resolve equações diferenciais com atraso dependente do tempo ou do estado."},
+      "syntax": [
+        {"code": "sol = ddesd(ddefun, delay, history, tspan)", "en": "Solves `y'(t) = ddefun(t, y, Z)` where `Z` holds `y` evaluated at the delayed times given by `delay`.", "pt": "Resolve `y'(t) = ddefun(t, y, Z)`, em que `Z` contém `y` avaliado nos instantes atrasados dados por `delay`."},
+        {"code": "sol = ddesd(ddefun, delay, history, tspan, options)", "en": "Also applies options from `ddeset`.", "pt": "Aplica também opções de `ddeset`."}
+      ],
+      "inputs": [
+        {"name": "ddefun", "en": "Handle `dydt = ddefun(t, y, Z)`.", "pt": "Handle `dydt = ddefun(t, y, Z)`."},
+        {"name": "delay", "en": "Constant delay, a vector of constants, or a function `d = delay(t, y)` returning the delays.", "pt": "Atraso constante, um vetor de constantes, ou uma função `d = delay(t, y)` que retorna os atrasos."},
+        {"name": "history", "en": "Constant vector or function giving the solution for `t <= t0`.", "pt": "Vetor constante ou função que dá a solução para `t <= t0`."},
+        {"name": "tspan", "en": "Interval `[t0 tf]`.", "pt": "Intervalo `[t0 tf]`."}
+      ],
+      "outputs": [
+        {"name": "sol", "en": "Structure with `sol.x`, `sol.y`, usable with `deval`.", "pt": "Estrutura com `sol.x` e `sol.y`, utilizável com `deval`."}
+      ],
+      "description": {
+        "en": "`ddesd` generalizes `dde23` by letting the delay depend on time and on the current state, as in models where the delay is itself a physical variable. The price is a more general, somewhat slower algorithm.\n\nFor constant delays, `dde23` is usually the better choice.",
+        "pt": "`ddesd` generaliza `dde23` ao permitir que o atraso dependa do tempo e do estado atual, como em modelos em que o atraso é ele próprio uma variável física. O preço é um algoritmo mais geral e um pouco mais lento.\n\nPara atrasos constantes, `dde23` costuma ser a melhor escolha."
+      },
+      "examples": [
+        {"title": {"en": "Constant delay of 1", "pt": "Atraso constante de 1"}, "code": "sol = ddesd(@(t, y, Z) -Z, 1, 1, [0 2]);\nfprintf('%.4f\\n', sol.y(end))"}
+      ],
+      "see": ["dde23", "ddensd", "ddeset", "deval"]
+    },
+    "ddeset": {
+      "summary": {"en": "Creates or updates the options structure used by the delay equation solvers.", "pt": "Cria ou atualiza a estrutura de opções usada pelos solvers de equações com atraso."},
+      "syntax": [
+        {"code": "options = ddeset('name1', value1, 'name2', value2, ...)", "en": "Returns a structure with the given options set.", "pt": "Retorna uma estrutura com as opções indicadas definidas."},
+        {"code": "options = ddeset(oldopts, 'name', value)", "en": "Copies `oldopts` and changes the listed options.", "pt": "Copia `oldopts` e altera as opções listadas."}
+      ],
+      "inputs": [
+        {"name": "'RelTol'", "en": "Relative error tolerance. Default `1e-3`.", "pt": "Tolerância de erro relativo. Padrão `1e-3`."},
+        {"name": "'AbsTol'", "en": "Absolute error tolerance. Default `1e-6`.", "pt": "Tolerância de erro absoluto. Padrão `1e-6`."},
+        {"name": "'Events'", "en": "Handle of an event function that can stop the integration.", "pt": "Handle de uma função de eventos que pode interromper a integração."},
+        {"name": "'MaxStep'", "en": "Upper bound for the step size.", "pt": "Limite superior para o tamanho do passo."}
+      ],
+      "outputs": [
+        {"name": "options", "en": "Options structure to pass as the last argument of `dde23`, `ddesd` or `ddensd`.", "pt": "Estrutura de opções para passar como último argumento de `dde23`, `ddesd` ou `ddensd`."}
+      ],
+      "description": {
+        "en": "Option names are matched without regard to case, and options you do not set remain empty so the solver uses its default. Starting from `oldopts` is a convenient way to change a single setting.",
+        "pt": "Os nomes das opções são comparados sem distinção entre maiúsculas e minúsculas, e as opções não definidas ficam vazias para que o solver use seu padrão. Partir de `oldopts` é um jeito prático de mudar uma única configuração."
+      },
+      "examples": [
+        {"title": {"en": "Setting tolerances", "pt": "Definindo tolerâncias"}, "code": "opts = ddeset('RelTol', 1e-6, 'AbsTol', 1e-9);\nsol = dde23(@(t, y, Z) -Z, 1, 1, [0 2], opts);\nfprintf('%.5f\\n', sol.y(end))"}
+      ],
+      "see": ["ddeget", "dde23", "ddesd", "odeset"]
+    },
+    "decic": {
+      "summary": {"en": "Finds consistent initial conditions for a fully implicit differential equation.", "pt": "Encontra condições iniciais consistentes para uma equação diferencial totalmente implícita."},
+      "syntax": [
+        {"code": "[y0mod, yp0mod] = decic(odefun, t0, y0, fixed_y0, yp0, fixed_yp0)", "en": "Adjusts the free components of `y0` and `yp0` so that `odefun(t0, y0mod, yp0mod) = 0`.", "pt": "Ajusta as componentes livres de `y0` e `yp0` de modo que `odefun(t0, y0mod, yp0mod) = 0`."},
+        {"code": "[y0mod, yp0mod] = decic(___, options)", "en": "Also applies tolerances from `odeset`.", "pt": "Aplica também tolerâncias de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `res = odefun(t, y, yp)` of the implicit system `f(t, y, y') = 0`.", "pt": "Handle `res = odefun(t, y, yp)` do sistema implícito `f(t, y, y') = 0`."},
+        {"name": "t0", "en": "Initial time.", "pt": "Instante inicial."},
+        {"name": "y0, yp0", "en": "Initial guesses for the solution and its derivative.", "pt": "Palpites iniciais para a solução e sua derivada."},
+        {"name": "fixed_y0, fixed_yp0", "en": "Vectors of 1 and 0 marking which components must be kept (1) or may be changed (0).", "pt": "Vetores de 1 e 0 que marcam quais componentes devem ser mantidas (1) ou podem ser alteradas (0)."}
+      ],
+      "outputs": [
+        {"name": "y0mod, yp0mod", "en": "Consistent initial values, close to the guesses, ready for `ode15i`.", "pt": "Valores iniciais consistentes, próximos dos palpites, prontos para `ode15i`."}
+      ],
+      "description": {
+        "en": "An implicit solver such as `ode15i` needs starting values that already satisfy the equation. `decic` computes them by holding the components you mark as fixed and solving for the rest. The number of free components must match the number of equations.\n\nIf the equation is not consistent for any choice of free values, the function reports that it failed to converge.",
+        "pt": "Um solver implícito como `ode15i` precisa de valores iniciais que já satisfaçam a equação. `decic` os calcula mantendo as componentes marcadas como fixas e resolvendo para as demais. O número de componentes livres deve coincidir com o número de equações.\n\nSe a equação não for consistente para nenhuma escolha dos valores livres, a função informa que não convergiu."
+      },
+      "examples": [
+        {"title": {"en": "y' + y = 0 with y(0) = 1", "pt": "y' + y = 0 com y(0) = 1"}, "code": "f = @(t, y, yp) yp + y;\n[y0, yp0] = decic(f, 0, 1, 1, 0, 0)"}
+      ],
+      "see": ["ode15i", "odeset", "fsolve"]
+    },
+    "del2": {
+      "summary": {"en": "Discrete Laplacian of an array.", "pt": "Laplaciano discreto de um array."},
+      "syntax": [
+        {"code": "L = del2(U)", "en": "Returns the discrete Laplacian of `U` with unit spacing, scaled by 1/4 for a matrix (1/2n for n dimensions).", "pt": "Retorna o Laplaciano discreto de `U` com espaçamento unitário, escalado por 1/4 em uma matriz (1/2n em n dimensões)."},
+        {"code": "L = del2(U, h)", "en": "Uses the spacing `h` in all directions.", "pt": "Usa o espaçamento `h` em todas as direções."},
+        {"code": "L = del2(U, hx, hy, ...)", "en": "Uses a separate spacing for each dimension.", "pt": "Usa um espaçamento separado para cada dimensão."}
+      ],
+      "inputs": [
+        {"name": "U", "en": "Numeric vector, matrix or N-D array of samples on a regular grid.", "pt": "Vetor, matriz ou array N-D numérico de amostras em uma grade regular."},
+        {"name": "h, hx, hy", "en": "Scalar spacings, or coordinate vectors.", "pt": "Espaçamentos escalares ou vetores de coordenadas."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "Array the same size as `U`.", "pt": "Array do mesmo tamanho de `U`."}
+      ],
+      "description": {
+        "en": "In the interior, each value is the mean of the second differences along every dimension, which approximates one fourth of the Laplacian `d2u/dx2 + d2u/dy2` for a matrix. Near the edges, the stencil is extrapolated linearly from the neighbors.\n\nMultiply by 4 (for a matrix) to get the plain Laplacian. For a quadratic function, the discrete Laplacian is exact and constant.",
+        "pt": "No interior, cada valor é a média das diferenças segundas em todas as dimensões, o que aproxima um quarto do Laplaciano `d2u/dx2 + d2u/dy2` para uma matriz. Perto das bordas, o estêncil é extrapolado linearmente a partir dos vizinhos.\n\nMultiplique por 4 (em uma matriz) para obter o Laplaciano puro. Para uma função quadrática, o Laplaciano discreto é exato e constante."
+      },
+      "examples": [
+        {"title": {"en": "Laplacian of x^2 + y^2", "pt": "Laplaciano de x^2 + y^2"}, "code": "[X, Y] = meshgrid(0:4);\nU = X.^2 + Y.^2;\n4*del2(U)"}
+      ],
+      "see": ["gradient", "diff", "divergence", "curl"]
+    },
+    "deval": {
+      "summary": {"en": "Evaluates a differential equation solution structure at given points.", "pt": "Avalia em pontos dados uma estrutura de solução de equação diferencial."},
+      "syntax": [
+        {"code": "y = deval(sol, x)", "en": "Returns the solution at the points `x`.", "pt": "Retorna a solução nos pontos `x`."},
+        {"code": "y = deval(sol, x, idx)", "en": "Returns only the solution components listed in `idx`.", "pt": "Retorna apenas as componentes da solução listadas em `idx`."},
+        {"code": "[y, yp] = deval(sol, x)", "en": "Also returns the first derivative.", "pt": "Retorna também a primeira derivada."}
+      ],
+      "inputs": [
+        {"name": "sol", "en": "Structure returned by a solver called with a single output, such as `ode45`, `bvp4c`, `dde23` or `pdepe` variants.", "pt": "Estrutura retornada por um solver chamado com uma única saída, como `ode45`, `bvp4c` ou `dde23`."},
+        {"name": "x", "en": "Points inside the solved interval.", "pt": "Pontos dentro do intervalo resolvido."},
+        {"name": "idx", "en": "Indices of the components wanted.", "pt": "Índices das componentes desejadas."}
+      ],
+      "outputs": [
+        {"name": "y", "en": "Matrix with one row per component and one column per point of `x`.", "pt": "Matriz com uma linha por componente e uma coluna por ponto de `x`."},
+        {"name": "yp", "en": "Derivative values with the same layout (when requested).", "pt": "Valores da derivada com o mesmo formato (quando pedidos)."}
+      ],
+      "description": {
+        "en": "Solvers return the solution only at their own steps. `deval` interpolates between them using the solver's method, so the result is smoother and more accurate than interpolating the stored points linearly.\n\nPoints outside the interval of the solution are extrapolated or rejected depending on the solver, so stay inside.",
+        "pt": "Os solvers retornam a solução apenas nos seus próprios passos. `deval` interpola entre eles usando o método do solver, de modo que o resultado é mais suave e preciso que uma interpolação linear dos pontos guardados.\n\nPontos fora do intervalo da solução são extrapolados ou rejeitados conforme o solver, então convém ficar dentro dele."
+      },
+      "examples": [
+        {"title": {"en": "Evaluate exp(-t) at t = 0.5", "pt": "Avaliar exp(-t) em t = 0.5"}, "code": "sol = ode45(@(t, y) -y, [0 1], 1);\ny = deval(sol, [0.25 0.5])\nexp(-[0.25 0.5])"}
+      ],
+      "see": ["ode45", "bvp4c", "dde23", "interp1", "odextend"]
+    },
+    "gradient": {
+      "summary": {"en": "Numerical gradient (finite-difference derivative) of sampled data.", "pt": "Gradiente numérico (derivada por diferenças finitas) de dados amostrados."},
+      "syntax": [
+        {"code": "g = gradient(f)", "en": "Derivative of a vector with unit spacing.", "pt": "Derivada de um vetor com espaçamento unitário."},
+        {"code": "g = gradient(f, h)", "en": "Derivative with uniform spacing `h`, or with the coordinate vector `h`.", "pt": "Derivada com espaçamento uniforme `h`, ou com o vetor de coordenadas `h`."},
+        {"code": "[gx, gy] = gradient(F, hx, hy)", "en": "Partial derivatives of a matrix with respect to columns (`gx`) and rows (`gy`).", "pt": "Derivadas parciais de uma matriz em relação às colunas (`gx`) e às linhas (`gy`)."}
+      ],
+      "inputs": [
+        {"name": "f, F", "en": "Vector or N-D array of samples.", "pt": "Vetor ou array N-D de amostras."},
+        {"name": "h, hx, hy", "en": "Scalar spacing or vector of sample coordinates.", "pt": "Espaçamento escalar ou vetor de coordenadas das amostras."}
+      ],
+      "outputs": [
+        {"name": "g, gx, gy", "en": "Arrays the same size as the input.", "pt": "Arrays do mesmo tamanho da entrada."}
+      ],
+      "description": {
+        "en": "Interior points use central differences, `(f(i+1) - f(i-1))/(2h)`. The end points use one-sided differences, which are less accurate.\n\nFor a matrix, the first output is the derivative along the columns direction (left to right) and the second along the rows direction (top to bottom), which is the opposite order from what the layout of `F` might suggest.",
+        "pt": "Os pontos interiores usam diferenças centrais, `(f(i+1) - f(i-1))/(2h)`. Os pontos extremos usam diferenças unilaterais, menos precisas.\n\nPara uma matriz, a primeira saída é a derivada na direção das colunas (da esquerda para a direita) e a segunda na direção das linhas (de cima para baixo), ou seja, a ordem inversa da que o formato de `F` poderia sugerir."
+      },
+      "examples": [
+        {"title": {"en": "Derivative of squares", "pt": "Derivada de quadrados"}, "code": "gradient([1 4 9 16])\n[gx, gy] = gradient([1 2 4; 2 3 5; 4 5 7])"}
+      ],
+      "see": ["diff", "del2", "trapz", "cumtrapz"]
+    },
+    "integral": {
+      "summary": {"en": "Numerical integral of a function of one variable.", "pt": "Integral numérica de uma função de uma variável."},
+      "syntax": [
+        {"code": "q = integral(fun, a, b)", "en": "Integrates `fun` from `a` to `b` with adaptive quadrature.", "pt": "Integra `fun` de `a` a `b` por quadratura adaptativa."},
+        {"code": "q = integral(fun, a, b, Name, Value)", "en": "Sets options such as `'AbsTol'`, `'RelTol'`, `'ArrayValued'` or `'Waypoints'`.", "pt": "Define opções como `'AbsTol'`, `'RelTol'`, `'ArrayValued'` ou `'Waypoints'`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle `y = fun(x)` that accepts a vector `x` and returns a vector of the same size.", "pt": "Handle `y = fun(x)` que aceita um vetor `x` e retorna um vetor do mesmo tamanho."},
+        {"name": "a, b", "en": "Limits. They may be `-Inf` or `Inf`.", "pt": "Limites. Podem ser `-Inf` ou `Inf`."},
+        {"name": "'ArrayValued'", "en": "Set `true` if `fun` returns an array for each scalar `x`.", "pt": "Defina como `true` se `fun` retorna um array para cada `x` escalar."},
+        {"name": "'Waypoints'", "en": "Interior points where the integrand has kinks or discontinuities.", "pt": "Pontos interiores onde o integrando tem quinas ou descontinuidades."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "The default method is a global adaptive Gauss-Kronrod rule, which subdivides the interval where the estimated error is largest until the tolerances are met. Infinite limits are handled by a change of variable.\n\nThe integrand must be vectorized: write `x.^2`, not `x^2`. This is the usual cause of an error when first using `integral`.",
+        "pt": "O método padrão é uma regra de Gauss-Kronrod adaptativa global, que subdivide o intervalo onde o erro estimado é maior até atingir as tolerâncias. Limites infinitos são tratados por mudança de variável.\n\nO integrando deve ser vetorizado: escreva `x.^2`, não `x^2`. Essa é a causa usual de erro no primeiro uso de `integral`."
+      },
+      "examples": [
+        {"title": {"en": "Finite and infinite ranges", "pt": "Intervalos finito e infinito"}, "code": "integral(@(x) x.^2, 0, 1)\nintegral(@(x) exp(-x.^2), -Inf, Inf)\nsqrt(pi)"}
+      ],
+      "see": ["integral2", "integral3", "quadgk", "trapz", "ode45"]
+    },
+    "integral2": {
+      "summary": {"en": "Numerical double integral over a rectangle or a region with variable limits.", "pt": "Integral dupla numérica sobre um retângulo ou uma região com limites variáveis."},
+      "syntax": [
+        {"code": "q = integral2(fun, xmin, xmax, ymin, ymax)", "en": "Integrates `fun(x, y)` over a rectangle.", "pt": "Integra `fun(x, y)` sobre um retângulo."},
+        {"code": "q = integral2(fun, xmin, xmax, ymin, ymax, Name, Value)", "en": "Sets options such as `'AbsTol'`, `'RelTol'` and `'Method'`.", "pt": "Define opções como `'AbsTol'`, `'RelTol'` e `'Method'`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle `z = fun(x, y)` that accepts arrays of the same size and returns an array of that size.", "pt": "Handle `z = fun(x, y)` que aceita arrays de mesmo tamanho e retorna um array desse tamanho."},
+        {"name": "xmin, xmax", "en": "Limits of `x`, scalars.", "pt": "Limites de `x`, escalares."},
+        {"name": "ymin, ymax", "en": "Limits of `y`: scalars, or function handles of `x` for a non-rectangular region.", "pt": "Limites de `y`: escalares, ou handles de função de `x` para uma região não retangular."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "The integrand must work on arrays, so use element-wise operators. Making `ymin` and `ymax` functions of `x` lets you integrate over regions bounded by curves, such as a triangle `0 <= y <= x`.\n\nThe area of a region is the integral of the constant 1, but write it as `@(x,y) ones(size(x))` so that the result keeps the array shape.",
+        "pt": "O integrando deve funcionar com arrays, então use operadores elemento a elemento. Tornar `ymin` e `ymax` funções de `x` permite integrar sobre regiões delimitadas por curvas, como o triângulo `0 <= y <= x`.\n\nA área de uma região é a integral da constante 1, mas escreva `@(x,y) ones(size(x))` para que o resultado mantenha o formato de array."
+      },
+      "examples": [
+        {"title": {"en": "Rectangle and triangle", "pt": "Retângulo e triângulo"}, "code": "f = @(x, y) x.*y;\nintegral2(f, 0, 1, 0, 1)\nintegral2(f, 0, 1, 0, @(x) x)"}
+      ],
+      "see": ["integral", "integral3", "dblquad", "quad2d"]
+    },
+    "integral3": {
+      "summary": {"en": "Numerical triple integral over a box or a region with variable limits.", "pt": "Integral tripla numérica sobre uma caixa ou uma região com limites variáveis."},
+      "syntax": [
+        {"code": "q = integral3(fun, xmin, xmax, ymin, ymax, zmin, zmax)", "en": "Integrates `fun(x, y, z)` over a box.", "pt": "Integra `fun(x, y, z)` sobre uma caixa."},
+        {"code": "q = integral3(___, Name, Value)", "en": "Sets options such as `'AbsTol'`, `'RelTol'` and `'Method'`.", "pt": "Define opções como `'AbsTol'`, `'RelTol'` e `'Method'`."}
+      ],
+      "inputs": [
+        {"name": "fun", "en": "Handle `w = fun(x, y, z)` that accepts arrays of the same size and returns an array of that size.", "pt": "Handle `w = fun(x, y, z)` que aceita arrays de mesmo tamanho e retorna um array desse tamanho."},
+        {"name": "xmin ... zmax", "en": "Scalar limits; the `y` limits may be handles of `x`, and the `z` limits handles of `x` and `y`.", "pt": "Limites escalares; os limites de `y` podem ser handles de `x`, e os de `z` handles de `x` e `y`."}
+      ],
+      "outputs": [
+        {"name": "q", "en": "Approximate value of the integral.", "pt": "Valor aproximado da integral."}
+      ],
+      "description": {
+        "en": "The method is the three-dimensional analogue of `integral2`, based on nested adaptive quadrature. The cost grows quickly with the dimension, so smooth integrands and moderate tolerances are advisable.\n\nUse element-wise operators in the integrand.",
+        "pt": "O método é o análogo tridimensional de `integral2`, baseado em quadratura adaptativa aninhada. O custo cresce rápido com a dimensão, então convém ter integrandos suaves e tolerâncias moderadas.\n\nUse operadores elemento a elemento no integrando."
+      },
+      "examples": [
+        {"title": {"en": "Integral of x + y + z on the unit cube", "pt": "Integral de x + y + z no cubo unitário"}, "code": "integral3(@(x, y, z) x + y + z, 0, 1, 0, 1, 0, 1)"}
+      ],
+      "see": ["integral", "integral2", "triplequad"]
+    },
+    "ode113": {
+      "summary": {"en": "Variable-order Adams-Bashforth-Moulton solver for nonstiff differential equations.", "pt": "Solver de Adams-Bashforth-Moulton de ordem variável para equações diferenciais não rígidas."},
+      "syntax": [
+        {"code": "[t, y] = ode113(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)` over `tspan` from the initial condition `y0`.", "pt": "Integra `y' = odefun(t, y)` em `tspan` a partir da condição inicial `y0`."},
+        {"code": "[t, y] = ode113(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."},
+        {"code": "sol = ode113(___)", "en": "Returns a structure for use with `deval`.", "pt": "Retorna uma estrutura para uso com `deval`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)` returning a column vector.", "pt": "Handle `dydt = odefun(t, y)` que retorna um vetor coluna."},
+        {"name": "tspan", "en": "`[t0 tf]`, or a longer vector of times at which to report the solution.", "pt": "`[t0 tf]`, ou um vetor mais longo de instantes em que reportar a solução."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."},
+        {"name": "options", "en": "Structure from `odeset` (tolerances, events, and so on).", "pt": "Estrutura de `odeset` (tolerâncias, eventos etc.)."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Column vector of time points.", "pt": "Vetor coluna de instantes."},
+        {"name": "y", "en": "Array with one row per time and one column per component.", "pt": "Array com uma linha por instante e uma coluna por componente."}
+      ],
+      "description": {
+        "en": "A multistep method reuses earlier derivative values, so each step needs few evaluations of `odefun`. That makes `ode113` efficient when the function is expensive to evaluate and the solution is smooth, and it handles stringent tolerances well.\n\nIt is not suited to stiff problems (use `ode15s`) nor to solutions with sharp discontinuities, where a one-step method like `ode45` is better.",
+        "pt": "Um método de múltiplos passos reaproveita valores anteriores da derivada, de modo que cada passo precisa de poucas avaliações de `odefun`. Isso torna `ode113` eficiente quando a função é cara de avaliar e a solução é suave, e ela lida bem com tolerâncias rigorosas.\n\nNão serve para problemas rígidos (use `ode15s`) nem para soluções com descontinuidades abruptas, em que um método de passo único como `ode45` é melhor."
+      },
+      "examples": [
+        {"title": {"en": "Exponential decay", "pt": "Decaimento exponencial"}, "code": "[t, y] = ode113(@(t, y) -y, [0 1], 1);\nfprintf('%.4f %.4f\\n', y(end), exp(-1))"}
+      ],
+      "see": ["ode45", "ode15s", "odeset", "deval"]
+    },
+    "ode15i": {
+      "summary": {"en": "Variable-order solver for fully implicit differential equations f(t, y, y') = 0.", "pt": "Solver de ordem variável para equações diferenciais totalmente implícitas f(t, y, y') = 0."},
+      "syntax": [
+        {"code": "[t, y] = ode15i(odefun, tspan, y0, yp0)", "en": "Integrates `odefun(t, y, yp) = 0` from consistent initial values `y0`, `yp0`.", "pt": "Integra `odefun(t, y, yp) = 0` a partir de valores iniciais consistentes `y0`, `yp0`."},
+        {"code": "[t, y] = ode15i(odefun, tspan, y0, yp0, options)", "en": "Also applies options from `odeset`.", "pt": "Aplica também opções de `odeset`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `res = odefun(t, y, yp)` returning the residual vector.", "pt": "Handle `res = odefun(t, y, yp)` que retorna o vetor de resíduos."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0, yp0", "en": "Initial values of the solution and of its derivative; they must satisfy the equation (see `decic`).", "pt": "Valores iniciais da solução e de sua derivada; devem satisfazer a equação (veja `decic`)."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "Unlike the other ODE solvers, `ode15i` does not require the equation to be solved for `y'`, so it can handle implicit problems and many differential-algebraic systems. It uses backward differentiation formulas of variable order.\n\nThe initial values must be consistent, that is, they must make the residual zero at `t0`. Use `decic` to repair a guess that is almost right.",
+        "pt": "Ao contrário dos outros solvers de EDO, `ode15i` não exige que a equação esteja resolvida para `y'`, e por isso trata problemas implícitos e muitos sistemas algébrico-diferenciais. Usa fórmulas de diferenciação para trás de ordem variável.\n\nOs valores iniciais devem ser consistentes, isto é, devem zerar o resíduo em `t0`. Use `decic` para corrigir um palpite quase certo."
+      },
+      "examples": [
+        {"title": {"en": "y' + y = 0 in implicit form", "pt": "y' + y = 0 em forma implícita"}, "code": "f = @(t, y, yp) yp + y;\n[t, y] = ode15i(f, [0 1], 1, -1);\nfprintf('%.3f %.3f\\n', y(end), exp(-1))"}
+      ],
+      "see": ["decic", "ode15s", "odeset", "ode45"]
+    },
+    "ode15s": {
+      "summary": {"en": "Variable-order solver for stiff differential equations and index-1 algebraic systems.", "pt": "Solver de ordem variável para equações diferenciais rígidas e sistemas algébricos de índice 1."},
+      "syntax": [
+        {"code": "[t, y] = ode15s(odefun, tspan, y0)", "en": "Integrates `y' = odefun(t, y)` over `tspan`.", "pt": "Integra `y' = odefun(t, y)` em `tspan`."},
+        {"code": "[t, y] = ode15s(odefun, tspan, y0, options)", "en": "Also applies options from `odeset`, such as `'Mass'` or `'Jacobian'`.", "pt": "Aplica também opções de `odeset`, como `'Mass'` ou `'Jacobian'`."},
+        {"code": "sol = ode15s(___)", "en": "Returns a structure for use with `deval`.", "pt": "Retorna uma estrutura para uso com `deval`."}
+      ],
+      "inputs": [
+        {"name": "odefun", "en": "Handle `dydt = odefun(t, y)` returning a column vector.", "pt": "Handle `dydt = odefun(t, y)` que retorna um vetor coluna."},
+        {"name": "tspan", "en": "`[t0 tf]` or a vector of output times.", "pt": "`[t0 tf]` ou um vetor de instantes de saída."},
+        {"name": "y0", "en": "Vector of initial values.", "pt": "Vetor de valores iniciais."},
+        {"name": "options", "en": "Structure from `odeset`. A mass matrix `M(t)*y' = f(t, y)` is given through `'Mass'`.", "pt": "Estrutura de `odeset`. Uma matriz de massa `M(t)*y' = f(t, y)` é dada por `'Mass'`."}
+      ],
+      "outputs": [
+        {"name": "t, y", "en": "Time points and solution, laid out as for `ode45`.", "pt": "Instantes e solução, com o mesmo formato de `ode45`."}
+      ],
+      "description": {
+        "en": "A problem is stiff when the solution varies slowly but the equation has fast-decaying modes that force explicit methods to take tiny steps. `ode15s` uses implicit formulas (numerical differentiation formulas or backward differentiation formulas), which stay stable with large steps at the cost of solving equations at each step.\n\nIt is the first solver to try on a stiff problem. Supplying the Jacobian with `odeset` speeds it up.",
+        "pt": "Um problema é rígido quando a solução varia devagar, mas a equação tem modos de decaimento rápido que obrigam métodos explícitos a passos minúsculos. `ode15s` usa fórmulas implícitas (de diferenciação numérica ou de diferenciação para trás), que permanecem estáveis com passos grandes ao custo de resolver equações a cada passo.\n\nÉ o primeiro solver a tentar em um problema rígido. Fornecer o Jacobiano com `odeset` o acelera."
+      },
+      "examples": [
+        {"title": {"en": "A stiff decay", "pt": "Um decaimento rígido"}, "code": "f = @(t, y) -1000*(y - cos(t));\n[t, y] = ode15s(f, [0 1], 0);\nfprintf('%.4f\\n', y(end))"}
+      ],
+      "see": ["ode45", "ode23s", "ode15i", "odeset", "deval"]
+    }
+  }
+}

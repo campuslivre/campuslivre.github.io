@@ -1,0 +1,829 @@
+{
+ "functions": {
+  "camva": {
+   "summary": {
+    "en": "Gets or sets the camera view angle of the current axes.",
+    "pt": "Obtém ou define o ângulo de visão da câmera dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "camva(angle)",
+     "en": "Sets the view angle, in degrees.",
+     "pt": "Define o ângulo de visão, em graus."
+    },
+    {
+     "code": "angle = camva",
+     "en": "Returns the current angle.",
+     "pt": "Retorna o ângulo atual."
+    },
+    {
+     "code": "camva('auto')",
+     "en": "Restores the automatic angle.",
+     "pt": "Restaura o ângulo automático."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "angle",
+     "en": "Positive scalar in degrees, below 180.",
+     "pt": "Escalar positivo em graus, menor que 180."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "angle",
+     "en": "Current view angle in degrees.",
+     "pt": "Ângulo de visão atual em graus."
+    }
+   ],
+   "description": {
+    "en": "The view angle is the opening of the camera lens. A smaller angle zooms in and a larger one zooms out, like changing the focal length of a lens, without moving the camera. `camzoom` changes it by a factor.",
+    "pt": "O ângulo de visão é a abertura da lente da câmera. Um ângulo menor aproxima e um maior afasta, como trocar a distância focal de uma lente, sem mover a câmera. `camzoom` o altera por um fator."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the angle",
+      "pt": "Definindo o ângulo"
+     },
+     "code": "surf(peaks(10))\ncamva(20)\ndisp(camva)"
+    }
+   ],
+   "see": [
+    "camzoom",
+    "campos",
+    "camproj"
+   ]
+  },
+  "camzoom": {
+   "summary": {
+    "en": "Zooms the camera in or out by a factor.",
+    "pt": "Aproxima ou afasta a câmera por um fator."
+   },
+   "syntax": [
+    {
+     "code": "camzoom(factor)",
+     "en": "Zooms in by `factor` (above 1) or out (below 1).",
+     "pt": "Aproxima por `factor` (acima de 1) ou afasta (abaixo de 1)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "factor",
+     "en": "Positive scalar. For 2, the objects look twice as large.",
+     "pt": "Escalar positivo. Com 2, os objetos parecem duas vezes maiores."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The call changes the camera view angle (see `camva`) so that the picture scales by the factor, while the camera stays in place. The relation is that the tangent of half the angle is divided by the factor. Repeated calls multiply the effects.",
+    "pt": "A chamada altera o ângulo de visão da câmera (veja `camva`) de modo que a imagem seja escalada pelo fator, com a câmera parada. A relação é que a tangente da metade do ângulo é dividida pelo fator. Chamadas repetidas multiplicam os efeitos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Zooming in by 2",
+      "pt": "Aproximando por 2"
+     },
+     "code": "surf(peaks(10))\ncamva(30)\ncamzoom(2)\ndisp(round(camva, 2))"
+    }
+   ],
+   "see": [
+    "camva",
+    "camdolly",
+    "campos"
+   ]
+  },
+  "cla": {
+   "summary": {
+    "en": "Clears the current axes of its graphics objects.",
+    "pt": "Limpa os eixos atuais de seus objetos gráficos."
+   },
+   "syntax": [
+    {
+     "code": "cla",
+     "en": "Deletes the lines, surfaces and other children of the current axes.",
+     "pt": "Apaga as linhas, superfícies e demais filhos dos eixos atuais."
+    },
+    {
+     "code": "cla reset",
+     "en": "Also restores the axes properties to their defaults.",
+     "pt": "Também restaura as propriedades dos eixos aos valores padrão."
+    },
+    {
+     "code": "cla(ax)",
+     "en": "Clears the axes `ax`.",
+     "pt": "Limpa os eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ax",
+     "en": "Optional axes handle.",
+     "pt": "Handle de eixos opcional."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The axes themselves remain, so new plots appear in the same place. Handles to the deleted objects become invalid. To clear the whole figure including its axes, use `clf`.",
+    "pt": "Os eixos permanecem, então novos gráficos aparecem no mesmo lugar. Os handles dos objetos apagados deixam de ser válidos. Para limpar a figura inteira, incluindo seus eixos, use `clf`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Deleting a line",
+      "pt": "Apagando uma linha"
+     },
+     "code": "h = plot(1:5);\ncla\ndisp(isvalid(h))"
+    }
+   ],
+   "see": [
+    "clf",
+    "hold",
+    "close",
+    "delete"
+   ]
+  },
+  "clf": {
+   "summary": {
+    "en": "Clears the current figure.",
+    "pt": "Limpa a figura atual."
+   },
+   "syntax": [
+    {
+     "code": "clf",
+     "en": "Deletes all the axes and other children of the current figure.",
+     "pt": "Apaga todos os eixos e demais filhos da figura atual."
+    },
+    {
+     "code": "clf reset",
+     "en": "Also resets the figure properties to their defaults.",
+     "pt": "Também restaura as propriedades da figura aos valores padrão."
+    },
+    {
+     "code": "clf(fig)",
+     "en": "Clears the figure `fig`.",
+     "pt": "Limpa a figura `fig`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fig",
+     "en": "Optional figure handle.",
+     "pt": "Handle de figura opcional."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The figure window stays open and empty, ready for a new plot. Use `cla` to clear only the current axes and keep the others.",
+    "pt": "A janela da figura permanece aberta e vazia, pronta para um novo gráfico. Use `cla` para limpar apenas os eixos atuais e manter os demais."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clearing and plotting again",
+      "pt": "Limpando e plotando de novo"
+     },
+     "code": "h = plot(1:5);\nclf\ndisp(isvalid(h))\nplot(1:3)"
+    }
+   ],
+   "see": [
+    "cla",
+    "figure",
+    "close",
+    "hold"
+   ]
+  },
+  "clim": {
+   "summary": {
+    "en": "Gets or sets the color limits of the current axes.",
+    "pt": "Obtém ou define os limites de cor dos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "clim([cmin cmax])",
+     "en": "Sets the limits.",
+     "pt": "Define os limites."
+    },
+    {
+     "code": "lims = clim",
+     "en": "Returns the current limits.",
+     "pt": "Retorna os limites atuais."
+    },
+    {
+     "code": "clim auto / clim manual",
+     "en": "Chooses limits from the data, or freezes them.",
+     "pt": "Escolhe os limites a partir dos dados, ou os congela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[cmin cmax]",
+     "en": "Two-element vector with `cmin` less than `cmax`.",
+     "pt": "Vetor de dois elementos com `cmin` menor que `cmax`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lims",
+     "en": "Two-element vector with the current limits.",
+     "pt": "Vetor de dois elementos com os limites atuais."
+    }
+   ],
+   "description": {
+    "en": "Data values at or below `cmin` get the first color of the colormap, and values at or above `cmax` get the last. Setting the same limits on several axes makes their colors comparable. In older code the same function is called `caxis`.",
+    "pt": "Valores dos dados em `cmin` ou abaixo recebem a primeira cor do colormap, e valores em `cmax` ou acima recebem a última. Definir os mesmos limites em vários eixos torna suas cores comparáveis. Em códigos antigos a mesma função se chama `caxis`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fixing the color range",
+      "pt": "Fixando a faixa de cores"
+     },
+     "code": "imagesc(magic(4))\nclim([0 20])\ndisp(clim)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "caxis",
+    "imagesc"
+   ]
+  },
+  "colorbar": {
+   "summary": {
+    "en": "Adds a color bar that shows how data values map to colors.",
+    "pt": "Adiciona uma barra de cores que mostra como valores dos dados se associam a cores."
+   },
+   "syntax": [
+    {
+     "code": "colorbar",
+     "en": "Adds a color bar at the right of the axes.",
+     "pt": "Adiciona uma barra de cores à direita dos eixos."
+    },
+    {
+     "code": "colorbar(location)",
+     "en": "Places it at `'eastoutside'`, `'southoutside'` and similar positions.",
+     "pt": "Posiciona em `'eastoutside'`, `'southoutside'` e posições semelhantes."
+    },
+    {
+     "code": "colorbar('off')",
+     "en": "Removes the color bar.",
+     "pt": "Remove a barra de cores."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "location",
+     "en": "Position name, such as `'north'`, `'south'`, `'east'`, `'west'` with an optional `'outside'` suffix.",
+     "pt": "Nome da posição, como `'north'`, `'south'`, `'east'`, `'west'`, com o sufixo opcional `'outside'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Handle of the color bar.",
+     "pt": "Handle da barra de cores."
+    }
+   ],
+   "description": {
+    "en": "The bar shows the current colormap over the color limits of the axes (see `clim`), so a reader can convert colors back into values. Use it with `imagesc`, `surf`, `contourf` and other plots that color by data.",
+    "pt": "A barra mostra o colormap atual sobre os limites de cor dos eixos (veja `clim`), para que o leitor converta cores de volta em valores. Use com `imagesc`, `surf`, `contourf` e outros gráficos coloridos pelos dados."
+   },
+   "notes": {
+    "en": "The returned handle is an axes object, so Colorbar-specific properties such as `Label` or `Location` are not available through it.",
+    "pt": "O handle retornado é um objeto de eixos, então propriedades específicas de Colorbar, como `Label` ou `Location`, não ficam disponíveis por ele."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Color bar beside an image",
+      "pt": "Barra de cores ao lado de uma imagem"
+     },
+     "code": "imagesc(magic(4))\ncolorbar",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "colormap",
+    "clim",
+    "imagesc",
+    "surf"
+   ]
+  },
+  "colorcube": {
+   "summary": {
+    "en": "Returns the colorcube colormap, a set of regularly spaced RGB colors.",
+    "pt": "Retorna o colormap colorcube, um conjunto de cores RGB regularmente espaçadas."
+   },
+   "syntax": [
+    {
+     "code": "map = colorcube",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = colorcube(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row of the result is one color, ordered from the lowest to the highest data value. Pass the matrix to `colormap` to apply it, as in `colormap(colorcube(64))`. A smaller `m` gives visibly distinct bands, which suits contour-like displays. The colors are chosen to sample the RGB cube with extra steps of gray and of the pure primary and secondary colors, so neighboring entries are not smooth gradients.",
+    "pt": "Cada linha do resultado é uma cor, ordenada do menor ao maior valor dos dados. Passe a matriz a `colormap` para aplicá-la, como em `colormap(colorcube(64))`. Um `m` menor dá faixas bem distintas, o que combina com exibições do tipo contorno. As cores amostram o cubo RGB com passos extras de cinza e das cores primárias e secundárias puras, então entradas vizinhas não formam gradientes suaves."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three colors",
+      "pt": "Três cores"
+     },
+     "code": "colorcube(8)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "jet",
+    "hsv",
+    "lines"
+   ]
+  },
+  "colormap": {
+   "summary": {
+    "en": "Gets or sets the colormap, the table that turns data values into colors.",
+    "pt": "Obtém ou define o colormap, a tabela que converte valores dos dados em cores."
+   },
+   "syntax": [
+    {
+     "code": "colormap(map)",
+     "en": "Sets the colormap of the current axes from an RGB matrix.",
+     "pt": "Define o colormap dos eixos atuais a partir de uma matriz RGB."
+    },
+    {
+     "code": "colormap(name)",
+     "en": "Sets a named map such as `'hot'`, `'gray'`, `'parula'`, `'jet'`.",
+     "pt": "Define um mapa nomeado, como `'hot'`, `'gray'`, `'parula'`, `'jet'`."
+    },
+    {
+     "code": "map = colormap",
+     "en": "Returns the current colormap.",
+     "pt": "Retorna o colormap atual."
+    },
+    {
+     "code": "colormap(ax, ___)",
+     "en": "Applies to the axes `ax`.",
+     "pt": "Aplica-se aos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "map",
+     "en": "`m`-by-3 matrix of RGB values between 0 and 1.",
+     "pt": "Matriz `m` por 3 de valores RGB entre 0 e 1."
+    },
+    {
+     "name": "name",
+     "en": "Name of a colormap function.",
+     "pt": "Nome de uma função de colormap."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Current colormap, one RGB row per color.",
+     "pt": "Colormap atual, com uma linha RGB por cor."
+    }
+   ],
+   "description": {
+    "en": "Plots that color by data, such as `surf`, `imagesc` and `contourf`, scale their values across the color limits and look the colors up in this table. The default is `parula` with 256 rows. Many maps take the number of colors as an argument, as in `colormap(hot(8))`.",
+    "pt": "Gráficos coloridos pelos dados, como `surf`, `imagesc` e `contourf`, escalam seus valores pelos limites de cor e buscam as cores nesta tabela. O padrão é `parula` com 256 linhas. Muitos mapas aceitam o número de cores como argumento, como em `colormap(hot(8))`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading and replacing the map",
+      "pt": "Lendo e trocando o mapa"
+     },
+     "code": "disp(size(colormap))\ncolormap(hot(8))\ndisp(size(colormap))"
+    }
+   ],
+   "see": [
+    "colorbar",
+    "clim",
+    "parula",
+    "gray",
+    "hot"
+   ]
+  },
+  "colororder": {
+   "summary": {
+    "en": "Gets or sets the list of colors used to draw successive lines.",
+    "pt": "Obtém ou define a lista de cores usadas para desenhar linhas sucessivas."
+   },
+   "syntax": [
+    {
+     "code": "colororder(newcolors)",
+     "en": "Sets the color order from an RGB matrix.",
+     "pt": "Define a ordem de cores a partir de uma matriz RGB."
+    },
+    {
+     "code": "colororder(name)",
+     "en": "Sets a named palette such as `'gem'`, `'default'`, `'sail'`.",
+     "pt": "Define uma paleta nomeada, como `'gem'`, `'default'`, `'sail'`."
+    },
+    {
+     "code": "C = colororder",
+     "en": "Returns the current colors.",
+     "pt": "Retorna as cores atuais."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "newcolors",
+     "en": "`n`-by-3 matrix of RGB values between 0 and 1.",
+     "pt": "Matriz `n` por 3 de valores RGB entre 0 e 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "`n`-by-3 matrix with the color order.",
+     "pt": "Matriz `n` por 3 com a ordem de cores."
+    }
+   ],
+   "description": {
+    "en": "When several lines are drawn in the same axes, each takes the next color in this list, and the list repeats after the last. Set it before plotting to control the palette of the whole figure.",
+    "pt": "Quando várias linhas são desenhadas nos mesmos eixos, cada uma usa a próxima cor da lista, e a lista se repete depois da última. Defina-a antes de plotar para controlar a paleta da figura inteira."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two-color cycle",
+      "pt": "Ciclo de duas cores"
+     },
+     "code": "colororder([1 0 0; 0 0 1])\nplot(1:5)\nhold on\nplot(5:-1:1)\ndisp(colororder)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "plot",
+    "hold",
+    "lines"
+   ]
+  },
+  "contrast": {
+   "summary": {
+    "en": "Returns a gray colormap that enhances the contrast of an image.",
+    "pt": "Retorna um colormap cinza que realça o contraste de uma imagem."
+   },
+   "syntax": [
+    {
+     "code": "cmap = contrast(X)",
+     "en": "Returns a gray map sized like the current colormap.",
+     "pt": "Retorna um mapa cinza com o tamanho do colormap atual."
+    },
+    {
+     "code": "cmap = contrast(X, m)",
+     "en": "Returns a map with `m` gray levels.",
+     "pt": "Retorna um mapa com `m` níveis de cinza."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Image or numeric array of data values.",
+     "pt": "Imagem ou array numérico de valores."
+    },
+    {
+     "name": "m",
+     "en": "Number of colors.",
+     "pt": "Número de cores."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "cmap",
+     "en": "`m`-by-3 gray colormap with equal RGB columns.",
+     "pt": "Colormap cinza `m` por 3, com colunas RGB iguais."
+    }
+   ],
+   "description": {
+    "en": "The map spreads the gray levels according to the distribution of the values in `X`, so that rare but important values are not squeezed into a narrow band of gray. Apply the result with `colormap`.",
+    "pt": "O mapa distribui os níveis de cinza conforme a distribuição dos valores em `X`, para que valores raros mas importantes não fiquem espremidos em uma faixa estreita de cinza. Aplique o resultado com `colormap`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A gray map for a matrix",
+      "pt": "Um mapa cinza para uma matriz"
+     },
+     "code": "c = contrast(magic(4), 8);\ndisp(size(c))\ndisp(isequal(c(:,1), c(:,2)))"
+    }
+   ],
+   "see": [
+    "colormap",
+    "gray",
+    "imagesc",
+    "brighten"
+   ]
+  },
+  "cool": {
+   "summary": {
+    "en": "Returns the cool colormap, a ramp from cyan to magenta.",
+    "pt": "Retorna o colormap cool, uma rampa de ciano a magenta."
+   },
+   "syntax": [
+    {
+     "code": "map = cool",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = cool(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row of the result is one color, ordered from the lowest to the highest data value. Pass the matrix to `colormap` to apply it, as in `colormap(cool(64))`. A smaller `m` gives visibly distinct bands, which suits contour-like displays.",
+    "pt": "Cada linha do resultado é uma cor, ordenada do menor ao maior valor dos dados. Passe a matriz a `colormap` para aplicá-la, como em `colormap(cool(64))`. Um `m` menor dá faixas bem distintas, o que combina com exibições do tipo contorno."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three colors",
+      "pt": "Três cores"
+     },
+     "code": "cool(3)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "jet",
+    "spring",
+    "winter"
+   ]
+  },
+  "copper": {
+   "summary": {
+    "en": "Returns the copper colormap, a ramp from black to a light copper tone.",
+    "pt": "Retorna o colormap copper, uma rampa do preto a um tom claro de cobre."
+   },
+   "syntax": [
+    {
+     "code": "map = copper",
+     "en": "Returns the colormap with as many rows as the current colormap.",
+     "pt": "Retorna o colormap com tantas linhas quanto o colormap atual."
+    },
+    {
+     "code": "map = copper(m)",
+     "en": "Returns an `m`-by-3 colormap.",
+     "pt": "Retorna um colormap `m` por 3."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors. The default is the number of rows of the current colormap.",
+     "pt": "Número de cores. O padrão é o número de linhas do colormap atual."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "Matrix with `m` rows and three columns. Each row is an RGB triplet with values between 0 and 1.",
+     "pt": "Matriz com `m` linhas e três colunas. Cada linha é uma tripla RGB com valores entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "Each row of the result is one color, ordered from the lowest to the highest data value. Pass the matrix to `colormap` to apply it, as in `colormap(copper(64))`. A smaller `m` gives visibly distinct bands, which suits contour-like displays.",
+    "pt": "Cada linha do resultado é uma cor, ordenada do menor ao maior valor dos dados. Passe a matriz a `colormap` para aplicá-la, como em `colormap(copper(64))`. Um `m` menor dá faixas bem distintas, o que combina com exibições do tipo contorno."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three colors",
+      "pt": "Três cores"
+     },
+     "code": "copper(3)"
+    }
+   ],
+   "see": [
+    "colormap",
+    "colorbar",
+    "parula",
+    "jet",
+    "bone",
+    "hot"
+   ]
+  },
+  "daspect": {
+   "summary": {
+    "en": "Gets or sets the data aspect ratio of the current axes.",
+    "pt": "Obtém ou define a razão de aspecto dos dados nos eixos atuais."
+   },
+   "syntax": [
+    {
+     "code": "daspect([dx dy dz])",
+     "en": "Sets the relative length of one data unit along each axis.",
+     "pt": "Define o comprimento relativo de uma unidade de dados em cada eixo."
+    },
+    {
+     "code": "r = daspect",
+     "en": "Returns the current ratio.",
+     "pt": "Retorna a razão atual."
+    },
+    {
+     "code": "daspect('auto') / daspect('manual')",
+     "en": "Lets the axes choose the ratio, or freezes it.",
+     "pt": "Deixa os eixos escolherem a razão, ou a congela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[dx dy dz]",
+     "en": "Three positive numbers. Only their ratios matter.",
+     "pt": "Três números positivos. Só as razões importam."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Row vector with the data aspect ratio.",
+     "pt": "Vetor linha com a razão de aspecto dos dados."
+    }
+   ],
+   "description": {
+    "en": "With `[1 1 1]`, one unit looks equally long in x, y and z, which is what `axis equal` does. With `[1 2 1]`, one unit in y is drawn half as long as one in x. Use it to correct or exaggerate the proportions of a plot.",
+    "pt": "Com `[1 1 1]`, uma unidade parece igualmente longa em x, y e z, que é o que `axis equal` faz. Com `[1 2 1]`, uma unidade em y é desenhada com metade do comprimento de uma em x. Use para corrigir ou exagerar as proporções de um gráfico."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting the ratio",
+      "pt": "Definindo a razão"
+     },
+     "code": "plot(1:5)\ndaspect([1 2 1])\ndisp(daspect)"
+    }
+   ],
+   "see": [
+    "axis",
+    "pbaspect",
+    "xlim",
+    "ylim"
+   ]
+  },
+  "datatip": {
+   "summary": {
+    "en": "Adds a data tip, a small label showing a data point, to a chart.",
+    "pt": "Adiciona um datatip, um pequeno rótulo que mostra um ponto de dados, a um gráfico."
+   },
+   "syntax": [
+    {
+     "code": "dt = datatip(chart, x, y)",
+     "en": "Adds a data tip at the point `(x, y)` of a chart.",
+     "pt": "Adiciona um datatip no ponto `(x, y)` de um gráfico."
+    },
+    {
+     "code": "dt = datatip(chart, 'DataIndex', k)",
+     "en": "Adds a data tip at the `k`-th data point.",
+     "pt": "Adiciona um datatip no `k`-ésimo ponto de dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "chart",
+     "en": "Handle of a line, scatter or similar chart object.",
+     "pt": "Handle de uma linha, scatter ou objeto de gráfico semelhante."
+    },
+    {
+     "name": "x, y",
+     "en": "Coordinates of the point to label.",
+     "pt": "Coordenadas do ponto a rotular."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "dt",
+     "en": "Handle of the data tip.",
+     "pt": "Handle do datatip."
+    }
+   ],
+   "description": {
+    "en": "Data tips mark points of interest with a label that shows their coordinates. The tip is attached to a chart object, so it moves with the data.",
+    "pt": "Datatips marcam pontos de interesse com um rótulo que mostra suas coordenadas. O datatip fica preso a um objeto de gráfico, então acompanha os dados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Labeling one point",
+      "pt": "Rotulando um ponto"
+     },
+     "code": "p = plot(1:5);\ndt = datatip(p, 3, 3);\ndisp(dt.X)"
+    }
+   ],
+   "see": [
+    "plot",
+    "text",
+    "annotation",
+    "scatter"
+   ]
+  },
+  "datetick": {
+   "summary": {
+    "en": "Formats axis tick labels as dates.",
+    "pt": "Formata os rótulos das marcas de um eixo como datas."
+   },
+   "syntax": [
+    {
+     "code": "datetick",
+     "en": "Labels the x-axis ticks as dates.",
+     "pt": "Rotula as marcas do eixo x como datas."
+    },
+    {
+     "code": "datetick(tickaxis)",
+     "en": "Chooses the axis: `'x'`, `'y'` or `'z'`.",
+     "pt": "Escolhe o eixo: `'x'`, `'y'` ou `'z'`."
+    },
+    {
+     "code": "datetick(tickaxis, dateform)",
+     "en": "Uses a date format given as a number or a pattern such as `'dd-mmm'`.",
+     "pt": "Usa um formato de data dado por um número ou por um padrão como `'dd-mmm'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "tickaxis",
+     "en": "`'x'` (default), `'y'` or `'z'`.",
+     "pt": "`'x'` (padrão), `'y'` ou `'z'`."
+    },
+    {
+     "name": "dateform",
+     "en": "Date format number or pattern.",
+     "pt": "Número ou padrão de formato de data."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The data on the chosen axis must be serial date numbers, as returned by `datenum`. The function replaces the numeric tick labels by formatted dates but keeps the tick positions. Newer code often uses `datetime` values, which are formatted automatically.",
+    "pt": "Os dados do eixo escolhido devem ser números seriais de data, como os retornados por `datenum`. A função troca os rótulos numéricos das marcas por datas formatadas, mantendo as posições das marcas. Códigos mais novos costumam usar valores `datetime`, que são formatados automaticamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Days of January",
+      "pt": "Dias de janeiro"
+     },
+     "code": "t = datenum(2024, 1, 1:30);\nplot(t, 1:30)\ndatetick('x', 'dd-mmm')",
+     "silent": true,
+     "note": {
+      "en": "In the app, the figure is drawn below the code.",
+      "pt": "No app, a figura é desenhada abaixo do código."
+     }
+    }
+   ],
+   "see": [
+    "datenum",
+    "datestr",
+    "datetime",
+    "xticklabels"
+   ]
+  }
+ }
+}

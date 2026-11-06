@@ -1,0 +1,961 @@
+{
+ "functions": {
+  "symunit": {
+   "summary": {
+    "en": "Access to units of measurement for symbolic expressions.",
+    "pt": "Acesso a unidades de medida para expressões simbólicas."
+   },
+   "syntax": [
+    {
+     "code": "u = symunit",
+     "en": "Creates the unit container; units are read as fields, such as `u.m` or `u.km`.",
+     "pt": "Cria o contêiner de unidades; as unidades são lidas como campos, como `u.m` ou `u.km`."
+    },
+    {
+     "code": "x = 3*u.km/u.h",
+     "en": "Attaches units to numbers and expressions by ordinary arithmetic.",
+     "pt": "Associa unidades a números e expressões por aritmética comum."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "u",
+     "en": "Object whose field names are unit names. Each field gives a symbolic unit.",
+     "pt": "Objeto cujos campos são nomes de unidades. Cada campo dá uma unidade simbólica."
+    }
+   ],
+   "description": {
+    "en": "A quantity with a unit is an ordinary symbolic expression in which the unit is a symbolic factor. `3*u.km` is three kilometers, `u.m/u.s` is meters per second, and `u.m^2` an area. Because units are symbolic, sums and products follow the usual rules, and `unitConvert` changes them to other units exactly.\n\nUnit names are case sensitive and follow common abbreviations: `m`, `km`, `cm`, `s`, `min`, `h`, `kg`, `N`, `J`, `W`, `Pa`, `K`, `Celsius`, `ft`, `mi`, `L`. Units are shown in square brackets, as in `3*[km]`.",
+    "pt": "Uma grandeza com unidade é uma expressão simbólica comum em que a unidade é um fator simbólico. `3*u.km` são três quilômetros, `u.m/u.s` é metros por segundo e `u.m^2` uma área. Como as unidades são simbólicas, somas e produtos seguem as regras usuais, e `unitConvert` as converte em outras unidades de forma exata.\n\nOs nomes de unidades diferenciam maiúsculas de minúsculas e seguem as abreviações comuns: `m`, `km`, `cm`, `s`, `min`, `h`, `kg`, `N`, `J`, `W`, `Pa`, `K`, `Celsius`, `ft`, `mi`, `L`. As unidades aparecem entre colchetes, como em `3*[km]`."
+   },
+   "notes": {
+    "en": "In MatLivre `symunit` must be called without arguments and used through the container `u`. The form `symunit('m')` does not return a usable unit, and a few unit names are not defined (for example `hour`, `day` and `mL`; use `h`, `d` and `cm^3`). Results of arithmetic on units have class `sym`.",
+    "pt": "No MatLivre `symunit` deve ser chamada sem argumentos e usada por meio do contêiner `u`. A forma `symunit('m')` não retorna uma unidade utilizável, e alguns nomes de unidade não estão definidos (por exemplo `hour`, `day` e `mL`; use `h`, `d` e `cm^3`). Os resultados da aritmética com unidades têm classe `sym`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quantities with units",
+      "pt": "Grandezas com unidades"
+     },
+     "code": "u = symunit;\nx = 3*u.km\nv = 5*u.m/u.s\nunitConvert(x, u.m)"
+    }
+   ],
+   "see": [
+    "unitConvert",
+    "findUnits",
+    "separateUnits",
+    "checkUnits",
+    "newUnit"
+   ]
+  },
+  "unitConvert": {
+   "summary": {
+    "en": "Converts a quantity to other units.",
+    "pt": "Converte uma grandeza para outras unidades."
+   },
+   "syntax": [
+    {
+     "code": "y = unitConvert(x, u2)",
+     "en": "Converts `x` to the unit or unit expression `u2`.",
+     "pt": "Converte `x` para a unidade ou expressão de unidades `u2`."
+    },
+    {
+     "code": "y = unitConvert(x, 'SI')",
+     "en": "Converts `x` to SI units.",
+     "pt": "Converte `x` para unidades do SI."
+    },
+    {
+     "code": "y = unitConvert(___, 'Temperature', mode)",
+     "en": "With `'absolute'`, converts temperatures as readings, not as differences (default `'difference'`).",
+     "pt": "Com `'absolute'`, converte temperaturas como leituras e não como diferenças (padrão `'difference'`)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic quantity with units.",
+     "pt": "Grandeza simbólica com unidades."
+    },
+    {
+     "name": "u2",
+     "en": "Target unit, such as `u.m`, or a combination like `u.km/u.h`.",
+     "pt": "Unidade de destino, como `u.m`, ou uma combinação como `u.km/u.h`."
+    },
+    {
+     "name": "'Temperature'",
+     "en": "`'difference'` (default) or `'absolute'`.",
+     "pt": "`'difference'` (padrão) ou `'absolute'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Quantity expressed in the target units, as an exact symbolic value.",
+     "pt": "Grandeza expressa nas unidades de destino, como valor simbólico exato."
+    }
+   ],
+   "description": {
+    "en": "The conversion multiplies the number by the ratio between the units, using exact rational factors, so `60 mi/h` in `km/h` is a fraction instead of a rounded decimal. Use `double` on the numeric part to get a decimal.\n\nUnits of different dimensions cannot be converted into one another. Temperatures need care: `'difference'` treats `Celsius` and `K` as scales of an interval, while `'absolute'` includes the offset, so `100 Celsius` is `212 Fahrenheit`.",
+    "pt": "A conversão multiplica o número pela razão entre as unidades, com fatores racionais exatos, de modo que `60 mi/h` em `km/h` é uma fração e não um decimal arredondado. Use `double` na parte numérica para obter um decimal.\n\nUnidades de dimensões diferentes não podem ser convertidas entre si. Temperaturas pedem cuidado: `'difference'` trata `Celsius` e `K` como escalas de um intervalo, enquanto `'absolute'` inclui o deslocamento, de modo que `100 Celsius` vale `212 Fahrenheit`."
+   },
+   "notes": {
+    "en": "In MatLivre a unit system name as target works for `'SI'`; `'CGS'` and `'US'` are accepted but return the quantity in SI units. Converting between units of different dimensions does not raise an error and returns the quantity unchanged.",
+    "pt": "No MatLivre o nome de um sistema de unidades como destino funciona para `'SI'`; `'CGS'` e `'US'` são aceitos, mas retornam a grandeza em unidades do SI. Converter entre unidades de dimensões diferentes não gera erro e devolve a grandeza sem alteração."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Length, speed and temperature",
+      "pt": "Comprimento, velocidade e temperatura"
+     },
+     "code": "u = symunit;\nunitConvert(3*u.km, u.m)\nunitConvert(5*u.m/u.s, u.km/u.h)\nunitConvert(100*u.Celsius, u.Fahrenheit, 'Temperature', 'absolute')"
+    }
+   ],
+   "see": [
+    "symunit",
+    "unitConversionFactor",
+    "rewrite",
+    "checkUnits",
+    "separateUnits"
+   ]
+  },
+  "unitConversionFactor": {
+   "summary": {
+    "en": "Factor that converts one unit into another.",
+    "pt": "Fator que converte uma unidade em outra."
+   },
+   "syntax": [
+    {
+     "code": "k = unitConversionFactor(u1, u2)",
+     "en": "Returns the number `k` such that `1*u1` equals `k*u2`.",
+     "pt": "Retorna o número `k` tal que `1*u1` é igual a `k*u2`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u1",
+     "en": "Source unit or unit expression.",
+     "pt": "Unidade de origem ou expressão de unidades."
+    },
+    {
+     "name": "u2",
+     "en": "Target unit with the same dimension.",
+     "pt": "Unidade de destino com a mesma dimensão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "k",
+     "en": "Exact symbolic conversion factor.",
+     "pt": "Fator de conversão simbólico exato."
+    }
+   ],
+   "description": {
+    "en": "The factor is a rational number whenever both units have rational definitions, which is the case for the metric and imperial units. For instance the factor from `mi` to `km` is `25146/15625`, which is exactly 1.609344.\n\nIt is the number that `unitConvert` multiplies by, and is useful when only the ratio is needed, for example to scale an array of plain numbers.",
+    "pt": "O fator é um número racional sempre que as duas unidades têm definições racionais, como ocorre nas unidades métricas e imperiais. Por exemplo, o fator de `mi` para `km` é `25146/15625`, exatamente 1,609344.\n\nÉ o número pelo qual `unitConvert` multiplica, e é útil quando só a razão interessa, por exemplo para escalar um array de números comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Factors between units",
+      "pt": "Fatores entre unidades"
+     },
+     "code": "u = symunit;\nunitConversionFactor(u.km, u.m)\nunitConversionFactor(u.h, u.s)\nk = unitConversionFactor(u.mi, u.km)\ndouble(k)"
+    }
+   ],
+   "see": [
+    "unitConvert",
+    "symunit",
+    "rewrite",
+    "double"
+   ]
+  },
+  "checkUnits": {
+   "summary": {
+    "en": "Checks the dimensional consistency of an expression with units.",
+    "pt": "Verifica a consistência dimensional de uma expressão com unidades."
+   },
+   "syntax": [
+    {
+     "code": "s = checkUnits(expr)",
+     "en": "Returns a structure with the fields `Consistent` and `Compatible`.",
+     "pt": "Retorna uma struct com os campos `Consistent` e `Compatible`."
+    },
+    {
+     "code": "tf = checkUnits(expr, 'Consistent')",
+     "en": "Tests only that all added terms have exactly the same units.",
+     "pt": "Testa apenas se todas as parcelas somadas têm exatamente as mesmas unidades."
+    },
+    {
+     "code": "tf = checkUnits(expr, 'Compatible')",
+     "en": "Tests that added terms have convertible units.",
+     "pt": "Testa se as parcelas somadas têm unidades conversíveis."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression with units.",
+     "pt": "Expressão simbólica com unidades."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Structure with logical fields.",
+     "pt": "Struct com campos lógicos."
+    },
+    {
+     "name": "tf",
+     "en": "Logical result of the single requested test.",
+     "pt": "Resultado lógico do teste pedido."
+    }
+   ],
+   "description": {
+    "en": "Quantities may only be added or compared if they have the same dimension. `Compatible` is true when every sum combines units of the same dimension, such as `m` and `km`, even if they differ in scale. `Consistent` is stricter and requires the very same unit in every term, so `1*m + 2*km` is compatible but not consistent.\n\nAdding a length to a time is neither: both fields are false.",
+    "pt": "Grandezas só podem ser somadas ou comparadas se têm a mesma dimensão. `Compatible` é verdadeiro quando cada soma combina unidades da mesma dimensão, como `m` e `km`, mesmo com escalas diferentes. `Consistent` é mais estrito e exige exatamente a mesma unidade em todos os termos, então `1*m + 2*km` é compatível, mas não consistente.\n\nSomar um comprimento a um tempo não é nem uma coisa nem outra: os dois campos são falsos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed, compatible and invalid sums",
+      "pt": "Somas mistas, compatíveis e inválidas"
+     },
+     "code": "u = symunit;\ncheckUnits(1*u.m + 2*u.m, 'Consistent')\ncheckUnits(1*u.m + 2*u.km, 'Consistent')\ns = checkUnits(1*u.m + 2*u.km)\nchw = checkUnits(1*u.m + 2*u.s, 'Compatible')"
+    }
+   ],
+   "see": [
+    "unitConvert",
+    "symunit",
+    "findUnits",
+    "isUnit"
+   ]
+  },
+  "findUnits": {
+   "summary": {
+    "en": "Finds the units that appear in an expression.",
+    "pt": "Encontra as unidades que aparecem em uma expressão."
+   },
+   "syntax": [
+    {
+     "code": "U = findUnits(expr)",
+     "en": "Returns the units present in `expr` as a row vector.",
+     "pt": "Retorna as unidades presentes em `expr` como vetor linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic expression, possibly with units.",
+     "pt": "Expressão simbólica, possivelmente com unidades."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "U",
+     "en": "Row vector of distinct units. Empty when the expression has no units.",
+     "pt": "Vetor linha de unidades distintas. Vazio quando a expressão não tem unidades."
+    }
+   ],
+   "description": {
+    "en": "Each distinct unit is listed once, no matter how many times or with which exponent it occurs. For `5*kg*m/s^2` the result is `[kg, m, s]`. The numeric factor is not returned; for that, use `separateUnits`.\n\nIt is a quick way to see what dimensions an expression involves before converting it.",
+    "pt": "Cada unidade distinta aparece uma única vez, não importa quantas vezes nem com qual expoente ocorra. Para `5*kg*m/s^2` o resultado é `[kg, m, s]`. O fator numérico não é retornado; para ele use `separateUnits`.\n\nÉ uma forma rápida de ver quais dimensões uma expressão envolve antes de convertê-la."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Units in a force expression",
+      "pt": "Unidades em uma expressão de força"
+     },
+     "code": "u = symunit;\nfindUnits(5*u.kg*u.m/u.s^2)\nfindUnits(3*u.m/u.s)\nfindUnits(sym(3))"
+    }
+   ],
+   "see": [
+    "separateUnits",
+    "isUnit",
+    "symunit",
+    "checkUnits"
+   ]
+  },
+  "isUnit": {
+   "summary": {
+    "en": "Tests whether a symbolic object is a unit.",
+    "pt": "Testa se um objeto simbólico é uma unidade."
+   },
+   "syntax": [
+    {
+     "code": "tf = isUnit(S)",
+     "en": "Returns `true` if `S` consists only of units, with no numeric factor.",
+     "pt": "Retorna `true` se `S` consiste apenas em unidades, sem fator numérico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Symbolic expression.",
+     "pt": "Expressão simbólica."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A single unit such as `u.m` and a unit expression such as `u.m/u.s` give `true`. A quantity with a number, like `3*u.m`, gives `false`, as does a number or a variable.\n\nThis distinction matters for functions that need a pure unit as an argument, for example the target of `unitConvert`.",
+    "pt": "Uma unidade isolada como `u.m` e uma expressão de unidades como `u.m/u.s` dão `true`. Uma grandeza com número, como `3*u.m`, dá `false`, assim como um número ou uma variável.\n\nA distinção importa para funções que exigem uma unidade pura como argumento, por exemplo o destino de `unitConvert`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Units versus quantities",
+      "pt": "Unidades versus grandezas"
+     },
+     "code": "u = symunit;\nisUnit(u.m)\nisUnit(u.m/u.s)\nisUnit(3*u.m)\nisUnit(sym(3))"
+    }
+   ],
+   "see": [
+    "symunit",
+    "findUnits",
+    "separateUnits",
+    "checkUnits"
+   ]
+  },
+  "separateUnits": {
+   "summary": {
+    "en": "Splits a quantity into its numeric part and its units.",
+    "pt": "Separa uma grandeza em sua parte numérica e suas unidades."
+   },
+   "syntax": [
+    {
+     "code": "[value, units] = separateUnits(expr)",
+     "en": "Returns the part of `expr` without units and the units part.",
+     "pt": "Retorna a parte de `expr` sem unidades e a parte de unidades."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "expr",
+     "en": "Symbolic quantity, a product of a factor and units.",
+     "pt": "Grandeza simbólica, produto de um fator e unidades."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "value",
+     "en": "The numeric or symbolic factor.",
+     "pt": "O fator numérico ou simbólico."
+    },
+    {
+     "name": "units",
+     "en": "The product of units, such as `[km]/[s]`.",
+     "pt": "O produto de unidades, como `[km]/[s]`."
+    }
+   ],
+   "description": {
+    "en": "`separateUnits` is the inverse of attaching units by multiplication: `value*units` gives back the original quantity. With a single output only `value` is returned. An expression without units yields itself as `value`.\n\nThe pair is handy when a calculation must continue with plain doubles, using `double(value)`, and the units are put back afterwards.",
+    "pt": "`separateUnits` é o inverso de associar unidades por multiplicação: `value*units` devolve a grandeza original. Com uma única saída apenas `value` é retornado. Uma expressão sem unidades produz a si mesma como `value`.\n\nO par é útil quando um cálculo deve continuar com doubles comuns, usando `double(value)`, e as unidades são recolocadas depois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Value and units of a speed",
+      "pt": "Valor e unidades de uma velocidade"
+     },
+     "code": "u = symunit;\n[v, un] = separateUnits(3*u.km/u.s)\nv*un"
+    }
+   ],
+   "see": [
+    "findUnits",
+    "isUnit",
+    "symunit",
+    "unitConvert"
+   ]
+  },
+  "str2symunit": {
+   "summary": {
+    "en": "Converts text describing units into a symbolic unit expression.",
+    "pt": "Converte um texto que descreve unidades em uma expressão simbólica de unidades."
+   },
+   "syntax": [
+    {
+     "code": "U = str2symunit(text)",
+     "en": "Parses `text` such as `'m/s'` or `'kg*m^2/s^2'`.",
+     "pt": "Interpreta um `text` como `'m/s'` ou `'kg*m^2/s^2'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "text",
+     "en": "Character vector or string with unit names combined with `*`, `/` and `^`.",
+     "pt": "Vetor de caracteres ou string com nomes de unidades combinados com `*`, `/` e `^`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "U",
+     "en": "Symbolic unit expression.",
+     "pt": "Expressão simbólica de unidades."
+    }
+   ],
+   "description": {
+    "en": "The text uses the same abbreviations as the fields of `symunit`. The result is the same expression you would build by hand with `u.m/u.s`, so it can be multiplied by numbers and passed to `unitConvert`.\n\nIt is the inverse of `symunit2str`, which turns a unit expression back into text. Unknown names raise an error.",
+    "pt": "O texto usa as mesmas abreviações dos campos de `symunit`. O resultado é a mesma expressão que se construiria à mão com `u.m/u.s`, de modo que pode ser multiplicado por números e passado a `unitConvert`.\n\nÉ o inverso de `symunit2str`, que transforma uma expressão de unidades de volta em texto. Nomes desconhecidos geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Parsing unit strings",
+      "pt": "Interpretando strings de unidades"
+     },
+     "code": "U = str2symunit('kg*m^2/s^2')\nisUnit(U)\nunitConvert(3*U, str2symunit('N*m'))"
+    }
+   ],
+   "see": [
+    "symunit2str",
+    "symunit",
+    "unitConvert",
+    "isUnit"
+   ]
+  },
+  "symunit2str": {
+   "summary": {
+    "en": "Converts a symbolic unit expression into text.",
+    "pt": "Converte uma expressão simbólica de unidades em texto."
+   },
+   "syntax": [
+    {
+     "code": "text = symunit2str(U)",
+     "en": "Returns the unit expression `U` as a character vector.",
+     "pt": "Retorna a expressão de unidades `U` como vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "U",
+     "en": "Symbolic unit expression or quantity.",
+     "pt": "Expressão simbólica de unidades ou grandeza."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "text",
+     "en": "Character vector without the square brackets, e.g. `'km/s'`.",
+     "pt": "Vetor de caracteres sem os colchetes, por exemplo `'km/s'`."
+    }
+   ],
+   "description": {
+    "en": "Units are normally displayed inside square brackets, as in `[km]/[s]`. `symunit2str` gives the plain notation, which is suited to labels, file names or messages, and which `str2symunit` can read back. A numeric factor stays in the text, so `5*u.m` becomes `'5*m'`.",
+    "pt": "As unidades normalmente aparecem entre colchetes, como em `[km]/[s]`. `symunit2str` dá a notação simples, adequada a rótulos, nomes de arquivo ou mensagens, e que `str2symunit` consegue ler de volta. Um fator numérico permanece no texto, de modo que `5*u.m` vira `'5*m'`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Units as text",
+      "pt": "Unidades como texto"
+     },
+     "code": "u = symunit;\nsymunit2str(u.km/u.s)\nsymunit2str(u.N)\nsymunit2str(5*u.m)"
+    }
+   ],
+   "see": [
+    "str2symunit",
+    "symunit",
+    "sym2str",
+    "char"
+   ]
+  },
+  "rewrite": {
+   "summary": {
+    "en": "Rewrites a quantity in terms of other units.",
+    "pt": "Reescreve uma grandeza em termos de outras unidades."
+   },
+   "syntax": [
+    {
+     "code": "y = rewrite(x, units)",
+     "en": "Expresses the derived units in `x` using the given unit expression.",
+     "pt": "Expressa as unidades derivadas em `x` usando a expressão de unidades dada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic quantity with units.",
+     "pt": "Grandeza simbólica com unidades."
+    },
+    {
+     "name": "units",
+     "en": "Unit expression in which to express the result, such as `u.kg*u.m/u.s^2`.",
+     "pt": "Expressão de unidades na qual expressar o resultado, como `u.kg*u.m/u.s^2`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Equivalent expression written in the requested units.",
+     "pt": "Expressão equivalente escrita nas unidades pedidas."
+    }
+   ],
+   "description": {
+    "en": "A derived unit is a shorthand for a product of base units: a newton is `kg*m/s^2` and a joule is `N*m`. `rewrite` expands or regroups the units of `x` accordingly. For example `rewrite(u.J, u.N*u.m)` gives the base form `[kg]*[m]^2/[s]^2`.\n\nTo change the scale of a unit, as from `km` to `m`, use `unitConvert`; `rewrite` is for changing the unit combination.",
+    "pt": "Uma unidade derivada é uma abreviação de um produto de unidades base: um newton é `kg*m/s^2` e um joule é `N*m`. `rewrite` expande ou reagrupa as unidades de `x` de acordo. Por exemplo `rewrite(u.J, u.N*u.m)` dá a forma base `[kg]*[m]^2/[s]^2`.\n\nPara mudar a escala de uma unidade, como de `km` para `m`, use `unitConvert`; `rewrite` serve para mudar a combinação de unidades."
+   },
+   "notes": {
+    "en": "In MatLivre `rewrite` accepts only unit expressions as the second argument. The named targets `'SI'` and `'SIBase'` raise an error.",
+    "pt": "No MatLivre `rewrite` aceita apenas expressões de unidades como segundo argumento. Os destinos nomeados `'SI'` e `'SIBase'` geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Derived units in base units",
+      "pt": "Unidades derivadas em unidades base"
+     },
+     "code": "u = symunit;\nrewrite(u.N, u.kg*u.m/u.s^2)\nrewrite(u.J, u.N*u.m)\nrewrite(1*u.W, u.J/u.s)"
+    }
+   ],
+   "see": [
+    "unitConvert",
+    "symunit",
+    "baseUnits",
+    "derivedUnits"
+   ]
+  },
+  "mixedUnits": {
+   "summary": {
+    "en": "Splits a quantity into whole parts in several units.",
+    "pt": "Divide uma grandeza em partes inteiras em várias unidades."
+   },
+   "syntax": [
+    {
+     "code": "m = mixedUnits(x, units)",
+     "en": "Expresses `x` as a sum over the given units, largest first.",
+     "pt": "Expressa `x` como soma sobre as unidades dadas, da maior para a menor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Symbolic quantity with a unit.",
+     "pt": "Grandeza simbólica com uma unidade."
+    },
+    {
+     "name": "units",
+     "en": "Row vector of units of the same dimension, from largest to smallest.",
+     "pt": "Vetor linha de unidades da mesma dimensão, da maior para a menor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Row vector with one term per unit; their sum equals `x`.",
+     "pt": "Vetor linha com um termo por unidade; sua soma é igual a `x`."
+    }
+   ],
+   "description": {
+    "en": "This is the familiar conversion of `3.5 h` into `3 h 30 min`. Each unit except the last takes the integer part of what remains, and the last takes the remainder. The terms add up exactly to the original quantity.\n\nThe same idea gives feet and inches, or degrees, minutes and seconds.",
+    "pt": "É a conversão familiar de `3,5 h` em `3 h 30 min`. Cada unidade, exceto a última, fica com a parte inteira do que resta, e a última fica com o resto. Os termos somam exatamente a grandeza original.\n\nA mesma ideia dá pés e polegadas, ou graus, minutos e segundos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hours and minutes",
+      "pt": "Horas e minutos"
+     },
+     "code": "u = symunit;\nmixedUnits(3.5*u.h, [u.h u.min])\nmixedUnits(5*u.ft, [u.ft u.in])"
+    }
+   ],
+   "see": [
+    "unitConvert",
+    "symunit",
+    "floor",
+    "rewrite"
+   ]
+  },
+  "unitInfo": {
+   "summary": {
+    "en": "Physical quantity that a unit measures.",
+    "pt": "Grandeza física que uma unidade mede."
+   },
+   "syntax": [
+    {
+     "code": "name = unitInfo(u)",
+     "en": "Returns the quantity name, such as `\"Force\"`.",
+     "pt": "Retorna o nome da grandeza, como `\"Force\"`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "u",
+     "en": "A unit.",
+     "pt": "Uma unidade."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "name",
+     "en": "String scalar with the physical quantity.",
+     "pt": "String escalar com a grandeza física."
+    }
+   ],
+   "description": {
+    "en": "`unitInfo` tells what a unit is used for: `m` is a `\"Length\"`, `kg` a `\"Mass\"`, `N` a `\"Force\"` and `Pa` a `\"Pressure\"`. Units that measure the same quantity can be converted into one another.",
+    "pt": "`unitInfo` diz para que serve uma unidade: `m` é um `\"Length\"`, `kg` um `\"Mass\"`, `N` um `\"Force\"` e `Pa` um `\"Pressure\"`. Unidades que medem a mesma grandeza podem ser convertidas entre si."
+   },
+   "notes": {
+    "en": "The name is returned in English, as in MATLAB.",
+    "pt": "O nome é retornado em inglês, como no MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Quantity names",
+      "pt": "Nomes de grandezas"
+     },
+     "code": "u = symunit;\nunitInfo(u.m)\nunitInfo(u.kg)\nunitInfo(u.N)\nunitInfo(u.Pa)"
+    }
+   ],
+   "see": [
+    "symunit",
+    "unitConvert",
+    "baseUnits",
+    "derivedUnits"
+   ]
+  },
+  "baseUnits": {
+   "summary": {
+    "en": "Base units of a system of units.",
+    "pt": "Unidades base de um sistema de unidades."
+   },
+   "syntax": [
+    {
+     "code": "b = baseUnits(system)",
+     "en": "Returns the base units of the named system.",
+     "pt": "Retorna as unidades base do sistema indicado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "system",
+     "en": "Name of a unit system, such as `'SI'`; see `unitSystems`.",
+     "pt": "Nome de um sistema de unidades, como `'SI'`; veja `unitSystems`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Row vector of base units.",
+     "pt": "Vetor linha de unidades base."
+    }
+   ],
+   "description": {
+    "en": "Every other unit of a system is defined from its base units. The SI has seven: kilogram, second, meter, ampere, candela, mole and kelvin. All other SI units, such as the newton, are derived units; `derivedUnits` lists them.",
+    "pt": "Toda outra unidade de um sistema é definida a partir de suas unidades base. O SI tem sete: quilograma, segundo, metro, ampere, candela, mol e kelvin. Todas as demais unidades do SI, como o newton, são unidades derivadas; `derivedUnits` as lista."
+   },
+   "notes": {
+    "en": "In MatLivre only `'SI'` can be queried; the other built-in systems and user-defined systems raise an error.",
+    "pt": "No MatLivre apenas `'SI'` pode ser consultado; os outros sistemas internos e os definidos pelo usuário geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Base units of the SI",
+      "pt": "Unidades base do SI"
+     },
+     "code": "baseUnits('SI')"
+    }
+   ],
+   "see": [
+    "derivedUnits",
+    "unitSystems",
+    "symunit",
+    "newUnitSystem"
+   ]
+  },
+  "derivedUnits": {
+   "summary": {
+    "en": "Derived units of a system of units.",
+    "pt": "Unidades derivadas de um sistema de unidades."
+   },
+   "syntax": [
+    {
+     "code": "d = derivedUnits(system)",
+     "en": "Returns the named derived units of the system.",
+     "pt": "Retorna as unidades derivadas nomeadas do sistema."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "system",
+     "en": "Name of a unit system, such as `'SI'`.",
+     "pt": "Nome de um sistema de unidades, como `'SI'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Row vector of derived units.",
+     "pt": "Vetor linha de unidades derivadas."
+    }
+   ],
+   "description": {
+    "en": "Derived units have their own names but are defined by products of base units: `N` is `kg*m/s^2`, `J` is `N*m` and `Pa` is `N/m^2`. The SI list includes `F`, `C`, `S`, `H`, `V`, `J`, `N`, `W`, `Pa`, `Hz` and others. Use `rewrite` to expand one of them.",
+    "pt": "Unidades derivadas têm nome próprio, mas são definidas por produtos de unidades base: `N` é `kg*m/s^2`, `J` é `N*m` e `Pa` é `N/m^2`. A lista do SI inclui `F`, `C`, `S`, `H`, `V`, `J`, `N`, `W`, `Pa`, `Hz` e outras. Use `rewrite` para expandir uma delas."
+   },
+   "notes": {
+    "en": "In MatLivre only `'SI'` can be queried.",
+    "pt": "No MatLivre apenas `'SI'` pode ser consultado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Derived units of the SI",
+      "pt": "Unidades derivadas do SI"
+     },
+     "code": "derivedUnits('SI')"
+    }
+   ],
+   "see": [
+    "baseUnits",
+    "unitSystems",
+    "rewrite",
+    "symunit"
+   ]
+  },
+  "unitSystems": {
+   "summary": {
+    "en": "Names of the available unit systems.",
+    "pt": "Nomes dos sistemas de unidades disponíveis."
+   },
+   "syntax": [
+    {
+     "code": "names = unitSystems",
+     "en": "Returns the names of the built-in and user-defined unit systems.",
+     "pt": "Retorna os nomes dos sistemas de unidades internos e definidos pelo usuário."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "String row vector, in alphabetical order.",
+     "pt": "Vetor linha de strings, em ordem alfabética."
+    }
+   ],
+   "description": {
+    "en": "The built-in systems are `\"SI\"`, `\"CGS\"`, `\"EMU\"`, `\"ESU\"`, `\"GU\"` and `\"US\"`. Systems created with `newUnitSystem` are added to the list and disappear with `removeUnitSystem`. Pass any of the names to `baseUnits`, `derivedUnits` or `unitConvert`.",
+    "pt": "Os sistemas internos são `\"SI\"`, `\"CGS\"`, `\"EMU\"`, `\"ESU\"`, `\"GU\"` e `\"US\"`. Sistemas criados com `newUnitSystem` entram na lista e saem com `removeUnitSystem`. Qualquer um dos nomes pode ser passado a `baseUnits`, `derivedUnits` ou `unitConvert`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listing systems",
+      "pt": "Listando sistemas"
+     },
+     "code": "unitSystems"
+    }
+   ],
+   "see": [
+    "baseUnits",
+    "derivedUnits",
+    "newUnitSystem",
+    "removeUnitSystem"
+   ]
+  },
+  "newUnit": {
+   "summary": {
+    "en": "Defines a new unit in terms of existing ones.",
+    "pt": "Define uma nova unidade em termos de unidades existentes."
+   },
+   "syntax": [
+    {
+     "code": "newUnit(name, value)",
+     "en": "Defines the unit `name` as equal to the quantity `value`.",
+     "pt": "Define a unidade `name` como igual à grandeza `value`."
+    },
+    {
+     "code": "u = newUnit(name, value)",
+     "en": "Also returns the new unit.",
+     "pt": "Também retorna a nova unidade."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of the unit, a valid identifier.",
+     "pt": "Nome da unidade, um identificador válido."
+    },
+    {
+     "name": "value",
+     "en": "Quantity that equals one of the new unit, such as `330*u.cm^3`.",
+     "pt": "Grandeza que equivale a uma unidade nova, como `330*u.cm^3`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "u",
+     "en": "The newly defined unit.",
+     "pt": "A unidade recém-definida."
+    }
+   ],
+   "description": {
+    "en": "After `newUnit('Beer', 330*u.cm^3)` the unit `Beer` is a field of every new `symunit` object and can be used in conversions: `2 Beer` is `33/50 L`. The definition holds until it is removed with `removeUnit` or the session ends.\n\nCreate a fresh container with `u = symunit` after defining the unit, as an existing one does not see it.",
+    "pt": "Depois de `newUnit('Beer', 330*u.cm^3)` a unidade `Beer` é um campo de todo novo objeto `symunit` e pode ser usada em conversões: `2 Beer` é `33/50 L`. A definição vale até ser removida com `removeUnit` ou até o fim da sessão.\n\nCrie um contêiner novo com `u = symunit` depois de definir a unidade, pois um já existente não a enxerga."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A custom volume unit",
+      "pt": "Uma unidade de volume personalizada"
+     },
+     "code": "u = symunit;\nnewUnit('Beer', 330*u.cm^3);\nu = symunit;\nunitConvert(2*u.Beer, u.L)\nremoveUnit('Beer');"
+    }
+   ],
+   "see": [
+    "removeUnit",
+    "symunit",
+    "unitConvert",
+    "newUnitSystem"
+   ]
+  },
+  "removeUnit": {
+   "summary": {
+    "en": "Removes a unit defined with newUnit.",
+    "pt": "Remove uma unidade definida com newUnit."
+   },
+   "syntax": [
+    {
+     "code": "removeUnit(name)",
+     "en": "Deletes the user-defined unit `name`.",
+     "pt": "Apaga a unidade definida pelo usuário `name`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of a unit created by `newUnit`.",
+     "pt": "Nome de uma unidade criada por `newUnit`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Only units added with `newUnit` can be removed. Asking to remove a built-in unit, such as `m`, or a name that was never defined raises an error. Quantities that already use the unit become meaningless afterwards, so convert or discard them first.",
+    "pt": "Somente unidades adicionadas com `newUnit` podem ser removidas. Pedir a remoção de uma unidade interna, como `m`, ou de um nome nunca definido gera erro. Grandezas que já usam a unidade perdem o sentido depois, então converta-as ou descarte-as antes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Defining and removing a unit",
+      "pt": "Definindo e removendo uma unidade"
+     },
+     "code": "u = symunit;\nnewUnit('Foo', 5*u.m);\nu = symunit;\nunitConvert(2*u.Foo, u.m)\nremoveUnit('Foo');"
+    }
+   ],
+   "see": [
+    "newUnit",
+    "symunit",
+    "removeUnitSystem"
+   ]
+  },
+  "newUnitSystem": {
+   "summary": {
+    "en": "Defines a new system of units.",
+    "pt": "Define um novo sistema de unidades."
+   },
+   "syntax": [
+    {
+     "code": "newUnitSystem(name, base)",
+     "en": "Creates the system `name` with the given base units.",
+     "pt": "Cria o sistema `name` com as unidades base dadas."
+    },
+    {
+     "code": "newUnitSystem(name, base, derived)",
+     "en": "Also names the derived units of the system.",
+     "pt": "Também nomeia as unidades derivadas do sistema."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of the new system.",
+     "pt": "Nome do novo sistema."
+    },
+    {
+     "name": "base",
+     "en": "Base units, taken from `baseUnits` of an existing system.",
+     "pt": "Unidades base, tiradas de `baseUnits` de um sistema existente."
+    },
+    {
+     "name": "derived",
+     "en": "Derived units, for example from `derivedUnits`.",
+     "pt": "Unidades derivadas, por exemplo de `derivedUnits`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A unit system is the choice of a set of base units from which all the others can be built. Once defined, the name appears in `unitSystems` and can be used as the target of `unitConvert`, which rewrites a quantity using that system's units.\n\nThe system lasts until `removeUnitSystem` is called or the session ends.",
+    "pt": "Um sistema de unidades é a escolha de um conjunto de unidades base a partir das quais todas as outras podem ser construídas. Depois de definido, o nome aparece em `unitSystems` e pode ser usado como destino de `unitConvert`, que reescreve uma grandeza com as unidades desse sistema.\n\nO sistema dura até `removeUnitSystem` ser chamada ou a sessão terminar."
+   },
+   "notes": {
+    "en": "In MatLivre the base units must be given as the output of `baseUnits('SI')`; an array built by hand from `symunit` is not accepted. A new system is listed by `unitSystems`, but `baseUnits` and `derivedUnits` cannot query it, and `unitConvert` to it returns SI units.",
+    "pt": "No MatLivre as unidades base devem ser dadas como a saída de `baseUnits('SI')`; um array montado à mão a partir de `symunit` não é aceito. Um novo sistema aparece em `unitSystems`, mas `baseUnits` e `derivedUnits` não conseguem consultá-lo, e `unitConvert` para ele devolve unidades do SI."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Registering a system",
+      "pt": "Registrando um sistema"
+     },
+     "code": "newUnitSystem('MySys', baseUnits('SI'), derivedUnits('SI'));\nunitSystems\nremoveUnitSystem('MySys');"
+    }
+   ],
+   "see": [
+    "removeUnitSystem",
+    "unitSystems",
+    "baseUnits",
+    "derivedUnits"
+   ]
+  },
+  "removeUnitSystem": {
+   "summary": {
+    "en": "Removes a unit system defined with newUnitSystem.",
+    "pt": "Remove um sistema de unidades definido com newUnitSystem."
+   },
+   "syntax": [
+    {
+     "code": "removeUnitSystem(name)",
+     "en": "Deletes the user-defined system `name`.",
+     "pt": "Apaga o sistema definido pelo usuário `name`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of a system created with `newUnitSystem`.",
+     "pt": "Nome de um sistema criado com `newUnitSystem`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Only systems created by `newUnitSystem` can be removed; the built-in systems are permanent. After removal the name no longer appears in `unitSystems`.",
+    "pt": "Apenas sistemas criados por `newUnitSystem` podem ser removidos; os sistemas internos são permanentes. Depois da remoção o nome deixa de aparecer em `unitSystems`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Adding and removing a system",
+      "pt": "Adicionando e removendo um sistema"
+     },
+     "code": "newUnitSystem('MySys', baseUnits('SI'));\nunitSystems\nremoveUnitSystem('MySys');\nunitSystems"
+    }
+   ],
+   "see": [
+    "newUnitSystem",
+    "unitSystems",
+    "removeUnit"
+   ]
+  }
+ }
+}

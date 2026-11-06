@@ -1,0 +1,1339 @@
+{
+ "functions": {
+  "save": {
+   "summary": {
+    "en": "Saves workspace variables to a MAT-file or a text file.",
+    "pt": "Salva variáveis do workspace em um arquivo MAT ou de texto."
+   },
+   "syntax": [
+    {
+     "code": "save(filename)",
+     "en": "Saves every workspace variable.",
+     "pt": "Salva todas as variáveis do workspace."
+    },
+    {
+     "code": "save(filename, var1, var2)",
+     "en": "Saves only the named variables.",
+     "pt": "Salva apenas as variáveis indicadas."
+    },
+    {
+     "code": "save(filename, ..., '-append')",
+     "en": "Adds variables to an existing MAT-file, replacing those with the same name.",
+     "pt": "Acrescenta variáveis a um arquivo MAT existente, substituindo as de mesmo nome."
+    },
+    {
+     "code": "save(filename, var, '-ascii')",
+     "en": "Writes numeric data as plain text.",
+     "pt": "Grava dados numéricos como texto simples."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "File name. `.mat` is added when there is no extension.",
+     "pt": "Nome do arquivo. `.mat` é acrescentado quando não há extensão."
+    },
+    {
+     "name": "var1, ...",
+     "en": "Names of the variables to save, given as text.",
+     "pt": "Nomes das variáveis a salvar, dados como texto."
+    },
+    {
+     "name": "'-append'",
+     "en": "Keeps the variables already in the file.",
+     "pt": "Mantém as variáveis já presentes no arquivo."
+    },
+    {
+     "name": "'-ascii'",
+     "en": "Text output; only numeric variables are allowed.",
+     "pt": "Saída em texto; apenas variáveis numéricas são permitidas."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A MAT-file stores variables with their class, size and values, so they come back unchanged with `load`. Text output with `'-ascii'` is readable by other programs but loses class information and writes numbers in an exponent format.\n\nIn function-call form the variable names must be quoted: `save('f.mat', 'x')`. In command form, `save f.mat x`, quotes are omitted.",
+    "pt": "Um arquivo MAT guarda as variáveis com classe, tamanho e valores, de modo que voltam inalteradas com `load`. A saída em texto com `'-ascii'` pode ser lida por outros programas, mas perde a informação de classe e grava os números em formato exponencial.\n\nNa forma de função, os nomes das variáveis devem estar entre aspas: `save('f.mat', 'x')`. Na forma de comando, `save f.mat x`, as aspas são omitidas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Save, append and reload",
+      "pt": "Salvar, acrescentar e recarregar"
+     },
+     "code": "a = 1; b = [1 2; 3 4]; s = 'text';\nsave('m1.mat', 'a', 's');\nsave('m1.mat', 'b', '-append');\nq = load('m1.mat')"
+    }
+   ],
+   "see": [
+    "load",
+    "matfile",
+    "writematrix",
+    "fopen"
+   ]
+  },
+  "set": {
+   "summary": {
+    "en": "Sets properties of a graphics object.",
+    "pt": "Define propriedades de um objeto gráfico."
+   },
+   "syntax": [
+    {
+     "code": "set(h, 'PropertyName', value)",
+     "en": "Sets one property of the object with handle `h`.",
+     "pt": "Define uma propriedade do objeto com handle `h`."
+    },
+    {
+     "code": "set(h, Name1, Value1, Name2, Value2)",
+     "en": "Sets several properties in one call.",
+     "pt": "Define várias propriedades em uma chamada."
+    },
+    {
+     "code": "set(hArray, 'PropertyName', value)",
+     "en": "Applies the same value to every object in the array.",
+     "pt": "Aplica o mesmo valor a todos os objetos do array."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h",
+     "en": "Handle of a figure, axes, line or other graphics object.",
+     "pt": "Handle de uma figura, eixos, linha ou outro objeto gráfico."
+    },
+    {
+     "name": "'PropertyName', value",
+     "en": "Property name and the value to give it.",
+     "pt": "Nome da propriedade e o valor a atribuir."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`set` is the function-style counterpart of dot assignment, so `set(p, 'LineWidth', 3)` and `p.LineWidth = 3` do the same. Use it to restyle plots after they are drawn, or to apply one setting to many handles. The current value of a property can be read back with `get`.",
+    "pt": "`set` é o equivalente em estilo de função da atribuição com ponto, então `set(p, 'LineWidth', 3)` e `p.LineWidth = 3` fazem o mesmo. Use-o para reformatar gráficos já desenhados ou para aplicar um ajuste a vários handles. O valor atual de uma propriedade pode ser lido com `get`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Restyle a line and the axes",
+      "pt": "Reformatar uma linha e os eixos"
+     },
+     "code": "fig = figure('Visible', 'off');\nax = axes;\np = plot(1:3);\nset(p, 'LineWidth', 3, 'Color', 'r', 'Marker', 'o');\nset(ax, 'XLim', [0 5]);\nget(p, 'LineWidth')\nget(p, 'Marker')\nget(ax, 'XLim')"
+    }
+   ],
+   "see": [
+    "get",
+    "gca",
+    "gcf",
+    "plot",
+    "figure"
+   ]
+  },
+  "sheetnames": {
+   "summary": {
+    "en": "Lists the sheet names of a spreadsheet file.",
+    "pt": "Lista os nomes das planilhas de um arquivo de planilha."
+   },
+   "syntax": [
+    {
+     "code": "names = sheetnames(filename)",
+     "en": "Returns the names of all sheets, in file order.",
+     "pt": "Retorna os nomes de todas as planilhas, na ordem do arquivo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Spreadsheet file name, such as an `.xlsx` file.",
+     "pt": "Nome do arquivo de planilha, como um arquivo `.xlsx`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "String column vector with one name per sheet.",
+     "pt": "Vetor coluna de strings com um nome por planilha."
+    }
+   ],
+   "description": {
+    "en": "Use `sheetnames` to find out what a workbook contains before reading it, then pass one of the names as the `'Sheet'` option of `readmatrix`, `readtable` or `readcell`.",
+    "pt": "Use `sheetnames` para descobrir o que um arquivo contém antes de lê-lo, e passe um dos nomes como opção `'Sheet'` de `readmatrix`, `readtable` ou `readcell`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two-sheet workbook",
+      "pt": "Arquivo com duas planilhas"
+     },
+     "code": "writematrix([1 2; 3 4], 'x.xlsx', 'Sheet', 'data');\nwritematrix([5 6], 'x.xlsx', 'Sheet', 'more');\nsheetnames('x.xlsx')\nreadmatrix('x.xlsx', 'Sheet', 'more')"
+    }
+   ],
+   "see": [
+    "readmatrix",
+    "readtable",
+    "readcell",
+    "writematrix"
+   ]
+  },
+  "textread": {
+   "summary": {
+    "en": "Reads formatted text-file data into separate variables.",
+    "pt": "Lê dados formatados de um arquivo de texto em variáveis separadas."
+   },
+   "syntax": [
+    {
+     "code": "[A, B, ...] = textread(filename, format)",
+     "en": "Reads columns according to the format, one output per conversion.",
+     "pt": "Lê colunas conforme o formato, uma saída por conversão."
+    },
+    {
+     "code": "[A, B, ...] = textread(filename, format, Name, Value)",
+     "en": "Sets options such as `'delimiter'` and `'headerlines'`.",
+     "pt": "Define opções como `'delimiter'` e `'headerlines'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "format",
+     "en": "Conversions such as `%s`, `%d`, `%f`, one per column.",
+     "pt": "Conversões como `%s`, `%d`, `%f`, uma por coluna."
+    },
+    {
+     "name": "'delimiter'",
+     "en": "Field separator.",
+     "pt": "Separador de campos."
+    },
+    {
+     "name": "'headerlines'",
+     "en": "Number of lines to skip at the start.",
+     "pt": "Número de linhas a pular no início."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A, B, ...",
+     "en": "One column vector or cell array per conversion.",
+     "pt": "Um vetor coluna ou cell array por conversão."
+    }
+   ],
+   "description": {
+    "en": "`textread` is an older function; `textscan`, `readtable` and `readmatrix` replace it. It is still convenient when you want each column in its own variable, with text columns as cell arrays of character vectors.",
+    "pt": "`textread` é uma função antiga; `textscan`, `readtable` e `readmatrix` a substituem. Continua prática quando se quer cada coluna em sua própria variável, com colunas de texto em cell arrays de vetores de caracteres."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Split a file into columns",
+      "pt": "Separar um arquivo em colunas"
+     },
+     "code": "fid = fopen('tx.txt', 'w'); fprintf(fid, 'a 1\\nb 2\\nc 3\\n'); fclose(fid);\n[name, val] = textread('tx.txt', '%s %f')\nfid = fopen('q.csv', 'w'); fprintf(fid, 'x,y\\n1,2\\n3,4\\n'); fclose(fid);\n[x, y] = textread('q.csv', '%f %f', 'delimiter', ',', 'headerlines', 1)"
+    }
+   ],
+   "see": [
+    "textscan",
+    "readtable",
+    "readmatrix",
+    "fscanf"
+   ]
+  },
+  "textscan": {
+   "summary": {
+    "en": "Reads formatted data from a file or text into a cell array of columns.",
+    "pt": "Lê dados formatados de um arquivo ou texto em um cell array de colunas."
+   },
+   "syntax": [
+    {
+     "code": "C = textscan(fid, formatSpec)",
+     "en": "Reads from an open file.",
+     "pt": "Lê de um arquivo aberto."
+    },
+    {
+     "code": "C = textscan(str, formatSpec)",
+     "en": "Reads from a character vector.",
+     "pt": "Lê de um vetor de caracteres."
+    },
+    {
+     "code": "C = textscan(..., Name, Value)",
+     "en": "Sets options such as `'Delimiter'` and `'HeaderLines'`.",
+     "pt": "Define opções como `'Delimiter'` e `'HeaderLines'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "formatSpec",
+     "en": "Conversions such as `%f`, `%d`, `%s`, one per column. Literal text in the format must match the data.",
+     "pt": "Conversões como `%f`, `%d`, `%s`, uma por coluna. O texto literal no formato deve casar com os dados."
+    },
+    {
+     "name": "'Delimiter'",
+     "en": "Field separator or cell array of separators.",
+     "pt": "Separador de campos ou cell array de separadores."
+    },
+    {
+     "name": "'HeaderLines'",
+     "en": "Number of lines to skip at the start.",
+     "pt": "Número de linhas a pular no início."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Cell array with one cell per conversion: numeric column vectors, or cell arrays of character vectors for `%s`.",
+     "pt": "Cell array com uma célula por conversão: vetores coluna numéricos, ou cell arrays de vetores de caracteres para `%s`."
+    }
+   ],
+   "description": {
+    "en": "The format is applied again and again until the input ends, so each conversion collects one column. `%d` gives `int32` and `%f` gives `double`. Join numeric columns of the same class with `[C{:}]`.\n\nBecause the result holds columns of different types, `textscan` suits files that mix text and numbers, where `readmatrix` cannot.",
+    "pt": "O formato é aplicado repetidamente até o fim da entrada, de modo que cada conversão coleta uma coluna. `%d` gera `int32` e `%f` gera `double`. Junte colunas numéricas da mesma classe com `[C{:}]`.\n\nComo o resultado guarda colunas de tipos diferentes, `textscan` serve a arquivos que misturam texto e números, onde `readmatrix` não consegue."
+   },
+   "notes": {
+    "en": "With `'EmptyValue'`, an empty field is dropped from the output in MatLivre instead of being replaced.",
+    "pt": "Com `'EmptyValue'`, um campo vazio é descartado da saída no MatLivre em vez de ser substituído."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Text and numbers",
+      "pt": "Texto e números"
+     },
+     "code": "C = textscan('a 1 b 2 c 3', '%s %f');\nC{1}'\nC{2}'\nD = textscan('10:20 30:40', '%d:%d');\n[D{:}]\nfid = fopen('t.csv', 'w'); fprintf(fid, 'id,val\\n1,2.5\\n2,3.5\\n'); fclose(fid);\nfid = fopen('t.csv');\nE = textscan(fid, '%d %f', 'Delimiter', ',', 'HeaderLines', 1);\nfclose(fid);\nE{2}'"
+    }
+   ],
+   "see": [
+    "textread",
+    "fscanf",
+    "readtable",
+    "readcell",
+    "strsplit"
+   ]
+  },
+  "Tiff.close": {
+   "summary": {
+    "en": "Closes the TIFF file held by a `Tiff` object.",
+    "pt": "Fecha o arquivo TIFF mantido por um objeto `Tiff`."
+   },
+   "syntax": [
+    {
+     "code": "close(t)",
+     "en": "Closes the file. The form `t.close()` is equivalent.",
+     "pt": "Fecha o arquivo. A forma `t.close()` é equivalente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object returned by the `Tiff` constructor.",
+     "pt": "Objeto `Tiff` retornado pelo construtor `Tiff`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Always close a `Tiff` object that was opened for writing: directories are only completed in the file when it is closed, and the file cannot be reopened reliably before that.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Feche sempre um objeto `Tiff` aberto para escrita: os diretórios só são concluídos no arquivo quando ele é fechado, e o arquivo não pode ser reaberto com segurança antes disso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write a file and close it",
+      "pt": "Gravar um arquivo e fechá-lo"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nsize(r.read())\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.read",
+    "Tiff.setTag",
+    "imread",
+    "imwrite"
+   ]
+  },
+  "Tiff.computeStrip": {
+   "summary": {
+    "en": "Returns the index of the strip that contains a given image row.",
+    "pt": "Retorna o índice da faixa (strip) que contém uma linha da imagem."
+   },
+   "syntax": [
+    {
+     "code": "stripNum = computeStrip(t, row)",
+     "en": "Finds the strip holding image row `row`.",
+     "pt": "Encontra a faixa que contém a linha `row` da imagem."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object open on a stripped image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem organizada em faixas."
+    },
+    {
+     "name": "row",
+     "en": "Row number, counted from 1.",
+     "pt": "Número da linha, contado a partir de 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "stripNum",
+     "en": "Strip index, counted from 1, for use with `readEncodedStrip`.",
+     "pt": "Índice da faixa, contado a partir de 1, para usar com `readEncodedStrip`."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Stripped TIFF files store the image as bands of consecutive rows, the height of each set by the `RowsPerStrip` tag. With 4 rows per strip, rows 1 to 4 are strip 1, rows 5 to 8 are strip 2, and so on.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Arquivos TIFF em faixas guardam a imagem como bandas de linhas consecutivas, cuja altura vem da tag `RowsPerStrip`. Com 4 linhas por faixa, as linhas 1 a 4 formam a faixa 1, as linhas 5 a 8 a faixa 2, e assim por diante."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strip of a row",
+      "pt": "Faixa de uma linha"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\n[r.computeStrip(1) r.computeStrip(4) r.computeStrip(5)]\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readEncodedStrip",
+    "Tiff.numberOfStrips",
+    "Tiff.computeTile",
+    "Tiff.getTag"
+   ]
+  },
+  "Tiff.computeTile": {
+   "summary": {
+    "en": "Returns the index of the tile that contains a given image position.",
+    "pt": "Retorna o índice do tile que contém uma posição da imagem."
+   },
+   "syntax": [
+    {
+     "code": "tileNum = computeTile(t, [row col])",
+     "en": "Finds the tile holding the pixel at `row`, `col`.",
+     "pt": "Encontra o tile que contém o pixel em `row`, `col`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object open on a tiled image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem organizada em tiles."
+    },
+    {
+     "name": "[row col]",
+     "en": "Pixel coordinates, counted from 1.",
+     "pt": "Coordenadas do pixel, contadas a partir de 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tileNum",
+     "en": "Tile index, counted from 1, for use with `readEncodedTile`.",
+     "pt": "Índice do tile, contado a partir de 1, para usar com `readEncodedTile`."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Tiled TIFF files split the image into a grid of fixed-size rectangles, whose size is given by the `TileWidth` and `TileLength` tags. Tiles are numbered row by row. This image fits inside one tile, so every position falls in tile 1.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Arquivos TIFF em tiles dividem a imagem em uma grade de retângulos de tamanho fixo, dado pelas tags `TileWidth` e `TileLength`. Os tiles são numerados linha a linha. Esta imagem cabe em um único tile, então toda posição cai no tile 1."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tile of a pixel",
+      "pt": "Tile de um pixel"
+     },
+     "code": "tag.ImageLength = 4; tag.ImageWidth = 4;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1;\ntag.TileLength = 16; tag.TileWidth = 16;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('u.tif', 'w'); w.setTag(tag); w.write(uint8(magic(4))); w.close();\nr = Tiff('u.tif', 'r');\nr.isTiled()\nr.computeTile([2 3])\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readEncodedTile",
+    "Tiff.numberOfTiles",
+    "Tiff.isTiled",
+    "Tiff.computeStrip"
+   ]
+  },
+  "Tiff.currentDirectory": {
+   "summary": {
+    "en": "Returns the number of the current image directory in the file.",
+    "pt": "Retorna o número do diretório de imagem atual no arquivo."
+   },
+   "syntax": [
+    {
+     "code": "n = currentDirectory(t)",
+     "en": "Returns the 1-based index of the directory being read or written.",
+     "pt": "Retorna o índice, a partir de 1, do diretório que está sendo lido ou gravado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object.",
+     "pt": "Objeto `Tiff`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Directory index, `1` for the first image.",
+     "pt": "Índice do diretório, `1` para a primeira imagem."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. A TIFF file can hold several images, each described by its own directory. A freshly opened file is positioned at directory 1. Use `nextDirectory` or `setDirectory` to move.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Um arquivo TIFF pode conter várias imagens, cada uma descrita por seu próprio diretório. Um arquivo recém-aberto está no diretório 1. Use `nextDirectory` ou `setDirectory` para se mover."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Walk through two images",
+      "pt": "Percorrer duas imagens"
+     },
+     "code": "tag.ImageLength = 2; tag.ImageWidth = 2;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 2;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('m.tif', 'w');\nw.setTag(tag); w.write(uint8([1 2; 3 4])); w.writeDirectory();\nw.setTag(tag); w.write(uint8([5 6; 7 8])); w.close();\nr = Tiff('m.tif', 'r');\nr.currentDirectory()\nr.nextDirectory();\nr.currentDirectory()\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.setDirectory",
+    "Tiff.nextDirectory",
+    "Tiff.lastDirectory",
+    "Tiff.read"
+   ]
+  },
+  "Tiff.getTag": {
+   "summary": {
+    "en": "Reads the value of a TIFF tag of the current directory.",
+    "pt": "Lê o valor de uma tag TIFF do diretório atual."
+   },
+   "syntax": [
+    {
+     "code": "value = getTag(t, tagName)",
+     "en": "Returns the value of the named tag.",
+     "pt": "Retorna o valor da tag indicada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    },
+    {
+     "name": "tagName",
+     "en": "Tag name such as `'ImageWidth'`, `'BitsPerSample'`, `'Compression'` or `'Photometric'`.",
+     "pt": "Nome da tag, como `'ImageWidth'`, `'BitsPerSample'`, `'Compression'` ou `'Photometric'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "value",
+     "en": "Tag value. Coded tags return numbers that you compare with constants such as `Tiff.Photometric.MinIsBlack`.",
+     "pt": "Valor da tag. Tags codificadas retornam números que se comparam com constantes como `Tiff.Photometric.MinIsBlack`."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Asking for a tag that the file does not contain is an error. The list of tag names that the class knows comes from `Tiff.getTagNames`.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Pedir uma tag que o arquivo não contém é um erro. A lista de nomes de tags que a classe conhece vem de `Tiff.getTagNames`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Image properties",
+      "pt": "Propriedades da imagem"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nr.getTag('ImageWidth')\nr.getTag('ImageLength')\nr.getTag('BitsPerSample')\nr.getTag('RowsPerStrip')\nr.getTag('Photometric') == Tiff.Photometric.MinIsBlack\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.setTag",
+    "Tiff.getTagNames",
+    "imfinfo",
+    "Tiff.read"
+   ]
+  },
+  "Tiff.getTagNames": {
+   "summary": {
+    "en": "Returns the names of the tags that the `Tiff` class supports.",
+    "pt": "Retorna os nomes das tags que a classe `Tiff` suporta."
+   },
+   "syntax": [
+    {
+     "code": "names = Tiff.getTagNames()",
+     "en": "Returns a cell array of tag names.",
+     "pt": "Retorna um cell array com os nomes das tags."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "Column cell array of character vectors.",
+     "pt": "Cell array em coluna de vetores de caracteres."
+    }
+   ],
+   "description": {
+    "en": "This is a static method, called on the class and not on an object. It is a convenient way to check the exact spelling of a tag before passing it to `getTag` or `setTag`.",
+    "pt": "É um método estático, chamado na classe e não em um objeto. Serve para conferir a grafia exata de uma tag antes de passá-la a `getTag` ou `setTag`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First tag names",
+      "pt": "Primeiros nomes de tags"
+     },
+     "code": "names = Tiff.getTagNames();\nclass(names)\nnames(1:3)"
+    }
+   ],
+   "see": [
+    "Tiff.getTag",
+    "Tiff.setTag",
+    "Tiff.getVersion",
+    "imfinfo"
+   ]
+  },
+  "Tiff.getVersion": {
+   "summary": {
+    "en": "Returns the version text of the TIFF library in use.",
+    "pt": "Retorna o texto de versão da biblioteca TIFF em uso."
+   },
+   "syntax": [
+    {
+     "code": "v = Tiff.getVersion()",
+     "en": "Returns the library version and copyright notice.",
+     "pt": "Retorna a versão da biblioteca e o aviso de direitos autorais."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Character vector with the library name and version number.",
+     "pt": "Vetor de caracteres com o nome e o número de versão da biblioteca."
+    }
+   ],
+   "description": {
+    "en": "This is a static method of the `Tiff` class. It is useful when reporting a problem with a file, since decoding behavior can depend on the version of the underlying library.",
+    "pt": "É um método estático da classe `Tiff`. Serve ao relatar um problema com um arquivo, já que o comportamento de decodificação pode depender da versão da biblioteca."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Library version",
+      "pt": "Versão da biblioteca"
+     },
+     "code": "v = Tiff.getVersion();\nischar(v)\nv(1:6)"
+    }
+   ],
+   "see": [
+    "Tiff.getTagNames",
+    "Tiff.getTag",
+    "imfinfo"
+   ]
+  },
+  "Tiff.isTiled": {
+   "summary": {
+    "en": "Tells whether the current image is stored in tiles.",
+    "pt": "Informa se a imagem atual é armazenada em tiles."
+   },
+   "syntax": [
+    {
+     "code": "tf = isTiled(t)",
+     "en": "Returns `true` for a tiled image and `false` for a stripped one.",
+     "pt": "Retorna `true` para uma imagem em tiles e `false` para uma em faixas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Use it to choose between the strip functions (`numberOfStrips`, `readEncodedStrip`) and the tile functions (`numberOfTiles`, `readEncodedTile`), because the wrong family gives an error.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Use-o para escolher entre as funções de faixa (`numberOfStrips`, `readEncodedStrip`) e as de tile (`numberOfTiles`, `readEncodedTile`), pois usar a família errada gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Stripped and tiled files",
+      "pt": "Arquivos em faixas e em tiles"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\ntag.ImageLength = 4; tag.ImageWidth = 4;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1;\ntag.TileLength = 16; tag.TileWidth = 16;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('u.tif', 'w'); w.setTag(tag); w.write(uint8(magic(4))); w.close();\na = Tiff('t.tif', 'r'); b = Tiff('u.tif', 'r');\n[a.isTiled() b.isTiled()]\na.close(); b.close();"
+    }
+   ],
+   "see": [
+    "Tiff.numberOfStrips",
+    "Tiff.numberOfTiles",
+    "Tiff.computeTile",
+    "Tiff.getTag"
+   ]
+  },
+  "Tiff.lastDirectory": {
+   "summary": {
+    "en": "Tells whether the current directory is the last one in the file.",
+    "pt": "Informa se o diretório atual é o último do arquivo."
+   },
+   "syntax": [
+    {
+     "code": "tf = lastDirectory(t)",
+     "en": "Returns `true` at the final image directory.",
+     "pt": "Retorna `true` no último diretório de imagem."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. This is the natural stop condition for a loop over every image in a multi-image file: read the current image, then call `nextDirectory` until `lastDirectory` is true.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. É a condição de parada natural para um laço sobre todas as imagens de um arquivo com várias imagens: leia a imagem atual e chame `nextDirectory` até `lastDirectory` ser verdadeira."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read every image",
+      "pt": "Ler todas as imagens"
+     },
+     "code": "tag.ImageLength = 2; tag.ImageWidth = 2;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 2;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('m.tif', 'w');\nw.setTag(tag); w.write(uint8([1 2; 3 4])); w.writeDirectory();\nw.setTag(tag); w.write(uint8([5 6; 7 8])); w.close();\nr = Tiff('m.tif', 'r');\nwhile true\n    disp(r.read())\n    if r.lastDirectory(), break, end\n    r.nextDirectory();\nend\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.nextDirectory",
+    "Tiff.currentDirectory",
+    "Tiff.setDirectory",
+    "Tiff.read"
+   ]
+  },
+  "Tiff.nextDirectory": {
+   "summary": {
+    "en": "Moves to the next image directory in the file.",
+    "pt": "Move para o próximo diretório de imagem do arquivo."
+   },
+   "syntax": [
+    {
+     "code": "nextDirectory(t)",
+     "en": "Makes the following directory current.",
+     "pt": "Torna o diretório seguinte o atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object.",
+     "pt": "Objeto `Tiff`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Calling it on the last directory is an error, so guard it with `lastDirectory`. After the move, `read` returns the next image.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Chamá-lo no último diretório é um erro, então proteja a chamada com `lastDirectory`. Após a troca, `read` devolve a próxima imagem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Step to the second image",
+      "pt": "Passar para a segunda imagem"
+     },
+     "code": "tag.ImageLength = 2; tag.ImageWidth = 2;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 2;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('m.tif', 'w');\nw.setTag(tag); w.write(uint8([1 2; 3 4])); w.writeDirectory();\nw.setTag(tag); w.write(uint8([5 6; 7 8])); w.close();\nr = Tiff('m.tif', 'r');\nr.read()\nr.nextDirectory();\nr.read()\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.lastDirectory",
+    "Tiff.setDirectory",
+    "Tiff.currentDirectory",
+    "Tiff.read"
+   ]
+  },
+  "Tiff.numberOfStrips": {
+   "summary": {
+    "en": "Returns the number of strips in the current image.",
+    "pt": "Retorna o número de faixas (strips) da imagem atual."
+   },
+   "syntax": [
+    {
+     "code": "n = numberOfStrips(t)",
+     "en": "Counts the strips of a stripped image.",
+     "pt": "Conta as faixas de uma imagem organizada em faixas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Number of strips, equal to `ceil(ImageLength / RowsPerStrip)` for chunky data.",
+     "pt": "Número de faixas, igual a `ceil(ImageLength / RowsPerStrip)` para dados chunky."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Use it to bound a loop that reads a large image strip by strip with `readEncodedStrip`, so only one band is in memory at a time. The call is an error for a tiled image.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Use-o para limitar um laço que lê uma imagem grande faixa a faixa com `readEncodedStrip`, mantendo só uma banda na memória por vez. A chamada é um erro em uma imagem em tiles."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Strips of an 8-row image",
+      "pt": "Faixas de uma imagem de 8 linhas"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nr.numberOfStrips()\nr.getTag('RowsPerStrip')\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readEncodedStrip",
+    "Tiff.computeStrip",
+    "Tiff.isTiled",
+    "Tiff.numberOfTiles"
+   ]
+  },
+  "Tiff.numberOfTiles": {
+   "summary": {
+    "en": "Returns the number of tiles in the current image.",
+    "pt": "Retorna o número de tiles da imagem atual."
+   },
+   "syntax": [
+    {
+     "code": "n = numberOfTiles(t)",
+     "en": "Counts the tiles of a tiled image.",
+     "pt": "Conta os tiles de uma imagem organizada em tiles."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Number of tiles in the grid that covers the image.",
+     "pt": "Número de tiles da grade que cobre a imagem."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. The grid has `ceil(ImageWidth / TileWidth)` columns and `ceil(ImageLength / TileLength)` rows, and edge tiles are padded to full size. The call is an error for a stripped image.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. A grade tem `ceil(ImageWidth / TileWidth)` colunas e `ceil(ImageLength / TileLength)` linhas, e os tiles das bordas são completados até o tamanho cheio. A chamada é um erro em uma imagem em faixas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tile count",
+      "pt": "Contagem de tiles"
+     },
+     "code": "tag.ImageLength = 4; tag.ImageWidth = 4;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1;\ntag.TileLength = 16; tag.TileWidth = 16;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('u.tif', 'w'); w.setTag(tag); w.write(uint8(magic(4))); w.close();\nr = Tiff('u.tif', 'r');\nr.numberOfTiles()\n[r.getTag('TileWidth') r.getTag('TileLength')]\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readEncodedTile",
+    "Tiff.computeTile",
+    "Tiff.isTiled",
+    "Tiff.numberOfStrips"
+   ]
+  },
+  "Tiff.read": {
+   "summary": {
+    "en": "Reads the whole current image into an array.",
+    "pt": "Lê a imagem atual inteira em um array."
+   },
+   "syntax": [
+    {
+     "code": "A = read(t)",
+     "en": "Returns the image pixels, decoded and assembled.",
+     "pt": "Retorna os pixels da imagem, decodificados e montados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Image array: `m`-by-`n` for grayscale, `m`-by-`n`-by-`k` for several samples per pixel. The class follows `BitsPerSample`.",
+     "pt": "Array da imagem: `m`-por-`n` para tons de cinza, `m`-por-`n`-por-`k` para várias amostras por pixel. A classe segue `BitsPerSample`."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Strips or tiles are decoded and put back in order, so you get the image as one array whatever the layout in the file. For a multi-image file, `read` returns the current directory; move with `setDirectory` or `nextDirectory`.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Faixas ou tiles são decodificados e recolocados em ordem, então se obtém a imagem em um só array, qualquer que seja a organização no arquivo. Em um arquivo com várias imagens, `read` devolve o diretório atual; mova-se com `setDirectory` ou `nextDirectory`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Round trip",
+      "pt": "Ida e volta"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nA = r.read();\nsize(A), class(A)\nisequal(A, I)\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readEncodedStrip",
+    "Tiff.setTag",
+    "imread",
+    "Tiff.setDirectory"
+   ]
+  },
+  "Tiff.readEncodedStrip": {
+   "summary": {
+    "en": "Reads one strip of the current image, still as stored.",
+    "pt": "Lê uma faixa (strip) da imagem atual, como armazenada."
+   },
+   "syntax": [
+    {
+     "code": "S = readEncodedStrip(t, stripNum)",
+     "en": "Decodes strip number `stripNum`.",
+     "pt": "Decodifica a faixa de número `stripNum`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened on a stripped image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem em faixas."
+    },
+    {
+     "name": "stripNum",
+     "en": "Strip index, counted from 1.",
+     "pt": "Índice da faixa, contado a partir de 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Array of the strip's rows: `RowsPerStrip`-by-`ImageWidth` (the last strip can be shorter).",
+     "pt": "Array com as linhas da faixa: `RowsPerStrip`-por-`ImageWidth` (a última faixa pode ser menor)."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. This lets you process a huge image a band at a time. The data comes back in the file's own sample layout, without any color conversion.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Isso permite processar uma imagem enorme uma banda por vez. Os dados voltam no layout de amostras do próprio arquivo, sem conversão de cor."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Second strip",
+      "pt": "Segunda faixa"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nS = r.readEncodedStrip(2);\nsize(S)\nisequal(S, I(5:8, :))\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.computeStrip",
+    "Tiff.numberOfStrips",
+    "Tiff.read",
+    "Tiff.readEncodedTile"
+   ]
+  },
+  "Tiff.readEncodedTile": {
+   "summary": {
+    "en": "Reads one tile of the current image, still as stored.",
+    "pt": "Lê um tile da imagem atual, como armazenado."
+   },
+   "syntax": [
+    {
+     "code": "T = readEncodedTile(t, tileNum)",
+     "en": "Decodes tile number `tileNum`.",
+     "pt": "Decodifica o tile de número `tileNum`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened on a tiled image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem em tiles."
+    },
+    {
+     "name": "tileNum",
+     "en": "Tile index, counted from 1.",
+     "pt": "Índice do tile, contado a partir de 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "Array of `TileLength`-by-`TileWidth` pixels. Tiles at the edge include padding beyond the image.",
+     "pt": "Array de pixels `TileLength`-por-`TileWidth`. Tiles das bordas incluem preenchimento além da imagem."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. The tile is returned at its full stored size, so a tile that overhangs the image edge carries padding that you must crop. Here a 4-by-4 image sits in a 16-by-16 tile.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. O tile é retornado em seu tamanho completo armazenado, então um tile que ultrapassa a borda da imagem traz preenchimento que precisa ser recortado. Aqui uma imagem 4-por-4 está em um tile 16-por-16."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Read and crop a tile",
+      "pt": "Ler e recortar um tile"
+     },
+     "code": "tag.ImageLength = 4; tag.ImageWidth = 4;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1;\ntag.TileLength = 16; tag.TileWidth = 16;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('u.tif', 'w'); w.setTag(tag); w.write(uint8(magic(4))); w.close();\nr = Tiff('u.tif', 'r');\nT = r.readEncodedTile(1);\nsize(T)\nT(1:4, 1:4)\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.computeTile",
+    "Tiff.numberOfTiles",
+    "Tiff.read",
+    "Tiff.readEncodedStrip"
+   ]
+  },
+  "Tiff.readRGBAImage": {
+   "summary": {
+    "en": "Reads the whole image converted to RGB color data.",
+    "pt": "Lê a imagem inteira convertida em dados de cor RGB."
+   },
+   "syntax": [
+    {
+     "code": "A = readRGBAImage(t)",
+     "en": "Returns the image as color pixels regardless of how it is stored.",
+     "pt": "Retorna a imagem como pixels coloridos, qualquer que seja o armazenamento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "`uint8` array with one plane per color channel.",
+     "pt": "Array `uint8` com um plano por canal de cor."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. The library converts any supported photometric interpretation (grayscale, palette, YCbCr and others) to RGB for you, which is handy for display. The conversion is always to 8 bits, so use `read` when you need the stored values.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. A biblioteca converte qualquer interpretação fotométrica suportada (tons de cinza, paleta, YCbCr e outras) para RGB, o que é útil para exibição. A conversão é sempre para 8 bits, então use `read` quando precisar dos valores armazenados."
+   },
+   "notes": {
+    "en": "MatLivre returns three color planes (RGB) and no alpha plane.",
+    "pt": "O MatLivre retorna três planos de cor (RGB) e nenhum plano alfa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Grayscale as color",
+      "pt": "Tons de cinza como cor"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nC = r.readRGBAImage();\nclass(C)\nsize(C, 1:2)\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.read",
+    "Tiff.readRGBAStrip",
+    "Tiff.readRGBATile",
+    "imread"
+   ]
+  },
+  "Tiff.readRGBAStrip": {
+   "summary": {
+    "en": "Reads one strip converted to RGB color data.",
+    "pt": "Lê uma faixa (strip) convertida em dados de cor RGB."
+   },
+   "syntax": [
+    {
+     "code": "A = readRGBAStrip(t, row)",
+     "en": "Returns the strip that starts at image row `row`.",
+     "pt": "Retorna a faixa que começa na linha `row` da imagem."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened on a stripped image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem em faixas."
+    },
+    {
+     "name": "row",
+     "en": "Row number where the strip starts, counted from 1. Rows start at `1`, `1 + RowsPerStrip`, and so on.",
+     "pt": "Número da linha em que a faixa começa, contado a partir de 1. As faixas começam em `1`, `1 + RowsPerStrip` e assim por diante."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "`uint8` color array covering the rows of that strip.",
+     "pt": "Array de cor `uint8` que cobre as linhas dessa faixa."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. It is the color-converted counterpart of `readEncodedStrip`, useful for displaying a large image in bands. The row argument must be the first row of a strip.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. É a contraparte com conversão de cor de `readEncodedStrip`, útil para exibir uma imagem grande em bandas. O argumento de linha deve ser a primeira linha de uma faixa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First strip as color",
+      "pt": "Primeira faixa como cor"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\nA = r.readRGBAStrip(1);\nsize(A, 1:2)\nclass(A)\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readRGBAImage",
+    "Tiff.readRGBATile",
+    "Tiff.readEncodedStrip",
+    "Tiff.computeStrip"
+   ]
+  },
+  "Tiff.readRGBATile": {
+   "summary": {
+    "en": "Reads one tile converted to RGB color data.",
+    "pt": "Lê um tile convertido em dados de cor RGB."
+   },
+   "syntax": [
+    {
+     "code": "A = readRGBATile(t, row, col)",
+     "en": "Returns the tile whose upper-left pixel is at `row`, `col`.",
+     "pt": "Retorna o tile cujo pixel superior esquerdo está em `row`, `col`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened on a tiled image.",
+     "pt": "Objeto `Tiff` aberto sobre uma imagem em tiles."
+    },
+    {
+     "name": "row, col",
+     "en": "Pixel position of the tile's upper-left corner, counted from 1.",
+     "pt": "Posição do pixel do canto superior esquerdo do tile, contada a partir de 1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "`uint8` color array of the tile.",
+     "pt": "Array de cor `uint8` do tile."
+    }
+   ],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. It is the color-converted counterpart of `readEncodedTile`. The position must correspond to the first pixel of a tile, so for the first tile pass `1, 1`.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. É a contraparte com conversão de cor de `readEncodedTile`. A posição deve corresponder ao primeiro pixel de um tile, então para o primeiro tile passe `1, 1`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "First tile as color",
+      "pt": "Primeiro tile como cor"
+     },
+     "code": "tag.ImageLength = 4; tag.ImageWidth = 4;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1;\ntag.TileLength = 16; tag.TileWidth = 16;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('u.tif', 'w'); w.setTag(tag); w.write(uint8(magic(4))); w.close();\nr = Tiff('u.tif', 'r');\nA = r.readRGBATile(1, 1);\nclass(A)\nA(:, :, 1)\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.readRGBAImage",
+    "Tiff.readRGBAStrip",
+    "Tiff.readEncodedTile",
+    "Tiff.computeTile"
+   ]
+  },
+  "Tiff.rewriteDirectory": {
+   "summary": {
+    "en": "Updates the current directory of a file with changed tags.",
+    "pt": "Atualiza o diretório atual de um arquivo com tags alteradas."
+   },
+   "syntax": [
+    {
+     "code": "rewriteDirectory(t)",
+     "en": "Writes the changed tags of the current directory back to the file.",
+     "pt": "Grava de volta no arquivo as tags alteradas do diretório atual."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened in `'r+'` mode.",
+     "pt": "Objeto `Tiff` aberto no modo `'r+'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Open the file with `'r+'`, move to the directory you want with `setDirectory`, change a tag with `setTag`, then call `rewriteDirectory`. Only metadata is rewritten, and the pixel data stays as it is.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Abra o arquivo com `'r+'`, vá ao diretório desejado com `setDirectory`, altere uma tag com `setTag` e então chame `rewriteDirectory`. Só os metadados são regravados, e os dados dos pixels ficam como estão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Add a description to an existing file",
+      "pt": "Acrescentar uma descrição a um arquivo existente"
+     },
+     "code": "tag.ImageLength = 2; tag.ImageWidth = 2;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 2;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('m.tif', 'w');\nw.setTag(tag); w.write(uint8([1 2; 3 4])); w.writeDirectory();\nw.setTag(tag); w.write(uint8([5 6; 7 8])); w.close();\nt = Tiff('m.tif', 'r+');\nt.setDirectory(2);\nt.setTag('ImageDescription', 'second image');\nt.rewriteDirectory();\nt.close();\nr = Tiff('m.tif', 'r');\nr.setDirectory(2);\nr.getTag('ImageDescription')\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.setTag",
+    "Tiff.setDirectory",
+    "Tiff.getTag",
+    "Tiff.close"
+   ]
+  },
+  "Tiff.setDirectory": {
+   "summary": {
+    "en": "Makes a given image directory the current one.",
+    "pt": "Torna um diretório de imagem específico o atual."
+   },
+   "syntax": [
+    {
+     "code": "setDirectory(t, dirNum)",
+     "en": "Jumps to directory number `dirNum`.",
+     "pt": "Salta para o diretório de número `dirNum`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object.",
+     "pt": "Objeto `Tiff`."
+    },
+    {
+     "name": "dirNum",
+     "en": "Directory index, counted from 1.",
+     "pt": "Índice do diretório, contado a partir de 1."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Unlike `nextDirectory`, it goes straight to any image, in either direction. Reading with `read` afterwards returns that image, and `getTag` reports its tags.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Ao contrário de `nextDirectory`, vai direto a qualquer imagem, em qualquer sentido. Ler com `read` depois devolve essa imagem, e `getTag` informa as suas tags."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Jump to the second image",
+      "pt": "Saltar para a segunda imagem"
+     },
+     "code": "tag.ImageLength = 2; tag.ImageWidth = 2;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 2;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nw = Tiff('m.tif', 'w');\nw.setTag(tag); w.write(uint8([1 2; 3 4])); w.writeDirectory();\nw.setTag(tag); w.write(uint8([5 6; 7 8])); w.close();\nr = Tiff('m.tif', 'r');\nr.setDirectory(2);\nr.read()\nr.setDirectory(1);\nr.read()\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.nextDirectory",
+    "Tiff.currentDirectory",
+    "Tiff.lastDirectory",
+    "Tiff.read"
+   ]
+  },
+  "Tiff.setSubDirectory": {
+   "summary": {
+    "en": "Moves to a sub-image whose file offset is given by a `SubIFD` tag.",
+    "pt": "Move para uma subimagem cujo deslocamento no arquivo é dado por uma tag `SubIFD`."
+   },
+   "syntax": [
+    {
+     "code": "setSubDirectory(t, offset)",
+     "en": "Makes the sub-image at byte `offset` current.",
+     "pt": "Torna atual a subimagem no deslocamento `offset`, em bytes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for reading.",
+     "pt": "Objeto `Tiff` aberto para leitura."
+    },
+    {
+     "name": "offset",
+     "en": "Byte offset of the sub-directory, as listed in the `SubIFD` tag of the parent image.",
+     "pt": "Deslocamento em bytes do subdiretório, conforme listado na tag `SubIFD` da imagem principal."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Some files attach reduced-resolution copies or other related images to a main image as sub-directories. The offsets come from the parent's `SubIFD` tag. A file without sub-images has nothing to move to, and an invalid offset is an error.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Alguns arquivos anexam a uma imagem principal cópias de resolução reduzida ou outras imagens relacionadas, como subdiretórios. Os deslocamentos vêm da tag `SubIFD` da imagem principal. Um arquivo sem subimagens não tem para onde ir, e um deslocamento inválido é um erro."
+   },
+   "notes": {
+    "en": "MatLivre cannot write `SubIFD` tags, so files with sub-images can only come from other programs.",
+    "pt": "O MatLivre não grava tags `SubIFD`, então arquivos com subimagens só podem vir de outros programas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "An invalid offset is rejected",
+      "pt": "Um deslocamento inválido é rejeitado"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 4;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\nI = uint8(magic(8) * 3);\nw = Tiff('t.tif', 'w'); w.setTag(tag); w.write(I); w.close();\nr = Tiff('t.tif', 'r');\ntry\n    r.setSubDirectory(0);\ncatch\n    disp('no sub-directory at that offset')\nend\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.setDirectory",
+    "Tiff.getTag",
+    "Tiff.nextDirectory",
+    "Tiff.currentDirectory"
+   ]
+  },
+  "Tiff.setTag": {
+   "summary": {
+    "en": "Sets the value of a TIFF tag before writing an image.",
+    "pt": "Define o valor de uma tag TIFF antes de gravar uma imagem."
+   },
+   "syntax": [
+    {
+     "code": "setTag(t, tagName, value)",
+     "en": "Sets one tag.",
+     "pt": "Define uma tag."
+    },
+    {
+     "code": "setTag(t, tagStruct)",
+     "en": "Sets several tags at once from a struct whose fields are tag names.",
+     "pt": "Define várias tags de uma vez a partir de uma struct cujos campos são nomes de tags."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "`Tiff` object opened for writing.",
+     "pt": "Objeto `Tiff` aberto para escrita."
+    },
+    {
+     "name": "tagName",
+     "en": "Tag name such as `'ImageWidth'`, `'ImageLength'`, `'BitsPerSample'`, `'SamplesPerPixel'`, `'Photometric'`, `'RowsPerStrip'`, `'PlanarConfiguration'` or `'Compression'`.",
+     "pt": "Nome da tag, como `'ImageWidth'`, `'ImageLength'`, `'BitsPerSample'`, `'SamplesPerPixel'`, `'Photometric'`, `'RowsPerStrip'`, `'PlanarConfiguration'` ou `'Compression'`."
+    },
+    {
+     "name": "value",
+     "en": "Tag value. For coded tags use the constants of the class, such as `Tiff.Photometric.MinIsBlack` or `Tiff.Compression.LZW`.",
+     "pt": "Valor da tag. Para tags codificadas use as constantes da classe, como `Tiff.Photometric.MinIsBlack` ou `Tiff.Compression.LZW`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The method acts on a `Tiff` object created with `Tiff(filename, mode)`. Before `write`, a new image needs at least its width and length, bits and samples per pixel, photometric interpretation and either rows per strip or tile size. After `writeDirectory`, the tags must be set again for the next image.",
+    "pt": "O método atua sobre um objeto `Tiff` criado com `Tiff(filename, mode)`. Antes de `write`, uma imagem nova precisa pelo menos de largura e altura, bits e amostras por pixel, interpretação fotométrica e linhas por faixa ou tamanho do tile. Depois de `writeDirectory`, as tags devem ser definidas de novo para a próxima imagem."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write a compressed image",
+      "pt": "Gravar uma imagem comprimida"
+     },
+     "code": "tag.ImageLength = 8; tag.ImageWidth = 8;\ntag.Photometric = Tiff.Photometric.MinIsBlack;\ntag.BitsPerSample = 8; tag.SamplesPerPixel = 1; tag.RowsPerStrip = 8;\ntag.PlanarConfiguration = Tiff.PlanarConfiguration.Chunky;\ntag.Compression = Tiff.Compression.LZW;\nw = Tiff('lzw.tif', 'w');\nw.setTag(tag);\nw.write(uint8(magic(8) * 3));\nw.close();\nr = Tiff('lzw.tif', 'r');\nr.getTag('Compression') == Tiff.Compression.LZW\nr.read()\nr.close();"
+    }
+   ],
+   "see": [
+    "Tiff.getTag",
+    "Tiff.getTagNames",
+    "Tiff.rewriteDirectory",
+    "imwrite"
+   ]
+  }
+ }
+}

@@ -1,0 +1,514 @@
+{
+  "functions": {
+    "exportgraphics": {
+      "summary": {"en": "Saves a figure, axes or chart to an image or vector file.", "pt": "Salva uma figura, eixos ou gráfico em um arquivo de imagem ou vetorial."},
+      "syntax": [
+        {"code": "exportgraphics(obj, filename)", "en": "Writes `obj` to `filename`; the format comes from the extension (PNG, JPG, TIFF, PDF, SVG, EPS and others).", "pt": "Grava `obj` em `filename`; o formato vem da extensão (PNG, JPG, TIFF, PDF, SVG, EPS e outros)."},
+        {"code": "exportgraphics(obj, filename, Name, Value)", "en": "Adds options such as `'Resolution'`, `'BackgroundColor'` or `'ContentType'`.", "pt": "Acrescenta opções como `'Resolution'`, `'BackgroundColor'` ou `'ContentType'`."}
+      ],
+      "inputs": [
+        {"name": "obj", "en": "Figure, axes, or chart object to export.", "pt": "Figura, eixos ou objeto de gráfico a exportar."},
+        {"name": "filename", "en": "Output file name with extension.", "pt": "Nome do arquivo de saída com extensão."},
+        {"name": "'Resolution'", "en": "Dots per inch for raster formats.", "pt": "Pontos por polegada para formatos raster."},
+        {"name": "'BackgroundColor'", "en": "Background color; `'none'` gives a transparent background where supported.", "pt": "Cor de fundo; `'none'` dá fundo transparente nos formatos que suportam."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Compared with `saveas`, `exportgraphics` trims surrounding whitespace by default and gives control over resolution and background. Exporting a single axes saves only that plot area, which is handy for figures in reports.\n\nVector formats (PDF, SVG, EPS) stay sharp at any zoom; raster formats depend on the resolution.",
+        "pt": "Em comparação com `saveas`, `exportgraphics` remove por padrão o espaço em branco ao redor e dá controle sobre resolução e fundo. Exportar um único eixo salva apenas aquela área de plotagem, o que é útil para figuras em relatórios.\n\nFormatos vetoriais (PDF, SVG, EPS) continuam nítidos em qualquer zoom; os formatos raster dependem da resolução."
+      },
+      "notes": {
+        "en": "Writing files needs the MatLivre editor's renderer. In the headless command-line runtime the call fails, which is why the example catches the error.",
+        "pt": "Gravar arquivos exige o renderizador do editor MatLivre. No runtime de linha de comando sem interface a chamada falha, e por isso o exemplo captura o erro."
+      },
+      "examples": [
+        {"title": {"en": "Export the current axes", "pt": "Exportar os eixos atuais"}, "code": "plot(1:5, (1:5).^2)\ntry\n  exportgraphics(gca, 'curve.png', 'Resolution', 150);\n  disp('saved curve.png')\ncatch\n  disp('needs the editor renderer')\nend", "note": {"en": "In the app the file is written and the first message is shown.", "pt": "No app o arquivo é gravado e a primeira mensagem é exibida."}}
+      ],
+      "see": ["saveas", "print", "figure", "gca", "imwrite"]
+    },
+    "orient": {
+      "summary": {"en": "Sets or gets the paper orientation used for printing or saving a figure.", "pt": "Define ou obtém a orientação do papel usada para imprimir ou salvar uma figura."},
+      "syntax": [
+        {"code": "orient portrait", "en": "Uses a vertical page.", "pt": "Usa página vertical."},
+        {"code": "orient landscape", "en": "Uses a horizontal page.", "pt": "Usa página horizontal."},
+        {"code": "orient tall", "en": "Fills a portrait page with the figure.", "pt": "Preenche uma página vertical com a figura."},
+        {"code": "o = orient", "en": "Returns the current orientation as text.", "pt": "Retorna a orientação atual como texto."},
+        {"code": "orient(fig, option)", "en": "Applies the option to the figure `fig`.", "pt": "Aplica a opção à figura `fig`."}
+      ],
+      "inputs": [
+        {"name": "option", "en": "`'portrait'`, `'landscape'` or `'tall'`.", "pt": "`'portrait'`, `'landscape'` ou `'tall'`."},
+        {"name": "fig", "en": "Optional figure handle.", "pt": "Handle de figura opcional."}
+      ],
+      "outputs": [
+        {"name": "o", "en": "Orientation name.", "pt": "Nome da orientação."}
+      ],
+      "description": {
+        "en": "The setting adjusts the paper properties of the figure (`PaperOrientation` and related ones), so it matters for `print` and `saveas`, not for what is drawn on screen. Landscape suits wide plots; tall uses nearly the whole portrait page.",
+        "pt": "O ajuste muda as propriedades de papel da figura (`PaperOrientation` e afins), por isso vale para `print` e `saveas`, não para o que é desenhado na tela. Paisagem serve para gráficos largos; `tall` usa quase toda a página em retrato."
+      },
+      "examples": [
+        {"title": {"en": "Choose and read the orientation", "pt": "Escolher e ler a orientação"}, "code": "plot(1:3)\norient landscape\ndisp(orient)\norient tall\ndisp(orient)"}
+      ],
+      "see": ["print", "saveas", "exportgraphics", "figure"]
+    },
+    "print": {
+      "summary": {"en": "Prints a figure or saves it to a file in a chosen format.", "pt": "Imprime uma figura ou a salva em arquivo no formato escolhido."},
+      "syntax": [
+        {"code": "print(filename, formatOption)", "en": "Saves the current figure, for example `print('plot', '-dpng')` writes `plot.png`.", "pt": "Salva a figura atual; por exemplo, `print('plot', '-dpng')` grava `plot.png`."},
+        {"code": "print(fig, filename, formatOption)", "en": "Saves the figure `fig`.", "pt": "Salva a figura `fig`."},
+        {"code": "print(___, '-rNNN')", "en": "Sets the resolution in dots per inch, such as `'-r300'`.", "pt": "Define a resolução em pontos por polegada, como `'-r300'`."},
+        {"code": "print -dpng name", "en": "Command form of the same call.", "pt": "Forma de comando da mesma chamada."}
+      ],
+      "inputs": [
+        {"name": "filename", "en": "File name; the extension is added when omitted.", "pt": "Nome do arquivo; a extensão é acrescentada se omitida."},
+        {"name": "formatOption", "en": "Device flag such as `'-dpng'`, `'-djpeg'`, `'-dsvg'`, `'-dpdf'`.", "pt": "Opção de dispositivo, como `'-dpng'`, `'-djpeg'`, `'-dsvg'`, `'-dpdf'`."},
+        {"name": "'-rNNN'", "en": "Resolution in dpi.", "pt": "Resolução em dpi."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`print` is the long-standing command for producing output files. It honors the paper properties of the figure (see `orient`). For new code, `exportgraphics` is usually simpler, since it crops whitespace and needs no format flag.",
+        "pt": "`print` é o comando clássico para gerar arquivos de saída. Respeita as propriedades de papel da figura (veja `orient`). Em código novo, `exportgraphics` costuma ser mais simples, pois corta o espaço em branco e dispensa a opção de formato."
+      },
+      "notes": {
+        "en": "Writing files needs the MatLivre editor's renderer; the headless command-line runtime reports an error, which the example catches.",
+        "pt": "Gravar arquivos exige o renderizador do editor MatLivre; o runtime de linha de comando sem interface informa um erro, que o exemplo captura."
+      },
+      "examples": [
+        {"title": {"en": "Save as PNG", "pt": "Salvar como PNG"}, "code": "plot(1:5)\ntry\n  print('figure1', '-dpng', '-r150');\n  disp('saved figure1.png')\ncatch\n  disp('needs the editor renderer')\nend", "note": {"en": "In the app the file is written and the first message is shown.", "pt": "No app o arquivo é gravado e a primeira mensagem é exibida."}}
+      ],
+      "see": ["exportgraphics", "saveas", "orient", "printopt"]
+    },
+    "printopt": {
+      "summary": {"en": "Returns the default printer command and options (deprecated).", "pt": "Retorna o comando e as opções padrão da impressora (obsoleto)."},
+      "syntax": [
+        {"code": "[pcmd, dev] = printopt", "en": "Returns the system print command `pcmd` and the default device `dev`.", "pt": "Retorna o comando de impressão do sistema `pcmd` e o dispositivo padrão `dev`."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "pcmd", "en": "Text of the operating system command used to send output to the printer.", "pt": "Texto do comando do sistema operacional usado para enviar a saída à impressora."},
+        {"name": "dev", "en": "Name of the default print device.", "pt": "Nome do dispositivo de impressão padrão."}
+      ],
+      "description": {
+        "en": "`printopt` once let users edit a file of printer defaults. It is deprecated and prints a warning each time it runs; printer defaults now come from the operating system. Use `print` or `exportgraphics` to produce output.",
+        "pt": "`printopt` já permitiu editar um arquivo com padrões de impressora. Está obsoleto e mostra um aviso a cada execução; os padrões de impressora agora vêm do sistema operacional. Use `print` ou `exportgraphics` para gerar saída."
+      },
+      "examples": [
+        {"title": {"en": "Read the print command", "pt": "Ler o comando de impressão"}, "code": "pcmd = printopt;\ndisp(class(pcmd))"}
+      ],
+      "see": ["print", "exportgraphics", "orient", "saveas"]
+    },
+    "saveas": {
+      "summary": {"en": "Saves a figure or Simulink model to a file in a chosen format.", "pt": "Salva uma figura ou modelo Simulink em um arquivo no formato escolhido."},
+      "syntax": [
+        {"code": "saveas(fig, filename)", "en": "Saves `fig`; the format is taken from the extension in `filename`.", "pt": "Salva `fig`; o formato é tirado da extensão em `filename`."},
+        {"code": "saveas(fig, filename, formattype)", "en": "Forces a format such as `'png'`, `'jpg'`, `'svg'`, `'pdf'`, `'fig'` or `'epsc'`.", "pt": "Força um formato como `'png'`, `'jpg'`, `'svg'`, `'pdf'`, `'fig'` ou `'epsc'`."}
+      ],
+      "inputs": [
+        {"name": "fig", "en": "Figure handle, for example `gcf`.", "pt": "Handle de figura, por exemplo `gcf`."},
+        {"name": "filename", "en": "Output name, with or without extension.", "pt": "Nome de saída, com ou sem extensão."},
+        {"name": "formattype", "en": "Format name as text.", "pt": "Nome do formato, como texto."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`saveas` is a quick way to dump a figure as it appears, including the surrounding margins. For control over resolution and cropping, `exportgraphics` or `print` is better. The `'fig'` format stores an editable figure.",
+        "pt": "`saveas` é um jeito rápido de gravar uma figura como ela aparece, inclusive as margens. Para controlar resolução e recorte, `exportgraphics` ou `print` são melhores. O formato `'fig'` guarda uma figura editável."
+      },
+      "notes": {
+        "en": "Writing files needs the MatLivre editor's renderer, and `.fig` files are not supported; use PNG, JPG or SVG. The headless runtime reports an error, which the example catches.",
+        "pt": "Gravar arquivos exige o renderizador do editor MatLivre, e arquivos `.fig` não são suportados; use PNG, JPG ou SVG. O runtime sem interface informa um erro, que o exemplo captura."
+      },
+      "examples": [
+        {"title": {"en": "Save the current figure", "pt": "Salvar a figura atual"}, "code": "plot(1:5)\ntry\n  saveas(gcf, 'myplot.png');\n  disp('saved myplot.png')\ncatch\n  disp('needs the editor renderer')\nend", "note": {"en": "In the app the file is written and the first message is shown.", "pt": "No app o arquivo é gravado e a primeira mensagem é exibida."}}
+      ],
+      "see": ["exportgraphics", "print", "gcf", "imwrite"]
+    },
+    "addcats": {
+      "summary": {"en": "Adds new categories to a categorical array without changing its values.", "pt": "Adiciona novas categorias a um array categorical sem alterar seus valores."},
+      "syntax": [
+        {"code": "B = addcats(A, newcats)", "en": "Appends the categories `newcats` to the end of the category list.", "pt": "Acrescenta as categorias `newcats` ao fim da lista de categorias."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Categorical array.", "pt": "Array categorical."},
+        {"name": "newcats", "en": "Name or cell array or string array of names that are not yet categories.", "pt": "Nome, ou cell array ou array de strings de nomes que ainda não são categorias."}
+      ],
+      "outputs": [
+        {"name": "B", "en": "Categorical array equal to `A` but with the extra categories.", "pt": "Array categorical igual a `A`, mas com as categorias extras."}
+      ],
+      "description": {
+        "en": "No element changes: the new categories simply become valid values that no element uses yet. This matters before assigning a value that is not in the category list, which would otherwise raise an error, and for tables like those from `countcats`, where unused categories appear with a zero count.",
+        "pt": "Nenhum elemento muda: as novas categorias apenas passam a ser valores válidos que nenhum elemento usa ainda. Isso importa antes de atribuir um valor que não está na lista de categorias, o que causaria erro, e em contagens como as de `countcats`, onde categorias sem uso aparecem com contagem zero."
+      },
+      "examples": [
+        {"title": {"en": "Add an unused category", "pt": "Adicionar uma categoria sem uso"}, "code": "c = categorical({'a', 'b', 'a'});\nd = addcats(c, 'z');\ncategories(d)'\ncountcats(d)"}
+      ],
+      "see": ["categorical", "categories", "removecats", "renamecats", "countcats"]
+    },
+    "addevent": {
+      "summary": {"en": "Adds events to a timeseries object.", "pt": "Adiciona eventos a um objeto timeseries."},
+      "syntax": [
+        {"code": "ts = addevent(ts, e, time)", "en": "Attaches the event `e` to the time series `ts` at `time`.", "pt": "Anexa o evento `e` à série temporal `ts` no instante `time`."}
+      ],
+      "inputs": [
+        {"name": "ts", "en": "A `timeseries` object.", "pt": "Um objeto `timeseries`."},
+        {"name": "e", "en": "Event object created with `tsdata.event`, or an array of them.", "pt": "Objeto de evento criado com `tsdata.event`, ou um array deles."},
+        {"name": "time", "en": "Time of the event, on the time scale of `ts`.", "pt": "Instante do evento, na escala de tempo de `ts`."}
+      ],
+      "outputs": [
+        {"name": "ts", "en": "The time series with the event stored.", "pt": "A série temporal com o evento armazenado."}
+      ],
+      "description": {
+        "en": "An event is a named marker, such as \"peak\" or \"sensor reset\", tied to an instant. It does not alter the data; it is metadata used to label plots or to select intervals of the series. Create events with `tsdata.event(name, time)`.",
+        "pt": "Um evento é um marcador com nome, como \"pico\" ou \"reinício do sensor\", associado a um instante. Não altera os dados; é metadado usado para rotular gráficos ou selecionar intervalos da série. Crie eventos com `tsdata.event(nome, tempo)`."
+      },
+      "notes": {
+        "en": "In MatLivre the stored events are returned as a cell array rather than an array of event objects.",
+        "pt": "No MatLivre os eventos armazenados são retornados como cell array, e não como um array de objetos de evento."
+      },
+      "examples": [
+        {"title": {"en": "Mark an instant", "pt": "Marcar um instante"}, "code": "ts = timeseries([10 20 30]', [0 1 2]);\ne = tsdata.event('peak', 1);\nts = addevent(ts, e, 1);\ndisp(size(ts.Events))"}
+      ],
+      "see": ["timeseries", "tsdata.event", "addsample", "delevent"]
+    },
+    "addprop": {
+      "summary": {"en": "Adds custom properties to a table or timetable.", "pt": "Adiciona propriedades personalizadas a uma table ou timetable."},
+      "syntax": [
+        {"code": "T = addprop(T, propNames, propTypes)", "en": "Adds one custom property, or several when given cell arrays, to `T`.", "pt": "Adiciona uma propriedade personalizada, ou várias quando dadas em cell arrays, a `T`."}
+      ],
+      "inputs": [
+        {"name": "T", "en": "A `table` or `timetable`.", "pt": "Uma `table` ou `timetable`."},
+        {"name": "propNames", "en": "Property name, or cell array of names.", "pt": "Nome da propriedade, ou cell array de nomes."},
+        {"name": "propTypes", "en": "`'table'` for one value for the whole table, or `'variable'` for one entry per variable.", "pt": "`'table'` para um valor para a tabela inteira, ou `'variable'` para uma entrada por variável."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "The table with the new properties, initially empty.", "pt": "A tabela com as novas propriedades, inicialmente vazias."}
+      ],
+      "description": {
+        "en": "Custom properties carry metadata, such as the source of the data or the unit of each column, that travels with the table. Afterwards, read and write them through `T.Properties.CustomProperties`. Variable-type properties hold one element per column, usually in a cell array.",
+        "pt": "Propriedades personalizadas carregam metadados, como a origem dos dados ou a unidade de cada coluna, que acompanham a tabela. Depois, leia e escreva por meio de `T.Properties.CustomProperties`. Propriedades do tipo variável guardam um elemento por coluna, em geral em um cell array."
+      },
+      "notes": {
+        "en": "`addprop` also exists for dynamic properties of handle objects (`dynamicprops`); that use is not available in MatLivre.",
+        "pt": "`addprop` também existe para propriedades dinâmicas de objetos handle (`dynamicprops`); esse uso não está disponível no MatLivre."
+      },
+      "examples": [
+        {"title": {"en": "Attach metadata", "pt": "Anexar metadados"}, "code": "T = table([1; 2], 'VariableNames', {'A'});\nT = addprop(T, 'Source', 'table');\nT.Properties.CustomProperties.Source = 'lab';\ndisp(T.Properties.CustomProperties.Source)"}
+      ],
+      "see": ["table", "addvars", "timetable", "summary"]
+    },
+    "addsample": {
+      "summary": {"en": "Adds samples to a timeseries object at given times.", "pt": "Adiciona amostras a um objeto timeseries em instantes dados."},
+      "syntax": [
+        {"code": "ts = addsample(ts, 'Data', data, 'Time', time)", "en": "Inserts the values in `data` at the times in `time`, keeping the series ordered by time.", "pt": "Insere os valores de `data` nos instantes de `time`, mantendo a série ordenada no tempo."}
+      ],
+      "inputs": [
+        {"name": "ts", "en": "A `timeseries` object.", "pt": "Um objeto `timeseries`."},
+        {"name": "'Data'", "en": "New values; must match the sample shape of the series.", "pt": "Novos valores; devem ter a forma das amostras da série."},
+        {"name": "'Time'", "en": "Times of the new samples.", "pt": "Instantes das novas amostras."}
+      ],
+      "outputs": [
+        {"name": "ts", "en": "The time series with the extra samples.", "pt": "A série temporal com as amostras extras."}
+      ],
+      "description": {
+        "en": "The new samples are merged into the time vector in sorted order, so a sample added in the middle ends up between its neighbors. Adding a sample at a time that already exists is an error.",
+        "pt": "As novas amostras são incorporadas ao vetor de tempo em ordem, então uma amostra adicionada no meio fica entre as vizinhas. Adicionar uma amostra em um instante já existente é erro."
+      },
+      "examples": [
+        {"title": {"en": "Insert a sample in the middle", "pt": "Inserir uma amostra no meio"}, "code": "ts = timeseries([10 20 30]', [0 1 2]);\nts = addsample(ts, 'Data', 25, 'Time', 1.5);\ndisp(ts.Time')\ndisp(ts.Data')"}
+      ],
+      "see": ["timeseries", "addevent", "delsample", "resample"]
+    },
+    "addsampletocollection": {
+      "summary": {"en": "Adds samples at given times to every member of a tscollection.", "pt": "Adiciona amostras em instantes dados a todos os membros de uma tscollection."},
+      "syntax": [
+        {"code": "tc = addsampletocollection(tc, 'Time', t, name, data)", "en": "Inserts a sample at time `t`, with the value `data` for the member called `name`.", "pt": "Insere uma amostra no instante `t`, com o valor `data` para o membro chamado `name`."}
+      ],
+      "inputs": [
+        {"name": "tc", "en": "A `tscollection` object.", "pt": "Um objeto `tscollection`."},
+        {"name": "'Time'", "en": "Time or vector of times of the new samples.", "pt": "Instante ou vetor de instantes das novas amostras."},
+        {"name": "name, data", "en": "Member name and its new values. Members not listed receive missing values (`NaN`).", "pt": "Nome do membro e seus novos valores. Membros não listados recebem valores ausentes (`NaN`)."}
+      ],
+      "outputs": [
+        {"name": "tc", "en": "The updated collection with a longer common time vector.", "pt": "A coleção atualizada, com o vetor de tempo comum mais longo."}
+      ],
+      "description": {
+        "en": "All members of a `tscollection` share one time vector, so a new time extends every member. This function does that in one step and fills the members you do not mention with `NaN`.",
+        "pt": "Todos os membros de uma `tscollection` compartilham um vetor de tempo, então um novo instante estende todos os membros. Esta função faz isso de uma vez e preenche com `NaN` os membros que você não menciona."
+      },
+      "examples": [
+        {"title": {"en": "Extend a collection", "pt": "Estender uma coleção"}, "code": "tc = tscollection(timeseries([1 2 3]', [0 1 2], 'Name', 'a'));\ntc = addsampletocollection(tc, 'Time', 3, 'a', 9);\ndisp(tc.Time')\ndisp(tc.a.Data')"}
+      ],
+      "see": ["tscollection", "addts", "addsample", "timeseries"]
+    },
+    "addtodate": {
+      "summary": {"en": "Adds a number of calendar units, such as months or days, to a date number.", "pt": "Soma um número de unidades de calendário, como meses ou dias, a um número de data."},
+      "syntax": [
+        {"code": "d2 = addtodate(d, q, f)", "en": "Adds `q` units of type `f` to the serial date `d`.", "pt": "Soma `q` unidades do tipo `f` à data serial `d`."}
+      ],
+      "inputs": [
+        {"name": "d", "en": "Serial date number, as from `datenum`.", "pt": "Número de data serial, como o de `datenum`."},
+        {"name": "q", "en": "Quantity to add; may be negative.", "pt": "Quantidade a somar; pode ser negativa."},
+        {"name": "f", "en": "Unit: `'year'`, `'month'`, `'week'`, `'day'`, `'hour'`, `'minute'`, `'second'` or `'millisecond'`.", "pt": "Unidade: `'year'`, `'month'`, `'week'`, `'day'`, `'hour'`, `'minute'`, `'second'` ou `'millisecond'`."}
+      ],
+      "outputs": [
+        {"name": "d2", "en": "Serial date number after the addition.", "pt": "Número de data serial após a soma."}
+      ],
+      "description": {
+        "en": "Years and months are calendar units of unequal length, so adding them is not the same as adding a fixed number of days. If the resulting day does not exist, it is moved to the last day of the month: one month after January 31 is February 29 in 2024. Units from `'week'` down are plain multiples of a day.",
+        "pt": "Anos e meses são unidades de calendário de duração desigual, então somá-los não equivale a somar um número fixo de dias. Se o dia resultante não existe, ele passa para o último dia do mês: um mês depois de 31 de janeiro é 29 de fevereiro em 2024. As unidades de `'week'` para baixo são múltiplos simples de um dia."
+      },
+      "examples": [
+        {"title": {"en": "End-of-month clamping", "pt": "Ajuste no fim do mês"}, "code": "d = datenum(2024, 1, 31);\ndisp(datestr(addtodate(d, 1, 'month'), 'yyyy-mm-dd'))\ndisp(datestr(addtodate(d, 1, 'year'), 'yyyy-mm-dd'))\ndisp(addtodate(d, 1, 'week') - d)"}
+      ],
+      "see": ["datenum", "datestr", "calendarDuration", "caldays", "datetime"]
+    },
+    "addts": {
+      "summary": {"en": "Adds a timeseries object as a member of a tscollection.", "pt": "Adiciona um objeto timeseries como membro de uma tscollection."},
+      "syntax": [
+        {"code": "tc = addts(tc, ts)", "en": "Adds the series `ts` to the collection `tc`.", "pt": "Adiciona a série `ts` à coleção `tc`."}
+      ],
+      "inputs": [
+        {"name": "tc", "en": "A `tscollection` object.", "pt": "Um objeto `tscollection`."},
+        {"name": "ts", "en": "A `timeseries` with a name and a time vector equal to that of the collection.", "pt": "Uma `timeseries` com nome e vetor de tempo igual ao da coleção."}
+      ],
+      "outputs": [
+        {"name": "tc", "en": "The collection including the new member.", "pt": "A coleção incluindo o novo membro."}
+      ],
+      "description": {
+        "en": "A collection groups series measured at the same times. The new member is stored under its `Name`, and you can then reach it as a field, as in `tc.b`. A series with a different time vector must be resampled first.",
+        "pt": "Uma coleção agrupa séries medidas nos mesmos instantes. O novo membro é guardado com seu `Name`, e depois pode ser acessado como campo, como em `tc.b`. Uma série com vetor de tempo diferente precisa ser reamostrada antes."
+      },
+      "notes": {
+        "en": "In MatLivre only the form that takes a `timeseries` object works; the form with raw data and a name is not supported.",
+        "pt": "No MatLivre só funciona a forma que recebe um objeto `timeseries`; a forma com dados brutos e um nome não é suportada."
+      },
+      "examples": [
+        {"title": {"en": "Add a second series", "pt": "Adicionar uma segunda série"}, "code": "tc = tscollection(timeseries([1 2 3]', [0 1 2], 'Name', 'a'));\nt2 = timeseries([4 5 6]', [0 1 2], 'Name', 'b');\ntc = addts(tc, t2);\ngettimeseriesnames(tc)"}
+      ],
+      "see": ["tscollection", "addsampletocollection", "gettimeseriesnames", "timeseries"]
+    },
+    "addvars": {
+      "summary": {"en": "Adds variables (columns) to a table or timetable.", "pt": "Adiciona variáveis (colunas) a uma table ou timetable."},
+      "syntax": [
+        {"code": "T2 = addvars(T, var1, ..., varN)", "en": "Appends the variables after the last column of `T`.", "pt": "Acrescenta as variáveis depois da última coluna de `T`."},
+        {"code": "T2 = addvars(___, 'Before', loc)", "en": "Inserts the variables before the column `loc` (a name or index).", "pt": "Insere as variáveis antes da coluna `loc` (um nome ou índice)."},
+        {"code": "T2 = addvars(___, 'After', loc)", "en": "Inserts the variables after the column `loc`.", "pt": "Insere as variáveis depois da coluna `loc`."},
+        {"code": "T2 = addvars(___, 'NewVariableNames', names)", "en": "Names the new variables.", "pt": "Dá nomes às novas variáveis."}
+      ],
+      "inputs": [
+        {"name": "T", "en": "A `table` or `timetable`.", "pt": "Uma `table` ou `timetable`."},
+        {"name": "var1, ..., varN", "en": "Arrays with the same number of rows as `T`.", "pt": "Arrays com o mesmo número de linhas de `T`."},
+        {"name": "'NewVariableNames'", "en": "Text or cell array with one name per new variable. Without it, names such as `Var3` are generated.", "pt": "Texto ou cell array com um nome por nova variável. Sem ele, são gerados nomes como `Var3`."}
+      ],
+      "outputs": [
+        {"name": "T2", "en": "Table with the extra variables; `T` is not modified.", "pt": "Tabela com as variáveis extras; `T` não é modificada."}
+      ],
+      "description": {
+        "en": "It is the non-destructive alternative to assigning `T.C = ...`, and the only one that can put the new column in a chosen position. Each new variable must have as many rows as the table.",
+        "pt": "É a alternativa não destrutiva a atribuir `T.C = ...`, e a única que consegue pôr a nova coluna em uma posição escolhida. Cada nova variável deve ter tantas linhas quanto a tabela."
+      },
+      "examples": [
+        {"title": {"en": "Append and insert a column", "pt": "Acrescentar e inserir uma coluna"}, "code": "T = table([1; 2], [3; 4], 'VariableNames', {'A', 'B'});\nT2 = addvars(T, [5; 6], 'NewVariableNames', 'C')\nT3 = addvars(T, [5; 6], 'Before', 'B', 'NewVariableNames', 'C')"}
+      ],
+      "see": ["removevars", "movevars", "table", "splitvars", "mergevars"]
+    },
+    "allfinite": {
+      "summary": {"en": "Tests whether all elements of an array are finite.", "pt": "Testa se todos os elementos de um array são finitos."},
+      "syntax": [
+        {"code": "tf = allfinite(A)", "en": "Returns a single logical value: true when no element is `Inf`, `-Inf` or `NaN`.", "pt": "Retorna um único valor lógico: verdadeiro quando nenhum elemento é `Inf`, `-Inf` ou `NaN`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric or logical array of any size. For complex data, both parts must be finite.", "pt": "Array numérico ou lógico de qualquer tamanho. Para dados complexos, as duas partes devem ser finitas."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Scalar logical.", "pt": "Lógico escalar."}
+      ],
+      "description": {
+        "en": "It is a compact check at the start of a function that cannot handle infinite or missing values: `assert(allfinite(x))`. Integer and logical arrays are always finite. An empty array gives true.",
+        "pt": "É uma verificação compacta no início de uma função que não aceita valores infinitos ou ausentes: `assert(allfinite(x))`. Arrays inteiros e lógicos são sempre finitos. Um array vazio dá verdadeiro."
+      },
+      "examples": [
+        {"title": {"en": "Finite or not", "pt": "Finito ou não"}, "code": "allfinite([1 2; 3 4])\nallfinite([1 Inf])\nallfinite([1 NaN])"}
+      ],
+      "see": ["isfinite", "isinf", "isnan", "anynan", "all"]
+    },
+    "alphanumericBoundary": {
+      "summary": {"en": "Pattern that matches the boundary between alphanumeric and other characters.", "pt": "Padrão que casa com a fronteira entre caracteres alfanuméricos e outros."},
+      "syntax": [
+        {"code": "pat = alphanumericBoundary", "en": "Creates a zero-width pattern that matches where an alphanumeric character meets a non-alphanumeric one, or the start or end of the text.", "pt": "Cria um padrão de largura zero que casa onde um caractere alfanumérico encontra um não alfanumérico, ou no início ou fim do texto."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "pat", "en": "A `pattern` object that consumes no characters.", "pt": "Um objeto `pattern` que não consome caracteres."}
+      ],
+      "description": {
+        "en": "Like the regular expression `\\b`, it marks where a word starts or ends without being part of the match. Placed on both sides of another pattern, it makes that pattern match only whole words. Combine patterns with `+`, as in `alphanumericBoundary + \"cat\" + alphanumericBoundary`.",
+        "pt": "Como a expressão regular `\\b`, marca onde uma palavra começa ou termina sem fazer parte do trecho encontrado. Colocado dos dois lados de outro padrão, faz com que ele case apenas palavras inteiras. Combine padrões com `+`, como em `alphanumericBoundary + \"cat\" + alphanumericBoundary`."
+      },
+      "examples": [
+        {"title": {"en": "Whole words only", "pt": "Somente palavras inteiras"}, "code": "str = \"foo_bar baz\";\nextract(str, alphanumericBoundary + lettersPattern + alphanumericBoundary)"}
+      ],
+      "see": ["alphanumericsPattern", "lettersPattern", "digitBoundary", "letterBoundary", "extract"]
+    },
+    "alphanumericsPattern": {
+      "summary": {"en": "Pattern that matches letters and digits.", "pt": "Padrão que casa letras e dígitos."},
+      "syntax": [
+        {"code": "pat = alphanumericsPattern", "en": "Matches one or more consecutive letters or digits.", "pt": "Casa uma ou mais letras ou dígitos consecutivos."},
+        {"code": "pat = alphanumericsPattern(n)", "en": "Matches exactly `n` alphanumeric characters.", "pt": "Casa exatamente `n` caracteres alfanuméricos."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Optional non-negative integer count.", "pt": "Quantidade inteira não negativa, opcional."}
+      ],
+      "outputs": [
+        {"name": "pat", "en": "A `pattern` object.", "pt": "Um objeto `pattern`."}
+      ],
+      "description": {
+        "en": "A pattern is used wherever text functions accept a pattern: `extract`, `contains`, `replace`, `split` and others. This one matches runs of letters and digits, and stops at spaces and punctuation, which makes it a quick tokenizer.",
+        "pt": "Um padrão é usado onde as funções de texto aceitam padrões: `extract`, `contains`, `replace`, `split` e outras. Este casa sequências de letras e dígitos e para em espaços e pontuação, o que o torna um tokenizador rápido."
+      },
+      "examples": [
+        {"title": {"en": "Split into alphanumeric tokens", "pt": "Separar em tokens alfanuméricos"}, "code": "extract(\"ab 12!c\", alphanumericsPattern)"}
+      ],
+      "see": ["alphanumericBoundary", "lettersPattern", "digitsPattern", "extract", "contains"]
+    },
+    "anymissing": {
+      "summary": {"en": "Tests whether any element of an array is a missing value.", "pt": "Testa se algum elemento de um array é um valor ausente."},
+      "syntax": [
+        {"code": "tf = anymissing(A)", "en": "Returns a single logical value: true if any element is missing.", "pt": "Retorna um único valor lógico: verdadeiro se algum elemento for ausente."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Array or table. What counts as missing depends on the type: `NaN` for numbers, `<missing>` for strings, `<undefined>` for categoricals, `NaT` for datetimes.", "pt": "Array ou tabela. O que conta como ausente depende do tipo: `NaN` para números, `<missing>` para strings, `<undefined>` para categoricals, `NaT` para datetimes."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Scalar logical.", "pt": "Lógico escalar."}
+      ],
+      "description": {
+        "en": "It works like `any(ismissing(A), 'all')` without building the intermediate array. Because it follows the type's own idea of \"missing\", the same call checks numeric, string and categorical data.",
+        "pt": "Funciona como `any(ismissing(A), 'all')` sem montar o array intermediário. Como segue a noção de \"ausente\" de cada tipo, a mesma chamada verifica dados numéricos, strings e categorical."
+      },
+      "examples": [
+        {"title": {"en": "Numbers and strings", "pt": "Números e strings"}, "code": "anymissing([1 NaN 3])\nanymissing([1 2 3])\nanymissing([\"a\" missing])"}
+      ],
+      "see": ["ismissing", "anynan", "rmmissing", "fillmissing", "standardizeMissing"]
+    },
+    "anynan": {
+      "summary": {"en": "Tests whether any element of an array is NaN.", "pt": "Testa se algum elemento de um array é NaN."},
+      "syntax": [
+        {"code": "tf = anynan(A)", "en": "Returns a single logical value: true if at least one element is `NaN`.", "pt": "Retorna um único valor lógico: verdadeiro se pelo menos um elemento for `NaN`."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "Numeric array of any size.", "pt": "Array numérico de qualquer tamanho."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Scalar logical.", "pt": "Lógico escalar."}
+      ],
+      "description": {
+        "en": "It replaces the longer idiom `any(isnan(A), 'all')`. Infinite values are not NaN, so `anynan([1 Inf])` is false. Integer arrays cannot hold NaN and always give false.",
+        "pt": "Substitui o idioma mais longo `any(isnan(A), 'all')`. Valores infinitos não são NaN, então `anynan([1 Inf])` é falso. Arrays inteiros não podem guardar NaN e sempre dão falso."
+      },
+      "examples": [
+        {"title": {"en": "Detect NaN", "pt": "Detectar NaN"}, "code": "anynan([1 NaN; 3 4])\nanynan([1 Inf])\nanynan(int8([1 2]))"}
+      ],
+      "see": ["isnan", "anymissing", "allfinite", "rmmissing", "nanmax"]
+    },
+    "append": {
+      "summary": {"en": "Joins text from several inputs end to end.", "pt": "Une o texto de várias entradas, uma depois da outra."},
+      "syntax": [
+        {"code": "s = append(str1, ..., strN)", "en": "Concatenates the inputs in order.", "pt": "Concatena as entradas em ordem."}
+      ],
+      "inputs": [
+        {"name": "str1, ..., strN", "en": "Strings, character vectors or arrays of them. Sizes must be compatible, or scalar.", "pt": "Strings, vetores de caracteres ou arrays deles. Os tamanhos devem ser compatíveis, ou escalares."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "A string array when any input is a string, otherwise a character vector.", "pt": "Um array de strings quando alguma entrada é string, caso contrário um vetor de caracteres."}
+      ],
+      "description": {
+        "en": "With string arrays the join is element by element, and a scalar is repeated against every element, so `append(\"x\", [\"1\" \"2\"])` gives `\"x1\"` and `\"x2\"`. A missing string in any input makes that result element missing.",
+        "pt": "Com arrays de strings a junção é elemento a elemento, e um escalar se repete contra cada elemento, de modo que `append(\"x\", [\"1\" \"2\"])` dá `\"x1\"` e `\"x2\"`. Uma string ausente em qualquer entrada torna ausente o elemento do resultado."
+      },
+      "notes": {
+        "en": "In MatLivre, cell array inputs are not accepted.",
+        "pt": "No MatLivre, entradas do tipo cell array não são aceitas."
+      },
+      "examples": [
+        {"title": {"en": "Join text", "pt": "Juntar textos"}, "code": "append(\"ab\", \"cd\")\nappend('a', 'b', 'c')\nappend(\"x\", [\"1\" \"2\"])"}
+      ],
+      "see": ["strcat", "join", "plus", "string", "strjoin"]
+    },
+    "array2table": {
+      "summary": {"en": "Converts a matrix or array into a table.", "pt": "Converte uma matriz ou array em uma table."},
+      "syntax": [
+        {"code": "T = array2table(A)", "en": "Makes one table variable for each column of `A`, named `Var1`, `Var2`, and so on.", "pt": "Cria uma variável de tabela para cada coluna de `A`, com nomes `Var1`, `Var2` etc."},
+        {"code": "T = array2table(A, 'VariableNames', names)", "en": "Names the variables.", "pt": "Dá nomes às variáveis."},
+        {"code": "T = array2table(A, 'RowNames', rows)", "en": "Labels the rows.", "pt": "Rotula as linhas."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "2-D array, numeric, logical, char or any type that can be split by column.", "pt": "Array 2-D, numérico, lógico, char ou outro tipo que possa ser dividido por colunas."},
+        {"name": "'VariableNames'", "en": "Cell array or string array with one name per column.", "pt": "Cell array ou array de strings com um nome por coluna."},
+        {"name": "'RowNames'", "en": "Cell array or string array with one name per row.", "pt": "Cell array ou array de strings com um nome por linha."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "Table with `size(A,1)` rows and `size(A,2)` variables, all of the class of `A`.", "pt": "Tabela com `size(A,1)` linhas e `size(A,2)` variáveis, todas da classe de `A`."}
+      ],
+      "description": {
+        "en": "All columns share the class of the source array. After conversion the data can be accessed by name (`T.x`), summarized and joined with other tables. Use `table2array` to go back.",
+        "pt": "Todas as colunas têm a classe do array de origem. Depois da conversão, os dados podem ser acessados por nome (`T.x`), resumidos e unidos a outras tabelas. Use `table2array` para voltar."
+      },
+      "examples": [
+        {"title": {"en": "Name columns and rows", "pt": "Nomear colunas e linhas"}, "code": "A = [1 2; 3 4];\nT = array2table(A, 'VariableNames', {'x', 'y'}, 'RowNames', {'r1', 'r2'})"}
+      ],
+      "see": ["table", "table2array", "cell2table", "struct2table", "array2timetable"]
+    },
+    "array2timetable": {
+      "summary": {"en": "Converts an array into a timetable with given row times.", "pt": "Converte um array em uma timetable com instantes de linha dados."},
+      "syntax": [
+        {"code": "TT = array2timetable(A, 'RowTimes', t)", "en": "Builds a timetable with one row per row of `A` and times from the datetime or duration vector `t`.", "pt": "Cria uma timetable com uma linha por linha de `A` e instantes do vetor datetime ou duration `t`."},
+        {"code": "TT = array2timetable(___, 'VariableNames', names)", "en": "Also names the variables.", "pt": "Também dá nomes às variáveis."},
+        {"code": "TT = array2timetable(A, 'SampleRate', fs)", "en": "Generates evenly spaced times from a sample rate in hertz.", "pt": "Gera instantes igualmente espaçados a partir de uma taxa de amostragem em hertz."}
+      ],
+      "inputs": [
+        {"name": "A", "en": "2-D array; each column becomes a variable.", "pt": "Array 2-D; cada coluna vira uma variável."},
+        {"name": "'RowTimes'", "en": "`datetime` or `duration` vector with one entry per row, in increasing order.", "pt": "Vetor `datetime` ou `duration` com uma entrada por linha, em ordem crescente."},
+        {"name": "'SampleRate'", "en": "Sampling rate in hertz, as an alternative to `RowTimes`.", "pt": "Taxa de amostragem em hertz, como alternativa a `RowTimes`."}
+      ],
+      "outputs": [
+        {"name": "TT", "en": "A `timetable`.", "pt": "Uma `timetable`."}
+      ],
+      "description": {
+        "en": "This is how a plain matrix of measurements becomes time-indexed data. Row times are required unless a sample rate or time step is given. The result supports `retime`, `synchronize` and time-based indexing.",
+        "pt": "É assim que uma matriz simples de medições vira dados indexados no tempo. Os instantes das linhas são obrigatórios, a menos que se dê uma taxa de amostragem ou um passo de tempo. O resultado aceita `retime`, `synchronize` e indexação por tempo."
+      },
+      "examples": [
+        {"title": {"en": "Matrix with second-based times", "pt": "Matriz com tempos em segundos"}, "code": "A = [1 2; 3 4];\nTT = array2timetable(A, 'RowTimes', seconds([1; 2]), 'VariableNames', {'a', 'b'})"}
+      ],
+      "see": ["timetable", "array2table", "retime", "seconds", "table2timetable"]
+    },
+    "arrayfun": {
+      "summary": {"en": "Applies a function to each element of one or more arrays.", "pt": "Aplica uma função a cada elemento de um ou mais arrays."},
+      "syntax": [
+        {"code": "B = arrayfun(func, A)", "en": "Calls `func` on every element of `A` and collects the scalar results in an array of the same size.", "pt": "Chama `func` em cada elemento de `A` e reúne os resultados escalares em um array do mesmo tamanho."},
+        {"code": "B = arrayfun(func, A1, ..., An)", "en": "Passes corresponding elements of several arrays of the same size.", "pt": "Passa elementos correspondentes de vários arrays de mesmo tamanho."},
+        {"code": "[B1, ..., Bm] = arrayfun(___)", "en": "Collects several outputs of `func`.", "pt": "Reúne várias saídas de `func`."},
+        {"code": "B = arrayfun(___, 'UniformOutput', false)", "en": "Returns a cell array so results can be of any size or type.", "pt": "Retorna um cell array para que os resultados possam ter qualquer tamanho ou tipo."},
+        {"code": "B = arrayfun(___, 'ErrorHandler', f)", "en": "Calls `f` instead of stopping when `func` errors on an element.", "pt": "Chama `f` em vez de parar quando `func` dá erro em um elemento."}
+      ],
+      "inputs": [
+        {"name": "func", "en": "Function handle taking as many arguments as there are arrays.", "pt": "Handle de função com tantos argumentos quanto arrays."},
+        {"name": "A", "en": "Array of any type, including struct arrays.", "pt": "Array de qualquer tipo, inclusive arrays de struct."},
+        {"name": "'UniformOutput'", "en": "`true` (default) requires scalar results; `false` allows anything and returns a cell array.", "pt": "`true` (padrão) exige resultados escalares; `false` permite qualquer coisa e retorna um cell array."},
+        {"name": "'ErrorHandler'", "en": "Handle receiving an error struct and the inputs; its output replaces the missing result.", "pt": "Handle que recebe uma struct de erro e as entradas; sua saída substitui o resultado que faltou."}
+      ],
+      "outputs": [
+        {"name": "B", "en": "Array (or cell array) with the same size as the inputs.", "pt": "Array (ou cell array) com o mesmo tamanho das entradas."}
+      ],
+      "description": {
+        "en": "`arrayfun` is a loop in disguise: it does not vectorize the computation, but it removes bookkeeping and keeps the result shaped like the input. It is the right tool when `func` does not work on whole arrays, for instance when it returns text or vectors per element.\n\nWith the default `UniformOutput` every call must return a scalar of the same class; otherwise an error is raised. Use `cellfun` for cell arrays and `structfun` for the fields of a struct.",
+        "pt": "`arrayfun` é um laço disfarçado: não vetoriza o cálculo, mas elimina o controle manual e mantém o resultado com a forma da entrada. É a ferramenta certa quando `func` não funciona com arrays inteiros, por exemplo quando devolve texto ou vetores por elemento.\n\nCom o `UniformOutput` padrão, toda chamada deve devolver um escalar da mesma classe; caso contrário há erro. Use `cellfun` para cell arrays e `structfun` para os campos de uma struct."
+      },
+      "examples": [
+        {"title": {"en": "Uniform and cell output", "pt": "Saída uniforme e em cell"}, "code": "arrayfun(@(x) x^2, 1:4)\nc = arrayfun(@(k) k*ones(1, k), 1:3, 'UniformOutput', false)\narrayfun(@(x, y) x + y, [1 2; 3 4], [10 20; 30 40])"},
+        {"title": {"en": "Several outputs", "pt": "Várias saídas"}, "code": "[m, i] = arrayfun(@(k) max([k 3 2]), 1:4)"}
+      ],
+      "see": ["cellfun", "structfun", "cell2mat", "bsxfun", "deal"]
+    }
+  }
+}

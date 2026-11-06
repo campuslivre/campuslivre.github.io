@@ -1,0 +1,542 @@
+{
+  "functions": {
+    "diffuse": {
+      "summary": {"en": "Diffuse (Lambertian) reflectance of a surface for a given light direction.", "pt": "Reflectância difusa (lambertiana) de uma superfície para uma dada direção de luz."},
+      "syntax": [
+        {"code": "R = diffuse(Nx, Ny, Nz, S)", "en": "Returns the diffuse reflectance at each surface point, given the surface normal components and the light direction `S`.", "pt": "Retorna a reflectância difusa em cada ponto da superfície, dadas as componentes da normal e a direção da luz `S`."}
+      ],
+      "inputs": [
+        {"name": "Nx, Ny, Nz", "en": "Arrays of the same size with the x, y and z components of the surface normals, for example from `surfnorm`.", "pt": "Arrays do mesmo tamanho com as componentes x, y e z das normais da superfície, por exemplo obtidas de `surfnorm`."},
+        {"name": "S", "en": "Light direction, either a vector `[x y z]` or the pair `[azimuth elevation]` in degrees.", "pt": "Direção da luz, como vetor `[x y z]` ou como o par `[azimute elevação]` em graus."}
+      ],
+      "outputs": [
+        {"name": "R", "en": "Array of the same size as `Nx`, with values from 0 (unlit) to 1 (light hitting head on).", "pt": "Array do mesmo tamanho de `Nx`, com valores de 0 (sem luz) a 1 (luz incidindo de frente)."}
+      ],
+      "description": {
+        "en": "The function implements Lambert's cosine law. Each normal and the light direction are scaled to unit length, and the result is their dot product, clipped at zero so that surfaces facing away from the light are simply dark.\n\nThe values are used to shade a surface by hand. For lighting a graphics object directly, use `light` and `lighting` instead.",
+        "pt": "A função implementa a lei do cosseno de Lambert. Cada normal e a direção da luz são normalizadas, e o resultado é o produto escalar entre elas, limitado a zero, de modo que superfícies voltadas para o lado oposto à luz ficam simplesmente escuras.\n\nOs valores servem para sombrear uma superfície manualmente. Para iluminar um objeto gráfico diretamente, use `light` e `lighting`."
+      },
+      "examples": [
+        {"title": {"en": "Normals tilted away from the light", "pt": "Normais inclinadas em relação à luz"}, "code": "Nx = [0 0 1];\nNy = [0 1 0];\nNz = [1 1 1];\nR = diffuse(Nx, Ny, Nz, [0 0 1])"}
+      ],
+      "see": ["specular", "surfnorm", "light", "lighting", "material"]
+    },
+    "figure": {
+      "summary": {"en": "Creates a figure window, or makes an existing one the current figure.", "pt": "Cria uma janela de figura ou torna uma figura existente a figura atual."},
+      "syntax": [
+        {"code": "figure", "en": "Creates a new figure with the next free number and makes it current.", "pt": "Cria uma nova figura com o próximo número livre e a torna atual."},
+        {"code": "figure(n)", "en": "Makes figure number `n` current, creating it if it does not exist.", "pt": "Torna a figura de número `n` atual, criando-a se não existir."},
+        {"code": "figure(Name, Value)", "en": "Creates a figure with properties such as `'Name'` set.", "pt": "Cria uma figura com propriedades como `'Name'` definidas."},
+        {"code": "f = figure(___)", "en": "Also returns the figure object.", "pt": "Também retorna o objeto da figura."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Positive integer, the figure number.", "pt": "Inteiro positivo, o número da figura."},
+        {"name": "Name, Value", "en": "Figure properties, for example `'Name'`, `'Color'` or `'Position'`.", "pt": "Propriedades da figura, por exemplo `'Name'`, `'Color'` ou `'Position'`."}
+      ],
+      "outputs": [
+        {"name": "f", "en": "Figure object (class `matlab.ui.Figure`). Its `Number` property holds the figure number.", "pt": "Objeto da figura (classe `matlab.ui.Figure`). Sua propriedade `Number` guarda o número da figura."}
+      ],
+      "description": {
+        "en": "Plotting commands draw in the current figure, creating one if none exists. Calling `figure` explicitly lets a script keep several plots apart: each call to `figure` without an argument opens a new window, and `figure(n)` goes back to an earlier one to add more to it.\n\nThe figure object can be stored and changed through its properties, which is the usual way to set a title or a background color.",
+        "pt": "Os comandos de plotagem desenham na figura atual, criando uma se não houver nenhuma. Chamar `figure` explicitamente permite manter vários gráficos separados: cada chamada sem argumento abre uma nova janela, e `figure(n)` volta a uma anterior para acrescentar mais conteúdo.\n\nO objeto da figura pode ser guardado e alterado por suas propriedades, que é o modo usual de definir um nome ou uma cor de fundo."
+      },
+      "examples": [
+        {"title": {"en": "Named figure and its number", "pt": "Figura nomeada e seu número"}, "code": "f = figure('Name', 'Demo');\nplot(1:5, (1:5).^2)\nf.Name\nf.Number"}
+      ],
+      "see": ["gcf", "close", "clf", "subplot", "tiledlayout", "axes"]
+    },
+    "flag": {
+      "summary": {"en": "Colormap that cycles through red, white, blue and black.", "pt": "Mapa de cores que alterna vermelho, branco, azul e preto."},
+      "syntax": [
+        {"code": "map = flag", "en": "Returns a colormap with the default number of rows (the size of the current colormap).", "pt": "Retorna um mapa de cores com o número padrão de linhas (o tamanho do mapa de cores atual)."},
+        {"code": "map = flag(m)", "en": "Returns a colormap with `m` rows.", "pt": "Retorna um mapa de cores com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The rows repeat the fixed sequence red, white, blue, black, so the map has sharp jumps instead of a gradient. It is meant for flagging distinct regions or for checking how many colors a plot uses, not for continuous data.\n\nUse `colormap(flag(8))` to apply it to the current axes.",
+        "pt": "As linhas repetem a sequência fixa vermelho, branco, azul, preto, de modo que o mapa tem saltos bruscos em vez de um gradiente. Serve para destacar regiões distintas ou para ver quantas cores um gráfico usa, não para dados contínuos.\n\nUse `colormap(flag(8))` para aplicá-lo aos eixos atuais."
+      },
+      "examples": [
+        {"title": {"en": "Five colors", "pt": "Cinco cores"}, "code": "flag(5)"}
+      ],
+      "see": ["colormap", "prism", "lines", "hsv", "jet"]
+    },
+    "fontname": {
+      "summary": {"en": "Sets the font name of the text in a figure or graphics object.", "pt": "Define o nome da fonte do texto de uma figura ou objeto gráfico."},
+      "syntax": [
+        {"code": "fontname(name)", "en": "Sets the font of the text in the current figure to `name`.", "pt": "Define a fonte do texto da figura atual como `name`."},
+        {"code": "fontname(obj, name)", "en": "Sets the font for the figure, axes or other container `obj` and the text inside it.", "pt": "Define a fonte da figura, dos eixos ou de outro contêiner `obj` e do texto dentro dele."}
+      ],
+      "inputs": [
+        {"name": "name", "en": "Font name as text, such as `'Arial'`. The value `'default'` restores the default font.", "pt": "Nome da fonte como texto, como `'Arial'`. O valor `'default'` restaura a fonte padrão."},
+        {"name": "obj", "en": "Handle to a figure, axes or other graphics object.", "pt": "Handle de uma figura, eixos ou outro objeto gráfico."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`fontname` is a shortcut for setting the `FontName` property on every object under `obj` that has one, so a single call restyles titles, labels and tick labels together.\n\nThe function does not draw anything by itself. It affects the text that already exists when it is called.",
+        "pt": "`fontname` é um atalho para definir a propriedade `FontName` de todo objeto sob `obj` que a possua, de modo que uma única chamada altera títulos, rótulos e marcas de eixo ao mesmo tempo.\n\nA função não desenha nada por si só. Ela atua sobre o texto que já existe quando é chamada."
+      },
+      "notes": {
+        "en": "In MatLivre, `fontname` with no arguments is an error and the function returns no value; the MATLAB form that returns the current font name is not available. Use the `FontName` property of an object to read it.",
+        "pt": "No MatLivre, `fontname` sem argumentos gera erro e a função não retorna valor; a forma do MATLAB que devolve o nome da fonte atual não está disponível. Leia a propriedade `FontName` de um objeto para obtê-la."
+      },
+      "examples": [
+        {"title": {"en": "Change the font of a plot", "pt": "Mudar a fonte de um gráfico"}, "code": "plot(1:4)\ntitle('Trend')\nfontname('Arial')\nax = gca;\nax.Title.String",
+         "note": {"en": "The figure is drawn below the code.", "pt": "A figura é desenhada abaixo do código."}}
+      ],
+      "see": ["fontsize", "title", "xlabel", "text", "gca"]
+    },
+    "fontsize": {
+      "summary": {"en": "Sets the font size of the text in a figure or graphics object.", "pt": "Define o tamanho da fonte do texto de uma figura ou objeto gráfico."},
+      "syntax": [
+        {"code": "fontsize(size, units)", "en": "Sets the font size for the text in the current figure, with `units` such as `'points'`.", "pt": "Define o tamanho da fonte do texto da figura atual, com `units` como `'points'`."},
+        {"code": "fontsize(obj, size, units)", "en": "Sets the size for the container `obj` and the text inside it.", "pt": "Define o tamanho para o contêiner `obj` e o texto dentro dele."},
+        {"code": "fontsize('increase')", "en": "Makes the font about 10 percent larger. `'decrease'` makes it smaller and `'default'` restores the default.", "pt": "Aumenta a fonte em cerca de 10 por cento. `'decrease'` a diminui e `'default'` restaura o padrão."}
+      ],
+      "inputs": [
+        {"name": "size", "en": "Positive number, the new font size, or one of the keywords `'increase'`, `'decrease'`, `'default'`.", "pt": "Número positivo, o novo tamanho da fonte, ou uma das palavras `'increase'`, `'decrease'`, `'default'`."},
+        {"name": "units", "en": "Unit of `size`, normally `'points'`.", "pt": "Unidade de `size`, normalmente `'points'`."},
+        {"name": "obj", "en": "Handle to a figure, axes or other graphics object.", "pt": "Handle de uma figura, eixos ou outro objeto gráfico."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`fontsize` changes the size of all the text in the target at once: tick labels, axis labels, titles and legends. It is quicker than setting `FontSize` on each object.\n\nWith the keywords `'increase'` and `'decrease'` the size changes by a fixed factor from its current value, which is convenient to try a more readable figure without picking a number.",
+        "pt": "`fontsize` altera de uma vez o tamanho de todo o texto do alvo: marcas de eixo, rótulos, títulos e legendas. É mais rápido do que definir `FontSize` em cada objeto.\n\nCom as palavras `'increase'` e `'decrease'`, o tamanho muda por um fator fixo a partir do valor atual, o que é útil para testar uma figura mais legível sem escolher um número."
+      },
+      "notes": {
+        "en": "In MatLivre the size is applied to the axes of the figure, and the units argument is accepted but not used to convert the value.",
+        "pt": "No MatLivre o tamanho é aplicado aos eixos da figura, e o argumento de unidades é aceito mas não é usado para converter o valor."
+      },
+      "examples": [
+        {"title": {"en": "Larger text on a plot", "pt": "Texto maior em um gráfico"}, "code": "plot(1:4)\nxlabel('index')\nfontsize(14, 'points')\nax = gca;\nax.FontSize"}
+      ],
+      "see": ["fontname", "title", "xlabel", "text", "gca"]
+    },
+    "gray": {
+      "summary": {"en": "Colormap of linear shades of gray, from black to white.", "pt": "Mapa de cores de tons de cinza lineares, do preto ao branco."},
+      "syntax": [
+        {"code": "map = gray", "en": "Returns a gray colormap with the default number of rows.", "pt": "Retorna um mapa de cinzas com o número padrão de linhas."},
+        {"code": "map = gray(m)", "en": "Returns a gray colormap with `m` rows.", "pt": "Retorna um mapa de cinzas com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix whose three columns are equal, running from 0 to 1.", "pt": "Matriz `m`-por-3 cujas três colunas são iguais, indo de 0 a 1."}
+      ],
+      "description": {
+        "en": "Each row has equal red, green and blue values, spaced evenly from black in the first row to white in the last. It is a good choice for images that should look like a black-and-white photograph and for figures that will be printed without color.",
+        "pt": "Cada linha tem valores iguais de vermelho, verde e azul, espaçados uniformemente do preto na primeira linha ao branco na última. É uma boa escolha para imagens que devem parecer fotografias em preto e branco e para figuras impressas sem cor."
+      },
+      "examples": [
+        {"title": {"en": "Four gray levels", "pt": "Quatro níveis de cinza"}, "code": "gray(4)"}
+      ],
+      "see": ["colormap", "bone", "hot", "imshow", "rgb2gray"]
+    },
+    "grid": {
+      "summary": {"en": "Turns the axes grid lines on or off.", "pt": "Liga ou desliga as linhas de grade dos eixos."},
+      "syntax": [
+        {"code": "grid on", "en": "Shows the major grid lines of the current axes.", "pt": "Mostra as linhas de grade principais dos eixos atuais."},
+        {"code": "grid off", "en": "Hides the grid lines.", "pt": "Oculta as linhas de grade."},
+        {"code": "grid", "en": "Toggles the grid between on and off.", "pt": "Alterna a grade entre ligada e desligada."},
+        {"code": "grid minor", "en": "Toggles the minor grid lines, which sit between the major ticks.", "pt": "Alterna as linhas de grade secundárias, que ficam entre as marcas principais."}
+      ],
+      "inputs": [
+        {"name": "ax", "en": "Optional first argument: the axes to change instead of the current axes.", "pt": "Primeiro argumento opcional: os eixos a alterar em vez dos eixos atuais."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "The grid lines follow the axis ticks, so they change when the ticks change. Grid state is stored on the axes, in the properties `XGrid`, `YGrid` and `ZGrid`, together with `XMinorGrid` and its relatives for the minor lines.\n\nCalled with no argument, `grid` flips the current state, which makes a script that runs twice show the opposite grid the second time. Prefer `grid on` or `grid off` when the outcome should be fixed.",
+        "pt": "As linhas de grade acompanham as marcas dos eixos, portanto mudam quando as marcas mudam. O estado da grade fica nos eixos, nas propriedades `XGrid`, `YGrid` e `ZGrid`, junto com `XMinorGrid` e suas equivalentes para as linhas secundárias.\n\nChamada sem argumento, `grid` inverte o estado atual, o que faz um script executado duas vezes mostrar a grade oposta na segunda. Prefira `grid on` ou `grid off` quando o resultado deve ser fixo."
+      },
+      "examples": [
+        {"title": {"en": "Grid with minor lines", "pt": "Grade com linhas secundárias"}, "code": "x = linspace(0, 4*pi, 100);\nplot(x, sin(x))\ngrid on\ngrid minor\nax = gca;\nax.XGrid\nax.XMinorGrid"}
+      ],
+      "see": ["box", "xticks", "yticks", "axis", "hold"]
+    },
+    "hold": {
+      "summary": {"en": "Keeps existing plots when new ones are added to the same axes.", "pt": "Mantém os gráficos existentes quando novos são adicionados aos mesmos eixos."},
+      "syntax": [
+        {"code": "hold on", "en": "Retains the current plots, so the next plotting commands add to them.", "pt": "Retém os gráficos atuais, de modo que os próximos comandos de plotagem se somam a eles."},
+        {"code": "hold off", "en": "Restores the default, where a new plot replaces the old content.", "pt": "Restaura o padrão, em que um novo gráfico substitui o conteúdo anterior."},
+        {"code": "hold", "en": "Toggles the hold state.", "pt": "Alterna o estado de retenção."},
+        {"code": "hold(ax, 'on')", "en": "Sets the state for the axes `ax` instead of the current axes.", "pt": "Define o estado para os eixos `ax` em vez dos eixos atuais."}
+      ],
+      "inputs": [
+        {"name": "ax", "en": "Axes to change. Optional.", "pt": "Eixos a alterar. Opcional."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "By default each call to a plotting function clears the axes first. With hold on, the new graphics are added instead, and the axis limits and the color order carry on from the previous lines, so successive `plot` calls get successive colors.\n\nThe function `ishold` tells whether hold is on for the current axes. Leave the state back at `hold off` once the extra lines are drawn, so that later plots in the script start clean.",
+        "pt": "Por padrão, cada chamada a uma função de plotagem limpa os eixos antes. Com hold on, os novos gráficos são acrescentados, e os limites dos eixos e a ordem das cores continuam do ponto em que estavam, de modo que chamadas sucessivas de `plot` recebem cores sucessivas.\n\nA função `ishold` informa se a retenção está ligada nos eixos atuais. Volte ao estado `hold off` depois de desenhar as linhas extras, para que gráficos posteriores no script comecem limpos."
+      },
+      "examples": [
+        {"title": {"en": "Two lines on one axes", "pt": "Duas linhas nos mesmos eixos"}, "code": "x = 0:0.1:2*pi;\nplot(x, sin(x))\nhold on\nplot(x, cos(x))\nishold\nhold off\nishold"}
+      ],
+      "see": ["ishold", "plot", "figure", "clf", "cla"]
+    },
+    "hot": {
+      "summary": {"en": "Colormap that goes from black through red and yellow to white.", "pt": "Mapa de cores que vai do preto ao branco, passando por vermelho e amarelo."},
+      "syntax": [
+        {"code": "map = hot", "en": "Returns a hot colormap with the default number of rows.", "pt": "Retorna um mapa de cores hot com o número padrão de linhas."},
+        {"code": "map = hot(m)", "en": "Returns a hot colormap with `m` rows.", "pt": "Retorna um mapa de cores hot com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The red channel rises first, then green, then blue, so low values are dark red and high values approach white. Because the lightness increases steadily, the map stays readable in grayscale prints, which makes it a reasonable choice for intensity and temperature data.",
+        "pt": "O canal vermelho sobe primeiro, depois o verde, depois o azul, de modo que valores baixos são vermelho escuro e valores altos se aproximam do branco. Como a luminosidade cresce de forma contínua, o mapa continua legível em impressões em escala de cinza, o que o torna uma escolha razoável para dados de intensidade e temperatura."
+      },
+      "examples": [
+        {"title": {"en": "Apply to a surface", "pt": "Aplicar a uma superfície"}, "code": "map = hot(64);\nsize(map)\nmap(end, :)\nsurf(peaks(20))\ncolormap(hot)\ncolorbar"}
+      ],
+      "see": ["colormap", "jet", "parula", "gray", "colorbar"]
+    },
+    "hsv": {
+      "summary": {"en": "Colormap that sweeps through the hue circle at full saturation and value.", "pt": "Mapa de cores que percorre o círculo de matizes com saturação e valor máximos."},
+      "syntax": [
+        {"code": "map = hsv", "en": "Returns an hsv colormap with the default number of rows.", "pt": "Retorna um mapa de cores hsv com o número padrão de linhas."},
+        {"code": "map = hsv(m)", "en": "Returns an hsv colormap with `m` rows.", "pt": "Retorna um mapa de cores hsv com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "The hue runs from 0 to just below 1 in equal steps, so the colors go from red through yellow, green, cyan, blue and magenta, nearly back to red. The first and last colors are close but not identical, and the map is cyclic, which suits angles and phases.\n\nIt is built as `hsv2rgb([h' ones(m,1) ones(m,1)])` with evenly spaced hues `h`.",
+        "pt": "O matiz vai de 0 até um pouco abaixo de 1 em passos iguais, e as cores passam do vermelho ao amarelo, verde, ciano, azul e magenta, quase voltando ao vermelho. A primeira e a última cor são próximas mas não idênticas, e o mapa é cíclico, o que combina com ângulos e fases.\n\nEle é construído como `hsv2rgb([h' ones(m,1) ones(m,1)])`, com matizes `h` igualmente espaçados."
+      },
+      "examples": [
+        {"title": {"en": "Four hues", "pt": "Quatro matizes"}, "code": "hsv(4)"}
+      ],
+      "see": ["hsv2rgb", "rgb2hsv", "colormap", "jet", "parula"]
+    },
+    "hsv2rgb": {
+      "summary": {"en": "Converts colors from hue-saturation-value to red-green-blue.", "pt": "Converte cores de matiz-saturação-valor para vermelho-verde-azul."},
+      "syntax": [
+        {"code": "rgb = hsv2rgb(hsv)", "en": "Converts an `m`-by-3 colormap or an image of size `m`-by-`n`-by-3 from HSV to RGB.", "pt": "Converte um mapa de cores `m`-por-3 ou uma imagem `m`-por-`n`-por-3 de HSV para RGB."}
+      ],
+      "inputs": [
+        {"name": "hsv", "en": "Matrix or image whose last dimension holds hue, saturation and value, each between 0 and 1.", "pt": "Matriz ou imagem cuja última dimensão contém matiz, saturação e valor, cada um entre 0 e 1."}
+      ],
+      "outputs": [
+        {"name": "rgb", "en": "Array of the same size with red, green and blue values between 0 and 1.", "pt": "Array do mesmo tamanho com valores de vermelho, verde e azul entre 0 e 1."}
+      ],
+      "description": {
+        "en": "Hue is measured as a fraction of the color wheel: 0 is red, 1/3 is green, 2/3 is blue and 1 wraps back to red. Saturation 0 gives a gray and value sets the brightness.\n\nEach row of a matrix is one color. The inverse conversion is `rgb2hsv`.",
+        "pt": "O matiz é medido como fração do círculo de cores: 0 é vermelho, 1/3 é verde, 2/3 é azul e 1 volta ao vermelho. Saturação 0 resulta em cinza e o valor define o brilho.\n\nCada linha de uma matriz é uma cor. A conversão inversa é `rgb2hsv`."
+      },
+      "examples": [
+        {"title": {"en": "Red and cyan from hues", "pt": "Vermelho e ciano a partir de matizes"}, "code": "hsv2rgb([0 1 1; 0.5 1 1; 0 0 0.5])"}
+      ],
+      "see": ["rgb2hsv", "hsv", "colormap", "rgb2gray"]
+    },
+    "jet": {
+      "summary": {"en": "Colormap that runs from dark blue through cyan, yellow and orange to dark red.", "pt": "Mapa de cores que vai do azul escuro ao vermelho escuro, passando por ciano, amarelo e laranja."},
+      "syntax": [
+        {"code": "map = jet", "en": "Returns a jet colormap with the default number of rows.", "pt": "Retorna um mapa de cores jet com o número padrão de linhas."},
+        {"code": "map = jet(m)", "en": "Returns a jet colormap with `m` rows.", "pt": "Retorna um mapa de cores jet com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "Jet was the default colormap of older MATLAB releases. It is a rainbow-style map that is easy to read at a glance but whose lightness goes up and down, which can create the impression of features that are not in the data. `parula` and `turbo` are better balanced alternatives.",
+        "pt": "O jet foi o mapa de cores padrão de versões antigas do MATLAB. É um mapa estilo arco-íris, fácil de ler à primeira vista, mas cuja luminosidade sobe e desce, o que pode dar a impressão de estruturas que não estão nos dados. `parula` e `turbo` são alternativas mais equilibradas."
+      },
+      "examples": [
+        {"title": {"en": "Use jet on a surface", "pt": "Usar jet em uma superfície"}, "code": "map = jet(8);\nsize(map)\nsurf(peaks(25))\ncolormap(jet(8))\ncolorbar"}
+      ],
+      "see": ["parula", "turbo", "hsv", "colormap", "colorbar"]
+    },
+    "legend": {
+      "summary": {"en": "Adds a legend that names the data series of the axes.", "pt": "Adiciona uma legenda que nomeia as séries de dados dos eixos."},
+      "syntax": [
+        {"code": "legend(label1, ..., labelN)", "en": "Labels the plotted series in order with the given text.", "pt": "Rotula as séries plotadas, em ordem, com os textos dados."},
+        {"code": "legend(labels)", "en": "Takes the labels from a cell array or string array.", "pt": "Obtém os rótulos de um cell array ou string array."},
+        {"code": "legend", "en": "Creates a legend using each series' `DisplayName`, or `data1`, `data2` and so on.", "pt": "Cria uma legenda usando o `DisplayName` de cada série, ou `data1`, `data2` e assim por diante."},
+        {"code": "legend(___, 'Location', loc)", "en": "Places the legend, for example `'southwest'` or `'northeastoutside'`.", "pt": "Posiciona a legenda, por exemplo `'southwest'` ou `'northeastoutside'`."},
+        {"code": "legend off", "en": "Removes the legend. `legend boxoff` hides only its frame.", "pt": "Remove a legenda. `legend boxoff` oculta apenas a moldura."},
+        {"code": "lgd = legend(___)", "en": "Returns the legend object.", "pt": "Retorna o objeto da legenda."}
+      ],
+      "inputs": [
+        {"name": "label1, ..., labelN", "en": "Text labels, one per series, in the order the series were drawn.", "pt": "Rótulos de texto, um por série, na ordem em que as séries foram desenhadas."},
+        {"name": "Location", "en": "Position of the legend. The default is `'northeast'`.", "pt": "Posição da legenda. O padrão é `'northeast'`."}
+      ],
+      "outputs": [
+        {"name": "lgd", "en": "Legend object, class `matlab.graphics.illustration.Legend`, with properties such as `String` and `Location`.", "pt": "Objeto da legenda, classe `matlab.graphics.illustration.Legend`, com propriedades como `String` e `Location`."}
+      ],
+      "description": {
+        "en": "The legend lists one entry per series in the axes, showing a sample of its line or marker next to the label. With explicit labels, they are matched to the series in drawing order; with the `DisplayName` property set when plotting, `legend` with no arguments uses those names and stays correct if the order changes.\n\nCall `legend` after the series exist, because a legend is not updated by series added later unless it is requested again.",
+        "pt": "A legenda lista uma entrada por série dos eixos, mostrando uma amostra da linha ou do marcador ao lado do rótulo. Com rótulos explícitos, eles são associados às séries na ordem de desenho; com a propriedade `DisplayName` definida ao plotar, `legend` sem argumentos usa esses nomes e continua correta se a ordem mudar.\n\nChame `legend` depois que as séries existirem, pois a legenda não é atualizada por séries acrescentadas depois, a menos que seja solicitada de novo."
+      },
+      "examples": [
+        {"title": {"en": "Names from DisplayName", "pt": "Nomes a partir de DisplayName"}, "code": "x = 0:0.2:6;\nplot(x, sin(x), 'DisplayName', 'sin')\nhold on\nplot(x, cos(x), 'DisplayName', 'cos')\nhold off\nlgd = legend;\nlgd.String"}
+      ],
+      "see": ["plot", "title", "xlabel", "hold", "colorbar"]
+    },
+    "light": {
+      "summary": {"en": "Creates a light source in the current axes.", "pt": "Cria uma fonte de luz nos eixos atuais."},
+      "syntax": [
+        {"code": "light", "en": "Adds a white, infinitely distant light at the default position `[1 0 1]`.", "pt": "Adiciona uma luz branca, infinitamente distante, na posição padrão `[1 0 1]`."},
+        {"code": "light(Name, Value)", "en": "Sets properties such as `'Position'`, `'Color'` and `'Style'`.", "pt": "Define propriedades como `'Position'`, `'Color'` e `'Style'`."},
+        {"code": "h = light(___)", "en": "Also returns the light object.", "pt": "Também retorna o objeto de luz."}
+      ],
+      "inputs": [
+        {"name": "Position", "en": "Three-element vector `[x y z]`. For the `'infinite'` style it is the direction of the light; for `'local'` it is a point in space.", "pt": "Vetor de três elementos `[x y z]`. No estilo `'infinite'` é a direção da luz; em `'local'` é um ponto no espaço."},
+        {"name": "Color", "en": "RGB triplet or color name. Default white.", "pt": "Trio RGB ou nome de cor. Padrão: branco."},
+        {"name": "Style", "en": "`'infinite'` (default) or `'local'`.", "pt": "`'infinite'` (padrão) ou `'local'`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Light object, class `matlab.graphics.primitive.Light`.", "pt": "Objeto de luz, classe `matlab.graphics.primitive.Light`."}
+      ],
+      "description": {
+        "en": "A light only has a visible effect on surfaces and patches whose lighting mode is not `'none'`. Set it with `lighting gouraud` or `lighting flat`. Without a light object, such surfaces are not shaded.\n\nSeveral lights can be added to one axes. To place a light by angles instead of coordinates, use `lightangle` or `camlight`.",
+        "pt": "Uma luz só tem efeito visível em superfícies e patches cujo modo de iluminação não seja `'none'`. Defina-o com `lighting gouraud` ou `lighting flat`. Sem um objeto de luz, essas superfícies não são sombreadas.\n\nVárias luzes podem ser adicionadas aos mesmos eixos. Para posicionar uma luz por ângulos em vez de coordenadas, use `lightangle` ou `camlight`."
+      },
+      "examples": [
+        {"title": {"en": "A lit surface", "pt": "Uma superfície iluminada"}, "code": "surf(peaks(30))\nshading interp\nlighting gouraud\nh = light('Position', [-1 -1 1]);\nh.Style\nh.Position"}
+      ],
+      "see": ["lightangle", "camlight", "lighting", "material", "shading"]
+    },
+    "lightangle": {
+      "summary": {"en": "Creates or moves a light using azimuth and elevation angles.", "pt": "Cria ou move uma luz usando ângulos de azimute e elevação."},
+      "syntax": [
+        {"code": "lightangle(az, el)", "en": "Creates a light at azimuth `az` and elevation `el`, in degrees.", "pt": "Cria uma luz com azimute `az` e elevação `el`, em graus."},
+        {"code": "lightangle(lightobj, az, el)", "en": "Moves an existing light.", "pt": "Move uma luz existente."},
+        {"code": "h = lightangle(___)", "en": "Returns the light object.", "pt": "Retorna o objeto de luz."}
+      ],
+      "inputs": [
+        {"name": "az, el", "en": "Azimuth and elevation of the light in degrees, measured in the same way as for `view`.", "pt": "Azimute e elevação da luz em graus, medidos da mesma forma que em `view`."},
+        {"name": "lightobj", "en": "Handle of a light created earlier.", "pt": "Handle de uma luz criada antes."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Light object whose `Position` is the unit vector for the given angles.", "pt": "Objeto de luz cuja `Position` é o vetor unitário correspondente aos ângulos dados."}
+      ],
+      "description": {
+        "en": "The angles are converted to a position vector and stored in the light's `Position` property. The light is placed relative to the axes, not to the camera, so rotating the plot afterwards does not move it. For a light that follows the camera, use `camlight`.\n\nAs with `light`, the surfaces need a lighting mode other than `'none'` to react.",
+        "pt": "Os ângulos são convertidos em um vetor de posição e guardados na propriedade `Position` da luz. A luz é posicionada em relação aos eixos, não à câmera, então girar o gráfico depois não a move. Para uma luz que acompanha a câmera, use `camlight`.\n\nComo em `light`, as superfícies precisam de um modo de iluminação diferente de `'none'` para reagir."
+      },
+      "examples": [
+        {"title": {"en": "Light from azimuth 45, elevation 30", "pt": "Luz com azimute 45 e elevação 30"}, "code": "surf(peaks(30))\nlighting gouraud\nh = lightangle(45, 30);\nh.Position"}
+      ],
+      "see": ["light", "camlight", "lighting", "view", "material"]
+    },
+    "lighting": {
+      "summary": {"en": "Selects the lighting method used to shade surfaces and patches.", "pt": "Seleciona o método de iluminação usado para sombrear superfícies e patches."},
+      "syntax": [
+        {"code": "lighting flat", "en": "Computes one shade per face. Fast, shows the facets.", "pt": "Calcula um tom por face. Rápido, deixa as facetas visíveis."},
+        {"code": "lighting gouraud", "en": "Interpolates the shade smoothly across each face, giving the best look on curved surfaces.", "pt": "Interpola o tom suavemente em cada face, com o melhor aspecto em superfícies curvas."},
+        {"code": "lighting none", "en": "Turns the lights off for the surfaces.", "pt": "Desliga as luzes para as superfícies."},
+        {"code": "lighting(ax, option)", "en": "Applies the option to the axes `ax`.", "pt": "Aplica a opção aos eixos `ax`."}
+      ],
+      "inputs": [
+        {"name": "option", "en": "One of `'flat'`, `'gouraud'`, `'none'`.", "pt": "Uma entre `'flat'`, `'gouraud'`, `'none'`."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`lighting` sets the face and edge lighting mode of every surface and patch in the axes. The result shows only when a light exists, which you add with `light`, `lightangle` or `camlight`.\n\nGouraud shading looks smooth because it blends the colors computed at the vertices. Flat shading is quicker and is often the better choice to see the shape of a coarse mesh.",
+        "pt": "`lighting` define o modo de iluminação das faces e arestas de todas as superfícies e patches dos eixos. O efeito só aparece quando existe uma luz, adicionada com `light`, `lightangle` ou `camlight`.\n\nO sombreamento de Gouraud parece suave porque mistura as cores calculadas nos vértices. O sombreamento flat é mais rápido e muitas vezes a melhor escolha para ver o formato de uma malha grosseira."
+      },
+      "examples": [
+        {"title": {"en": "Smooth lighting on a sphere", "pt": "Iluminação suave em uma esfera"}, "code": "[x, y, z] = sphere(30);\ns = surf(x, y, z);\nshading flat\nlighting gouraud\ncamlight\naxis equal\nclass(s)"}
+      ],
+      "see": ["light", "lightangle", "material", "shading", "camlight"]
+    },
+    "line": {
+      "summary": {"en": "Draws a primitive line through the given points in the current axes.", "pt": "Desenha uma linha primitiva pelos pontos dados nos eixos atuais."},
+      "syntax": [
+        {"code": "line(x, y)", "en": "Draws a line through the points `(x(i), y(i))`.", "pt": "Desenha uma linha pelos pontos `(x(i), y(i))`."},
+        {"code": "line(x, y, z)", "en": "Draws a line in 3-D.", "pt": "Desenha uma linha em 3-D."},
+        {"code": "line(___, Name, Value)", "en": "Sets properties such as `'Color'`, `'LineWidth'` and `'LineStyle'`.", "pt": "Define propriedades como `'Color'`, `'LineWidth'` e `'LineStyle'`."},
+        {"code": "h = line(___)", "en": "Returns the line object.", "pt": "Retorna o objeto de linha."}
+      ],
+      "inputs": [
+        {"name": "x, y, z", "en": "Coordinate vectors of the same length.", "pt": "Vetores de coordenadas de mesmo comprimento."},
+        {"name": "Name, Value", "en": "Line properties, for example `'Color', 'r'`.", "pt": "Propriedades da linha, por exemplo `'Color', 'r'`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Line object with the properties `XData`, `YData`, `ZData`, `Color` and others.", "pt": "Objeto de linha com as propriedades `XData`, `YData`, `ZData`, `Color` e outras."}
+      ],
+      "description": {
+        "en": "Unlike `plot`, `line` does not clear the axes, does not reset the limits to fit data in a special way and does not advance the color order: it only adds an object to what is already there. That makes it handy for annotating a plot with a reference segment or an arrow shaft.\n\nIf there are no axes yet, one is created. Each call draws a single line, with the first coordinate vector against the second.",
+        "pt": "Diferente de `plot`, `line` não limpa os eixos, não redefine os limites de modo especial e não avança a ordem de cores: apenas acrescenta um objeto ao que já existe. Isso é útil para anotar um gráfico com um segmento de referência ou a haste de uma seta.\n\nSe ainda não houver eixos, um é criado. Cada chamada desenha uma única linha, com o primeiro vetor de coordenadas contra o segundo."
+      },
+      "examples": [
+        {"title": {"en": "A segment over a plot", "pt": "Um segmento sobre um gráfico"}, "code": "plot(0:5, (0:5).^2)\nh = line([0 5], [0 25], 'Color', 'r', 'LineStyle', '--');\nh.XData\nh.YData"}
+      ],
+      "see": ["plot", "xline", "yline", "rectangle", "text"]
+    },
+    "lines": {
+      "summary": {"en": "Colormap made of the default line colors of the axes.", "pt": "Mapa de cores formado pelas cores de linha padrão dos eixos."},
+      "syntax": [
+        {"code": "map = lines", "en": "Returns the colors with the default number of rows.", "pt": "Retorna as cores com o número padrão de linhas."},
+        {"code": "map = lines(m)", "en": "Returns `m` colors, repeating the sequence when `m` exceeds its length.", "pt": "Retorna `m` cores, repetindo a sequência quando `m` excede seu tamanho."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values.", "pt": "Matriz `m`-por-3 de valores RGB."}
+      ],
+      "description": {
+        "en": "The map holds the seven colors that successive `plot` lines take (blue, orange, yellow, purple, green, light blue, dark red), cycled when more are requested. Use it to color several objects consistently with the lines of a plot, for example bars or filled areas drawn with `fill` and `bar`.",
+        "pt": "O mapa contém as sete cores que linhas sucessivas de `plot` recebem (azul, laranja, amarelo, roxo, verde, azul claro, vermelho escuro), repetidas quando se pedem mais. Use-o para colorir vários objetos de forma coerente com as linhas de um gráfico, por exemplo barras ou áreas desenhadas com `fill` e `bar`."
+      },
+      "examples": [
+        {"title": {"en": "Three line colors", "pt": "Três cores de linha"}, "code": "c = lines(3)"}
+      ],
+      "see": ["orderedcolors", "colormap", "plot", "hsv", "parula"]
+    },
+    "makehgtform": {
+      "summary": {"en": "Creates a 4-by-4 transformation matrix for translation, scaling and rotation in 3-D.", "pt": "Cria uma matriz de transformação 4-por-4 para translação, escala e rotação em 3-D."},
+      "syntax": [
+        {"code": "M = makehgtform('translate', [tx ty tz])", "en": "Translation by the given amounts.", "pt": "Translação pelas quantidades dadas."},
+        {"code": "M = makehgtform('scale', s)", "en": "Uniform scaling, or `[sx sy sz]` for different factors.", "pt": "Escala uniforme, ou `[sx sy sz]` para fatores diferentes."},
+        {"code": "M = makehgtform('xrotate', t)", "en": "Rotation by `t` radians about the x-axis. `'yrotate'` and `'zrotate'` act on the other axes.", "pt": "Rotação de `t` radianos em torno do eixo x. `'yrotate'` e `'zrotate'` atuam nos outros eixos."},
+        {"code": "M = makehgtform('axisrotate', [ax ay az], t)", "en": "Rotation by `t` radians about an arbitrary axis.", "pt": "Rotação de `t` radianos em torno de um eixo arbitrário."}
+      ],
+      "inputs": [
+        {"name": "t", "en": "Angle in radians.", "pt": "Ângulo em radianos."},
+        {"name": "[tx ty tz]", "en": "Translation vector.", "pt": "Vetor de translação."}
+      ],
+      "outputs": [
+        {"name": "M", "en": "4-by-4 homogeneous transformation matrix, to be used as the `Matrix` property of an `hgtransform` object.", "pt": "Matriz de transformação homogênea 4-por-4, para uso como propriedade `Matrix` de um objeto `hgtransform`."}
+      ],
+      "description": {
+        "en": "The matrix acts on column vectors `[x; y; z; 1]`. Translation values sit in the last column, scale factors on the diagonal, and a rotation fills the upper-left 3-by-3 block.\n\nSeveral transformations can be given in one call. They are combined, and the matrices are multiplied so that the last one listed is applied first. The result can also be built by multiplying the single matrices yourself.",
+        "pt": "A matriz atua sobre vetores coluna `[x; y; z; 1]`. Os valores de translação ficam na última coluna, os fatores de escala na diagonal e uma rotação preenche o bloco 3-por-3 superior esquerdo.\n\nVárias transformações podem ser dadas em uma só chamada. Elas são combinadas, e as matrizes são multiplicadas de modo que a última listada é aplicada primeiro. O resultado também pode ser obtido multiplicando você mesmo as matrizes individuais."
+      },
+      "examples": [
+        {"title": {"en": "Translate and scale", "pt": "Transladar e escalar"}, "code": "T = makehgtform('translate', [1 2 3])\nS = makehgtform('scale', 2);\nM = T * S;\nM * [1; 1; 1; 1]"}
+      ],
+      "see": ["viewmtx", "hgtransform", "rotate", "view", "pbaspect"]
+    },
+    "material": {
+      "summary": {"en": "Sets the reflectance properties of surfaces and patches.", "pt": "Define as propriedades de reflexão de superfícies e patches."},
+      "syntax": [
+        {"code": "material shiny", "en": "Strong specular highlights that take the color of the light.", "pt": "Reflexos especulares fortes, com a cor da luz."},
+        {"code": "material dull", "en": "No specular highlight, mostly diffuse reflection.", "pt": "Sem reflexo especular, quase só reflexão difusa."},
+        {"code": "material metal", "en": "Strong specular highlight that takes the color of the surface.", "pt": "Reflexo especular forte, com a cor da superfície."},
+        {"code": "material default", "en": "Restores the default values.", "pt": "Restaura os valores padrão."},
+        {"code": "material([ka kd ks n sc])", "en": "Sets the five parameters directly.", "pt": "Define diretamente os cinco parâmetros."}
+      ],
+      "inputs": [
+        {"name": "[ka kd ks n sc]", "en": "Ambient, diffuse and specular strength, specular exponent and specular color reflectance.", "pt": "Intensidade ambiente, difusa e especular, expoente especular e reflectância da cor especular."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "The setting changes the `AmbientStrength`, `DiffuseStrength`, `SpecularStrength`, `SpecularExponent` and `SpecularColorReflectance` properties of every surface and patch in the axes. A larger specular exponent makes the highlight smaller and sharper.\n\nLike all lighting settings it has a visible effect only when a light is present in the axes.",
+        "pt": "A configuração altera as propriedades `AmbientStrength`, `DiffuseStrength`, `SpecularStrength`, `SpecularExponent` e `SpecularColorReflectance` de toda superfície e patch dos eixos. Um expoente especular maior deixa o reflexo menor e mais nítido.\n\nComo toda configuração de iluminação, só tem efeito visível quando há uma luz nos eixos."
+      },
+      "examples": [
+        {"title": {"en": "Shiny sphere", "pt": "Esfera brilhante"}, "code": "s = surf(sphere(40));\nshading interp\nlighting gouraud\ncamlight\nmaterial shiny\ns.SpecularExponent"}
+      ],
+      "see": ["lighting", "light", "shading", "specular", "diffuse"]
+    },
+    "nexttile": {
+      "summary": {"en": "Creates axes in the next free tile of a tiled chart layout.", "pt": "Cria eixos no próximo bloco livre de um layout em blocos."},
+      "syntax": [
+        {"code": "nexttile", "en": "Creates axes in the next empty tile of the current layout, creating a 2-by-2 layout if none exists.", "pt": "Cria eixos no próximo bloco vazio do layout atual, criando um layout 2-por-2 se não houver nenhum."},
+        {"code": "nexttile(n)", "en": "Uses tile number `n`, counted row by row from the top left.", "pt": "Usa o bloco de número `n`, contado linha a linha a partir do canto superior esquerdo."},
+        {"code": "nexttile(t, ___)", "en": "Works in the layout `t` instead of the current one.", "pt": "Atua no layout `t` em vez do atual."},
+        {"code": "ax = nexttile(___)", "en": "Returns the axes object.", "pt": "Retorna o objeto de eixos."}
+      ],
+      "inputs": [
+        {"name": "t", "en": "Layout created by `tiledlayout`.", "pt": "Layout criado por `tiledlayout`."},
+        {"name": "n", "en": "Tile number, a positive integer within the grid.", "pt": "Número do bloco, um inteiro positivo dentro da grade."}
+      ],
+      "outputs": [
+        {"name": "ax", "en": "Axes object that fills the tile and becomes the current axes.", "pt": "Objeto de eixos que preenche o bloco e passa a ser os eixos atuais."}
+      ],
+      "description": {
+        "en": "`nexttile` is the way to place plots in a layout. Without a number, it fills the grid in reading order, one tile per call. With a number, it jumps to a particular tile, which allows filling them in any order.\n\nThe axes it returns is current, so plot commands that follow draw into that tile.",
+        "pt": "`nexttile` é o modo de colocar gráficos em um layout. Sem número, preenche a grade em ordem de leitura, um bloco por chamada. Com número, salta para um bloco específico, o que permite preenchê-los em qualquer ordem.\n\nOs eixos retornados passam a ser os atuais, de modo que os comandos de plotagem seguintes desenham nesse bloco."
+      },
+      "examples": [
+        {"title": {"en": "Two plots side by side", "pt": "Dois gráficos lado a lado"}, "code": "t = tiledlayout(1, 2);\nax1 = nexttile;\nplot(1:5)\ntitle('linear')\nax2 = nexttile;\nplot((1:5).^2)\ntitle('square')\nclass(ax1)"}
+      ],
+      "see": ["tiledlayout", "tilenum", "tilerowcol", "subplot", "sgtitle"]
+    },
+    "num2ruler": {
+      "summary": {"en": "Converts numeric values to the data type that an axis ruler uses.", "pt": "Converte valores numéricos para o tipo de dado usado por uma régua de eixo."},
+      "syntax": [
+        {"code": "data = num2ruler(num, ruler)", "en": "Converts the numbers `num` to values of the type shown on the ruler, such as `datetime` on a time axis.", "pt": "Converte os números `num` em valores do tipo exibido na régua, como `datetime` em um eixo de tempo."}
+      ],
+      "inputs": [
+        {"name": "num", "en": "Numeric array of positions along the axis.", "pt": "Array numérico de posições ao longo do eixo."},
+        {"name": "ruler", "en": "An axis ruler, for example `ax.XAxis` or `ax.YAxis`.", "pt": "Uma régua de eixo, por exemplo `ax.XAxis` ou `ax.YAxis`."}
+      ],
+      "outputs": [
+        {"name": "data", "en": "Values in the ruler's own type. For a numeric ruler they are the numbers unchanged.", "pt": "Valores no tipo da própria régua. Em uma régua numérica, são os mesmos números."}
+      ],
+      "description": {
+        "en": "Axes with datetime, duration or categorical data store positions as plain numbers internally. `num2ruler` translates such a position back to the value a reader sees on the axis, and `ruler2num` goes the other way.\n\nThis is useful when a property such as a limit or a tick is stored numerically but the code needs the corresponding date.",
+        "pt": "Eixos com dados datetime, duration ou categorical guardam as posições como números simples internamente. `num2ruler` traduz uma posição desse tipo de volta ao valor que o leitor vê no eixo, e `ruler2num` faz o caminho inverso.\n\nIsso é útil quando uma propriedade, como um limite ou uma marca, é guardada numericamente mas o código precisa da data correspondente."
+      },
+      "notes": {
+        "en": "In MatLivre the conversion is available for numeric and datetime rulers. Other ruler types are not converted.",
+        "pt": "No MatLivre a conversão está disponível para réguas numéricas e de datetime. Outros tipos de régua não são convertidos."
+      },
+      "examples": [
+        {"title": {"en": "Position on a date axis", "pt": "Posição em um eixo de datas"}, "code": "t = datetime(2024,1,1) + days(0:4);\nplot(t, [1 4 2 5 3])\nax = gca;\nn = ruler2num(t(3), ax.XAxis)\nd = num2ruler(n, ax.XAxis)"}
+      ],
+      "see": ["ruler2num", "datetime", "xlim", "xticks", "gca"]
+    },
+    "orderedcolors": {
+      "summary": {"en": "Returns a named set of distinct colors, such as the default line colors.", "pt": "Retorna um conjunto nomeado de cores distintas, como as cores de linha padrão."},
+      "syntax": [
+        {"code": "C = orderedcolors(scheme)", "en": "Returns the colors of the named scheme as an `n`-by-3 matrix of RGB values.", "pt": "Retorna as cores do esquema nomeado como uma matriz `n`-por-3 de valores RGB."}
+      ],
+      "inputs": [
+        {"name": "scheme", "en": "Name of a color scheme, for example `'gem'`, `'gem12'`, `'glow'`, `'sail'`, `'earth'`, `'reef'` or `'meadow'`.", "pt": "Nome de um esquema de cores, por exemplo `'gem'`, `'gem12'`, `'glow'`, `'sky'`, `'earth'`, `'reef'` ou `'meadow'`."}
+      ],
+      "outputs": [
+        {"name": "C", "en": "Matrix with one RGB row per color. The `'gem'` scheme gives 7 rows and `'gem12'` gives 12.", "pt": "Matriz com uma linha RGB por cor. O esquema `'gem'` dá 7 linhas e `'gem12'` dá 12."}
+      ],
+      "description": {
+        "en": "The colors are chosen to be told apart easily and are listed in the order in which they should be used. The scheme `'gem'` is the default color order of the axes, which is why `lines` and `orderedcolors('gem')` return the same values.\n\nThe matrix can be assigned to the `ColorOrder` property of an axes to change the colors of the lines drawn next, or sampled to color bars and markers by hand.",
+        "pt": "As cores são escolhidas para serem fáceis de distinguir e estão listadas na ordem em que devem ser usadas. O esquema `'gem'` é a ordem de cores padrão dos eixos, e por isso `lines` e `orderedcolors('gem')` retornam os mesmos valores.\n\nA matriz pode ser atribuída à propriedade `ColorOrder` de um eixo para mudar as cores das linhas desenhadas em seguida, ou usada para colorir barras e marcadores manualmente."
+      },
+      "examples": [
+        {"title": {"en": "The default color order", "pt": "A ordem de cores padrão"}, "code": "C = orderedcolors('gem')\nsize(orderedcolors('gem12'))"}
+      ],
+      "see": ["lines", "colororder", "colormap", "hsv", "parula"]
+    },
+    "parula": {
+      "summary": {"en": "Default colormap: a smooth progression from dark blue through teal and green to yellow.", "pt": "Mapa de cores padrão: uma progressão suave do azul escuro ao amarelo, passando por verde-azulado e verde."},
+      "syntax": [
+        {"code": "map = parula", "en": "Returns a parula colormap with the default number of rows.", "pt": "Retorna um mapa de cores parula com o número padrão de linhas."},
+        {"code": "map = parula(m)", "en": "Returns a parula colormap with `m` rows.", "pt": "Retorna um mapa de cores parula com `m` linhas."}
+      ],
+      "inputs": [
+        {"name": "m", "en": "Number of colors, a nonnegative integer.", "pt": "Número de cores, um inteiro não negativo."}
+      ],
+      "outputs": [
+        {"name": "map", "en": "`m`-by-3 matrix of RGB values between 0 and 1.", "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."}
+      ],
+      "description": {
+        "en": "Parula is the colormap that new figures start with. Its lightness rises steadily and its hue changes gradually, so equal steps in the data look like equal steps in color, and the map degrades gracefully in grayscale.\n\nThe returned matrix is interpolated from a fixed table of base colors to reach the requested length.",
+        "pt": "Parula é o mapa de cores com que as figuras novas começam. Sua luminosidade cresce de modo contínuo e seu matiz muda gradualmente, de modo que passos iguais nos dados parecem passos iguais em cor, e o mapa se comporta bem em escala de cinza.\n\nA matriz retornada é interpolada a partir de uma tabela fixa de cores-base para atingir o comprimento pedido."
+      },
+      "examples": [
+        {"title": {"en": "First and last colors", "pt": "Primeira e última cores"}, "code": "map = parula(2)\nsize(parula)"}
+      ],
+      "see": ["turbo", "jet", "colormap", "hot", "colorbar"]
+    }
+  }
+}

@@ -1,0 +1,736 @@
+{
+ "functions": {
+  "Tiff.write": {
+   "summary": {
+    "en": "Method of a Tiff object: writes an image to the current directory of a TIFF file opened for writing.",
+    "pt": "Método de um objeto Tiff: grava uma imagem no diretório atual de um arquivo TIFF aberto para escrita."
+   },
+   "syntax": [
+    {
+     "code": "write(t, imageData)",
+     "en": "Writes the whole image `imageData` using the layout set in the tags of `t`.",
+     "pt": "Grava a imagem inteira `imageData` usando o layout definido nas tags de `t`."
+    },
+    {
+     "code": "t.write(imageData)",
+     "en": "Same call in dot notation.",
+     "pt": "Mesma chamada em notação de ponto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `Tiff` object created with mode `'w'`.",
+     "pt": "Objeto `Tiff` criado com o modo `'w'`."
+    },
+    {
+     "name": "imageData",
+     "en": "Pixel array whose size and class match the `ImageLength`, `ImageWidth`, `BitsPerSample` and `SamplesPerPixel` tags.",
+     "pt": "Array de pixels cujo tamanho e classe batem com as tags `ImageLength`, `ImageWidth`, `BitsPerSample` e `SamplesPerPixel`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`write` is the high-level way to store pixels in a TIFF file. Before calling it, describe the image with `setTag`: dimensions, bit depth, number of samples per pixel, photometric interpretation, planar configuration and, for stripped images, `RowsPerStrip`. The method then encodes the array and appends it as one image directory.\n\nOnly one call to `write` is allowed per directory. To store another image in the same file, call `writeDirectory` first and set the tags again. Call `close` when finished so the file is completed.",
+    "pt": "`write` é a forma de alto nível de guardar pixels em um arquivo TIFF. Antes de chamá-lo, descreva a imagem com `setTag`: dimensões, profundidade de bits, número de amostras por pixel, interpretação fotométrica, configuração planar e, em imagens por faixas, `RowsPerStrip`. O método então codifica o array e o acrescenta como um diretório de imagem.\n\nSó é permitida uma chamada a `write` por diretório. Para guardar outra imagem no mesmo arquivo, chame `writeDirectory` antes e defina as tags de novo. Chame `close` ao terminar para que o arquivo seja concluído."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write and read back",
+      "pt": "Gravar e ler de volta"
+     },
+     "code": "img = uint8(magic(8)*3);\nt = Tiff('write_demo.tif','w');\nt.setTag('ImageLength',8); t.setTag('ImageWidth',8);\nt.setTag('Photometric',Tiff.Photometric.MinIsBlack);\nt.setTag('BitsPerSample',8); t.setTag('SamplesPerPixel',1);\nt.setTag('PlanarConfiguration',Tiff.PlanarConfiguration.Chunky);\nt.setTag('RowsPerStrip',8);\nt.write(img);\nt.close();\nr = Tiff('write_demo.tif','r');\nback = r.read();\nr.close();\nisequal(back, img)"
+    }
+   ],
+   "see": [
+    "Tiff.read",
+    "Tiff.writeDirectory",
+    "Tiff.writeEncodedStrip",
+    "imwrite",
+    "imread"
+   ]
+  },
+  "Tiff.writeDirectory": {
+   "summary": {
+    "en": "Method of a Tiff object: closes the current image directory and starts a new one, for multi-image TIFF files.",
+    "pt": "Método de um objeto Tiff: fecha o diretório de imagem atual e inicia um novo, para arquivos TIFF com várias imagens."
+   },
+   "syntax": [
+    {
+     "code": "writeDirectory(t)",
+     "en": "Finishes the current directory and creates an empty one after it.",
+     "pt": "Conclui o diretório atual e cria um vazio logo depois."
+    },
+    {
+     "code": "t.writeDirectory()",
+     "en": "Same call in dot notation.",
+     "pt": "Mesma chamada em notação de ponto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `Tiff` object opened for writing.",
+     "pt": "Objeto `Tiff` aberto para escrita."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A TIFF file is a chain of directories, and each directory describes one image with its own tags. After you write the pixels of one image, `writeDirectory` seals it and opens the next directory, so the tags must be set again before the next `write`.\n\nDo not call it after the last image: `close` already finishes the final directory. When reading, `nextDirectory` and `setDirectory` move between the stored images.",
+    "pt": "Um arquivo TIFF é uma cadeia de diretórios, e cada diretório descreve uma imagem com suas próprias tags. Depois de gravar os pixels de uma imagem, `writeDirectory` a conclui e abre o diretório seguinte, de modo que as tags precisam ser definidas de novo antes do próximo `write`.\n\nNão o chame depois da última imagem: `close` já conclui o diretório final. Na leitura, `nextDirectory` e `setDirectory` percorrem as imagens guardadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two images in one file",
+      "pt": "Duas imagens em um arquivo"
+     },
+     "code": "img = uint8(magic(8)*3);\nt = Tiff('pages_demo.tif','w');\nfor k = 1:2\n  page = img;\n  if k == 2, page = 255 - img; end\n  t.setTag('ImageLength',8); t.setTag('ImageWidth',8);\n  t.setTag('Photometric',Tiff.Photometric.MinIsBlack);\n  t.setTag('BitsPerSample',8); t.setTag('SamplesPerPixel',1);\n  t.setTag('PlanarConfiguration',Tiff.PlanarConfiguration.Chunky);\nt.setTag('RowsPerStrip',8);\n  t.write(page);\n  if k < 2, t.writeDirectory(); end\nend\nt.close();\nr = Tiff('pages_demo.tif','r');\na = r.read();\nr.nextDirectory();\nb = r.read();\nr.close();\ndisp(a(1,1:3))\ndisp(b(1,1:3))"
+    }
+   ],
+   "see": [
+    "Tiff.write",
+    "Tiff.setDirectory",
+    "Tiff.nextDirectory",
+    "Tiff.close"
+   ]
+  },
+  "Tiff.writeEncodedStrip": {
+   "summary": {
+    "en": "Method of a Tiff object: writes one strip of a stripped TIFF image from an array of pixels.",
+    "pt": "Método de um objeto Tiff: grava uma faixa (strip) de uma imagem TIFF organizada em faixas a partir de um array de pixels."
+   },
+   "syntax": [
+    {
+     "code": "writeEncodedStrip(t, stripNumber, data)",
+     "en": "Encodes `data` and stores it as strip number `stripNumber`.",
+     "pt": "Codifica `data` e a guarda como a faixa de número `stripNumber`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `Tiff` object opened for writing.",
+     "pt": "Objeto `Tiff` aberto para escrita."
+    },
+    {
+     "name": "stripNumber",
+     "en": "Strip index, starting at 1 for the top strip.",
+     "pt": "Índice da faixa, começando em 1 para a faixa superior."
+    },
+    {
+     "name": "data",
+     "en": "Pixels of that strip, `RowsPerStrip` rows tall and as wide as the image.",
+     "pt": "Pixels dessa faixa, com `RowsPerStrip` linhas de altura e a largura da imagem."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A stripped TIFF stores the image as horizontal bands of `RowsPerStrip` rows each. `writeEncodedStrip` is the low-level counterpart of `write`: it lets you produce the image band by band, which is useful when the whole array is not in memory at once.\n\nSet all tags, including `RowsPerStrip`, before the first strip. The array passed for each strip must match the strip size and the class given by `BitsPerSample`. The last strip of an image whose height is not a multiple of `RowsPerStrip` is shorter.",
+    "pt": "Um TIFF em faixas guarda a imagem como bandas horizontais de `RowsPerStrip` linhas cada. `writeEncodedStrip` é o equivalente de baixo nível de `write`: permite produzir a imagem banda a banda, o que ajuda quando o array inteiro não cabe na memória de uma vez.\n\nDefina todas as tags, inclusive `RowsPerStrip`, antes da primeira faixa. O array de cada faixa deve ter o tamanho da faixa e a classe dada por `BitsPerSample`. A última faixa de uma imagem cuja altura não é múltipla de `RowsPerStrip` é mais curta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two strips of four rows",
+      "pt": "Duas faixas de quatro linhas"
+     },
+     "code": "img = uint8(magic(8)*3);\nt = Tiff('strip_demo.tif','w');\nt.setTag('ImageLength',8); t.setTag('ImageWidth',8);\nt.setTag('Photometric',Tiff.Photometric.MinIsBlack);\nt.setTag('BitsPerSample',8); t.setTag('SamplesPerPixel',1);\nt.setTag('PlanarConfiguration',Tiff.PlanarConfiguration.Chunky);\nt.setTag('RowsPerStrip',4);\nt.writeEncodedStrip(1, img(1:4,:));\nt.writeEncodedStrip(2, img(5:8,:));\nt.close();\nr = Tiff('strip_demo.tif','r');\nback = r.read();\nr.close();\nisequal(back, img)"
+    }
+   ],
+   "see": [
+    "Tiff.write",
+    "Tiff.writeEncodedTile",
+    "Tiff.setTag"
+   ]
+  },
+  "Tiff.writeEncodedTile": {
+   "summary": {
+    "en": "Method of a Tiff object: writes one tile of a tiled TIFF image from an array of pixels.",
+    "pt": "Método de um objeto Tiff: grava um bloco (tile) de uma imagem TIFF organizada em blocos a partir de um array de pixels."
+   },
+   "syntax": [
+    {
+     "code": "writeEncodedTile(t, tileNumber, data)",
+     "en": "Encodes `data` and stores it as tile number `tileNumber`.",
+     "pt": "Codifica `data` e a guarda como o bloco de número `tileNumber`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "A `Tiff` object opened for writing.",
+     "pt": "Objeto `Tiff` aberto para escrita."
+    },
+    {
+     "name": "tileNumber",
+     "en": "Tile index, starting at 1 and counting across each row of tiles from the top left.",
+     "pt": "Índice do bloco, começando em 1 e contando ao longo de cada fileira de blocos a partir do canto superior esquerdo."
+    },
+    {
+     "name": "data",
+     "en": "Pixels of the tile, `TileLength` rows by `TileWidth` columns.",
+     "pt": "Pixels do bloco, com `TileLength` linhas por `TileWidth` colunas."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "A tiled TIFF divides the image into rectangular blocks, which makes it cheap to read a small region of a large picture. Choose tiling by setting `TileLength` and `TileWidth` instead of `RowsPerStrip`; the usual TIFF rule is that both are multiples of 16.\n\n`writeEncodedTile` stores one block at a time. Tiles are numbered in row-major order, so in an image with two tiles per row tile 2 is the top right block and tile 3 is the bottom left one.",
+    "pt": "Um TIFF em blocos divide a imagem em retângulos, o que torna barato ler uma região pequena de uma imagem grande. Escolha o uso de blocos definindo `TileLength` e `TileWidth` no lugar de `RowsPerStrip`; pela regra habitual do TIFF, ambos são múltiplos de 16.\n\n`writeEncodedTile` grava um bloco por vez. Os blocos são numerados por linhas, então numa imagem com dois blocos por fileira o bloco 2 é o do canto superior direito e o bloco 3 é o inferior esquerdo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A 32 by 32 image from four tiles",
+      "pt": "Uma imagem 32 por 32 a partir de quatro blocos"
+     },
+     "code": "t = Tiff('tile_demo.tif','w');\nt.setTag('ImageLength',32); t.setTag('ImageWidth',32);\nt.setTag('TileLength',16); t.setTag('TileWidth',16);\nt.setTag('Photometric',Tiff.Photometric.MinIsBlack);\nt.setTag('BitsPerSample',8); t.setTag('SamplesPerPixel',1);\nt.setTag('PlanarConfiguration',Tiff.PlanarConfiguration.Chunky);\nfor k = 1:4\n  t.writeEncodedTile(k, uint8(k*50*ones(16)));\nend\nt.close();\nr = Tiff('tile_demo.tif','r');\nimg = r.read();\nr.close();\nsize(img)\nimg([1 17], [1 17])"
+    }
+   ],
+   "see": [
+    "Tiff.write",
+    "Tiff.writeEncodedStrip",
+    "Tiff.setTag"
+   ]
+  },
+  "type": {
+   "summary": {
+    "en": "Displays the contents of a text file in the command window.",
+    "pt": "Exibe o conteúdo de um arquivo de texto na janela de comandos."
+   },
+   "syntax": [
+    {
+     "code": "type filename",
+     "en": "Prints the file `filename` (command form).",
+     "pt": "Imprime o arquivo `filename` (forma de comando)."
+    },
+    {
+     "code": "type('filename')",
+     "en": "Function form, useful when the name is in a variable.",
+     "pt": "Forma de função, útil quando o nome está em uma variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Name or path of the file, with its extension when it has one.",
+     "pt": "Nome ou caminho do arquivo, com a extensão quando houver."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`type` reads the file as text and shows it exactly as stored, line by line, with a blank line before and after. It is the quickest way to check what `writematrix`, `writelines` or `writestruct` actually produced.\n\nIt is meant for text. Pointing it at a binary file prints unreadable characters. If the file cannot be found, an error is raised.",
+    "pt": "`type` lê o arquivo como texto e o mostra exatamente como está guardado, linha a linha, com uma linha em branco antes e depois. É a forma mais rápida de conferir o que `writematrix`, `writelines` ou `writestruct` de fato produziram.\n\nServe para texto. Apontá-lo para um arquivo binário imprime caracteres ilegíveis. Se o arquivo não for encontrado, ocorre um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Show a file just written",
+      "pt": "Mostrar um arquivo recém-gravado"
+     },
+     "code": "writematrix([1 2; 3 4], 'type_demo.csv');\ntype type_demo.csv"
+    }
+   ],
+   "see": [
+    "fileread",
+    "disp",
+    "writematrix",
+    "readlines"
+   ]
+  },
+  "who": {
+   "summary": {
+    "en": "Lists the names of the variables in the current workspace.",
+    "pt": "Lista os nomes das variáveis do workspace atual."
+   },
+   "syntax": [
+    {
+     "code": "who",
+     "en": "Prints the variable names in columns.",
+     "pt": "Imprime os nomes das variáveis em colunas."
+    },
+    {
+     "code": "who name1 name2",
+     "en": "Prints only the listed variables that exist.",
+     "pt": "Imprime apenas as variáveis listadas que existirem."
+    },
+    {
+     "code": "c = who",
+     "en": "Returns the names as a cell array of character vectors instead of printing.",
+     "pt": "Retorna os nomes como um cell array de vetores de caracteres, em vez de imprimir."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name1, name2",
+     "en": "Variable names. Wildcards such as `a*` select by pattern.",
+     "pt": "Nomes de variáveis. Curingas como `a*` selecionam por padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "Cell array with one variable name per cell, in alphabetical order.",
+     "pt": "Cell array com um nome de variável por célula, em ordem alfabética."
+    }
+   ],
+   "description": {
+    "en": "`who` shows only names. Use `whos` when you also want the size, byte count and class of each variable. Names are sorted alphabetically, and with an output argument the list comes back as data you can loop over or filter.\n\nIn a live script the workspace panel shows the same information interactively, so `who` is mostly useful in plain scripts and in the command line.",
+    "pt": "`who` mostra apenas nomes. Use `whos` quando também quiser tamanho, número de bytes e classe de cada variável. Os nomes saem em ordem alfabética e, com um argumento de saída, a lista volta como dados que podem ser percorridos ou filtrados.\n\nEm um live script o painel de workspace mostra a mesma informação de forma interativa, então `who` é mais útil em scripts comuns e na linha de comando."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Names in the workspace",
+      "pt": "Nomes no workspace"
+     },
+     "code": "x = 1; y = 'hi'; z = [1 2 3];\nc = who;\ndisp(c')\nwho x"
+    }
+   ],
+   "see": [
+    "whos",
+    "clear",
+    "exist",
+    "isvarname"
+   ]
+  },
+  "writecell": {
+   "summary": {
+    "en": "Writes a cell array to a delimited text file or spreadsheet.",
+    "pt": "Grava um cell array em um arquivo de texto delimitado ou em uma planilha."
+   },
+   "syntax": [
+    {
+     "code": "writecell(C, filename)",
+     "en": "Writes `C` to `filename`; the format follows the extension (`.txt`, `.csv`, `.xlsx`).",
+     "pt": "Grava `C` em `filename`; o formato segue a extensão (`.txt`, `.csv`, `.xlsx`)."
+    },
+    {
+     "code": "writecell(C, filename, 'Delimiter', d)",
+     "en": "Uses delimiter `d` between fields in a text file.",
+     "pt": "Usa o delimitador `d` entre os campos em um arquivo de texto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "Cell array whose cells hold scalars or text.",
+     "pt": "Cell array cujas células guardam escalares ou texto."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name.",
+     "pt": "Nome do arquivo de saída."
+    },
+    {
+     "name": "'Delimiter'",
+     "en": "Field separator for text files, such as `','`, `';'` or `'tab'`.",
+     "pt": "Separador de campos em arquivos de texto, como `','`, `';'` ou `'tab'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each cell becomes one field and each row of the cell array one line. Numbers are written in text form and character vectors as they are, so a mixed cell array such as `{1, 'x'; 2, 'y'}` produces a mixed file. For `.csv` the default delimiter is a comma.\n\nIf the file already exists it is overwritten. `readcell` reads the same layout back.",
+    "pt": "Cada célula vira um campo e cada linha do cell array vira uma linha do arquivo. Números são escritos em forma de texto e vetores de caracteres como estão, então um cell array misto como `{1, 'x'; 2, 'y'}` gera um arquivo misto. Em `.csv` o delimitador padrão é a vírgula.\n\nSe o arquivo já existe, ele é sobrescrito. `readcell` lê o mesmo layout de volta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed data to CSV",
+      "pt": "Dados mistos para CSV"
+     },
+     "code": "C = {1, 'x'; 2, 'y'};\nwritecell(C, 'cell_demo.csv');\ntype cell_demo.csv\nwritecell(C, 'cell_demo2.csv', 'Delimiter', ';');\ntype cell_demo2.csv"
+    }
+   ],
+   "see": [
+    "readcell",
+    "writematrix",
+    "writetable",
+    "writelines"
+   ]
+  },
+  "writelines": {
+   "summary": {
+    "en": "Writes text lines to a file, one string per line.",
+    "pt": "Grava linhas de texto em um arquivo, uma string por linha."
+   },
+   "syntax": [
+    {
+     "code": "writelines(str, filename)",
+     "en": "Writes each element of the string array `str` as a line of `filename`.",
+     "pt": "Grava cada elemento do array de strings `str` como uma linha de `filename`."
+    },
+    {
+     "code": "writelines(str, filename, 'WriteMode', 'append')",
+     "en": "Adds the lines at the end of an existing file instead of replacing it.",
+     "pt": "Acrescenta as linhas ao final de um arquivo existente em vez de substituí-lo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String array, character vector or cell array of text.",
+     "pt": "Array de strings, vetor de caracteres ou cell array de texto."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name.",
+     "pt": "Nome do arquivo de saída."
+    },
+    {
+     "name": "'WriteMode'",
+     "en": "`'overwrite'` (default) or `'append'`.",
+     "pt": "`'overwrite'` (padrão) ou `'append'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`writelines` is the plain-text counterpart of `readlines`. Each element of `str` ends with a line break, and the text is stored as given, so nothing is quoted or converted. It is the simplest way to save logs, notes or generated code.\n\nEscape sequences inside a quoted literal are not interpreted: `'a\\tb'` is written with a backslash and a `t`. Build the text with `sprintf` when you need real tabs or other control characters.",
+    "pt": "`writelines` é o equivalente em texto puro de `readlines`. Cada elemento de `str` termina com uma quebra de linha e o texto é guardado como foi dado, sem aspas nem conversões. É a maneira mais simples de salvar logs, anotações ou código gerado.\n\nSequências de escape dentro de um literal entre aspas não são interpretadas: `'a\\tb'` é gravado com uma barra invertida e um `t`. Monte o texto com `sprintf` quando precisar de tabulações reais ou outros caracteres de controle."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write, then append",
+      "pt": "Gravar e depois acrescentar"
+     },
+     "code": "writelines([\"first\"; \"second\"], 'lines_demo.txt');\nwritelines(\"third\", 'lines_demo.txt', 'WriteMode', 'append');\ntype lines_demo.txt"
+    }
+   ],
+   "see": [
+    "readlines",
+    "fileread",
+    "fprintf",
+    "type"
+   ]
+  },
+  "writematrix": {
+   "summary": {
+    "en": "Writes a numeric matrix to a delimited text file or spreadsheet.",
+    "pt": "Grava uma matriz numérica em um arquivo de texto delimitado ou em uma planilha."
+   },
+   "syntax": [
+    {
+     "code": "writematrix(A, filename)",
+     "en": "Writes `A`; the format follows the extension (`.csv`, `.txt`, `.dat`, `.xlsx`).",
+     "pt": "Grava `A`; o formato segue a extensão (`.csv`, `.txt`, `.dat`, `.xlsx`)."
+    },
+    {
+     "code": "writematrix(A, filename, 'Delimiter', d)",
+     "en": "Uses delimiter `d`, for example `';'` or `'tab'`.",
+     "pt": "Usa o delimitador `d`, por exemplo `';'` ou `'tab'`."
+    },
+    {
+     "code": "writematrix(A, filename, 'WriteMode', 'append')",
+     "en": "Adds rows to the end of an existing text file.",
+     "pt": "Acrescenta linhas ao final de um arquivo de texto existente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric matrix.",
+     "pt": "Matriz numérica."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name.",
+     "pt": "Nome do arquivo de saída."
+    },
+    {
+     "name": "'Delimiter'",
+     "en": "Field separator for text files.",
+     "pt": "Separador de campos em arquivos de texto."
+    },
+    {
+     "name": "'WriteMode'",
+     "en": "`'overwrite'` (default) or `'append'`.",
+     "pt": "`'overwrite'` (padrão) ou `'append'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each row of `A` becomes one line and the elements of the row are separated by the delimiter, which is a comma by default for `.csv`. Numbers are written with up to 15 significant digits, so `1/3` is stored as `0.333333333333333`. The result can be read back with `readmatrix`.\n\nAn existing file is replaced unless `'WriteMode'` is `'append'`.",
+    "pt": "Cada linha de `A` vira uma linha do arquivo e os elementos são separados pelo delimitador, que por padrão é a vírgula em `.csv`. Os números são escritos com até 15 algarismos significativos, então `1/3` é gravado como `0.333333333333333`. O resultado pode ser lido de volta com `readmatrix`.\n\nUm arquivo existente é substituído, a menos que `'WriteMode'` seja `'append'`."
+   },
+   "notes": {
+    "en": "MatLivre's `writematrix` accepts numeric input only; a string array raises an error.",
+    "pt": "O `writematrix` do MatLivre aceita apenas entrada numérica; um array de strings gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "CSV and tab-delimited",
+      "pt": "CSV e delimitado por tabulação"
+     },
+     "code": "A = [1 2; 3 4];\nwritematrix(A, 'matrix_demo.csv');\nwritematrix([5 6], 'matrix_demo.csv', 'WriteMode', 'append');\ntype matrix_demo.csv\nwritematrix(A, 'matrix_demo.dat', 'Delimiter', 'tab');\nreadmatrix('matrix_demo.dat')"
+    }
+   ],
+   "see": [
+    "readmatrix",
+    "writecell",
+    "writetable",
+    "xlswrite"
+   ]
+  },
+  "writestruct": {
+   "summary": {
+    "en": "Writes a structure to an XML or JSON file.",
+    "pt": "Grava uma struct em um arquivo XML ou JSON."
+   },
+   "syntax": [
+    {
+     "code": "writestruct(S, filename)",
+     "en": "Writes `S`; the format follows the extension (`.xml` or `.json`).",
+     "pt": "Grava `S`; o formato segue a extensão (`.xml` ou `.json`)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Structure or struct array with numeric, text or nested struct fields.",
+     "pt": "Struct ou array de structs com campos numéricos, de texto ou structs aninhadas."
+    },
+    {
+     "name": "filename",
+     "en": "Output file name ending in `.xml` or `.json`.",
+     "pt": "Nome do arquivo de saída terminado em `.xml` ou `.json`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each field becomes an element: a scalar or text becomes a leaf, and a nested struct becomes a nested element. In XML, a numeric vector is written as repeated elements with the field name, and the root element is called `struct`. In JSON the structure maps to an object and vectors map to arrays.\n\n`readstruct` reads the file back into a structure, so the pair is a convenient way to store configuration or results in a readable form.",
+    "pt": "Cada campo vira um elemento: um escalar ou texto vira uma folha, e uma struct aninhada vira um elemento aninhado. Em XML, um vetor numérico é escrito como elementos repetidos com o nome do campo, e o elemento raiz se chama `struct`. Em JSON a estrutura vira um objeto e os vetores viram arrays.\n\n`readstruct` lê o arquivo de volta para uma struct, então o par é uma forma cômoda de guardar configurações ou resultados em formato legível."
+   },
+   "notes": {
+    "en": "In JSON output MatLivre writes numbers with a decimal point (`3.0` for `3`).",
+    "pt": "Na saída JSON o MatLivre escreve os números com ponto decimal (`3.0` para `3`)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Struct to XML",
+      "pt": "Struct para XML"
+     },
+     "code": "s.name = 'run1';\ns.n = [1 2 3];\ns.opts.tol = 0.5;\nwritestruct(s, 'struct_demo.xml');\ntype struct_demo.xml"
+    }
+   ],
+   "see": [
+    "readstruct",
+    "jsonencode",
+    "struct",
+    "writecell"
+   ]
+  },
+  "xlsfinfo": {
+   "summary": {
+    "en": "Reports whether a file is a readable spreadsheet and lists its sheets.",
+    "pt": "Informa se um arquivo é uma planilha legível e lista suas abas."
+   },
+   "syntax": [
+    {
+     "code": "[type, sheets] = xlsfinfo(filename)",
+     "en": "Returns a description of the file type and the sheet names.",
+     "pt": "Retorna a descrição do tipo do arquivo e os nomes das abas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Spreadsheet file name, such as `'data.xlsx'`.",
+     "pt": "Nome do arquivo de planilha, como `'data.xlsx'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "type",
+     "en": "Text describing the format, for example `'Microsoft Excel Spreadsheet'`; empty if the file is not a spreadsheet.",
+     "pt": "Texto que descreve o formato, por exemplo `'Microsoft Excel Spreadsheet'`; vazio se o arquivo não for uma planilha."
+    },
+    {
+     "name": "sheets",
+     "en": "Cell array with the sheet names, in workbook order.",
+     "pt": "Cell array com os nomes das abas, na ordem do arquivo."
+    }
+   ],
+   "description": {
+    "en": "`xlsfinfo` is a quick inspection step before `xlsread` or `readmatrix`: it tells you which sheets exist so you can pick one by name. A new workbook written by `xlswrite` without a sheet name has a single sheet called `Sheet1`.\n\nNewer code usually calls `sheetnames` or `readtable` directly, but `xlsfinfo` is still common in older scripts.",
+    "pt": "`xlsfinfo` é uma etapa rápida de inspeção antes de `xlsread` ou `readmatrix`: mostra quais abas existem para que se escolha uma pelo nome. Uma pasta de trabalho nova gravada por `xlswrite` sem nome de aba tem uma única aba chamada `Sheet1`.\n\nCódigo mais novo costuma chamar `sheetnames` ou `readtable` diretamente, mas `xlsfinfo` ainda é comum em scripts antigos."
+   },
+   "notes": {
+    "en": "MatLivre returns at most two outputs and raises an error, instead of returning an empty type, when the file does not exist.",
+    "pt": "O MatLivre retorna no máximo duas saídas e gera um erro, em vez de devolver um tipo vazio, quando o arquivo não existe."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspect a workbook",
+      "pt": "Inspecionar uma pasta de trabalho"
+     },
+     "code": "xlswrite('info_demo.xlsx', [1 2; 3 4], 'Data');\n[type, sheets] = xlsfinfo('info_demo.xlsx')"
+    }
+   ],
+   "see": [
+    "xlsread",
+    "xlswrite",
+    "sheetnames",
+    "readtable"
+   ]
+  },
+  "xlsread": {
+   "summary": {
+    "en": "Reads numbers and text from an Excel spreadsheet.",
+    "pt": "Lê números e texto de uma planilha do Excel."
+   },
+   "syntax": [
+    {
+     "code": "num = xlsread(filename)",
+     "en": "Reads the numeric data of the first sheet.",
+     "pt": "Lê os dados numéricos da primeira aba."
+    },
+    {
+     "code": "num = xlsread(filename, sheet)",
+     "en": "Reads a sheet given by number or name.",
+     "pt": "Lê uma aba dada por número ou nome."
+    },
+    {
+     "code": "num = xlsread(filename, sheet, range)",
+     "en": "Reads only the cells of `range`, such as `'B2:C3'`.",
+     "pt": "Lê apenas as células de `range`, como `'B2:C3'`."
+    },
+    {
+     "code": "[num, txt, raw] = xlsread(___)",
+     "en": "Also returns the text cells and the unprocessed contents.",
+     "pt": "Também retorna as células de texto e o conteúdo bruto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Spreadsheet file name.",
+     "pt": "Nome do arquivo de planilha."
+    },
+    {
+     "name": "sheet",
+     "en": "Sheet index or name.",
+     "pt": "Índice ou nome da aba."
+    },
+    {
+     "name": "range",
+     "en": "Cell range in A1 notation.",
+     "pt": "Intervalo de células em notação A1."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "num",
+     "en": "Numeric matrix. Cells without a number become `NaN`, and leading text rows or columns are trimmed away.",
+     "pt": "Matriz numérica. Células sem número viram `NaN`, e linhas ou colunas iniciais de texto são removidas."
+    },
+    {
+     "name": "txt",
+     "en": "Cell array holding the text cells; numeric cells appear as empty text.",
+     "pt": "Cell array com as células de texto; as células numéricas aparecem como texto vazio."
+    },
+    {
+     "name": "raw",
+     "en": "Cell array with every cell exactly as read, numbers and text together.",
+     "pt": "Cell array com todas as células exatamente como lidas, números e texto juntos."
+    }
+   ],
+   "description": {
+    "en": "`xlsread` splits a sheet into its numeric part and its text part. A header row of labels followed by numbers gives a `num` without the header, and `txt` with the labels. Use `raw` when you need both kinds in their original positions.\n\nThe function is kept for older code. `readmatrix`, `readcell` and `readtable` are the recommended replacements, with more control over ranges and types.",
+    "pt": "`xlsread` separa a planilha em sua parte numérica e sua parte de texto. Uma linha de rótulos seguida de números dá um `num` sem o cabeçalho e um `txt` com os rótulos. Use `raw` quando precisar dos dois tipos nas posições originais.\n\nA função é mantida para código antigo. `readmatrix`, `readcell` e `readtable` são as substitutas recomendadas, com mais controle sobre intervalos e tipos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Header text and numbers",
+      "pt": "Texto de cabeçalho e números"
+     },
+     "code": "xlswrite('read_demo.xlsx', {'name','val'; 'a',1; 'b',2});\n[num, txt, raw] = xlsread('read_demo.xlsx')"
+    },
+    {
+     "title": {
+      "en": "A range of a sheet",
+      "pt": "Um intervalo de uma aba"
+     },
+     "code": "xlswrite('range_demo.xlsx', magic(4));\nxlsread('range_demo.xlsx', 1, 'B2:C3')"
+    }
+   ],
+   "see": [
+    "xlswrite",
+    "xlsfinfo",
+    "readmatrix",
+    "readcell",
+    "readtable"
+   ]
+  },
+  "xlswrite": {
+   "summary": {
+    "en": "Writes a matrix or cell array to an Excel spreadsheet.",
+    "pt": "Grava uma matriz ou cell array em uma planilha do Excel."
+   },
+   "syntax": [
+    {
+     "code": "xlswrite(filename, A)",
+     "en": "Writes `A` to the first sheet starting at cell A1.",
+     "pt": "Grava `A` na primeira aba a partir da célula A1."
+    },
+    {
+     "code": "xlswrite(filename, A, sheet)",
+     "en": "Writes to the sheet given by number or name.",
+     "pt": "Grava na aba dada por número ou nome."
+    },
+    {
+     "code": "xlswrite(filename, A, sheet, range)",
+     "en": "Writes starting at the cell given by `range`, such as `'B2'`.",
+     "pt": "Grava a partir da célula dada por `range`, como `'B2'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Output `.xlsx` file name. A missing file is created.",
+     "pt": "Nome do arquivo `.xlsx` de saída. Um arquivo inexistente é criado."
+    },
+    {
+     "name": "A",
+     "en": "Numeric matrix or cell array mixing numbers and text.",
+     "pt": "Matriz numérica ou cell array que mistura números e texto."
+    },
+    {
+     "name": "sheet",
+     "en": "Sheet index or name. A new name creates the sheet.",
+     "pt": "Índice ou nome da aba. Um nome novo cria a aba."
+    },
+    {
+     "name": "range",
+     "en": "Top-left cell or a range in A1 notation.",
+     "pt": "Célula superior esquerda ou intervalo em notação A1."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Each element of `A` goes to one cell, so a cell array can hold a header row of text above numeric data. When the file already exists, only the target cells are changed and the rest of the workbook is kept, which allows building a file piece by piece.\n\nThe function is kept for older code. `writematrix` and `writecell` do the same job with a cleaner interface.",
+    "pt": "Cada elemento de `A` vai para uma célula, então um cell array pode ter uma linha de cabeçalho em texto acima de dados numéricos. Quando o arquivo já existe, apenas as células de destino mudam e o restante da pasta de trabalho é mantido, o que permite montar um arquivo por partes.\n\nA função é mantida para código antigo. `writematrix` e `writecell` fazem o mesmo trabalho com uma interface mais limpa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Write, then add a block",
+      "pt": "Gravar e depois acrescentar um bloco"
+     },
+     "code": "xlswrite('sheet_demo.xlsx', [1 2; 3 4]);\nxlswrite('sheet_demo.xlsx', [9 9], 1, 'B3');\nxlsread('sheet_demo.xlsx')"
+    }
+   ],
+   "see": [
+    "xlsread",
+    "xlsfinfo",
+    "writematrix",
+    "writecell"
+   ]
+  }
+ }
+}

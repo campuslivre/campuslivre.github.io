@@ -1,0 +1,428 @@
+{
+  "functions": {
+    "patch": {
+      "summary": {"en": "Draws one or more filled polygons from vertex coordinates or from faces and vertices.", "pt": "Desenha um ou mais polígonos preenchidos a partir de coordenadas de vértices ou de faces e vértices."},
+      "syntax": [
+        {"code": "patch(X, Y, C)", "en": "Draws the polygon with vertices `(X, Y)` filled with the color `C`.", "pt": "Desenha o polígono de vértices `(X, Y)` preenchido com a cor `C`."},
+        {"code": "patch('Faces', F, 'Vertices', V)", "en": "Draws the polygons listed in the face matrix `F`, whose indices refer to the rows of `V`.", "pt": "Desenha os polígonos listados na matriz de faces `F`, cujos índices se referem às linhas de `V`."},
+        {"code": "patch(___, Name, Value)", "en": "Sets properties such as `'FaceColor'`, `'EdgeColor'` or `'FaceAlpha'`.", "pt": "Define propriedades como `'FaceColor'`, `'EdgeColor'` ou `'FaceAlpha'`."},
+        {"code": "p = patch(___)", "en": "Returns the patch object so its properties can be changed later.", "pt": "Retorna o objeto patch para que suas propriedades possam ser alteradas depois."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Vectors with the vertex coordinates. If they are matrices, each column is a separate polygon.", "pt": "Vetores com as coordenadas dos vértices. Se forem matrizes, cada coluna é um polígono separado."},
+        {"name": "C", "en": "Fill color: a color name such as `'r'`, or an RGB triplet.", "pt": "Cor de preenchimento: um nome de cor como `'r'`, ou um trio RGB."},
+        {"name": "'Faces', 'Vertices'", "en": "Face-vertex form: `Vertices` holds one point per row and `Faces` one polygon per row, as vertex indices.", "pt": "Forma face-vértice: `Vertices` tem um ponto por linha e `Faces` um polígono por linha, como índices de vértices."},
+        {"name": "'FaceAlpha'", "en": "Transparency of the fill, from 0 (invisible) to 1 (opaque).", "pt": "Transparência do preenchimento, de 0 (invisível) a 1 (opaco)."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "A patch object with properties like `Faces`, `Vertices`, `FaceColor`, `EdgeColor` and `FaceAlpha`.", "pt": "Um objeto patch com propriedades como `Faces`, `Vertices`, `FaceColor`, `EdgeColor` e `FaceAlpha`."}
+      ],
+      "description": {
+        "en": "`patch` is the low-level primitive behind filled shapes. Unlike `fill`, it can draw many polygons in one object and takes the face-vertex description used by meshes: a list of points plus a list of polygons that index into it. The polygon is closed automatically and drawn in the current axes.\n\nA face can have any number of vertices; rows of `Faces` with fewer vertices than the matrix width are padded with `NaN`.",
+        "pt": "`patch` é a primitiva de baixo nível por trás das formas preenchidas. Diferente de `fill`, desenha muitos polígonos em um único objeto e aceita a descrição face-vértice usada por malhas: uma lista de pontos e uma lista de polígonos que a indexam. O polígono é fechado automaticamente e desenhado nos eixos atuais.\n\nUma face pode ter qualquer número de vértices; linhas de `Faces` com menos vértices que a largura da matriz são completadas com `NaN`."
+      },
+      "examples": [
+        {"title": {"en": "A triangle and a two-triangle square", "pt": "Um triângulo e um quadrado de dois triângulos"}, "code": "figure\npatch([0 1 0.5], [0 0 1], 'g')\nhold on\nV = [2 0; 3 0; 3 1; 2 1];\nF = [1 2 3; 1 3 4];\np = patch('Faces', F, 'Vertices', V, 'FaceColor', 'b', 'FaceAlpha', 0.5);\naxis equal", "silent": true}
+      ],
+      "see": ["fill", "polyshape", "trisurf", "surf", "plot"]
+    },
+    "perimeter": {
+      "summary": {"en": "Perimeter length of a polyshape or a 2-D alpha shape.", "pt": "Comprimento do perímetro de um polyshape ou de uma alpha shape 2-D."},
+      "syntax": [
+        {"code": "L = perimeter(pshape)", "en": "Total length of all boundaries, holes included.", "pt": "Comprimento total de todos os contornos, incluindo os furos."},
+        {"code": "L = perimeter(pshape, I)", "en": "Perimeter of only the boundaries selected by `I`.", "pt": "Perímetro apenas dos contornos selecionados por `I`."},
+        {"code": "L = perimeter(shp)", "en": "Perimeter of a 2-D `alphaShape`. For a 3-D one use `surfaceArea`.", "pt": "Perímetro de uma `alphaShape` 2-D. Para uma 3-D use `surfaceArea`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "shp", "en": "A 2-D `alphaShape`.", "pt": "Uma `alphaShape` 2-D."}
+      ],
+      "outputs": [
+        {"name": "L", "en": "Scalar length, in the units of the coordinates. An empty shape has perimeter `0`.", "pt": "Comprimento escalar, nas unidades das coordenadas. Uma forma vazia tem perímetro `0`."}
+      ],
+      "description": {
+        "en": "The perimeter is the sum of the edge lengths along every boundary. A hole contributes its own boundary length, since it is also an edge of the shape. A 4 by 3 rectangle has perimeter 14; carving a unit square hole raises it to 18.",
+        "pt": "O perímetro é a soma dos comprimentos das arestas de todos os contornos. Um furo contribui com o comprimento do próprio contorno, pois também é uma borda da forma. Um retângulo 4 por 3 tem perímetro 14; abrir um furo quadrado de lado 1 o eleva para 18."
+      },
+      "examples": [
+        {"title": {"en": "Perimeter with and without a hole", "pt": "Perímetro com e sem furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nperimeter(P)\nperimeter(D)"}
+      ],
+      "see": ["area", "polyshape", "numsides", "surfaceArea"]
+    },
+    "pointLocation": {
+      "summary": {"en": "Finds the triangle or tetrahedron of a triangulation that contains each query point.", "pt": "Encontra o triângulo ou tetraedro de uma triangulação que contém cada ponto de consulta."},
+      "syntax": [
+        {"code": "ti = pointLocation(TR, P)", "en": "Index of the simplex containing each row of `P`.", "pt": "Índice do simplex que contém cada linha de `P`."},
+        {"code": "[ti, bc] = pointLocation(TR, P)", "en": "Also returns the barycentric coordinates of the points in those simplices.", "pt": "Também retorna as coordenadas baricêntricas dos pontos nesses simplexes."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation`, `delaunayTriangulation` or `DelaunayTri` object.", "pt": "Um objeto `triangulation`, `delaunayTriangulation` ou `DelaunayTri`."},
+        {"name": "P", "en": "Query points, one per row.", "pt": "Pontos de consulta, um por linha."}
+      ],
+      "outputs": [
+        {"name": "ti", "en": "Column vector of simplex indices. A point outside the triangulation gives `NaN`.", "pt": "Vetor coluna de índices de simplexes. Um ponto fora da triangulação dá `NaN`."},
+        {"name": "bc", "en": "Matrix of barycentric coordinates, one row per point.", "pt": "Matriz de coordenadas baricêntricas, uma linha por ponto."}
+      ],
+      "description": {
+        "en": "This is a point-in-triangle search over the whole mesh. A point on a shared edge belongs to more than one triangle and one of them is returned. The barycentric output is the base of linear interpolation: multiply `bc` by the values stored at the three vertices of triangle `ti` to interpolate.",
+        "pt": "É uma busca de ponto em triângulo sobre toda a malha. Um ponto sobre uma aresta compartilhada pertence a mais de um triângulo e um deles é retornado. A saída baricêntrica é a base da interpolação linear: multiplique `bc` pelos valores guardados nos três vértices do triângulo `ti` para interpolar."
+      },
+      "examples": [
+        {"title": {"en": "Locate a point inside and outside", "pt": "Localizar um ponto dentro e fora"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\n[ti, bc] = pointLocation(DT, [0.9 0.5; 5 5])"}
+      ],
+      "see": ["nearestNeighbor", "cartesianToBarycentric", "delaunayTriangulation", "inpolygon"]
+    },
+    "polyarea": {
+      "summary": {"en": "Area of a polygon given by its vertex coordinates.", "pt": "Área de um polígono dado pelas coordenadas de seus vértices."},
+      "syntax": [
+        {"code": "A = polyarea(x, y)", "en": "Area of the polygon with vertices `(x, y)`.", "pt": "Área do polígono de vértices `(x, y)`."},
+        {"code": "A = polyarea(x, y, dim)", "en": "For matrices, treats the polygons as running along dimension `dim`.", "pt": "Para matrizes, trata os polígonos como estando ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "x, y", "en": "Vectors of vertex coordinates in order around the polygon, or matrices with one polygon per column.", "pt": "Vetores de coordenadas dos vértices em ordem ao redor do polígono, ou matrizes com um polígono por coluna."},
+        {"name": "dim", "en": "Dimension along which the vertices run.", "pt": "Dimensão ao longo da qual os vértices correm."}
+      ],
+      "outputs": [
+        {"name": "A", "en": "Non-negative area. For matrix input, a row vector with one area per column.", "pt": "Área não negativa. Para entrada matricial, um vetor linha com uma área por coluna."}
+      ],
+      "description": {
+        "en": "The area follows from the shoelace formula, a sum of cross products of consecutive vertices. The polygon is closed automatically, so the first vertex need not be repeated. The result is the absolute value, so clockwise and counterclockwise lists give the same number.\n\nFor a self-intersecting polygon, regions traversed in opposite directions subtract from each other. Use `polyshape` for robust geometry with holes.",
+        "pt": "A área vem da fórmula do cadarço, uma soma de produtos vetoriais de vértices consecutivos. O polígono é fechado automaticamente, então o primeiro vértice não precisa ser repetido. O resultado é o valor absoluto, de modo que listas horárias e anti-horárias dão o mesmo número.\n\nPara um polígono autointersectante, regiões percorridas em sentidos opostos se subtraem. Use `polyshape` para geometria robusta com furos."
+      },
+      "examples": [
+        {"title": {"en": "A square and two rectangles", "pt": "Um quadrado e dois retângulos"}, "code": "polyarea([0 1 1 0], [0 0 1 1])\nX = [0 1 1 0; 0 2 2 0]';\nY = [0 0 1 1; 0 0 3 3]';\npolyarea(X, Y)"}
+      ],
+      "see": ["area", "polyshape", "inpolygon", "convhull", "trapz"]
+    },
+    "polybuffer": {
+      "summary": {"en": "Grows or shrinks a polyshape by a fixed distance.", "pt": "Aumenta ou reduz um polyshape por uma distância fixa."},
+      "syntax": [
+        {"code": "pb = polybuffer(pshape, d)", "en": "Offsets the boundaries by distance `d`: outward for positive `d`, inward for negative.", "pt": "Desloca os contornos pela distância `d`: para fora se `d` é positivo, para dentro se negativo."},
+        {"code": "pb = polybuffer(pshape, d, 'JointType', type)", "en": "Chooses how the corners are treated: `'round'` (default), `'square'` or `'miter'`.", "pt": "Escolhe como os cantos são tratados: `'round'` (padrão), `'square'` ou `'miter'`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "d", "en": "Offset distance. A negative value shrinks the shape and may make it vanish or split.", "pt": "Distância de deslocamento. Um valor negativo reduz a forma e pode fazê-la desaparecer ou se dividir."},
+        {"name": "'JointType'", "en": "Corner style. Round corners are arcs of radius `d`, miter corners keep the sharp angle, square corners are cut flat.", "pt": "Estilo dos cantos. Cantos arredondados são arcos de raio `d`, cantos em esquadria mantêm o ângulo vivo, cantos quadrados são cortados retos."}
+      ],
+      "outputs": [
+        {"name": "pb", "en": "The offset `polyshape`.", "pt": "O `polyshape` deslocado."}
+      ],
+      "description": {
+        "en": "The buffer is the set of points within distance `d` of the shape. For a rectangle of 4 by 3 grown by 1 with round corners, the area is `12 + 14*1 + pi`: the original, four strips along the sides, and four quarter discs at the corners. Miter joints keep sharp corners, so the area grows to `30` for the same example.\n\nHoles shrink as the shape grows, and close up when the offset exceeds their size.",
+        "pt": "O buffer é o conjunto de pontos a distância até `d` da forma. Para um retângulo 4 por 3 expandido de 1 com cantos arredondados, a área é `12 + 14*1 + pi`: o original, quatro faixas ao longo dos lados e quatro quartos de disco nos cantos. Juntas em esquadria mantêm os cantos vivos, então a área sobe para `30` no mesmo exemplo.\n\nOs furos encolhem quando a forma cresce e se fecham quando o deslocamento excede o tamanho deles."
+      },
+      "examples": [
+        {"title": {"en": "Round and miter growth", "pt": "Crescimento arredondado e em esquadria"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nrounded = polybuffer(P, 1);\nmitered = polybuffer(P, 1, 'JointType', 'miter');\nfprintf('%.4f\\n', area(rounded), area(mitered))"}
+      ],
+      "notes": {"en": "The `'NumPoints'` option is not recognized by MatLivre.", "pt": "A opção `'NumPoints'` não é reconhecida pelo MatLivre."},
+      "see": ["polyshape", "area", "perimeter", "rmslivers"]
+    },
+    "polyshape": {
+      "summary": {"en": "Creates a 2-D polygon, possibly with several regions and holes, that supports geometry queries and Boolean operations.", "pt": "Cria um polígono 2-D, possivelmente com várias regiões e furos, que aceita consultas geométricas e operações booleanas."},
+      "syntax": [
+        {"code": "pshape = polyshape(x, y)", "en": "Polygon from vertex coordinate vectors. `NaN` separates several boundaries.", "pt": "Polígono a partir de vetores de coordenadas dos vértices. `NaN` separa vários contornos."},
+        {"code": "pshape = polyshape(P)", "en": "Vertices as the rows of a two-column matrix.", "pt": "Vértices como linhas de uma matriz de duas colunas."},
+        {"code": "pshape = polyshape(___, 'Simplify', tf)", "en": "Turns off the automatic repair of the input when `tf` is `false`.", "pt": "Desliga o reparo automático da entrada quando `tf` é `false`."},
+        {"code": "pshape = polyshape()", "en": "An empty polyshape.", "pt": "Um polyshape vazio."}
+      ],
+      "inputs": [
+        {"name": "x, y", "en": "Vectors of the same length with the vertex coordinates, in order around the boundary.", "pt": "Vetores de mesmo comprimento com as coordenadas dos vértices, em ordem ao redor do contorno."},
+        {"name": "'Simplify'", "en": "Logical. By default (`true`) the constructor fixes self-intersections, duplicate vertices and orientation, and prints a warning if it had to.", "pt": "Lógico. Por padrão (`true`), o construtor corrige autointerseções, vértices duplicados e orientação, e emite um aviso se precisar."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "A `polyshape` with read-only properties `Vertices` (the list of vertices, boundaries separated by `NaN` rows), `NumRegions` and `NumHoles`.", "pt": "Um `polyshape` com as propriedades somente leitura `Vertices` (a lista de vértices, contornos separados por linhas `NaN`), `NumRegions` e `NumHoles`."}
+      ],
+      "description": {
+        "en": "A polyshape represents a planar region bounded by polygons. A boundary inside another becomes a hole, and boundaries that do not touch become separate regions. Geometry is available through functions such as `area`, `perimeter`, `centroid`, `isinterior`, `holes`, `regions`, `rotate`, `scale` and `translate`, and through the Boolean operations `union`, `intersect`, `subtract` and `xor`.\n\nWhen the input has defects, such as a bowtie-shaped boundary that crosses itself, the constructor repairs it and splits it into valid pieces. A degenerate input, such as three collinear points, gives an empty polyshape with `NumRegions` equal to 0.",
+        "pt": "Um polyshape representa uma região plana delimitada por polígonos. Um contorno dentro de outro vira furo, e contornos que não se tocam viram regiões separadas. A geometria está disponível por funções como `area`, `perimeter`, `centroid`, `isinterior`, `holes`, `regions`, `rotate`, `scale` e `translate`, e pelas operações booleanas `union`, `intersect`, `subtract` e `xor`.\n\nQuando a entrada tem defeitos, como um contorno em gravata-borboleta que se cruza, o construtor o repara e o divide em partes válidas. Uma entrada degenerada, como três pontos colineares, dá um polyshape vazio com `NumRegions` igual a 0."
+      },
+      "examples": [
+        {"title": {"en": "Two regions in one polyshape", "pt": "Duas regiões em um polyshape"}, "code": "P = polyshape([0 1 1 0 NaN 3 5 5 3], [0 0 1 1 NaN 0 0 2 2]);\nP.NumRegions\narea(P)\ncentroid(P)"}
+      ],
+      "see": ["area", "subtract", "addboundary", "holes", "isinterior", "polybuffer"]
+    },
+    "rectint": {
+      "summary": {"en": "Area of intersection between axis-aligned rectangles.", "pt": "Área de interseção entre retângulos alinhados aos eixos."},
+      "syntax": [
+        {"code": "A = rectint(R1, R2)", "en": "Overlap area of every rectangle in `R1` with every rectangle in `R2`.", "pt": "Área de sobreposição de cada retângulo de `R1` com cada retângulo de `R2`."}
+      ],
+      "inputs": [
+        {"name": "R1, R2", "en": "Matrices with one rectangle per row in the form `[x y width height]`, where `(x, y)` is the lower-left corner.", "pt": "Matrizes com um retângulo por linha na forma `[x y largura altura]`, onde `(x, y)` é o canto inferior esquerdo."}
+      ],
+      "outputs": [
+        {"name": "A", "en": "Matrix with `size(R1, 1)` rows and `size(R2, 1)` columns. Entry `(i, j)` is the overlap area of rectangle `i` of `R1` and rectangle `j` of `R2`.", "pt": "Matriz com `size(R1, 1)` linhas e `size(R2, 1)` colunas. A entrada `(i, j)` é a área de sobreposição do retângulo `i` de `R1` com o retângulo `j` de `R2`."}
+      ],
+      "description": {
+        "en": "The overlap of two rectangles is itself a rectangle whose width is the overlap of the x intervals and whose height is the overlap of the y intervals; if either is zero or negative the area is `0`. Rectangles that merely touch along an edge have no overlap.",
+        "pt": "A sobreposição de dois retângulos é também um retângulo, cuja largura é a sobreposição dos intervalos em x e cuja altura é a sobreposição dos intervalos em y; se qualquer uma for zero ou negativa, a área é `0`. Retângulos que apenas se tocam em uma aresta não têm sobreposição."
+      },
+      "examples": [
+        {"title": {"en": "Overlap of a pair of rectangles", "pt": "Sobreposição de um par de retângulos"}, "code": "A = [0 0 2 2];\nB = [1 1 2 2; 5 5 1 1];\nrectint(A, B)"}
+      ],
+      "see": ["overlaps", "polyshape", "boundingbox", "polyarea"]
+    },
+    "regions": {
+      "summary": {"en": "Splits a polyshape into its disconnected regions.", "pt": "Divide um polyshape em suas regiões desconexas."},
+      "syntax": [
+        {"code": "R = regions(pshape)", "en": "One element per connected region, each with its own holes.", "pt": "Um elemento por região conexa, cada uma com seus próprios furos."},
+        {"code": "R = regions(pshape, I)", "en": "Only the regions selected by the index `I`.", "pt": "Apenas as regiões selecionadas pelo índice `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "R", "en": "The regions, as separate `polyshape` objects.", "pt": "As regiões, como objetos `polyshape` separados."}
+      ],
+      "description": {
+        "en": "Each region is a solid piece together with the holes inside it. This is the tool for analysing pieces one by one, for instance computing the area of each island of a shape, or discarding small ones.\n\nTo count the regions only, read the `NumRegions` property.",
+        "pt": "Cada região é uma peça sólida junto com os furos dentro dela. É a ferramenta para analisar as peças uma a uma, por exemplo calcular a área de cada ilha de uma forma, ou descartar as pequenas.\n\nPara apenas contar as regiões, leia a propriedade `NumRegions`."
+      },
+      "examples": [
+        {"title": {"en": "Count the regions", "pt": "Contar as regiões"}, "code": "P = polyshape([0 1 1 0 NaN 3 5 5 3], [0 0 1 1 NaN 0 0 2 2]);\nR = regions(P);\nnumel(R)"}
+      ],
+      "notes": {"en": "In MatLivre the result is returned as a cell array of polyshapes rather than a polyshape array, so use `R{k}` to reach the k-th region.", "pt": "No MatLivre o resultado é retornado como cell array de polyshapes, e não como array de polyshape, então use `R{k}` para acessar a k-ésima região."},
+      "see": ["holes", "numboundaries", "sortregions", "rmslivers", "addboundary"]
+    },
+    "rmboundary": {
+      "summary": {"en": "Removes selected boundaries from a polyshape.", "pt": "Remove contornos selecionados de um polyshape."},
+      "syntax": [
+        {"code": "pshape = rmboundary(pshape, I)", "en": "Deletes the boundaries whose indices are in `I`.", "pt": "Elimina os contornos cujos índices estão em `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "I", "en": "Index or vector of indices of the boundaries to delete, counted in the order they appear in `Vertices`.", "pt": "Índice ou vetor de índices dos contornos a eliminar, contados na ordem em que aparecem em `Vertices`."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The polyshape without those boundaries.", "pt": "O polyshape sem esses contornos."}
+      ],
+      "description": {
+        "en": "Boundaries are numbered in the order of the `Vertices` list, which is also the order used by `ishole` and `sortboundaries`. Use `sortboundaries` first when you want to remove, for example, the smallest piece.\n\nRemoving the outer boundary of a region also removes the holes inside it.",
+        "pt": "Os contornos são numerados na ordem da lista `Vertices`, que também é a ordem usada por `ishole` e `sortboundaries`. Use `sortboundaries` antes quando quiser remover, por exemplo, a menor peça.\n\nRemover o contorno externo de uma região remove também os furos dentro dela."
+      },
+      "examples": [
+        {"title": {"en": "Drop the second island", "pt": "Eliminar a segunda ilha"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nB = addboundary(P, [5 6 6 5], [0 0 1 1]);\narea(B)\nR = rmboundary(B, 2);\narea(R)"}
+      ],
+      "see": ["addboundary", "sortboundaries", "ishole", "rmholes", "numboundaries"]
+    },
+    "rmholes": {
+      "summary": {"en": "Removes holes from a polyshape, leaving solid regions.", "pt": "Remove furos de um polyshape, deixando regiões sólidas."},
+      "syntax": [
+        {"code": "pshape = rmholes(pshape)", "en": "Fills every hole.", "pt": "Preenche todos os furos."},
+        {"code": "pshape = rmholes(pshape, I)", "en": "Fills only the holes selected by the index `I`.", "pt": "Preenche apenas os furos selecionados pelo índice `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "I", "en": "Index of the holes to fill, counted among the holes only.", "pt": "Índice dos furos a preencher, contados apenas entre os furos."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The polyshape with the holes filled in.", "pt": "O polyshape com os furos preenchidos."}
+      ],
+      "description": {
+        "en": "A rectangle of area 12 with a unit-square hole has area 11; after `rmholes` it has area 12 again and `NumHoles` is 0. The outer boundaries are untouched.",
+        "pt": "Um retângulo de área 12 com um furo quadrado de lado 1 tem área 11; após `rmholes` volta a ter área 12 e `NumHoles` é 0. Os contornos externos não são alterados."
+      },
+      "examples": [
+        {"title": {"en": "Fill the hole of a ring", "pt": "Preencher o furo de um anel"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nR = rmholes(D);\n[area(D) area(R)]\nR.NumHoles"}
+      ],
+      "see": ["holes", "ishole", "rmboundary", "subtract", "rmslivers"]
+    },
+    "rmslivers": {
+      "summary": {"en": "Removes thin parts of a polyshape narrower than a given width.", "pt": "Remove partes finas de um polyshape mais estreitas que uma largura dada."},
+      "syntax": [
+        {"code": "pshape = rmslivers(pshape, tol)", "en": "Cleans parts of the shape that are thinner than about `tol`.", "pt": "Elimina partes da forma que são mais finas que cerca de `tol`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "tol", "en": "Non-negative width threshold, in coordinate units.", "pt": "Limite de largura não negativo, em unidades de coordenadas."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The cleaned polyshape. Slivers that disappear may reduce `NumRegions`.", "pt": "O polyshape limpo. Fragmentos finos que somem podem reduzir `NumRegions`."}
+      ],
+      "description": {
+        "en": "Slivers appear as artefacts of Boolean operations or buffering: very thin spikes, or strips that join two pieces. `rmslivers` removes them while leaving the main body almost unchanged. A larger `tol` removes thicker features, so choose it small relative to the features that matter.",
+        "pt": "Fragmentos finos aparecem como artefatos de operações booleanas ou de buffer: espinhos muito finos, ou faixas que ligam duas peças. `rmslivers` os remove deixando o corpo principal quase inalterado. Um `tol` maior remove características mais grossas, então escolha-o pequeno em relação às características que importam."
+      },
+      "examples": [
+        {"title": {"en": "Dropping a thin strip", "pt": "Eliminando uma faixa fina"}, "code": "A = polyshape([0 2 2 0], [0 0 2 2]);\nB = addboundary(A, [5 5.02 5.02 5], [0 0 2 2]);\nC = rmslivers(B, 0.05);\n[area(B) area(C)]\nC.NumRegions"}
+      ],
+      "see": ["polybuffer", "rmboundary", "issimplified", "polyshape"]
+    },
+    "rotate": {
+      "summary": {"en": "Rotates a polyshape by an angle in degrees about a center point.", "pt": "Gira um polyshape por um ângulo em graus em torno de um ponto central."},
+      "syntax": [
+        {"code": "pshape = rotate(pshape, angle, center)", "en": "Rotates counterclockwise by `angle` degrees about the point `center = [x y]`.", "pt": "Gira no sentido anti-horário por `angle` graus em torno do ponto `center = [x y]`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "angle", "en": "Rotation angle in degrees. Positive values turn counterclockwise.", "pt": "Ângulo de rotação em graus. Valores positivos giram no sentido anti-horário."},
+        {"name": "center", "en": "Two-element vector with the center of rotation.", "pt": "Vetor de dois elementos com o centro de rotação."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The rotated polyshape. Areas and perimeters are preserved.", "pt": "O polyshape girado. Áreas e perímetros são preservados."}
+      ],
+      "description": {
+        "en": "Each vertex `(x, y)` is mapped to its rotation about `center`. Because the angle is in degrees, `rotate(P, 90, c)` turns a shape a quarter turn. The vertices that come back may be listed starting from a different corner than the input.\n\nFor graphics objects, a function of the same name, `rotate(h, direction, alpha)`, rotates plotted objects about an axis in 3-D; it is a separate function.",
+        "pt": "Cada vértice `(x, y)` é levado à sua rotação em torno de `center`. Como o ângulo é em graus, `rotate(P, 90, c)` gira a forma um quarto de volta. Os vértices retornados podem começar por um canto diferente do da entrada.\n\nPara objetos gráficos, uma função de mesmo nome, `rotate(h, direction, alpha)`, gira objetos plotados em torno de um eixo em 3-D; é uma função distinta."
+      },
+      "examples": [
+        {"title": {"en": "Quarter turn about the square's center", "pt": "Quarto de volta em torno do centro do quadrado"}, "code": "Q = polyshape([0 1 1 0], [0 0 1 1]);\nR = rotate(Q, 90, [0.5 0.5]);\nR.Vertices\narea(R)"}
+      ],
+      "notes": {"en": "Pass the center explicitly. When it is omitted MatLivre rotates about the origin.", "pt": "Informe o centro explicitamente. Quando omitido, o MatLivre gira em torno da origem."},
+      "see": ["scale", "translate", "polyshape", "centroid"]
+    },
+    "scale": {
+      "summary": {"en": "Scales a polyshape by a factor, about a center point.", "pt": "Muda a escala de um polyshape por um fator, em torno de um ponto central."},
+      "syntax": [
+        {"code": "pshape = scale(pshape, s)", "en": "Multiplies all coordinates by the scalar `s`.", "pt": "Multiplica todas as coordenadas pelo escalar `s`."},
+        {"code": "pshape = scale(pshape, [sx sy])", "en": "Uses different factors along x and y.", "pt": "Usa fatores diferentes em x e y."},
+        {"code": "pshape = scale(pshape, [sx sy], center)", "en": "Scales about the point `center = [x y]` instead of the origin.", "pt": "Muda a escala em torno do ponto `center = [x y]` em vez da origem."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "s", "en": "Scale factor: a scalar, or a two-element vector `[sx sy]`.", "pt": "Fator de escala: um escalar, ou um vetor de dois elementos `[sx sy]`."},
+        {"name": "center", "en": "Fixed point of the scaling.", "pt": "Ponto fixo da mudança de escala."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The scaled polyshape. Area changes by `sx*sy`.", "pt": "O polyshape com a escala alterada. A área muda por `sx*sy`."}
+      ],
+      "description": {
+        "en": "The point `center` stays where it is and every other vertex moves along the line from the center by the factor given. With a factor of 2 a shape doubles in width and height, and its area grows four times. A negative factor mirrors the shape.\n\nThe name `scale` is also used by other toolboxes for unrelated normalizing operations; with a `polyshape` it is geometric scaling.",
+        "pt": "O ponto `center` permanece onde está e todos os outros vértices se movem ao longo da reta a partir do centro pelo fator dado. Com fator 2 a forma dobra de largura e altura, e a área fica quatro vezes maior. Um fator negativo espelha a forma.\n\nO nome `scale` também é usado em outras áreas para normalizações sem relação; com um `polyshape` é mudança de escala geométrica."
+      },
+      "examples": [
+        {"title": {"en": "Stretch a rectangle in x only", "pt": "Esticar um retângulo só em x"}, "code": "P = polyshape([0 2 2 0], [0 0 1 1]);\nS = scale(P, [3 1], [0 0]);\nS.Vertices\nare = [area(P) area(S)]"}
+      ],
+      "notes": {"en": "In MatLivre, use the vector form `[sx sy]` when you also pass a center; the scalar form with a center is not handled correctly.", "pt": "No MatLivre, use a forma vetorial `[sx sy]` quando também informar um centro; a forma escalar com centro não é tratada corretamente."},
+      "see": ["rotate", "translate", "polyshape", "area"]
+    },
+    "sortboundaries": {
+      "summary": {"en": "Reorders the boundaries of a polyshape by a chosen criterion.", "pt": "Reordena os contornos de um polyshape por um critério escolhido."},
+      "syntax": [
+        {"code": "pshape = sortboundaries(pshape, criterion)", "en": "Sorts the boundaries in ascending order of the criterion.", "pt": "Ordena os contornos em ordem crescente do critério."},
+        {"code": "pshape = sortboundaries(pshape, criterion, direction)", "en": "Sorts in `'ascend'` or `'descend'` order.", "pt": "Ordena em ordem `'ascend'` ou `'descend'`."}
+      ],
+      "inputs": [
+        {"name": "criterion", "en": "What to sort by: `'area'`, `'perimeter'`, `'numsides'` or `'centroid'`.", "pt": "O critério de ordenação: `'area'`, `'perimeter'`, `'numsides'` ou `'centroid'`."},
+        {"name": "direction", "en": "`'ascend'` (default) or `'descend'`.", "pt": "`'ascend'` (padrão) ou `'descend'`."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The polyshape with the same geometry and boundaries in the new order, which is the order of `Vertices`.", "pt": "O polyshape com a mesma geometria e os contornos na nova ordem, que é a ordem de `Vertices`."}
+      ],
+      "description": {
+        "en": "Sorting changes only the order in which boundaries are stored, not the shape. That order is what `rmboundary`, `ishole` and the index arguments of `area` and `perimeter` refer to, so sorting first makes them select 'the largest' or 'the smallest' piece reliably.",
+        "pt": "A ordenação muda apenas a ordem em que os contornos são guardados, não a forma. Essa ordem é a que `rmboundary`, `ishole` e os argumentos de índice de `area` e `perimeter` usam, de modo que ordenar antes permite selecionar com segurança 'a maior' ou 'a menor' peça."
+      },
+      "examples": [
+        {"title": {"en": "Largest piece first", "pt": "Maior peça primeiro"}, "code": "P = polyshape([0 1 1 0 NaN 3 5 5 3], [0 0 1 1 NaN 0 0 2 2]);\nS = sortboundaries(P, 'area', 'descend');\nS.Vertices"}
+      ],
+      "see": ["sortregions", "rmboundary", "ishole", "numboundaries"]
+    },
+    "sortregions": {
+      "summary": {"en": "Reorders the regions of a polyshape by a chosen criterion.", "pt": "Reordena as regiões de um polyshape por um critério escolhido."},
+      "syntax": [
+        {"code": "pshape = sortregions(pshape, criterion)", "en": "Sorts the regions in ascending order of the criterion.", "pt": "Ordena as regiões em ordem crescente do critério."},
+        {"code": "pshape = sortregions(pshape, criterion, direction)", "en": "Sorts in `'ascend'` or `'descend'` order.", "pt": "Ordena em ordem `'ascend'` ou `'descend'`."}
+      ],
+      "inputs": [
+        {"name": "criterion", "en": "`'area'`, `'perimeter'`, `'numsides'` or `'centroid'`.", "pt": "`'area'`, `'perimeter'`, `'numsides'` ou `'centroid'`."},
+        {"name": "direction", "en": "`'ascend'` (default) or `'descend'`.", "pt": "`'ascend'` (padrão) ou `'descend'`."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "The same shape with its regions stored in the new order; each hole stays with its region.", "pt": "A mesma forma com as regiões guardadas na nova ordem; cada furo permanece com sua região."}
+      ],
+      "description": {
+        "en": "It works like `sortboundaries`, but treats a region together with its holes as one unit. The order matters for functions that take a region index, such as `regions(pshape, I)` and `area(pshape, I)`.",
+        "pt": "Funciona como `sortboundaries`, mas trata uma região junto com seus furos como uma unidade. A ordem importa para funções que recebem um índice de região, como `regions(pshape, I)` e `area(pshape, I)`."
+      },
+      "examples": [
+        {"title": {"en": "Order two islands by area", "pt": "Ordenar duas ilhas por área"}, "code": "P = polyshape([0 1 1 0 NaN 3 5 5 3], [0 0 1 1 NaN 0 0 2 2]);\nS = sortregions(P, 'area', 'ascend');\nS.Vertices"}
+      ],
+      "see": ["sortboundaries", "regions", "rmboundary", "area"]
+    },
+    "stlread": {
+      "summary": {"en": "Reads a triangulated surface from an STL file.", "pt": "Lê uma superfície triangulada de um arquivo STL."},
+      "syntax": [
+        {"code": "TR = stlread(filename)", "en": "Reads a binary or ASCII STL file and returns a `triangulation`.", "pt": "Lê um arquivo STL binário ou ASCII e retorna uma `triangulation`."}
+      ],
+      "inputs": [
+        {"name": "filename", "en": "Name of the STL file, as a character vector or string.", "pt": "Nome do arquivo STL, como vetor de caracteres ou string."}
+      ],
+      "outputs": [
+        {"name": "TR", "en": "A 3-D `triangulation` with `Points` (the distinct vertices) and `ConnectivityList` (one triangle per row).", "pt": "Uma `triangulation` 3-D com `Points` (os vértices distintos) e `ConnectivityList` (um triângulo por linha)."}
+      ],
+      "description": {
+        "en": "STL stores each triangle with its three corners written out in full, so a vertex shared by many triangles appears many times in the file. `stlread` merges identical corners into one point, producing a proper indexed mesh. The order of points can differ from the order in which the writer produced them.\n\nSTL carries only geometry: no colors, units or vertex data. Face normals stored in the file are not kept in the result; use `faceNormal` to compute them.",
+        "pt": "O STL guarda cada triângulo com seus três cantos escritos por completo, então um vértice compartilhado por muitos triângulos aparece muitas vezes no arquivo. `stlread` junta cantos idênticos em um único ponto, produzindo uma malha indexada de fato. A ordem dos pontos pode diferir da ordem em que o autor do arquivo os produziu.\n\nO STL contém apenas geometria: sem cores, unidades ou dados por vértice. As normais das faces guardadas no arquivo não são mantidas no resultado; use `faceNormal` para calculá-las."
+      },
+      "examples": [
+        {"title": {"en": "Write and read back a tetrahedron", "pt": "Gravar e ler de volta um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 3 2; 1 2 4; 1 4 3; 2 3 4];\nstlwrite(triangulation(T, P), 'tet.stl');\nTR = stlread('tet.stl');\nsize(TR.Points)\nsize(TR.ConnectivityList)"}
+      ],
+      "notes": {"en": "MatLivre returns the `triangulation` form only; the `[F, V]` multi-output form is not available.", "pt": "O MatLivre retorna apenas a forma `triangulation`; a forma com várias saídas `[F, V]` não está disponível."},
+      "see": ["stlwrite", "triangulation", "faceNormal", "trisurf"]
+    },
+    "stlwrite": {
+      "summary": {"en": "Writes a triangulation to an STL file.", "pt": "Grava uma triangulação em um arquivo STL."},
+      "syntax": [
+        {"code": "stlwrite(TR, filename)", "en": "Writes the triangulation in binary STL format.", "pt": "Grava a triangulação em formato STL binário."},
+        {"code": "stlwrite(TR, filename, 'text')", "en": "Writes human-readable ASCII STL instead.", "pt": "Grava STL ASCII legível por humanos."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` object of triangles in 3-D space.", "pt": "Um objeto `triangulation` de triângulos no espaço 3-D."},
+        {"name": "filename", "en": "Output file name, usually ending in `.stl`. An existing file is overwritten.", "pt": "Nome do arquivo de saída, normalmente terminado em `.stl`. Um arquivo existente é sobrescrito."},
+        {"name": "'text'", "en": "Switch to the ASCII format. Binary is the default.", "pt": "Muda para o formato ASCII. Binário é o padrão."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Every triangle is written with its three vertices and its unit normal, computed from the vertex order by the right-hand rule. The vertex order therefore decides which side counts as outside, and a closed solid should have its triangles ordered consistently.\n\nBinary files are compact: 84 bytes of header plus 50 bytes per triangle. ASCII files are several times larger but can be read in a text editor.",
+        "pt": "Cada triângulo é escrito com seus três vértices e sua normal unitária, calculada da ordem dos vértices pela regra da mão direita. A ordem dos vértices decide, portanto, qual lado é o exterior, e um sólido fechado deve ter os triângulos ordenados de forma consistente.\n\nArquivos binários são compactos: 84 bytes de cabeçalho mais 50 bytes por triângulo. Arquivos ASCII são várias vezes maiores, mas podem ser lidos em um editor de texto."
+      },
+      "examples": [
+        {"title": {"en": "Binary and text files", "pt": "Arquivos binário e texto"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 3 2; 1 2 4; 1 4 3; 2 3 4];\ntr = triangulation(T, P);\nstlwrite(tr, 'tet_bin.stl');\nstlwrite(tr, 'tet_txt.stl', 'text');\nd1 = dir('tet_bin.stl');\ndisp(d1.bytes)"}
+      ],
+      "notes": {"en": "MatLivre accepts the `stlwrite(TR, filename)` and `'text'` forms only. Passing faces and vertices separately is not supported.", "pt": "O MatLivre aceita apenas as formas `stlwrite(TR, filename)` e `'text'`. Passar faces e vértices separadamente não é suportado."},
+      "see": ["stlread", "triangulation", "faceNormal", "trisurf"]
+    },
+    "subtract": {
+      "summary": {"en": "Boolean difference of two polyshapes: the first with the second cut out.", "pt": "Diferença booleana de dois polyshapes: o primeiro com o segundo recortado."},
+      "syntax": [
+        {"code": "P = subtract(P1, P2)", "en": "Returns the part of `P1` that is not in `P2`.", "pt": "Retorna a parte de `P1` que não está em `P2`."}
+      ],
+      "inputs": [
+        {"name": "P1", "en": "The `polyshape` to cut from.", "pt": "O `polyshape` do qual se recorta."},
+        {"name": "P2", "en": "The `polyshape` to remove.", "pt": "O `polyshape` a remover."}
+      ],
+      "outputs": [
+        {"name": "P", "en": "The difference, as a new `polyshape`. It can have holes or several regions.", "pt": "A diferença, como novo `polyshape`. Pode ter furos ou várias regiões."}
+      ],
+      "description": {
+        "en": "If `P2` lies fully inside `P1`, the result is `P1` with a hole. If it cuts across an edge, a notch is removed. If they do not overlap, `P1` is returned unchanged. The order of arguments matters: `subtract(P1, P2)` and `subtract(P2, P1)` are different shapes.\n\nThe companion operations are `union`, `intersect` and `xor`.",
+        "pt": "Se `P2` está totalmente dentro de `P1`, o resultado é `P1` com um furo. Se cruza uma borda, uma reentrância é removida. Se não se sobrepõem, `P1` é retornado sem alteração. A ordem dos argumentos importa: `subtract(P1, P2)` e `subtract(P2, P1)` são formas diferentes.\n\nAs operações companheiras são `union`, `intersect` e `xor`."
+      },
+      "examples": [
+        {"title": {"en": "Punching a hole", "pt": "Fazendo um furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nD.NumHoles\narea(D)"}
+      ],
+      "see": ["union", "intersect", "xor", "holes", "polyshape"]
+    },
+    "surfaceArea": {
+      "summary": {"en": "Surface area of a 3-D alpha shape.", "pt": "Área de superfície de uma alpha shape 3-D."},
+      "syntax": [
+        {"code": "SA = surfaceArea(shp)", "en": "Total area of the boundary faces of a 3-D `alphaShape`.", "pt": "Área total das faces de contorno de uma `alphaShape` 3-D."}
+      ],
+      "inputs": [
+        {"name": "shp", "en": "A 3-D `alphaShape` object. A 2-D one raises an error; use `perimeter` for it.", "pt": "Um objeto `alphaShape` 3-D. Uma 2-D gera erro; use `perimeter` para ela."}
+      ],
+      "outputs": [
+        {"name": "SA", "en": "Scalar surface area.", "pt": "Área de superfície escalar."}
+      ],
+      "description": {
+        "en": "The result is the sum of the areas of the triangular boundary facets listed by `boundaryFacets`. For the regular corner tetrahedron with legs of length 1, three faces are right triangles of area 0.5 and the fourth is an equilateral triangle of area about 0.866, so the total is about 2.366. The matching volume is returned by `volume`.",
+        "pt": "O resultado é a soma das áreas das facetas triangulares de contorno listadas por `boundaryFacets`. Para o tetraedro de canto com catetos de comprimento 1, três faces são triângulos retângulos de área 0,5 e a quarta é um triângulo equilátero de área cerca de 0,866, totalizando cerca de 2,366. O volume correspondente é retornado por `volume`."
+      },
+      "examples": [
+        {"title": {"en": "Surface area and volume of a tetrahedron", "pt": "Área de superfície e volume de um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nshp = alphaShape(P(:,1), P(:,2), P(:,3));\nsurfaceArea(shp)\nvolume(shp)"}
+      ],
+      "see": ["alphaShape", "volume", "boundaryFacets", "perimeter", "area"]
+    }
+  }
+}

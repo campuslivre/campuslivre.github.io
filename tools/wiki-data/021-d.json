@@ -1,0 +1,833 @@
+{
+ "functions": {
+  "addlistener": {
+   "summary": {
+    "en": "Attaches a callback to an event or property change of a handle object.",
+    "pt": "Associa um callback a um evento ou a uma mudança de propriedade de um objeto handle."
+   },
+   "syntax": [
+    {
+     "code": "lh = addlistener(obj, 'EventName', callback)",
+     "en": "Calls `callback` whenever `obj` triggers the event.",
+     "pt": "Chama `callback` sempre que `obj` dispara o evento."
+    },
+    {
+     "code": "lh = addlistener(obj, 'PropName', 'PostSet', callback)",
+     "en": "Calls `callback` after the observable property `PropName` is set.",
+     "pt": "Chama `callback` depois que a propriedade observável `PropName` é definida."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Handle object that defines the event.",
+     "pt": "Objeto handle que define o evento."
+    },
+    {
+     "name": "'EventName'",
+     "en": "Name of an event declared in the `events` block of the class.",
+     "pt": "Nome de um evento declarado no bloco `events` da classe."
+    },
+    {
+     "name": "callback",
+     "en": "Function handle called as `callback(src, evtdata)`, where `src` is the object and `evtdata` carries event information.",
+     "pt": "Handle de função chamado como `callback(src, evtdata)`, em que `src` é o objeto e `evtdata` traz informações do evento."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lh",
+     "en": "An `event.listener` object. The listener lives as long as `lh` or the source object exists; `delete(lh)` removes it.",
+     "pt": "Um objeto `event.listener`. O listener existe enquanto `lh` ou o objeto de origem existir; `delete(lh)` o remove."
+    }
+   ],
+   "description": {
+    "en": "Events let objects announce that something happened without knowing who is interested. A class declares an event in its `events` block and fires it with `notify(obj, 'EventName')`. Any number of listeners may be attached from outside, each with its own callback, and they run in the order they were created.\n\nUnlike `listener`, `addlistener` ties the listener to the life of the source object: you do not have to keep `lh` in a variable for it to stay active.",
+    "pt": "Eventos permitem que objetos anunciem que algo aconteceu sem saber quem se interessa. Uma classe declara um evento no bloco `events` e o dispara com `notify(obj, 'EventName')`. Qualquer número de listeners pode ser anexado de fora, cada um com seu próprio callback, e eles são executados na ordem em que foram criados.\n\nAo contrário de `listener`, `addlistener` prende o listener à vida do objeto de origem: não é preciso guardar `lh` numa variável para que ele continue ativo."
+   },
+   "notes": {
+    "en": "Events declared in a `classdef` work and run their callbacks when notified. The built-in `ObjectBeingDestroyed` event is registered but its callback is not run when the object is deleted. Example code in this wiki uses a built-in class because a script cannot define its own class.",
+    "pt": "Eventos declarados em uma `classdef` funcionam e executam seus callbacks quando notificados. O evento embutido `ObjectBeingDestroyed` é registrado, mas seu callback não é executado quando o objeto é apagado. O exemplo usa uma classe embutida porque um script não consegue definir sua própria classe."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listening to a built-in event",
+      "pt": "Escutando um evento embutido"
+     },
+     "code": "m = containers.Map();\nlh = addlistener(m, 'ObjectBeingDestroyed', @(src, evt) disp('map destroyed'));\nclass(lh)\nlh.EventName\nevent.hasListener(m, 'ObjectBeingDestroyed')"
+    }
+   ],
+   "see": [
+    "listener",
+    "event.hasListener",
+    "events",
+    "notify"
+   ]
+  },
+  "builtin": {
+   "summary": {
+    "en": "Calls the built-in version of a function, ignoring any overriding file.",
+    "pt": "Chama a versão embutida de uma função, ignorando qualquer arquivo que a substitua."
+   },
+   "syntax": [
+    {
+     "code": "[y1, ..., yN] = builtin(name, x1, ..., xM)",
+     "en": "Calls the built-in function `name` with the given arguments.",
+     "pt": "Chama a função embutida `name` com os argumentos dados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Name of a built-in function, as text.",
+     "pt": "Nome de uma função embutida, como texto."
+    },
+    {
+     "name": "x1, ..., xM",
+     "en": "Arguments passed to that function.",
+     "pt": "Argumentos passados a essa função."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y1, ..., yN",
+     "en": "Outputs of the built-in function.",
+     "pt": "Saídas da função embutida."
+    }
+   ],
+   "description": {
+    "en": "When you write your own function with the same name as a built-in, yours takes precedence in calls. Inside it, `builtin` is the way to reach the original, for example to wrap `size` with extra checks and then delegate to the standard one.\n\nThe number of outputs requested from `builtin` is passed on to the function.",
+    "pt": "Quando você escreve uma função própria com o mesmo nome de uma embutida, a sua tem precedência nas chamadas. Dentro dela, `builtin` é o caminho para chegar à original, por exemplo para envolver `size` com verificações extras e delegar à versão padrão.\n\nO número de saídas pedido a `builtin` é repassado à função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Calling built-ins by name",
+      "pt": "Chamando funções embutidas pelo nome"
+     },
+     "code": "builtin('sum', [1 2 3])\n[m, i] = builtin('max', [4 9 2]);\nfprintf('max %d at %d\\n', m, i)\nbuiltin('upper', 'abc')"
+    }
+   ],
+   "see": [
+    "feval",
+    "exist",
+    "which",
+    "func2str"
+   ]
+  },
+  "clone": {
+   "summary": {
+    "en": "Creates an independent copy of a System object.",
+    "pt": "Cria uma cópia independente de um objeto System."
+   },
+   "syntax": [
+    {
+     "code": "c = clone(obj)",
+     "en": "Returns a new object of the same class with the same property values and internal state.",
+     "pt": "Retorna um novo objeto da mesma classe com os mesmos valores de propriedades e o mesmo estado interno."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object (an instance of a class derived from `matlab.System`).",
+     "pt": "Um objeto System (instância de uma classe derivada de `matlab.System`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "c",
+     "en": "A separate object. Changes to `c` do not affect `obj`, and the reverse.",
+     "pt": "Um objeto separado. Mudanças em `c` não afetam `obj`, e vice-versa."
+    }
+   ],
+   "description": {
+    "en": "System objects are handle objects, so plain assignment `b = a` makes `b` another name for the same object. `clone` is the way to get a true copy, including any state the object has accumulated, such as the buffer of a filter or the position in a stream. It also copies the locked status of the object.\n\nThe example shows the aliasing problem that `clone` solves, using a handle object that is available everywhere.",
+    "pt": "Objetos System são objetos handle, então a atribuição simples `b = a` faz de `b` outro nome para o mesmo objeto. `clone` é a forma de obter uma cópia verdadeira, incluindo o estado que o objeto acumulou, como o buffer de um filtro ou a posição em um fluxo. Também copia o estado de bloqueio do objeto.\n\nO exemplo mostra o problema de apelidos que `clone` resolve, usando um objeto handle disponível em qualquer lugar."
+   },
+   "notes": {
+    "en": "System objects are not available in MatLivre, so `clone` cannot be called. The example shows how handle objects behave, which is why a clone is needed.",
+    "pt": "Objetos System não estão disponíveis no MatLivre, então `clone` não pode ser chamada. O exemplo mostra como os objetos handle se comportam, que é o motivo de a clonagem ser necessária."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Assignment copies the handle, not the object",
+      "pt": "A atribuição copia o handle, não o objeto"
+     },
+     "code": "a = containers.Map();\nb = a;\nb('key') = 1;\nfprintf('a has %d key, a == b is %d\\n', a.Count, a == b)"
+    }
+   ],
+   "see": [
+    "isLocked",
+    "isDone",
+    "isequal",
+    "copy"
+   ]
+  },
+  "empty": {
+   "summary": {
+    "en": "Creates an empty array of a given class.",
+    "pt": "Cria um array vazio de uma determinada classe."
+   },
+   "syntax": [
+    {
+     "code": "E = ClassName.empty",
+     "en": "Returns a `0`-by-`0` empty array of the class.",
+     "pt": "Retorna um array vazio `0`-por-`0` da classe."
+    },
+    {
+     "code": "E = ClassName.empty(m, n, ...)",
+     "en": "Returns an empty array with the given size, in which at least one dimension is `0`.",
+     "pt": "Retorna um array vazio com o tamanho dado, em que pelo menos uma dimensão é `0`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ClassName",
+     "en": "A class name such as `double`, `char`, `single`, `int8`, `cell` or `struct`, or a user-defined class.",
+     "pt": "Um nome de classe como `double`, `char`, `single`, `int8`, `cell` ou `struct`, ou uma classe definida pelo usuário."
+    },
+    {
+     "name": "m, n, ...",
+     "en": "Dimension sizes. At least one must be `0`, otherwise it is an error.",
+     "pt": "Tamanhos das dimensões. Pelo menos uma deve ser `0`, senão ocorre um erro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "Empty array of the requested class and size.",
+     "pt": "Array vazio da classe e do tamanho pedidos."
+    }
+   ],
+   "description": {
+    "en": "`empty` makes it explicit what type of data an empty variable will hold, and gives it a specific shape. That shape matters: a `0`-by-`3` empty matrix is the right starting point for building a table of three-column rows with vertical concatenation, while `[]` is `0`-by-`0`.\n\nIt also creates empty arrays of objects, as in `MyClass.empty`, which can later grow by indexing.",
+    "pt": "`empty` deixa explícito que tipo de dado uma variável vazia vai guardar e lhe dá um formato específico. O formato importa: uma matriz vazia `0`-por-`3` é o ponto de partida certo para montar uma tabela de linhas de três colunas por concatenação vertical, enquanto `[]` é `0`-por-`0`.\n\nTambém cria arrays vazios de objetos, como em `MyClass.empty`, que depois podem crescer por indexação."
+   },
+   "notes": {
+    "en": "`empty` works for the built-in classes. For a user-defined class, `MyClass.empty` is not yet recognized.",
+    "pt": "`empty` funciona para as classes embutidas. Para uma classe definida pelo usuário, `MyClass.empty` ainda não é reconhecida."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Typed empty arrays",
+      "pt": "Arrays vazios com tipo"
+     },
+     "code": "x = double.empty(0, 3);\nsize(x)\nrows = [x; 1 2 3; 4 5 6]\nclass(int8.empty(2, 0))\nsize(cell.empty)"
+    }
+   ],
+   "see": [
+    "zeros",
+    "isempty",
+    "cell",
+    "struct"
+   ]
+  },
+  "enumeration": {
+   "summary": {
+    "en": "Lists the members of an enumeration class.",
+    "pt": "Lista os membros de uma classe de enumeração."
+   },
+   "syntax": [
+    {
+     "code": "enumeration ClassName",
+     "en": "Displays the enumeration members of the class.",
+     "pt": "Exibe os membros de enumeração da classe."
+    },
+    {
+     "code": "m = enumeration('ClassName')",
+     "en": "Returns the members as a column of enumeration objects.",
+     "pt": "Retorna os membros como uma coluna de objetos de enumeração."
+    },
+    {
+     "code": "[m, names] = enumeration('ClassName')",
+     "en": "Also returns the member names as a cell array of character vectors.",
+     "pt": "Também retorna os nomes dos membros como um cell array de vetores de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ClassName",
+     "en": "Name of a class defined with an `enumeration` block.",
+     "pt": "Nome de uma classe definida com um bloco `enumeration`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "The enumeration members.",
+     "pt": "Os membros da enumeração."
+    },
+    {
+     "name": "names",
+     "en": "Names of the members, in the order they were declared.",
+     "pt": "Nomes dos membros, na ordem em que foram declarados."
+    }
+   ],
+   "description": {
+    "en": "An enumeration class defines a fixed set of named values in an `enumeration` block of a `classdef` file, for example `Red`, `Green`, `Blue`. The `enumeration` function is how a program discovers that set at run time, for instance to fill a menu or to loop over all choices.\n\nIt is also the keyword that opens that block inside a `classdef`; the function and the keyword are unrelated otherwise.",
+    "pt": "Uma classe de enumeração define um conjunto fixo de valores nomeados em um bloco `enumeration` de um arquivo `classdef`, por exemplo `Red`, `Green`, `Blue`. A função `enumeration` é como um programa descobre esse conjunto em tempo de execução, por exemplo para preencher um menu ou percorrer todas as opções.\n\nTambém é a palavra-chave que abre esse bloco dentro de uma `classdef`; fora isso, a função e a palavra-chave não têm relação."
+   },
+   "notes": {
+    "en": "A script cannot declare an enumeration class, so the example only shows the failure path. With a class saved in its own file, `[m, names] = enumeration('Color')` returns the members and their names as in MATLAB. Built-in enumeration classes such as `matlab.lang.OnOffSwitchState` are not available.",
+    "pt": "Um script não consegue declarar uma classe de enumeração, então o exemplo só mostra o caminho de falha. Com uma classe salva em seu próprio arquivo, `[m, names] = enumeration('Color')` retorna os membros e seus nomes como no MATLAB. Classes de enumeração embutidas, como `matlab.lang.OnOffSwitchState`, não estão disponíveis."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A class that does not exist",
+      "pt": "Uma classe que não existe"
+     },
+     "code": "try\n  enumeration('NoSuchEnum')\ncatch\n  disp('no such class')\nend"
+    }
+   ],
+   "see": [
+    "ismethod",
+    "isprop",
+    "events",
+    "meta.class.fromName"
+   ]
+  },
+  "eq": {
+   "summary": {
+    "en": "Equality test, the function form of the `==` operator.",
+    "pt": "Teste de igualdade, a forma em função do operador `==`."
+   },
+   "syntax": [
+    {
+     "code": "C = eq(A, B)",
+     "en": "Compares `A` and `B` element by element. Same as `A == B`.",
+     "pt": "Compara `A` e `B` elemento a elemento. Equivale a `A == B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric, logical or char arrays, or objects. Sizes must be compatible (equal, or one of them is 1 in each dimension).",
+     "pt": "Arrays numéricos, lógicos ou de char, ou objetos. Os tamanhos devem ser compatíveis (iguais, ou um deles igual a 1 em cada dimensão)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Logical array: `true` where the elements are equal.",
+     "pt": "Array lógico: `true` onde os elementos são iguais."
+    }
+   ],
+   "description": {
+    "en": "The comparison converts to a common type first, so `eq(true, 1)` and `eq('a', 97)` are both `true`. A scalar is compared against every element of an array. Two NaN values are never equal, and comparing a number to a NaN gives `false`.\n\nFor handle objects, `eq` tests whether both operands are the same object, not whether their contents match. Floating-point results that look equal can differ in the last digits, so for computed values compare with a tolerance, `abs(a - b) < tol`. To compare whole arrays, use `isequal`.",
+    "pt": "A comparação converte primeiro para um tipo comum, então `eq(true, 1)` e `eq('a', 97)` são ambos `true`. Um escalar é comparado com cada elemento de um array. Dois NaN nunca são iguais, e comparar um número com NaN dá `false`.\n\nPara objetos handle, `eq` testa se os dois operandos são o mesmo objeto, não se o conteúdo coincide. Resultados de ponto flutuante que parecem iguais podem diferir nos últimos dígitos; para valores calculados, compare com tolerância, `abs(a - b) < tol`. Para comparar arrays inteiros, use `isequal`."
+   },
+   "notes": {
+    "en": "Comparing structs or cell arrays with `eq` is an error, as in MATLAB.",
+    "pt": "Comparar structs ou cell arrays com `eq` é um erro, como no MATLAB."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Elementwise and scalar comparison",
+      "pt": "Comparação elemento a elemento e com escalar"
+     },
+     "code": "eq([1 2 3], [1 5 3])\neq([1 2 2; 2 3 2], 2)\neq('abc', 'abd')\neq([1 NaN], [1 NaN])"
+    }
+   ],
+   "see": [
+    "isequal",
+    "ne",
+    "lt",
+    "=="
+   ]
+  },
+  "event.hasListener": {
+   "summary": {
+    "en": "Tests whether an event of an object has listeners.",
+    "pt": "Testa se um evento de um objeto tem listeners."
+   },
+   "syntax": [
+    {
+     "code": "tf = event.hasListener(obj, 'EventName')",
+     "en": "Returns `true` if at least one listener is attached to the event of `obj`.",
+     "pt": "Retorna `true` se pelo menos um listener estiver associado ao evento de `obj`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A handle object.",
+     "pt": "Um objeto handle."
+    },
+    {
+     "name": "'EventName'",
+     "en": "Name of an event of the object's class.",
+     "pt": "Nome de um evento da classe do objeto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A class that triggers events can use this test to skip building expensive event data when nobody is listening. Listeners created with `addlistener` or `listener` count as long as they exist and are enabled, and deleting them makes the answer `false` again.",
+    "pt": "Uma classe que dispara eventos pode usar esse teste para evitar montar dados de evento caros quando ninguém está escutando. Listeners criados com `addlistener` ou `listener` contam enquanto existirem e estiverem ativos, e apagá-los faz a resposta voltar a ser `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Before and after adding a listener",
+      "pt": "Antes e depois de adicionar um listener"
+     },
+     "code": "m = containers.Map();\nevent.hasListener(m, 'ObjectBeingDestroyed')\nlh = addlistener(m, 'ObjectBeingDestroyed', @(s, e) disp('gone'));\nevent.hasListener(m, 'ObjectBeingDestroyed')\ndelete(lh)\nevent.hasListener(m, 'ObjectBeingDestroyed')"
+    }
+   ],
+   "see": [
+    "addlistener",
+    "listener",
+    "notify",
+    "events"
+   ]
+  },
+  "events": {
+   "summary": {
+    "en": "Lists the events defined by a class.",
+    "pt": "Lista os eventos definidos por uma classe."
+   },
+   "syntax": [
+    {
+     "code": "events(obj)",
+     "en": "Prints the names of the events of the object's class.",
+     "pt": "Imprime os nomes dos eventos da classe do objeto."
+    },
+    {
+     "code": "events('ClassName')",
+     "en": "Same, for a class given by name.",
+     "pt": "Igual, para uma classe dada pelo nome."
+    },
+    {
+     "code": "e = events(obj)",
+     "en": "Returns the event names as a cell array.",
+     "pt": "Retorna os nomes dos eventos como um cell array."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object of a class that defines events.",
+     "pt": "Um objeto de uma classe que define eventos."
+    },
+    {
+     "name": "'ClassName'",
+     "en": "Name of a class.",
+     "pt": "Nome de uma classe."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "e",
+     "en": "Cell array of character vectors, one event name per row.",
+     "pt": "Cell array de vetores de caracteres, um nome de evento por linha."
+    }
+   ],
+   "description": {
+    "en": "The list includes events inherited from superclasses. Every handle class has `ObjectBeingDestroyed`. The names are the ones that can be passed to `addlistener`, `listener` and `notify`.\n\nInside a `classdef` file, `events` is also the keyword that opens the block where a class declares its events.",
+    "pt": "A lista inclui eventos herdados de superclasses. Toda classe handle tem `ObjectBeingDestroyed`. Os nomes são os que podem ser passados a `addlistener`, `listener` e `notify`.\n\nDentro de um arquivo `classdef`, `events` também é a palavra-chave que abre o bloco em que a classe declara seus eventos."
+   },
+   "notes": {
+    "en": "Calling `events` with a class name works for classes defined in files; for built-in classes such as `containers.Map` pass an object instead.",
+    "pt": "Chamar `events` com o nome da classe funciona para classes definidas em arquivos; para classes embutidas como `containers.Map`, passe um objeto."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Events of a handle object",
+      "pt": "Eventos de um objeto handle"
+     },
+     "code": "m = containers.Map();\nevents(m)\ne = events(m)"
+    }
+   ],
+   "see": [
+    "addlistener",
+    "listener",
+    "event.hasListener",
+    "notify"
+   ]
+  },
+  "import": {
+   "summary": {
+    "en": "Adds a package or class name to the import list so it can be used with a short name.",
+    "pt": "Adiciona um nome de pacote ou classe à lista de importação para poder usá-lo com um nome curto."
+   },
+   "syntax": [
+    {
+     "code": "import pkg.name",
+     "en": "Imports one function or class from package `pkg`.",
+     "pt": "Importa uma função ou classe do pacote `pkg`."
+    },
+    {
+     "code": "import pkg.*",
+     "en": "Imports everything in package `pkg`.",
+     "pt": "Importa tudo do pacote `pkg`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "pkg.name",
+     "en": "Fully qualified name, such as `containers.Map` or `matlab.lang.makeValidName`.",
+     "pt": "Nome totalmente qualificado, como `containers.Map` ou `matlab.lang.makeValidName`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Package members are normally called by their full path, such as `containers.Map(...)`. With `import containers.Map`, the shorter `Map(...)` is recognized in the same function or script. The list lasts until the function ends or the workspace is cleared, and the command form `import pkg.name` is the usual way to write it.\n\nImporting does not load anything and cannot make an unknown name valid; it only gives the name an alias.",
+    "pt": "Membros de pacotes normalmente são chamados pelo caminho completo, como `containers.Map(...)`. Com `import containers.Map`, o nome mais curto `Map(...)` é reconhecido na mesma função ou script. A lista dura até o fim da função ou até o workspace ser limpo, e a forma de comando `import pkg.name` é a maneira usual de escrever.\n\nImportar não carrega nada e não torna válido um nome desconhecido; apenas dá um apelido ao nome."
+   },
+   "notes": {
+    "en": "The import statement is accepted, but short names are not resolved afterwards in this version. Always write the full name, as in the example.",
+    "pt": "A instrução import é aceita, mas os nomes curtos não são resolvidos depois nesta versão. Escreva sempre o nome completo, como no exemplo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Using the full name",
+      "pt": "Usando o nome completo"
+     },
+     "code": "import containers.Map\nm = containers.Map();\nm('one') = 1;\ndisp(m.Count)"
+    }
+   ],
+   "see": [
+    "containers.Map",
+    "which",
+    "exist",
+    "meta.class.fromName"
+   ]
+  },
+  "isDone": {
+   "summary": {
+    "en": "Tests whether a System object has finished producing data.",
+    "pt": "Testa se um objeto System terminou de produzir dados."
+   },
+   "syntax": [
+    {
+     "code": "tf = isDone(obj)",
+     "en": "Returns `true` when a source System object has no more data to give.",
+     "pt": "Retorna `true` quando um objeto System de fonte não tem mais dados a fornecer."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object that implements `isDone`, typically a data source such as a file reader.",
+     "pt": "Um objeto System que implementa `isDone`, em geral uma fonte de dados como um leitor de arquivo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "`true` after the last block has been read.",
+     "pt": "`true` depois que o último bloco foi lido."
+    }
+   ],
+   "description": {
+    "en": "Source objects deliver their data in blocks, one call at a time. The standard loop reads a block and checks `isDone` before reading the next: `while ~isDone(src), block = src(); ... end`. The check is false until the final block has been delivered.\n\nA System object that never ends, such as a signal generator, reports `false` forever, so the loop needs another stop condition.",
+    "pt": "Objetos de fonte entregam seus dados em blocos, uma chamada por vez. O laço padrão lê um bloco e verifica `isDone` antes de ler o próximo: `while ~isDone(src), block = src(); ... end`. A verificação é falsa até que o último bloco tenha sido entregue.\n\nUm objeto System que nunca termina, como um gerador de sinal, informa `false` para sempre, então o laço precisa de outra condição de parada."
+   },
+   "notes": {
+    "en": "System objects are not available in MatLivre, so `isDone` cannot be called. The example reproduces the read-until-done pattern with a counter.",
+    "pt": "Objetos System não estão disponíveis no MatLivre, então `isDone` não pode ser chamada. O exemplo reproduz o padrão de ler até terminar com um contador."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The same loop pattern with a plain counter",
+      "pt": "O mesmo padrão de laço com um contador simples"
+     },
+     "code": "data = reshape(1:10, 5, 2);\nk = 0;\nwhile k < size(data, 2)\n  k = k + 1;\n  block = data(:, k);\n  fprintf('block %d sums to %d\\n', k, sum(block))\nend"
+    }
+   ],
+   "see": [
+    "isLocked",
+    "clone",
+    "while",
+    "feof"
+   ]
+  },
+  "isLocked": {
+   "summary": {
+    "en": "Tests whether a System object, or a function, is locked.",
+    "pt": "Testa se um objeto System, ou uma função, está bloqueado."
+   },
+   "syntax": [
+    {
+     "code": "tf = isLocked(obj)",
+     "en": "Returns `true` if the System object has been run and its settings are fixed.",
+     "pt": "Retorna `true` se o objeto System já foi executado e suas configurações estão fixas."
+    },
+    {
+     "code": "tf = mislocked(name)",
+     "en": "The matching check for a function locked with `mlock`.",
+     "pt": "A verificação correspondente para uma função bloqueada com `mlock`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "A System object.",
+     "pt": "Um objeto System."
+    },
+    {
+     "name": "name",
+     "en": "Function name, for `mislocked`.",
+     "pt": "Nome da função, para `mislocked`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A System object becomes locked the first time it is called, which freezes the properties that cannot change while the object holds state, such as the size and data type of the input. `release` unlocks it so that the settings can be changed. `isLocked` reports which of the two states the object is in.\n\nFor ordinary functions the same idea is `mlock`: a locked function keeps its persistent variables when `clear` is used, and `mislocked` tells whether a function is in that state.",
+    "pt": "Um objeto System fica bloqueado na primeira vez em que é chamado, o que congela as propriedades que não podem mudar enquanto o objeto guarda estado, como o tamanho e o tipo de dado da entrada. `release` o desbloqueia para que as configurações possam ser alteradas. `isLocked` informa em qual dos dois estados o objeto está.\n\nPara funções comuns a mesma ideia é `mlock`: uma função bloqueada mantém suas variáveis persistentes quando se usa `clear`, e `mislocked` informa se uma função está nesse estado."
+   },
+   "notes": {
+    "en": "System objects are not available in MatLivre, so `isLocked` itself cannot be called; the example uses `mislocked`.",
+    "pt": "Objetos System não estão disponíveis no MatLivre, então `isLocked` em si não pode ser chamada; o exemplo usa `mislocked`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "The function-level counterpart",
+      "pt": "O equivalente para funções"
+     },
+     "code": "mislocked('sin')"
+    }
+   ],
+   "see": [
+    "mislocked",
+    "mlock",
+    "munlock",
+    "clone",
+    "isDone"
+   ]
+  },
+  "ismethod": {
+   "summary": {
+    "en": "Tests whether an object has a method of a given name.",
+    "pt": "Testa se um objeto tem um método com determinado nome."
+   },
+   "syntax": [
+    {
+     "code": "tf = ismethod(obj, 'name')",
+     "en": "Returns `true` if `name` is a method of the class of `obj`.",
+     "pt": "Retorna `true` se `name` for um método da classe de `obj`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object.",
+     "pt": "Um objeto."
+    },
+    {
+     "name": "'name'",
+     "en": "Method name, as text. The match is case sensitive.",
+     "pt": "Nome do método, como texto. A comparação diferencia maiúsculas de minúsculas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Use it to decide at run time whether a call such as `obj.name(...)` is safe, or to write code that works with any object that offers a given operation. Inherited methods count. Properties and events do not; see `isprop` and `events` for those.",
+    "pt": "Use para decidir em tempo de execução se uma chamada como `obj.name(...)` é segura, ou para escrever código que funcione com qualquer objeto que ofereça determinada operação. Métodos herdados contam. Propriedades e eventos não; veja `isprop` e `events` para esses."
+   },
+   "notes": {
+    "en": "Pass an object. The form with the class name as text, `ismethod('ClassName', 'name')`, does not find methods in this version.",
+    "pt": "Passe um objeto. A forma com o nome da classe como texto, `ismethod('ClassName', 'name')`, não encontra métodos nesta versão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Methods of a Map",
+      "pt": "Métodos de um Map"
+     },
+     "code": "m = containers.Map();\nismethod(m, 'isKey')\nismethod(m, 'fly')\nismethod(m, 'Count')"
+    }
+   ],
+   "see": [
+    "isprop",
+    "methods",
+    "isobject",
+    "events"
+   ]
+  },
+  "isprop": {
+   "summary": {
+    "en": "Tests whether an object has a property of a given name.",
+    "pt": "Testa se um objeto tem uma propriedade com determinado nome."
+   },
+   "syntax": [
+    {
+     "code": "tf = isprop(obj, 'name')",
+     "en": "Returns `true` if `name` is a property of `obj`.",
+     "pt": "Retorna `true` se `name` for uma propriedade de `obj`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "An object.",
+     "pt": "Um objeto."
+    },
+    {
+     "name": "'name'",
+     "en": "Property name, as text.",
+     "pt": "Nome da propriedade, como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Unlike `isfield`, which looks inside a struct, `isprop` is for objects: `isprop(m, 'Count')` asks whether the object `m` has a property called `Count`. It returns `false` for anything that is not an object, such as a number or a struct.",
+    "pt": "Ao contrário de `isfield`, que olha dentro de uma struct, `isprop` é para objetos: `isprop(m, 'Count')` pergunta se o objeto `m` tem uma propriedade chamada `Count`. Retorna `false` para qualquer coisa que não seja objeto, como um número ou uma struct."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Properties of a Map",
+      "pt": "Propriedades de um Map"
+     },
+     "code": "m = containers.Map();\nisprop(m, 'Count')\nisprop(m, 'Weight')\nisprop([1 2 3], 'Count')"
+    }
+   ],
+   "see": [
+    "ismethod",
+    "isfield",
+    "properties",
+    "isobject"
+   ]
+  },
+  "listener": {
+   "summary": {
+    "en": "Creates an event listener without attaching it to the life of the source object.",
+    "pt": "Cria um listener de evento sem prendê-lo à vida do objeto de origem."
+   },
+   "syntax": [
+    {
+     "code": "lh = listener(obj, 'EventName', callback)",
+     "en": "Creates a listener that calls `callback` when `obj` triggers the event.",
+     "pt": "Cria um listener que chama `callback` quando `obj` dispara o evento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Handle object that defines the event.",
+     "pt": "Objeto handle que define o evento."
+    },
+    {
+     "name": "'EventName'",
+     "en": "Name of the event.",
+     "pt": "Nome do evento."
+    },
+    {
+     "name": "callback",
+     "en": "Function handle called as `callback(src, evtdata)`.",
+     "pt": "Handle de função chamado como `callback(src, evtdata)`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lh",
+     "en": "An `event.listener` object with properties `Source`, `EventName`, `Callback`, `Enabled` and `Recursive`.",
+     "pt": "Um objeto `event.listener` com as propriedades `Source`, `EventName`, `Callback`, `Enabled` e `Recursive`."
+    }
+   ],
+   "description": {
+    "en": "`listener` and `addlistener` build the same kind of object. The difference is lifetime: a listener made with `listener` stays active only while you hold `lh`, so it disappears when the variable is cleared or goes out of scope. That makes it the right tool when the listener should be tied to a view or a temporary computation rather than to the source.\n\nSetting `lh.Enabled = false` pauses the callback without removing the listener.",
+    "pt": "`listener` e `addlistener` constroem o mesmo tipo de objeto. A diferença é o tempo de vida: um listener criado com `listener` só fica ativo enquanto você guarda `lh`, desaparecendo quando a variável é limpa ou sai de escopo. É a ferramenta certa quando o listener deve estar ligado a uma visão ou a um cálculo temporário, e não à origem.\n\nDefinir `lh.Enabled = false` pausa o callback sem remover o listener."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Creating and pausing a listener",
+      "pt": "Criando e pausando um listener"
+     },
+     "code": "m = containers.Map();\nlh = listener(m, 'ObjectBeingDestroyed', @(s, e) disp('gone'));\nlh.EventName\nlh.Enabled\nlh.Enabled = false;\nlh.Enabled"
+    }
+   ],
+   "see": [
+    "addlistener",
+    "event.hasListener",
+    "events",
+    "notify"
+   ]
+  },
+  "meta.class.fromName": {
+   "summary": {
+    "en": "Returns the meta.class object that describes a class, given its name.",
+    "pt": "Retorna o objeto meta.class que descreve uma classe, dado o seu nome."
+   },
+   "syntax": [
+    {
+     "code": "mc = meta.class.fromName('ClassName')",
+     "en": "Returns a description of the class named `ClassName`.",
+     "pt": "Retorna uma descrição da classe de nome `ClassName`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'ClassName'",
+     "en": "Name of a class, as text.",
+     "pt": "Nome de uma classe, como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "mc",
+     "en": "A `meta.class` object. Its `Name`, `PropertyList`, `MethodList` and `EventList` describe the class.",
+     "pt": "Um objeto `meta.class`. Seus campos `Name`, `PropertyList`, `MethodList` e `EventList` descrevem a classe."
+    }
+   ],
+   "description": {
+    "en": "Metaclass objects let a program inspect classes without having an instance: the properties, methods and events they declare, and the superclasses. The shorthand `?ClassName` returns the same object in MATLAB.\n\nFor a name that is not a class on the path the result is empty, so test it with `isempty` before reading its properties.",
+    "pt": "Objetos metaclasse permitem que um programa inspecione classes sem ter uma instância: as propriedades, métodos e eventos declarados e as superclasses. A forma abreviada `?ClassName` retorna o mesmo objeto no MATLAB.\n\nPara um nome que não é uma classe no caminho, o resultado é vazio, então teste com `isempty` antes de ler suas propriedades."
+   },
+   "notes": {
+    "en": "Only classes defined in files give a full description. For built-in classes the call returns an empty result, and the `?ClassName` shorthand is not supported.",
+    "pt": "Só classes definidas em arquivos geram uma descrição completa. Para classes embutidas a chamada retorna um resultado vazio, e a forma abreviada `?ClassName` não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A name that is not a class",
+      "pt": "Um nome que não é uma classe"
+     },
+     "code": "mc = meta.class.fromName('NoSuchClass');\nisempty(mc)"
+    }
+   ],
+   "see": [
+    "ismethod",
+    "isprop",
+    "events",
+    "enumeration"
+   ]
+  }
+ }
+}

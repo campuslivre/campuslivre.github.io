@@ -1,0 +1,1290 @@
+{
+ "functions": {
+  "inner2outer": {
+   "summary": {
+    "en": "Swaps the nesting of a table whose variables are tables.",
+    "pt": "Inverte o aninhamento de uma tabela cujas variáveis são tabelas."
+   },
+   "syntax": [
+    {
+     "code": "T2 = inner2outer(T)",
+     "en": "Regroups the inner variables so they become the outer ones.",
+     "pt": "Reagrupa as variáveis internas de modo que passem a ser as externas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "Table in which every variable is itself a table or timetable.",
+     "pt": "Tabela em que toda variável é, ela mesma, uma tabela ou timetable."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T2",
+     "en": "Table with one variable per distinct inner variable name; each holds a table whose variables are the former outer ones.",
+     "pt": "Tabela com uma variável por nome interno distinto; cada uma contém uma tabela cujas variáveis são as antigas externas."
+    }
+   ],
+   "description": {
+    "en": "Take a table with outer variables `A` and `B`, each a table with inner variables `u` and `v`. `inner2outer` returns a table with outer variables `u` and `v`, each containing the columns `A` and `B`. Rows are unchanged. It is useful to compare the same measurement across groups.",
+    "pt": "Considere uma tabela com variáveis externas `A` e `B`, cada uma uma tabela com variáveis internas `u` e `v`. `inner2outer` retorna uma tabela com variáveis externas `u` e `v`, cada uma contendo as colunas `A` e `B`. As linhas não mudam. É útil para comparar a mesma medida entre grupos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Swapping the nesting",
+      "pt": "Trocando o aninhamento"
+     },
+     "code": "inner = table([1; 2], [3; 4], 'VariableNames', {'u', 'v'});\nother = table([5; 6], [7; 8], 'VariableNames', {'u', 'v'});\nT = table(inner, other, 'VariableNames', {'A', 'B'});\nT2 = inner2outer(T);\nT2.u",
+     "silent": false
+    }
+   ],
+   "see": [
+    "table",
+    "splitvars",
+    "mergevars",
+    "innerjoin",
+    "stack"
+   ]
+  },
+  "innerjoin": {
+   "summary": {
+    "en": "Joins two tables keeping only the rows whose key appears in both.",
+    "pt": "Une duas tabelas mantendo só as linhas cuja chave aparece nas duas."
+   },
+   "syntax": [
+    {
+     "code": "C = innerjoin(A, B)",
+     "en": "Joins on the variables the two tables have in common.",
+     "pt": "Une pelas variáveis que as duas tabelas têm em comum."
+    },
+    {
+     "code": "C = innerjoin(A, B, 'Keys', k)",
+     "en": "Joins on the named key variable(s).",
+     "pt": "Une pelas variáveis-chave indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Tables.",
+     "pt": "Tabelas."
+    },
+    {
+     "name": "'Keys'",
+     "en": "Name or names of the key variables present in both tables.",
+     "pt": "Nome ou nomes das variáveis-chave presentes nas duas tabelas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Table with the key variables, then the remaining variables of `A`, then those of `B`.",
+     "pt": "Tabela com as variáveis-chave, depois as demais variáveis de `A` e em seguida as de `B`."
+    }
+   ],
+   "description": {
+    "en": "A row appears in the result only when its key is present in both tables. If a key repeats, every pairing of the matching rows is produced. Keys that occur in only one table are dropped; use `outerjoin` to keep them.",
+    "pt": "Uma linha só aparece no resultado quando sua chave está presente nas duas tabelas. Se uma chave se repete, geram-se todos os pareamentos das linhas correspondentes. Chaves que ocorrem em apenas uma tabela são descartadas; use `outerjoin` para mantê-las."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Matching keys",
+      "pt": "Chaves correspondentes"
+     },
+     "code": "A = table([1; 2; 3], {'a'; 'b'; 'c'}, 'VariableNames', {'k', 'x'});\nB = table([1; 3; 4], [10; 30; 40], 'VariableNames', {'k', 'y'});\ninnerjoin(A, B, 'Keys', 'k')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "outerjoin",
+    "join",
+    "table",
+    "union",
+    "intersect"
+   ]
+  },
+  "insert": {
+   "summary": {
+    "en": "Adds a key and value to a dictionary and returns the updated dictionary.",
+    "pt": "Adiciona uma chave e um valor a um dictionary e retorna o dictionary atualizado."
+   },
+   "syntax": [
+    {
+     "code": "d2 = insert(d, key, value)",
+     "en": "Adds the pair, or overwrites the value if `key` already exists.",
+     "pt": "Adiciona o par, ou sobrescreve o valor se `key` já existir."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "`dictionary` object.",
+     "pt": "Objeto `dictionary`."
+    },
+    {
+     "name": "key, value",
+     "en": "The key and its value, or arrays of matching length for several pairs.",
+     "pt": "A chave e seu valor, ou arrays de mesmo comprimento para vários pares."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d2",
+     "en": "Updated `dictionary`. The input `d` is not modified.",
+     "pt": "`dictionary` atualizado. A entrada `d` não é modificada."
+    }
+   ],
+   "description": {
+    "en": "A dictionary is a value, not a handle object, so the result must be assigned: `d = insert(d, k, v)`. This is equivalent to `d(k) = v`. The key type must match the types the dictionary already holds.",
+    "pt": "Um dictionary é um valor, não um objeto handle, então o resultado precisa ser atribuído: `d = insert(d, k, v)`. Equivale a `d(k) = v`. O tipo da chave deve combinar com os tipos que o dictionary já guarda."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Add and overwrite",
+      "pt": "Adicionar e sobrescrever"
+     },
+     "code": "d = dictionary([\"x\" \"y\"], [1 2]);\nd = insert(d, \"z\", 3)\nd = insert(d, \"x\", 99);\nd(\"x\")",
+     "silent": false
+    }
+   ],
+   "see": [
+    "dictionary",
+    "isConfigured",
+    "keys",
+    "values",
+    "isKey",
+    "remove"
+   ]
+  },
+  "insertAfter": {
+   "summary": {
+    "en": "Inserts text right after a marker or a position.",
+    "pt": "Insere texto logo depois de um marcador ou de uma posição."
+   },
+   "syntax": [
+    {
+     "code": "newStr = insertAfter(str, pat, new)",
+     "en": "Inserts `new` after each occurrence of `pat`.",
+     "pt": "Insere `new` depois de cada ocorrência de `pat`."
+    },
+    {
+     "code": "newStr = insertAfter(str, pos, new)",
+     "en": "Inserts `new` after character position `pos` (rejected by MatLivre, see notes).",
+     "pt": "Insere `new` depois da posição `pos` (recusado pelo MatLivre, veja as notas)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text to modify.",
+     "pt": "Texto a modificar."
+    },
+    {
+     "name": "pat",
+     "en": "Marker text or `pattern`.",
+     "pt": "Texto marcador ou `pattern`."
+    },
+    {
+     "name": "pos",
+     "en": "Position after which to insert.",
+     "pt": "Posição depois da qual inserir."
+    },
+    {
+     "name": "new",
+     "en": "Text to insert.",
+     "pt": "Texto a inserir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "Text with the insertion made.",
+     "pt": "Texto com a inserção feita."
+    }
+   ],
+   "description": {
+    "en": "The original characters are kept; only new ones are added. With a marker, the insertion is made after every match, not only the first.",
+    "pt": "Os caracteres originais são mantidos; apenas novos são acrescentados. Com um marcador, a inserção é feita depois de cada ocorrência, não só da primeira."
+   },
+   "notes": {
+    "en": "In MatLivre only text markers work as the second argument; a numeric position raises an error.",
+    "pt": "Em MatLivre apenas marcadores de texto funcionam como segundo argumento; uma posição numérica gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inserting after a marker",
+      "pt": "Inserindo depois de um marcador"
+     },
+     "code": "insertAfter(\"abcdef\", \"cd\", \"XX\")",
+     "silent": false
+    }
+   ],
+   "see": [
+    "insertBefore",
+    "extractAfter",
+    "replace",
+    "eraseBetween",
+    "strcat"
+   ]
+  },
+  "insertBefore": {
+   "summary": {
+    "en": "Inserts text right before a marker or a position.",
+    "pt": "Insere texto logo antes de um marcador ou de uma posição."
+   },
+   "syntax": [
+    {
+     "code": "newStr = insertBefore(str, pat, new)",
+     "en": "Inserts `new` before each occurrence of `pat`.",
+     "pt": "Insere `new` antes de cada ocorrência de `pat`."
+    },
+    {
+     "code": "newStr = insertBefore(str, pos, new)",
+     "en": "Inserts `new` before character position `pos` (rejected by MatLivre, see notes).",
+     "pt": "Insere `new` antes da posição `pos` (recusado pelo MatLivre, veja as notas)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text to modify.",
+     "pt": "Texto a modificar."
+    },
+    {
+     "name": "pat",
+     "en": "Marker text or `pattern`.",
+     "pt": "Texto marcador ou `pattern`."
+    },
+    {
+     "name": "pos",
+     "en": "Position before which to insert.",
+     "pt": "Posição antes da qual inserir."
+    },
+    {
+     "name": "new",
+     "en": "Text to insert.",
+     "pt": "Texto a inserir."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "Text with the insertion made.",
+     "pt": "Texto com a inserção feita."
+    }
+   ],
+   "description": {
+    "en": "It is the mirror image of `insertAfter`. Only new characters are added; the original text is kept intact. With a marker, the insertion is made before every match.",
+    "pt": "É o espelho de `insertAfter`. Apenas novos caracteres são acrescentados; o texto original permanece intacto. Com um marcador, a inserção é feita antes de cada ocorrência."
+   },
+   "notes": {
+    "en": "In MatLivre only text markers work as the second argument; a numeric position raises an error.",
+    "pt": "Em MatLivre apenas marcadores de texto funcionam como segundo argumento; uma posição numérica gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inserting before a marker",
+      "pt": "Inserindo antes de um marcador"
+     },
+     "code": "insertBefore(\"abcdef\", \"cd\", \"XX\")",
+     "silent": false
+    }
+   ],
+   "see": [
+    "insertAfter",
+    "extractBefore",
+    "replace",
+    "eraseBetween",
+    "strcat"
+   ]
+  },
+  "int16": {
+   "summary": {
+    "en": "Converts values to signed 16-bit integers, from -32768 to 32767.",
+    "pt": "Converte valores em inteiros com sinal de 16 bits, de -32768 a 32767."
+   },
+   "syntax": [
+    {
+     "code": "B = int16(A)",
+     "en": "Converts `A` to class `int16`.",
+     "pt": "Converte `A` para a classe `int16`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array.",
+     "pt": "Array numérico, lógico ou de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of class `int16`, same size as `A`.",
+     "pt": "Array da classe `int16`, do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Fractions are rounded to the nearest integer, with ties going away from zero. Out-of-range values saturate at `intmin('int16')` or `intmax('int16')` instead of wrapping around, and `NaN` becomes `0`. Arithmetic between a `int16` and a double gives a `int16`, rounded after the operation; mixing two different integer classes is an error.\n\nThe class has no representation for `Inf` or `NaN`, so `int16(Inf)` is `intmax('int16')`.",
+    "pt": "Frações são arredondadas para o inteiro mais próximo, com empates indo para longe do zero. Valores fora da faixa saturam em `intmin('int16')` ou `intmax('int16')` em vez de dar a volta, e `NaN` vira `0`. A aritmética entre um `int16` e um double resulta em `int16`, arredondado após a operação; misturar duas classes inteiras diferentes é erro.\n\nA classe não tem representação para `Inf` ou `NaN`, então `int16(Inf)` é `intmax('int16')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rounding and saturation",
+      "pt": "Arredondamento e saturação"
+     },
+     "code": "int16(40000)\nint16(-7.5)\nint16(2.5)\nint16(NaN)\nclass(int16(3))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmax",
+    "intmin",
+    "double",
+    "uint8",
+    "round",
+    "cast"
+   ]
+  },
+  "int32": {
+   "summary": {
+    "en": "Converts values to signed 32-bit integers, from -2147483648 to 2147483647.",
+    "pt": "Converte valores em inteiros com sinal de 32 bits, de -2147483648 a 2147483647."
+   },
+   "syntax": [
+    {
+     "code": "B = int32(A)",
+     "en": "Converts `A` to class `int32`.",
+     "pt": "Converte `A` para a classe `int32`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array.",
+     "pt": "Array numérico, lógico ou de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of class `int32`, same size as `A`.",
+     "pt": "Array da classe `int32`, do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Fractions are rounded to the nearest integer, with ties going away from zero. Out-of-range values saturate at `intmin('int32')` or `intmax('int32')` instead of wrapping around, and `NaN` becomes `0`. Arithmetic between a `int32` and a double gives a `int32`, rounded after the operation; mixing two different integer classes is an error.\n\nThe class has no representation for `Inf` or `NaN`, so `int32(Inf)` is `intmax('int32')`.",
+    "pt": "Frações são arredondadas para o inteiro mais próximo, com empates indo para longe do zero. Valores fora da faixa saturam em `intmin('int32')` ou `intmax('int32')` em vez de dar a volta, e `NaN` vira `0`. A aritmética entre um `int32` e um double resulta em `int32`, arredondado após a operação; misturar duas classes inteiras diferentes é erro.\n\nA classe não tem representação para `Inf` ou `NaN`, então `int32(Inf)` é `intmax('int32')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rounding and saturation",
+      "pt": "Arredondamento e saturação"
+     },
+     "code": "int32(5) / int32(2)\nint32(7) / 2\nint32(1e10)\nint32(NaN)\nclass(int32(3))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmax",
+    "intmin",
+    "double",
+    "uint8",
+    "round",
+    "cast"
+   ]
+  },
+  "int64": {
+   "summary": {
+    "en": "Converts values to signed 64-bit integers, from -9223372036854775808 to 9223372036854775807.",
+    "pt": "Converte valores em inteiros com sinal de 64 bits, de -9223372036854775808 a 9223372036854775807."
+   },
+   "syntax": [
+    {
+     "code": "B = int64(A)",
+     "en": "Converts `A` to class `int64`.",
+     "pt": "Converte `A` para a classe `int64`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array.",
+     "pt": "Array numérico, lógico ou de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of class `int64`, same size as `A`.",
+     "pt": "Array da classe `int64`, do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Fractions are rounded to the nearest integer, with ties going away from zero. Out-of-range values saturate at `intmin('int64')` or `intmax('int64')` instead of wrapping around, and `NaN` becomes `0`. Arithmetic between a `int64` and a double gives a `int64`, rounded after the operation; mixing two different integer classes is an error.\n\nThe class has no representation for `Inf` or `NaN`, so `int64(Inf)` is `intmax('int64')`.",
+    "pt": "Frações são arredondadas para o inteiro mais próximo, com empates indo para longe do zero. Valores fora da faixa saturam em `intmin('int64')` ou `intmax('int64')` em vez de dar a volta, e `NaN` vira `0`. A aritmética entre um `int64` e um double resulta em `int64`, arredondado após a operação; misturar duas classes inteiras diferentes é erro.\n\nA classe não tem representação para `Inf` ou `NaN`, então `int64(Inf)` é `intmax('int64')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rounding and saturation",
+      "pt": "Arredondamento e saturação"
+     },
+     "code": "int64(9223372036854775807)\nint64(2)^62\nint64(1e19)\nclass(int64(3))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmax",
+    "intmin",
+    "double",
+    "uint8",
+    "round",
+    "cast"
+   ]
+  },
+  "int8": {
+   "summary": {
+    "en": "Converts values to signed 8-bit integers, from -128 to 127.",
+    "pt": "Converte valores em inteiros com sinal de 8 bits, de -128 a 127."
+   },
+   "syntax": [
+    {
+     "code": "B = int8(A)",
+     "en": "Converts `A` to class `int8`.",
+     "pt": "Converte `A` para a classe `int8`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array.",
+     "pt": "Array numérico, lógico ou de caracteres."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of class `int8`, same size as `A`.",
+     "pt": "Array da classe `int8`, do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Fractions are rounded to the nearest integer, with ties going away from zero. Out-of-range values saturate at `intmin('int8')` or `intmax('int8')` instead of wrapping around, and `NaN` becomes `0`. Arithmetic between a `int8` and a double gives a `int8`, rounded after the operation; mixing two different integer classes is an error.\n\nThe class has no representation for `Inf` or `NaN`, so `int8(Inf)` is `intmax('int8')`.",
+    "pt": "Frações são arredondadas para o inteiro mais próximo, com empates indo para longe do zero. Valores fora da faixa saturam em `intmin('int8')` ou `intmax('int8')` em vez de dar a volta, e `NaN` vira `0`. A aritmética entre um `int8` e um double resulta em `int8`, arredondado após a operação; misturar duas classes inteiras diferentes é erro.\n\nA classe não tem representação para `Inf` ou `NaN`, então `int8(Inf)` é `intmax('int8')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rounding and saturation",
+      "pt": "Arredondamento e saturação"
+     },
+     "code": "int8(100) + int8(100)\nint8(-200)\nint8(7.5)\nclass(int8(3))\nint8(NaN)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmax",
+    "intmin",
+    "double",
+    "uint8",
+    "round",
+    "cast"
+   ]
+  },
+  "int2str": {
+   "summary": {
+    "en": "Rounds numbers to integers and returns them as text.",
+    "pt": "Arredonda números para inteiros e os retorna como texto."
+   },
+   "syntax": [
+    {
+     "code": "s = int2str(N)",
+     "en": "Returns the rounded values as a character array.",
+     "pt": "Retorna os valores arredondados como um array de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "N",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Character vector (or char matrix, one row per row of `N`) with the rounded numbers separated by spaces.",
+     "pt": "Vetor de caracteres (ou matriz de caracteres, uma linha por linha de `N`) com os números arredondados separados por espaços."
+    }
+   ],
+   "description": {
+    "en": "`int2str(N)` equals `num2str(round(N))`. Ties round away from zero, so `int2str(2.5)` is `'3'`. It does not give control over the format; use `sprintf` or `num2str` with a format string for that.",
+    "pt": "`int2str(N)` equivale a `num2str(round(N))`. Empates arredondam para longe do zero, então `int2str(2.5)` é `'3'`. Não há controle sobre o formato; para isso use `sprintf` ou `num2str` com uma string de formato."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rounded text",
+      "pt": "Texto arredondado"
+     },
+     "code": "int2str(3.7)\nint2str(2.5)\nint2str(1e3*pi)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "num2str",
+    "round",
+    "sprintf",
+    "mat2str",
+    "str2double"
+   ]
+  },
+  "intersect": {
+   "summary": {
+    "en": "Elements common to two arrays, without repetition.",
+    "pt": "Elementos comuns a dois arrays, sem repetição."
+   },
+   "syntax": [
+    {
+     "code": "C = intersect(A, B)",
+     "en": "Returns the sorted values found in both `A` and `B`.",
+     "pt": "Retorna os valores ordenados presentes em `A` e `B`."
+    },
+    {
+     "code": "[C, ia, ib] = intersect(A, B)",
+     "en": "Also returns index vectors so that `C = A(ia)` and `C = B(ib)`.",
+     "pt": "Também retorna vetores de índices tais que `C = A(ia)` e `C = B(ib)`."
+    },
+    {
+     "code": "C = intersect(A, B, 'rows')",
+     "en": "Treats each row as one element.",
+     "pt": "Trata cada linha como um elemento."
+    },
+    {
+     "code": "C = intersect(___, 'stable')",
+     "en": "Keeps the order in which the values appear in `A`.",
+     "pt": "Mantém a ordem em que os valores aparecem em `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A, B",
+     "en": "Numeric arrays, cell arrays of character vectors, strings or tables.",
+     "pt": "Arrays numéricos, cell arrays de vetores de caracteres, strings ou tabelas."
+    },
+    {
+     "name": "'rows'",
+     "en": "Compare whole rows of two matrices with the same number of columns.",
+     "pt": "Compara linhas inteiras de duas matrizes com o mesmo número de colunas."
+    },
+    {
+     "name": "'sorted' | 'stable'",
+     "en": "Order of the result: ascending (default) or order of appearance.",
+     "pt": "Ordem do resultado: crescente (padrão) ou ordem de aparição."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "C",
+     "en": "Common values. A row vector if both inputs are row vectors, otherwise a column.",
+     "pt": "Valores comuns. Vetor linha se as duas entradas forem vetores linha, senão uma coluna."
+    },
+    {
+     "name": "ia, ib",
+     "en": "Column index vectors into `A` and `B`.",
+     "pt": "Vetores coluna de índices em `A` e `B`."
+    }
+   ],
+   "description": {
+    "en": "Duplicates are collapsed, so each shared value appears once in `C`. By default the output is sorted. `NaN` never equals `NaN`, so it is never reported as common.\n\nThe related set operations are `union`, `setdiff` and `setxor`.",
+    "pt": "Duplicatas são reunidas, de modo que cada valor compartilhado aparece uma vez em `C`. Por padrão a saída é ordenada. `NaN` nunca é igual a `NaN`, então nunca é reportado como comum.\n\nAs operações de conjuntos relacionadas são `union`, `setdiff` e `setxor`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers and text",
+      "pt": "Números e texto"
+     },
+     "code": "intersect([1 2 3 4], [3 4 5])\n[c, ia, ib] = intersect([5 1 3], [3 5 7])\nintersect({'x', 'y', 'z'}, {'z', 'x'})",
+     "silent": false
+    }
+   ],
+   "see": [
+    "union",
+    "setdiff",
+    "setxor",
+    "unique",
+    "ismember"
+   ]
+  },
+  "intmax": {
+   "summary": {
+    "en": "Largest value of an integer class.",
+    "pt": "Maior valor de uma classe inteira."
+   },
+   "syntax": [
+    {
+     "code": "m = intmax",
+     "en": "Returns the largest `int32`.",
+     "pt": "Retorna o maior `int32`."
+    },
+    {
+     "code": "m = intmax(classname)",
+     "en": "Returns the largest value of the named integer class.",
+     "pt": "Retorna o maior valor da classe inteira indicada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "classname",
+     "en": "One of `'int8'`, `'int16'`, `'int32'` (default), `'int64'`, `'uint8'`, `'uint16'`, `'uint32'`, `'uint64'`; or an integer array, whose class is used.",
+     "pt": "Uma entre `'int8'`, `'int16'`, `'int32'` (padrão), `'int64'`, `'uint8'`, `'uint16'`, `'uint32'`, `'uint64'`; ou um array inteiro, cuja classe é usada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Scalar of the requested class.",
+     "pt": "Escalar da classe pedida."
+    }
+   ],
+   "description": {
+    "en": "Integer arithmetic saturates at this value: `intmax('int32') + 1` is still `intmax('int32')`. For unsigned types the largest value is `2^n - 1`, and for signed types `2^(n-1) - 1`.",
+    "pt": "A aritmética inteira satura nesse valor: `intmax('int32') + 1` continua sendo `intmax('int32')`. Para tipos sem sinal o maior valor é `2^n - 1`, e para tipos com sinal, `2^(n-1) - 1`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Limits of integer classes",
+      "pt": "Limites das classes inteiras"
+     },
+     "code": "intmax\nintmax('uint16')\nintmax('int64')\nintmax('int32') + 1",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmin",
+    "realmax",
+    "flintmax",
+    "int32",
+    "uint8"
+   ]
+  },
+  "intmin": {
+   "summary": {
+    "en": "Smallest value of an integer class.",
+    "pt": "Menor valor de uma classe inteira."
+   },
+   "syntax": [
+    {
+     "code": "m = intmin",
+     "en": "Returns the smallest `int32`.",
+     "pt": "Retorna o menor `int32`."
+    },
+    {
+     "code": "m = intmin(classname)",
+     "en": "Returns the smallest value of the named integer class.",
+     "pt": "Retorna o menor valor da classe inteira indicada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "classname",
+     "en": "An integer class name, default `'int32'`, or an integer array whose class is used.",
+     "pt": "Nome de uma classe inteira, padrão `'int32'`, ou um array inteiro cuja classe é usada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Scalar of the requested class.",
+     "pt": "Escalar da classe pedida."
+    }
+   ],
+   "description": {
+    "en": "For signed types the smallest value is `-2^(n-1)`, one unit further from zero than the largest is. For unsigned types it is `0`. Subtracting past this value saturates instead of wrapping.",
+    "pt": "Para tipos com sinal, o menor valor é `-2^(n-1)`, uma unidade mais distante do zero que o maior. Para tipos sem sinal é `0`. Subtrair além desse valor satura em vez de dar a volta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Limits of integer classes",
+      "pt": "Limites das classes inteiras"
+     },
+     "code": "intmin\nintmin('int8')\nintmin('uint8')\nintmin('int8') - 1",
+     "silent": false
+    }
+   ],
+   "see": [
+    "intmax",
+    "realmin",
+    "int8",
+    "uint8",
+    "flintmax"
+   ]
+  },
+  "iqr": {
+   "summary": {
+    "en": "Interquartile range: the spread between the 75th and 25th percentiles.",
+    "pt": "Intervalo interquartil: a dispersão entre os percentis 75 e 25."
+   },
+   "syntax": [
+    {
+     "code": "r = iqr(X)",
+     "en": "Returns the interquartile range of a vector, or of each column of a matrix.",
+     "pt": "Retorna o intervalo interquartil de um vetor, ou de cada coluna de uma matriz."
+    },
+    {
+     "code": "r = iqr(X, dim)",
+     "en": "Computes along dimension `dim`.",
+     "pt": "Calcula ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "dim",
+     "en": "Dimension to operate along.",
+     "pt": "Dimensão ao longo da qual operar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "The difference `prctile(X, 75) - prctile(X, 25)`.",
+     "pt": "A diferença `prctile(X, 75) - prctile(X, 25)`."
+    }
+   ],
+   "description": {
+    "en": "The interquartile range measures the width of the middle half of the data, so unlike the standard deviation it is not influenced by extreme values. It is the basis of the common rule that flags a point as an outlier when it lies more than 1.5 times `iqr` beyond the quartiles.",
+    "pt": "O intervalo interquartil mede a largura da metade central dos dados e, ao contrário do desvio padrão, não é afetado por valores extremos. É a base da regra comum que marca um ponto como outlier quando ele fica a mais de 1,5 vez o `iqr` além dos quartis."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Spread of a sample",
+      "pt": "Dispersão de uma amostra"
+     },
+     "code": "iqr([1 2 3 4 5 6 7 8])\niqr([1 2 3 4 100])\nstd([1 2 3 4 100])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "prctile",
+    "quantile",
+    "median",
+    "std",
+    "mad",
+    "range"
+   ]
+  },
+  "isa": {
+   "summary": {
+    "en": "Tests whether a value belongs to a class or to a class category.",
+    "pt": "Testa se um valor pertence a uma classe ou a uma categoria de classes."
+   },
+   "syntax": [
+    {
+     "code": "tf = isa(obj, classname)",
+     "en": "Returns true if `obj` is of that class, or inherits from it.",
+     "pt": "Retorna verdadeiro se `obj` for dessa classe ou herdar dela."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "obj",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    },
+    {
+     "name": "classname",
+     "en": "Class name such as `'double'` or `'struct'`, or one of the categories `'numeric'`, `'float'`, `'integer'`. A cell array tests several names.",
+     "pt": "Nome de classe como `'double'` ou `'struct'`, ou uma das categorias `'numeric'`, `'float'`, `'integer'`. Um cell array testa vários nomes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar (or an array when `classname` is a cell array).",
+     "pt": "Escalar lógico (ou array quando `classname` é um cell array)."
+    }
+   ],
+   "description": {
+    "en": "`'numeric'` covers all integer and floating-point classes, `'float'` covers `single` and `double`, and `'integer'` covers the signed and unsigned integers. Logical and char are not numeric. Unlike `strcmp(class(x), ...)`, `isa` also respects class hierarchies.",
+    "pt": "`'numeric'` cobre todas as classes inteiras e de ponto flutuante, `'float'` cobre `single` e `double`, e `'integer'` cobre os inteiros com e sem sinal. Lógico e char não são numéricos. Ao contrário de `strcmp(class(x), ...)`, `isa` também respeita hierarquias de classes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Classes and categories",
+      "pt": "Classes e categorias"
+     },
+     "code": "isa(5, 'numeric')\nisa(int8(1), 'integer')\nisa(int8(1), 'float')\nisa(single(1), 'float')\nisa(true, 'numeric')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "class",
+    "isnumeric",
+    "isfloat",
+    "isinteger",
+    "validateattributes"
+   ]
+  },
+  "isbetween": {
+   "summary": {
+    "en": "Tests whether values lie within an interval, endpoints included.",
+    "pt": "Testa se valores estão dentro de um intervalo, extremos incluídos."
+   },
+   "syntax": [
+    {
+     "code": "tf = isbetween(x, lower, upper)",
+     "en": "Returns true where `lower <= x <= upper`.",
+     "pt": "Retorna verdadeiro onde `lower <= x <= upper`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "`datetime`, `duration` (or numeric) array to test.",
+     "pt": "Array `datetime`, `duration` (ou numérico) a testar."
+    },
+    {
+     "name": "lower, upper",
+     "en": "Scalars or arrays of the same type, compatible in size with `x`.",
+     "pt": "Escalares ou arrays do mesmo tipo, de tamanho compatível com `x`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array.",
+     "pt": "Array lógico."
+    }
+   ],
+   "description": {
+    "en": "`isbetween` is mostly used with dates: it saves writing `x >= lower & x <= upper` and reads clearly. Both limits are included. A value equal to either endpoint counts as inside.",
+    "pt": "`isbetween` é mais usada com datas: poupa escrever `x >= lower & x <= upper` e é mais legível. Os dois limites são incluídos. Um valor igual a qualquer extremo conta como dentro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dates in a month",
+      "pt": "Datas em um mês"
+     },
+     "code": "t = datetime(2024, 1, [5 20 31]);\nisbetween(t, datetime(2024, 1, 1), datetime(2024, 1, 25))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "datetime",
+    "between",
+    "ismember",
+    "withinrange",
+    "timerange"
+   ]
+  },
+  "iscalendarduration": {
+   "summary": {
+    "en": "Tests whether a value is a calendarDuration array.",
+    "pt": "Testa se um valor é um array calendarDuration."
+   },
+   "syntax": [
+    {
+     "code": "tf = iscalendarduration(A)",
+     "en": "Returns true for a `calendarDuration` array.",
+     "pt": "Retorna verdadeiro para um array `calendarDuration`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "`calendarDuration` values count calendar units such as `caldays` and `calmonths`, which vary in length. A plain `duration` such as `days(1)` is a fixed number of 24-hour days, and tests false here.",
+    "pt": "Valores `calendarDuration` contam unidades de calendário como `caldays` e `calmonths`, que têm comprimento variável. Uma `duration` comum, como `days(1)`, é um número fixo de dias de 24 horas e resulta em falso aqui."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Calendar vs fixed duration",
+      "pt": "Duração de calendário e duração fixa"
+     },
+     "code": "iscalendarduration(caldays(2))\niscalendarduration(days(2))\niscalendarduration(5)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "caldays",
+    "calmonths",
+    "isduration",
+    "isdatetime",
+    "duration"
+   ]
+  },
+  "iscategorical": {
+   "summary": {
+    "en": "Tests whether a value is a categorical array.",
+    "pt": "Testa se um valor é um array categorical."
+   },
+   "syntax": [
+    {
+     "code": "tf = iscategorical(A)",
+     "en": "Returns true for a `categorical` array.",
+     "pt": "Retorna verdadeiro para um array `categorical`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A cell array of text, even if it looks like categories, is not categorical until it is converted with `categorical`. The test looks at the class only, not at the contents.",
+    "pt": "Um cell array de textos, mesmo parecendo categorias, não é categorical até ser convertido com `categorical`. O teste olha apenas a classe, não o conteúdo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cell vs categorical",
+      "pt": "Cell e categorical"
+     },
+     "code": "iscategorical(categorical({'a', 'b'}))\niscategorical({'a', 'b'})",
+     "silent": false
+    }
+   ],
+   "see": [
+    "categorical",
+    "iscategory",
+    "categories",
+    "isordinal",
+    "class"
+   ]
+  },
+  "iscategory": {
+   "summary": {
+    "en": "Tests which names are categories of a categorical array.",
+    "pt": "Testa quais nomes são categorias de um array categorical."
+   },
+   "syntax": [
+    {
+     "code": "tf = iscategory(C, names)",
+     "en": "Returns true for each name in `names` that is a category of `C`.",
+     "pt": "Retorna verdadeiro para cada nome em `names` que seja categoria de `C`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "`categorical` array.",
+     "pt": "Array `categorical`."
+    },
+    {
+     "name": "names",
+     "en": "Text or cell array of text with the category names to look for.",
+     "pt": "Texto ou cell array de textos com os nomes de categoria a procurar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array, one entry per name.",
+     "pt": "Array lógico, uma entrada por nome."
+    }
+   ],
+   "description": {
+    "en": "The test concerns the set of categories, not the data. A category can exist without any element currently having that value, and then `iscategory` is still true.",
+    "pt": "O teste diz respeito ao conjunto de categorias, não aos dados. Uma categoria pode existir sem que algum elemento tenha esse valor no momento, e então `iscategory` continua verdadeiro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Looking up categories",
+      "pt": "Procurando categorias"
+     },
+     "code": "C = categorical({'a', 'b', 'a'});\niscategory(C, 'a')\niscategory(C, {'a', 'z'})",
+     "silent": false
+    }
+   ],
+   "see": [
+    "categories",
+    "iscategorical",
+    "addcats",
+    "removecats",
+    "categorical"
+   ]
+  },
+  "iscell": {
+   "summary": {
+    "en": "Tests whether a value is a cell array.",
+    "pt": "Testa se um valor é um cell array."
+   },
+   "syntax": [
+    {
+     "code": "tf = iscell(A)",
+     "en": "Returns true for a cell array.",
+     "pt": "Retorna verdadeiro para um cell array."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test is true for any cell array, including an empty one (`{}`). Use `iscellstr` to check that every cell holds a character vector.",
+    "pt": "O teste é verdadeiro para qualquer cell array, inclusive vazio (`{}`). Use `iscellstr` para verificar se toda célula guarda um vetor de caracteres."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Cell or not",
+      "pt": "Cell ou não"
+     },
+     "code": "iscell({1, 'a'})\niscell({})\niscell([1 2 3])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "iscellstr",
+    "cell",
+    "iscolumn",
+    "isstruct",
+    "class"
+   ]
+  },
+  "iscellstr": {
+   "summary": {
+    "en": "Tests whether a value is a cell array of character vectors.",
+    "pt": "Testa se um valor é um cell array de vetores de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "tf = iscellstr(A)",
+     "en": "Returns true if `A` is a cell array in which every element is a character vector.",
+     "pt": "Retorna verdadeiro se `A` for um cell array em que todo elemento é um vetor de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A single non-text element, such as a number, makes the result false. An empty cell array counts as true. String arrays are not cell arrays, so `iscellstr` is false for them; use `isstring` or `cellstr` to convert.",
+    "pt": "Um único elemento que não seja texto, como um número, torna o resultado falso. Um cell array vazio conta como verdadeiro. String arrays não são cell arrays, então `iscellstr` é falso para eles; use `isstring` ou `cellstr` para converter."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Text-only cells",
+      "pt": "Cells só com texto"
+     },
+     "code": "iscellstr({'a', 'bc'})\niscellstr({'a', 1})\niscellstr({})",
+     "silent": false
+    }
+   ],
+   "see": [
+    "iscell",
+    "cellstr",
+    "ischar",
+    "isstring",
+    "char"
+   ]
+  },
+  "ischar": {
+   "summary": {
+    "en": "Tests whether a value is a character array.",
+    "pt": "Testa se um valor é um array de caracteres."
+   },
+   "syntax": [
+    {
+     "code": "tf = ischar(A)",
+     "en": "Returns true for a char array.",
+     "pt": "Retorna verdadeiro para um array char."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Single-quoted text such as `'abc'` is a char array. A double-quoted `\"abc\"` is a string, so `ischar` is false for it; use `isstring` to test for strings, or `ischar(x) || isstring(x)` to accept both.",
+    "pt": "Texto entre aspas simples, como `'abc'`, é um array char. Um `\"abc\"` entre aspas duplas é uma string, então `ischar` é falso para ele; use `isstring` para testar strings, ou `ischar(x) || isstring(x)` para aceitar ambos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Char vs string",
+      "pt": "Char e string"
+     },
+     "code": "ischar('abc')\nischar(\"abc\")\nischar(65)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "isstring",
+    "iscellstr",
+    "char",
+    "class",
+    "isnumeric"
+   ]
+  },
+  "isConfigured": {
+   "summary": {
+    "en": "Tests whether a dictionary has its key and value types defined.",
+    "pt": "Testa se um dictionary tem definidos os tipos de chave e valor."
+   },
+   "syntax": [
+    {
+     "code": "tf = isConfigured(d)",
+     "en": "Returns true if `d` has key and value types.",
+     "pt": "Retorna verdadeiro se `d` tiver tipos de chave e valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "`dictionary` object.",
+     "pt": "Objeto `dictionary`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A dictionary created with `dictionary` and no arguments has no types yet, so it is unconfigured. The types are fixed the first time entries are added, or when it is made with entries or with `configureDictionary`. An empty dictionary created with explicit types is configured.",
+    "pt": "Um dictionary criado com `dictionary` sem argumentos ainda não tem tipos, então não está configurado. Os tipos ficam definidos na primeira vez que entradas são adicionadas, ou quando é criado com entradas ou com `configureDictionary`. Um dictionary vazio criado com tipos explícitos está configurado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Unconfigured and configured",
+      "pt": "Não configurado e configurado"
+     },
+     "code": "isConfigured(dictionary)\nisConfigured(dictionary([\"a\" \"b\"], [1 2]))\nisConfigured(dictionary(string.empty, double.empty))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "dictionary",
+    "configureDictionary",
+    "insert",
+    "keys",
+    "isKey"
+   ]
+  },
+  "isdatetime": {
+   "summary": {
+    "en": "Tests whether a value is a datetime array.",
+    "pt": "Testa se um valor é um array datetime."
+   },
+   "syntax": [
+    {
+     "code": "tf = isdatetime(A)",
+     "en": "Returns true for a `datetime` array.",
+     "pt": "Retorna verdadeiro para um array `datetime`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Only values of class `datetime` pass. Date strings, serial date numbers from `datenum` and `duration` values are not `datetime`; convert them with `datetime(...)` first.",
+    "pt": "Só valores da classe `datetime` passam. Strings de data, números seriais de `datenum` e valores `duration` não são `datetime`; converta-os antes com `datetime(...)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Datetime or not",
+      "pt": "Datetime ou não"
+     },
+     "code": "isdatetime(datetime(2024, 1, 5))\nisdatetime('2024-01-05')\nisdatetime(hours(3))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "datetime",
+    "isduration",
+    "iscalendarduration",
+    "datenum",
+    "class"
+   ]
+  }
+ }
+}

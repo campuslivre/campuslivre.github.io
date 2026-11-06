@@ -1,0 +1,1245 @@
+{
+ "functions": {
+  "sparse": {
+   "summary": {
+    "en": "Creates a sparse matrix, or converts a full matrix to sparse form.",
+    "pt": "Cria uma matriz esparsa, ou converte uma matriz cheia para a forma esparsa."
+   },
+   "syntax": [
+    {
+     "code": "S = sparse(A)",
+     "en": "Converts the full matrix `A` to sparse storage.",
+     "pt": "Converte a matriz cheia `A` para armazenamento esparso."
+    },
+    {
+     "code": "S = sparse(m, n)",
+     "en": "Creates an `m`-by-`n` sparse matrix of zeros.",
+     "pt": "Cria uma matriz esparsa `m`-por-`n` de zeros."
+    },
+    {
+     "code": "S = sparse(i, j, v)",
+     "en": "Creates a matrix with `S(i(k), j(k)) = v(k)`; repeated positions are added together.",
+     "pt": "Cria uma matriz com `S(i(k), j(k)) = v(k)`; posições repetidas são somadas."
+    },
+    {
+     "code": "S = sparse(i, j, v, m, n)",
+     "en": "Same, with an explicit size `m`-by-`n`.",
+     "pt": "Igual, com tamanho explícito `m`-por-`n`."
+    },
+    {
+     "code": "S = sparse(i, j, v, m, n, nzmax)",
+     "en": "Also reserves space for `nzmax` nonzeros.",
+     "pt": "Também reserva espaço para `nzmax` não nulos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical matrix.",
+     "pt": "Matriz numérica ou lógica."
+    },
+    {
+     "name": "i, j",
+     "en": "Row and column indices of the entries, as vectors of positive integers.",
+     "pt": "Índices de linha e coluna dos elementos, como vetores de inteiros positivos."
+    },
+    {
+     "name": "v",
+     "en": "Values for the entries; a scalar is expanded to all positions.",
+     "pt": "Valores dos elementos; um escalar é expandido para todas as posições."
+    },
+    {
+     "name": "m, n",
+     "en": "Number of rows and columns.",
+     "pt": "Número de linhas e colunas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Sparse matrix. Zero entries are not shown when it is displayed.",
+     "pt": "Matriz esparsa. Os elementos nulos não aparecem quando ela é exibida."
+    }
+   ],
+   "description": {
+    "en": "A sparse matrix keeps only its nonzero entries, which lets large matrices that are mostly zeros, such as finite-difference grids or graphs, be handled efficiently. Display lists each stored entry as `(row,column)  value`.\n\nArithmetic follows simple rules: sparse times sparse is sparse, sparse plus a nonzero scalar becomes full, and most elementwise functions keep sparsity if `f(0) = 0`. Use `full` to convert back, `issparse` to test, and `find` to list the entries.\n\nBuilding from triplets `(i, j, v)` is the fast way to assemble a matrix. Duplicate positions are summed, which is convenient for assembling finite-element matrices.",
+    "pt": "Uma matriz esparsa guarda apenas seus elementos não nulos, o que permite lidar com eficiência com matrizes grandes e quase todas nulas, como malhas de diferenças finitas ou grafos. A exibição lista cada elemento armazenado como `(linha,coluna)  valor`.\n\nA aritmética segue regras simples: esparsa vezes esparsa é esparsa, esparsa mais um escalar não nulo vira cheia, e a maioria das funções elemento a elemento mantém a esparsidade se `f(0) = 0`. Use `full` para converter de volta, `issparse` para testar e `find` para listar os elementos.\n\nMontar a partir de triplas `(i, j, v)` é a forma rápida de construir uma matriz. Posições repetidas são somadas, o que é conveniente para montar matrizes de elementos finitos."
+   },
+   "notes": {
+    "en": "Complex values are not kept: the imaginary part is dropped when building a sparse matrix. MatLivre stores sparse matrices densely, so they save no memory, and sizes above 200 million elements are rejected. Results and display match MATLAB for ordinary sizes.",
+    "pt": "Valores complexos não são preservados: a parte imaginária é descartada ao montar a matriz esparsa. O MatLivre armazena matrizes esparsas de forma densa, então elas não economizam memória, e tamanhos acima de 200 milhões de elementos são rejeitados. Resultados e exibição coincidem com os do MATLAB em tamanhos comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Triplets, a sum and a conversion",
+      "pt": "Triplas, uma soma e uma conversão"
+     },
+     "code": "S = sparse([1 2 3 3], [1 2 3 3], [4 5 6 1])\nfull(S)\nT = sparse([1 0 2; 0 0 3])\nsize(sparse(2, 3))"
+    }
+   ],
+   "see": [
+    "full",
+    "issparse",
+    "nnz",
+    "spalloc",
+    "speye",
+    "find"
+   ]
+  },
+  "spaugment": {
+   "summary": {
+    "en": "Augmented matrix of the least-squares problem for a sparse matrix.",
+    "pt": "Matriz aumentada do problema de mínimos quadrados para uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "S = spaugment(A)",
+     "en": "Returns `[speye(m) A; A' sparse(n,n)]` for an `m`-by-`n` matrix `A`.",
+     "pt": "Retorna `[speye(m) A; A' sparse(n,n)]` para uma matriz `A` `m`-por-`n`."
+    },
+    {
+     "code": "S = spaugment(A, c)",
+     "en": "Uses `c*speye(m)` in the upper left block.",
+     "pt": "Usa `c*speye(m)` no bloco superior esquerdo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse (or full) `m`-by-`n` matrix.",
+     "pt": "Matriz `m`-por-`n` esparsa (ou cheia)."
+    },
+    {
+     "name": "c",
+     "en": "Scalar scaling the identity block; the default is `max(abs(A(:)))/1000`.",
+     "pt": "Escalar que multiplica o bloco identidade; o padrão é `max(abs(A(:)))/1000`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Symmetric sparse matrix of size `(m+n)`-by-`(m+n)`.",
+     "pt": "Matriz esparsa simétrica de tamanho `(m+n)`-por-`(m+n)`."
+    }
+   ],
+   "description": {
+    "en": "The least-squares problem of minimizing `norm(b - A*x)` can be written as one symmetric indefinite linear system in the unknowns `r` (residual) and `x`. `spaugment` builds the coefficient matrix of that system, so that sparse direct or iterative solvers can be applied without squaring the condition number as the normal equations do.\n\nWith `c` as the scaling, the system is `S*[r/c; x] = [b; 0]`.",
+    "pt": "O problema de mínimos quadrados de minimizar `norm(b - A*x)` pode ser escrito como um único sistema linear simétrico indefinido nas incógnitas `r` (resíduo) e `x`. `spaugment` monta a matriz de coeficientes desse sistema, de modo que solvers esparsos diretos ou iterativos possam ser usados sem elevar ao quadrado o número de condição, como fazem as equações normais.\n\nCom `c` como escala, o sistema é `S*[r/c; x] = [b; 0]`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Augmented matrix of a 3-by-2 matrix",
+      "pt": "Matriz aumentada de uma matriz 3-por-2"
+     },
+     "code": "A = sparse([1 2; 3 4; 5 6]);\nS = spaugment(A, 1);\nfull(S)"
+    }
+   ],
+   "see": [
+    "sparse",
+    "speye",
+    "lsqr",
+    "minres"
+   ]
+  },
+  "spconvert": {
+   "summary": {
+    "en": "Converts a list of (row, column, value) entries to a sparse matrix.",
+    "pt": "Converte uma lista de elementos (linha, coluna, valor) em uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "S = spconvert(D)",
+     "en": "Builds a sparse matrix from the rows `[i j v]` of `D`.",
+     "pt": "Monta uma matriz esparsa a partir das linhas `[i j v]` de `D`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "D",
+     "en": "Matrix with three columns `[i j v]`, or four columns `[i j re im]` for complex entries. An entry with value `0` at the last position sets the size.",
+     "pt": "Matriz com três colunas `[i j v]`, ou quatro colunas `[i j re im]` para elementos complexos. Um elemento de valor `0` na última posição define o tamanho."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Sparse matrix whose size is the largest row and column index in `D`.",
+     "pt": "Matriz esparsa cujo tamanho é o maior índice de linha e de coluna em `D`."
+    }
+   ],
+   "description": {
+    "en": "`spconvert` reads the format commonly used to save sparse matrices as text, one entry per line. Loading such a file with `load` gives the matrix `D`, and `spconvert(D)` turns it into a sparse matrix.\n\nThe size is taken from the largest indices that appear, so adding a row with value `0` at the bottom-right position is how a matrix with empty trailing rows or columns is specified.",
+    "pt": "`spconvert` lê o formato comumente usado para salvar matrizes esparsas como texto, um elemento por linha. Carregar esse arquivo com `load` gera a matriz `D`, e `spconvert(D)` a transforma em matriz esparsa.\n\nO tamanho é tomado dos maiores índices que aparecem, então acrescentar uma linha com valor `0` na posição inferior direita é como se especifica uma matriz com linhas ou colunas finais vazias."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Triplets with a size marker",
+      "pt": "Triplas com marcador de tamanho"
+     },
+     "code": "D = [1 1 5; 2 3 7; 4 4 0];\nS = spconvert(D);\nsize(S)\nfull(S)"
+    }
+   ],
+   "see": [
+    "sparse",
+    "find",
+    "load"
+   ]
+  },
+  "spdiags": {
+   "summary": {
+    "en": "Extracts diagonals from a matrix, or builds a matrix from diagonals.",
+    "pt": "Extrai diagonais de uma matriz, ou monta uma matriz a partir de diagonais."
+   },
+   "syntax": [
+    {
+     "code": "B = spdiags(A)",
+     "en": "Returns the nonzero diagonals of `A` as the columns of `B`.",
+     "pt": "Retorna as diagonais não nulas de `A` como as colunas de `B`."
+    },
+    {
+     "code": "[B, d] = spdiags(A)",
+     "en": "Also returns the diagonal numbers `d`.",
+     "pt": "Também retorna os números das diagonais `d`."
+    },
+    {
+     "code": "S = spdiags(B, d, m, n)",
+     "en": "Builds an `m`-by-`n` sparse matrix whose diagonals `d` are taken from the columns of `B`.",
+     "pt": "Monta uma matriz esparsa `m`-por-`n` cujas diagonais `d` são tiradas das colunas de `B`."
+    },
+    {
+     "code": "S = spdiags(B, d, A)",
+     "en": "Replaces the diagonals `d` of `A` with the columns of `B`.",
+     "pt": "Substitui as diagonais `d` de `A` pelas colunas de `B`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Matrix to extract from, or to modify.",
+     "pt": "Matriz da qual extrair, ou a modificar."
+    },
+    {
+     "name": "B",
+     "en": "Matrix whose columns hold the diagonal values.",
+     "pt": "Matriz cujas colunas guardam os valores das diagonais."
+    },
+    {
+     "name": "d",
+     "en": "Vector of diagonal numbers: `0` is the main diagonal, positive values are above it, negative below.",
+     "pt": "Vetor de números de diagonais: `0` é a diagonal principal, valores positivos ficam acima, negativos abaixo."
+    },
+    {
+     "name": "m, n",
+     "en": "Size of the matrix to create.",
+     "pt": "Tamanho da matriz a criar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Matrix with one diagonal per column, padded with zeros.",
+     "pt": "Matriz com uma diagonal por coluna, completada com zeros."
+    },
+    {
+     "name": "S",
+     "en": "Sparse matrix with the requested diagonals.",
+     "pt": "Matriz esparsa com as diagonais pedidas."
+    }
+   ],
+   "description": {
+    "en": "A band matrix such as the second-difference operator is written compactly by listing its diagonals. A column of `B` shorter than the diagonal is padded: for a square matrix, a superdiagonal uses the entries of `B` from the bottom, and a subdiagonal uses them from the top, so the first entries of an upper diagonal and the last entries of a lower diagonal are ignored.\n\nExtraction is the inverse: `spdiags(A)` finds which diagonals are not empty and returns them in the same layout, ready to be fed back to the building form.",
+    "pt": "Uma matriz em banda, como o operador de segunda diferença, é escrita de forma compacta listando suas diagonais. Uma coluna de `B` mais curta que a diagonal é completada: em uma matriz quadrada, uma superdiagonal usa os elementos de `B` a partir do final, e uma subdiagonal usa-os a partir do início, de modo que os primeiros elementos de uma diagonal superior e os últimos de uma inferior são ignorados.\n\nA extração é o inverso: `spdiags(A)` descobre quais diagonais não estão vazias e as devolve no mesmo formato, pronto para a forma de construção."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Second-difference matrix",
+      "pt": "Matriz de segunda diferença"
+     },
+     "code": "e = ones(4, 1);\nA = spdiags([-e 2*e -e], -1:1, 4, 4);\nfull(A)\n[B, d] = spdiags(A);\nd"
+    }
+   ],
+   "see": [
+    "diag",
+    "sparse",
+    "speye",
+    "full"
+   ]
+  },
+  "speye": {
+   "summary": {
+    "en": "Sparse identity matrix.",
+    "pt": "Matriz identidade esparsa."
+   },
+   "syntax": [
+    {
+     "code": "S = speye(n)",
+     "en": "Returns the `n`-by-`n` sparse identity.",
+     "pt": "Retorna a identidade esparsa `n`-por-`n`."
+    },
+    {
+     "code": "S = speye(m, n)",
+     "en": "Returns an `m`-by-`n` sparse matrix with ones on the main diagonal.",
+     "pt": "Retorna uma matriz esparsa `m`-por-`n` com uns na diagonal principal."
+    },
+    {
+     "code": "S = speye([m n])",
+     "en": "Same, with the size given as a vector.",
+     "pt": "Igual, com o tamanho dado como vetor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m, n",
+     "en": "Number of rows and columns.",
+     "pt": "Número de linhas e colunas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "S",
+     "en": "Sparse matrix with `min(m,n)` stored nonzeros.",
+     "pt": "Matriz esparsa com `min(m,n)` não nulos armazenados."
+    }
+   ],
+   "description": {
+    "en": "`speye(n)` is the sparse counterpart of `eye(n)`. It is the natural building block for shifted matrices such as `A + sigma*speye(n)`, where using a full identity would destroy the sparsity of the sum.",
+    "pt": "`speye(n)` é a versão esparsa de `eye(n)`. É o bloco natural para matrizes deslocadas como `A + sigma*speye(n)`, em que usar uma identidade cheia destruiria a esparsidade da soma."
+   },
+   "notes": {
+    "en": "MatLivre stores sparse matrices densely, so they save no memory, and sizes above 200 million elements are rejected. Results and display match MATLAB for ordinary sizes.",
+    "pt": "O MatLivre armazena matrizes esparsas de forma densa, então elas não economizam memória, e tamanhos acima de 200 milhões de elementos são rejeitados. Resultados e exibição coincidem com os do MATLAB em tamanhos comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Identity and a shifted matrix",
+      "pt": "Identidade e uma matriz deslocada"
+     },
+     "code": "I = speye(3)\nfull(speye(2, 3))\nS = 2*speye(2) + sparse([0 1; 0 0]);\nfull(S)"
+    }
+   ],
+   "see": [
+    "eye",
+    "sparse",
+    "spones",
+    "spdiags"
+   ]
+  },
+  "spfun": {
+   "summary": {
+    "en": "Applies a function to the nonzero elements of a sparse matrix.",
+    "pt": "Aplica uma função aos elementos não nulos de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "F = spfun(fun, S)",
+     "en": "Evaluates `fun` on the nonzero entries of `S` and returns the results in the same positions.",
+     "pt": "Avalia `fun` nos elementos não nulos de `S` e retorna os resultados nas mesmas posições."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle that works elementwise on a vector.",
+     "pt": "Handle de função que atua elemento a elemento sobre um vetor."
+    },
+    {
+     "name": "S",
+     "en": "Sparse matrix.",
+     "pt": "Matriz esparsa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "F",
+     "en": "Sparse matrix with the same size and pattern as `S`.",
+     "pt": "Matriz esparsa de mesmo tamanho e padrão que `S`."
+    }
+   ],
+   "description": {
+    "en": "Zeros in `S` are never passed to `fun`. Compare `exp(S)`, which turns every zero into 1 and gives a full matrix, with `spfun(@exp, S)`, which leaves the zeros as zeros and keeps the result sparse. This is useful for functions where `f(0)` is not zero but the absent entries should stay absent.",
+    "pt": "Os zeros de `S` nunca são passados a `fun`. Compare `exp(S)`, que transforma cada zero em 1 e dá uma matriz cheia, com `spfun(@exp, S)`, que deixa os zeros como zeros e mantém o resultado esparso. Serve para funções em que `f(0)` não é zero mas as posições ausentes devem continuar ausentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Applying exp to the nonzeros only",
+      "pt": "Aplicando exp só aos não nulos"
+     },
+     "code": "S = sparse([0 1; 2 0]);\nF = spfun(@exp, S);\nfull(F)\nnnz(F)\nnnz(exp(S))"
+    }
+   ],
+   "see": [
+    "sparse",
+    "spones",
+    "nonzeros",
+    "arrayfun"
+   ]
+  },
+  "spones": {
+   "summary": {
+    "en": "Replaces the nonzero elements of a matrix by ones.",
+    "pt": "Substitui os elementos não nulos de uma matriz por uns."
+   },
+   "syntax": [
+    {
+     "code": "R = spones(S)",
+     "en": "Returns a sparse matrix with the same pattern as `S` and ones where `S` is nonzero.",
+     "pt": "Retorna uma matriz esparsa com o mesmo padrão de `S` e uns onde `S` é não nulo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Sparse or full matrix.",
+     "pt": "Matriz esparsa ou cheia."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Sparse matrix of ones and zeros.",
+     "pt": "Matriz esparsa de uns e zeros."
+    }
+   ],
+   "description": {
+    "en": "`spones` keeps the structure of a matrix and discards the values, giving its adjacency pattern. For a sparse input it equals `spfun(@(x) 1, S)`. It is handy for counting entries by row or column, as in `sum(spones(S), 2)`.",
+    "pt": "`spones` mantém a estrutura de uma matriz e descarta os valores, dando seu padrão de adjacência. Para uma entrada esparsa equivale a `spfun(@(x) 1, S)`. É útil para contar elementos por linha ou coluna, como em `sum(spones(S), 2)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Pattern and row counts",
+      "pt": "Padrão e contagem por linha"
+     },
+     "code": "S = sparse([2 0 3; 0 0 -5]);\nfull(spones(S))\nfull(sum(spones(S), 2))"
+    }
+   ],
+   "see": [
+    "spfun",
+    "sparse",
+    "nnz",
+    "spy"
+   ]
+  },
+  "spparms": {
+   "summary": {
+    "en": "Sets or reads parameters of the sparse matrix routines.",
+    "pt": "Define ou lê parâmetros das rotinas de matrizes esparsas."
+   },
+   "syntax": [
+    {
+     "code": "spparms('key', value)",
+     "en": "Sets the tuning parameter `key` to `value`.",
+     "pt": "Define o parâmetro de ajuste `key` com o valor `value`."
+    },
+    {
+     "code": "spparms('default')",
+     "en": "Restores the default parameters.",
+     "pt": "Restaura os parâmetros padrão."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'key'",
+     "en": "Name of a parameter, such as `'spumoni'` (diagnostic output level) or `'tight'`.",
+     "pt": "Nome de um parâmetro, como `'spumoni'` (nível de mensagens de diagnóstico) ou `'tight'`."
+    },
+    {
+     "name": "value",
+     "en": "New numeric value.",
+     "pt": "Novo valor numérico."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "In MATLAB these parameters tune the algorithms behind sparse backslash, such as the ordering heuristics and the verbosity of diagnostics. They rarely need changing, and the defaults are the right choice for almost all uses.",
+    "pt": "No MATLAB esses parâmetros ajustam os algoritmos por trás da divisão à esquerda esparsa, como as heurísticas de ordenação e o nível de detalhe do diagnóstico. Raramente precisam mudar, e os padrões são a escolha certa para quase todos os usos."
+   },
+   "notes": {
+    "en": "The call is accepted and does nothing. The forms that return the parameter values, such as `v = spparms` or `[keys, vals] = spparms`, are not available.",
+    "pt": "A chamada é aceita e não faz nada. As formas que retornam os valores dos parâmetros, como `v = spparms` ou `[keys, vals] = spparms`, não estão disponíveis."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Setting and restoring",
+      "pt": "Definindo e restaurando"
+     },
+     "code": "spparms('spumoni', 0)\nspparms('default')\ndisp('sparse parameters reset')"
+    }
+   ],
+   "see": [
+    "sparse",
+    "lu",
+    "chol",
+    "symrcm"
+   ]
+  },
+  "sprand": {
+   "summary": {
+    "en": "Sparse matrix with random entries uniformly distributed between 0 and 1.",
+    "pt": "Matriz esparsa com elementos aleatórios uniformemente distribuídos entre 0 e 1."
+   },
+   "syntax": [
+    {
+     "code": "R = sprand(m, n, density)",
+     "en": "Returns an `m`-by-`n` sparse matrix with about `density*m*n` nonzeros.",
+     "pt": "Retorna uma matriz esparsa `m`-por-`n` com cerca de `density*m*n` não nulos."
+    },
+    {
+     "code": "R = sprand(S)",
+     "en": "Returns a random matrix with the same sparsity pattern as `S`.",
+     "pt": "Retorna uma matriz aleatória com o mesmo padrão de esparsidade de `S`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m, n",
+     "en": "Size of the matrix.",
+     "pt": "Tamanho da matriz."
+    },
+    {
+     "name": "density",
+     "en": "Fraction of entries that are nonzero, from 0 to 1.",
+     "pt": "Fração de elementos não nulos, de 0 a 1."
+    },
+    {
+     "name": "S",
+     "en": "Sparse matrix whose pattern is copied.",
+     "pt": "Matriz esparsa cujo padrão é copiado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Sparse matrix whose nonzeros are drawn from the uniform distribution on (0, 1).",
+     "pt": "Matriz esparsa cujos não nulos são sorteados da distribuição uniforme em (0, 1)."
+    }
+   ],
+   "description": {
+    "en": "The positions of the nonzeros are chosen at random, so the actual number can be somewhat different from the requested density when two draws land on the same position. Use `rng` before the call for reproducible matrices.\n\nIt is used to build test matrices for sparse algorithms. For normally distributed values use `sprandn`.",
+    "pt": "As posições dos não nulos são escolhidas ao acaso, então o número real pode ser um pouco diferente da densidade pedida quando dois sorteios caem na mesma posição. Use `rng` antes da chamada para obter matrizes reprodutíveis.\n\nÉ usada para criar matrizes de teste de algoritmos esparsos. Para valores com distribuição normal use `sprandn`."
+   },
+   "notes": {
+    "en": "The matrices produced for a given seed differ from MATLAB's. MatLivre stores sparse matrices densely, so they save no memory, and sizes above 200 million elements are rejected. Results and display match MATLAB for ordinary sizes.",
+    "pt": "As matrizes produzidas para uma dada semente diferem das do MATLAB. O MatLivre armazena matrizes esparsas de forma densa, então elas não economizam memória, e tamanhos acima de 200 milhões de elementos são rejeitados. Resultados e exibição coincidem com os do MATLAB em tamanhos comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A random sparse matrix",
+      "pt": "Uma matriz esparsa aleatória"
+     },
+     "code": "rng(1);\nR = sprand(6, 6, 0.3);\nsize(R)\nissparse(R)\nall(nonzeros(R) > 0 & nonzeros(R) < 1)"
+    }
+   ],
+   "see": [
+    "sprandn",
+    "sprandsym",
+    "rand",
+    "sparse"
+   ]
+  },
+  "sprandn": {
+   "summary": {
+    "en": "Sparse matrix with normally distributed random entries.",
+    "pt": "Matriz esparsa com elementos aleatórios de distribuição normal."
+   },
+   "syntax": [
+    {
+     "code": "R = sprandn(m, n, density)",
+     "en": "Returns an `m`-by-`n` sparse matrix with about `density*m*n` nonzeros.",
+     "pt": "Retorna uma matriz esparsa `m`-por-`n` com cerca de `density*m*n` não nulos."
+    },
+    {
+     "code": "R = sprandn(S)",
+     "en": "Returns a random matrix with the same sparsity pattern as `S`.",
+     "pt": "Retorna uma matriz aleatória com o mesmo padrão de esparsidade de `S`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m, n",
+     "en": "Size of the matrix.",
+     "pt": "Tamanho da matriz."
+    },
+    {
+     "name": "density",
+     "en": "Fraction of entries that are nonzero.",
+     "pt": "Fração de elementos não nulos."
+    },
+    {
+     "name": "S",
+     "en": "Sparse matrix whose pattern is copied.",
+     "pt": "Matriz esparsa cujo padrão é copiado."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Sparse matrix whose nonzeros come from the standard normal distribution.",
+     "pt": "Matriz esparsa cujos não nulos vêm da distribuição normal padrão."
+    }
+   ],
+   "description": {
+    "en": "It works like `sprand`, except that the values are drawn from the normal distribution with mean 0 and variance 1, so they can be negative. Seed with `rng` to repeat a result.",
+    "pt": "Funciona como `sprand`, exceto que os valores são sorteados da distribuição normal de média 0 e variância 1, podendo ser negativos. Use `rng` para repetir um resultado."
+   },
+   "notes": {
+    "en": "The matrices produced for a given seed differ from MATLAB's. MatLivre stores sparse matrices densely, so they save no memory, and sizes above 200 million elements are rejected. Results and display match MATLAB for ordinary sizes.",
+    "pt": "As matrizes produzidas para uma dada semente diferem das do MATLAB. O MatLivre armazena matrizes esparsas de forma densa, então elas não economizam memória, e tamanhos acima de 200 milhões de elementos são rejeitados. Resultados e exibição coincidem com os do MATLAB em tamanhos comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A random matrix with negative entries",
+      "pt": "Uma matriz aleatória com elementos negativos"
+     },
+     "code": "rng(1);\nR = sprandn(5, 5, 0.4);\nsize(R)\nissparse(R)\nany(nonzeros(R) < 0)"
+    }
+   ],
+   "see": [
+    "sprand",
+    "sprandsym",
+    "randn",
+    "sparse"
+   ]
+  },
+  "sprandsym": {
+   "summary": {
+    "en": "Sparse symmetric random matrix.",
+    "pt": "Matriz esparsa simétrica aleatória."
+   },
+   "syntax": [
+    {
+     "code": "R = sprandsym(n, density)",
+     "en": "Returns an `n`-by-`n` symmetric sparse matrix with normally distributed entries and about `density*n^2` nonzeros.",
+     "pt": "Retorna uma matriz esparsa simétrica `n`-por-`n` com elementos de distribuição normal e cerca de `density*n^2` não nulos."
+    },
+    {
+     "code": "R = sprandsym(S)",
+     "en": "Returns a symmetric matrix with the pattern of the lower triangle of `S`, mirrored.",
+     "pt": "Retorna uma matriz simétrica com o padrão do triângulo inferior de `S`, espelhado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Order of the matrix.",
+     "pt": "Ordem da matriz."
+    },
+    {
+     "name": "density",
+     "en": "Fraction of entries that are nonzero.",
+     "pt": "Fração de elementos não nulos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "R",
+     "en": "Symmetric sparse matrix, generally indefinite.",
+     "pt": "Matriz esparsa simétrica, em geral indefinida."
+    }
+   ],
+   "description": {
+    "en": "Random entries are drawn for one triangle and mirrored across the diagonal, so `R == R'`. The matrix is usually not positive definite; to test `pcg` or `ichol` add a multiple of the identity large enough to make the diagonal dominant, for example `R + n*speye(n)`.",
+    "pt": "Elementos aleatórios são sorteados para um triângulo e espelhados pela diagonal, de modo que `R == R'`. A matriz em geral não é definida positiva; para testar `pcg` ou `ichol`, some um múltiplo da identidade grande o bastante para tornar a diagonal dominante, por exemplo `R + n*speye(n)`."
+   },
+   "notes": {
+    "en": "The matrices produced for a given seed differ from MATLAB's. MatLivre stores sparse matrices densely, so they save no memory, and sizes above 200 million elements are rejected. Results and display match MATLAB for ordinary sizes.",
+    "pt": "As matrizes produzidas para uma dada semente diferem das do MATLAB. O MatLivre armazena matrizes esparsas de forma densa, então elas não economizam memória, e tamanhos acima de 200 milhões de elementos são rejeitados. Resultados e exibição coincidem com os do MATLAB em tamanhos comuns."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A symmetric random matrix",
+      "pt": "Uma matriz simétrica aleatória"
+     },
+     "code": "rng(1);\nR = sprandsym(5, 0.4);\nisequal(R, R')\nissparse(R)"
+    }
+   ],
+   "see": [
+    "sprand",
+    "sprandn",
+    "issymmetric",
+    "speye"
+   ]
+  },
+  "sprank": {
+   "summary": {
+    "en": "Structural rank of a sparse matrix.",
+    "pt": "Posto estrutural de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "r = sprank(A)",
+     "en": "Returns the structural rank of `A`, computed from its nonzero pattern alone.",
+     "pt": "Retorna o posto estrutural de `A`, calculado apenas a partir do padrão de não nulos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse or full matrix.",
+     "pt": "Matriz esparsa ou cheia."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Integer: the largest number of nonzeros that can be chosen with no two in the same row or column.",
+     "pt": "Inteiro: o maior número de não nulos que podem ser escolhidos sem dois na mesma linha ou coluna."
+    }
+   ],
+   "description": {
+    "en": "Structural rank ignores the numerical values and asks how many independent entries the pattern could support, a maximum matching in the bipartite graph of rows and columns. The numerical rank can never exceed it, so `sprank(A) < min(size(A))` proves the matrix is singular whatever its values, while a full structural rank does not guarantee that it is not.",
+    "pt": "O posto estrutural ignora os valores numéricos e pergunta quantas entradas independentes o padrão poderia sustentar, um emparelhamento máximo no grafo bipartido de linhas e colunas. O posto numérico nunca o ultrapassa, então `sprank(A) < min(size(A))` prova que a matriz é singular quaisquer que sejam os valores, enquanto um posto estrutural completo não garante que ela não seja."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rank of a pattern",
+      "pt": "Posto de um padrão"
+     },
+     "code": "sprank(speye(3))\nsprank(sparse([1 1; 0 0]))\nsprank(sparse([1 0; 1 0]))"
+    }
+   ],
+   "see": [
+    "rank",
+    "dmperm",
+    "sparse",
+    "spy"
+   ]
+  },
+  "spy": {
+   "summary": {
+    "en": "Visualizes the sparsity pattern of a matrix.",
+    "pt": "Visualiza o padrão de esparsidade de uma matriz."
+   },
+   "syntax": [
+    {
+     "code": "spy(S)",
+     "en": "Plots a dot for every nonzero element of `S`.",
+     "pt": "Desenha um ponto para cada elemento não nulo de `S`."
+    },
+    {
+     "code": "spy(S, LineSpec)",
+     "en": "Uses a color and marker given by `LineSpec`.",
+     "pt": "Usa a cor e o marcador dados por `LineSpec`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Sparse or full matrix.",
+     "pt": "Matriz esparsa ou cheia."
+    },
+    {
+     "name": "LineSpec",
+     "en": "Optional marker specification such as `'r*'`.",
+     "pt": "Especificação opcional de marcador, como `'r*'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The plot has the matrix layout, with row 1 at the top, and shows the number of nonzeros under the axis. It quickly reveals structure: bands, blocks, arrow shapes, and the effect of a reordering such as `symrcm` on the fill pattern.",
+    "pt": "O gráfico tem o layout da matriz, com a linha 1 no topo, e mostra o número de não nulos sob o eixo. Revela rapidamente a estrutura: bandas, blocos, formas de seta e o efeito de uma reordenação como `symrcm` no padrão de preenchimento."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Pattern of a banded matrix",
+      "pt": "Padrão de uma matriz em banda"
+     },
+     "code": "e = ones(12, 1);\nA = spdiags([e e e e e], -2:2, 12, 12);\nspy(A)",
+     "silent": true
+    }
+   ],
+   "see": [
+    "gplot",
+    "symrcm",
+    "nnz",
+    "sparse"
+   ]
+  },
+  "symbfact": {
+   "summary": {
+    "en": "Symbolic factorization analysis of a sparse matrix.",
+    "pt": "Análise de fatoração simbólica de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "count = symbfact(A)",
+     "en": "Returns the number of nonzeros in each column of the Cholesky factor of `A`.",
+     "pt": "Retorna o número de não nulos em cada coluna do fator de Cholesky de `A`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Sparse symmetric matrix; the pattern of its upper triangle is used.",
+     "pt": "Matriz esparsa simétrica; usa-se o padrão do triângulo superior."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "count",
+     "en": "Vector with `count(j)` equal to the number of nonzeros in column `j` of the Cholesky factor.",
+     "pt": "Vetor com `count(j)` igual ao número de não nulos na coluna `j` do fator de Cholesky."
+    }
+   ],
+   "description": {
+    "en": "Predicting the memory a Cholesky factorization will need does not require computing it. The counts follow from the nonzero pattern alone, by following the elimination tree. Summing them gives the total size of the factor, `sum(count)`, so different orderings can be compared before doing the numerical work.",
+    "pt": "Prever a memória que uma fatoração de Cholesky vai exigir não requer calculá-la. As contagens decorrem apenas do padrão de não nulos, percorrendo a árvore de eliminação. A soma delas dá o tamanho total do fator, `sum(count)`, de modo que diferentes ordenações podem ser comparadas antes do trabalho numérico."
+   },
+   "notes": {
+    "en": "Only the single output is supported; the extra outputs (tree height, parent vector, factor pattern) are not.",
+    "pt": "Só a saída única é suportada; as saídas extras (altura da árvore, vetor de pais, padrão do fator) não são."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Column counts of the factor",
+      "pt": "Contagens por coluna do fator"
+     },
+     "code": "A = sparse(diag(4*ones(4,1)) + diag(ones(3,1),1) + diag(ones(3,1),-1));\nc = symbfact(A)\nsum(c)\nnnz(chol(A))"
+    }
+   ],
+   "see": [
+    "etree",
+    "chol",
+    "symrcm",
+    "colperm"
+   ]
+  },
+  "symmlq": {
+   "summary": {
+    "en": "Solves a symmetric linear system with the symmetric LQ method.",
+    "pt": "Resolve um sistema linear simétrico pelo método LQ simétrico."
+   },
+   "syntax": [
+    {
+     "code": "x = symmlq(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = symmlq(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = symmlq(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = symmlq(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`symmlq` is meant for symmetric `A`, definite or indefinite. It uses the Lanczos process, so memory stays constant, and it solves a related tridiagonal system by LQ factorization. It is a companion of `minres`, which minimizes the residual instead. A preconditioner must be symmetric positive definite.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`symmlq` é voltado para `A` simétrica, definida ou indefinida. Usa o processo de Lanczos, então a memória fica constante, e resolve um sistema tridiagonal relacionado por fatoração LQ. É companheiro do `minres`, que minimiza o resíduo. Um pré-condicionador deve ser simétrico definido positivo.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Symmetric tridiagonal system",
+      "pt": "Sistema tridiagonal simétrico"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = symmlq(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "minres",
+    "pcg",
+    "gmres",
+    "lsqr"
+   ]
+  },
+  "symrcm": {
+   "summary": {
+    "en": "Reverse Cuthill-McKee ordering that reduces the bandwidth of a sparse matrix.",
+    "pt": "Ordenação de Cuthill-McKee reversa que reduz a largura de banda de uma matriz esparsa."
+   },
+   "syntax": [
+    {
+     "code": "p = symrcm(S)",
+     "en": "Returns a permutation vector `p` so that `S(p,p)` has a smaller bandwidth.",
+     "pt": "Retorna um vetor de permutação `p` tal que `S(p,p)` tenha largura de banda menor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Square sparse matrix, treated as symmetric by its pattern.",
+     "pt": "Matriz esparsa quadrada, tratada como simétrica pelo seu padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Row vector, a permutation of `1:size(S,1)`.",
+     "pt": "Vetor linha, uma permutação de `1:size(S,1)`."
+    }
+   ],
+   "description": {
+    "en": "The method numbers the nodes of the matrix graph in breadth-first order, starting from a node far from the center, and then reverses the order. Rows and columns that are linked end up near each other, so the nonzeros gather near the diagonal. A narrower band means less fill-in in banded Cholesky or LU factorizations, and a more cache-friendly matrix-vector product.\n\nApply it symmetrically, `S(p,p)`, to keep a symmetric matrix symmetric.",
+    "pt": "O método numera os nós do grafo da matriz em largura, partindo de um nó distante do centro, e depois inverte a ordem. Linhas e colunas ligadas ficam próximas, e os não nulos se reúnem perto da diagonal. Uma banda mais estreita significa menos preenchimento em fatorações de Cholesky ou LU em banda, e um produto matriz-vetor mais amigável ao cache.\n\nAplique-a simetricamente, `S(p,p)`, para manter simétrica uma matriz simétrica."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reordering a matrix",
+      "pt": "Reordenando uma matriz"
+     },
+     "code": "S = sparse([1 0 0 1; 0 1 1 0; 0 1 1 0; 1 0 0 1]);\np = symrcm(S)\nfull(S(p, p))"
+    }
+   ],
+   "see": [
+    "colperm",
+    "etree",
+    "spy",
+    "symbfact"
+   ]
+  },
+  "tfqmr": {
+   "summary": {
+    "en": "Solves a square linear system with the transpose-free quasi-minimal residual method.",
+    "pt": "Resolve um sistema linear quadrado pelo método do resíduo quase mínimo sem transposta."
+   },
+   "syntax": [
+    {
+     "code": "x = tfqmr(A, b)",
+     "en": "Solves `A*x = b` with default tolerance and iteration limit.",
+     "pt": "Resolve `A*x = b` com a tolerância e o limite de iterações padrão."
+    },
+    {
+     "code": "x = tfqmr(A, b, tol, maxit)",
+     "en": "Sets the relative residual tolerance and the maximum number of iterations.",
+     "pt": "Define a tolerância do resíduo relativo e o número máximo de iterações."
+    },
+    {
+     "code": "x = tfqmr(A, b, tol, maxit, M1, M2, x0)",
+     "en": "Adds a preconditioner `M = M1*M2` and an initial guess `x0`.",
+     "pt": "Acrescenta um pré-condicionador `M = M1*M2` e uma estimativa inicial `x0`."
+    },
+    {
+     "code": "[x, flag, relres, iter, resvec] = tfqmr(___)",
+     "en": "Also returns the convergence flag, final relative residual, iteration count and residual history.",
+     "pt": "Também retorna o indicador de convergência, o resíduo relativo final, o número de iterações e o histórico de resíduos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Square coefficient matrix (usually sparse), or a function handle that returns `A*x`.",
+     "pt": "Matriz de coeficientes quadrada (em geral esparsa), ou handle de função que retorna `A*x`."
+    },
+    {
+     "name": "b",
+     "en": "Right-hand side column vector with `size(A,1)` entries.",
+     "pt": "Vetor coluna do lado direito, com `size(A,1)` elementos."
+    },
+    {
+     "name": "tol",
+     "en": "Relative residual tolerance; the default is `1e-6`.",
+     "pt": "Tolerância do resíduo relativo; o padrão é `1e-6`."
+    },
+    {
+     "name": "maxit",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "M1, M2",
+     "en": "Preconditioner factors, as matrices or function handles; the solver works with `M1*M2`.",
+     "pt": "Fatores do pré-condicionador, como matrizes ou handles de função; o solver trabalha com `M1*M2`."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. The default is a vector of zeros.",
+     "pt": "Estimativa inicial. O padrão é um vetor de zeros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The computed solution, a column vector.",
+     "pt": "A solução calculada, um vetor coluna."
+    },
+    {
+     "name": "flag",
+     "en": "`0` if it converged within `maxit` iterations, `1` if it ran out of iterations, `2` if the preconditioner was ill-conditioned, `3` if it stagnated, and other values for a breakdown.",
+     "pt": "`0` se convergiu em até `maxit` iterações, `1` se acabaram as iterações, `2` se o pré-condicionador era mal condicionado, `3` se estagnou, e outros valores para uma falha numérica."
+    },
+    {
+     "name": "relres",
+     "en": "Relative residual `norm(b - A*x)/norm(b)` at the returned iterate.",
+     "pt": "Resíduo relativo `norm(b - A*x)/norm(b)` na iteração retornada."
+    },
+    {
+     "name": "iter",
+     "en": "Iteration at which `x` was computed.",
+     "pt": "Iteração em que `x` foi calculado."
+    },
+    {
+     "name": "resvec",
+     "en": "History of residual norms.",
+     "pt": "Histórico das normas dos resíduos."
+    }
+   ],
+   "description": {
+    "en": "`tfqmr` is a quasi-minimal residual method built on the same ideas as `cgs`, but it smooths the residual and avoids the sharp spikes of `cgs`. Like `bicgstab` it never uses `A'`. It takes two products with `A` per iteration.\n\nWhen called with fewer than two outputs it prints a one-line message about whether it converged. With a `flag` output it stays silent, so check `flag` yourself. A good preconditioner such as an incomplete factorization (`ilu`, `ichol`) can cut the iteration count a lot.",
+    "pt": "`tfqmr` é um método de resíduo quase mínimo construído sobre as mesmas ideias do `cgs`, mas suaviza o resíduo e evita os picos abruptos do `cgs`. Como o `bicgstab`, nunca usa `A'`. Faz dois produtos com `A` por iteração.\n\nQuando chamado com menos de duas saídas, imprime uma linha dizendo se convergiu. Com a saída `flag`, fica em silêncio, então verifique `flag` por conta própria. Um bom pré-condicionador, como uma fatoração incompleta (`ilu`, `ichol`), pode reduzir bastante o número de iterações."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tridiagonal system",
+      "pt": "Sistema tridiagonal"
+     },
+     "code": "A = sparse(diag(4*ones(5,1)) + diag(ones(4,1),1) + diag(ones(4,1),-1));\nb = (1:5)';\n[x, flag, relres, iter] = tfqmr(A, b, 1e-10, 100);\nfprintf('flag = %d, relres < 1e-10: %d\\n', flag, relres < 1e-10)\ndisp(x')"
+    }
+   ],
+   "see": [
+    "qmr",
+    "cgs",
+    "bicgstab",
+    "gmres"
+   ]
+  },
+  "treelayout": {
+   "summary": {
+    "en": "Computes node coordinates for drawing a tree.",
+    "pt": "Calcula as coordenadas dos nós para desenhar uma árvore."
+   },
+   "syntax": [
+    {
+     "code": "[x, y] = treelayout(p)",
+     "en": "Returns the coordinates of each node of the tree described by the parent vector `p`.",
+     "pt": "Retorna as coordenadas de cada nó da árvore descrita pelo vetor de pais `p`."
+    },
+    {
+     "code": "[x, y, h] = treelayout(p)",
+     "en": "Also returns the height of the tree.",
+     "pt": "Também retorna a altura da árvore."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Parent vector: `p(j)` is the parent of node `j`, and `0` marks a root. A parent must come before its children, so `p(j) < j`.",
+     "pt": "Vetor de pais: `p(j)` é o pai do nó `j`, e `0` marca uma raiz. Um pai deve vir antes de seus filhos, ou seja, `p(j) < j`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x, y",
+     "en": "Row vectors with the horizontal and vertical position of each node, in the unit square, with the root at the top.",
+     "pt": "Vetores linha com a posição horizontal e vertical de cada nó, no quadrado unitário, com a raiz no topo."
+    },
+    {
+     "name": "h",
+     "en": "Height of the tree, in levels below the root.",
+     "pt": "Altura da árvore, em níveis abaixo da raiz."
+    }
+   ],
+   "description": {
+    "en": "Leaves are spread evenly from left to right, and each parent is centered above its children. The result can be given directly to `plot` or `gplot` for custom drawings. `treeplot` and `etreeplot` use this layout.",
+    "pt": "As folhas são distribuídas uniformemente da esquerda para a direita, e cada pai é centralizado sobre seus filhos. O resultado pode ser dado diretamente a `plot` ou `gplot` para desenhos personalizados. `treeplot` e `etreeplot` usam esse layout."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Layout of a small tree",
+      "pt": "Layout de uma árvore pequena"
+     },
+     "code": "p = [0 1 1 2 2];\n[x, y, h] = treelayout(p)"
+    }
+   ],
+   "see": [
+    "treeplot",
+    "etreeplot",
+    "gplot",
+    "etree"
+   ]
+  },
+  "treeplot": {
+   "summary": {
+    "en": "Draws a tree from its parent vector.",
+    "pt": "Desenha uma árvore a partir do vetor de pais."
+   },
+   "syntax": [
+    {
+     "code": "treeplot(p)",
+     "en": "Plots the tree whose parent vector is `p`.",
+     "pt": "Desenha a árvore cujo vetor de pais é `p`."
+    },
+    {
+     "code": "treeplot(p, nodeSpec, edgeSpec)",
+     "en": "Sets the style of the node markers and of the edges.",
+     "pt": "Define o estilo dos marcadores dos nós e das arestas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "p",
+     "en": "Parent vector: `p(j)` is the parent of node `j`, `0` for a root, with `p(j) < j`.",
+     "pt": "Vetor de pais: `p(j)` é o pai do nó `j`, `0` para uma raiz, com `p(j) < j`."
+    },
+    {
+     "name": "nodeSpec, edgeSpec",
+     "en": "Optional line specifications, for example `'ko'` and `'r-'`.",
+     "pt": "Especificações de linha opcionais, por exemplo `'ko'` e `'r-'`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "Nodes are placed with `treelayout`: the root is at the top and each level of the tree is one row lower. The format is the same one returned by `etree`, so `treeplot(etree(A))` shows the elimination tree of a matrix.",
+    "pt": "Os nós são posicionados com `treelayout`: a raiz fica no topo e cada nível da árvore fica uma linha abaixo. O formato é o mesmo retornado por `etree`, então `treeplot(etree(A))` mostra a árvore de eliminação de uma matriz."
+   },
+   "notes": {
+    "en": "The form that returns coordinates, `[x, y] = treeplot(p)`, is not supported; use `treelayout` for that.",
+    "pt": "A forma que retorna coordenadas, `[x, y] = treeplot(p)`, não é suportada; use `treelayout` para isso."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A binary tree",
+      "pt": "Uma árvore binária"
+     },
+     "code": "p = [0 1 1 2 2 3 3];\ntreeplot(p)",
+     "silent": true
+    }
+   ],
+   "see": [
+    "treelayout",
+    "etreeplot",
+    "etree",
+    "gplot"
+   ]
+  },
+  "unmesh": {
+   "summary": {
+    "en": "Converts a list of mesh edges to a graph adjacency matrix and node coordinates.",
+    "pt": "Converte uma lista de arestas de malha em uma matriz de adjacência e coordenadas dos nós."
+   },
+   "syntax": [
+    {
+     "code": "[A, xy] = unmesh(E)",
+     "en": "Returns the adjacency matrix `A` and node coordinates `xy` for the edge list `E`.",
+     "pt": "Retorna a matriz de adjacência `A` e as coordenadas `xy` dos nós para a lista de arestas `E`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "E",
+     "en": "`m`-by-4 matrix; each row `[x1 y1 x2 y2]` is one edge, given by the coordinates of its two end points.",
+     "pt": "Matriz `m`-por-4; cada linha `[x1 y1 x2 y2]` é uma aresta, dada pelas coordenadas de suas duas extremidades."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "A",
+     "en": "Symmetric `n`-by-`n` adjacency matrix, with `A(i,j) = 1` when nodes `i` and `j` share an edge.",
+     "pt": "Matriz de adjacência simétrica `n`-por-`n`, com `A(i,j) = 1` quando os nós `i` e `j` compartilham uma aresta."
+    },
+    {
+     "name": "xy",
+     "en": "`n`-by-2 matrix with the coordinates of the distinct end points, numbered in order of first appearance.",
+     "pt": "Matriz `n`-por-2 com as coordenadas das extremidades distintas, numeradas na ordem da primeira aparição."
+    }
+   ],
+   "description": {
+    "en": "Segments that share an end point are connected through the same node: two end points with identical coordinates become one node. The pair `A`, `xy` is exactly what `gplot` needs, so a drawing given as loose line segments can be turned into a graph and analyzed with sparse matrix tools.",
+    "pt": "Segmentos que compartilham uma extremidade se ligam pelo mesmo nó: duas extremidades com coordenadas idênticas viram um único nó. O par `A`, `xy` é exatamente o que o `gplot` precisa, de modo que um desenho dado como segmentos soltos pode virar um grafo e ser analisado com ferramentas de matrizes esparsas."
+   },
+   "notes": {
+    "en": "`A` is returned as an ordinary (full) matrix rather than sparse.",
+    "pt": "`A` é retornada como matriz comum (cheia) em vez de esparsa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A triangle from three segments",
+      "pt": "Um triângulo a partir de três segmentos"
+     },
+     "code": "E = [0 0 1 0; 1 0 0 1; 0 1 0 0];\n[A, xy] = unmesh(E);\nfull(A)\nxy"
+    }
+   ],
+   "see": [
+    "gplot",
+    "sparse",
+    "treelayout",
+    "spy"
+   ]
+  }
+ }
+}

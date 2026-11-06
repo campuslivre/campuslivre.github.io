@@ -1,0 +1,935 @@
+{
+ "functions": {
+  "input": {
+   "summary": {
+    "en": "Prompts the user for a value or text at the command window.",
+    "pt": "Pede um valor ou um texto ao usuário na janela de comandos."
+   },
+   "syntax": [
+    {
+     "code": "x = input(prompt)",
+     "en": "Shows `prompt`, evaluates what the user types as an expression and returns the result.",
+     "pt": "Exibe `prompt`, avalia o que o usuário digita como expressão e retorna o resultado."
+    },
+    {
+     "code": "txt = input(prompt, 's')",
+     "en": "Returns the typed characters as text, without evaluating them.",
+     "pt": "Retorna os caracteres digitados como texto, sem avaliá-los."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "prompt",
+     "en": "Text shown before the cursor.",
+     "pt": "Texto exibido antes do cursor."
+    },
+    {
+     "name": "'s'",
+     "en": "Option that returns the raw text instead of evaluating it.",
+     "pt": "Opção que retorna o texto bruto em vez de avaliá-lo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The value of the typed expression, or the typed text when `'s'` is used.",
+     "pt": "O valor da expressão digitada, ou o texto digitado quando `'s'` é usado."
+    }
+   ],
+   "description": {
+    "en": "`input` stops the script and waits for a line of keyboard input. In the default form the line is evaluated as MATLAB code, so typing `2*pi` returns `6.2832`. With `'s'` the line is returned untouched as a character vector, which is the safe choice for names and free text.\n\nBecause it blocks until someone answers, `input` suits interactive sessions rather than programs that must run unattended.",
+    "pt": "`input` interrompe o script e espera uma linha digitada. Na forma padrão, a linha é avaliada como código MATLAB, então digitar `2*pi` retorna `6.2832`. Com `'s'`, a linha volta intacta como vetor de caracteres, a escolha segura para nomes e texto livre.\n\nPor bloquear até alguém responder, `input` serve a sessões interativas, não a programas que precisam rodar sem supervisão."
+   },
+   "notes": {
+    "en": "MatLivre runs scripts without an interactive command window, so `input` raises an error instead of waiting. Pass values through variables or function arguments instead.",
+    "pt": "O MatLivre executa scripts sem janela de comandos interativa, então `input` gera um erro em vez de esperar. Passe os valores por variáveis ou argumentos de função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Calling input without a console",
+      "pt": "Chamando input sem console"
+     },
+     "code": "try\n    x = input('Value: ');\ncatch err\n    disp(err.message)\nend",
+     "silent": false,
+     "note": {
+      "en": "MatLivre has no interactive command window, so the call fails with a message that this snippet prints.",
+      "pt": "O MatLivre não tem janela de comandos interativa, então a chamada falha com uma mensagem que este trecho exibe."
+     }
+    }
+   ],
+   "see": [
+    "keyboard",
+    "inputdlg",
+    "disp",
+    "fprintf",
+    "str2double"
+   ]
+  },
+  "clearAllMemoizedCaches": {
+   "summary": {
+    "en": "Empties the caches of all memoized functions at once.",
+    "pt": "Esvazia de uma só vez os caches de todas as funções memoizadas."
+   },
+   "syntax": [
+    {
+     "code": "clearAllMemoizedCaches",
+     "en": "Discards every stored result of every function created with `memoize`.",
+     "pt": "Descarta todos os resultados armazenados de todas as funções criadas com `memoize`."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "A function made with `memoize` remembers the outputs for the inputs it has already seen. `clearAllMemoizedCaches` wipes those stored results for every memoized function in the session, so the next call with any input recomputes. The functions stay memoized and keep their settings, only the cache contents and the hit and miss counters go back to zero.\n\nUse it to free memory or to be sure that a later timing is not served from a cache. To empty only one function, call `clearCache` on it.",
+    "pt": "Uma função criada com `memoize` lembra as saídas das entradas que já viu. `clearAllMemoizedCaches` apaga esses resultados guardados de todas as funções memoizadas da sessão, de modo que a próxima chamada com qualquer entrada recalcula. As funções continuam memoizadas e mantêm suas configurações; só o conteúdo do cache e os contadores de acertos e falhas voltam a zero.\n\nUse para liberar memória ou para garantir que uma medição de tempo posterior não venha do cache. Para esvaziar apenas uma função, chame `clearCache` nela."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reset every cache",
+      "pt": "Zerando todos os caches"
+     },
+     "code": "f = memoize(@(x) x^2);\nf(2); f(2);\ns = stats(f);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)\nclearAllMemoizedCaches\ns = stats(f);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "memoize",
+    "clearCache",
+    "stats",
+    "MemoizedFunction"
+   ]
+  },
+  "clearCache": {
+   "summary": {
+    "en": "Empties the cache of one memoized function.",
+    "pt": "Esvazia o cache de uma única função memoizada."
+   },
+   "syntax": [
+    {
+     "code": "clearCache(m)",
+     "en": "Removes every stored result from the memoized function object `m`.",
+     "pt": "Remove todos os resultados armazenados do objeto de função memoizada `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "A `matlab.lang.MemoizedFunction` object returned by `memoize`.",
+     "pt": "Um objeto `matlab.lang.MemoizedFunction` retornado por `memoize`."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`clearCache` is a method of memoized function objects. It deletes the cached inputs and outputs of `m` and resets its statistics, but leaves `m` memoized: the next call computes the result again and stores it.\n\nOther memoized functions are not affected. To clear all of them at once use `clearAllMemoizedCaches`.",
+    "pt": "`clearCache` é um método dos objetos de função memoizada. Apaga as entradas e saídas guardadas de `m` e zera suas estatísticas, mas mantém `m` memoizada: a próxima chamada calcula o resultado de novo e o armazena.\n\nAs demais funções memoizadas não são afetadas. Para limpar todas de uma vez, use `clearAllMemoizedCaches`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Clear one cache",
+      "pt": "Limpando um cache"
+     },
+     "code": "m = memoize(@(x) x + 1);\nm(1); m(1); m(2);\ns = stats(m);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)\nclearCache(m)\ns = stats(m);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "memoize",
+    "clearAllMemoizedCaches",
+    "stats",
+    "MemoizedFunction"
+   ]
+  },
+  "cputime": {
+   "summary": {
+    "en": "CPU time used by the session, in seconds.",
+    "pt": "Tempo de CPU usado pela sessão, em segundos."
+   },
+   "syntax": [
+    {
+     "code": "t = cputime",
+     "en": "Returns the total CPU time consumed so far.",
+     "pt": "Retorna o tempo total de CPU consumido até o momento."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Scalar double with the accumulated CPU seconds.",
+     "pt": "Escalar double com os segundos de CPU acumulados."
+    }
+   ],
+   "description": {
+    "en": "The value counts processor time, not wall-clock time: a program that sleeps or waits adds almost nothing, while one that computes continuously adds about one second per second of work. Only differences are meaningful, so read `cputime` before and after a block and subtract.\n\nOn machines with several cores the value can grow faster than real time. For measuring how long code takes to run, `tic` and `toc` or `timeit` are usually a better fit.",
+    "pt": "O valor conta tempo de processador, não tempo de relógio: um programa que dorme ou espera acrescenta quase nada, enquanto um que calcula sem parar acrescenta cerca de um segundo por segundo de trabalho. Só as diferenças têm significado, então leia `cputime` antes e depois de um bloco e subtraia.\n\nEm máquinas com vários núcleos o valor pode crescer mais rápido que o tempo real. Para medir quanto o código leva para rodar, `tic` e `toc` ou `timeit` costumam ser mais adequados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Difference between two readings",
+      "pt": "Diferença entre duas leituras"
+     },
+     "code": "t0 = cputime;\ns = 0;\nfor k = 1:1e5\n    s = s + k;\nend\ndt = cputime - t0;\ndisp(dt >= 0)\ndisp(s)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "tic",
+    "toc",
+    "timeit",
+    "clock",
+    "now"
+   ]
+  },
+  "inmem": {
+   "summary": {
+    "en": "Lists the functions currently loaded in memory.",
+    "pt": "Lista as funções atualmente carregadas na memória."
+   },
+   "syntax": [
+    {
+     "code": "M = inmem",
+     "en": "Returns the names of the loaded M-file functions as a cell array of character vectors.",
+     "pt": "Retorna os nomes das funções de arquivo M carregadas, como cell array de vetores de caracteres."
+    },
+    {
+     "code": "[M, X, J] = inmem",
+     "en": "Also returns the loaded MEX files `X` and Java classes `J`.",
+     "pt": "Retorna também os arquivos MEX `X` e as classes Java `J` carregados."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "M",
+     "en": "Cell array of function names.",
+     "pt": "Cell array com nomes de funções."
+    },
+    {
+     "name": "X",
+     "en": "Cell array of MEX file names.",
+     "pt": "Cell array com nomes de arquivos MEX."
+    },
+    {
+     "name": "J",
+     "en": "Cell array of Java class names.",
+     "pt": "Cell array com nomes de classes Java."
+    }
+   ],
+   "description": {
+    "en": "MATLAB loads a function file the first time it is called and keeps it in memory. `inmem` reports what is there, which helps explain why persistent variables survive between calls or why a file edit has no effect until `clear` is run.\n\nThe content of the list depends on what has already run in the session, so it is not stable from one session to another.",
+    "pt": "O MATLAB carrega um arquivo de função na primeira chamada e o mantém na memória. `inmem` informa o que está carregado, o que ajuda a entender por que variáveis persistentes sobrevivem entre chamadas ou por que a edição de um arquivo não tem efeito até se usar `clear`.\n\nO conteúdo da lista depende do que já foi executado na sessão, por isso não é estável de uma sessão para outra."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Result types",
+      "pt": "Tipos dos resultados"
+     },
+     "code": "[M, X, J] = inmem;\ndisp(class(M))\ndisp(class(X))\ndisp(class(J))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "clear",
+    "which",
+    "exist",
+    "mlock"
+   ]
+  },
+  "memoize": {
+   "summary": {
+    "en": "Creates a version of a function that caches its results.",
+    "pt": "Cria uma versão de uma função que guarda seus resultados em cache."
+   },
+   "syntax": [
+    {
+     "code": "m = memoize(fun)",
+     "en": "Returns a memoized function object for the function handle `fun`.",
+     "pt": "Retorna um objeto de função memoizada para o function handle `fun`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle to wrap. It should be deterministic: same inputs, same outputs, no side effects that matter.",
+     "pt": "Function handle a ser envolvido. Deve ser determinístico: mesmas entradas, mesmas saídas, sem efeitos colaterais relevantes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "A `matlab.lang.MemoizedFunction` object, called like the original function.",
+     "pt": "Um objeto `matlab.lang.MemoizedFunction`, chamado como a função original."
+    }
+   ],
+   "description": {
+    "en": "Calling `m(x)` the first time runs `fun(x)` and stores the inputs and outputs. Calling it again with equal inputs returns the stored output without running `fun`. This pays off when the same expensive computation is repeated, for example inside a loop or in a recursive definition.\n\nThe object has the properties `Enabled` (turn caching on or off) and `CacheSize` (how many results are kept, 10 by default), and the helper functions `stats` and `clearCache` inspect and reset it. Do not memoize functions whose result depends on random numbers, files or the clock.",
+    "pt": "A primeira chamada `m(x)` executa `fun(x)` e guarda entradas e saídas. Chamar de novo com entradas iguais devolve a saída guardada sem executar `fun`. Isso compensa quando o mesmo cálculo caro se repete, por exemplo dentro de um laço ou em uma definição recursiva.\n\nO objeto tem as propriedades `Enabled` (liga ou desliga o cache) e `CacheSize` (quantos resultados são mantidos, 10 por padrão), e as funções `stats` e `clearCache` o inspecionam e o reiniciam. Não memoize funções cujo resultado depende de números aleatórios, arquivos ou do relógio."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hits and misses",
+      "pt": "Acertos e falhas"
+     },
+     "code": "f = memoize(@(x) x^2);\na = f(3)\nb = f(3)\ns = stats(f);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "MemoizedFunction",
+    "stats",
+    "clearCache",
+    "clearAllMemoizedCaches",
+    "timeit"
+   ]
+  },
+  "MemoizedFunction": {
+   "summary": {
+    "en": "Class of the objects returned by memoize.",
+    "pt": "Classe dos objetos retornados por memoize."
+   },
+   "syntax": [
+    {
+     "code": "m = memoize(fun)",
+     "en": "Creates an object of class `matlab.lang.MemoizedFunction` around `fun`.",
+     "pt": "Cria um objeto da classe `matlab.lang.MemoizedFunction` em torno de `fun`."
+    },
+    {
+     "code": "m.Enabled = tf",
+     "en": "Turns caching on (`true`) or off (`false`) for `m`.",
+     "pt": "Liga (`true`) ou desliga (`false`) o cache de `m`."
+    },
+    {
+     "code": "m.CacheSize = n",
+     "en": "Sets how many results the cache keeps.",
+     "pt": "Define quantos resultados o cache mantém."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "Enabled",
+     "en": "Logical property. When `false` the function is always run and nothing is stored.",
+     "pt": "Propriedade lógica. Com `false`, a função sempre é executada e nada é guardado."
+    },
+    {
+     "name": "CacheSize",
+     "en": "Number of distinct input sets whose results are kept. Older entries are dropped when it is exceeded.",
+     "pt": "Número de conjuntos de entradas distintos cujos resultados são mantidos. Entradas antigas são descartadas ao exceder."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Function",
+     "en": "Read-only handle of the wrapped function.",
+     "pt": "Handle somente leitura da função envolvida."
+    }
+   ],
+   "description": {
+    "en": "A `MemoizedFunction` object behaves like the function handle it wraps: it is called with the same arguments and returns the same outputs. In addition it owns a cache. Its properties `Enabled`, `CacheSize` and `Function` describe the setup, `stats` reports hits and misses, and `clearCache` empties it.\n\nThe object is a handle, so copies of the variable refer to the same cache.",
+    "pt": "Um objeto `MemoizedFunction` se comporta como o function handle que envolve: é chamado com os mesmos argumentos e devolve as mesmas saídas. Além disso, possui um cache. As propriedades `Enabled`, `CacheSize` e `Function` descrevem a configuração, `stats` informa acertos e falhas e `clearCache` esvazia o cache.\n\nO objeto é um handle, então cópias da variável apontam para o mesmo cache."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Properties of a memoized function",
+      "pt": "Propriedades de uma função memoizada"
+     },
+     "code": "m = memoize(@(x) x^2);\nclass(m)\nm.Enabled\nm.CacheSize = 5;\nm.CacheSize\nm.Function",
+     "silent": false
+    }
+   ],
+   "see": [
+    "memoize",
+    "stats",
+    "clearCache",
+    "clearAllMemoizedCaches"
+   ]
+  },
+  "memory": {
+   "summary": {
+    "en": "Reports how much memory is available and in use.",
+    "pt": "Informa quanta memória está disponível e em uso."
+   },
+   "syntax": [
+    {
+     "code": "m = memory",
+     "en": "Returns a struct with memory figures, in bytes.",
+     "pt": "Retorna um struct com valores de memória, em bytes."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Struct with fields `MaxPossibleArrayBytes`, `MemAvailableAllArrays` and `MemUsedMATLAB`.",
+     "pt": "Struct com os campos `MaxPossibleArrayBytes`, `MemAvailableAllArrays` e `MemUsedMATLAB`."
+    }
+   ],
+   "description": {
+    "en": "`MemUsedMATLAB` is the memory the session currently uses, `MemAvailableAllArrays` is what is available for arrays in total and `MaxPossibleArrayBytes` is the size of the largest single array that could still be created. All three are in bytes and change from one call to the next.\n\nIt helps to check whether a very large array is feasible before allocating it.",
+    "pt": "`MemUsedMATLAB` é a memória que a sessão usa no momento, `MemAvailableAllArrays` é o total disponível para arrays e `MaxPossibleArrayBytes` é o tamanho do maior array único que ainda poderia ser criado. Os três estão em bytes e mudam de uma chamada para outra.\n\nÉ útil para verificar se um array muito grande é viável antes de alocá-lo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Memory fields",
+      "pt": "Campos de memória"
+     },
+     "code": "m = memory;\nfieldnames(m)\ndisp(m.MemUsedMATLAB > 0)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "whos",
+    "clear",
+    "inmem",
+    "cputime"
+   ]
+  },
+  "stats": {
+   "summary": {
+    "en": "Cache statistics of a memoized function.",
+    "pt": "Estatísticas do cache de uma função memoizada."
+   },
+   "syntax": [
+    {
+     "code": "s = stats(m)",
+     "en": "Returns a struct describing the cache of the memoized function `m`.",
+     "pt": "Retorna um struct que descreve o cache da função memoizada `m`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "A `matlab.lang.MemoizedFunction` object.",
+     "pt": "Um objeto `matlab.lang.MemoizedFunction`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Struct with `Cache` (stored `Inputs`, `Outputs`, `HitCount`, `TotalHits`, `TotalMisses`), `MostHitCachedInput`, `CacheHitRatePercent` and `CacheOccupancyPercent`.",
+     "pt": "Struct com `Cache` (`Inputs`, `Outputs`, `HitCount`, `TotalHits`, `TotalMisses` armazenados), `MostHitCachedInput`, `CacheHitRatePercent` e `CacheOccupancyPercent`."
+    }
+   ],
+   "description": {
+    "en": "A call whose inputs were already cached is a hit, and one that had to run the function is a miss. `s.Cache.TotalHits` and `s.Cache.TotalMisses` count them, and `CacheHitRatePercent` is hits divided by all calls, times 100.\n\nUse `stats` to check whether memoization is actually saving work, and to pick a `CacheSize` that fits the number of distinct inputs.",
+    "pt": "Uma chamada cujas entradas já estavam no cache é um acerto (hit), e uma que precisou executar a função é uma falha (miss). `s.Cache.TotalHits` e `s.Cache.TotalMisses` contam cada caso, e `CacheHitRatePercent` é o número de acertos dividido pelo total de chamadas, vezes 100.\n\nUse `stats` para ver se a memoização realmente poupa trabalho e para escolher um `CacheSize` compatível com o número de entradas distintas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Hit rate",
+      "pt": "Taxa de acertos"
+     },
+     "code": "f = memoize(@(x) x^2);\nf(3); f(3); f(4);\ns = stats(f);\nfprintf('hits %d, misses %d\\n', s.Cache.TotalHits, s.Cache.TotalMisses)\nfprintf('hit rate %.1f%%\\n', s.CacheHitRatePercent)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "memoize",
+    "MemoizedFunction",
+    "clearCache"
+   ]
+  },
+  "tic": {
+   "summary": {
+    "en": "Starts a stopwatch timer.",
+    "pt": "Inicia um cronômetro."
+   },
+   "syntax": [
+    {
+     "code": "tic",
+     "en": "Starts the timer. A later call to `toc` reports the time since this point.",
+     "pt": "Inicia o cronômetro. Uma chamada posterior a `toc` informa o tempo desde este ponto."
+    },
+    {
+     "code": "t = tic",
+     "en": "Starts the timer and returns an id that identifies this stopwatch.",
+     "pt": "Inicia o cronômetro e retorna um identificador desse cronômetro."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Timer id, to be passed to `toc(t)` when several stopwatches run at the same time.",
+     "pt": "Identificador do cronômetro, passado a `toc(t)` quando vários cronômetros funcionam ao mesmo tempo."
+    }
+   ],
+   "description": {
+    "en": "`tic` records the current moment and `toc` reads the elapsed wall-clock seconds from it. Without an output, `tic` stores the moment in a single shared timer, and each new `tic` replaces it.\n\nThe pair is meant for coarse timing of a block of code. For a reliable measurement of a fast function, `timeit` repeats the call and removes overhead.",
+    "pt": "`tic` registra o instante atual e `toc` lê os segundos de relógio decorridos desde então. Sem saída, `tic` guarda o instante em um único cronômetro compartilhado, e cada novo `tic` o substitui.\n\nO par serve para medir tempos de blocos de código de forma aproximada. Para medir com confiança uma função rápida, `timeit` repete a chamada e remove a sobrecarga."
+   },
+   "notes": {
+    "en": "In MatLivre the form `t = tic` is not supported: it fails with a message that no value was produced. Use plain `tic` and `toc`.",
+    "pt": "No MatLivre a forma `t = tic` não é suportada: falha com uma mensagem de que nenhum valor foi produzido. Use `tic` e `toc` simples."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Timing a loop",
+      "pt": "Cronometrando um laço"
+     },
+     "code": "tic\ns = 0;\nfor k = 1:1e5\n    s = s + sqrt(k);\nend\nt = toc;\ndisp(t >= 0)\nfprintf('%.2f\\n', s)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "toc",
+    "timeit",
+    "cputime",
+    "clock"
+   ]
+  },
+  "timeit": {
+   "summary": {
+    "en": "Measures the typical running time of a function.",
+    "pt": "Mede o tempo típico de execução de uma função."
+   },
+   "syntax": [
+    {
+     "code": "t = timeit(f)",
+     "en": "Returns the time, in seconds, that calling `f()` takes.",
+     "pt": "Retorna o tempo, em segundos, que a chamada `f()` leva."
+    },
+    {
+     "code": "t = timeit(f, n)",
+     "en": "Calls `f` requesting `n` output arguments.",
+     "pt": "Chama `f` pedindo `n` argumentos de saída."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "f",
+     "en": "Function handle that takes no inputs.",
+     "pt": "Function handle que não recebe entradas."
+    },
+    {
+     "name": "n",
+     "en": "Number of outputs to request from `f`.",
+     "pt": "Número de saídas a pedir de `f`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Scalar double, the measured time in seconds.",
+     "pt": "Escalar double, o tempo medido em segundos."
+    }
+   ],
+   "description": {
+    "en": "`timeit` runs the function several times, warms it up first and returns the median of the measurements, which is far less noisy than a single `tic` and `toc`. To time code that is not a single call, wrap it in an anonymous function, and move any setup outside the handle so it is not timed.\n\nTimings differ between machines and runs, so never print the exact number in a test; compare orders of magnitude instead.",
+    "pt": "`timeit` executa a função várias vezes, aquece-a antes e retorna a mediana das medições, muito menos ruidosa que um único `tic` e `toc`. Para medir um código que não é uma chamada única, envolva-o em uma função anônima e deixe qualquer preparação fora do handle, para que não seja cronometrada.\n\nOs tempos variam entre máquinas e execuções, então nunca imprima o valor exato em um teste; compare ordens de grandeza."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Timing a function",
+      "pt": "Medindo uma função"
+     },
+     "code": "A = magic(50);\nt = timeit(@() A * A);\ndisp(class(t))\ndisp(t > 0)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "tic",
+    "toc",
+    "cputime",
+    "memoize"
+   ]
+  },
+  "toc": {
+   "summary": {
+    "en": "Reads the stopwatch started by tic.",
+    "pt": "Lê o cronômetro iniciado por tic."
+   },
+   "syntax": [
+    {
+     "code": "toc",
+     "en": "Prints the seconds elapsed since the last `tic`.",
+     "pt": "Imprime os segundos decorridos desde o último `tic`."
+    },
+    {
+     "code": "t = toc",
+     "en": "Returns the elapsed seconds instead of printing them.",
+     "pt": "Retorna os segundos decorridos em vez de imprimi-los."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Elapsed time in seconds, a double.",
+     "pt": "Tempo decorrido em segundos, um double."
+    }
+   ],
+   "description": {
+    "en": "`toc` does not stop the timer: calling it again later reports a longer time since the same `tic`. Without an output argument it prints a line of the form `Elapsed time is 0.01 seconds.`, so most code asks for the number and formats it itself.\n\nCalling `toc` before any `tic` is an error.",
+    "pt": "`toc` não para o cronômetro: chamá-lo de novo mais tarde informa um tempo maior desde o mesmo `tic`. Sem argumento de saída, imprime uma linha como `Elapsed time is 0.01 seconds.`, então a maioria dos códigos pede o número e o formata por conta própria.\n\nChamar `toc` antes de qualquer `tic` é um erro."
+   },
+   "notes": {
+    "en": "MatLivre supports `toc` after the plain `tic`. The form `toc(t)` with an id is available only when `tic` can return one, which MatLivre does not yet allow.",
+    "pt": "O MatLivre aceita `toc` após o `tic` simples. A forma `toc(t)` com um identificador só existe quando `tic` consegue retornar um, o que o MatLivre ainda não permite."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Two readings",
+      "pt": "Duas leituras"
+     },
+     "code": "tic\nx = sum(1:1e6);\nt1 = toc;\ny = sum(1:1e6);\nt2 = toc;\ndisp(t2 >= t1)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "tic",
+    "timeit",
+    "cputime",
+    "clock"
+   ]
+  },
+  "inferiorto": {
+   "summary": {
+    "en": "Declares that a class has lower precedence than other classes.",
+    "pt": "Declara que uma classe tem precedência menor que a de outras classes."
+   },
+   "syntax": [
+    {
+     "code": "inferiorto('class1', 'class2', ...)",
+     "en": "Marks the class being defined as inferior to the named classes.",
+     "pt": "Marca a classe em definição como inferior às classes indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'class1', ...",
+     "en": "Names of classes, as text.",
+     "pt": "Nomes de classes, como texto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "When an operation or function receives objects of two different classes, MATLAB decides whose method to call. If the class being defined is inferior to the other, the other class's method wins. `inferiorto` records that ranking and is called only from inside the constructor of a class.\n\nIt matters for classes that overload operators such as `+` and need a clear rule for mixed arguments. `superiorto` states the opposite ranking.",
+    "pt": "Quando uma operação ou função recebe objetos de duas classes diferentes, o MATLAB decide qual método chamar. Se a classe em definição é inferior à outra, vale o método da outra classe. `inferiorto` registra essa hierarquia e só é chamada dentro do construtor de uma classe.\n\nImporta para classes que sobrecarregam operadores como `+` e precisam de uma regra clara para argumentos mistos. `superiorto` declara a hierarquia oposta."
+   },
+   "notes": {
+    "en": "This is the old-style class mechanism; in a script it always raises an error.",
+    "pt": "É o mecanismo de classes do estilo antigo; em um script sempre gera um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Outside a class method",
+      "pt": "Fora de um método de classe"
+     },
+     "code": "try\n    inferiorto('double')\ncatch err\n    disp(err.message)\nend",
+     "silent": false,
+     "note": {
+      "en": "The function only makes sense inside a class constructor, so a script gets an error.",
+      "pt": "A função só faz sentido no construtor de uma classe, então um script recebe um erro."
+     }
+    }
+   ],
+   "see": [
+    "superiorto",
+    "class",
+    "isa",
+    "superiorfloat"
+   ]
+  },
+  "superiorto": {
+   "summary": {
+    "en": "Declares that a class has higher precedence than other classes.",
+    "pt": "Declara que uma classe tem precedência maior que a de outras classes."
+   },
+   "syntax": [
+    {
+     "code": "superiorto('class1', 'class2', ...)",
+     "en": "Marks the class being defined as superior to the named classes.",
+     "pt": "Marca a classe em definição como superior às classes indicadas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'class1', ...",
+     "en": "Names of classes, as text.",
+     "pt": "Nomes de classes, como texto."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "In a call that mixes objects of different classes, the class marked superior supplies the method that runs. `superiorto` registers that rule and is valid only inside a class constructor. A typical use is a user class that should take over arithmetic with `double`, so that `obj + 1` calls the class's own `plus`.\n\n`inferiorto` declares the reverse relation.",
+    "pt": "Numa chamada que mistura objetos de classes diferentes, a classe marcada como superior fornece o método que será executado. `superiorto` registra essa regra e só é válida dentro do construtor de uma classe. Um uso típico é uma classe própria que deve assumir a aritmética com `double`, de modo que `obj + 1` chame o `plus` da classe.\n\n`inferiorto` declara a relação inversa."
+   },
+   "notes": {
+    "en": "This is the old-style class mechanism; in a script it always raises an error.",
+    "pt": "É o mecanismo de classes do estilo antigo; em um script sempre gera um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Outside a class method",
+      "pt": "Fora de um método de classe"
+     },
+     "code": "try\n    superiorto('double')\ncatch err\n    disp(err.message)\nend",
+     "silent": false,
+     "note": {
+      "en": "A script is not a class constructor, so the call is rejected.",
+      "pt": "Um script não é construtor de classe, então a chamada é rejeitada."
+     }
+    }
+   ],
+   "see": [
+    "inferiorto",
+    "class",
+    "isa",
+    "superiorfloat"
+   ]
+  },
+  "superiorfloat": {
+   "summary": {
+    "en": "Class name of the dominant floating-point type among the arguments.",
+    "pt": "Nome da classe de ponto flutuante dominante entre os argumentos."
+   },
+   "syntax": [
+    {
+     "code": "cls = superiorfloat(a, b, ...)",
+     "en": "Returns `'single'` if any argument is single, otherwise `'double'`.",
+     "pt": "Retorna `'single'` se algum argumento for single, caso contrário `'double'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "a, b, ...",
+     "en": "Floating-point arrays (single or double).",
+     "pt": "Arrays de ponto flutuante (single ou double)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "cls",
+     "en": "Character vector, `'single'` or `'double'`.",
+     "pt": "Vetor de caracteres, `'single'` ou `'double'`."
+    }
+   ],
+   "description": {
+    "en": "The result follows the rule that arithmetic between `single` and `double` gives `single`. It is used when writing a function that should produce the same precision as its inputs, for example by creating the output with `zeros(n, cls)`.\n\nAn argument of any other class, such as an integer type or a char, is an error.",
+    "pt": "O resultado segue a regra de que a aritmética entre `single` e `double` resulta em `single`. Serve para escrever funções que devem produzir a mesma precisão de suas entradas, por exemplo criando a saída com `zeros(n, cls)`.\n\nUm argumento de qualquer outra classe, como tipos inteiros ou char, é um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mixed precisions",
+      "pt": "Precisões mistas"
+     },
+     "code": "superiorfloat(1, 2)\nsuperiorfloat(single(1), 2)\ntry\n    superiorfloat(int8(1))\ncatch err\n    disp(err.message)\nend",
+     "silent": false
+    }
+   ],
+   "see": [
+    "class",
+    "single",
+    "double",
+    "isfloat"
+   ]
+  },
+  "ts2timetable": {
+   "summary": {
+    "en": "Converts a timeseries object into a timetable.",
+    "pt": "Converte um objeto timeseries em um timetable."
+   },
+   "syntax": [
+    {
+     "code": "TT = ts2timetable(ts)",
+     "en": "Returns a timetable whose rows are the samples of `ts`.",
+     "pt": "Retorna um timetable cujas linhas são as amostras de `ts`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "A `timeseries` object.",
+     "pt": "Um objeto `timeseries`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "TT",
+     "en": "A timetable. The sample times become the row times and the data go into the variable `Data`.",
+     "pt": "Um timetable. Os instantes das amostras viram os tempos das linhas e os dados vão para a variável `Data`."
+    }
+   ],
+   "description": {
+    "en": "`timeseries` objects are the older container for time-stamped data, while `timetable` is the table-based one that works with `retime`, `synchronize` and most newer functions. This conversion lets old data enter the newer workflow. Numeric times become durations in seconds; datetime times give a datetime row axis.",
+    "pt": "Objetos `timeseries` são o contêiner antigo para dados com carimbo de tempo, enquanto `timetable` é o baseado em tabelas, que funciona com `retime`, `synchronize` e a maioria das funções novas. A conversão permite levar dados antigos ao fluxo novo. Tempos numéricos viram durações em segundos; tempos datetime geram um eixo de linhas datetime."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "From timeseries",
+      "pt": "De um timeseries"
+     },
+     "code": "ts = timeseries([10; 20; 30], [0 1 2]);\nTT = ts2timetable(ts)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "timeseries",
+    "timetable",
+    "retime",
+    "table2timetable"
+   ]
+  },
+  "inf": {
+   "summary": {
+    "en": "Creates arrays filled with positive infinity.",
+    "pt": "Cria arrays preenchidos com infinito positivo."
+   },
+   "syntax": [
+    {
+     "code": "x = inf",
+     "en": "The scalar `Inf`.",
+     "pt": "O escalar `Inf`."
+    },
+    {
+     "code": "x = inf(n)",
+     "en": "An `n`-by-`n` matrix of `Inf`.",
+     "pt": "Uma matriz `n` por `n` de `Inf`."
+    },
+    {
+     "code": "x = inf(sz1, ..., szN)",
+     "en": "An array with the given dimensions.",
+     "pt": "Um array com as dimensões dadas."
+    },
+    {
+     "code": "x = inf(___, classname)",
+     "en": "Creates the array as `'double'` or `'single'`.",
+     "pt": "Cria o array como `'double'` ou `'single'`."
+    },
+    {
+     "code": "x = inf(___, 'like', p)",
+     "en": "Uses the class of the variable `p`.",
+     "pt": "Usa a classe da variável `p`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n, sz1, ..., szN",
+     "en": "Non-negative integers with the sizes. Zero gives an empty array.",
+     "pt": "Inteiros não negativos com os tamanhos. Zero gera um array vazio."
+    },
+    {
+     "name": "classname",
+     "en": "`'double'` (default) or `'single'`.",
+     "pt": "`'double'` (padrão) ou `'single'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "Array of `Inf` values.",
+     "pt": "Array de valores `Inf`."
+    }
+   ],
+   "description": {
+    "en": "`Inf` is the IEEE value that results from overflow or from dividing a nonzero number by zero, and it compares larger than every finite number. `inf(2, 3)` builds a 2-by-3 matrix of them, useful as a starting value for a running minimum: `best = inf; best = min(best, v)`.\n\nUse `-inf` for negative infinity. `Inf` is also a name that can be typed directly in an expression.",
+    "pt": "`Inf` é o valor IEEE que resulta de estouro ou da divisão de um número não nulo por zero, e é maior que qualquer número finito. `inf(2, 3)` cria uma matriz 2 por 3 desses valores, útil como valor inicial de um mínimo corrente: `best = inf; best = min(best, v)`.\n\nUse `-inf` para o infinito negativo. `Inf` também é um nome que pode ser digitado diretamente numa expressão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Infinity arrays",
+      "pt": "Arrays de infinito"
+     },
+     "code": "inf\nx = inf(2, 3)\ny = inf(1, 3, 'single');\nclass(y)\n1/0 == inf",
+     "silent": false
+    }
+   ],
+   "see": [
+    "nan",
+    "isinf",
+    "isfinite",
+    "realmax"
+   ]
+  },
+  "nan": {
+   "summary": {
+    "en": "Creates arrays filled with NaN (not a number).",
+    "pt": "Cria arrays preenchidos com NaN (não é um número)."
+   },
+   "syntax": [
+    {
+     "code": "x = nan",
+     "en": "The scalar `NaN`.",
+     "pt": "O escalar `NaN`."
+    },
+    {
+     "code": "x = nan(n)",
+     "en": "An `n`-by-`n` matrix of `NaN`.",
+     "pt": "Uma matriz `n` por `n` de `NaN`."
+    },
+    {
+     "code": "x = nan(sz1, ..., szN)",
+     "en": "An array with the given dimensions.",
+     "pt": "Um array com as dimensões dadas."
+    },
+    {
+     "code": "x = nan(___, classname)",
+     "en": "Creates the array as `'double'` or `'single'`.",
+     "pt": "Cria o array como `'double'` ou `'single'`."
+    },
+    {
+     "code": "x = nan(___, 'like', p)",
+     "en": "Uses the class of the variable `p`.",
+     "pt": "Usa a classe da variável `p`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n, sz1, ..., szN",
+     "en": "Non-negative integers with the sizes.",
+     "pt": "Inteiros não negativos com os tamanhos."
+    },
+    {
+     "name": "classname",
+     "en": "`'double'` (default) or `'single'`.",
+     "pt": "`'double'` (padrão) ou `'single'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "Array of `NaN` values.",
+     "pt": "Array de valores `NaN`."
+    }
+   ],
+   "description": {
+    "en": "`NaN` stands for an undefined numeric result such as `0/0` or `Inf - Inf`. It is not equal to anything, not even itself, so test for it with `isnan`, never with `==`. Preallocating with `nan` is a good way to mark entries that have not been computed yet: forgotten cells stay visible instead of looking like zeros.\n\nMost statistics functions propagate `NaN`; options such as `'omitnan'` skip it.",
+    "pt": "`NaN` representa um resultado numérico indefinido, como `0/0` ou `Inf - Inf`. Não é igual a nada, nem a si mesmo, então teste com `isnan`, nunca com `==`. Pré-alocar com `nan` é uma boa forma de marcar entradas ainda não calculadas: células esquecidas continuam visíveis em vez de parecerem zeros.\n\nA maioria das funções estatísticas propaga `NaN`; opções como `'omitnan'` o ignoram."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "NaN placeholders",
+      "pt": "NaN como marcador"
+     },
+     "code": "x = nan(2, 3)\nx(1, 2) = 5;\nisnan(x)\nNaN == NaN",
+     "silent": false
+    }
+   ],
+   "see": [
+    "inf",
+    "isnan",
+    "nanmax",
+    "ismissing",
+    "fillmissing"
+   ]
+  }
+ }
+}

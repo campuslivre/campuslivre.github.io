@@ -1,0 +1,597 @@
+{
+  "functions": {
+    "dsearchn": {
+      "summary": {"en": "Index of the nearest point in a set, for each query point.", "pt": "Índice do ponto mais próximo em um conjunto, para cada ponto de consulta."},
+      "syntax": [
+        {"code": "k = dsearchn(P, PQ)", "en": "For each row of `PQ`, finds the closest row of `P`.", "pt": "Para cada linha de `PQ`, encontra a linha mais próxima de `P`."},
+        {"code": "[k, d] = dsearchn(P, PQ)", "en": "Also returns the distances.", "pt": "Também retorna as distâncias."}
+      ],
+      "inputs": [
+        {"name": "P", "en": "Matrix of data points, one per row, with n columns for n dimensions.", "pt": "Matriz de pontos de dados, um por linha, com n colunas para n dimensões."},
+        {"name": "PQ", "en": "Query points, one per row, with the same number of columns as `P`.", "pt": "Pontos de consulta, um por linha, com o mesmo número de colunas de `P`."}
+      ],
+      "outputs": [
+        {"name": "k", "en": "Column vector with, for each query point, the row index in `P` of its nearest neighbor.", "pt": "Vetor coluna com, para cada ponto de consulta, o índice da linha de `P` do vizinho mais próximo."},
+        {"name": "d", "en": "Column vector of the Euclidean distances to those neighbors.", "pt": "Vetor coluna das distâncias euclidianas a esses vizinhos."}
+      ],
+      "description": {
+        "en": "The distance is the ordinary Euclidean distance. The search compares each query point against the data points, so the result is exact; if two data points are equally close, one of them is returned.\n\nThe function works in any dimension and is a quick way to snap points onto a mesh or a sample set.",
+        "pt": "A distância é a distância euclidiana comum. A busca compara cada ponto de consulta com os pontos de dados, então o resultado é exato; se dois pontos de dados estiverem à mesma distância, um deles é retornado.\n\nA função funciona em qualquer dimensão e é uma forma rápida de encaixar pontos numa malha ou num conjunto de amostras."
+      },
+      "examples": [
+        {"title": {"en": "Nearest of three points", "pt": "Mais próximo entre três pontos"}, "code": "P = [0 0; 5 5; 10 0];\nPQ = [4 4; 9 1; 1 0];\n[k, d] = dsearchn(P, PQ)"}
+      ],
+      "see": ["nearestNeighbor", "delaunayn", "knnsearch", "pointLocation"]
+    },
+    "delaunayTriangulation": {
+      "summary": {"en": "Creates a Delaunay triangulation object from 2-D or 3-D points.", "pt": "Cria um objeto de triangulação de Delaunay a partir de pontos 2-D ou 3-D."},
+      "syntax": [
+        {"code": "DT = delaunayTriangulation(x, y)", "en": "Triangulates 2-D points.", "pt": "Triangula pontos 2-D."},
+        {"code": "DT = delaunayTriangulation(x, y, z)", "en": "Triangulates 3-D points into tetrahedra.", "pt": "Triangula pontos 3-D em tetraedros."},
+        {"code": "DT = delaunayTriangulation(P)", "en": "Points as the rows of a matrix with two or three columns.", "pt": "Pontos como linhas de uma matriz com duas ou três colunas."}
+      ],
+      "inputs": [
+        {"name": "x, y, z", "en": "Coordinates of the points as column vectors.", "pt": "Coordenadas dos pontos como vetores coluna."},
+        {"name": "P", "en": "Matrix with one point per row.", "pt": "Matriz com um ponto por linha."}
+      ],
+      "outputs": [
+        {"name": "DT", "en": "A `delaunayTriangulation` with properties `Points`, `ConnectivityList` and `Constraints`.", "pt": "Uma `delaunayTriangulation` com as propriedades `Points`, `ConnectivityList` e `Constraints`."}
+      ],
+      "description": {
+        "en": "The object stores the points and the Delaunay connectivity and offers queries on them: `pointLocation`, `nearestNeighbor`, `edges`, `circumcenter`, `incenter`, `freeBoundary`, `convexHull` and the barycentric conversions. `ConnectivityList` has one row per triangle (or tetrahedron) with indices into `Points`.\n\nDuplicate points are not kept as separate vertices.",
+        "pt": "O objeto guarda os pontos e a conectividade de Delaunay e oferece consultas sobre eles: `pointLocation`, `nearestNeighbor`, `edges`, `circumcenter`, `incenter`, `freeBoundary`, `convexHull` e as conversões baricêntricas. `ConnectivityList` tem uma linha por triângulo (ou tetraedro) com índices de `Points`.\n\nPontos duplicados não são mantidos como vértices separados."
+      },
+      "examples": [
+        {"title": {"en": "Triangulation of five points", "pt": "Triangulação de cinco pontos"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nDT.ConnectivityList\nsize(DT.Points)"}
+      ],
+      "notes": {"en": "Constrained triangulations (the edge-constraint input) are not supported in MatLivre, so `isInterior` cannot be used.", "pt": "Triangulações com restrições (a entrada de arestas restritas) não são suportadas no MatLivre, então `isInterior` não pode ser usada."},
+      "see": ["delaunay", "triangulation", "pointLocation", "convexHull", "voronoiDiagram"]
+    },
+    "edgeAttachments": {
+      "summary": {"en": "Triangles or tetrahedra attached to given edges of a triangulation.", "pt": "Triângulos ou tetraedros ligados a arestas dadas de uma triangulação."},
+      "syntax": [
+        {"code": "T = edgeAttachments(TR, v1, v2)", "en": "For each edge from vertex `v1(i)` to `v2(i)`, lists the simplices that contain the edge.", "pt": "Para cada aresta do vértice `v1(i)` ao `v2(i)`, lista os simplexes que contêm a aresta."},
+        {"code": "T = edgeAttachments(TR, E)", "en": "The edges are given as the rows of the two-column matrix `E`.", "pt": "As arestas são dadas como linhas da matriz `E` de duas colunas."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` or `delaunayTriangulation` object.", "pt": "Um objeto `triangulation` ou `delaunayTriangulation`."},
+        {"name": "v1, v2", "en": "Column vectors of vertex indices that define the edges.", "pt": "Vetores coluna de índices de vértices que definem as arestas."},
+        {"name": "E", "en": "Edges as a two-column matrix of vertex indices.", "pt": "Arestas como matriz de duas colunas de índices de vértices."}
+      ],
+      "outputs": [
+        {"name": "T", "en": "Cell array with one entry per edge, each a row vector of simplex indices. An edge that is not in the triangulation gives an empty entry.", "pt": "Cell array com uma entrada por aresta, cada uma um vetor linha de índices de simplexes. Uma aresta que não está na triangulação dá uma entrada vazia."}
+      ],
+      "description": {
+        "en": "An interior edge of a planar mesh belongs to two triangles, an edge on the outline belongs to one. Looking at how many simplices come back therefore tells whether an edge is on the boundary. In a 3-D tetrahedral mesh an edge can be shared by many tetrahedra.",
+        "pt": "Uma aresta interna de uma malha plana pertence a dois triângulos; uma aresta do contorno pertence a um. Ver quantos simplexes retornam diz, portanto, se a aresta está no contorno. Em uma malha tetraédrica 3-D, uma aresta pode ser compartilhada por muitos tetraedros."
+      },
+      "examples": [
+        {"title": {"en": "Triangles on two edges", "pt": "Triângulos em duas arestas"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nea = edgeAttachments(DT, [1 2; 2 3])"}
+      ],
+      "see": ["edges", "freeBoundary", "isConnected", "triangulation"]
+    },
+    "edges": {
+      "summary": {"en": "All edges of a triangulation, as pairs of vertex indices.", "pt": "Todas as arestas de uma triangulação, como pares de índices de vértices."},
+      "syntax": [
+        {"code": "E = edges(TR)", "en": "Returns each distinct edge once, as a row `[v1 v2]` with `v1 < v2`.", "pt": "Retorna cada aresta distinta uma vez, como uma linha `[v1 v2]` com `v1 < v2`."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation`, `delaunayTriangulation`, or a legacy `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `triangulation`, `delaunayTriangulation`, ou um `DelaunayTri` ou `TriRep` antigo."}
+      ],
+      "outputs": [
+        {"name": "E", "en": "Two-column matrix of vertex indices, sorted by rows.", "pt": "Matriz de duas colunas de índices de vértices, ordenada por linhas."}
+      ],
+      "description": {
+        "en": "Edges shared by neighbouring triangles are listed only once. For a mesh of `V` vertices, `F` triangles and `E` edges in a closed surface, `V - E + F` equals 2, which is a quick check on a mesh. The edge list is the input for drawing a wireframe or building a graph from the mesh.",
+        "pt": "Arestas compartilhadas por triângulos vizinhos aparecem uma só vez. Em uma malha com `V` vértices, `F` triângulos e `E` arestas em uma superfície fechada, `V - E + F` vale 2, uma verificação rápida de uma malha. A lista de arestas serve para desenhar uma estrutura de arame ou montar um grafo a partir da malha."
+      },
+      "examples": [
+        {"title": {"en": "Edges of a five-point mesh", "pt": "Arestas de uma malha de cinco pontos"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nE = edges(DT)"}
+      ],
+      "see": ["edgeAttachments", "isConnected", "freeBoundary", "triangulation", "graph"]
+    },
+    "faceNormal": {
+      "summary": {"en": "Unit normal vector of each triangle of a triangulated surface.", "pt": "Vetor normal unitário de cada triângulo de uma superfície triangulada."},
+      "syntax": [
+        {"code": "N = faceNormal(TR)", "en": "Normals for all triangles.", "pt": "Normais de todos os triângulos."},
+        {"code": "N = faceNormal(TR, T)", "en": "Normals only for the triangles with indices in `T`.", "pt": "Normais apenas dos triângulos com índices em `T`."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` of triangles in 2-D or 3-D space.", "pt": "Uma `triangulation` de triângulos no espaço 2-D ou 3-D."},
+        {"name": "T", "en": "Optional column vector of triangle indices.", "pt": "Vetor coluna opcional de índices de triângulos."}
+      ],
+      "outputs": [
+        {"name": "N", "en": "Matrix with one unit vector per triangle, three columns.", "pt": "Matriz com um vetor unitário por triângulo, três colunas."}
+      ],
+      "description": {
+        "en": "The normal of a triangle is perpendicular to its plane. Its direction follows the right-hand rule on the vertex order in the connectivity list: curling the fingers from the first vertex to the second to the third, the thumb points along the normal. A planar 2-D mesh with counterclockwise triangles therefore has all normals equal to `[0 0 1]`.\n\nReversing the vertex order of a triangle flips its normal.",
+        "pt": "A normal de um triângulo é perpendicular ao seu plano. Seu sentido segue a regra da mão direita sobre a ordem dos vértices na lista de conectividade: ao curvar os dedos do primeiro vértice ao segundo e ao terceiro, o polegar aponta na direção da normal. Uma malha plana 2-D com triângulos anti-horários tem, portanto, todas as normais iguais a `[0 0 1]`.\n\nInverter a ordem dos vértices de um triângulo inverte sua normal."
+      },
+      "examples": [
+        {"title": {"en": "Normals of a tetrahedron's faces", "pt": "Normais das faces de um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 3 2; 1 2 4; 1 4 3; 2 3 4];\ntr = triangulation(T, P);\nN = faceNormal(tr)"}
+      ],
+      "see": ["faceNormals", "vertexNormal", "featureEdges", "triangulation"]
+    },
+    "faceNormals": {
+      "summary": {"en": "Legacy form of faceNormal for TriRep and DelaunayTri objects.", "pt": "Forma antiga de faceNormal para objetos TriRep e DelaunayTri."},
+      "syntax": [
+        {"code": "N = faceNormals(TR)", "en": "Unit normals of all triangles.", "pt": "Normais unitárias de todos os triângulos."},
+        {"code": "N = faceNormals(TR, T)", "en": "Only for the triangles in `T`.", "pt": "Apenas para os triângulos em `T`."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `TriRep` or `DelaunayTri` object.", "pt": "Um objeto `TriRep` ou `DelaunayTri`."},
+        {"name": "T", "en": "Optional triangle indices.", "pt": "Índices de triângulos opcionais."}
+      ],
+      "outputs": [
+        {"name": "N", "en": "One unit normal per row.", "pt": "Uma normal unitária por linha."}
+      ],
+      "description": {
+        "en": "`faceNormals` is the older name of `faceNormal` and returns the same vectors: perpendicular to each triangle and oriented by the right-hand rule on the vertex order. In a 2-D triangulation every normal is `[0 0 1]`, assuming counterclockwise vertex order.",
+        "pt": "`faceNormals` é o nome antigo de `faceNormal` e retorna os mesmos vetores: perpendiculares a cada triângulo e orientados pela regra da mão direita sobre a ordem dos vértices. Em uma triangulação 2-D, toda normal é `[0 0 1]`, supondo ordem anti-horária dos vértices."
+      },
+      "examples": [
+        {"title": {"en": "Normals of a planar mesh", "pt": "Normais de uma malha plana"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nN = faceNormals(DL)"}
+      ],
+      "see": ["faceNormal", "DelaunayTri", "featureEdges"]
+    },
+    "featureEdges": {
+      "summary": {"en": "Sharp edges of a triangulated surface, selected by the angle between adjacent faces.", "pt": "Arestas vivas de uma superfície triangulada, selecionadas pelo ângulo entre faces adjacentes."},
+      "syntax": [
+        {"code": "E = featureEdges(TR, angle)", "en": "Returns the edges where the angle between the two adjacent faces exceeds `angle`.", "pt": "Retorna as arestas em que o ângulo entre as duas faces adjacentes excede `angle`."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` of a 3-D surface (triangles).", "pt": "Uma `triangulation` de uma superfície 3-D (triângulos)."},
+        {"name": "angle", "en": "Threshold angle in radians, between 0 and `pi`.", "pt": "Ângulo limite em radianos, entre 0 e `pi`."}
+      ],
+      "outputs": [
+        {"name": "E", "en": "Two-column matrix of vertex indices, one row per feature edge.", "pt": "Matriz de duas colunas de índices de vértices, uma linha por aresta viva."}
+      ],
+      "description": {
+        "en": "For each edge shared by two triangles, the function measures the angle between the two face normals. An edge is kept when that angle is larger than the threshold. On a cube, the 12 edges at the corners are kept while the diagonals across the flat faces are dropped, since those faces are coplanar.\n\nThe result is typically drawn on top of a shaded surface to emphasise its creases.",
+        "pt": "Para cada aresta compartilhada por dois triângulos, a função mede o ângulo entre as duas normais das faces. A aresta é mantida quando esse ângulo é maior que o limite. Em um cubo, as 12 arestas dos cantos são mantidas, enquanto as diagonais nas faces planas são descartadas, pois essas faces são coplanares.\n\nO resultado costuma ser desenhado sobre uma superfície sombreada para realçar suas dobras."
+      },
+      "examples": [
+        {"title": {"en": "Creases of a tetrahedron", "pt": "Dobras de um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 3 2; 1 2 4; 1 4 3; 2 3 4];\ntr = triangulation(T, P);\nE = featureEdges(tr, pi/6)"}
+      ],
+      "see": ["faceNormal", "edges", "freeBoundary", "triangulation"]
+    },
+    "freeBoundary": {
+      "summary": {"en": "Boundary facets of a triangulation: edges of a 2-D mesh or faces of a 3-D one that touch only one simplex.", "pt": "Facetas de contorno de uma triangulação: arestas de uma malha 2-D ou faces de uma 3-D que tocam um só simplex."},
+      "syntax": [
+        {"code": "F = freeBoundary(TR)", "en": "Returns the free boundary facets as rows of vertex indices.", "pt": "Retorna as facetas livres do contorno como linhas de índices de vértices."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation`, `delaunayTriangulation` or legacy `TriRep` or `DelaunayTri` object.", "pt": "Um objeto `triangulation`, `delaunayTriangulation` ou `TriRep` ou `DelaunayTri` antigo."}
+      ],
+      "outputs": [
+        {"name": "F", "en": "Two columns per edge for a 2-D triangulation, three per face for a tetrahedral one. A closed triangulated surface gives an empty matrix.", "pt": "Duas colunas por aresta em uma triangulação 2-D, três por face em uma tetraédrica. Uma superfície triangulada fechada dá uma matriz vazia."}
+      ],
+      "description": {
+        "en": "A facet shared by two simplices is interior; a facet owned by a single simplex lies on the outer boundary. The free boundary therefore gives the outline of a flat mesh or the skin of a solid mesh. The edges are oriented consistently with the triangles that own them.",
+        "pt": "Uma faceta compartilhada por dois simplexes é interna; uma faceta de um único simplex está no contorno externo. O contorno livre dá, portanto, o contorno de uma malha plana ou a casca de uma malha sólida. As arestas são orientadas de forma consistente com os triângulos a que pertencem."
+      },
+      "examples": [
+        {"title": {"en": "Outline of a square mesh", "pt": "Contorno de uma malha quadrada"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nF = freeBoundary(DT)"}
+      ],
+      "see": ["boundaryFacets", "boundaryshape", "edgeAttachments", "convexHull"]
+    },
+    "holes": {
+      "summary": {"en": "Returns the holes of a polyshape as an array of polyshape objects.", "pt": "Retorna os furos de um polyshape como um array de objetos polyshape."},
+      "syntax": [
+        {"code": "H = holes(pshape)", "en": "One polyshape per hole boundary.", "pt": "Um polyshape por contorno de furo."},
+        {"code": "H = holes(pshape, I)", "en": "Only the holes selected by the index `I`.", "pt": "Apenas os furos selecionados pelo índice `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "H", "en": "Array of `polyshape` objects, each describing a hole as a solid polygon. If there are no holes it is an empty polyshape.", "pt": "Array de objetos `polyshape`, cada um descrevendo um furo como polígono sólido. Se não houver furos, é um polyshape vazio."}
+      ],
+      "description": {
+        "en": "The holes are returned as ordinary filled shapes, so you can ask for their `area` or `centroid`, or fill them. This is the inverse of making holes with `subtract`. To drop the holes from the shape, use `rmholes`.",
+        "pt": "Os furos são retornados como formas comuns preenchidas, então é possível pedir sua `area` ou `centroid`, ou preenchê-los. É o inverso de fazer furos com `subtract`. Para eliminar os furos da forma, use `rmholes`."
+      },
+      "examples": [
+        {"title": {"en": "Extract a hole", "pt": "Extrair um furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nh = holes(D);\ndisp(area(h))\ndisp(h.Vertices)"}
+      ],
+      "see": ["rmholes", "ishole", "regions", "subtract"]
+    },
+    "incenter": {
+      "summary": {"en": "Incenters and inscribed-circle radii of the triangles or tetrahedra of a triangulation.", "pt": "Incentros e raios dos círculos inscritos nos triângulos ou tetraedros de uma triangulação."},
+      "syntax": [
+        {"code": "IC = incenter(TR)", "en": "Incenter of every simplex, one row each.", "pt": "Incentro de cada simplex, uma linha por simplex."},
+        {"code": "IC = incenter(TR, T)", "en": "Only for the simplices in `T`.", "pt": "Apenas para os simplexes em `T`."},
+        {"code": "[IC, r] = incenter(___)", "en": "Also returns the inradii.", "pt": "Também retorna os inraios."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` or `delaunayTriangulation` object.", "pt": "Um objeto `triangulation` ou `delaunayTriangulation`."},
+        {"name": "T", "en": "Optional column vector of simplex indices.", "pt": "Vetor coluna opcional de índices de simplexes."}
+      ],
+      "outputs": [
+        {"name": "IC", "en": "Incenter coordinates, one row per simplex.", "pt": "Coordenadas dos incentros, uma linha por simplex."},
+        {"name": "r", "en": "Column vector of the radii of the inscribed circles (spheres).", "pt": "Vetor coluna dos raios dos círculos (esferas) inscritos."}
+      ],
+      "description": {
+        "en": "The incenter is the center of the largest circle (sphere) that fits inside a simplex, touching all its sides. For a triangle it is where the angle bisectors meet. Unlike the circumcenter, it always lies inside the simplex.\n\nThe ratio of inradius to circumradius is a common measure of how well-shaped a triangle is.",
+        "pt": "O incentro é o centro do maior círculo (esfera) que cabe dentro de um simplex, tocando todos os seus lados. Em um triângulo, é onde as bissetrizes se encontram. Ao contrário do circuncentro, sempre fica dentro do simplex.\n\nA razão entre inraio e circunraio é uma medida comum da qualidade da forma de um triângulo."
+      },
+      "examples": [
+        {"title": {"en": "Incenters and radii", "pt": "Incentros e raios"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\n[IC, r] = incenter(DT)"}
+      ],
+      "see": ["circumcenter", "incenters", "delaunayTriangulation", "triangulation"]
+    },
+    "incenters": {
+      "summary": {"en": "Legacy form of incenter for TriRep and DelaunayTri objects.", "pt": "Forma antiga de incenter para objetos TriRep e DelaunayTri."},
+      "syntax": [
+        {"code": "IC = incenters(TR)", "en": "Incenters of all simplices.", "pt": "Incentros de todos os simplexes."},
+        {"code": "IC = incenters(TR, T)", "en": "Only for the simplices in `T`.", "pt": "Apenas para os simplexes em `T`."},
+        {"code": "[IC, r] = incenters(___)", "en": "Also returns the inradii.", "pt": "Também retorna os inraios."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `DelaunayTri` ou `TriRep`."},
+        {"name": "T", "en": "Optional simplex indices.", "pt": "Índices de simplexes opcionais."}
+      ],
+      "outputs": [
+        {"name": "IC", "en": "Incenter coordinates, one row per simplex.", "pt": "Coordenadas dos incentros, uma linha por simplex."},
+        {"name": "r", "en": "Inradii.", "pt": "Inraios."}
+      ],
+      "description": {
+        "en": "`incenters` is the older plural name of `incenter` used with `TriRep` and `DelaunayTri`. It returns the center of the circle (sphere) inscribed in each simplex and its radius, with the same values as `incenter`.",
+        "pt": "`incenters` é o nome antigo, no plural, de `incenter`, usado com `TriRep` e `DelaunayTri`. Retorna o centro do círculo (esfera) inscrito em cada simplex e seu raio, com os mesmos valores de `incenter`."
+      },
+      "examples": [
+        {"title": {"en": "Incenters with DelaunayTri", "pt": "Incentros com DelaunayTri"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nIC = incenters(DL)"}
+      ],
+      "see": ["incenter", "circumcenters", "DelaunayTri"]
+    },
+    "inOutStatus": {
+      "summary": {"en": "Flags which triangles of a constrained Delaunay triangulation lie inside the constrained region.", "pt": "Indica quais triângulos de uma triangulação de Delaunay com restrições estão dentro da região restrita."},
+      "syntax": [
+        {"code": "IN = inOutStatus(DT)", "en": "Returns a logical value for every triangle of the legacy `DelaunayTri` object `DT`.", "pt": "Retorna um valor lógico para cada triângulo do objeto `DelaunayTri` antigo `DT`."}
+      ],
+      "inputs": [
+        {"name": "DT", "en": "A 2-D `DelaunayTri` created with constraint edges that form closed loops.", "pt": "Um `DelaunayTri` 2-D criado com arestas restritas que formam laços fechados."}
+      ],
+      "outputs": [
+        {"name": "IN", "en": "Logical column vector, one entry per triangle: `true` when the triangle is inside the domain bounded by the constraints.", "pt": "Vetor coluna lógico, uma entrada por triângulo: `true` quando o triângulo está dentro do domínio delimitado pelas restrições."}
+      ],
+      "description": {
+        "en": "When constraint edges enclose a domain, the triangulation still fills the whole convex hull of the points. `inOutStatus` tells which triangles belong to the enclosed domain, with nested loops counting as holes (inside, outside, inside again). It is how a mesh of a shape with holes is cut out of the full triangulation. The newer equivalent is `isInterior`.",
+        "pt": "Quando arestas restritas cercam um domínio, a triangulação ainda preenche todo o fecho convexo dos pontos. `inOutStatus` diz quais triângulos pertencem ao domínio cercado, com laços aninhados contando como furos (dentro, fora, dentro de novo). É como se recorta a malha de uma forma com furos a partir da triangulação completa. O equivalente mais novo é `isInterior`."
+      },
+      "examples": [
+        {"title": {"en": "Behavior in MatLivre", "pt": "Comportamento no MatLivre"}, "code": "P = [0 0; 4 0; 4 4; 0 4; 1 1; 3 1; 3 3; 1 3];\nC = [1 2; 2 3; 3 4; 4 1; 5 6; 6 7; 7 8; 8 5];\ntry\n  DL = DelaunayTri(P, C);\n  IN = inOutStatus(DL)\ncatch ME\n  disp(ME.message)\nend", "note": {"en": "In MATLAB this prints one logical value per triangle. MatLivre has no constrained triangulation and reports an error message instead.", "pt": "No MATLAB isto imprime um valor lógico por triângulo. O MatLivre não tem triangulação com restrições e informa uma mensagem de erro."}}
+      ],
+      "notes": {"en": "Not functional in MatLivre: constrained Delaunay triangulations are unsupported, so calling it raises an error.", "pt": "Não funcional no MatLivre: triangulações de Delaunay com restrições não são suportadas, então a chamada gera erro."},
+      "see": ["isInterior", "DelaunayTri", "delaunayTriangulation", "inpolygon"]
+    },
+    "inpolygon": {
+      "summary": {"en": "Tests which points lie inside or on the edge of a polygon.", "pt": "Testa quais pontos estão dentro de um polígono ou sobre sua aresta."},
+      "syntax": [
+        {"code": "in = inpolygon(xq, yq, xv, yv)", "en": "Tells whether each query point `(xq, yq)` is inside or on the polygon with vertices `(xv, yv)`.", "pt": "Indica se cada ponto de consulta `(xq, yq)` está dentro ou sobre o polígono de vértices `(xv, yv)`."},
+        {"code": "[in, on] = inpolygon(___)", "en": "Also returns which points lie exactly on the polygon boundary.", "pt": "Também retorna quais pontos estão exatamente sobre o contorno do polígono."}
+      ],
+      "inputs": [
+        {"name": "xq, yq", "en": "Coordinates of the query points; arrays of the same size.", "pt": "Coordenadas dos pontos de consulta; arrays do mesmo tamanho."},
+        {"name": "xv, yv", "en": "Vectors with the polygon's vertices. The polygon is closed automatically.", "pt": "Vetores com os vértices do polígono. O polígono é fechado automaticamente."}
+      ],
+      "outputs": [
+        {"name": "in", "en": "Logical array the size of `xq`: `true` for points inside or on the boundary.", "pt": "Array lógico do tamanho de `xq`: `true` para pontos dentro ou sobre o contorno."},
+        {"name": "on", "en": "Logical array: `true` for points on the boundary.", "pt": "Array lógico: `true` para pontos sobre o contorno."}
+      ],
+      "description": {
+        "en": "A point counts as inside when a ray from it crosses the polygon an odd number of times. Points exactly on an edge or vertex are reported as inside in `in` and also flagged in `on`, so `in & ~on` selects strictly interior points.\n\nThe polygon may be concave or self-intersecting; regions covered an even number of times are treated as outside.",
+        "pt": "Um ponto conta como interno quando um raio a partir dele cruza o polígono um número ímpar de vezes. Pontos exatamente sobre uma aresta ou vértice são indicados como dentro em `in` e também marcados em `on`, de modo que `in & ~on` seleciona apenas os pontos estritamente internos.\n\nO polígono pode ser côncavo ou autointersectante; regiões cobertas um número par de vezes são tratadas como externas."
+      },
+      "examples": [
+        {"title": {"en": "Inside, on the edge, outside", "pt": "Dentro, na aresta, fora"}, "code": "xv = [0 1 1 0];\nyv = [0 0 1 1];\n[in, on] = inpolygon([0.5 1 2], [0.5 0.5 2], xv, yv)"}
+      ],
+      "see": ["isinterior", "polyshape", "polyarea", "convhull"]
+    },
+    "inShape": {
+      "summary": {"en": "Tests whether points lie inside an alpha shape.", "pt": "Testa se pontos estão dentro de uma alpha shape."},
+      "syntax": [
+        {"code": "tf = inShape(shp, xq, yq)", "en": "Tests 2-D query points against a 2-D alpha shape.", "pt": "Testa pontos de consulta 2-D contra uma alpha shape 2-D."},
+        {"code": "tf = inShape(shp, xq, yq, zq)", "en": "Tests 3-D query points against a 3-D alpha shape.", "pt": "Testa pontos de consulta 3-D contra uma alpha shape 3-D."},
+        {"code": "tf = inShape(shp, Q)", "en": "Query points as the rows of `Q`.", "pt": "Pontos de consulta como linhas de `Q`."}
+      ],
+      "inputs": [
+        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."},
+        {"name": "xq, yq, zq", "en": "Coordinates of the query points, arrays of the same size.", "pt": "Coordenadas dos pontos de consulta, arrays do mesmo tamanho."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical array: `true` for points inside the shape.", "pt": "Array lógico: `true` para pontos dentro da forma."}
+      ],
+      "description": {
+        "en": "A point is inside when it falls in one of the triangles (tetrahedra) that make up the shape at the current `Alpha`. Changing `Alpha` changes the answer for points near concavities and for points in gaps between regions.",
+        "pt": "Um ponto está dentro quando cai em um dos triângulos (tetraedros) que formam a forma no `Alpha` atual. Mudar `Alpha` muda a resposta para pontos perto de reentrâncias e para pontos nos vãos entre regiões."
+      },
+      "examples": [
+        {"title": {"en": "Points in and out", "pt": "Pontos dentro e fora"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\ntf = inShape(shp, [0.5 2], [0.2 2])"}
+      ],
+      "see": ["alphaShape", "inpolygon", "isinterior", "pointLocation"]
+    },
+    "isConnected": {
+      "summary": {"en": "Tests whether pairs of vertices are joined by an edge in a triangulation.", "pt": "Testa se pares de vértices estão ligados por uma aresta em uma triangulação."},
+      "syntax": [
+        {"code": "tf = isConnected(TR, v1, v2)", "en": "`true` for each pair `v1(i)`, `v2(i)` that forms an edge.", "pt": "`true` para cada par `v1(i)`, `v2(i)` que forma uma aresta."},
+        {"code": "tf = isConnected(TR, E)", "en": "Pairs given as the rows of the two-column matrix `E`.", "pt": "Pares dados como linhas da matriz `E` de duas colunas."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation` or `delaunayTriangulation` object.", "pt": "Um objeto `triangulation` ou `delaunayTriangulation`."},
+        {"name": "v1, v2", "en": "Column vectors of vertex indices.", "pt": "Vetores coluna de índices de vértices."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical column vector, one value per pair.", "pt": "Vetor coluna lógico, um valor por par."}
+      ],
+      "description": {
+        "en": "Two vertices are connected when some triangle (tetrahedron) of the mesh has both as corners. Being connected here means directly joined by an edge, not reachable through a path. Order does not matter: `(a, b)` and `(b, a)` give the same answer.",
+        "pt": "Dois vértices estão conectados quando algum triângulo (tetraedro) da malha tem ambos como cantos. Estar conectado aqui significa ligado diretamente por uma aresta, e não alcançável por um caminho. A ordem não importa: `(a, b)` e `(b, a)` dão a mesma resposta."
+      },
+      "examples": [
+        {"title": {"en": "Which pairs are edges", "pt": "Quais pares são arestas"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\ntf = isConnected(DT, [1; 1], [2; 3])"}
+      ],
+      "see": ["isEdge", "edges", "edgeAttachments", "triangulation"]
+    },
+    "isEdge": {
+      "summary": {"en": "Tests whether pairs of vertices form an edge of a legacy DelaunayTri or TriRep triangulation.", "pt": "Testa se pares de vértices formam uma aresta de uma triangulação DelaunayTri ou TriRep antiga."},
+      "syntax": [
+        {"code": "tf = isEdge(TR, v1, v2)", "en": "`true` for each pair `v1(i)`, `v2(i)` that is an edge.", "pt": "`true` para cada par `v1(i)`, `v2(i)` que é uma aresta."},
+        {"code": "tf = isEdge(TR, E)", "en": "Pairs given as the rows of a two-column matrix.", "pt": "Pares dados como linhas de uma matriz de duas colunas."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `DelaunayTri` ou `TriRep`."},
+        {"name": "v1, v2", "en": "Vertex indices, as vectors of the same length.", "pt": "Índices de vértices, como vetores do mesmo comprimento."}
+      ],
+      "outputs": [
+        {"name": "tf", "en": "Logical column vector, one value per pair.", "pt": "Vetor coluna lógico, um valor por par."}
+      ],
+      "description": {
+        "en": "`isEdge` is the older name of what `isConnected` does for the newer triangulation classes. Two vertices form an edge when some triangle of the mesh has them as adjacent corners. A false answer does not mean the points are far apart, only that no triangle links them.",
+        "pt": "`isEdge` é o nome antigo do que `isConnected` faz para as classes novas de triangulação. Dois vértices formam uma aresta quando algum triângulo da malha os tem como cantos adjacentes. Uma resposta falsa não significa que os pontos estejam distantes, apenas que nenhum triângulo os liga."
+      },
+      "examples": [
+        {"title": {"en": "Edge or not", "pt": "Aresta ou não"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\ntf = isEdge(DL, [1 1], [2 3])"}
+      ],
+      "see": ["isConnected", "edges", "DelaunayTri"]
+    },
+    "ishole": {
+      "summary": {"en": "Tells which boundaries of a polyshape are holes.", "pt": "Indica quais contornos de um polyshape são furos."},
+      "syntax": [
+        {"code": "TF = ishole(pshape)", "en": "One logical value per boundary.", "pt": "Um valor lógico por contorno."},
+        {"code": "TF = ishole(pshape, I)", "en": "Only for the boundaries selected by `I`.", "pt": "Apenas para os contornos selecionados por `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "TF", "en": "Logical column vector: `true` for a hole boundary, `false` for an outer boundary.", "pt": "Vetor coluna lógico: `true` para contorno de furo, `false` para contorno externo."}
+      ],
+      "description": {
+        "en": "A polyshape stores outer boundaries and hole boundaries in one list. `ishole` classifies each entry, which is useful together with `rmboundary` or `sortboundaries` to select what to remove or reorder. The number of `true` values equals the `NumHoles` property.",
+        "pt": "Um polyshape guarda contornos externos e contornos de furos em uma única lista. `ishole` classifica cada entrada, o que é útil junto com `rmboundary` ou `sortboundaries` para escolher o que remover ou reordenar. O número de valores `true` é igual à propriedade `NumHoles`."
+      },
+      "examples": [
+        {"title": {"en": "Outer boundary and hole", "pt": "Contorno externo e furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nTF = ishole(D)"}
+      ],
+      "see": ["holes", "rmholes", "numboundaries", "sortboundaries"]
+    },
+    "isInterior": {
+      "summary": {"en": "Flags the triangles of a constrained Delaunay triangulation that lie inside the constrained region.", "pt": "Indica os triângulos de uma triangulação de Delaunay com restrições que estão dentro da região restrita."},
+      "syntax": [
+        {"code": "IN = isInterior(DT)", "en": "Logical value for every triangle of the 2-D `delaunayTriangulation` `DT`.", "pt": "Valor lógico para cada triângulo da `delaunayTriangulation` 2-D `DT`."}
+      ],
+      "inputs": [
+        {"name": "DT", "en": "A 2-D `delaunayTriangulation` built with constraint edges that form closed loops.", "pt": "Uma `delaunayTriangulation` 2-D criada com arestas restritas que formam laços fechados."}
+      ],
+      "outputs": [
+        {"name": "IN", "en": "Logical column vector: `true` for triangles inside the domain bounded by the constraints, with nested loops treated as holes.", "pt": "Vetor coluna lógico: `true` para triângulos dentro do domínio delimitado pelas restrições, com laços aninhados tratados como furos."}
+      ],
+      "description": {
+        "en": "A Delaunay triangulation always covers the convex hull of the points. Constraint edges that form closed polygons mark an inner domain, and `isInterior` separates the triangles inside it from those outside, such as in the notch of a concave shape or in a hole. Indexing the connectivity list with the result, `DT.ConnectivityList(IN, :)`, gives the mesh of the domain.",
+        "pt": "Uma triangulação de Delaunay sempre cobre o fecho convexo dos pontos. Arestas restritas que formam polígonos fechados marcam um domínio interno, e `isInterior` separa os triângulos dentro dele dos de fora, como na reentrância de uma forma côncava ou em um furo. Indexar a lista de conectividade com o resultado, `DT.ConnectivityList(IN, :)`, dá a malha do domínio."
+      },
+      "examples": [
+        {"title": {"en": "Behavior in MatLivre", "pt": "Comportamento no MatLivre"}, "code": "P = [0 0; 4 0; 4 4; 0 4; 1 1; 3 1; 3 3; 1 3];\nC = [1 2; 2 3; 3 4; 4 1; 5 6; 6 7; 7 8; 8 5];\ntry\n  DT = delaunayTriangulation(P, C);\n  IN = isInterior(DT)\ncatch ME\n  disp(ME.message)\nend", "note": {"en": "In MATLAB this returns the inside/outside flag of each triangle. MatLivre has no constrained triangulation and reports an error message instead.", "pt": "No MATLAB isto retorna o indicador dentro/fora de cada triângulo. O MatLivre não tem triangulação com restrições e informa uma mensagem de erro."}}
+      ],
+      "notes": {"en": "Not functional in MatLivre: constrained Delaunay triangulations are unsupported, so the call raises an error. The constraint input of `delaunayTriangulation` is also ignored.", "pt": "Não funcional no MatLivre: triangulações de Delaunay com restrições não são suportadas, então a chamada gera erro. A entrada de restrições de `delaunayTriangulation` também é ignorada."},
+      "see": ["inOutStatus", "delaunayTriangulation", "isinterior", "freeBoundary"]
+    },
+    "isinterior": {
+      "summary": {"en": "Tests whether points lie inside a polyshape.", "pt": "Testa se pontos estão dentro de um polyshape."},
+      "syntax": [
+        {"code": "TF = isinterior(pshape, xq, yq)", "en": "`true` for each query point inside or on the polyshape.", "pt": "`true` para cada ponto de consulta dentro ou sobre o polyshape."},
+        {"code": "TF = isinterior(pshape, Q)", "en": "Query points as the rows of a two-column matrix.", "pt": "Pontos de consulta como linhas de uma matriz de duas colunas."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "xq, yq", "en": "Coordinates of the query points, arrays of the same size.", "pt": "Coordenadas dos pontos de consulta, arrays do mesmo tamanho."}
+      ],
+      "outputs": [
+        {"name": "TF", "en": "Logical array of the size of the query: `true` where the point is in the shape. Points inside a hole are not inside.", "pt": "Array lógico do tamanho da consulta: `true` onde o ponto está na forma. Pontos dentro de um furo não estão dentro."}
+      ],
+      "description": {
+        "en": "The test accounts for all regions and holes of the polyshape, which makes it more convenient than `inpolygon` for shapes with several boundaries. A point on an edge counts as inside.",
+        "pt": "O teste considera todas as regiões e furos do polyshape, o que o torna mais conveniente que `inpolygon` para formas com vários contornos. Um ponto sobre uma aresta conta como dentro."
+      },
+      "examples": [
+        {"title": {"en": "Points relative to a rectangle with a hole", "pt": "Pontos em relação a um retângulo com furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nTF = isinterior(D, [0.5 1.5 5], [0.5 1.5 1])"}
+      ],
+      "notes": {"en": "The second output `[TFin, TFon]` (points on the boundary) is not available in MatLivre; use `inpolygon` when you need it.", "pt": "A segunda saída `[TFin, TFon]` (pontos sobre o contorno) não está disponível no MatLivre; use `inpolygon` quando precisar dela."},
+      "see": ["inpolygon", "polyshape", "inShape", "nearestvertex"]
+    },
+    "issimplified": {
+      "summary": {"en": "Tests whether a polyshape is free of self-intersections and other defects.", "pt": "Testa se um polyshape está livre de autointerseções e outros defeitos."},
+      "syntax": [
+        {"code": "TF = issimplified(pshape)", "en": "`true` when the polyshape is already in its clean, normalized form.", "pt": "`true` quando o polyshape já está em sua forma limpa e normalizada."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "TF", "en": "Scalar logical.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "A polyshape is simplified when its boundaries do not cross themselves or each other, vertices are in the standard orientation (outer boundaries one way, holes the other) and no duplicate or collinear spurious vertices remain. By default, the `polyshape` constructor simplifies its input, so most polyshapes pass this test.",
+        "pt": "Um polyshape é simplificado quando seus contornos não se cruzam nem cruzam uns aos outros, os vértices estão na orientação padrão (contornos externos em um sentido, furos no outro) e não restam vértices duplicados ou espúrios. Por padrão, o construtor `polyshape` simplifica sua entrada, então a maioria dos polyshapes passa neste teste."
+      },
+      "examples": [
+        {"title": {"en": "A simple rectangle", "pt": "Um retângulo simples"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nTF = issimplified(P)"}
+      ],
+      "see": ["polyshape", "rmslivers", "numboundaries"]
+    },
+    "nearestNeighbor": {
+      "summary": {"en": "Nearest vertex of a triangulation or alpha shape to each query point.", "pt": "Vértice de uma triangulação ou alpha shape mais próximo de cada ponto de consulta."},
+      "syntax": [
+        {"code": "k = nearestNeighbor(TR, P)", "en": "Index of the closest vertex of the triangulation for each row of `P`.", "pt": "Índice do vértice da triangulação mais próximo de cada linha de `P`."},
+        {"code": "[k, d] = nearestNeighbor(TR, P)", "en": "Also returns the distances.", "pt": "Também retorna as distâncias."},
+        {"code": "k = nearestNeighbor(shp, xq, yq)", "en": "For an `alphaShape`, the closest of its points to the query points.", "pt": "Para uma `alphaShape`, o mais próximo de seus pontos aos pontos de consulta."}
+      ],
+      "inputs": [
+        {"name": "TR", "en": "A `triangulation`, `delaunayTriangulation` or `DelaunayTri` object.", "pt": "Um objeto `triangulation`, `delaunayTriangulation` ou `DelaunayTri`."},
+        {"name": "P", "en": "Query points, one per row.", "pt": "Pontos de consulta, um por linha."},
+        {"name": "shp, xq, yq", "en": "An `alphaShape` and the coordinates of the query points.", "pt": "Uma `alphaShape` e as coordenadas dos pontos de consulta."}
+      ],
+      "outputs": [
+        {"name": "k", "en": "Indices of the nearest points, a column vector.", "pt": "Índices dos pontos mais próximos, um vetor coluna."},
+        {"name": "d", "en": "Euclidean distances to those points, a column vector.", "pt": "Distâncias euclidianas até esses pontos, um vetor coluna."}
+      ],
+      "description": {
+        "en": "The answer is always a vertex of the object, never a point on an edge or inside a face. The search uses Euclidean distance. For plain arrays of points use `dsearchn`, which works the same way.",
+        "pt": "A resposta é sempre um vértice do objeto, nunca um ponto sobre uma aresta ou dentro de uma face. A busca usa distância euclidiana. Para arrays simples de pontos use `dsearchn`, que funciona do mesmo modo."
+      },
+      "examples": [
+        {"title": {"en": "Closest vertices", "pt": "Vértices mais próximos"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\n[k, d] = nearestNeighbor(DT, [0.1 0.1; 0.9 0.9])"}
+      ],
+      "see": ["dsearchn", "pointLocation", "nearestvertex", "delaunayTriangulation"]
+    },
+    "nearestvertex": {
+      "summary": {"en": "Index of the polyshape vertex closest to each query point.", "pt": "Índice do vértice do polyshape mais próximo de cada ponto de consulta."},
+      "syntax": [
+        {"code": "vid = nearestvertex(pshape, xq, yq)", "en": "For each query point, the index of the nearest vertex.", "pt": "Para cada ponto de consulta, o índice do vértice mais próximo."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
+        {"name": "xq, yq", "en": "Coordinates of the query points.", "pt": "Coordenadas dos pontos de consulta."}
+      ],
+      "outputs": [
+        {"name": "vid", "en": "Column vector of vertex indices.", "pt": "Vetor coluna de índices de vértices."}
+      ],
+      "description": {
+        "en": "The distance is measured to the polygon's vertices, not to its edges, so a point near the middle of a long edge may be matched to a distant corner. For distance to edges, test `isinterior` or buffer the shape with `polybuffer`.",
+        "pt": "A distância é medida até os vértices do polígono, não até as arestas, então um ponto perto do meio de uma aresta longa pode ser associado a um canto distante. Para distância até as arestas, teste `isinterior` ou expanda a forma com `polybuffer`."
+      },
+      "examples": [
+        {"title": {"en": "Nearest corners of a rectangle", "pt": "Cantos mais próximos de um retângulo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nvid = nearestvertex(P, [3.9 0.1], [2.9 0.2])"}
+      ],
+      "see": ["isinterior", "dsearchn", "polyshape", "polybuffer"]
+    },
+    "nsidedpoly": {
+      "summary": {"en": "Creates a regular polygon with a given number of sides, as a polyshape.", "pt": "Cria um polígono regular com um dado número de lados, como polyshape."},
+      "syntax": [
+        {"code": "pshape = nsidedpoly(n)", "en": "Regular `n`-gon centered at the origin with unit circumradius.", "pt": "`n`-ágono regular centrado na origem com circunraio unitário."},
+        {"code": "pshape = nsidedpoly(n, 'Center', c, 'Radius', r)", "en": "Sets the center `c = [x y]` and the circumradius `r`.", "pt": "Define o centro `c = [x y]` e o circunraio `r`."},
+        {"code": "pshape = nsidedpoly(n, 'Center', c, 'SideLength', s)", "en": "Sets the side length instead of the radius.", "pt": "Define o comprimento do lado no lugar do raio."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Number of sides, an integer of at least 3.", "pt": "Número de lados, inteiro de pelo menos 3."},
+        {"name": "'Center'", "en": "Two-element vector with the center. Default `[0 0]`.", "pt": "Vetor de dois elementos com o centro. Padrão `[0 0]`."},
+        {"name": "'Radius'", "en": "Distance from the center to each vertex. Default `1`.", "pt": "Distância do centro a cada vértice. Padrão `1`."},
+        {"name": "'SideLength'", "en": "Length of each side; cannot be combined with `'Radius'`.", "pt": "Comprimento de cada lado; não pode ser combinado com `'Radius'`."}
+      ],
+      "outputs": [
+        {"name": "pshape", "en": "A `polyshape` with `n` vertices.", "pt": "Um `polyshape` com `n` vértices."}
+      ],
+      "description": {
+        "en": "The vertices lie on a circle and are equally spaced. The area is `n/2 * r^2 * sin(2*pi/n)`, so a hexagon with unit radius has area about `2.598`. With a large `n` the polygon approaches a disc, which is a simple way to build a circular region as a polyshape.",
+        "pt": "Os vértices ficam em uma circunferência e são igualmente espaçados. A área é `n/2 * r^2 * sin(2*pi/n)`, então um hexágono de raio unitário tem área cerca de `2.598`. Com `n` grande o polígono se aproxima de um disco, um modo simples de construir uma região circular como polyshape."
+      },
+      "examples": [
+        {"title": {"en": "Hexagon area and perimeter", "pt": "Área e perímetro de um hexágono"}, "code": "H = nsidedpoly(6);\ndisp(numsides(H))\ndisp(area(H))\ndisp(perimeter(H))"}
+      ],
+      "see": ["polyshape", "area", "perimeter", "polybuffer"]
+    },
+    "numboundaries": {
+      "summary": {"en": "Number of boundaries of a polyshape, counting outer boundaries and holes.", "pt": "Número de contornos de um polyshape, contando contornos externos e furos."},
+      "syntax": [
+        {"code": "n = numboundaries(pshape)", "en": "Returns the total number of boundaries.", "pt": "Retorna o número total de contornos."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Non-negative integer. It equals `pshape.NumRegions + pshape.NumHoles`.", "pt": "Inteiro não negativo. É igual a `pshape.NumRegions + pshape.NumHoles`."}
+      ],
+      "description": {
+        "en": "Each solid piece has one outer boundary, and every hole inside it adds another boundary. A rectangle with a hole therefore has two boundaries but only one region. Boundaries are the units addressed by `rmboundary`, `sortboundaries` and `ishole`.",
+        "pt": "Cada peça sólida tem um contorno externo, e cada furo dentro dela acrescenta outro contorno. Um retângulo com um furo tem, portanto, dois contornos mas apenas uma região. Os contornos são as unidades acessadas por `rmboundary`, `sortboundaries` e `ishole`."
+      },
+      "examples": [
+        {"title": {"en": "Boundaries versus regions", "pt": "Contornos versus regiões"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nnumboundaries(D)\nD.NumRegions"}
+      ],
+      "see": ["regions", "holes", "ishole", "rmboundary"]
+    },
+    "numRegions": {
+      "summary": {"en": "Number of disjoint regions of an alpha shape.", "pt": "Número de regiões disjuntas de uma alpha shape."},
+      "syntax": [
+        {"code": "n = numRegions(shp)", "en": "Counts the connected pieces of the shape at its current `Alpha`.", "pt": "Conta as peças conexas da forma no seu `Alpha` atual."}
+      ],
+      "inputs": [
+        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Number of regions, a non-negative integer.", "pt": "Número de regiões, um inteiro não negativo."}
+      ],
+      "description": {
+        "en": "Lowering `Alpha` tends to split the shape into several pieces; raising it merges them. `numRegions` shows how many pieces the current choice gives. Combined with `criticalAlpha(shp, 'one-region')` it helps pick an `Alpha` with a single region.",
+        "pt": "Diminuir `Alpha` tende a dividir a forma em várias peças; aumentar as une. `numRegions` mostra quantas peças a escolha atual produz. Combinada com `criticalAlpha(shp, 'one-region')`, ajuda a escolher um `Alpha` com uma única região."
+      },
+      "examples": [
+        {"title": {"en": "Two clusters, two alpha values", "pt": "Dois grupos, dois valores de alpha"}, "code": "x = [0 1 1 0 5 6 6 5]';\ny = [0 0 1 1 0 0 1 1]';\nshp = alphaShape(x, y, 1);\ndisp(numRegions(shp))\nshp.Alpha = 5;\ndisp(numRegions(shp))"}
+      ],
+      "notes": {"en": "For a `polyshape` the number of regions is the property `NumRegions`, not a function call: use `P.NumRegions`.", "pt": "Em um `polyshape` o número de regiões é a propriedade `NumRegions`, e não uma chamada de função: use `P.NumRegions`."},
+      "see": ["alphaShape", "criticalAlpha", "regions", "numboundaries"]
+    },
+    "numsides": {
+      "summary": {"en": "Total number of sides (vertices) of a polyshape.", "pt": "Número total de lados (vértices) de um polyshape."},
+      "syntax": [
+        {"code": "n = numsides(pshape)", "en": "Counts the sides over all boundaries.", "pt": "Conta os lados em todos os contornos."},
+        {"code": "n = numsides(pshape, I)", "en": "Counts only the sides of boundary `I`.", "pt": "Conta apenas os lados do contorno `I`."}
+      ],
+      "inputs": [
+        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Non-negative integer. A closed polygon has as many sides as vertices.", "pt": "Inteiro não negativo. Um polígono fechado tem tantos lados quanto vértices."}
+      ],
+      "description": {
+        "en": "Sides are counted for outer boundaries and holes alike. A polyshape with a four-sided outline and a four-sided hole has eight sides. An empty polyshape has zero.",
+        "pt": "Os lados são contados tanto nos contornos externos quanto nos furos. Um polyshape com contorno de quatro lados e um furo de quatro lados tem oito lados. Um polyshape vazio tem zero."
+      },
+      "examples": [
+        {"title": {"en": "Sides of a shape with a hole", "pt": "Lados de uma forma com furo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\nnumsides(P)\nnumsides(D)"}
+      ],
+      "see": ["numboundaries", "polyshape", "nsidedpoly", "rmslivers"]
+    },
+    "overlaps": {
+      "summary": {"en": "Tests whether two polyshapes share any area.", "pt": "Testa se dois polyshapes compartilham alguma área."},
+      "syntax": [
+        {"code": "TF = overlaps(P1, P2)", "en": "`true` when `P1` and `P2` overlap.", "pt": "`true` quando `P1` e `P2` se sobrepõem."}
+      ],
+      "inputs": [
+        {"name": "P1, P2", "en": "`polyshape` objects.", "pt": "Objetos `polyshape`."}
+      ],
+      "outputs": [
+        {"name": "TF", "en": "Logical scalar.", "pt": "Escalar lógico."}
+      ],
+      "description": {
+        "en": "The test asks whether the intersection of the two shapes has a non-zero area. A shape lying entirely inside the other overlaps it; two shapes that are far apart do not. Because it avoids building the intersection result, it can be faster than computing `intersect` and checking its area.",
+        "pt": "O teste pergunta se a interseção das duas formas tem área diferente de zero. Uma forma totalmente dentro da outra se sobrepõe a ela; duas formas distantes não. Como evita construir o resultado da interseção, pode ser mais rápido que calcular `intersect` e verificar sua área."
+      },
+      "examples": [
+        {"title": {"en": "Overlapping and separate shapes", "pt": "Formas que se sobrepõem e separadas"}, "code": "A = polyshape([0 2 2 0], [0 0 2 2]);\nB = polyshape([1 3 3 1], [1 1 3 3]);\nC = polyshape([5 6 6 5], [5 5 6 6]);\noverlaps(A, B)\noverlaps(A, C)"}
+      ],
+      "see": ["intersect", "union", "subtract", "polyshape", "rectint"]
+    }
+  }
+}

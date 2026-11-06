@@ -1,0 +1,1178 @@
+{
+ "functions": {
+  "isdst": {
+   "summary": {
+    "en": "Tests whether datetime values fall in daylight saving time.",
+    "pt": "Testa se valores datetime caem no horário de verão."
+   },
+   "syntax": [
+    {
+     "code": "tf = isdst(t)",
+     "en": "Returns a logical array telling which elements of the datetime array `t` are in daylight saving time.",
+     "pt": "Retorna um array lógico indicando quais elementos do array datetime `t` estão no horário de verão."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array. It needs a time zone to give a meaningful answer.",
+     "pt": "Array datetime. Precisa ter um fuso horário para dar uma resposta significativa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `t`; `true` where daylight saving time is in effect.",
+     "pt": "Array lógico do mesmo tamanho de `t`; `true` onde o horário de verão está em vigor."
+    }
+   ],
+   "description": {
+    "en": "A datetime with a time zone carries the rules of that zone, including the dates when clocks move forward and back. `isdst` consults those rules for each element.\n\nA datetime with no time zone has no rules to apply, so the result is `false` everywhere.",
+    "pt": "Um datetime com fuso horário carrega as regras daquele fuso, incluindo as datas em que os relógios avançam e recuam. `isdst` consulta essas regras para cada elemento.\n\nUm datetime sem fuso horário não tem regras a aplicar, então o resultado é `false` em todos os elementos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Winter and summer in New York",
+      "pt": "Inverno e verão em Nova York"
+     },
+     "code": "w = datetime(2024,1,15,'TimeZone','America/New_York');\ns = datetime(2024,7,15,'TimeZone','America/New_York');\nisdst(w)\nisdst(s)"
+    }
+   ],
+   "see": [
+    "datetime",
+    "timezones",
+    "isbetween",
+    "isweekend"
+   ]
+  },
+  "isduration": {
+   "summary": {
+    "en": "Tests whether a value is a duration array.",
+    "pt": "Testa se um valor é um array duration."
+   },
+   "syntax": [
+    {
+     "code": "tf = isduration(A)",
+     "en": "Returns `true` if `A` is a duration array, `false` otherwise.",
+     "pt": "Retorna `true` se `A` é um array duration, `false` caso contrário."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test looks only at the class. Arrays built by `seconds`, `minutes`, `hours`, `days` or by subtracting two datetimes are durations. A plain number such as `3`, even when it represents a time span, is not.",
+    "pt": "O teste olha apenas para a classe. Arrays criados por `seconds`, `minutes`, `hours`, `days` ou pela subtração de dois datetimes são durations. Um número comum como `3`, mesmo representando um intervalo de tempo, não é."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Durations versus numbers",
+      "pt": "Durations e números"
+     },
+     "code": "isduration(hours(2))\nisduration(datetime(2024,1,2) - datetime(2024,1,1))\nisduration(2)"
+    }
+   ],
+   "see": [
+    "duration",
+    "seconds",
+    "hours",
+    "class"
+   ]
+  },
+  "isenum": {
+   "summary": {
+    "en": "Tests whether a value is an instance of an enumeration class.",
+    "pt": "Testa se um valor é instância de uma classe de enumeração."
+   },
+   "syntax": [
+    {
+     "code": "tf = isenum(A)",
+     "en": "Returns `true` if `A` is a member of an enumeration class.",
+     "pt": "Retorna `true` se `A` é um membro de uma classe de enumeração."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Enumeration classes are classdef classes declared with an `enumeration` block. Only their members make `isenum` return `true`. Built-in types such as numbers, text and `categorical` arrays give `false`, even though a categorical array also holds a fixed set of named values.",
+    "pt": "Classes de enumeração são classes classdef declaradas com um bloco `enumeration`. Só os membros delas fazem `isenum` retornar `true`. Tipos nativos como números, texto e arrays `categorical` dão `false`, embora um array categórico também guarde um conjunto fixo de valores nomeados."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ordinary values are not enumerations",
+      "pt": "Valores comuns não são enumerações"
+     },
+     "code": "isenum(1)\nisenum('text')\nisenum(categorical({'a','b'}))"
+    }
+   ],
+   "see": [
+    "enumeration",
+    "categorical",
+    "isobject",
+    "class"
+   ]
+  },
+  "isfield": {
+   "summary": {
+    "en": "Tests whether a struct has the given field names.",
+    "pt": "Testa se um struct possui os nomes de campo informados."
+   },
+   "syntax": [
+    {
+     "code": "tf = isfield(S, name)",
+     "en": "Returns `true` if `S` is a struct with a field called `name`.",
+     "pt": "Retorna `true` se `S` é um struct com um campo chamado `name`."
+    },
+    {
+     "code": "tf = isfield(S, names)",
+     "en": "Checks several names at once and returns one logical per name.",
+     "pt": "Verifica vários nomes de uma vez e retorna um lógico para cada nome."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Value to test. If it is not a struct the result is `false`.",
+     "pt": "Valor a testar. Se não for um struct, o resultado é `false`."
+    },
+    {
+     "name": "name, names",
+     "en": "Character vector, string scalar, or cell array of names.",
+     "pt": "Vetor de caracteres, string escalar ou cell array de nomes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar for one name, or a logical array the same size as the cell array `names`.",
+     "pt": "Escalar lógico para um nome, ou array lógico do mesmo tamanho do cell array `names`."
+    }
+   ],
+   "description": {
+    "en": "`isfield` compares names exactly, including case. It never errors on a non-struct first argument, it just answers `false`, which makes it safe for checking optional fields of unknown input.\n\nA name that is not text, inside the cell array, also yields `false` for that position instead of an error.",
+    "pt": "`isfield` compara os nomes exatamente, inclusive maiúsculas e minúsculas. Nunca dá erro quando o primeiro argumento não é um struct, apenas responde `false`, o que o torna seguro para checar campos opcionais de uma entrada desconhecida.\n\nUm nome que não seja texto, dentro do cell array, também resulta em `false` naquela posição em vez de erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Checking one and several fields",
+      "pt": "Verificando um e vários campos"
+     },
+     "code": "s.a = 1;\ns.b = 'x';\nisfield(s, 'a')\nisfield(s, {'a', 'c', 'b'})\nisfield(5, 'a')"
+    }
+   ],
+   "see": [
+    "fieldnames",
+    "rmfield",
+    "setfield",
+    "isstruct",
+    "struct"
+   ]
+  },
+  "isfinite": {
+   "summary": {
+    "en": "Marks elements that are neither infinite nor NaN.",
+    "pt": "Marca os elementos que não são infinitos nem NaN."
+   },
+   "syntax": [
+    {
+     "code": "tf = isfinite(A)",
+     "en": "Returns a logical array that is `true` where the element is a finite number.",
+     "pt": "Retorna um array lógico que é `true` onde o elemento é um número finito."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array, or a datetime or duration array.",
+     "pt": "Array numérico, lógico ou de char, ou array datetime ou duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "An element is finite when it is not `Inf`, `-Inf` or `NaN`. For a complex number both the real and imaginary parts must be finite. Integer types are always finite, so the result is all `true`.\n\n`isfinite(A)` is equivalent to `~isinf(A) & ~isnan(A)`.",
+    "pt": "Um elemento é finito quando não é `Inf`, `-Inf` nem `NaN`. Para um número complexo, a parte real e a imaginária precisam ser finitas. Os tipos inteiros são sempre finitos, então o resultado é todo `true`.\n\n`isfinite(A)` equivale a `~isinf(A) & ~isnan(A)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Filtering out bad values",
+      "pt": "Filtrando valores ruins"
+     },
+     "code": "x = [1 Inf -Inf NaN 4];\nisfinite(x)\nx(isfinite(x))"
+    }
+   ],
+   "see": [
+    "isinf",
+    "isnan",
+    "nan",
+    "inf",
+    "rmmissing"
+   ]
+  },
+  "isfloat": {
+   "summary": {
+    "en": "Tests whether an array holds floating-point numbers.",
+    "pt": "Testa se um array contém números de ponto flutuante."
+   },
+   "syntax": [
+    {
+     "code": "tf = isfloat(A)",
+     "en": "Returns `true` if `A` is of class `double` or `single`.",
+     "pt": "Retorna `true` se `A` é da classe `double` ou `single`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Only `double` and `single` are floating-point types. Integer types, `logical` and `char` are not, even though they can be converted to floating point freely. Complex arrays of these two classes also count.",
+    "pt": "Apenas `double` e `single` são tipos de ponto flutuante. Tipos inteiros, `logical` e `char` não são, embora possam ser convertidos livremente para ponto flutuante. Arrays complexos dessas duas classes também contam."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Which classes are floating point",
+      "pt": "Quais classes são de ponto flutuante"
+     },
+     "code": "isfloat(1)\nisfloat(single(2.5))\nisfloat(int8(3))\nisfloat('a')"
+    }
+   ],
+   "see": [
+    "isinteger",
+    "isnumeric",
+    "isreal",
+    "double",
+    "single"
+   ]
+  },
+  "isgraphics": {
+   "summary": {
+    "en": "Tests whether a value is a valid graphics object handle.",
+    "pt": "Testa se um valor é um handle válido de objeto gráfico."
+   },
+   "syntax": [
+    {
+     "code": "tf = isgraphics(H)",
+     "en": "Returns `true` for each element of `H` that is a valid graphics handle.",
+     "pt": "Retorna `true` para cada elemento de `H` que é um handle gráfico válido."
+    },
+    {
+     "code": "tf = isgraphics(H, type)",
+     "en": "Also requires the object to be of the given type, such as `'line'` or `'axes'`.",
+     "pt": "Exige também que o objeto seja do tipo informado, como `'line'` ou `'axes'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "H",
+     "en": "Value or array of values to test.",
+     "pt": "Valor ou array de valores a testar."
+    },
+    {
+     "name": "type",
+     "en": "Type name such as `'figure'`, `'axes'` or `'line'`.",
+     "pt": "Nome do tipo, como `'figure'`, `'axes'` ou `'line'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `H`.",
+     "pt": "Array lógico do mesmo tamanho de `H`."
+    }
+   ],
+   "description": {
+    "en": "A handle becomes invalid when its object is deleted, so `isgraphics` is the way to check that a stored handle still points at something alive. Ordinary numbers are never graphics handles, unlike the older `ishandle`, which also accepted numeric handles of existing figures.",
+    "pt": "Um handle se torna inválido quando o objeto é apagado, então `isgraphics` é o modo de conferir se um handle guardado ainda aponta para algo vivo. Números comuns nunca são handles gráficos, ao contrário do antigo `ishandle`, que aceitava também handles numéricos de figuras existentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Checking a line handle",
+      "pt": "Verificando o handle de uma linha"
+     },
+     "code": "h = plot(1:3);\nisgraphics(h)\nisgraphics(h, 'line')\nisgraphics(h, 'axes')\nisgraphics(5)"
+    }
+   ],
+   "see": [
+    "ishandle",
+    "isvalid",
+    "gca",
+    "gcf",
+    "plot"
+   ]
+  },
+  "isinf": {
+   "summary": {
+    "en": "Marks elements that are positive or negative infinity.",
+    "pt": "Marca os elementos que são infinito positivo ou negativo."
+   },
+   "syntax": [
+    {
+     "code": "tf = isinf(A)",
+     "en": "Returns a logical array that is `true` where `A` is `Inf` or `-Inf`.",
+     "pt": "Retorna um array lógico que é `true` onde `A` é `Inf` ou `-Inf`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array. Complex values count as infinite if either part is infinite.",
+     "pt": "Array numérico ou lógico. Valores complexos contam como infinitos se qualquer uma das partes for infinita."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "`NaN` is not infinite, so `isinf(NaN)` is `false`. Integer arrays cannot hold infinity and always give all `false`.\n\nThe result is handy for masking: `x(isinf(x)) = NaN` replaces every infinity before computing statistics.",
+    "pt": "`NaN` não é infinito, então `isinf(NaN)` é `false`. Arrays de inteiros não guardam infinito e dão sempre tudo `false`.\n\nO resultado serve para mascarar: `x(isinf(x)) = NaN` troca todos os infinitos antes de calcular estatísticas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Finding infinities",
+      "pt": "Encontrando infinitos"
+     },
+     "code": "x = [1 Inf -Inf NaN 1/0];\nisinf(x)\nx(isinf(x)) = NaN"
+    }
+   ],
+   "see": [
+    "isfinite",
+    "isnan",
+    "inf",
+    "nan"
+   ]
+  },
+  "isinteger": {
+   "summary": {
+    "en": "Tests whether an array has an integer class.",
+    "pt": "Testa se um array tem classe inteira."
+   },
+   "syntax": [
+    {
+     "code": "tf = isinteger(A)",
+     "en": "Returns `true` if `A` is of class `int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32` or `uint64`.",
+     "pt": "Retorna `true` se `A` é da classe `int8`, `int16`, `int32`, `int64`, `uint8`, `uint16`, `uint32` ou `uint64`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test is about the class, not the value. The double `3` holds a whole number but `isinteger(3)` is `false`; `isinteger(int8(3))` is `true`. To check whether values are whole numbers, compare with `round`, for instance `x == round(x)`.",
+    "pt": "O teste é sobre a classe, não sobre o valor. O double `3` guarda um número inteiro, mas `isinteger(3)` é `false`; `isinteger(int8(3))` é `true`. Para checar se os valores são números inteiros, compare com `round`, por exemplo `x == round(x)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Class versus value",
+      "pt": "Classe versus valor"
+     },
+     "code": "isinteger(int8(3))\nisinteger(3)\nx = [1 2.5 4];\nx == round(x)"
+    }
+   ],
+   "see": [
+    "isfloat",
+    "isnumeric",
+    "round",
+    "int8"
+   ]
+  },
+  "isjava": {
+   "summary": {
+    "en": "Tests whether a value is a Java object.",
+    "pt": "Testa se um valor é um objeto Java."
+   },
+   "syntax": [
+    {
+     "code": "tf = isjava(A)",
+     "en": "Returns `true` if `A` is a Java object.",
+     "pt": "Retorna `true` se `A` é um objeto Java."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "In MATLAB, objects created from Java classes (for example `java.lang.String`) make this function return `true`. Numbers, text, structs and MATLAB classes give `false`.",
+    "pt": "No MATLAB, objetos criados a partir de classes Java (por exemplo `java.lang.String`) fazem esta função retornar `true`. Números, texto, structs e classes do MATLAB dão `false`."
+   },
+   "notes": {
+    "en": "MatLivre has no Java virtual machine, so Java objects cannot be created and `isjava` always returns `false`.",
+    "pt": "O MatLivre não tem máquina virtual Java, então objetos Java não podem ser criados e `isjava` sempre retorna `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Non-Java values",
+      "pt": "Valores que não são Java"
+     },
+     "code": "isjava(1)\nisjava('text')\nisjava(struct())"
+    }
+   ],
+   "see": [
+    "isobject",
+    "class",
+    "ishandle"
+   ]
+  },
+  "isKey": {
+   "summary": {
+    "en": "Tests whether keys are present in a containers.Map or dictionary.",
+    "pt": "Testa se chaves estão presentes em um containers.Map ou dictionary."
+   },
+   "syntax": [
+    {
+     "code": "tf = isKey(M, key)",
+     "en": "Returns `true` if `key` is a key of the map `M`.",
+     "pt": "Retorna `true` se `key` é uma chave do mapa `M`."
+    },
+    {
+     "code": "tf = isKey(M, keys)",
+     "en": "With a cell array of keys, tests each one and returns a logical array of the same size.",
+     "pt": "Com um cell array de chaves, testa cada uma e retorna um array lógico do mesmo tamanho."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "M",
+     "en": "A `containers.Map` or a `dictionary` object.",
+     "pt": "Um objeto `containers.Map` ou `dictionary`."
+    },
+    {
+     "name": "key, keys",
+     "en": "A key, or a cell array of keys. Its type must match the key type of the map.",
+     "pt": "Uma chave, ou um cell array de chaves. O tipo deve combinar com o tipo de chave do mapa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar, or an array the size of the cell array `keys`.",
+     "pt": "Escalar lógico, ou array do tamanho do cell array `keys`."
+    }
+   ],
+   "description": {
+    "en": "`isKey` is the safe way to guard a lookup, because reading a missing key with `M(key)` raises an error. Character keys are compared case-sensitively.\n\nFor a `containers.Map` it is written `isKey(M, key)`; for a `dictionary` the same function applies and `M.isKey(key)` is also accepted.",
+    "pt": "`isKey` é o modo seguro de proteger uma consulta, porque ler uma chave inexistente com `M(key)` gera erro. Chaves de texto são comparadas com distinção entre maiúsculas e minúsculas.\n\nPara um `containers.Map` escreve-se `isKey(M, key)`; para um `dictionary` a mesma função vale e `M.isKey(key)` também é aceito."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Guarding a lookup",
+      "pt": "Protegendo uma consulta"
+     },
+     "code": "m = containers.Map({'a','b'}, [1 2]);\nisKey(m, 'a')\nisKey(m, {'a','z'})\nif isKey(m, 'b'), disp(m('b')), end"
+    }
+   ],
+   "see": [
+    "keys",
+    "values",
+    "containers.Map",
+    "remove"
+   ]
+  },
+  "isletter": {
+   "summary": {
+    "en": "Marks the characters that are letters.",
+    "pt": "Marca os caracteres que são letras."
+   },
+   "syntax": [
+    {
+     "code": "tf = isletter(A)",
+     "en": "Returns a logical array that is `true` where the character of `A` is a letter.",
+     "pt": "Retorna um array lógico que é `true` onde o caractere de `A` é uma letra."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Character array. Other classes give all `false`.",
+     "pt": "Array de caracteres. Outras classes dão tudo `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "A character counts as a letter if it is alphabetic in the character set, which includes accented letters such as `é`. Digits, spaces and punctuation are not letters. `isletter(A)` gives the same answer as `isstrprop(A, 'alpha')`.",
+    "pt": "Um caractere conta como letra se for alfabético no conjunto de caracteres, o que inclui letras acentuadas como `é`. Dígitos, espaços e pontuação não são letras. `isletter(A)` dá a mesma resposta que `isstrprop(A, 'alpha')`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Letters in a code",
+      "pt": "Letras em um código"
+     },
+     "code": "s = 'R2D2 ok';\nisletter(s)\ns(isletter(s))"
+    }
+   ],
+   "see": [
+    "isspace",
+    "isstrprop",
+    "upper",
+    "lower"
+   ]
+  },
+  "islogical": {
+   "summary": {
+    "en": "Tests whether an array is of class logical.",
+    "pt": "Testa se um array é da classe logical."
+   },
+   "syntax": [
+    {
+     "code": "tf = islogical(A)",
+     "en": "Returns `true` if `A` is a logical array.",
+     "pt": "Retorna `true` se `A` é um array lógico."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Comparisons, `true`, `false` and functions such as `isnan` produce logical arrays. The numbers `0` and `1` are doubles, not logical, so `islogical(1)` is `false` even though `1` works as a condition in `if`.\n\nUse `logical(x)` to convert; it errors on `NaN`.",
+    "pt": "Comparações, `true`, `false` e funções como `isnan` produzem arrays lógicos. Os números `0` e `1` são doubles, não lógicos, então `islogical(1)` é `false` embora `1` funcione como condição em `if`.\n\nUse `logical(x)` para converter; ele dá erro com `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Logical versus numeric",
+      "pt": "Lógico versus numérico"
+     },
+     "code": "islogical(true)\nislogical(3 > 2)\nislogical(1)"
+    }
+   ],
+   "see": [
+    "logical",
+    "isnumeric",
+    "true",
+    "false"
+   ]
+  },
+  "ismember": {
+   "summary": {
+    "en": "Tests whether elements of one set belong to another set.",
+    "pt": "Testa se elementos de um conjunto pertencem a outro conjunto."
+   },
+   "syntax": [
+    {
+     "code": "tf = ismember(A, S)",
+     "en": "Returns `true` for each element of `A` that is found in `S`.",
+     "pt": "Retorna `true` para cada elemento de `A` que é encontrado em `S`."
+    },
+    {
+     "code": "[tf, loc] = ismember(A, S)",
+     "en": "Also returns the index in `S` of each match.",
+     "pt": "Retorna também o índice em `S` de cada correspondência."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Elements to look up: numbers, characters, strings, or a cell array of character vectors. A single text value is treated as one element.",
+     "pt": "Elementos a procurar: números, caracteres, strings ou um cell array de vetores de caracteres. Um valor de texto único é tratado como um elemento."
+    },
+    {
+     "name": "S",
+     "en": "The set to search in, of a compatible type.",
+     "pt": "O conjunto onde procurar, de tipo compatível."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    },
+    {
+     "name": "loc",
+     "en": "Double array the same size as `A`: the index in `S` of the matching element, or `0` when there is none.",
+     "pt": "Array double do mesmo tamanho de `A`: o índice em `S` do elemento correspondente, ou `0` se não houver."
+    }
+   ],
+   "description": {
+    "en": "`ismember` is the usual tool for filtering by membership, for example keeping only the rows whose code appears in an allowed list. Cell arrays of text are compared as whole strings. `NaN` never matches `NaN`, because the two are not equal.\n\nThe second output turns the function into a lookup: `loc` can be used to index into data that is parallel to `S`.",
+    "pt": "`ismember` é a ferramenta habitual para filtrar por pertinência, por exemplo manter só as linhas cujo código aparece numa lista permitida. Cell arrays de texto são comparados como strings inteiras. `NaN` nunca casa com `NaN`, porque os dois não são iguais.\n\nA segunda saída transforma a função em uma consulta: `loc` pode indexar dados paralelos a `S`."
+   },
+   "notes": {
+    "en": "The `'rows'` option (comparing whole rows) is accepted by MatLivre but is not applied; the call is then treated as an element-wise test. Do not rely on it.",
+    "pt": "A opção `'rows'` (comparar linhas inteiras) é aceita pelo MatLivre, mas não é aplicada; a chamada é tratada como um teste elemento a elemento. Não conte com ela."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Membership and positions",
+      "pt": "Pertinência e posições"
+     },
+     "code": "[tf, loc] = ismember([1 5 2 2], [2 1 0])\nismember({'a','q'}, {'a','b'})\nismember(NaN, [NaN 1])"
+    }
+   ],
+   "see": [
+    "unique",
+    "intersect",
+    "setdiff",
+    "union",
+    "find",
+    "contains"
+   ]
+  },
+  "ismissing": {
+   "summary": {
+    "en": "Marks missing values: NaN, NaT, missing strings, undefined categories and empty text.",
+    "pt": "Marca valores ausentes: NaN, NaT, strings missing, categorias indefinidas e texto vazio."
+   },
+   "syntax": [
+    {
+     "code": "tf = ismissing(A)",
+     "en": "Returns a logical array that is `true` where an element is missing.",
+     "pt": "Retorna um array lógico que é `true` onde um elemento é ausente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric array, string array, cell array of character vectors, categorical, datetime or duration array.",
+     "pt": "Array numérico, array de strings, cell array de vetores de caracteres, categorical, datetime ou duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "What counts as missing depends on the type. For floating-point numbers it is `NaN`; for datetime `NaT`; for a string array the `missing` value; for a categorical array an undefined element; and for a cell array of character vectors an empty vector `''`.\n\nInteger and logical arrays cannot hold a missing value, so the result is all `false`. A related function, `rmmissing`, removes the flagged elements.",
+    "pt": "O que conta como ausente depende do tipo. Para números de ponto flutuante é `NaN`; para datetime, `NaT`; para array de strings, o valor `missing`; para categorical, um elemento indefinido; e para cell array de vetores de caracteres, um vetor vazio `''`.\n\nArrays de inteiros e lógicos não guardam valor ausente, então o resultado é tudo `false`. A função relacionada `rmmissing` remove os elementos marcados."
+   },
+   "notes": {
+    "en": "For tables and for character matrices, MatLivre's `ismissing` does not flag every entry that MATLAB flags (for example blank characters). Prefer applying it to plain arrays.",
+    "pt": "Para tables e matrizes de caracteres, o `ismissing` do MatLivre não marca todas as entradas que o MATLAB marca (por exemplo, caracteres em branco). Prefira aplicá-lo a arrays simples."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Different kinds of missing",
+      "pt": "Diferentes tipos de ausente"
+     },
+     "code": "ismissing([1 NaN 3])\nismissing([\"a\", missing])\nismissing({'a', ''})\nismissing(categorical({'a', ''}))"
+    }
+   ],
+   "see": [
+    "isnan",
+    "rmmissing",
+    "fillmissing",
+    "standardizeMissing",
+    "missing"
+   ]
+  },
+  "isnan": {
+   "summary": {
+    "en": "Marks elements that are NaN (not a number).",
+    "pt": "Marca os elementos que são NaN (not a number)."
+   },
+   "syntax": [
+    {
+     "code": "tf = isnan(A)",
+     "en": "Returns a logical array that is `true` where `A` is `NaN`.",
+     "pt": "Retorna um array lógico que é `true` onde `A` é `NaN`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric or logical array. A complex number is NaN if either part is NaN.",
+     "pt": "Array numérico ou lógico. Um número complexo é NaN se qualquer uma das partes for NaN."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "`NaN` is not equal to anything, itself included, so `x == NaN` is always `false`. The only reliable way to detect it is `isnan`.\n\nCommon uses are removing bad data, `x(~isnan(x))`, or counting it with `sum(isnan(x))`. Integer types have no NaN and give all `false`.",
+    "pt": "`NaN` não é igual a nada, nem a si mesmo, então `x == NaN` é sempre `false`. A única forma confiável de detectá-lo é `isnan`.\n\nUsos comuns são remover dados ruins, `x(~isnan(x))`, ou contá-los com `sum(isnan(x))`. Tipos inteiros não têm NaN e dão tudo `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Detecting and counting NaN",
+      "pt": "Detectando e contando NaN"
+     },
+     "code": "x = [4 NaN 7 NaN 1];\nisnan(x)\nx(~isnan(x))\nsum(isnan(x))\nNaN == NaN"
+    }
+   ],
+   "see": [
+    "isinf",
+    "isfinite",
+    "ismissing",
+    "nan",
+    "rmmissing"
+   ]
+  },
+  "isnat": {
+   "summary": {
+    "en": "Marks datetime elements that are NaT (not a time).",
+    "pt": "Marca os elementos datetime que são NaT (not a time)."
+   },
+   "syntax": [
+    {
+     "code": "tf = isnat(t)",
+     "en": "Returns a logical array that is `true` where the datetime array `t` holds `NaT`.",
+     "pt": "Retorna um array lógico que é `true` onde o array datetime `t` contém `NaT`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `t`.",
+     "pt": "Array lógico do mesmo tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`NaT` is to datetime what `NaN` is to numbers: it stands for a missing or invalid date, and it never compares equal to any date. Use `isnat` instead of `==` to find it.",
+    "pt": "`NaT` está para o datetime como `NaN` está para os números: representa uma data ausente ou inválida e nunca é igual a nenhuma data. Use `isnat` em vez de `==` para encontrá-lo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Finding missing dates",
+      "pt": "Encontrando datas ausentes"
+     },
+     "code": "t = [datetime(2024,1,1) NaT datetime(2024,3,1)];\nisnat(t)\nt(~isnat(t))"
+    }
+   ],
+   "see": [
+    "NaT",
+    "datetime",
+    "isnan",
+    "ismissing"
+   ]
+  },
+  "isnumeric": {
+   "summary": {
+    "en": "Tests whether an array is numeric.",
+    "pt": "Testa se um array é numérico."
+   },
+   "syntax": [
+    {
+     "code": "tf = isnumeric(A)",
+     "en": "Returns `true` if `A` is of a numeric class: floating-point or integer.",
+     "pt": "Retorna `true` se `A` é de classe numérica: ponto flutuante ou inteira."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Numeric classes are `double`, `single` and the eight integer classes. Characters and logical values can take part in arithmetic but are not numeric, so `isnumeric('a')` and `isnumeric(true)` are `false`. Complex numbers are numeric.",
+    "pt": "As classes numéricas são `double`, `single` e as oito classes de inteiros. Caracteres e valores lógicos podem entrar em contas, mas não são numéricos, então `isnumeric('a')` e `isnumeric(true)` são `false`. Números complexos são numéricos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numeric classes",
+      "pt": "Classes numéricas"
+     },
+     "code": "isnumeric(3.5)\nisnumeric(uint8(7))\nisnumeric(2+3i)\nisnumeric('a')\nisnumeric(true)"
+    }
+   ],
+   "see": [
+    "isfloat",
+    "isinteger",
+    "isreal",
+    "ischar",
+    "islogical"
+   ]
+  },
+  "isobject": {
+   "summary": {
+    "en": "Tests whether a value is an object of a MATLAB class.",
+    "pt": "Testa se um valor é um objeto de uma classe do MATLAB."
+   },
+   "syntax": [
+    {
+     "code": "tf = isobject(A)",
+     "en": "Returns `true` if `A` is an object.",
+     "pt": "Retorna `true` se `A` é um objeto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "Plain data such as numbers, text, structs and cell arrays are not objects, so the result is `false`. Instances of user-defined and handle classes are objects. Java objects are not covered by this function; use `isjava` for those.",
+    "pt": "Dados simples como números, texto, structs e cell arrays não são objetos, então o resultado é `false`. Instâncias de classes definidas pelo usuário e de classes handle são objetos. Objetos Java não são cobertos por esta função; use `isjava` para eles."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Plain data are not objects",
+      "pt": "Dados simples não são objetos"
+     },
+     "code": "isobject(1)\nisobject('text')\nisobject(struct('a', 1))"
+    }
+   ],
+   "see": [
+    "isjava",
+    "isstruct",
+    "class",
+    "isa",
+    "ishandle"
+   ]
+  },
+  "isordinal": {
+   "summary": {
+    "en": "Tests whether a categorical array is ordinal.",
+    "pt": "Testa se um array categorical é ordinal."
+   },
+   "syntax": [
+    {
+     "code": "tf = isordinal(C)",
+     "en": "Returns `true` if the categorical array `C` has an ordering among its categories.",
+     "pt": "Retorna `true` se o array categorical `C` tem uma ordem entre suas categorias."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "A categorical array.",
+     "pt": "Um array categorical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "An ordinal categorical array allows comparisons such as `<` and `>` and functions such as `min` and `max`, using the order in which the categories were listed. A nominal array (the default) allows only equality tests. Create an ordinal array with the `'Ordinal'` option of `categorical`.",
+    "pt": "Um array categorical ordinal permite comparações como `<` e `>` e funções como `min` e `max`, usando a ordem em que as categorias foram listadas. Um array nominal (o padrão) permite apenas testes de igualdade. Crie um array ordinal com a opção `'Ordinal'` de `categorical`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Nominal and ordinal",
+      "pt": "Nominal e ordinal"
+     },
+     "code": "n = categorical({'lo','hi'});\no = categorical({'lo','hi'}, {'lo','hi'}, 'Ordinal', true);\nisordinal(n)\nisordinal(o)"
+    }
+   ],
+   "see": [
+    "categorical",
+    "isprotected",
+    "categories"
+   ]
+  },
+  "isprotected": {
+   "summary": {
+    "en": "Tests whether the categories of a categorical array are protected.",
+    "pt": "Testa se as categorias de um array categorical são protegidas."
+   },
+   "syntax": [
+    {
+     "code": "tf = isprotected(C)",
+     "en": "Returns `true` if the categorical array `C` is protected.",
+     "pt": "Retorna `true` se o array categorical `C` é protegido."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "C",
+     "en": "A categorical array.",
+     "pt": "Um array categorical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "In a protected categorical array, assigning a value that is not already a category is an error, instead of silently adding a new category. All ordinal arrays are protected. Create a protected array with the `'Protected'` option of `categorical`.",
+    "pt": "Em um array categorical protegido, atribuir um valor que ainda não é uma categoria gera erro, em vez de adicionar silenciosamente uma nova categoria. Todos os arrays ordinais são protegidos. Crie um array protegido com a opção `'Protected'` de `categorical`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Protected and ordinal arrays",
+      "pt": "Arrays protegidos e ordinais"
+     },
+     "code": "c = categorical({'lo','hi','lo'}, {'lo','hi'});\np = categorical({'lo','hi','lo'}, {'lo','hi'}, 'Protected', true);\no = categorical({'lo','hi'}, {'lo','hi'}, 'Ordinal', true);\nisprotected(c)\nisprotected(p)\nisprotected(o)"
+    }
+   ],
+   "see": [
+    "categorical",
+    "isordinal",
+    "addcats",
+    "categories"
+   ]
+  },
+  "isreal": {
+   "summary": {
+    "en": "Tests whether an array is stored without an imaginary part.",
+    "pt": "Testa se um array é armazenado sem parte imaginária."
+   },
+   "syntax": [
+    {
+     "code": "tf = isreal(A)",
+     "en": "Returns `true` if `A` is stored without an imaginary part.",
+     "pt": "Retorna `true` se `A` é armazenado sem parte imaginária."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Any value.",
+     "pt": "Qualquer valor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "The test concerns how the array is stored, not its value. The result of `3 + 0i` is simplified to the real `3`, so `isreal` is `true`, but `complex(3, 0)` forces complex storage and gives `false`. Non-numeric values such as cell arrays and structs also give `false`.",
+    "pt": "O teste diz respeito a como o array é armazenado, não ao seu valor. O resultado de `3 + 0i` é simplificado para o real `3`, então `isreal` é `true`, mas `complex(3, 0)` força armazenamento complexo e dá `false`. Valores não numéricos como cell arrays e structs também dão `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Real and complex storage",
+      "pt": "Armazenamento real e complexo"
+     },
+     "code": "isreal(5)\nisreal(1 + 2i)\nisreal(3 + 0i)\nisreal(complex(3, 0))\nisreal(sqrt(-4))"
+    }
+   ],
+   "see": [
+    "complex",
+    "real",
+    "imag",
+    "isnumeric"
+   ]
+  },
+  "isregular": {
+   "summary": {
+    "en": "Tests whether a timetable has evenly spaced row times.",
+    "pt": "Testa se um timetable tem tempos de linha igualmente espaçados."
+   },
+   "syntax": [
+    {
+     "code": "tf = isregular(TT)",
+     "en": "Returns `true` if the row times of `TT` are sorted, unique and equally spaced.",
+     "pt": "Retorna `true` se os tempos de linha de `TT` são ordenados, únicos e igualmente espaçados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "TT",
+     "en": "A timetable.",
+     "pt": "Um timetable."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A regular timetable has a constant step between consecutive row times, as in a signal sampled at a fixed rate. Irregular ones come from event logs or missed samples. Some operations, such as `retime` with a fixed rate or lagging by a duration, are simpler on regular data.",
+    "pt": "Um timetable regular tem passo constante entre tempos de linha consecutivos, como um sinal amostrado com taxa fixa. Os irregulares vêm de registros de eventos ou amostras perdidas. Algumas operações, como `retime` com taxa fixa ou defasagem por uma duração, são mais simples com dados regulares."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Regular and irregular row times",
+      "pt": "Tempos de linha regulares e irregulares"
+     },
+     "code": "a = timetable(seconds([0;1;2]), [1;2;3]);\nb = timetable(seconds([0;1;3]), [1;2;3]);\nisregular(a)\nisregular(b)"
+    }
+   ],
+   "see": [
+    "timetable",
+    "retime",
+    "lag",
+    "synchronize"
+   ]
+  },
+  "isspace": {
+   "summary": {
+    "en": "Marks the characters that are whitespace.",
+    "pt": "Marca os caracteres que são espaço em branco."
+   },
+   "syntax": [
+    {
+     "code": "tf = isspace(A)",
+     "en": "Returns a logical array that is `true` where the character of `A` is whitespace.",
+     "pt": "Retorna um array lógico que é `true` onde o caractere de `A` é espaço em branco."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Character array. Other classes give all `false`.",
+     "pt": "Array de caracteres. Outras classes dão tudo `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array the same size as `A`.",
+     "pt": "Array lógico do mesmo tamanho de `A`."
+    }
+   ],
+   "description": {
+    "en": "Whitespace includes the space, tab, newline, carriage return, vertical tab and form feed. It is used to split words by hand or to trim text: `s(~isspace(s))` removes every blank.",
+    "pt": "Espaço em branco inclui espaço, tabulação, nova linha, retorno de carro, tabulação vertical e avanço de página. Serve para separar palavras manualmente ou limpar texto: `s(~isspace(s))` remove todos os espaços."
+   },
+   "notes": {
+    "en": "MatLivre's `isspace` expects a character array; a string scalar such as `\"a b\"` raises an error. Convert it with `char` first.",
+    "pt": "O `isspace` do MatLivre espera um array de caracteres; uma string escalar como `\"a b\"` gera erro. Converta antes com `char`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Removing blanks",
+      "pt": "Removendo espaços"
+     },
+     "code": "s = sprintf('a b\\tc');\nisspace(s)\ns(~isspace(s))"
+    }
+   ],
+   "see": [
+    "isletter",
+    "isstrprop",
+    "strtrim",
+    "strsplit",
+    "regexprep"
+   ]
+  }
+ }
+}

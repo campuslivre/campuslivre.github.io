@@ -1,0 +1,768 @@
+{
+ "functions": {
+  "error": {
+   "summary": {
+    "en": "Throws an error, stopping the running code unless it is caught.",
+    "pt": "Lança um erro, interrompendo o código em execução a menos que seja capturado."
+   },
+   "syntax": [
+    {
+     "code": "error(msg)",
+     "en": "Throws an error with the message `msg`.",
+     "pt": "Lança um erro com a mensagem `msg`."
+    },
+    {
+     "code": "error(msg, A1, ..., An)",
+     "en": "Formats the message like `sprintf` before throwing.",
+     "pt": "Formata a mensagem como `sprintf` antes de lançar."
+    },
+    {
+     "code": "error(id, msg, A1, ..., An)",
+     "en": "Also sets the message identifier `id`, such as `'MyPkg:badInput'`.",
+     "pt": "Também define o identificador `id` da mensagem, como `'MyPkg:badInput'`."
+    },
+    {
+     "code": "error(ME)",
+     "en": "Throws an existing `MException` object, or a struct with the fields `message` and `identifier`.",
+     "pt": "Lança um objeto `MException` existente, ou uma struct com os campos `message` e `identifier`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "msg",
+     "en": "Message text. Format fields and escape sequences such as `\\n` are processed only when extra arguments follow.",
+     "pt": "Texto da mensagem. Campos de formato e sequências de escape como `\\n` só são processados quando há argumentos adicionais."
+    },
+    {
+     "name": "id",
+     "en": "Identifier made of parts joined by colons, no spaces, with at least one colon.",
+     "pt": "Identificador formado por partes unidas por dois-pontos, sem espaços, com ao menos um dois-pontos."
+    },
+    {
+     "name": "A1, ..., An",
+     "en": "Values for the format fields of `msg`.",
+     "pt": "Valores para os campos de formato de `msg`."
+    },
+    {
+     "name": "ME",
+     "en": "An `MException` object or a struct.",
+     "pt": "Um objeto `MException` ou uma struct."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`error` is how code reports a situation it cannot continue from. An uncaught error stops the script and prints the message; inside `try ... catch`, the caught object `err` has `err.message`, `err.identifier` and `err.stack`. Identifiers let callers react to a specific failure with `strcmp(err.identifier, 'MyPkg:badInput')` instead of matching message text.\n\nA single argument that looks like an identifier, as in `error('Result:bad')`, is treated as the message and leaves the identifier empty; supply a message after the identifier to set both.",
+    "pt": "`error` é como o código informa uma situação da qual não pode continuar. Um erro não capturado interrompe o script e imprime a mensagem; dentro de `try ... catch`, o objeto capturado `err` tem `err.message`, `err.identifier` e `err.stack`. Identificadores permitem reagir a uma falha específica com `strcmp(err.identifier, 'MyPkg:badInput')` em vez de comparar o texto da mensagem.\n\nUm único argumento com aparência de identificador, como em `error('Result:bad')`, é tratado como mensagem e deixa o identificador vazio; informe uma mensagem depois do identificador para definir os dois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Catching an error with an identifier",
+      "pt": "Capturando um erro com identificador"
+     },
+     "code": "try\n    error('Demo:tooBig', 'Value %d is larger than %d', 12, 10);\ncatch err\n    disp(err.identifier)\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "warning",
+    "assert",
+    "MException",
+    "try",
+    "lasterr"
+   ]
+  },
+  "genvarname": {
+   "summary": {
+    "en": "Builds valid, unique variable names from text (superseded by matlab.lang.makeValidName).",
+    "pt": "Gera nomes de variável válidos e únicos a partir de texto (substituída por matlab.lang.makeValidName)."
+   },
+   "syntax": [
+    {
+     "code": "v = genvarname(str)",
+     "en": "Converts `str` into a valid variable name.",
+     "pt": "Converte `str` em um nome de variável válido."
+    },
+    {
+     "code": "v = genvarname(str, exclusions)",
+     "en": "Also avoids every name in `exclusions`.",
+     "pt": "Também evita todo nome em `exclusions`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text or cell array of text.",
+     "pt": "Texto ou cell array de textos."
+    },
+    {
+     "name": "exclusions",
+     "en": "Name or cell array of names that must not be returned.",
+     "pt": "Nome ou cell array de nomes que não devem ser retornados."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Valid name, or a cell array of names when `str` is a cell array.",
+     "pt": "Nome válido, ou cell array de nomes quando `str` é um cell array."
+    }
+   ],
+   "description": {
+    "en": "`genvarname` removes spaces and capitalizes the letter that follows each one, replaces other invalid characters, prefixes `x` to names that start with a digit or are reserved keywords, and then appends a number when the result collides with an entry of `exclusions` or with an earlier name in the same call.\n\nIt is handy for turning headings or file names into dynamic field names or variables. New code should use `matlab.lang.makeValidName` and `matlab.lang.makeUniqueStrings`.",
+    "pt": "`genvarname` remove espaços e põe em maiúscula a letra que vem depois de cada um, substitui outros caracteres inválidos, acrescenta `x` aos nomes que começam com dígito ou são palavras reservadas, e depois anexa um número quando o resultado colide com uma entrada de `exclusions` ou com um nome anterior da mesma chamada.\n\nÉ útil para transformar títulos ou nomes de arquivo em nomes dinâmicos de campo ou variável. Código novo deve usar `matlab.lang.makeValidName` e `matlab.lang.makeUniqueStrings`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Valid and unique names",
+      "pt": "Nomes válidos e únicos"
+     },
+     "code": "genvarname('total cost')\ngenvarname('2nd try')\ngenvarname('x', {'x', 'x1'})\ngenvarname({'a', 'a', 'a'})"
+    }
+   ],
+   "see": [
+    "matlab.lang.makeValidName",
+    "matlab.lang.makeUniqueStrings",
+    "isvarname",
+    "iskeyword"
+   ]
+  },
+  "inputname": {
+   "summary": {
+    "en": "Returns the name of the variable passed as a given argument of the current function.",
+    "pt": "Retorna o nome da variável passada como um dado argumento da função atual."
+   },
+   "syntax": [
+    {
+     "code": "name = inputname(argNumber)",
+     "en": "Returns the variable name used for argument `argNumber`.",
+     "pt": "Retorna o nome da variável usado no argumento `argNumber`."
+    },
+    {
+     "code": "name = inputname(argNumber, ids_only)",
+     "en": "The optional flag `ids_only` controls what is returned when the argument is not a plain variable.",
+     "pt": "O sinalizador opcional `ids_only` controla o que é retornado quando o argumento não é uma variável simples."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "argNumber",
+     "en": "Position of the argument, counted from 1.",
+     "pt": "Posição do argumento, contada a partir de 1."
+    },
+    {
+     "name": "ids_only",
+     "en": "Logical, optional. Selects whether only variable names are accepted (default `true`).",
+     "pt": "Lógico, opcional. Define se apenas nomes de variáveis são aceitos (padrão `true`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "name",
+     "en": "Character vector with the caller's variable name, or empty.",
+     "pt": "Vetor de caracteres com o nome da variável do chamador, ou vazio."
+    }
+   ],
+   "description": {
+    "en": "A function normally sees only values. `inputname` lets it recover the name the caller used, which is useful for labeling output, as in `disp([inputname(1) ' = ' num2str(x)])`. When the argument was not a plain variable, the result is empty or, with `ids_only` set to `false`, the text of the expression. It can be called only from inside a function.\n\nThe example below writes a function `show` to a file; in MATLAB it prints `[alpha]`.",
+    "pt": "Uma função normalmente enxerga só valores. `inputname` permite recuperar o nome que o chamador usou, o que serve para rotular saídas, como em `disp([inputname(1) ' = ' num2str(x)])`. Quando o argumento não era uma variável simples, o resultado é vazio ou, com `ids_only` igual a `false`, o texto da expressão. Só pode ser chamada dentro de uma função.\n\nO exemplo abaixo grava uma função `show` em um arquivo; no MATLAB ela imprime `[alpha]`."
+   },
+   "notes": {
+    "en": "In MatLivre `inputname` always returns an empty character vector, whatever the argument. Pass the name explicitly when a function needs it.",
+    "pt": "No MatLivre, `inputname` sempre retorna um vetor de caracteres vazio, seja qual for o argumento. Passe o nome de forma explícita quando uma função precisar dele."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Naming the arguments",
+      "pt": "Nomeando os argumentos"
+     },
+     "code": "writelines([\"function show(a)\", \"  fprintf('[%s]\\n', inputname(1));\", \"end\"], 'show.m');\nalpha = 1;\nshow(alpha)",
+     "note": {
+      "en": "MatLivre currently returns an empty name here, so it prints `[]`.",
+      "pt": "O MatLivre hoje retorna um nome vazio aqui, então imprime `[]`."
+     }
+    }
+   ],
+   "see": [
+    "nargin",
+    "evalin",
+    "assignin",
+    "inputParser"
+   ]
+  },
+  "inputParser": {
+   "summary": {
+    "en": "Parses and validates the arguments of a function.",
+    "pt": "Analisa e valida os argumentos de uma função."
+   },
+   "syntax": [
+    {
+     "code": "p = inputParser",
+     "en": "Creates an empty parser object.",
+     "pt": "Cria um objeto analisador vazio."
+    },
+    {
+     "code": "parse(p, args...)",
+     "en": "Matches `args` against the declared arguments and fills `p.Results`.",
+     "pt": "Associa `args` aos argumentos declarados e preenche `p.Results`."
+    },
+    {
+     "code": "p.Results, p.UsingDefaults, p.Unmatched",
+     "en": "Read the parsed values, the names left at their defaults, and the unrecognized pairs.",
+     "pt": "Leem os valores analisados, os nomes que ficaram no padrão e os pares não reconhecidos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "FunctionName",
+     "en": "Property: name shown in error messages.",
+     "pt": "Propriedade: nome mostrado nas mensagens de erro."
+    },
+    {
+     "name": "CaseSensitive",
+     "en": "Property: match parameter names with case (default `false`).",
+     "pt": "Propriedade: diferencia maiúsculas nos nomes de parâmetros (padrão `false`)."
+    },
+    {
+     "name": "KeepUnmatched",
+     "en": "Property: when `true`, unknown name-value pairs go to `Unmatched` instead of causing an error (default `false`).",
+     "pt": "Propriedade: quando `true`, pares nome-valor desconhecidos vão para `Unmatched` em vez de causar erro (padrão `false`)."
+    },
+    {
+     "name": "PartialMatching",
+     "en": "Property: accept unique abbreviations of parameter names (default `true`).",
+     "pt": "Propriedade: aceita abreviações únicas dos nomes de parâmetros (padrão `true`)."
+    },
+    {
+     "name": "StructExpand",
+     "en": "Property: accept a struct in place of name-value pairs (default `true`).",
+     "pt": "Propriedade: aceita uma struct no lugar de pares nome-valor (padrão `true`)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "The parser object. After `parse`, `p.Results` is a struct with one field per declared argument.",
+     "pt": "O objeto analisador. Depois de `parse`, `p.Results` é uma struct com um campo por argumento declarado."
+    }
+   ],
+   "description": {
+    "en": "An `inputParser` is a handle object. You declare the arguments with `addRequired`, `addOptional` and `addParameter`, then call `parse(p, varargin{:})` inside your function. Required arguments are positional and must come first, optional ones follow, and name-value pairs come last.\n\nA failed validation raises an error that names the argument and the validation function. `p.Results` lists fields in alphabetical order, `p.UsingDefaults` names the arguments that were not supplied, and `p.Unmatched` holds the unrecognized pairs when `KeepUnmatched` is on.",
+    "pt": "Um `inputParser` é um objeto handle. Você declara os argumentos com `addRequired`, `addOptional` e `addParameter` e então chama `parse(p, varargin{:})` dentro da função. Os argumentos obrigatórios são posicionais e vêm primeiro, os opcionais vêm depois, e os pares nome-valor por último.\n\nUma validação que falha gera um erro que cita o argumento e a função de validação. `p.Results` lista os campos em ordem alfabética, `p.UsingDefaults` nomeia os argumentos não fornecidos, e `p.Unmatched` guarda os pares não reconhecidos quando `KeepUnmatched` está ligado."
+   },
+   "notes": {
+    "en": "MatLivre does not provide `addSwitch`.",
+    "pt": "O MatLivre não oferece `addSwitch`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Required, optional and name-value arguments",
+      "pt": "Argumentos obrigatórios, opcionais e nome-valor"
+     },
+     "code": "p = inputParser;\np.FunctionName = 'demo';\naddRequired(p, 'n', @isnumeric);\naddOptional(p, 'mode', 'fast', @ischar);\naddParameter(p, 'Tol', 1e-3, @(x) x > 0);\nparse(p, 4, 'slow', 'Tol', 0.1);\nr = p.Results\np.UsingDefaults\ntry\n    parse(p, 4, 'fast', 'Tol', -1);\ncatch err\n    disp(err.message)\nend"
+    }
+   ],
+   "see": [
+    "addRequired",
+    "addOptional",
+    "addParameter",
+    "validateattributes",
+    "varargin"
+   ]
+  },
+  "isvarname": {
+   "summary": {
+    "en": "Tests whether text is a valid variable name.",
+    "pt": "Testa se um texto é um nome de variável válido."
+   },
+   "syntax": [
+    {
+     "code": "tf = isvarname(name)",
+     "en": "Returns `true` if `name` can be used as a variable name.",
+     "pt": "Retorna `true` se `name` pode ser usado como nome de variável."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Text to test.",
+     "pt": "Texto a testar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical scalar.",
+     "pt": "Escalar lógico."
+    }
+   ],
+   "description": {
+    "en": "A valid name starts with a letter and continues with letters, digits and underscores, and is not a reserved keyword such as `for` or `end`. Names starting with an underscore or a digit, names with spaces or hyphens, and empty text are all invalid.\n\nUse it before creating a dynamic field name or variable from user text; `matlab.lang.makeValidName` repairs a name instead of only testing it.",
+    "pt": "Um nome válido começa com letra e continua com letras, dígitos e sublinhados, e não é uma palavra reservada como `for` ou `end`. Nomes que começam com sublinhado ou dígito, com espaços ou hifens, e o texto vazio são todos inválidos.\n\nUse antes de criar um nome dinâmico de campo ou variável a partir de texto do usuário; `matlab.lang.makeValidName` conserta um nome em vez de apenas testá-lo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Valid and invalid names",
+      "pt": "Nomes válidos e inválidos"
+     },
+     "code": "names = {'speed', 'a_1', '1st', 'my var', 'for', ''};\nfor k = 1:numel(names)\n    fprintf('%-6s %d\\n', names{k}, isvarname(names{k}));\nend"
+    }
+   ],
+   "see": [
+    "matlab.lang.makeValidName",
+    "genvarname",
+    "iskeyword",
+    "exist"
+   ]
+  },
+  "lasterr": {
+   "summary": {
+    "en": "Returns the message of the most recent error.",
+    "pt": "Retorna a mensagem do erro mais recente."
+   },
+   "syntax": [
+    {
+     "code": "msg = lasterr",
+     "en": "Returns the last error message.",
+     "pt": "Retorna a última mensagem de erro."
+    },
+    {
+     "code": "[msg, id] = lasterr",
+     "en": "Also returns its identifier.",
+     "pt": "Também retorna o identificador."
+    },
+    {
+     "code": "lasterr(msg, id)",
+     "en": "Sets the stored message and identifier.",
+     "pt": "Define a mensagem e o identificador guardados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "msg",
+     "en": "Message to store.",
+     "pt": "Mensagem a guardar."
+    },
+    {
+     "name": "id",
+     "en": "Identifier to store.",
+     "pt": "Identificador a guardar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "msg",
+     "en": "Text of the last error; empty if none occurred.",
+     "pt": "Texto do último erro; vazio se nenhum ocorreu."
+    },
+    {
+     "name": "id",
+     "en": "Identifier of the last error.",
+     "pt": "Identificador do último erro."
+    }
+   ],
+   "description": {
+    "en": "Every error raised in the session, even one caught by `try`, updates the stored message. `lasterr` reads it back, which was the older way to inspect an error after an empty `catch`. Prefer `catch err` and use `err.message` and `err.identifier`, which belong to one specific error.",
+    "pt": "Todo erro lançado na sessão, mesmo um capturado por `try`, atualiza a mensagem guardada. `lasterr` a lê de volta, o que era a forma antiga de inspecionar um erro depois de um `catch` vazio. Prefira `catch err` e use `err.message` e `err.identifier`, que pertencem a um erro específico."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading the last error",
+      "pt": "Lendo o último erro"
+     },
+     "code": "try\n    error('Demo:fail', 'boom %d', 2);\ncatch\nend\n[msg, id] = lasterr"
+    }
+   ],
+   "see": [
+    "lasterror",
+    "error",
+    "lastwarn",
+    "MException"
+   ]
+  },
+  "lasterror": {
+   "summary": {
+    "en": "Returns a struct describing the most recent error (obsolete).",
+    "pt": "Retorna uma struct que descreve o erro mais recente (obsoleta)."
+   },
+   "syntax": [
+    {
+     "code": "s = lasterror",
+     "en": "Returns the last error as a struct.",
+     "pt": "Retorna o último erro como struct."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Struct with fields `message`, `identifier` and `stack`.",
+     "pt": "Struct com os campos `message`, `identifier` e `stack`."
+    }
+   ],
+   "description": {
+    "en": "`lasterror` packages the information of the most recent error as a struct. It is kept for old programs; in new code, catch the error with `catch err` and work with the `MException` object `err`, which also supports `rethrow` and `getReport`.",
+    "pt": "`lasterror` reúne as informações do erro mais recente em uma struct. É mantida para programas antigos; em código novo, capture o erro com `catch err` e trabalhe com o objeto `MException` `err`, que também oferece `rethrow` e `getReport`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fields of the last error",
+      "pt": "Campos do último erro"
+     },
+     "code": "try\n    error('Demo:fail', 'boom %d', 2);\ncatch\nend\ns = lasterror;\ns.message\ns.identifier"
+    }
+   ],
+   "see": [
+    "lasterr",
+    "error",
+    "MException",
+    "rethrow"
+   ]
+  },
+  "lastwarn": {
+   "summary": {
+    "en": "Returns or sets the most recent warning message.",
+    "pt": "Retorna ou define a mensagem de aviso mais recente."
+   },
+   "syntax": [
+    {
+     "code": "msg = lastwarn",
+     "en": "Returns the last warning message.",
+     "pt": "Retorna a última mensagem de aviso."
+    },
+    {
+     "code": "[msg, id] = lastwarn",
+     "en": "Also returns its identifier.",
+     "pt": "Também retorna o identificador."
+    },
+    {
+     "code": "lastwarn(msg, id)",
+     "en": "Sets the stored message and identifier.",
+     "pt": "Define a mensagem e o identificador guardados."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "msg",
+     "en": "Message to store.",
+     "pt": "Mensagem a guardar."
+    },
+    {
+     "name": "id",
+     "en": "Identifier to store.",
+     "pt": "Identificador a guardar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "msg",
+     "en": "Text of the last warning; empty if none was issued.",
+     "pt": "Texto do último aviso; vazio se nenhum foi emitido."
+    },
+    {
+     "name": "id",
+     "en": "Identifier of the last warning.",
+     "pt": "Identificador do último aviso."
+    }
+   ],
+   "description": {
+    "en": "Each warning issued through `warning` is remembered, even if it was switched off. Code can call `lastwarn('')` before an operation and read `lastwarn` afterwards to learn whether the operation warned, without parsing printed output.",
+    "pt": "Cada aviso emitido por `warning` é lembrado, mesmo que esteja desligado. O código pode chamar `lastwarn('')` antes de uma operação e ler `lastwarn` depois para saber se a operação emitiu aviso, sem analisar a saída impressa."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Detecting a warning",
+      "pt": "Detectando um aviso"
+     },
+     "code": "lastwarn('');\nwarning('Demo:low', 'Level is low (%d)', 3);\n[msg, id] = lastwarn"
+    }
+   ],
+   "see": [
+    "warning",
+    "lasterr",
+    "error",
+    "MException"
+   ]
+  },
+  "matlab.lang.makeUniqueStrings": {
+   "summary": {
+    "en": "Makes strings unique by appending numbers to the ones that collide.",
+    "pt": "Torna strings únicas anexando números às que colidem."
+   },
+   "syntax": [
+    {
+     "code": "u = matlab.lang.makeUniqueStrings(str, exclusions)",
+     "en": "Changes `str` so that it does not match any text in `exclusions`.",
+     "pt": "Altera `str` para que não coincida com nenhum texto de `exclusions`."
+    },
+    {
+     "code": "u = matlab.lang.makeUniqueStrings(strs)",
+     "en": "Makes the elements of a cell array differ from each other.",
+     "pt": "Faz os elementos de um cell array diferirem entre si."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text or cell array of text to fix.",
+     "pt": "Texto ou cell array de textos a corrigir."
+    },
+    {
+     "name": "exclusions",
+     "en": "Text or cell array of text that the result must avoid.",
+     "pt": "Texto ou cell array de textos que o resultado deve evitar."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "u",
+     "en": "The unique text, with the same shape as `str`.",
+     "pt": "O texto único, com a mesma forma de `str`."
+    }
+   ],
+   "description": {
+    "en": "A string that already differs from everything in `exclusions` is returned unchanged. Otherwise the function appends `_1`, `_2`, and so on until the name is free. For a cell array without `exclusions`, the first occurrence is kept and later duplicates receive suffixes in order.\n\nA typical use is naming new items, files or table variables without overwriting existing ones.",
+    "pt": "Uma string que já difere de tudo em `exclusions` é retornada sem alteração. Caso contrário, a função anexa `_1`, `_2` e assim por diante até o nome ficar livre. Em um cell array sem `exclusions`, a primeira ocorrência é mantida e as duplicatas seguintes recebem sufixos em ordem.\n\nUm uso típico é nomear novos itens, arquivos ou variáveis de tabela sem sobrescrever os existentes."
+   },
+   "notes": {
+    "en": "MatLivre returns a single output; the second output (a logical showing which strings were modified) is not supported.",
+    "pt": "O MatLivre retorna uma única saída; a segunda saída (um lógico que indica quais strings foram modificadas) não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Avoiding existing names",
+      "pt": "Evitando nomes existentes"
+     },
+     "code": "matlab.lang.makeUniqueStrings('file', {'file', 'file_1', 'other'})\nmatlab.lang.makeUniqueStrings({'a', 'a', 'b', 'a'})"
+    }
+   ],
+   "see": [
+    "matlab.lang.makeValidName",
+    "genvarname",
+    "unique",
+    "isvarname"
+   ]
+  },
+  "matlab.lang.makeValidName": {
+   "summary": {
+    "en": "Converts text into valid variable or field names.",
+    "pt": "Converte texto em nomes válidos de variável ou campo."
+   },
+   "syntax": [
+    {
+     "code": "v = matlab.lang.makeValidName(str)",
+     "en": "Returns `str` changed into a valid name.",
+     "pt": "Retorna `str` convertido em um nome válido."
+    },
+    {
+     "code": "[v, modified] = matlab.lang.makeValidName(str)",
+     "en": "Also tells which strings had to change.",
+     "pt": "Também informa quais strings precisaram mudar."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text, string array or cell array of text.",
+     "pt": "Texto, array de strings ou cell array de textos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Valid names, in the same shape as `str`.",
+     "pt": "Nomes válidos, com a mesma forma de `str`."
+    },
+    {
+     "name": "modified",
+     "en": "Logical array: `true` where the name was changed.",
+     "pt": "Array lógico: `true` onde o nome foi alterado."
+    }
+   ],
+   "description": {
+    "en": "Valid names are returned unchanged. Spaces are removed and the letter after each is capitalized (`'my value'` becomes `'myValue'`), other illegal characters become underscores, and a name that starts with a digit or is a reserved word gets the prefix `x`. The function does not make names unique; combine it with `matlab.lang.makeUniqueStrings` for that.\n\nTables use this rule to turn column headings of imported files into variable names.",
+    "pt": "Nomes válidos são retornados sem alteração. Espaços são removidos e a letra seguinte é posta em maiúscula (`'my value'` vira `'myValue'`), outros caracteres ilegais viram sublinhados, e um nome que começa com dígito ou é palavra reservada recebe o prefixo `x`. A função não torna os nomes únicos; combine com `matlab.lang.makeUniqueStrings` para isso.\n\nTabelas usam essa regra para transformar cabeçalhos de colunas de arquivos importados em nomes de variáveis."
+   },
+   "notes": {
+    "en": "MatLivre ignores the `'ReplacementStyle'` and `'Prefix'` options: replacements are always underscores and the prefix is always `x`.",
+    "pt": "O MatLivre ignora as opções `'ReplacementStyle'` e `'Prefix'`: as substituições são sempre sublinhados e o prefixo é sempre `x`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Repairing names",
+      "pt": "Consertando nomes"
+     },
+     "code": "[v, changed] = matlab.lang.makeValidName({'total cost', '3rd', 'a-b', 'ok'})"
+    }
+   ],
+   "see": [
+    "matlab.lang.makeUniqueStrings",
+    "isvarname",
+    "genvarname",
+    "iskeyword"
+   ]
+  },
+  "mfilename": {
+   "summary": {
+    "en": "Returns the name of the file that is running.",
+    "pt": "Retorna o nome do arquivo em execução."
+   },
+   "syntax": [
+    {
+     "code": "name = mfilename",
+     "en": "Returns the file name without path or extension.",
+     "pt": "Retorna o nome do arquivo sem caminho nem extensão."
+    },
+    {
+     "code": "p = mfilename('fullpath')",
+     "en": "Returns the path including the file name, without the extension.",
+     "pt": "Retorna o caminho incluindo o nome do arquivo, sem a extensão."
+    },
+    {
+     "code": "d = mfilename('fullpathext')",
+     "en": "Returns the path including name and extension.",
+     "pt": "Retorna o caminho incluindo nome e extensão."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'fullpath'",
+     "en": "Option that adds the folder to the result.",
+     "pt": "Opção que acrescenta a pasta ao resultado."
+    },
+    {
+     "name": "'fullpathext'",
+     "en": "Option that adds the folder and the extension.",
+     "pt": "Opção que acrescenta a pasta e a extensão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "name",
+     "en": "Character vector; empty when called from the command line or from code with no file.",
+     "pt": "Vetor de caracteres; vazio quando chamado da linha de comando ou de código sem arquivo."
+    }
+   ],
+   "description": {
+    "en": "Inside a function file, `mfilename` is the name of that file, which lets error messages or log lines name their origin without hard-coding it. Called from a script, it gives the script's name. When there is no file, as in code typed at the prompt, the result is empty.",
+    "pt": "Dentro de um arquivo de função, `mfilename` é o nome desse arquivo, o que permite que mensagens de erro ou linhas de log indiquem a origem sem escrevê-la à mão. Chamada de um script, dá o nome do script. Quando não há arquivo, como em código digitado no prompt, o resultado é vazio."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A function reporting its own file name",
+      "pt": "Uma função informando o próprio nome de arquivo"
+     },
+     "code": "writelines([\"function r = who_am_i()\", \"  r = mfilename;\", \"end\"], 'who_am_i.m');\nwho_am_i"
+    }
+   ],
+   "see": [
+    "dbstack",
+    "fileparts",
+    "which",
+    "inputname"
+   ]
+  },
+  "mislocked": {
+   "summary": {
+    "en": "Tests whether a function file is locked in memory.",
+    "pt": "Testa se um arquivo de função está travado na memória."
+   },
+   "syntax": [
+    {
+     "code": "tf = mislocked",
+     "en": "Tests the function that calls it.",
+     "pt": "Testa a função que a chama."
+    },
+    {
+     "code": "tf = mislocked(name)",
+     "en": "Tests the function named `name`.",
+     "pt": "Testa a função de nome `name`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "name",
+     "en": "Function name, as text.",
+     "pt": "Nome da função, como texto."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "`true` if the function is locked.",
+     "pt": "`true` se a função está travada."
+    }
+   ],
+   "description": {
+    "en": "A function becomes locked when it calls `mlock`; `munlock` unlocks it. A locked function keeps its persistent variables when `clear` is used, so `mislocked` tells whether a `clear` would reset them. A function that never called `mlock` is not locked.",
+    "pt": "Uma função fica travada quando chama `mlock`; `munlock` a destrava. Uma função travada mantém as variáveis persistentes quando se usa `clear`, então `mislocked` informa se um `clear` as reiniciaria. Uma função que nunca chamou `mlock` não está travada."
+   },
+   "notes": {
+    "en": "MatLivre does not track locks: `mislocked` always returns `false`, even after the function called `mlock`.",
+    "pt": "O MatLivre não registra travas: `mislocked` sempre retorna `false`, mesmo depois de a função chamar `mlock`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Before the function has run",
+      "pt": "Antes de a função ser executada"
+     },
+     "code": "writelines([\"function r = counter()\", \"  mlock;\", \"  persistent n\", \"  if isempty(n), n = 0; end\", \"  n = n + 1; r = n;\", \"end\"], 'counter.m');\nmislocked('counter')"
+    }
+   ],
+   "see": [
+    "mlock",
+    "munlock",
+    "persistent",
+    "clear"
+   ]
+  },
+  "mlock": {
+   "summary": {
+    "en": "Locks the running function in memory so that clear does not reset it.",
+    "pt": "Trava a função em execução na memória para que clear não a reinicie."
+   },
+   "syntax": [
+    {
+     "code": "mlock",
+     "en": "Called inside a function file, locks that function.",
+     "pt": "Chamada dentro de um arquivo de função, trava essa função."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Persistent variables normally disappear when the function is cleared with `clear` or `clear all`. A locked function stays in memory, so its persistent variables survive until `munlock` is called or the session ends. `mlock` is valid only inside a function file; call it once, usually at the start.\n\nUse it for state that must outlast a `clear`, such as a call counter or a cache.",
+    "pt": "Variáveis persistentes normalmente desaparecem quando a função é limpa com `clear` ou `clear all`. Uma função travada fica na memória, então suas variáveis persistentes sobrevivem até `munlock` ser chamada ou a sessão terminar. `mlock` só vale dentro de um arquivo de função; chame uma vez, em geral no início.\n\nUse para estado que precisa durar além de um `clear`, como um contador de chamadas ou um cache."
+   },
+   "notes": {
+    "en": "In MatLivre `mlock` is accepted but does not record a lock; `mislocked` stays `false`.",
+    "pt": "No MatLivre, `mlock` é aceita mas não registra uma trava; `mislocked` continua `false`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "State that survives clear",
+      "pt": "Estado que sobrevive ao clear"
+     },
+     "code": "writelines([\"function r = counter()\", \"  mlock;\", \"  persistent n\", \"  if isempty(n), n = 0; end\", \"  n = n + 1; r = n;\", \"end\"], 'counter.m');\ncounter;\ncounter;\nclear counter\ncounter"
+    }
+   ],
+   "see": [
+    "munlock",
+    "mislocked",
+    "persistent",
+    "clear"
+   ]
+  }
+ }
+}

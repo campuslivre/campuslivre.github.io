@@ -1,0 +1,1306 @@
+{
+ "functions": {
+  "viewmtx": {
+   "summary": {
+    "en": "Returns the 4-by-4 matrix that projects 3-D points onto the 2-D screen for a given viewpoint.",
+    "pt": "Retorna a matriz 4-por-4 que projeta pontos 3-D na tela 2-D para um dado ponto de vista."
+   },
+   "syntax": [
+    {
+     "code": "T = viewmtx(az, el)",
+     "en": "Returns the orthographic transformation matrix for azimuth `az` and elevation `el`, in degrees.",
+     "pt": "Retorna a matriz de transformação ortográfica para azimute `az` e elevação `el`, em graus."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "az, el",
+     "en": "Azimuth and elevation of the viewpoint in degrees, with the same meaning as in `view`.",
+     "pt": "Azimute e elevação do ponto de vista em graus, com o mesmo sentido de `view`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "4-by-4 matrix acting on homogeneous column vectors `[x; y; z; 1]`.",
+     "pt": "Matriz 4-por-4 que atua sobre vetores coluna homogêneos `[x; y; z; 1]`."
+    }
+   ],
+   "description": {
+    "en": "The matrix rotates the data so that the viewer looks along the chosen direction. Multiplying it by a point `[x; y; z; 1]` gives the screen coordinates in the first two entries of the result and the depth in the third. It is the same transformation that `view` applies to axes.\n\nUse it to project 3-D data to 2-D by hand, for example to draw a 3-D object with `plot` or to compute which points are in front.",
+    "pt": "A matriz gira os dados de modo que o observador olhe ao longo da direção escolhida. Multiplicá-la por um ponto `[x; y; z; 1]` dá as coordenadas de tela nas duas primeiras entradas do resultado e a profundidade na terceira. É a mesma transformação que `view` aplica aos eixos.\n\nUse-a para projetar dados 3-D em 2-D manualmente, por exemplo para desenhar um objeto 3-D com `plot` ou para calcular quais pontos estão à frente."
+   },
+   "notes": {
+    "en": "MatLivre supports only the orthographic form. The variants with a perspective angle (`viewmtx(az, el, phi)`) raise an error.",
+    "pt": "O MatLivre suporta apenas a forma ortográfica. As variantes com ângulo de perspectiva (`viewmtx(az, el, phi)`) geram erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Project a point",
+      "pt": "Projetar um ponto"
+     },
+     "code": "T = viewmtx(30, 30)\np = T * [1; 0; 0; 1]"
+    }
+   ],
+   "see": [
+    "view",
+    "makehgtform",
+    "pbaspect",
+    "camlight"
+   ]
+  },
+  "winter": {
+   "summary": {
+    "en": "Colormap that shades from blue to green.",
+    "pt": "Mapa de cores que varia de azul a verde."
+   },
+   "syntax": [
+    {
+     "code": "map = winter",
+     "en": "Returns the colormap with the default number of rows.",
+     "pt": "Retorna o mapa de cores com o número padrão de linhas."
+    },
+    {
+     "code": "map = winter(m)",
+     "en": "Returns `m` colors.",
+     "pt": "Retorna `m` cores."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "m",
+     "en": "Number of colors, a nonnegative integer.",
+     "pt": "Número de cores, um inteiro não negativo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "map",
+     "en": "`m`-by-3 matrix of RGB values between 0 and 1.",
+     "pt": "Matriz `m`-por-3 de valores RGB entre 0 e 1."
+    }
+   ],
+   "description": {
+    "en": "The red channel is 0, the green channel rises linearly from 0 to 1 and the blue channel falls from 1 to 0.5. The map runs from blue to a light sea green, and is one of the four seasonal maps with `spring`, `summer` and `autumn`.",
+    "pt": "O canal vermelho é 0, o verde sobe linearmente de 0 a 1 e o azul cai de 1 a 0,5. O mapa vai do azul a um verde-água claro, e é um dos quatro mapas sazonais junto com `spring`, `summer` e `autumn`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Three steps",
+      "pt": "Três passos"
+     },
+     "code": "winter(3)"
+    }
+   ],
+   "see": [
+    "spring",
+    "summer",
+    "autumn",
+    "colormap",
+    "parula"
+   ]
+  },
+  "xlabel": {
+   "summary": {
+    "en": "Adds a label to the x-axis.",
+    "pt": "Adiciona um rótulo ao eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xlabel(txt)",
+     "en": "Sets the x-axis label of the current axes.",
+     "pt": "Define o rótulo do eixo x dos eixos atuais."
+    },
+    {
+     "code": "xlabel(txt, Name, Value)",
+     "en": "Sets text properties such as `'FontSize'` or `'Color'`.",
+     "pt": "Define propriedades de texto como `'FontSize'` ou `'Color'`."
+    },
+    {
+     "code": "xlabel(target, ___)",
+     "en": "Labels the axes or tiled layout `target`.",
+     "pt": "Rotula os eixos ou o layout em blocos `target`."
+    },
+    {
+     "code": "t = xlabel(___)",
+     "en": "Returns the text object.",
+     "pt": "Retorna o objeto de texto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "txt",
+     "en": "Label as text, a string array or a cell array of lines (a multi-line label).",
+     "pt": "Rótulo como texto, string array ou cell array de linhas (rótulo em várias linhas)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Text object, class `matlab.graphics.primitive.Text`.",
+     "pt": "Objeto de texto, classe `matlab.graphics.primitive.Text`."
+    }
+   ],
+   "description": {
+    "en": "The label is centered under the x-axis. It is stored in the axes as `XLabel`, so a second call replaces the first. TeX markup such as `\\alpha` or `t_{max}` is interpreted by default.\n\nWith a tiled layout as target, the label is shared by the whole grid and appears once under it.",
+    "pt": "O rótulo é centralizado sob o eixo x. É guardado nos eixos como `XLabel`, portanto uma segunda chamada substitui a primeira. A marcação TeX, como `\\alpha` ou `t_{max}`, é interpretada por padrão.\n\nCom um layout em blocos como alvo, o rótulo é compartilhado por toda a grade e aparece uma vez abaixo dela."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Label with units and TeX",
+      "pt": "Rótulo com unidades e TeX"
+     },
+     "code": "t = 0:0.1:5;\nplot(t, exp(-t))\nh = xlabel('time t (s)');\nylabel('\\alpha(t)')\nh.String"
+    }
+   ],
+   "see": [
+    "ylabel",
+    "title",
+    "xlim",
+    "xticks",
+    "text"
+   ]
+  },
+  "xlim": {
+   "summary": {
+    "en": "Gets or sets the limits of the x-axis.",
+    "pt": "Obtém ou define os limites do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xlim([xmin xmax])",
+     "en": "Sets the limits of the current axes.",
+     "pt": "Define os limites dos eixos atuais."
+    },
+    {
+     "code": "xl = xlim",
+     "en": "Returns the current limits as a two-element vector.",
+     "pt": "Retorna os limites atuais como um vetor de dois elementos."
+    },
+    {
+     "code": "xlim('auto')",
+     "en": "Lets the axes choose limits that fit the data again.",
+     "pt": "Deixa os eixos escolherem de novo limites que se ajustem aos dados."
+    },
+    {
+     "code": "xlim(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[xmin xmax]",
+     "en": "Two numbers with `xmin < xmax`. `-Inf` and `Inf` are allowed and mean \"fit the data on that side\".",
+     "pt": "Dois números com `xmin < xmax`. `-Inf` e `Inf` são permitidos e significam \"ajustar aos dados nesse lado\"."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "xl",
+     "en": "Current limits, `[xmin xmax]`.",
+     "pt": "Limites atuais, `[xmin xmax]`."
+    }
+   ],
+   "description": {
+    "en": "The limits decide which part of the data is visible. Data outside the range is clipped, not removed. Setting limits turns off automatic fitting for that axis until `xlim('auto')` is called.\n\nThe limits are stored in the `XLim` property of the axes. To reverse the direction of the axis, set `ax.XDir = 'reverse'` rather than swapping the limits.",
+    "pt": "Os limites decidem qual parte dos dados é visível. Dados fora da faixa são cortados, não removidos. Definir limites desliga o ajuste automático desse eixo até que `xlim('auto')` seja chamado.\n\nOs limites ficam na propriedade `XLim` dos eixos. Para inverter o sentido do eixo, defina `ax.XDir = 'reverse'` em vez de trocar os limites."
+   },
+   "notes": {
+    "en": "In MatLivre, `xlim('mode')` returns `'auto'` even after the limits were fixed by hand.",
+    "pt": "No MatLivre, `xlim('mode')` retorna `'auto'` mesmo depois de os limites terem sido fixados manualmente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Zoom into part of a curve",
+      "pt": "Ampliar parte de uma curva"
+     },
+     "code": "x = linspace(0, 10, 200);\nplot(x, sin(x))\nxlim([2 6])\nxl = xlim"
+    }
+   ],
+   "see": [
+    "ylim",
+    "axis",
+    "xticks",
+    "xscale",
+    "zlim"
+   ]
+  },
+  "xline": {
+   "summary": {
+    "en": "Draws a vertical line at a given x value across the axes.",
+    "pt": "Desenha uma linha vertical em um valor x dado, atravessando os eixos."
+   },
+   "syntax": [
+    {
+     "code": "xline(xvalue)",
+     "en": "Draws a vertical line at `xvalue`. A vector draws one line per element.",
+     "pt": "Desenha uma linha vertical em `xvalue`. Um vetor desenha uma linha por elemento."
+    },
+    {
+     "code": "xline(xvalue, LineSpec)",
+     "en": "Sets the line style and color, for example `'--r'`.",
+     "pt": "Define o estilo e a cor da linha, por exemplo `'--r'`."
+    },
+    {
+     "code": "xline(xvalue, LineSpec, label)",
+     "en": "Also attaches a text label to the line.",
+     "pt": "Também anexa um rótulo de texto à linha."
+    },
+    {
+     "code": "xl = xline(___)",
+     "en": "Returns the line object.",
+     "pt": "Retorna o objeto da linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "xvalue",
+     "en": "Position or positions along the x-axis.",
+     "pt": "Posição ou posições ao longo do eixo x."
+    },
+    {
+     "name": "label",
+     "en": "Text shown next to the line.",
+     "pt": "Texto exibido ao lado da linha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "xl",
+     "en": "Constant line object, class `matlab.graphics.chart.decoration.ConstantLine`, with the properties `Value`, `Label` and `Color`.",
+     "pt": "Objeto de linha constante, classe `matlab.graphics.chart.decoration.ConstantLine`, com as propriedades `Value`, `Label` e `Color`."
+    }
+   ],
+   "description": {
+    "en": "Unlike `line`, the line spans the whole height of the axes even when the limits change, because it is tied to a value and not to a pair of end points. It does not affect the automatic axis limits.\n\nIt is handy for marking a threshold, an event time or a mean. The horizontal counterpart is `yline`.",
+    "pt": "Diferente de `line`, a linha cobre toda a altura dos eixos mesmo quando os limites mudam, pois está ligada a um valor e não a um par de pontos extremos. Ela não afeta os limites automáticos dos eixos.\n\nÉ útil para marcar um limiar, o instante de um evento ou uma média. A versão horizontal é `yline`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mark an event",
+      "pt": "Marcar um evento"
+     },
+     "code": "t = 0:0.1:10;\nplot(t, sin(t))\nh = xline(5, '--r', 'event');\nh.Value\nh.Label"
+    }
+   ],
+   "see": [
+    "yline",
+    "xregion",
+    "line",
+    "xlim",
+    "text"
+   ]
+  },
+  "xregion": {
+   "summary": {
+    "en": "Shades a vertical band between two x values.",
+    "pt": "Sombreia uma faixa vertical entre dois valores de x."
+   },
+   "syntax": [
+    {
+     "code": "xregion(x1, x2)",
+     "en": "Shades the band from `x1` to `x2` over the full height of the axes.",
+     "pt": "Sombreia a faixa de `x1` a `x2` em toda a altura dos eixos."
+    },
+    {
+     "code": "xregion(x1, x2, Name, Value)",
+     "en": "Sets properties such as `'FaceColor'` and `'FaceAlpha'`.",
+     "pt": "Define propriedades como `'FaceColor'` e `'FaceAlpha'`."
+    },
+    {
+     "code": "xr = xregion(___)",
+     "en": "Returns the region object.",
+     "pt": "Retorna o objeto da região."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x1, x2",
+     "en": "Edges of the band along the x-axis. Vectors of equal length draw several bands.",
+     "pt": "Bordas da faixa ao longo do eixo x. Vetores de mesmo comprimento desenham várias faixas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "xr",
+     "en": "Constant region object, class `matlab.graphics.chart.decoration.ConstantRegion`, with the property `Value` holding `[x1 x2]`.",
+     "pt": "Objeto de região constante, classe `matlab.graphics.chart.decoration.ConstantRegion`, com a propriedade `Value` guardando `[x1 x2]`."
+    }
+   ],
+   "description": {
+    "en": "The band stays attached to its x values, so it fills the whole plot height whatever the limits. It does not change the automatic limits. It is used to show a time window, an acceptable range or a part of the data that gets special treatment.\n\nThe horizontal counterpart is `yregion`.",
+    "pt": "A faixa permanece ligada aos seus valores de x, preenchendo toda a altura do gráfico quaisquer que sejam os limites. Ela não altera os limites automáticos. É usada para mostrar uma janela de tempo, uma faixa aceitável ou uma parte dos dados com tratamento especial.\n\nA versão horizontal é `yregion`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Highlight a window",
+      "pt": "Destacar uma janela"
+     },
+     "code": "t = 0:0.1:10;\nplot(t, sin(t))\nr = xregion(3, 5, 'FaceColor', 'g');\nr.Value"
+    }
+   ],
+   "see": [
+    "yregion",
+    "xline",
+    "patch",
+    "xlim",
+    "rectangle"
+   ]
+  },
+  "xscale": {
+   "summary": {
+    "en": "Gets or sets the scale of the x-axis, linear or logarithmic.",
+    "pt": "Obtém ou define a escala do eixo x, linear ou logarítmica."
+   },
+   "syntax": [
+    {
+     "code": "xscale(option)",
+     "en": "Sets the scale to `'linear'` or `'log'`.",
+     "pt": "Define a escala como `'linear'` ou `'log'`."
+    },
+    {
+     "code": "sc = xscale",
+     "en": "Returns the current scale as text.",
+     "pt": "Retorna a escala atual como texto."
+    },
+    {
+     "code": "xscale(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "option",
+     "en": "`'linear'` (default) or `'log'`.",
+     "pt": "`'linear'` (padrão) ou `'log'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "sc",
+     "en": "Current scale, `'linear'` or `'log'`.",
+     "pt": "Escala atual, `'linear'` ou `'log'`."
+    }
+   ],
+   "description": {
+    "en": "A logarithmic axis shows equal ratios as equal distances, which suits data that spans several orders of magnitude. Only positive values can be drawn on it; zero and negative values are omitted.\n\nThe setting is stored in the axes property `XScale`. `semilogx` and `loglog` draw a plot and set the scale in a single call.",
+    "pt": "Um eixo logarítmico mostra razões iguais como distâncias iguais, o que serve a dados que abrangem várias ordens de grandeza. Só valores positivos podem ser desenhados nele; zero e valores negativos são omitidos.\n\nA configuração fica na propriedade `XScale` dos eixos. `semilogx` e `loglog` desenham um gráfico e definem a escala em uma única chamada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Logarithmic x-axis",
+      "pt": "Eixo x logarítmico"
+     },
+     "code": "x = logspace(0, 3, 50);\nplot(x, sqrt(x))\nxscale('log')\nxscale"
+    }
+   ],
+   "see": [
+    "yscale",
+    "semilogx",
+    "loglog",
+    "xlim",
+    "xticks"
+   ]
+  },
+  "xsecondarylabel": {
+   "summary": {
+    "en": "Sets the secondary label of the x-axis.",
+    "pt": "Define o rótulo secundário do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xsecondarylabel(txt)",
+     "en": "Sets the secondary label of the current axes.",
+     "pt": "Define o rótulo secundário dos eixos atuais."
+    },
+    {
+     "code": "xsecondarylabel(txt, Name, Value)",
+     "en": "Sets text properties of the label.",
+     "pt": "Define propriedades de texto do rótulo."
+    },
+    {
+     "code": "xsecondarylabel(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "txt",
+     "en": "Text for the secondary label.",
+     "pt": "Texto do rótulo secundário."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The secondary label is a small text beside the end of the axis, where MATLAB shows an exponent multiplier such as `\\times10^{5}` or the year and month of a date axis. Writing your own text there replaces that automatic content.\n\nThe string is stored in `ax.XAxis.SecondaryLabel.String`. It is separate from the main `xlabel`.",
+    "pt": "O rótulo secundário é um texto pequeno junto à extremidade do eixo, onde o MATLAB mostra um multiplicador de expoente como `\\times10^{5}` ou o ano e o mês de um eixo de datas. Escrever seu próprio texto ali substitui esse conteúdo automático.\n\nO texto fica em `ax.XAxis.SecondaryLabel.String`. É independente do `xlabel` principal."
+   },
+   "notes": {
+    "en": "In MatLivre `xsecondarylabel` returns no value, so the text object cannot be captured with `t = xsecondarylabel(...)`. Read the text from `ax.XAxis.SecondaryLabel.String`.",
+    "pt": "No MatLivre `xsecondarylabel` não retorna valor, então o objeto de texto não pode ser capturado com `t = xsecondarylabel(...)`. Leia o texto em `ax.XAxis.SecondaryLabel.String`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Custom secondary label",
+      "pt": "Rótulo secundário personalizado"
+     },
+     "code": "plot([1 2 3]*1e5, 1:3)\nxsecondarylabel('scale factor')\nax = gca;\nax.XAxis.SecondaryLabel.String"
+    }
+   ],
+   "see": [
+    "ysecondarylabel",
+    "xlabel",
+    "xtickformat",
+    "xticks"
+   ]
+  },
+  "xtickangle": {
+   "summary": {
+    "en": "Gets or sets the rotation angle of the x-axis tick labels.",
+    "pt": "Obtém ou define o ângulo de rotação dos rótulos de marcas do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xtickangle(angle)",
+     "en": "Rotates the tick labels by `angle` degrees.",
+     "pt": "Gira os rótulos das marcas em `angle` graus."
+    },
+    {
+     "code": "a = xtickangle",
+     "en": "Returns the current angle.",
+     "pt": "Retorna o ângulo atual."
+    },
+    {
+     "code": "xtickangle(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "angle",
+     "en": "Rotation in degrees, counterclockwise. The default is 0; 90 gives vertical text.",
+     "pt": "Rotação em graus, no sentido anti-horário. O padrão é 0; 90 dá texto vertical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "a",
+     "en": "Current rotation in degrees.",
+     "pt": "Rotação atual em graus."
+    }
+   ],
+   "description": {
+    "en": "Long tick labels, such as dates or names, can overlap when they are horizontal. Rotating them by 30 to 90 degrees makes room. The angle is stored in the property `XTickLabelRotation` of the axes.",
+    "pt": "Rótulos de marcas longos, como datas ou nomes, podem se sobrepor quando estão na horizontal. Girá-los de 30 a 90 graus abre espaço. O ângulo fica na propriedade `XTickLabelRotation` dos eixos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tilted labels",
+      "pt": "Rótulos inclinados"
+     },
+     "code": "bar(1:4)\nxticklabels({'first group', 'second group', 'third group', 'fourth group'})\nxtickangle(45)\na = xtickangle"
+    }
+   ],
+   "see": [
+    "ytickangle",
+    "xticklabels",
+    "xticks",
+    "xtickformat"
+   ]
+  },
+  "xtickformat": {
+   "summary": {
+    "en": "Gets or sets the number format of the x-axis tick labels.",
+    "pt": "Obtém ou define o formato numérico dos rótulos de marcas do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xtickformat(fmt)",
+     "en": "Formats the tick labels with `fmt`, a `sprintf`-style specification such as `'%.1f'`, or a name like `'usd'`.",
+     "pt": "Formata os rótulos das marcas com `fmt`, uma especificação no estilo de `sprintf` como `'%.1f'`, ou um nome como `'usd'`."
+    },
+    {
+     "code": "f = xtickformat",
+     "en": "Returns the current format.",
+     "pt": "Retorna o formato atual."
+    },
+    {
+     "code": "xtickformat(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fmt",
+     "en": "Text such as `'%d%%'` or `'%.2f'`, or `'usd'`, `'eur'` for currency. For datetime axes it is a datetime format such as `'MMM dd'`.",
+     "pt": "Texto como `'%d%%'` ou `'%.2f'`, ou `'usd'`, `'eur'` para moeda. Em eixos de datetime é um formato de data como `'MMM dd'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Current format as text.",
+     "pt": "Formato atual como texto."
+    }
+   ],
+   "description": {
+    "en": "The format controls how the numbers at the ticks are written, without changing where the ticks are. Adding a unit (`'%d%%'`) or fixing the number of decimals avoids labels such as `0.30000000004`.\n\nIf the labels were set by hand with `xticklabels`, the format has no visible effect until `xticklabels('auto')` is called.",
+    "pt": "O formato controla como os números nas marcas são escritos, sem mudar onde as marcas ficam. Acrescentar uma unidade (`'%d%%'`) ou fixar as casas decimais evita rótulos como `0.30000000004`.\n\nSe os rótulos foram definidos manualmente com `xticklabels`, o formato não tem efeito visível até que `xticklabels('auto')` seja chamado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Percent labels",
+      "pt": "Rótulos em porcentagem"
+     },
+     "code": "plot(0:10:100, (0:10).^2)\nxtickformat('%d%%')\nf = xtickformat\nxticklabels"
+    }
+   ],
+   "see": [
+    "ytickformat",
+    "xticklabels",
+    "xticks",
+    "xtickangle",
+    "sprintf"
+   ]
+  },
+  "xticklabels": {
+   "summary": {
+    "en": "Gets or sets the text of the x-axis tick labels.",
+    "pt": "Obtém ou define o texto dos rótulos de marcas do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xticklabels(labels)",
+     "en": "Sets the labels, a cell array or string array with one entry per tick.",
+     "pt": "Define os rótulos, um cell array ou string array com uma entrada por marca."
+    },
+    {
+     "code": "lbl = xticklabels",
+     "en": "Returns the current labels as a cell array.",
+     "pt": "Retorna os rótulos atuais como cell array."
+    },
+    {
+     "code": "xticklabels('auto')",
+     "en": "Goes back to automatically generated labels.",
+     "pt": "Volta aos rótulos gerados automaticamente."
+    },
+    {
+     "code": "xticklabels(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "labels",
+     "en": "Text for each tick, in order. If there are fewer labels than ticks, they repeat.",
+     "pt": "Texto de cada marca, em ordem. Se houver menos rótulos do que marcas, eles se repetem."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lbl",
+     "en": "Cell array with the current labels.",
+     "pt": "Cell array com os rótulos atuais."
+    }
+   ],
+   "description": {
+    "en": "Labels are matched to the ticks given by `xticks`, so set the tick positions first. Replacing the numbers by names is the main use, for example weekdays or categories on a bar chart.\n\nThe labels live in the `XTickLabel` property of the axes. Setting them by hand switches `XTickLabelMode` to manual.",
+    "pt": "Os rótulos são associados às marcas dadas por `xticks`, portanto defina primeiro as posições das marcas. A principal utilidade é trocar os números por nomes, por exemplo dias da semana ou categorias em um gráfico de barras.\n\nOs rótulos ficam na propriedade `XTickLabel` dos eixos. Defini-los manualmente muda `XTickLabelMode` para manual."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Names instead of numbers",
+      "pt": "Nomes em vez de números"
+     },
+     "code": "bar([4 7 3])\nxticks(1:3)\nxticklabels({'low', 'mid', 'high'})\nxticklabels"
+    }
+   ],
+   "see": [
+    "xticks",
+    "yticklabels",
+    "xtickangle",
+    "xtickformat",
+    "xlim"
+   ]
+  },
+  "xticks": {
+   "summary": {
+    "en": "Gets or sets the positions of the x-axis tick marks.",
+    "pt": "Obtém ou define as posições das marcas do eixo x."
+   },
+   "syntax": [
+    {
+     "code": "xticks(ticks)",
+     "en": "Sets the tick positions to the values in the vector `ticks`.",
+     "pt": "Define as posições das marcas como os valores do vetor `ticks`."
+    },
+    {
+     "code": "t = xticks",
+     "en": "Returns the current tick positions.",
+     "pt": "Retorna as posições atuais das marcas."
+    },
+    {
+     "code": "xticks('auto')",
+     "en": "Goes back to automatic tick placement.",
+     "pt": "Volta ao posicionamento automático das marcas."
+    },
+    {
+     "code": "xticks(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ticks",
+     "en": "Vector of increasing values. An empty vector `[]` removes the ticks.",
+     "pt": "Vetor de valores crescentes. Um vetor vazio `[]` remove as marcas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Row vector with the current tick positions.",
+     "pt": "Vetor linha com as posições atuais das marcas."
+    }
+   ],
+   "description": {
+    "en": "By default the axes choose round tick values that depend on the limits. `xticks` fixes them instead, which is useful to mark the points where data were sampled or the multiples of `pi` on a trigonometric plot. The positions are stored in the `XTick` property.\n\nPair it with `xticklabels` to give the ticks custom text.",
+    "pt": "Por padrão os eixos escolhem valores redondos para as marcas, que dependem dos limites. `xticks` os fixa, o que serve para marcar os pontos em que os dados foram amostrados ou os múltiplos de `pi` em um gráfico trigonométrico. As posições ficam na propriedade `XTick`.\n\nCombine com `xticklabels` para dar texto próprio às marcas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Ticks at multiples of pi/2",
+      "pt": "Marcas em múltiplos de pi/2"
+     },
+     "code": "x = linspace(0, 2*pi, 100);\nplot(x, sin(x))\nxticks(0:pi/2:2*pi)\nxticklabels({'0', '\\pi/2', '\\pi', '3\\pi/2', '2\\pi'})\nt = xticks"
+    }
+   ],
+   "see": [
+    "yticks",
+    "xticklabels",
+    "xlim",
+    "xtickangle",
+    "grid"
+   ]
+  },
+  "ylabel": {
+   "summary": {
+    "en": "Adds a label to the y-axis.",
+    "pt": "Adiciona um rótulo ao eixo y."
+   },
+   "syntax": [
+    {
+     "code": "ylabel(txt)",
+     "en": "Sets the y-axis label of the current axes.",
+     "pt": "Define o rótulo do eixo y dos eixos atuais."
+    },
+    {
+     "code": "ylabel(txt, Name, Value)",
+     "en": "Sets text properties such as `'FontSize'` or `'Color'`.",
+     "pt": "Define propriedades de texto como `'FontSize'` ou `'Color'`."
+    },
+    {
+     "code": "ylabel(target, ___)",
+     "en": "Labels the axes or tiled layout `target`.",
+     "pt": "Rotula os eixos ou o layout em blocos `target`."
+    },
+    {
+     "code": "t = ylabel(___)",
+     "en": "Returns the text object.",
+     "pt": "Retorna o objeto de texto."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "txt",
+     "en": "Label as text, a string array or a cell array of lines (a multi-line label).",
+     "pt": "Rótulo como texto, string array ou cell array de linhas (rótulo em várias linhas)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Text object, class `matlab.graphics.primitive.Text`.",
+     "pt": "Objeto de texto, classe `matlab.graphics.primitive.Text`."
+    }
+   ],
+   "description": {
+    "en": "The label is rotated 90 degrees and placed beside the y-axis. It is stored in the axes as `YLabel`, so a second call replaces the first. TeX markup such as `\\alpha` or `t_{max}` is interpreted by default.\n\nWith a tiled layout as target, the label is shared by the whole grid.",
+    "pt": "O rótulo é girado 90 graus e colocado ao lado do eixo y. É guardado nos eixos como `YLabel`, portanto uma segunda chamada substitui a primeira. A marcação TeX, como `\\alpha` ou `t_{max}`, é interpretada por padrão.\n\nCom um layout em blocos como alvo, o rótulo é compartilhado por toda a grade."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Label with units",
+      "pt": "Rótulo com unidades"
+     },
+     "code": "t = 0:0.1:5;\nplot(t, 9.8*t)\nh = ylabel('speed v (m/s)');\nxlabel('time t (s)')\nh.String"
+    }
+   ],
+   "see": [
+    "xlabel",
+    "title",
+    "ylim",
+    "yticks",
+    "text"
+   ]
+  },
+  "ylim": {
+   "summary": {
+    "en": "Gets or sets the limits of the y-axis.",
+    "pt": "Obtém ou define os limites do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "ylim([ymin ymax])",
+     "en": "Sets the limits of the current axes.",
+     "pt": "Define os limites dos eixos atuais."
+    },
+    {
+     "code": "yl = ylim",
+     "en": "Returns the current limits as a two-element vector.",
+     "pt": "Retorna os limites atuais como um vetor de dois elementos."
+    },
+    {
+     "code": "ylim('auto')",
+     "en": "Lets the axes choose limits that fit the data again.",
+     "pt": "Deixa os eixos escolherem de novo limites que se ajustem aos dados."
+    },
+    {
+     "code": "ylim(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "[ymin ymax]",
+     "en": "Two numbers with `ymin < ymax`. `-Inf` and `Inf` are allowed and mean \"fit the data on that side\".",
+     "pt": "Dois números com `ymin < ymax`. `-Inf` e `Inf` são permitidos e significam \"ajustar aos dados nesse lado\"."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "xl",
+     "en": "Current limits, `[ymin ymax]`.",
+     "pt": "Limites atuais, `[ymin ymax]`."
+    }
+   ],
+   "description": {
+    "en": "The limits decide which part of the data is visible. Data outside the range is clipped, not removed. Setting limits turns off automatic fitting for that axis until `ylim('auto')` is called.\n\nThe limits are stored in the `YLim` property of the axes. To flip the direction of the axis, set `ax.YDir = 'reverse'`; the default for plots is `'normal'`, with values increasing upward.",
+    "pt": "Os limites decidem qual parte dos dados é visível. Dados fora da faixa são cortados, não removidos. Definir limites desliga o ajuste automático desse eixo até que `ylim('auto')` seja chamado.\n\nOs limites ficam na propriedade `YLim` dos eixos. Para inverter o sentido do eixo, defina `ax.YDir = 'reverse'`; o padrão em gráficos é `'normal'`, com os valores crescendo para cima."
+   },
+   "notes": {
+    "en": "In MatLivre, `ylim('mode')` returns `'auto'` even after the limits were fixed by hand.",
+    "pt": "No MatLivre, `ylim('mode')` retorna `'auto'` mesmo depois de os limites terem sido fixados manualmente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fix the vertical range",
+      "pt": "Fixar a faixa vertical"
+     },
+     "code": "x = linspace(0, 10, 200);\nplot(x, sin(x))\nylim([-2 2])\nyl = ylim"
+    }
+   ],
+   "see": [
+    "xlim",
+    "axis",
+    "yticks",
+    "yscale",
+    "zlim"
+   ]
+  },
+  "yline": {
+   "summary": {
+    "en": "Draws a horizontal line at a given y value across the axes.",
+    "pt": "Desenha uma linha horizontal em um valor y dado, atravessando os eixos."
+   },
+   "syntax": [
+    {
+     "code": "yline(yvalue)",
+     "en": "Draws a horizontal line at `yvalue`. A vector draws one line per element.",
+     "pt": "Desenha uma linha horizontal em `yvalue`. Um vetor desenha uma linha por elemento."
+    },
+    {
+     "code": "yline(yvalue, LineSpec)",
+     "en": "Sets the line style and color, for example `'--r'`.",
+     "pt": "Define o estilo e a cor da linha, por exemplo `'--r'`."
+    },
+    {
+     "code": "yline(yvalue, LineSpec, label)",
+     "en": "Also attaches a text label to the line.",
+     "pt": "Também anexa um rótulo de texto à linha."
+    },
+    {
+     "code": "yl = yline(___)",
+     "en": "Returns the line object.",
+     "pt": "Retorna o objeto da linha."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "yvalue",
+     "en": "Position or positions along the y-axis.",
+     "pt": "Posição ou posições ao longo do eixo y."
+    },
+    {
+     "name": "label",
+     "en": "Text shown next to the line.",
+     "pt": "Texto exibido ao lado da linha."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "yl",
+     "en": "Constant line object, class `matlab.graphics.chart.decoration.ConstantLine`, with the properties `Value`, `Label` and `Color`.",
+     "pt": "Objeto de linha constante, classe `matlab.graphics.chart.decoration.ConstantLine`, com as propriedades `Value`, `Label` e `Color`."
+    }
+   ],
+   "description": {
+    "en": "Unlike `line`, the line spans the whole width of the axes even when the limits change, because it is tied to a value and not to a pair of end points. It does not affect the automatic axis limits.\n\nIt is handy for marking a threshold, a target level or a mean. The vertical counterpart is `xline`.",
+    "pt": "Diferente de `line`, a linha cobre toda a largura dos eixos mesmo quando os limites mudam, pois está ligada a um valor e não a um par de pontos extremos. Ela não afeta os limites automáticos dos eixos.\n\nÉ útil para marcar um limiar, um nível-alvo ou uma média. A versão vertical é `xline`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mark the mean",
+      "pt": "Marcar a média"
+     },
+     "code": "y = [3 5 4 6 2 7];\nplot(y)\nh = yline(mean(y), ':r', 'mean');\nh.Value\nh.Label"
+    }
+   ],
+   "see": [
+    "xline",
+    "yregion",
+    "line",
+    "ylim",
+    "text"
+   ]
+  },
+  "yregion": {
+   "summary": {
+    "en": "Shades a horizontal band between two y values.",
+    "pt": "Sombreia uma faixa horizontal entre dois valores de y."
+   },
+   "syntax": [
+    {
+     "code": "yregion(y1, y2)",
+     "en": "Shades the band from `y1` to `y2` over the full width of the axes.",
+     "pt": "Sombreia a faixa de `y1` a `y2` em toda a largura dos eixos."
+    },
+    {
+     "code": "yregion(y1, y2, Name, Value)",
+     "en": "Sets properties such as `'FaceColor'` and `'FaceAlpha'`.",
+     "pt": "Define propriedades como `'FaceColor'` e `'FaceAlpha'`."
+    },
+    {
+     "code": "yr = yregion(___)",
+     "en": "Returns the region object.",
+     "pt": "Retorna o objeto da região."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y1, y2",
+     "en": "Edges of the band along the y-axis. Vectors of equal length draw several bands.",
+     "pt": "Bordas da faixa ao longo do eixo y. Vetores de mesmo comprimento desenham várias faixas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "yr",
+     "en": "Constant region object, class `matlab.graphics.chart.decoration.ConstantRegion`, with the property `Value` holding `[y1 y2]`.",
+     "pt": "Objeto de região constante, classe `matlab.graphics.chart.decoration.ConstantRegion`, com a propriedade `Value` guardando `[y1 y2]`."
+    }
+   ],
+   "description": {
+    "en": "The band stays attached to its y values, so it fills the whole plot width whatever the limits. It does not change the automatic limits. It is used to show a tolerance range, a safe operating band or a level of interest.\n\nThe vertical counterpart is `xregion`.",
+    "pt": "A faixa permanece ligada aos seus valores de y, preenchendo toda a largura do gráfico quaisquer que sejam os limites. Ela não altera os limites automáticos. É usada para mostrar uma faixa de tolerância, uma região segura de operação ou um nível de interesse.\n\nA versão vertical é `xregion`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Highlight a tolerance band",
+      "pt": "Destacar uma faixa de tolerância"
+     },
+     "code": "y = [3 5 4 6 2 7];\nplot(y)\nr = yregion(3, 5, 'FaceColor', 'g');\nr.Value"
+    }
+   ],
+   "see": [
+    "xregion",
+    "yline",
+    "patch",
+    "ylim",
+    "rectangle"
+   ]
+  },
+  "yscale": {
+   "summary": {
+    "en": "Gets or sets the scale of the y-axis, linear or logarithmic.",
+    "pt": "Obtém ou define a escala do eixo y, linear ou logarítmica."
+   },
+   "syntax": [
+    {
+     "code": "yscale(option)",
+     "en": "Sets the scale to `'linear'` or `'log'`.",
+     "pt": "Define a escala como `'linear'` ou `'log'`."
+    },
+    {
+     "code": "sc = yscale",
+     "en": "Returns the current scale as text.",
+     "pt": "Retorna a escala atual como texto."
+    },
+    {
+     "code": "yscale(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "option",
+     "en": "`'linear'` (default) or `'log'`.",
+     "pt": "`'linear'` (padrão) ou `'log'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "sc",
+     "en": "Current scale, `'linear'` or `'log'`.",
+     "pt": "Escala atual, `'linear'` ou `'log'`."
+    }
+   ],
+   "description": {
+    "en": "A logarithmic axis shows equal ratios as equal distances, which suits data that spans several orders of magnitude. Only positive values can be drawn on it; zero and negative values are omitted.\n\nThe setting is stored in the axes property `YScale`. `semilogx` and `loglog` draw a plot and set the scale in a single call.",
+    "pt": "Um eixo logarítmico mostra razões iguais como distâncias iguais, o que serve a dados que abrangem várias ordens de grandeza. Só valores positivos podem ser desenhados nele; zero e valores negativos são omitidos.\n\nA configuração fica na propriedade `YScale` dos eixos. `semilogx` e `loglog` desenham um gráfico e definem a escala em uma única chamada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Logarithmic y-axis",
+      "pt": "Eixo y logarítmico"
+     },
+     "code": "x = 1:6;\nplot(x, 10.^x)\nyscale('log')\nyscale"
+    }
+   ],
+   "see": [
+    "xscale",
+    "semilogy",
+    "loglog",
+    "ylim",
+    "yticks"
+   ]
+  },
+  "ysecondarylabel": {
+   "summary": {
+    "en": "Sets the secondary label of the y-axis.",
+    "pt": "Define o rótulo secundário do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "ysecondarylabel(txt)",
+     "en": "Sets the secondary label of the current axes.",
+     "pt": "Define o rótulo secundário dos eixos atuais."
+    },
+    {
+     "code": "ysecondarylabel(txt, Name, Value)",
+     "en": "Sets text properties of the label.",
+     "pt": "Define propriedades de texto do rótulo."
+    },
+    {
+     "code": "ysecondarylabel(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "txt",
+     "en": "Text for the secondary label.",
+     "pt": "Texto do rótulo secundário."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "The secondary label is a small text beside the end of the axis, where MATLAB shows an exponent multiplier such as `\\times10^{5}`. Writing your own text there replaces that automatic content.\n\nThe string is stored in `ax.YAxis.SecondaryLabel.String`. It is separate from the main `ylabel`.",
+    "pt": "O rótulo secundário é um texto pequeno junto à extremidade do eixo, onde o MATLAB mostra um multiplicador de expoente como `\\times10^{5}`. Escrever seu próprio texto ali substitui esse conteúdo automático.\n\nO texto fica em `ax.YAxis.SecondaryLabel.String`. É independente do `ylabel` principal."
+   },
+   "notes": {
+    "en": "In MatLivre `ysecondarylabel` returns no value, so the text object cannot be captured with `t = ysecondarylabel(...)`. Read the text from `ax.YAxis.SecondaryLabel.String`.",
+    "pt": "No MatLivre `ysecondarylabel` não retorna valor, então o objeto de texto não pode ser capturado com `t = ysecondarylabel(...)`. Leia o texto em `ax.YAxis.SecondaryLabel.String`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Custom secondary label",
+      "pt": "Rótulo secundário personalizado"
+     },
+     "code": "plot(1:3, [1 2 3]*1e5)\nysecondarylabel('scale factor')\nax = gca;\nax.YAxis.SecondaryLabel.String"
+    }
+   ],
+   "see": [
+    "xsecondarylabel",
+    "ylabel",
+    "ytickformat",
+    "yticks"
+   ]
+  },
+  "ytickangle": {
+   "summary": {
+    "en": "Gets or sets the rotation angle of the y-axis tick labels.",
+    "pt": "Obtém ou define o ângulo de rotação dos rótulos de marcas do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "ytickangle(angle)",
+     "en": "Rotates the tick labels by `angle` degrees.",
+     "pt": "Gira os rótulos das marcas em `angle` graus."
+    },
+    {
+     "code": "a = ytickangle",
+     "en": "Returns the current angle.",
+     "pt": "Retorna o ângulo atual."
+    },
+    {
+     "code": "ytickangle(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "angle",
+     "en": "Rotation in degrees, counterclockwise. The default is 0; 90 gives vertical text.",
+     "pt": "Rotação em graus, no sentido anti-horário. O padrão é 0; 90 dá texto vertical."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "a",
+     "en": "Current rotation in degrees.",
+     "pt": "Rotação atual em graus."
+    }
+   ],
+   "description": {
+    "en": "Rotating the y tick labels is less common than for x, but it helps when the labels are long. The angle is stored in the property `YTickLabelRotation` of the axes.",
+    "pt": "Girar os rótulos das marcas do eixo y é menos comum do que no eixo x, mas ajuda quando os rótulos são longos. O ângulo fica na propriedade `YTickLabelRotation` dos eixos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tilted labels",
+      "pt": "Rótulos inclinados"
+     },
+     "code": "plot(1:4)\nyticks(1:4)\nyticklabels({'very low', 'low', 'high', 'very high'})\nytickangle(30)\na = ytickangle"
+    }
+   ],
+   "see": [
+    "xtickangle",
+    "yticklabels",
+    "yticks",
+    "ytickformat"
+   ]
+  },
+  "ytickformat": {
+   "summary": {
+    "en": "Gets or sets the number format of the y-axis tick labels.",
+    "pt": "Obtém ou define o formato numérico dos rótulos de marcas do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "ytickformat(fmt)",
+     "en": "Formats the tick labels with `fmt`, a `sprintf`-style specification such as `'%.1f'`, or a name like `'usd'`.",
+     "pt": "Formata os rótulos das marcas com `fmt`, uma especificação no estilo de `sprintf` como `'%.1f'`, ou um nome como `'usd'`."
+    },
+    {
+     "code": "f = ytickformat",
+     "en": "Returns the current format.",
+     "pt": "Retorna o formato atual."
+    },
+    {
+     "code": "ytickformat(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fmt",
+     "en": "Text such as `'%d%%'` or `'%.2f'`, or `'usd'`, `'eur'` for currency. For datetime axes it is a datetime format such as `'MMM dd'`.",
+     "pt": "Texto como `'%d%%'` ou `'%.2f'`, ou `'usd'`, `'eur'` para moeda. Em eixos de datetime é um formato de data como `'MMM dd'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "f",
+     "en": "Current format as text.",
+     "pt": "Formato atual como texto."
+    }
+   ],
+   "description": {
+    "en": "The format controls how the numbers at the ticks are written, without changing where the ticks are. Adding a unit (`'%d%%'`) or fixing the number of decimals avoids labels such as `0.30000000004`.\n\nIf the labels were set by hand with `yticklabels`, the format has no visible effect until `yticklabels('auto')` is called.",
+    "pt": "O formato controla como os números nas marcas são escritos, sem mudar onde as marcas ficam. Acrescentar uma unidade (`'%d%%'`) ou fixar as casas decimais evita rótulos como `0.30000000004`.\n\nSe os rótulos foram definidos manualmente com `yticklabels`, o formato não tem efeito visível até que `yticklabels('auto')` seja chamado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Currency labels",
+      "pt": "Rótulos em moeda"
+     },
+     "code": "plot(1:4, [10 25 40 55])\nyticks([10 25 40 55])\nytickformat('usd')\nf = ytickformat\nyticklabels"
+    }
+   ],
+   "see": [
+    "xtickformat",
+    "yticklabels",
+    "yticks",
+    "ytickangle",
+    "sprintf"
+   ]
+  },
+  "yticklabels": {
+   "summary": {
+    "en": "Gets or sets the text of the y-axis tick labels.",
+    "pt": "Obtém ou define o texto dos rótulos de marcas do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "yticklabels(labels)",
+     "en": "Sets the labels, a cell array or string array with one entry per tick.",
+     "pt": "Define os rótulos, um cell array ou string array com uma entrada por marca."
+    },
+    {
+     "code": "lbl = yticklabels",
+     "en": "Returns the current labels as a cell array.",
+     "pt": "Retorna os rótulos atuais como cell array."
+    },
+    {
+     "code": "yticklabels('auto')",
+     "en": "Goes back to automatically generated labels.",
+     "pt": "Volta aos rótulos gerados automaticamente."
+    },
+    {
+     "code": "yticklabels(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "labels",
+     "en": "Text for each tick, in order. If there are fewer labels than ticks, they repeat.",
+     "pt": "Texto de cada marca, em ordem. Se houver menos rótulos do que marcas, eles se repetem."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "lbl",
+     "en": "Cell array with the current labels.",
+     "pt": "Cell array com os rótulos atuais."
+    }
+   ],
+   "description": {
+    "en": "Labels are matched to the ticks given by `yticks`, so set the tick positions first. Replacing the numbers by names is the main use, for example weekdays or categories on a bar chart.\n\nThe labels live in the `YTickLabel` property of the axes. Setting them by hand switches `YTickLabelMode` to manual.",
+    "pt": "Os rótulos são associados às marcas dadas por `yticks`, portanto defina primeiro as posições das marcas. A principal utilidade é trocar os números por nomes, por exemplo dias da semana ou categorias em um gráfico de barras.\n\nOs rótulos ficam na propriedade `YTickLabel` dos eixos. Defini-los manualmente muda `YTickLabelMode` para manual."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Names instead of numbers",
+      "pt": "Nomes em vez de números"
+     },
+     "code": "barh([4 7 3])\nyticks(1:3)\nyticklabels({'low', 'mid', 'high'})\nyticklabels"
+    }
+   ],
+   "see": [
+    "yticks",
+    "xticklabels",
+    "ytickangle",
+    "ytickformat",
+    "ylim"
+   ]
+  },
+  "yticks": {
+   "summary": {
+    "en": "Gets or sets the positions of the y-axis tick marks.",
+    "pt": "Obtém ou define as posições das marcas do eixo y."
+   },
+   "syntax": [
+    {
+     "code": "yticks(ticks)",
+     "en": "Sets the tick positions to the values in the vector `ticks`.",
+     "pt": "Define as posições das marcas como os valores do vetor `ticks`."
+    },
+    {
+     "code": "t = yticks",
+     "en": "Returns the current tick positions.",
+     "pt": "Retorna as posições atuais das marcas."
+    },
+    {
+     "code": "yticks('auto')",
+     "en": "Goes back to automatic tick placement.",
+     "pt": "Volta ao posicionamento automático das marcas."
+    },
+    {
+     "code": "yticks(ax, ___)",
+     "en": "Acts on the axes `ax`.",
+     "pt": "Atua nos eixos `ax`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ticks",
+     "en": "Vector of increasing values. An empty vector `[]` removes the ticks.",
+     "pt": "Vetor de valores crescentes. Um vetor vazio `[]` remove as marcas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Row vector with the current tick positions.",
+     "pt": "Vetor linha com as posições atuais das marcas."
+    }
+   ],
+   "description": {
+    "en": "By default the axes choose round tick values that depend on the limits. `yticks` fixes them instead, which is useful to mark the points where data were sampled or the multiples of `pi` on a trigonometric plot. The positions are stored in the `YTick` property.\n\nPair it with `yticklabels` to give the ticks custom text.",
+    "pt": "Por padrão os eixos escolhem valores redondos para as marcas, que dependem dos limites. `yticks` os fixa, o que serve para marcar os pontos em que os dados foram amostrados ou os múltiplos de `pi` em um gráfico trigonométrico. As posições ficam na propriedade `YTick`.\n\nCombine com `yticklabels` para dar texto próprio às marcas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Fixed tick positions",
+      "pt": "Posições fixas de marcas"
+     },
+     "code": "plot(1:5, [2 8 5 9 4])\nyticks(0:3:9)\nt = yticks"
+    }
+   ],
+   "see": [
+    "xticks",
+    "yticklabels",
+    "ylim",
+    "ytickangle",
+    "grid"
+   ]
+  }
+ }
+}

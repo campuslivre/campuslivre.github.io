@@ -1,0 +1,1283 @@
+{
+ "functions": {
+  "day": {
+   "summary": {
+    "en": "Day of the month of each datetime value.",
+    "pt": "Dia do mês de cada valor datetime."
+   },
+   "syntax": [
+    {
+     "code": "d = day(t)",
+     "en": "Returns the day of the month, from 1 to 31.",
+     "pt": "Retorna o dia do mês, de 1 a 31."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t",
+     "en": "datetime array.",
+     "pt": "Array datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Numeric array with the size of `t`.",
+     "pt": "Array numérico com o tamanho de `t`."
+    }
+   ],
+   "description": {
+    "en": "`day(t)` is the same as `t.Day`. It gives the number of the day inside the month, not inside the year or week. For the other parts of a date use `month`, `year`, `hour`, `minute` and `second`, or the `Year`, `Month` properties of the datetime.\n\nThe result is a plain double array, so it can be used directly in comparisons and indexing.",
+    "pt": "`day(t)` é igual a `t.Day`. Dá o número do dia dentro do mês, e não dentro do ano ou da semana. Para as outras partes da data use `month`, `year`, `hour`, `minute` e `second`, ou as propriedades `Year`, `Month` do datetime.\n\nO resultado é um array double comum, que pode ser usado diretamente em comparações e indexação."
+   },
+   "notes": {
+    "en": "Only the one-argument form is implemented: the optional second argument (`'dayofyear'`, `'dayofweek'`, `'name'`) is ignored and the day of the month is returned. `day` does not accept duration or calendarDuration input.",
+    "pt": "Só a forma com um argumento está implementada: o segundo argumento opcional (`'dayofyear'`, `'dayofweek'`, `'name'`) é ignorado e retorna-se o dia do mês. `day` não aceita entrada duration ou calendarDuration."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Days of a range",
+      "pt": "Dias de um intervalo"
+     },
+     "code": "t = datetime(2020,5,17):datetime(2020,5,19);\nday(t)\nday(datetime(2020,2,29)) == 29"
+    }
+   ],
+   "see": [
+    "month",
+    "year",
+    "datetime",
+    "weekday",
+    "dateshift"
+   ]
+  },
+  "days": {
+   "summary": {
+    "en": "Duration in fixed 24-hour days, or a duration converted to a number of days.",
+    "pt": "Duração em dias fixos de 24 horas, ou duração convertida em número de dias."
+   },
+   "syntax": [
+    {
+     "code": "d = days(x)",
+     "en": "Creates a duration of `x` days from a number.",
+     "pt": "Cria uma duração de `x` dias a partir de um número."
+    },
+    {
+     "code": "n = days(d)",
+     "en": "Converts the duration `d` to a number of days.",
+     "pt": "Converte a duração `d` em um número de dias."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "d",
+     "en": "duration array.",
+     "pt": "Array duration."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "duration array in days, displayed as `1 day`, `2.5 days`.",
+     "pt": "Array duration em dias, exibido como `1 day`, `2.5 days`."
+    },
+    {
+     "name": "n",
+     "en": "Double array with the number of days.",
+     "pt": "Array double com o número de dias."
+    }
+   ],
+   "description": {
+    "en": "A numeric input is turned into a `duration` whose display format is days; it can be added to datetimes and to other durations: `days(2) + hours(3)` is `2.125 days`. A duration input goes the other way and returns a plain number, so `days(duration(36,0,0))` is `1.5`.\n\nA day here always has 24 hours. For a step that follows the calendar, including daylight-saving changes, use `caldays`. Differences between datetimes are durations, so `days(t2 - t1)` is the elapsed number of days.",
+    "pt": "Uma entrada numérica vira uma `duration` cujo formato de exibição é em dias; pode ser somada a datetimes e a outras durações: `days(2) + hours(3)` é `2.125 days`. Uma entrada duration faz o caminho inverso e retorna um número simples, então `days(duration(36,0,0))` é `1.5`.\n\nUm dia aqui sempre tem 24 horas. Para um passo que segue o calendário, incluindo mudanças de horário de verão, use `caldays`. Diferenças entre datetimes são durações, então `days(t2 - t1)` é o número de dias decorridos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Both directions",
+      "pt": "Nos dois sentidos"
+     },
+     "code": "days([1 2.5])\ndays(2) + hours(3)\nt1 = datetime(2020,1,1);\nt2 = datetime(2020,1,10);\ndays(t2 - t1)"
+    }
+   ],
+   "see": [
+    "hours",
+    "minutes",
+    "seconds",
+    "duration",
+    "caldays"
+   ]
+  },
+  "deal": {
+   "summary": {
+    "en": "Copies input values to separate output variables.",
+    "pt": "Copia valores de entrada para variáveis de saída separadas."
+   },
+   "syntax": [
+    {
+     "code": "[a, b, ...] = deal(x)",
+     "en": "Gives every output a copy of `x`.",
+     "pt": "Dá a cada saída uma cópia de `x`."
+    },
+    {
+     "code": "[a, b, ...] = deal(x1, x2, ...)",
+     "en": "Assigns each input to the matching output.",
+     "pt": "Atribui cada entrada à saída correspondente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x, x1, x2, ...",
+     "en": "Any values. With several inputs, their number must equal the number of outputs.",
+     "pt": "Quaisquer valores. Com várias entradas, o número delas deve ser igual ao de saídas."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "a, b, ...",
+     "en": "The distributed values.",
+     "pt": "Os valores distribuídos."
+    }
+   ],
+   "description": {
+    "en": "`deal` is most useful with comma-separated lists: `[s.x] = deal(0)` sets field `x` in every element of a struct array, and `[c{:}] = deal(5)` fills every cell of a cell array. It also allows swapping or distributing values in one line: `[a, b] = deal(b, a)`.\n\nIf the numbers of inputs and outputs disagree, and there is more than one input, an error is raised.",
+    "pt": "`deal` é mais útil com listas separadas por vírgulas: `[s.x] = deal(0)` define o campo `x` em todo elemento de um array de structs, e `[c{:}] = deal(5)` preenche todas as células de um cell array. Também permite trocar ou distribuir valores numa linha: `[a, b] = deal(b, a)`.\n\nSe os números de entradas e saídas divergem, havendo mais de uma entrada, ocorre um erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Copy, distribute and fill",
+      "pt": "Copiar, distribuir e preencher"
+     },
+     "code": "[a, b, c] = deal(1, 2, 3)\n[p, q] = deal(7)\nc = cell(1, 2);\n[c{:}] = deal(5);\nc"
+    }
+   ],
+   "see": [
+    "cell",
+    "struct",
+    "cellfun",
+    "num2cell"
+   ]
+  },
+  "deblank": {
+   "summary": {
+    "en": "Removes trailing whitespace from text.",
+    "pt": "Remove espaços em branco do fim de um texto."
+   },
+   "syntax": [
+    {
+     "code": "s2 = deblank(s)",
+     "en": "Removes trailing spaces, tabs, newlines and null characters.",
+     "pt": "Remove espaços, tabulações, quebras de linha e caracteres nulos do fim."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "Character vector, cell array of character vectors, string array, or char matrix.",
+     "pt": "Vetor de caracteres, cell array de vetores de caracteres, array de strings ou matriz char."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s2",
+     "en": "Text of the same type, without trailing blanks. For a char matrix, columns that are blank in every row are removed.",
+     "pt": "Texto do mesmo tipo, sem espaços finais. Para uma matriz char, são removidas as colunas em branco em todas as linhas."
+    }
+   ],
+   "description": {
+    "en": "Only the end of the text is changed; leading and inner whitespace stay. Text made only of blanks becomes empty. To clean both ends use `strtrim`.",
+    "pt": "Só o fim do texto é alterado; espaços no início e no meio permanecem. Um texto só de espaços fica vazio. Para limpar as duas pontas use `strtrim`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Trailing blanks",
+      "pt": "Espaços finais"
+     },
+     "code": "['[' deblank('ab   ') ']']\ndeblank({'a  ','b '})\nsize(deblank('   '))"
+    }
+   ],
+   "see": [
+    "strtrim",
+    "blanks",
+    "strip",
+    "cellfun"
+   ]
+  },
+  "dec2base": {
+   "summary": {
+    "en": "Converts a nonnegative integer to text in a given base (2 to 36).",
+    "pt": "Converte um inteiro não negativo em texto numa base dada (2 a 36)."
+   },
+   "syntax": [
+    {
+     "code": "s = dec2base(d, base)",
+     "en": "Digits of `d` in `base`.",
+     "pt": "Dígitos de `d` na base `base`."
+    },
+    {
+     "code": "s = dec2base(d, base, len)",
+     "en": "Pads with leading zeros to at least `len` digits.",
+     "pt": "Preenche com zeros à esquerda até pelo menos `len` dígitos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Nonnegative integers (up to `flintmax`).",
+     "pt": "Inteiros não negativos (até `flintmax`)."
+    },
+    {
+     "name": "base",
+     "en": "Integer from 2 to 36.",
+     "pt": "Inteiro de 2 a 36."
+    },
+    {
+     "name": "len",
+     "en": "Minimum number of digits.",
+     "pt": "Número mínimo de dígitos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Char array, one row per element of `d`, left padded with zeros to the same length.",
+     "pt": "Array char, uma linha por elemento de `d`, preenchido com zeros à esquerda até o mesmo comprimento."
+    }
+   ],
+   "description": {
+    "en": "The digits are `0-9` followed by uppercase `A-Z`. The value is repeatedly divided by the base and the remainders form the digits, last remainder first. `dec2bin` and `dec2hex` are the same operation for base 2 and 16. The reverse is `base2dec`.",
+    "pt": "Os dígitos são `0-9` seguidos de `A-Z` maiúsculas. O valor é dividido repetidamente pela base e os restos formam os dígitos, com o último resto primeiro. `dec2bin` e `dec2hex` são a mesma operação para as bases 2 e 16. O inverso é `base2dec`."
+   },
+   "notes": {
+    "en": "Only a numeric base is accepted; a string of custom symbols as the base is not supported.",
+    "pt": "Só base numérica é aceita; uma string de símbolos personalizados como base não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Several bases",
+      "pt": "Várias bases"
+     },
+     "code": "dec2base(10, 3)\ndec2base(255, 16)\ndec2base(10, 2, 8)"
+    }
+   ],
+   "see": [
+    "base2dec",
+    "dec2bin",
+    "dec2hex",
+    "bin2dec"
+   ]
+  },
+  "dec2bin": {
+   "summary": {
+    "en": "Converts a nonnegative integer to binary text.",
+    "pt": "Converte um inteiro não negativo em texto binário."
+   },
+   "syntax": [
+    {
+     "code": "b = dec2bin(d)",
+     "en": "Binary digits of `d`.",
+     "pt": "Dígitos binários de `d`."
+    },
+    {
+     "code": "b = dec2bin(d, len)",
+     "en": "Pads with zeros to at least `len` digits.",
+     "pt": "Preenche com zeros até pelo menos `len` dígitos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Nonnegative integers up to `flintmax`.",
+     "pt": "Inteiros não negativos até `flintmax`."
+    },
+    {
+     "name": "len",
+     "en": "Minimum number of digits.",
+     "pt": "Número mínimo de dígitos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "b",
+     "en": "Char array of `0` and `1`, one row per element, padded with leading zeros to the same length.",
+     "pt": "Array char de `0` e `1`, uma linha por elemento, preenchido com zeros à esquerda até o mesmo comprimento."
+    }
+   ],
+   "description": {
+    "en": "With a vector input every row has the width needed by the largest value, so `dec2bin([1 5 10])` is a 3-by-4 char matrix. The result is text; to do arithmetic on bits use `bitand`, `bitor` and `bitshift` on the numbers, or convert back with `bin2dec`.",
+    "pt": "Com um vetor de entrada, todas as linhas têm a largura exigida pelo maior valor, então `dec2bin([1 5 10])` é uma matriz char 3 por 4. O resultado é texto; para operar sobre bits use `bitand`, `bitor` e `bitshift` nos números, ou converta de volta com `bin2dec`."
+   },
+   "notes": {
+    "en": "Negative numbers are an error in MatLivre; MATLAB R2023b accepts them and returns the two's complement representation.",
+    "pt": "Números negativos são erro no MatLivre; o MATLAB R2023b os aceita e retorna a representação em complemento de dois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Widths and padding",
+      "pt": "Larguras e preenchimento"
+     },
+     "code": "dec2bin(5)\ndec2bin(5, 8)\ndec2bin([1 5 10])"
+    }
+   ],
+   "see": [
+    "bin2dec",
+    "dec2hex",
+    "dec2base",
+    "bitand"
+   ]
+  },
+  "dec2hex": {
+   "summary": {
+    "en": "Converts a nonnegative integer to hexadecimal text.",
+    "pt": "Converte um inteiro não negativo em texto hexadecimal."
+   },
+   "syntax": [
+    {
+     "code": "h = dec2hex(d)",
+     "en": "Hexadecimal digits of `d`, using uppercase letters.",
+     "pt": "Dígitos hexadecimais de `d`, com letras maiúsculas."
+    },
+    {
+     "code": "h = dec2hex(d, len)",
+     "en": "Pads with zeros to at least `len` digits.",
+     "pt": "Preenche com zeros até pelo menos `len` dígitos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "Nonnegative integers up to `flintmax`.",
+     "pt": "Inteiros não negativos até `flintmax`."
+    },
+    {
+     "name": "len",
+     "en": "Minimum number of digits.",
+     "pt": "Número mínimo de dígitos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "h",
+     "en": "Char array, one row per element, padded with zeros to the same length.",
+     "pt": "Array char, uma linha por elemento, preenchido com zeros até o mesmo comprimento."
+    }
+   ],
+   "description": {
+    "en": "Each hexadecimal digit stands for four bits, so `dec2hex(255)` is `'FF'`. It is often used for colors and memory values. The reverse is `hex2dec`.",
+    "pt": "Cada dígito hexadecimal representa quatro bits, então `dec2hex(255)` é `'FF'`. É muito usado para cores e valores de memória. O inverso é `hex2dec`."
+   },
+   "notes": {
+    "en": "Negative numbers are an error in MatLivre; MATLAB R2023b returns the two's complement representation.",
+    "pt": "Números negativos são erro no MatLivre; o MATLAB R2023b retorna a representação em complemento de dois."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Single value and vector",
+      "pt": "Valor único e vetor"
+     },
+     "code": "dec2hex(255)\ndec2hex(10, 4)\ndec2hex([10 255 4096])"
+    }
+   ],
+   "see": [
+    "hex2dec",
+    "dec2bin",
+    "dec2base",
+    "sprintf"
+   ]
+  },
+  "delevent": {
+   "summary": {
+    "en": "Removes an event from a timeseries object.",
+    "pt": "Remove um evento de um objeto timeseries."
+   },
+   "syntax": [
+    {
+     "code": "ts = delevent(ts, event)",
+     "en": "Removes the event with the given name, or the event object.",
+     "pt": "Remove o evento com o nome dado, ou o objeto de evento."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "timeseries object.",
+     "pt": "Objeto timeseries."
+    },
+    {
+     "name": "event",
+     "en": "Name of the event (text), or a `tsdata.event` object.",
+     "pt": "Nome do evento (texto) ou objeto `tsdata.event`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ts",
+     "en": "The timeseries without the event.",
+     "pt": "O timeseries sem o evento."
+    }
+   ],
+   "description": {
+    "en": "Events are named markers placed at times of a time series, created with `addevent`. They are stored in the `Events` property. `delevent` deletes one of them by name; the time and data samples are untouched.",
+    "pt": "Eventos são marcadores nomeados colocados em instantes de uma série temporal, criados com `addevent`. Ficam guardados na propriedade `Events`. `delevent` apaga um deles pelo nome; as amostras de tempo e dados não são afetadas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Add and remove an event",
+      "pt": "Adicionar e remover um evento"
+     },
+     "code": "ts = timeseries([1 2 3 4]', [0 1 2 3]');\nts = addevent(ts, 'e', 1);\nn1 = numel(ts.Events)\nts = delevent(ts, 'e');\nn2 = numel(ts.Events)"
+    }
+   ],
+   "see": [
+    "addevent",
+    "timeseries",
+    "delsample",
+    "tscollection"
+   ]
+  },
+  "delsample": {
+   "summary": {
+    "en": "Removes samples from a timeseries object.",
+    "pt": "Remove amostras de um objeto timeseries."
+   },
+   "syntax": [
+    {
+     "code": "ts2 = delsample(ts, 'Index', n)",
+     "en": "Removes the samples at the indices `n`.",
+     "pt": "Remove as amostras nos índices `n`."
+    },
+    {
+     "code": "ts2 = delsample(ts, 'Value', t)",
+     "en": "Removes the samples at the time values `t`.",
+     "pt": "Remove as amostras nos instantes `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "timeseries object.",
+     "pt": "Objeto timeseries."
+    },
+    {
+     "name": "n",
+     "en": "Sample indices.",
+     "pt": "Índices de amostras."
+    },
+    {
+     "name": "t",
+     "en": "Time values.",
+     "pt": "Valores de tempo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "ts2",
+     "en": "timeseries with the samples removed, in both `Time` and `Data`.",
+     "pt": "timeseries sem as amostras, tanto em `Time` quanto em `Data`."
+    }
+   ],
+   "description": {
+    "en": "The time vector and the data are shortened together, so the remaining samples keep their original times; no interpolation takes place. Use `'Index'` when you know the position and `'Value'` when you know the time.",
+    "pt": "O vetor de tempo e os dados são encurtados juntos, e as amostras restantes mantêm seus tempos originais; não há interpolação. Use `'Index'` quando conhece a posição e `'Value'` quando conhece o tempo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "By index and by time",
+      "pt": "Por índice e por tempo"
+     },
+     "code": "ts = timeseries([1 2 3 4]', [0 1 2 3]');\na = delsample(ts, 'Index', [2 3]);\na.Time'\na.Data'\nb = delsample(ts, 'Value', 2);\nb.Time'"
+    }
+   ],
+   "see": [
+    "timeseries",
+    "delsamplefromcollection",
+    "delevent",
+    "resample"
+   ]
+  },
+  "delsamplefromcollection": {
+   "summary": {
+    "en": "Removes samples from a tscollection object.",
+    "pt": "Remove amostras de um objeto tscollection."
+   },
+   "syntax": [
+    {
+     "code": "tsc2 = delsamplefromcollection(tsc, 'Index', n)",
+     "en": "Removes the samples at the indices `n` from every member.",
+     "pt": "Remove de todos os membros as amostras nos índices `n`."
+    },
+    {
+     "code": "tsc2 = delsamplefromcollection(tsc, 'Value', t)",
+     "en": "Removes the samples at the times `t`.",
+     "pt": "Remove as amostras nos instantes `t`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "tsc",
+     "en": "tscollection object, a group of time series sharing one time vector.",
+     "pt": "Objeto tscollection, um grupo de séries temporais que compartilham um vetor de tempo."
+    },
+    {
+     "name": "n",
+     "en": "Sample indices.",
+     "pt": "Índices de amostras."
+    },
+    {
+     "name": "t",
+     "en": "Time values.",
+     "pt": "Valores de tempo."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tsc2",
+     "en": "The collection with the samples removed.",
+     "pt": "A coleção sem as amostras."
+    }
+   ],
+   "description": {
+    "en": "A collection has a single common time vector, so a sample is removed from that vector and from the data of every member series at once. It is the collection counterpart of `delsample`.",
+    "pt": "Uma coleção tem um único vetor de tempo comum, então a amostra é removida desse vetor e dos dados de todas as séries membros de uma vez. É o equivalente de `delsample` para coleções."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dropping the middle sample",
+      "pt": "Removendo a amostra do meio"
+     },
+     "code": "ts = timeseries([1 2 3]', [0 1 2]', 'Name', 'a');\ntsc = tscollection(ts);\ntsc2 = delsamplefromcollection(tsc, 'Index', 2);\ntsc2.Time'"
+    }
+   ],
+   "see": [
+    "tscollection",
+    "delsample",
+    "timeseries",
+    "addsampletocollection"
+   ]
+  },
+  "detectImportOptions": {
+   "summary": {
+    "en": "Guesses how to read a data file and returns import options.",
+    "pt": "Deduz como ler um arquivo de dados e retorna opções de importação."
+   },
+   "syntax": [
+    {
+     "code": "opts = detectImportOptions(filename)",
+     "en": "Inspects the file and returns an options object.",
+     "pt": "Inspeciona o arquivo e retorna um objeto de opções."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "filename",
+     "en": "Path of a delimited text file such as `.csv`.",
+     "pt": "Caminho de um arquivo de texto delimitado, como `.csv`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "opts",
+     "en": "Options object with properties such as `Delimiter`, `VariableNames`, `VariableTypes` and `DataLines`.",
+     "pt": "Objeto de opções com propriedades como `Delimiter`, `VariableNames`, `VariableTypes` e `DataLines`."
+    }
+   ],
+   "description": {
+    "en": "The function reads the start of the file and decides the delimiter, whether the first line holds variable names, and a type for each column (numbers become `double`, text becomes `char`). You can edit the properties, for example change a type or select some variables, and then pass the object to `readtable` or `readmatrix`.\n\nThis lets you adjust the reading without writing the options by hand.",
+    "pt": "A função lê o início do arquivo e decide o delimitador, se a primeira linha tem nomes de variáveis e o tipo de cada coluna (números viram `double`, texto vira `char`). Você pode editar as propriedades, por exemplo mudar um tipo ou selecionar algumas variáveis, e então passar o objeto a `readtable` ou `readmatrix`.\n\nAssim é possível ajustar a leitura sem escrever as opções à mão."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Detect and read",
+      "pt": "Detectar e ler"
+     },
+     "code": "fid = fopen('demo.csv', 'w');\nfprintf(fid, 'a,b\\n1,x\\n2,y\\n');\nfclose(fid);\nopts = detectImportOptions('demo.csv');\nopts.VariableNames\nopts.VariableTypes\nT = readtable('demo.csv', opts)",
+     "note": {
+      "en": "The example first writes a small file in the current folder.",
+      "pt": "O exemplo escreve primeiro um pequeno arquivo na pasta atual."
+     }
+    }
+   ],
+   "see": [
+    "readtable",
+    "readmatrix",
+    "importOptions",
+    "setvartype",
+    "preview"
+   ]
+  },
+  "detrend": {
+   "summary": {
+    "en": "Removes a mean or a straight-line trend from data.",
+    "pt": "Remove a média ou uma tendência linear dos dados."
+   },
+   "syntax": [
+    {
+     "code": "y = detrend(x)",
+     "en": "Subtracts the best-fit straight line from each column.",
+     "pt": "Subtrai de cada coluna a reta de melhor ajuste."
+    },
+    {
+     "code": "y = detrend(x, n)",
+     "en": "Removes a polynomial of degree `n`, with `0` removing the mean.",
+     "pt": "Remove um polinômio de grau `n`, com `0` removendo a média."
+    },
+    {
+     "code": "y = detrend(x, 'constant')",
+     "en": "Removes only the mean.",
+     "pt": "Remove apenas a média."
+    },
+    {
+     "code": "y = detrend(x, 'linear')",
+     "en": "Removes the linear trend (default).",
+     "pt": "Remove a tendência linear (padrão)."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "x",
+     "en": "Vector, or matrix whose columns are treated as separate signals.",
+     "pt": "Vetor, ou matriz cujas colunas são tratadas como sinais separados."
+    },
+    {
+     "name": "n / type",
+     "en": "Degree `n` of the polynomial, or `'constant'` or `'linear'`.",
+     "pt": "Grau `n` do polinômio, ou `'constant'` ou `'linear'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Detrended data, same size as `x`.",
+     "pt": "Dados sem tendência, do mesmo tamanho de `x`."
+    }
+   ],
+   "description": {
+    "en": "The function fits a polynomial to the data in the least-squares sense, taking the sample index as the independent variable, and subtracts it. The result oscillates around zero, which is useful before spectral analysis, where a trend would add energy at low frequencies.\n\nA row vector is treated as a single signal, not as many.",
+    "pt": "A função ajusta um polinômio aos dados no sentido de mínimos quadrados, tomando o índice da amostra como variável independente, e o subtrai. O resultado oscila em torno de zero, o que é útil antes de uma análise espectral, em que uma tendência adicionaria energia nas baixas frequências.\n\nUm vetor linha é tratado como um único sinal, e não como vários."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Mean and linear trend",
+      "pt": "Média e tendência linear"
+     },
+     "code": "x = [1 2 4 7];\ndetrend(x, 'constant')\ndetrend(x, 'linear')"
+    }
+   ],
+   "see": [
+    "polyfit",
+    "polyval",
+    "mean",
+    "fft",
+    "filter"
+   ]
+  },
+  "dictionary": {
+   "summary": {
+    "en": "Lookup table that maps keys to values.",
+    "pt": "Tabela de consulta que associa chaves a valores."
+   },
+   "syntax": [
+    {
+     "code": "d = dictionary()",
+     "en": "Creates an empty dictionary whose types are set by the first entry.",
+     "pt": "Cria um dicionário vazio cujos tipos são definidos pela primeira entrada."
+    },
+    {
+     "code": "d = dictionary(keys, values)",
+     "en": "Creates a dictionary from arrays of keys and values.",
+     "pt": "Cria um dicionário a partir de arrays de chaves e valores."
+    },
+    {
+     "code": "d = dictionary(k1, v1, k2, v2, ...)",
+     "en": "Creates it from key and value pairs.",
+     "pt": "Cria a partir de pares chave e valor."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "keys",
+     "en": "Array of unique keys: numbers or strings.",
+     "pt": "Array de chaves únicas: números ou strings."
+    },
+    {
+     "name": "values",
+     "en": "Array with one value per key, or a cell array.",
+     "pt": "Array com um valor por chave, ou um cell array."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "A `dictionary`. Unlike `containers.Map`, it is a value object, so a copy is independent of the original.",
+     "pt": "Um `dictionary`. Diferente do `containers.Map`, é um objeto de valor, então uma cópia é independente do original."
+    }
+   ],
+   "description": {
+    "en": "Read with `d(key)` and write with `d(key) = value`; writing an existing key replaces the value, and writing a new key adds an entry. Reading a missing key is an error unless you use `lookup` with a fallback. Other operations: `isKey(d, k)`, `keys(d)`, `values(d)`, `numEntries(d)`, `remove(d, k)` and `entries(d)`.\n\nAssigning `[]` to a key, as in `d(\"a\") = []`, removes it.",
+    "pt": "Leia com `d(chave)` e escreva com `d(chave) = valor`; escrever numa chave existente troca o valor, e escrever numa chave nova adiciona uma entrada. Ler uma chave inexistente é erro, a menos que use `lookup` com valor reserva. Outras operações: `isKey(d, k)`, `keys(d)`, `values(d)`, `numEntries(d)`, `remove(d, k)` e `entries(d)`.\n\nAtribuir `[]` a uma chave, como em `d(\"a\") = []`, a remove."
+   },
+   "notes": {
+    "en": "`remove` raises an error when the key is absent, even if a `FallbackValue` is passed.",
+    "pt": "`remove` gera erro quando a chave não existe, mesmo que `FallbackValue` seja passado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create, query and update",
+      "pt": "Criar, consultar e atualizar"
+     },
+     "code": "d = dictionary(\"a\", 1, \"b\", 2);\nd(\"c\") = 3;\nd(\"a\")\nisKey(d, [\"a\" \"q\"])\nnumEntries(d)\nd"
+    }
+   ],
+   "see": [
+    "configureDictionary",
+    "containers.Map",
+    "entries",
+    "isKey",
+    "struct"
+   ]
+  },
+  "digitBoundary": {
+   "summary": {
+    "en": "Pattern that matches the boundary between a digit and a non-digit.",
+    "pt": "Padrão que casa a fronteira entre um dígito e um não dígito."
+   },
+   "syntax": [
+    {
+     "code": "pat = digitBoundary",
+     "en": "A zero-width pattern at a digit boundary.",
+     "pt": "Um padrão de largura zero em uma fronteira de dígito."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object that matches no characters, only a position.",
+     "pt": "Um objeto `pattern` que não casa caracteres, apenas uma posição."
+    }
+   ],
+   "description": {
+    "en": "A boundary exists where a digit is next to a character that is not a digit, or where a digit is at the start or end of the text. Like `\\b` in regular expressions, it consumes no text and is used to anchor another pattern, for example to demand that a run of digits is not part of a longer word such as `x12`.",
+    "pt": "Existe fronteira onde um dígito fica ao lado de um caractere que não é dígito, ou onde um dígito está no início ou no fim do texto. Como o `\\b` das expressões regulares, não consome texto e serve para ancorar outro padrão, por exemplo para exigir que uma sequência de dígitos não faça parte de uma palavra maior como `x12`."
+   },
+   "notes": {
+    "en": "Used on its own, as in `extract(txt, digitBoundary)`, MatLivre returns empty matches; combine it with other patterns.",
+    "pt": "Usado sozinho, como em `extract(txt, digitBoundary)`, o MatLivre retorna casamentos vazios; combine-o com outros padrões."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Anchoring digits",
+      "pt": "Ancorando dígitos"
+     },
+     "code": "extract('ab 12 cd', digitBoundary + digitsPattern + digitBoundary)"
+    }
+   ],
+   "see": [
+    "digitsPattern",
+    "lettersPattern",
+    "wordBoundary",
+    "extract",
+    "contains"
+   ]
+  },
+  "digitsPattern": {
+   "summary": {
+    "en": "Pattern that matches a run of digit characters.",
+    "pt": "Padrão que casa uma sequência de dígitos."
+   },
+   "syntax": [
+    {
+     "code": "pat = digitsPattern",
+     "en": "Matches one or more digits.",
+     "pt": "Casa um ou mais dígitos."
+    },
+    {
+     "code": "pat = digitsPattern(n)",
+     "en": "Matches exactly `n` digits.",
+     "pt": "Casa exatamente `n` dígitos."
+    },
+    {
+     "code": "pat = digitsPattern(minDigits, maxDigits)",
+     "en": "Matches between `minDigits` and `maxDigits` digits.",
+     "pt": "Casa entre `minDigits` e `maxDigits` dígitos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Number of digits.",
+     "pt": "Número de dígitos."
+    },
+    {
+     "name": "minDigits, maxDigits",
+     "en": "Lower and upper limits on the run length.",
+     "pt": "Limites inferior e superior do comprimento da sequência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "pat",
+     "en": "A `pattern` object.",
+     "pt": "Um objeto `pattern`."
+    }
+   ],
+   "description": {
+    "en": "It is the readable version of `\\d+` in regular expressions. The pattern can be passed to `extract`, `contains`, `replace`, `split`, `count` and similar functions, and combined with other patterns using `+` (sequence) and `|` (choice).",
+    "pt": "É a versão legível de `\\d+` das expressões regulares. O padrão pode ser passado a `extract`, `contains`, `replace`, `split`, `count` e funções semelhantes, e combinado com outros padrões usando `+` (sequência) e `|` (escolha)."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extracting numbers",
+      "pt": "Extraindo números"
+     },
+     "code": "extract('ab12cd345', digitsPattern)\nextract('a12b345', digitsPattern(2, 3))\nreplace('foo123', digitsPattern, '#')"
+    }
+   ],
+   "see": [
+    "lettersPattern",
+    "digitBoundary",
+    "characterListPattern",
+    "extract",
+    "pattern"
+   ]
+  },
+  "discretize": {
+   "summary": {
+    "en": "Groups numeric data into bins.",
+    "pt": "Agrupa dados numéricos em intervalos (bins)."
+   },
+   "syntax": [
+    {
+     "code": "Y = discretize(X, edges)",
+     "en": "Returns the bin number of each element, using the bin edges `edges`.",
+     "pt": "Retorna o número do bin de cada elemento, usando as bordas `edges`."
+    },
+    {
+     "code": "Y = discretize(X, n)",
+     "en": "Uses `n` equal-width bins covering the data.",
+     "pt": "Usa `n` bins de mesma largura cobrindo os dados."
+    },
+    {
+     "code": "Y = discretize(X, edges, values)",
+     "en": "Returns the corresponding entry of `values` instead of the bin number.",
+     "pt": "Retorna a entrada correspondente de `values` em vez do número do bin."
+    },
+    {
+     "code": "[Y, E] = discretize(___)",
+     "en": "Also returns the bin edges.",
+     "pt": "Também retorna as bordas dos bins."
+    },
+    {
+     "code": "Y = discretize(___, 'IncludedEdge', 'right')",
+     "en": "Makes bins closed on the right.",
+     "pt": "Torna os bins fechados à direita."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric array.",
+     "pt": "Array numérico."
+    },
+    {
+     "name": "edges",
+     "en": "Increasing vector of bin edges.",
+     "pt": "Vetor crescente de bordas."
+    },
+    {
+     "name": "values",
+     "en": "One value per bin.",
+     "pt": "Um valor por bin."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "Y",
+     "en": "Bin numbers (or `values`), with `NaN` for data outside all bins.",
+     "pt": "Números dos bins (ou `values`), com `NaN` para dados fora de todos os bins."
+    },
+    {
+     "name": "E",
+     "en": "Bin edges.",
+     "pt": "Bordas dos bins."
+    }
+   ],
+   "description": {
+    "en": "Bin `k` covers `edges(k) <= x < edges(k+1)`, so a value equal to an inner edge falls in the bin to its right. Only the last bin includes its upper edge by default. With `'IncludedEdge', 'right'`, bins are `(edges(k), edges(k+1)]` and the first bin includes its lower edge.\n\nData outside the range of the edges gives `NaN`. Use `accumarray` or `histcounts` to count how many fall into each bin.",
+    "pt": "O bin `k` cobre `edges(k) <= x < edges(k+1)`, de modo que um valor igual a uma borda interna cai no bin à direita dela. Só o último bin inclui por padrão sua borda superior. Com `'IncludedEdge', 'right'`, os bins são `(edges(k), edges(k+1)]` e o primeiro bin inclui sua borda inferior.\n\nDados fora do intervalo das bordas dão `NaN`. Use `accumarray` ou `histcounts` para contar quantos caem em cada bin."
+   },
+   "notes": {
+    "en": "The `'categorical'` option and datetime input are not available in MatLivre; use the numeric bin numbers with `categorical(Y, 1:n, names)`.",
+    "pt": "A opção `'categorical'` e entrada datetime não estão disponíveis no MatLivre; use os números de bin com `categorical(Y, 1:n, nomes)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Bin numbers and labels",
+      "pt": "Números e rótulos de bins"
+     },
+     "code": "x = [1 5 9 10];\ndiscretize(x, [0 5 10])\ndiscretize(x, [0 5 10], 'IncludedEdge', 'right')\ndiscretize([0 1 2 3], [0 2 4], [10 20])\ndiscretize([0.5 20], [0 2 4])"
+    }
+   ],
+   "see": [
+    "histcounts",
+    "accumarray",
+    "categorical",
+    "cut",
+    "interp1"
+   ]
+  },
+  "double": {
+   "summary": {
+    "en": "Converts values to double precision.",
+    "pt": "Converte valores para precisão dupla."
+   },
+   "syntax": [
+    {
+     "code": "B = double(A)",
+     "en": "Returns `A` as a double array.",
+     "pt": "Retorna `A` como array double."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Numeric, logical or char array (also datetime, duration and others that define the conversion).",
+     "pt": "Array numérico, lógico ou char (também datetime, duration e outros que definem a conversão)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Double array of the same size. Characters become their character codes.",
+     "pt": "Array double do mesmo tamanho. Caracteres viram seus códigos."
+    }
+   ],
+   "description": {
+    "en": "`double` is the default numeric class in MATLAB, with about 15 to 16 significant decimal digits. Converting from `single` keeps the exact value of the `single`, which is why `double(single(0.1))` is not exactly `0.1`. Integers convert exactly, and `true` and `false` become 1 and 0.\n\nA char vector becomes the codes of its characters: `double('hi')` is `[104 105]`. A string scalar is not a number list: `double(\"12\")` converts the text to the number `12`, and non-numeric text gives `NaN`. A cell array is an error.",
+    "pt": "`double` é a classe numérica padrão do MATLAB, com cerca de 15 a 16 dígitos decimais significativos. Converter de `single` mantém o valor exato do `single`, por isso `double(single(0.1))` não é exatamente `0.1`. Inteiros convertem exatamente, e `true` e `false` viram 1 e 0.\n\nUm vetor de caracteres vira os códigos de seus caracteres: `double('hi')` é `[104 105]`. Uma string escalar é interpretada como número: `double(\"12\")` converte o texto no número `12`, e texto não numérico dá `NaN`. Um cell array é erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Integers, text and logicals",
+      "pt": "Inteiros, texto e lógicos"
+     },
+     "code": "double(int8(-5))\ndouble('hi')\ndouble(true)\ndouble(\"a\")\ndouble(uint8(200)) * 2"
+    }
+   ],
+   "see": [
+    "single",
+    "int8",
+    "cast",
+    "char",
+    "class"
+   ]
+  },
+  "duration": {
+   "summary": {
+    "en": "Length of time as a number of hours, minutes and seconds.",
+    "pt": "Intervalo de tempo como número de horas, minutos e segundos."
+   },
+   "syntax": [
+    {
+     "code": "d = duration(h, m, s)",
+     "en": "Builds a duration from hours, minutes and seconds.",
+     "pt": "Cria uma duração a partir de horas, minutos e segundos."
+    },
+    {
+     "code": "d = duration(h, m, s, ms)",
+     "en": "Adds milliseconds.",
+     "pt": "Acrescenta milissegundos."
+    },
+    {
+     "code": "d = duration(___, 'Format', f)",
+     "en": "Sets the display format, such as `'hh:mm'` or `'d'`.",
+     "pt": "Define o formato de exibição, como `'hh:mm'` ou `'d'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "h, m, s",
+     "en": "Numeric arrays of the same size, or scalars. Values outside the usual range carry over.",
+     "pt": "Arrays numéricos do mesmo tamanho, ou escalares. Valores fora da faixa usual são normalizados."
+    },
+    {
+     "name": "'Format'",
+     "en": "Display format: `'hh:mm:ss'` (default), `'hh:mm'`, `'d'`, `'hh:mm:ss.SSS'`, and others.",
+     "pt": "Formato de exibição: `'hh:mm:ss'` (padrão), `'hh:mm'`, `'d'`, `'hh:mm:ss.SSS'` e outros."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "duration array.",
+     "pt": "Array duration."
+    }
+   ],
+   "description": {
+    "en": "A duration is an exact elapsed time, stored internally in days. Hours do not wrap at 24: `duration(25,30,0)` is `25:30:00`, and `duration(0,0,90)` is `00:01:30`. Durations can be added and subtracted, multiplied by numbers, compared, and added to datetimes. Convert to numbers with `hours`, `minutes`, `seconds` or `days`.\n\nThe functions `seconds`, `minutes`, `hours`, `days` and `years` are shorter ways to create durations from a single number.",
+    "pt": "Uma duração é um tempo decorrido exato, guardado internamente em dias. As horas não voltam a zero em 24: `duration(25,30,0)` é `25:30:00`, e `duration(0,0,90)` é `00:01:30`. Durações podem ser somadas e subtraídas, multiplicadas por números, comparadas e somadas a datetimes. Converta para números com `hours`, `minutes`, `seconds` ou `days`.\n\nAs funções `seconds`, `minutes`, `hours`, `days` e `years` são formas mais curtas de criar durações a partir de um único número."
+   },
+   "notes": {
+    "en": "The text form `duration('01:30:00')` does not parse correctly in MatLivre; use numeric arguments.",
+    "pt": "A forma com texto `duration('01:30:00')` não é interpretada corretamente no MatLivre; use argumentos numéricos."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Build, combine and convert",
+      "pt": "Criar, combinar e converter"
+     },
+     "code": "d = duration(25, 30, 0)\nd + duration(0, 45, 0)\nduration(2, 0, 0) > duration(1, 30, 0)\nhours(duration(2, 30, 0))\nduration(26, 0, 0, 'Format', 'd')"
+    }
+   ],
+   "see": [
+    "hours",
+    "minutes",
+    "seconds",
+    "days",
+    "datetime",
+    "calendarDuration"
+   ]
+  },
+  "endsWith": {
+   "summary": {
+    "en": "Tests whether text ends with a given piece of text or pattern.",
+    "pt": "Testa se um texto termina com um dado trecho ou padrão."
+   },
+   "syntax": [
+    {
+     "code": "tf = endsWith(str, suffix)",
+     "en": "True where `str` ends with `suffix`.",
+     "pt": "Verdadeiro onde `str` termina com `suffix`."
+    },
+    {
+     "code": "tf = endsWith(str, suffix, 'IgnoreCase', true)",
+     "en": "Ignores letter case.",
+     "pt": "Ignora maiúsculas e minúsculas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Character vector, string array or cell array of character vectors.",
+     "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "suffix",
+     "en": "Text, a list of text (true if any matches), or a `pattern`.",
+     "pt": "Texto, uma lista de textos (verdadeiro se qualquer um casar) ou um `pattern`."
+    },
+    {
+     "name": "'IgnoreCase'",
+     "en": "Logical, default `false`.",
+     "pt": "Lógico, padrão `false`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "tf",
+     "en": "Logical array with the size of `str`.",
+     "pt": "Array lógico com o tamanho de `str`."
+    }
+   ],
+   "description": {
+    "en": "The test is case sensitive by default. An empty `suffix` always matches. It is the usual way to select files by extension: `endsWith(names, '.m')`.\n\nThe counterpart for the beginning of the text is `startsWith`.",
+    "pt": "O teste diferencia maiúsculas de minúsculas por padrão. Um `suffix` vazio sempre casa. É a forma usual de selecionar arquivos por extensão: `endsWith(nomes, '.m')`.\n\nA contraparte para o início do texto é `startsWith`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Extensions",
+      "pt": "Extensões"
+     },
+     "code": "endsWith({'a.m','b.txt','c.M'}, '.m')\nendsWith(\"File.M\", \".m\", 'IgnoreCase', true)\nendsWith('abc123', digitsPattern)"
+    }
+   ],
+   "see": [
+    "startsWith",
+    "contains",
+    "strfind",
+    "regexp"
+   ]
+  },
+  "entries": {
+   "summary": {
+    "en": "All keys and values of a dictionary, as a table.",
+    "pt": "Todas as chaves e valores de um dicionário, como tabela."
+   },
+   "syntax": [
+    {
+     "code": "T = entries(d)",
+     "en": "Returns a table with variables `Key` and `Value`, one row per entry.",
+     "pt": "Retorna uma tabela com as variáveis `Key` e `Value`, uma linha por entrada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "d",
+     "en": "dictionary object.",
+     "pt": "Objeto dictionary."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "T",
+     "en": "table with `Key` and `Value` variables.",
+     "pt": "Tabela com as variáveis `Key` e `Value`."
+    }
+   ],
+   "description": {
+    "en": "A table is convenient for display, sorting and further processing: `sortrows(T, 'Key')` orders the entries, and `T.Key` and `T.Value` give the columns. It is a snapshot; changing `T` does not change the dictionary. `keys(d)` and `values(d)` give just one of the two columns.",
+    "pt": "Uma tabela é conveniente para exibição, ordenação e processamento posterior: `sortrows(T, 'Key')` ordena as entradas, e `T.Key` e `T.Value` dão as colunas. É uma cópia no momento da chamada; alterar `T` não altera o dicionário. `keys(d)` e `values(d)` dão apenas uma das duas colunas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Table of entries",
+      "pt": "Tabela de entradas"
+     },
+     "code": "d = dictionary([\"a\" \"b\"], [1 2]);\nT = entries(d)\nT.Value'"
+    }
+   ],
+   "see": [
+    "dictionary",
+    "keys",
+    "values",
+    "isKey",
+    "table"
+   ]
+  },
+  "eomdate": {
+   "summary": {
+    "en": "Date number of the last day of a month.",
+    "pt": "Número de data do último dia de um mês."
+   },
+   "syntax": [
+    {
+     "code": "n = eomdate(y, m)",
+     "en": "Last day of month `m` in year `y`, as a date number.",
+     "pt": "Último dia do mês `m` do ano `y`, como número de data."
+    },
+    {
+     "code": "n = eomdate(d)",
+     "en": "Last day of the month containing the date `d`.",
+     "pt": "Último dia do mês que contém a data `d`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y, m",
+     "en": "Year and month (scalars).",
+     "pt": "Ano e mês (escalares)."
+    },
+    {
+     "name": "d",
+     "en": "Date number or datetime.",
+     "pt": "Número de data ou datetime."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "n",
+     "en": "Date number (`datenum`) at midnight of the last day of the month.",
+     "pt": "Número de data (`datenum`) à meia-noite do último dia do mês."
+    }
+   ],
+   "description": {
+    "en": "The result is a date number, so display it with `datestr`, as in `datestr(eomdate(2024,2))`. It accounts for leap years. To get the day of the month as a plain number, `eomday` is simpler.",
+    "pt": "O resultado é um número de data, então exiba-o com `datestr`, como em `datestr(eomdate(2024,2))`. Considera anos bissextos. Para obter o dia do mês como número simples, `eomday` é mais direto."
+   },
+   "notes": {
+    "en": "Only scalar inputs are handled correctly: with a vector of years or months MatLivre returns only the first result. In MATLAB `eomdate` takes year and month arrays.",
+    "pt": "Só entradas escalares são tratadas corretamente: com um vetor de anos ou meses o MatLivre retorna apenas o primeiro resultado. No MATLAB, `eomdate` aceita arrays de ano e mês."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "End of February",
+      "pt": "Fim de fevereiro"
+     },
+     "code": "n = eomdate(2024, 2)\ndatestr(n)"
+    }
+   ],
+   "see": [
+    "eomday",
+    "datenum",
+    "datestr",
+    "calendar",
+    "dateshift"
+   ]
+  },
+  "eomday": {
+   "summary": {
+    "en": "Number of days in a month.",
+    "pt": "Número de dias em um mês."
+   },
+   "syntax": [
+    {
+     "code": "d = eomday(y, m)",
+     "en": "Last day of month `m` in year `y`.",
+     "pt": "Último dia do mês `m` do ano `y`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "y",
+     "en": "Year (integer array).",
+     "pt": "Ano (array de inteiros)."
+    },
+    {
+     "name": "m",
+     "en": "Month, from 1 to 12.",
+     "pt": "Mês, de 1 a 12."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Double array: 28, 29, 30 or 31.",
+     "pt": "Array double: 28, 29, 30 ou 31."
+    }
+   ],
+   "description": {
+    "en": "The year matters only for February: it has 29 days in leap years, that is, years divisible by 4 except those divisible by 100 unless also divisible by 400, so `eomday(1900,2)` is 28 and `eomday(2000,2)` is 29. Arrays `y` and `m` of the same size, or one scalar, work element by element.",
+    "pt": "O ano só importa para fevereiro: tem 29 dias em anos bissextos, isto é, divisíveis por 4, exceto os divisíveis por 100, a menos que também sejam por 400, então `eomday(1900,2)` é 28 e `eomday(2000,2)` é 29. Arrays `y` e `m` de mesmo tamanho, ou um deles escalar, atuam elemento a elemento."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Month lengths",
+      "pt": "Duração dos meses"
+     },
+     "code": "eomday(2024, 1:12)\neomday([1900 2000 2023 2024], 2)"
+    }
+   ],
+   "see": [
+    "eomdate",
+    "datenum",
+    "calendar",
+    "datetime"
+   ]
+  }
+ }
+}

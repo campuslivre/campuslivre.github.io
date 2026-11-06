@@ -1,0 +1,1316 @@
+{
+ "functions": {
+  "eps": {
+   "summary": {
+    "en": "Floating-point spacing: the distance from a number to the next larger representable one.",
+    "pt": "Espaçamento de ponto flutuante: a distância de um número ao próximo representável maior."
+   },
+   "syntax": [
+    {
+     "code": "e = eps",
+     "en": "Returns the spacing at 1, `2^-52`.",
+     "pt": "Retorna o espaçamento em 1, `2^-52`."
+    },
+    {
+     "code": "e = eps(X)",
+     "en": "Returns the spacing at each element of `X`.",
+     "pt": "Retorna o espaçamento em cada elemento de `X`."
+    },
+    {
+     "code": "e = eps('single')",
+     "en": "Returns the spacing at 1 for single precision.",
+     "pt": "Retorna o espaçamento em 1 para precisão simples."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "X",
+     "en": "Numeric array, or the class name `'double'` or `'single'`.",
+     "pt": "Array numérico, ou o nome da classe `'double'` ou `'single'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "e",
+     "en": "Spacing values, the same size as `X`, in the class of `X`.",
+     "pt": "Valores de espaçamento, do mesmo tamanho de `X`, na classe de `X`."
+    }
+   ],
+   "description": {
+    "en": "Floating-point numbers are not evenly spaced: the gap between neighbors grows with the magnitude. `eps(x)` is the gap between `abs(x)` and the next larger number of the same class. Values smaller than `eps(x)/2` added to `x` are lost to rounding.\n\nThe spacing doubles each time the number crosses a power of two. For `0` the result is the smallest positive denormalized number.",
+    "pt": "Números de ponto flutuante não são igualmente espaçados: a distância entre vizinhos cresce com a magnitude. `eps(x)` é a distância entre `abs(x)` e o próximo número maior da mesma classe. Valores menores que `eps(x)/2` somados a `x` se perdem no arredondamento.\n\nO espaçamento dobra cada vez que o número cruza uma potência de dois. Para `0`, o resultado é o menor número positivo desnormalizado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Spacing at different magnitudes",
+      "pt": "Espaçamento em diferentes magnitudes"
+     },
+     "code": "eps\neps(1000)\neps(single(1))\n1 + eps/2 == 1",
+     "silent": false
+    }
+   ],
+   "see": [
+    "realmin",
+    "realmax",
+    "flintmax",
+    "single",
+    "double"
+   ]
+  },
+  "erase": {
+   "summary": {
+    "en": "Removes every occurrence of a substring from text.",
+    "pt": "Remove toda ocorrência de uma substring de um texto."
+   },
+   "syntax": [
+    {
+     "code": "newStr = erase(str, match)",
+     "en": "Deletes each occurrence of `match` from `str`.",
+     "pt": "Apaga cada ocorrência de `match` em `str`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String array, character vector or cell array of character vectors.",
+     "pt": "String array, vetor de caracteres ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "match",
+     "en": "Text to delete. A string array or cell array deletes several patterns, applied in turn.",
+     "pt": "Texto a apagar. Um string array ou cell array apaga vários padrões, aplicados em sequência."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "Text of the same type and size as `str`, without the matches.",
+     "pt": "Texto do mesmo tipo e tamanho de `str`, sem as ocorrências."
+    }
+   ],
+   "description": {
+    "en": "`erase` searches for literal text, not patterns, and removes all non-overlapping matches. When `match` lists several strings, each one is removed from the text in the order given.\n\nTo delete by position rather than by content, use `eraseBetween`.",
+    "pt": "`erase` procura texto literal, não padrões, e remove todas as ocorrências sem sobreposição. Quando `match` lista várias strings, cada uma é removida do texto na ordem dada.\n\nPara apagar por posição em vez de conteúdo, use `eraseBetween`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Removing separators",
+      "pt": "Removendo separadores"
+     },
+     "code": "erase(\"a-b-c\", \"-\")\nerase(\"hello world\", [\"lo\", \"wor\"])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "eraseBetween",
+    "replace",
+    "strrep",
+    "extractBefore",
+    "extractAfter"
+   ]
+  },
+  "eraseBetween": {
+   "summary": {
+    "en": "Deletes the text lying between two markers or two positions.",
+    "pt": "Apaga o texto que está entre dois marcadores ou duas posições."
+   },
+   "syntax": [
+    {
+     "code": "newStr = eraseBetween(str, startPat, endPat)",
+     "en": "Deletes what is between the first `startPat` and the following `endPat`; the markers stay.",
+     "pt": "Apaga o que está entre o primeiro `startPat` e o `endPat` seguinte; os marcadores permanecem."
+    },
+    {
+     "code": "newStr = eraseBetween(str, startPos, endPos)",
+     "en": "Deletes the characters from position `startPos` to `endPos`.",
+     "pt": "Apaga os caracteres da posição `startPos` até `endPos`."
+    },
+    {
+     "code": "newStr = eraseBetween(___, 'Boundaries', 'inclusive')",
+     "en": "Also deletes the markers themselves.",
+     "pt": "Apaga também os próprios marcadores."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "startPat, endPat",
+     "en": "Text markers that delimit the part to delete.",
+     "pt": "Marcadores de texto que delimitam a parte a apagar."
+    },
+    {
+     "name": "startPos, endPos",
+     "en": "Positive integers giving the first and last character to delete.",
+     "pt": "Inteiros positivos com o primeiro e o último caractere a apagar."
+    },
+    {
+     "name": "'Boundaries'",
+     "en": "`'exclusive'` (default) keeps the markers; `'inclusive'` removes them.",
+     "pt": "`'exclusive'` (padrão) mantém os marcadores; `'inclusive'` os remove."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "Text of the same type as `str` with the selected part removed.",
+     "pt": "Texto do mesmo tipo de `str` com a parte selecionada removida."
+    }
+   ],
+   "description": {
+    "en": "With text markers, the first match of `startPat` is found, then the first `endPat` after it, and what lies between them is deleted. By default the markers are kept, so `eraseBetween(\"[x]\", \"[\", \"]\")` leaves `\"[]\"`.\n\nWith numeric positions the range is always inclusive on both ends.",
+    "pt": "Com marcadores de texto, localiza-se a primeira ocorrência de `startPat` e, depois dela, a primeira de `endPat`; o que fica entre eles é apagado. Por padrão os marcadores são mantidos, então `eraseBetween(\"[x]\", \"[\", \"]\")` deixa `\"[]\"`.\n\nCom posições numéricas, o intervalo é sempre inclusivo nas duas pontas."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Markers and positions",
+      "pt": "Marcadores e posições"
+     },
+     "code": "eraseBetween(\"Hello [x] world\", \"[\", \"]\")\neraseBetween(\"Hello [x] world\", \"[\", \"]\", \"Boundaries\", \"inclusive\")\neraseBetween(\"abcdef\", 2, 4)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "erase",
+    "extractBetween",
+    "insertAfter",
+    "insertBefore",
+    "extractAfter"
+   ]
+  },
+  "etime": {
+   "summary": {
+    "en": "Elapsed time in seconds between two date vectors.",
+    "pt": "Tempo decorrido, em segundos, entre dois vetores de data."
+   },
+   "syntax": [
+    {
+     "code": "t = etime(t1, t0)",
+     "en": "Returns `t1` minus `t0`, in seconds.",
+     "pt": "Retorna `t1` menos `t0`, em segundos."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "t1, t0",
+     "en": "Date vectors `[year month day hour minute second]`, as returned by `clock`. Each is a 1-by-6 row.",
+     "pt": "Vetores de data `[ano mês dia hora minuto segundo]`, como os retornados por `clock`. Cada um é uma linha 1 por 6."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Scalar double: the difference in seconds. It is negative when `t1` is earlier than `t0`.",
+     "pt": "Escalar double: a diferença em segundos. É negativa quando `t1` é anterior a `t0`."
+    }
+   ],
+   "description": {
+    "en": "`etime` converts both date vectors to absolute time and subtracts them, so it handles differences that cross day, month or year boundaries. The usual pattern is to store `t0 = clock` before some work and call `etime(clock, t0)` afterward.\n\nFor new code, `datetime` and `duration` arithmetic is more flexible.",
+    "pt": "`etime` converte os dois vetores de data para tempo absoluto e os subtrai, de modo que lida com diferenças que atravessam dias, meses ou anos. O uso típico é guardar `t0 = clock` antes de um trecho de código e chamar `etime(clock, t0)` depois.\n\nEm código novo, a aritmética com `datetime` e `duration` é mais flexível."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Across midnight",
+      "pt": "Atravessando a meia-noite"
+     },
+     "code": "etime([2024 1 2 0 1 0], [2024 1 1 23 59 0])\netime([2024 1 1 0 0 0], [2024 1 1 0 1 30])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "clock",
+    "datetime",
+    "tic",
+    "toc",
+    "datenum"
+   ]
+  },
+  "exceltime": {
+   "summary": {
+    "en": "Converts datetime values to Excel serial date numbers.",
+    "pt": "Converte valores datetime em números de data seriais do Excel."
+   },
+   "syntax": [
+    {
+     "code": "E = exceltime(T)",
+     "en": "Returns Excel serial dates for the datetime array `T`.",
+     "pt": "Retorna as datas seriais do Excel para o array datetime `T`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "T",
+     "en": "`datetime` array.",
+     "pt": "Array `datetime`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "E",
+     "en": "Double array, same size as `T`. Days are the integer part; the time of day is the fraction.",
+     "pt": "Array double, do mesmo tamanho de `T`. Os dias são a parte inteira; a hora do dia é a fração."
+    }
+   ],
+   "description": {
+    "en": "Excel stores a date as the number of days since an epoch, with the time of day as a fraction of a day. In the 1900 system, 1 January 2024 is `45292`. Noon is `0.5`, so noon on that day is `45292.5`.",
+    "pt": "O Excel guarda uma data como o número de dias desde uma época, com a hora do dia como fração de dia. No sistema 1900, 1 de janeiro de 2024 é `45292`. O meio-dia é `0.5`, logo o meio-dia desse dia é `45292.5`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dates to serial numbers",
+      "pt": "Datas para números seriais"
+     },
+     "code": "format long\nexceltime(datetime(2024, 1, 1))\nexceltime(datetime(2024, 1, 1, 12, 0, 0))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "datetime",
+    "datenum",
+    "posixtime",
+    "juliandate",
+    "datestr"
+   ]
+  },
+  "extract": {
+   "summary": {
+    "en": "Extracts the parts of text that match a pattern or a literal string.",
+    "pt": "Extrai as partes de um texto que casam com um padrão ou string literal."
+   },
+   "syntax": [
+    {
+     "code": "newStr = extract(str, pat)",
+     "en": "Returns every match of `pat` found in `str`.",
+     "pt": "Retorna toda ocorrência de `pat` encontrada em `str`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "String array, character vector or cell array of character vectors.",
+     "pt": "String array, vetor de caracteres ou cell array de vetores de caracteres."
+    },
+    {
+     "name": "pat",
+     "en": "Text to find, or a `pattern` object such as `digitsPattern` or `lettersPattern`.",
+     "pt": "Texto a procurar, ou um objeto `pattern` como `digitsPattern` ou `lettersPattern`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "String array with one element per match, in order. For several input strings the matches are collected in a column.",
+     "pt": "String array com um elemento por ocorrência, em ordem. Para várias strings de entrada, as ocorrências são reunidas em uma coluna."
+    }
+   ],
+   "description": {
+    "en": "`extract` is a pattern-based search that returns the matched text instead of positions. It is a convenient replacement for `regexp(str, expr, 'match')` when a `pattern` object can describe what you want.\n\nThe result is always a string array, even when `str` is a character vector.",
+    "pt": "`extract` faz uma busca por padrão e retorna o texto casado em vez de posições. É uma alternativa prática a `regexp(str, expr, 'match')` quando um objeto `pattern` descreve o que se quer.\n\nO resultado é sempre um string array, mesmo quando `str` é um vetor de caracteres."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Numbers inside text",
+      "pt": "Números dentro de um texto"
+     },
+     "code": "extract(\"a1b22c333\", digitsPattern)\nextract(\"Item 12 and 34\", digitsPattern)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "extractBetween",
+    "extractAfter",
+    "extractBefore",
+    "regexp",
+    "digitsPattern",
+    "strfind"
+   ]
+  },
+  "extractAfter": {
+   "summary": {
+    "en": "Extracts the text that follows a marker or a position.",
+    "pt": "Extrai o texto que vem depois de um marcador ou de uma posição."
+   },
+   "syntax": [
+    {
+     "code": "newStr = extractAfter(str, pat)",
+     "en": "Returns what follows the first occurrence of `pat`.",
+     "pt": "Retorna o que vem depois da primeira ocorrência de `pat`."
+    },
+    {
+     "code": "newStr = extractAfter(str, pos)",
+     "en": "Returns the characters after position `pos`.",
+     "pt": "Retorna os caracteres depois da posição `pos`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text to search.",
+     "pt": "Texto onde procurar."
+    },
+    {
+     "name": "pat",
+     "en": "Marker text or `pattern`. Only the first match counts.",
+     "pt": "Texto marcador ou `pattern`. Só a primeira ocorrência conta."
+    },
+    {
+     "name": "pos",
+     "en": "Positive integer: how many leading characters to skip.",
+     "pt": "Inteiro positivo: quantos caracteres iniciais pular."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "The remainder of the text, as a string (or the type of `str`). If `pat` is not found the result is a missing string.",
+     "pt": "O restante do texto, como string (ou o tipo de `str`). Se `pat` não for achado, o resultado é uma string ausente."
+    }
+   ],
+   "description": {
+    "en": "The marker itself is not part of the result. Use it to split a `key=value` entry: `extractAfter(s, \"=\")` gives the value and `extractBefore(s, \"=\")` gives the key.",
+    "pt": "O próprio marcador não faz parte do resultado. Serve para separar uma entrada `chave=valor`: `extractAfter(s, \"=\")` dá o valor e `extractBefore(s, \"=\")` dá a chave."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Text after a marker",
+      "pt": "Texto depois de um marcador"
+     },
+     "code": "extractAfter(\"abc=def=ghi\", \"=\")\nextractAfter(\"abcdef\", 2)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "extractBefore",
+    "extractBetween",
+    "extract",
+    "eraseBetween",
+    "insertAfter"
+   ]
+  },
+  "extractBefore": {
+   "summary": {
+    "en": "Extracts the text that comes before a marker or a position.",
+    "pt": "Extrai o texto que vem antes de um marcador ou de uma posição."
+   },
+   "syntax": [
+    {
+     "code": "newStr = extractBefore(str, pat)",
+     "en": "Returns what precedes the first occurrence of `pat`.",
+     "pt": "Retorna o que precede a primeira ocorrência de `pat`."
+    },
+    {
+     "code": "newStr = extractBefore(str, pos)",
+     "en": "Returns the characters before position `pos`.",
+     "pt": "Retorna os caracteres antes da posição `pos`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "str",
+     "en": "Text to search.",
+     "pt": "Texto onde procurar."
+    },
+    {
+     "name": "pat",
+     "en": "Marker text or `pattern`. Only the first match counts.",
+     "pt": "Texto marcador ou `pattern`. Só a primeira ocorrência conta."
+    },
+    {
+     "name": "pos",
+     "en": "Positive integer: the position up to (and excluding) which characters are kept.",
+     "pt": "Inteiro positivo: a posição até a qual (sem incluí-la) os caracteres são mantidos."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "The leading part of the text. If `pat` is not found the result is a missing string.",
+     "pt": "A parte inicial do texto. Se `pat` não for achado, o resultado é uma string ausente."
+    }
+   ],
+   "description": {
+    "en": "The marker is excluded from the result. It is the mirror image of `extractAfter`; together they split a string around a separator without using `regexp` or `split`.",
+    "pt": "O marcador é excluído do resultado. É o espelho de `extractAfter`; juntas separam uma string em torno de um separador sem usar `regexp` ou `split`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Text before a marker",
+      "pt": "Texto antes de um marcador"
+     },
+     "code": "extractBefore(\"abc=def=ghi\", \"=\")\nextractBefore(\"abcdef\", 4)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "extractAfter",
+    "extractBetween",
+    "extract",
+    "eraseBetween",
+    "insertBefore"
+   ]
+  },
+  "extractBetween": {
+   "summary": {
+    "en": "Extracts the text between two markers or two positions.",
+    "pt": "Extrai o texto entre dois marcadores ou duas posições."
+   },
+   "syntax": [
+    {
+     "code": "newStr = extractBetween(str, startPat, endPat)",
+     "en": "Returns what lies between `startPat` and the next `endPat`.",
+     "pt": "Retorna o que está entre `startPat` e o próximo `endPat`."
+    },
+    {
+     "code": "newStr = extractBetween(str, startPos, endPos)",
+     "en": "Returns the characters from `startPos` to `endPos`.",
+     "pt": "Retorna os caracteres de `startPos` a `endPos`."
+    },
+    {
+     "code": "newStr = extractBetween(___, 'Boundaries', 'inclusive')",
+     "en": "Keeps the markers in the result.",
+     "pt": "Mantém os marcadores no resultado."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "startPat, endPat",
+     "en": "Marker text or `pattern` objects.",
+     "pt": "Texto marcador ou objetos `pattern`."
+    },
+    {
+     "name": "startPos, endPos",
+     "en": "Positive integers: first and last character to return.",
+     "pt": "Inteiros positivos: primeiro e último caractere a retornar."
+    },
+    {
+     "name": "'Boundaries'",
+     "en": "`'exclusive'` (default) drops the markers; `'inclusive'` keeps them.",
+     "pt": "`'exclusive'` (padrão) descarta os marcadores; `'inclusive'` os mantém."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "newStr",
+     "en": "String array of the extracted pieces.",
+     "pt": "String array com os trechos extraídos."
+    }
+   ],
+   "description": {
+    "en": "This is the usual way to pull a field out of text such as `\"name [id] value\"`. Each start marker is paired with the next end marker, and every such pair yields one piece.",
+    "pt": "É a forma usual de tirar um campo de um texto como `\"nome [id] valor\"`. Cada marcador inicial é pareado com o próximo marcador final, e cada par gera um trecho."
+   },
+   "notes": {
+    "en": "In MatLivre, numeric positions work in `eraseBetween`, `extractAfter` and `extractBefore`, but `extractBetween` with two numeric positions raises an error. Use text markers or index the string directly.",
+    "pt": "Em MatLivre, posições numéricas funcionam em `eraseBetween`, `extractAfter` e `extractBefore`, mas `extractBetween` com duas posições numéricas gera erro. Use marcadores de texto ou indexe a string diretamente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Between brackets",
+      "pt": "Entre colchetes"
+     },
+     "code": "extractBetween(\"a[bc]d\", \"[\", \"]\")\nextractBetween(\"a[bc]d\", \"[\", \"]\", \"Boundaries\", \"inclusive\")",
+     "silent": false
+    }
+   ],
+   "see": [
+    "extractAfter",
+    "extractBefore",
+    "extract",
+    "eraseBetween",
+    "regexp"
+   ]
+  },
+  "feval": {
+   "summary": {
+    "en": "Calls a function given by handle or by name.",
+    "pt": "Chama uma função dada por handle ou por nome."
+   },
+   "syntax": [
+    {
+     "code": "[y1, ..., yN] = feval(fun, x1, ..., xM)",
+     "en": "Calls `fun` with the arguments `x1` to `xM` and returns its outputs.",
+     "pt": "Chama `fun` com os argumentos `x1` a `xM` e retorna suas saídas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle, or the name of a function as text.",
+     "pt": "Function handle, ou o nome de uma função como texto."
+    },
+    {
+     "name": "x1, ..., xM",
+     "en": "Arguments passed on to `fun`.",
+     "pt": "Argumentos repassados a `fun`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y1, ..., yN",
+     "en": "Outputs of `fun`. The number requested is passed on, so `[m, i] = feval(@max, v)` gets both outputs.",
+     "pt": "Saídas de `fun`. O número pedido é repassado, então `[m, i] = feval(@max, v)` obtém as duas saídas."
+    }
+   ],
+   "description": {
+    "en": "`feval(@f, a, b)` is the same as `f(a, b)`. It is useful when the function to run is chosen at run time, for example read from a variable or a struct field. With a handle, calling `fun(a, b)` directly is usually clearer.",
+    "pt": "`feval(@f, a, b)` equivale a `f(a, b)`. É útil quando a função a executar é escolhida em tempo de execução, por exemplo lida de uma variável ou de um campo de struct. Com um handle, chamar `fun(a, b)` diretamente costuma ser mais claro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "By name and by handle",
+      "pt": "Por nome e por handle"
+     },
+     "code": "feval('max', [1 5 2])\nfeval(@(a, b) a + b, 2, 3)\n[m, i] = feval(@max, [4 9 2])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "func2str",
+    "str2func",
+    "arrayfun",
+    "cellfun",
+    "functions"
+   ]
+  },
+  "fieldnames": {
+   "summary": {
+    "en": "Names of the fields of a struct or the properties of an object.",
+    "pt": "Nomes dos campos de uma struct ou das propriedades de um objeto."
+   },
+   "syntax": [
+    {
+     "code": "names = fieldnames(S)",
+     "en": "Returns the field names as a cell array of character vectors.",
+     "pt": "Retorna os nomes dos campos como cell array de vetores de caracteres."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Structure (or an object).",
+     "pt": "Estrutura (ou um objeto)."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "names",
+     "en": "Column cell array with one name per field, in the order the fields were created.",
+     "pt": "Cell array coluna com um nome por campo, na ordem em que os campos foram criados."
+    }
+   ],
+   "description": {
+    "en": "`fieldnames` is the usual way to loop over a struct: `for k = 1:numel(f), s.(f{k}) ... end` reads each field by dynamic name.\n\nThe result is a column, so transpose it with `'` if a row is more convenient.",
+    "pt": "`fieldnames` é a forma usual de percorrer uma struct: `for k = 1:numel(f), s.(f{k}) ... end` lê cada campo por nome dinâmico.\n\nO resultado é uma coluna; transponha com `'` se uma linha for mais conveniente."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Listing and looping",
+      "pt": "Listando e percorrendo"
+     },
+     "code": "s = struct('p', 1, 'q', 'text');\nf = fieldnames(s)\nfor k = 1:numel(f)\n    fprintf('%s is a %s\\n', f{k}, class(s.(f{k})));\nend",
+     "silent": false
+    }
+   ],
+   "see": [
+    "isfield",
+    "rmfield",
+    "getfield",
+    "setfield",
+    "struct",
+    "orderfields"
+   ]
+  },
+  "fillmissing": {
+   "summary": {
+    "en": "Replaces missing values (NaN) by interpolation, a constant or a neighbor.",
+    "pt": "Substitui valores ausentes (NaN) por interpolação, constante ou vizinho."
+   },
+   "syntax": [
+    {
+     "code": "B = fillmissing(A, 'linear')",
+     "en": "Fills gaps by linear interpolation between the nearest valid values.",
+     "pt": "Preenche lacunas por interpolação linear entre os valores válidos mais próximos."
+    },
+    {
+     "code": "B = fillmissing(A, 'constant', v)",
+     "en": "Replaces missing entries by the value `v`.",
+     "pt": "Substitui as entradas ausentes pelo valor `v`."
+    },
+    {
+     "code": "B = fillmissing(A, method)",
+     "en": "Other methods: `'previous'`, `'next'`, `'nearest'`.",
+     "pt": "Outros métodos: `'previous'`, `'next'`, `'nearest'`."
+    },
+    {
+     "code": "[B, TF] = fillmissing(___)",
+     "en": "Also returns a logical array marking the filled positions.",
+     "pt": "Também retorna um array lógico marcando as posições preenchidas."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Vector, matrix or table. A matrix is processed column by column.",
+     "pt": "Vetor, matriz ou tabela. Uma matriz é processada coluna a coluna."
+    },
+    {
+     "name": "method",
+     "en": "`'linear'`, `'previous'`, `'next'`, `'nearest'` or `'constant'`.",
+     "pt": "`'linear'`, `'previous'`, `'next'`, `'nearest'` ou `'constant'`."
+    },
+    {
+     "name": "v",
+     "en": "Fill value, required with `'constant'`.",
+     "pt": "Valor de preenchimento, obrigatório com `'constant'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "B",
+     "en": "Array of the same size as `A` with the gaps filled.",
+     "pt": "Array do mesmo tamanho de `A` com as lacunas preenchidas."
+    },
+    {
+     "name": "TF",
+     "en": "Logical array, true where a value was filled.",
+     "pt": "Array lógico, verdadeiro onde um valor foi preenchido."
+    }
+   ],
+   "description": {
+    "en": "A value counts as missing when it is `NaN` (for numeric data). `'linear'` draws a straight line between the closest valid points on each side of a gap, `'previous'` repeats the last valid value, `'next'` takes the following one and `'nearest'` takes whichever is closer.\n\nA gap at the edge of the data has a valid neighbor on one side only, so `'linear'` cannot interpolate there.",
+    "pt": "Um valor é considerado ausente quando é `NaN` (em dados numéricos). `'linear'` traça uma reta entre os pontos válidos mais próximos de cada lado da lacuna, `'previous'` repete o último valor válido, `'next'` usa o seguinte e `'nearest'` usa o mais próximo.\n\nUma lacuna na borda dos dados tem vizinho válido de um lado apenas, então `'linear'` não consegue interpolar ali."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Filling NaN",
+      "pt": "Preenchendo NaN"
+     },
+     "code": "x = [1 NaN 3 NaN NaN 6];\nfillmissing(x, 'linear')\nfillmissing(x, 'previous')\nfillmissing(x, 'constant', 0)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "ismissing",
+    "rmmissing",
+    "standardizeMissing",
+    "isnan",
+    "interp1",
+    "movmean"
+   ]
+  },
+  "filter": {
+   "summary": {
+    "en": "One-dimensional digital filter: applies a difference equation to a signal.",
+    "pt": "Filtro digital unidimensional: aplica uma equação de diferenças a um sinal."
+   },
+   "syntax": [
+    {
+     "code": "y = filter(b, a, x)",
+     "en": "Filters `x` with numerator `b` and denominator `a`.",
+     "pt": "Filtra `x` com numerador `b` e denominador `a`."
+    },
+    {
+     "code": "[y, zf] = filter(b, a, x)",
+     "en": "Also returns the final filter state.",
+     "pt": "Também retorna o estado final do filtro."
+    },
+    {
+     "code": "y = filter(b, a, x, zi)",
+     "en": "Starts from the initial state `zi`.",
+     "pt": "Parte do estado inicial `zi`."
+    },
+    {
+     "code": "y = filter(b, a, x, zi, dim)",
+     "en": "Filters along dimension `dim`.",
+     "pt": "Filtra ao longo da dimensão `dim`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "b",
+     "en": "Vector of feedforward (numerator) coefficients.",
+     "pt": "Vetor de coeficientes de alimentação direta (numerador)."
+    },
+    {
+     "name": "a",
+     "en": "Vector of feedback (denominator) coefficients. If `a(1)` is not 1, all coefficients are divided by it.",
+     "pt": "Vetor de coeficientes de realimentação (denominador). Se `a(1)` não for 1, todos os coeficientes são divididos por ele."
+    },
+    {
+     "name": "x",
+     "en": "Input signal: a vector, or a matrix filtered column by column.",
+     "pt": "Sinal de entrada: vetor, ou matriz filtrada coluna a coluna."
+    },
+    {
+     "name": "zi",
+     "en": "Initial conditions (delays), of length `max(length(a), length(b)) - 1`.",
+     "pt": "Condições iniciais (atrasos), de comprimento `max(length(a), length(b)) - 1`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "y",
+     "en": "Filtered signal, same size as `x`.",
+     "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+    },
+    {
+     "name": "zf",
+     "en": "Final delay values, usable as `zi` to continue filtering the next block of data.",
+     "pt": "Valores finais dos atrasos, utilizáveis como `zi` para continuar filtrando o próximo bloco de dados."
+    }
+   ],
+   "description": {
+    "en": "The output follows `a(1)*y(n) = b(1)*x(n) + b(2)*x(n-1) + ... - a(2)*y(n-1) - ...`. With `a = 1` this is an FIR filter such as a moving average; with other `a` values the filter is recursive (IIR) and the response to an impulse can last forever.\n\nThe filter is causal: `y(n)` uses only current and past inputs, which introduces a delay. Samples before the first one are taken as zero unless `zi` is given.",
+    "pt": "A saída obedece a `a(1)*y(n) = b(1)*x(n) + b(2)*x(n-1) + ... - a(2)*y(n-1) - ...`. Com `a = 1` o filtro é FIR, como uma média móvel; com outros valores de `a` o filtro é recursivo (IIR) e a resposta a um impulso pode durar indefinidamente.\n\nO filtro é causal: `y(n)` usa apenas entradas atuais e passadas, o que introduz atraso. As amostras anteriores à primeira são tomadas como zero, a menos que `zi` seja dado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Moving average and recursive filter",
+      "pt": "Média móvel e filtro recursivo"
+     },
+     "code": "filter([1 1 1]/3, 1, [3 6 9 12 15])\nfilter(1, [1 -0.5], [1 0 0 0])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "conv",
+    "filtfilt",
+    "movmean",
+    "freqz",
+    "deconv",
+    "cumsum"
+   ]
+  },
+  "findgroups": {
+   "summary": {
+    "en": "Assigns a group number to each element according to its unique value.",
+    "pt": "Atribui a cada elemento um número de grupo conforme seu valor único."
+   },
+   "syntax": [
+    {
+     "code": "G = findgroups(A)",
+     "en": "Returns the group index of each element of `A`.",
+     "pt": "Retorna o índice do grupo de cada elemento de `A`."
+    },
+    {
+     "code": "[G, ID] = findgroups(A)",
+     "en": "Also returns the unique values that identify the groups.",
+     "pt": "Também retorna os valores únicos que identificam os grupos."
+    },
+    {
+     "code": "G = findgroups(A1, ..., AN)",
+     "en": "Groups by the combination of several variables.",
+     "pt": "Agrupa pela combinação de várias variáveis."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "A",
+     "en": "Grouping variable: numeric, logical, string, categorical or cell array of character vectors. Must be a vector.",
+     "pt": "Variável de agrupamento: numérica, lógica, string, categorical ou cell array de vetores de caracteres. Deve ser um vetor."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "G",
+     "en": "Column of positive integers, one per element of `A`; equal values share a number. Numbering follows the sorted order of the unique values.",
+     "pt": "Coluna de inteiros positivos, um por elemento de `A`; valores iguais têm o mesmo número. A numeração segue a ordem classificada dos valores únicos."
+    },
+    {
+     "name": "ID",
+     "en": "The unique values, sorted; `ID(k)` is the value of group `k`.",
+     "pt": "Os valores únicos, ordenados; `ID(k)` é o valor do grupo `k`."
+    }
+   ],
+   "description": {
+    "en": "`findgroups` is the first half of a split-apply-combine step. Pass `G` to `splitapply` or `accumarray` to compute a statistic per group, for instance the sum of values that share a label. Missing values (`NaN`) get a `NaN` group number.",
+    "pt": "`findgroups` é a primeira metade de um passo dividir-aplicar-combinar. Passe `G` a `splitapply` ou `accumarray` para calcular uma estatística por grupo, por exemplo a soma dos valores que compartilham um rótulo. Valores ausentes (`NaN`) recebem número de grupo `NaN`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Group and sum",
+      "pt": "Agrupar e somar"
+     },
+     "code": "[g, id] = findgroups([\"b\"; \"a\"; \"b\"; \"c\"])\naccumarray(g, [1; 2; 3; 4])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "splitapply",
+    "accumarray",
+    "unique",
+    "groupsummary",
+    "groupcounts"
+   ]
+  },
+  "findstr": {
+   "summary": {
+    "en": "Finds the starting positions of the shorter text inside the longer one (legacy).",
+    "pt": "Encontra as posições iniciais do texto menor dentro do maior (legado)."
+   },
+   "syntax": [
+    {
+     "code": "k = findstr(s1, s2)",
+     "en": "Returns the start indices of occurrences of the shorter string within the longer one.",
+     "pt": "Retorna os índices iniciais das ocorrências da string menor dentro da maior."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s1, s2",
+     "en": "Character vectors. The order does not matter: the shorter is searched inside the longer.",
+     "pt": "Vetores de caracteres. A ordem não importa: a menor é procurada dentro da maior."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "k",
+     "en": "Row vector of start positions, empty if there is no match.",
+     "pt": "Vetor linha de posições iniciais, vazio se não houver ocorrência."
+    }
+   ],
+   "description": {
+    "en": "`findstr` is kept for compatibility. Because it swaps its arguments silently, `strfind(text, pattern)` is clearer and is the recommended replacement.\n\nOverlapping occurrences are all reported: searching `'ana'` in `'banana'` finds positions 2 and 4.",
+    "pt": "`findstr` é mantida por compatibilidade. Como troca os argumentos silenciosamente, `strfind(texto, padrão)` é mais claro e é a substituição recomendada.\n\nOcorrências que se sobrepõem são todas reportadas: procurar `'ana'` em `'banana'` encontra as posições 2 e 4."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Overlapping matches",
+      "pt": "Ocorrências sobrepostas"
+     },
+     "code": "findstr('banana', 'ana')\nfindstr('abcabc', 'bc')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "strfind",
+    "contains",
+    "strrep",
+    "regexp",
+    "extract"
+   ]
+  },
+  "flintmax": {
+   "summary": {
+    "en": "Largest consecutive integer that floating point can hold exactly.",
+    "pt": "Maior inteiro consecutivo que o ponto flutuante representa exatamente."
+   },
+   "syntax": [
+    {
+     "code": "m = flintmax",
+     "en": "Returns `2^53` for double.",
+     "pt": "Retorna `2^53` para double."
+    },
+    {
+     "code": "m = flintmax('single')",
+     "en": "Returns `2^24` for single.",
+     "pt": "Retorna `2^24` para single."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "class",
+     "en": "`'double'` (default) or `'single'`.",
+     "pt": "`'double'` (padrão) ou `'single'`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Scalar of the requested class.",
+     "pt": "Escalar da classe pedida."
+    }
+   ],
+   "description": {
+    "en": "Up to `flintmax`, every integer is representable. Above it, the spacing between floating-point numbers exceeds 1, so some integers cannot be stored and `flintmax + 1` rounds back to `flintmax`.",
+    "pt": "Até `flintmax`, todo inteiro é representável. Acima dele, o espaçamento entre números de ponto flutuante passa de 1, então alguns inteiros não podem ser armazenados e `flintmax + 1` arredonda de volta para `flintmax`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Limit of exact integers",
+      "pt": "Limite dos inteiros exatos"
+     },
+     "code": "format long\nflintmax\nflintmax + 1 == flintmax\nflintmax('single')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "eps",
+    "realmax",
+    "intmax",
+    "double",
+    "single"
+   ]
+  },
+  "func2str": {
+   "summary": {
+    "en": "Converts a function handle to text.",
+    "pt": "Converte um function handle em texto."
+   },
+   "syntax": [
+    {
+     "code": "s = func2str(fh)",
+     "en": "Returns the name of a simple handle, or the full text of an anonymous one.",
+     "pt": "Retorna o nome de um handle simples, ou o texto completo de um anônimo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fh",
+     "en": "Function handle.",
+     "pt": "Function handle."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "Character vector. For `@sin` it is `'sin'` (no `@`); for an anonymous function it starts with `@` and shows the parameter list and body.",
+     "pt": "Vetor de caracteres. Para `@sin` é `'sin'` (sem `@`); para uma função anônima começa com `@` e mostra a lista de parâmetros e o corpo."
+    }
+   ],
+   "description": {
+    "en": "`func2str` is the inverse of `str2func`. It is handy for printing which function was used, and for saving an anonymous function as text. The body of an anonymous function is shown in a normalized form, so spacing may differ from how it was typed.",
+    "pt": "`func2str` é o inverso de `str2func`. É útil para imprimir qual função foi usada e para salvar uma função anônima como texto. O corpo de uma função anônima aparece em forma normalizada, então o espaçamento pode diferir do digitado."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Simple and anonymous handles",
+      "pt": "Handles simples e anônimos"
+     },
+     "code": "func2str(@sin)\nfunc2str(@(x, y) x + y)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "str2func",
+    "feval",
+    "functions",
+    "cellfun",
+    "arrayfun"
+   ]
+  },
+  "functions": {
+   "summary": {
+    "en": "Information about a function handle: name, type and file.",
+    "pt": "Informações sobre um function handle: nome, tipo e arquivo."
+   },
+   "syntax": [
+    {
+     "code": "info = functions(fh)",
+     "en": "Returns a struct describing the handle `fh`.",
+     "pt": "Retorna uma struct que descreve o handle `fh`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fh",
+     "en": "Function handle.",
+     "pt": "Function handle."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "info",
+     "en": "Struct with the fields `function`, `type` and `file`. For anonymous functions it also has `workspace`, a cell holding a struct of the variables captured when the handle was created.",
+     "pt": "Struct com os campos `function`, `type` e `file`. Para funções anônimas tem também `workspace`, um cell com uma struct das variáveis capturadas quando o handle foi criado."
+    }
+   ],
+   "description": {
+    "en": "The `type` field is `'simple'` for a plain named function, `'anonymous'` for `@(x) ...` handles, and other values for nested and local functions. Captured variables are what make `@(x) a*x` remember `a`; `functions` is the way to inspect them.",
+    "pt": "O campo `type` é `'simple'` para uma função nomeada comum, `'anonymous'` para handles `@(x) ...`, e outros valores para funções aninhadas e locais. As variáveis capturadas fazem `@(x) a*x` lembrar `a`; `functions` é a forma de inspecioná-las."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspecting a handle",
+      "pt": "Inspecionando um handle"
+     },
+     "code": "f = functions(@sin)\nk = 3;\ng = functions(@(a) a + k);\ng.type\ng.workspace{1}",
+     "silent": false
+    }
+   ],
+   "see": [
+    "func2str",
+    "str2func",
+    "feval",
+    "is_function_handle",
+    "cellfun"
+   ]
+  },
+  "getabstime": {
+   "summary": {
+    "en": "Time vector of a timeseries as date strings.",
+    "pt": "Vetor de tempo de uma timeseries como strings de data."
+   },
+   "syntax": [
+    {
+     "code": "t = getabstime(ts)",
+     "en": "Returns the absolute date string of each sample.",
+     "pt": "Retorna a string de data absoluta de cada amostra."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` whose `TimeInfo.StartDate` is set.",
+     "pt": "`timeseries` com `TimeInfo.StartDate` definido."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "t",
+     "en": "Cell array of date strings, one per sample, in the form `'dd-mmm-yyyy HH:MM:SS'`.",
+     "pt": "Cell array de strings de data, uma por amostra, na forma `'dd-mmm-yyyy HH:MM:SS'`."
+    }
+   ],
+   "description": {
+    "en": "A timeseries stores times relative to a start, in the units of `TimeInfo.Units`. When `TimeInfo.StartDate` holds a date, `getabstime` adds each relative time to that date. Without a start date the time vector is relative and the call raises an error.",
+    "pt": "Uma timeseries guarda tempos relativos a um início, na unidade de `TimeInfo.Units`. Quando `TimeInfo.StartDate` contém uma data, `getabstime` soma cada tempo relativo a essa data. Sem data de início o vetor de tempo é relativo e a chamada gera erro."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dates from a start date",
+      "pt": "Datas a partir de uma data inicial"
+     },
+     "code": "ts = timeseries([1; 2; 3], [0; 1; 2]);\nts.TimeInfo.StartDate = '01-Jan-2024 00:00:00';\nts.TimeInfo.Units = 'seconds';\ngetabstime(ts)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "timeseries",
+    "setabstime",
+    "datetime",
+    "datestr",
+    "getsamples"
+   ]
+  },
+  "getdatasamples": {
+   "summary": {
+    "en": "Picks samples of a timeseries by index and returns only the data.",
+    "pt": "Seleciona amostras de uma timeseries por índice e retorna apenas os dados."
+   },
+   "syntax": [
+    {
+     "code": "d = getdatasamples(ts, idx)",
+     "en": "Returns the data rows at the sample indices `idx`.",
+     "pt": "Retorna as linhas de dados nos índices de amostra `idx`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    },
+    {
+     "name": "idx",
+     "en": "Vector of sample indices.",
+     "pt": "Vetor de índices de amostras."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "d",
+     "en": "Array with the selected data samples (not a timeseries).",
+     "pt": "Array com as amostras de dados selecionadas (não uma timeseries)."
+    }
+   ],
+   "description": {
+    "en": "`getdatasamples` is the data-only counterpart of `getsamples`: it returns the numbers at those sample positions without time information. Indexing is by sample number, not by time value.",
+    "pt": "`getdatasamples` é a versão só de dados de `getsamples`: retorna os números nessas posições de amostra, sem informação de tempo. A indexação é por número da amostra, não por valor de tempo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Samples 1 and 3",
+      "pt": "Amostras 1 e 3"
+     },
+     "code": "ts = timeseries([10; 20; 30; 40], [0; 1; 2; 3]);\nd = getdatasamples(ts, [1 3])",
+     "silent": false
+    }
+   ],
+   "see": [
+    "getsamples",
+    "timeseries",
+    "getsampleusingtime",
+    "getdatasamplesize",
+    "addsample"
+   ]
+  },
+  "getdatasamplesize": {
+   "summary": {
+    "en": "Size of one data sample of a timeseries.",
+    "pt": "Tamanho de uma amostra de dados de uma timeseries."
+   },
+   "syntax": [
+    {
+     "code": "sz = getdatasamplesize(ts)",
+     "en": "Returns the dimensions of a single sample.",
+     "pt": "Retorna as dimensões de uma única amostra."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "sz",
+     "en": "Row vector of sizes, excluding the time dimension.",
+     "pt": "Vetor linha de tamanhos, excluindo a dimensão de tempo."
+    }
+   ],
+   "description": {
+    "en": "The time dimension of `Data` is separated out, and the rest describes one sample. A series of scalars has sample size `[1 1]`; a series with two channels per instant has `[1 2]`.",
+    "pt": "A dimensão de tempo de `Data` é separada, e o restante descreve uma amostra. Uma série de escalares tem tamanho de amostra `[1 1]`; uma série com dois canais por instante tem `[1 2]`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Scalar and two-channel series",
+      "pt": "Série escalar e de dois canais"
+     },
+     "code": "getdatasamplesize(timeseries((1:4)', (0:3)'))\ngetdatasamplesize(timeseries([1 2; 3 4; 5 6], (0:2)'))",
+     "silent": false
+    }
+   ],
+   "see": [
+    "timeseries",
+    "getdatasamples",
+    "size",
+    "getsamples",
+    "getinterpmethod"
+   ]
+  },
+  "getfield": {
+   "summary": {
+    "en": "Reads a struct field, possibly nested or indexed, by name.",
+    "pt": "Lê um campo de struct, possivelmente aninhado ou indexado, pelo nome."
+   },
+   "syntax": [
+    {
+     "code": "v = getfield(S, 'name')",
+     "en": "Returns the value of field `name`.",
+     "pt": "Retorna o valor do campo `name`."
+    },
+    {
+     "code": "v = getfield(S, 'a', 'b')",
+     "en": "Follows nested fields.",
+     "pt": "Segue campos aninhados."
+    },
+    {
+     "code": "v = getfield(S, 'a', {k})",
+     "en": "Indexes into the field value.",
+     "pt": "Indexa o valor do campo."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "S",
+     "en": "Structure.",
+     "pt": "Estrutura."
+    },
+    {
+     "name": "name",
+     "en": "Field name as text, or an index in a cell such as `{2}`.",
+     "pt": "Nome do campo como texto, ou um índice em um cell como `{2}`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "v",
+     "en": "Value stored at the end of the path.",
+     "pt": "Valor armazenado no fim do caminho."
+    }
+   ],
+   "description": {
+    "en": "Each argument after `S` is one step of the path: text means a field, a cell means an index. `getfield(S, 'a', 'b', {2})` is the same as `S.a.b(2)`. With a name held in a variable, the dynamic field syntax `S.(name)` does the same job.",
+    "pt": "Cada argumento após `S` é um passo do caminho: texto significa campo, cell significa índice. `getfield(S, 'a', 'b', {2})` equivale a `S.a.b(2)`. Com o nome em uma variável, a sintaxe de campo dinâmico `S.(nome)` faz o mesmo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Nested field with an index",
+      "pt": "Campo aninhado com índice"
+     },
+     "code": "s.a.b = [10 20 30];\ngetfield(s, 'a', 'b', {2})\ngetfield(s, 'a')",
+     "silent": false
+    }
+   ],
+   "see": [
+    "setfield",
+    "fieldnames",
+    "isfield",
+    "rmfield",
+    "struct"
+   ]
+  },
+  "getinterpmethod": {
+   "summary": {
+    "en": "Interpolation method of a timeseries.",
+    "pt": "Método de interpolação de uma timeseries."
+   },
+   "syntax": [
+    {
+     "code": "m = getinterpmethod(ts)",
+     "en": "Returns the name of the interpolation method.",
+     "pt": "Retorna o nome do método de interpolação."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "ts",
+     "en": "`timeseries` object.",
+     "pt": "Objeto `timeseries`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "m",
+     "en": "Character vector: `'linear'` (default) or `'zoh'` (zero-order hold).",
+     "pt": "Vetor de caracteres: `'linear'` (padrão) ou `'zoh'` (retenção de ordem zero)."
+    }
+   ],
+   "description": {
+    "en": "The method decides how values between samples are computed when the series is resampled or sampled at new times. `'linear'` draws straight lines; `'zoh'` holds each value until the next sample. Change it with `setinterpmethod`.",
+    "pt": "O método decide como os valores entre amostras são calculados quando a série é reamostrada ou amostrada em novos tempos. `'linear'` traça retas; `'zoh'` mantém cada valor até a próxima amostra. Altere com `setinterpmethod`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Default and changed",
+      "pt": "Padrão e alterado"
+     },
+     "code": "ts = timeseries([1; 2; 3], [0; 1; 2]);\ngetinterpmethod(ts)\nts = setinterpmethod(ts, 'zoh');\ngetinterpmethod(ts)",
+     "silent": false
+    }
+   ],
+   "see": [
+    "setinterpmethod",
+    "resample",
+    "timeseries",
+    "interp1",
+    "getsamples"
+   ]
+  }
+ }
+}

@@ -1,0 +1,570 @@
+{
+  "functions": {
+    "heatmap": {
+      "summary": {"en": "Heatmap chart that shows a matrix, or two table variables, as colored cells.", "pt": "Gráfico de mapa de calor que mostra uma matriz, ou duas variáveis de uma tabela, como células coloridas."},
+      "syntax": [
+        {"code": "heatmap(cdata)", "en": "Draws one cell per element of the matrix `cdata`, colored by its value.", "pt": "Desenha uma célula por elemento da matriz `cdata`, colorida pelo valor."},
+        {"code": "heatmap(xvalues, yvalues, cdata)", "en": "Labels the columns with `xvalues` and the rows with `yvalues`.", "pt": "Rotula as colunas com `xvalues` e as linhas com `yvalues`."},
+        {"code": "heatmap(tbl, xvar, yvar)", "en": "Counts the rows of the table `tbl` for each pair of values of the variables `xvar` and `yvar`.", "pt": "Conta as linhas da tabela `tbl` para cada par de valores das variáveis `xvar` e `yvar`."},
+        {"code": "h = heatmap(___)", "en": "Also returns the chart object, whose properties (`Title`, `Colormap`, `ColorData`) can be changed.", "pt": "Também retorna o objeto do gráfico, cujas propriedades (`Title`, `Colormap`, `ColorData`) podem ser alteradas."}
+      ],
+      "inputs": [
+        {"name": "cdata", "en": "Numeric matrix, one value per cell.", "pt": "Matriz numérica, um valor por célula."},
+        {"name": "xvalues, yvalues", "en": "Labels for the columns and rows: cell array of character vectors, string array or numeric vector.", "pt": "Rótulos das colunas e linhas: cell array de vetores de caracteres, array de strings ou vetor numérico."},
+        {"name": "tbl, xvar, yvar", "en": "Table and the names of two of its variables.", "pt": "Tabela e os nomes de duas de suas variáveis."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "HeatmapChart object.", "pt": "Objeto HeatmapChart."}
+      ],
+      "description": {
+        "en": "A heatmap is a good way to read a correlation matrix, a confusion matrix or any grid of numbers, because the color gives a quick overview while the labels keep the cells identifiable. The color scale is set by the smallest and largest values and follows the current colormap.\n\nUnlike `imagesc`, `heatmap` is a chart: it has category labels, not numeric axes.",
+        "pt": "Um mapa de calor é uma boa forma de ler uma matriz de correlação, uma matriz de confusão ou qualquer grade de números, pois a cor dá uma visão geral rápida enquanto os rótulos mantêm as células identificáveis. A escala de cor é definida pelo menor e pelo maior valor e segue o colormap atual.\n\nAo contrário de `imagesc`, `heatmap` é um gráfico de categorias, com rótulos e não com eixos numéricos."
+      },
+      "examples": [
+        {"title": {"en": "Labelled matrix", "pt": "Matriz com rótulos"}, "silent": true, "code": "cdata = [10 2 0; 3 12 1; 0 4 9];\nh = heatmap({'A','B','C'}, {'A','B','C'}, cdata);\nh.Title = 'Confusion matrix';", "note": {"en": "In the app, the chart is drawn below the code.", "pt": "No app, o gráfico é desenhado abaixo do código."}}
+      ],
+      "see": ["imagesc", "pcolor", "bubblechart", "histogram2", "table"]
+    },
+    "hidden": {
+      "summary": {"en": "Turns hidden-line removal on or off for mesh plots.", "pt": "Liga ou desliga a remoção de linhas ocultas em gráficos de malha."},
+      "syntax": [
+        {"code": "hidden on", "en": "Makes the mesh opaque, so lines behind the surface are hidden.", "pt": "Torna a malha opaca, de modo que as linhas atrás da superfície fiquem ocultas."},
+        {"code": "hidden off", "en": "Makes the mesh see-through, so every line shows.", "pt": "Torna a malha transparente, de modo que todas as linhas apareçam."},
+        {"code": "hidden", "en": "Toggles the current state.", "pt": "Alterna o estado atual."}
+      ],
+      "inputs": [
+        {"name": "on, off", "en": "Command-style option; `hidden('off')` works too.", "pt": "Opção em estilo de comando; `hidden('off')` também funciona."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "A mesh drawn by `mesh` normally fills its faces with the background color, which hides whatever lies behind the surface. `hidden off` removes that fill so the full wireframe is visible, which helps when the back of the surface matters.",
+        "pt": "Uma malha desenhada por `mesh` normalmente preenche as faces com a cor de fundo, ocultando o que está atrás da superfície. `hidden off` remove esse preenchimento e deixa a malha completa visível, o que ajuda quando o fundo da superfície importa."
+      },
+      "notes": {
+        "en": "In MatLivre the command is accepted but does not change the drawing.",
+        "pt": "No MatLivre o comando é aceito, mas não altera o desenho."
+      },
+      "examples": [
+        {"title": {"en": "See-through mesh", "pt": "Malha transparente"}, "silent": true, "code": "mesh(peaks(20))\nhidden off", "note": {"en": "In MATLAB the lines behind the surface become visible.", "pt": "No MATLAB, as linhas atrás da superfície ficam visíveis."}}
+      ],
+      "see": ["mesh", "surf", "meshz", "shading"]
+    },
+    "hist": {
+      "summary": {"en": "Counts data into equally spaced bins and draws a histogram, or returns the counts and centers.", "pt": "Conta dados em bins igualmente espaçados e desenha um histograma, ou retorna as contagens e os centros."},
+      "syntax": [
+        {"code": "hist(y)", "en": "Plots a histogram with 10 bins spanning the range of `y`.", "pt": "Plota um histograma com 10 bins cobrindo a faixa de `y`."},
+        {"code": "hist(y, nbins)", "en": "Uses `nbins` bins.", "pt": "Usa `nbins` bins."},
+        {"code": "hist(y, centers)", "en": "Uses the vector `centers` as the bin centers.", "pt": "Usa o vetor `centers` como centros dos bins."},
+        {"code": "[n, c] = hist(___)", "en": "Returns the counts `n` and the bin centers `c` and draws nothing.", "pt": "Retorna as contagens `n` e os centros `c` dos bins e não desenha nada."}
+      ],
+      "inputs": [
+        {"name": "y", "en": "Vector of data. For a matrix, each column is binned separately.", "pt": "Vetor de dados. Para uma matriz, cada coluna é contada separadamente."},
+        {"name": "nbins", "en": "Number of bins, 10 by default.", "pt": "Número de bins, 10 por padrão."},
+        {"name": "centers", "en": "Vector of bin centers; the bin edges lie halfway between neighbors.", "pt": "Vetor de centros dos bins; as bordas ficam a meio caminho entre vizinhos."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Counts per bin, as a row vector (one column per data column for a matrix input, with bins down the rows).", "pt": "Contagens por bin, como vetor linha (uma coluna por coluna de dados para entrada matricial, com os bins nas linhas)."},
+        {"name": "c", "en": "Centers of the bins.", "pt": "Centros dos bins."}
+      ],
+      "description": {
+        "en": "With a number of bins, the range from the minimum to the maximum of the data is divided into equal parts, and the center of each part is reported. Each value is counted in the bin whose center is nearest.\n\n`hist` is an older function. `histogram` offers automatic bin selection, normalization and a returned object, and `histcounts` returns counts without plotting.",
+        "pt": "Com um número de bins, a faixa do mínimo ao máximo dos dados é dividida em partes iguais e o centro de cada parte é informado. Cada valor é contado no bin cujo centro é o mais próximo.\n\n`hist` é uma função antiga. `histogram` oferece seleção automática de bins, normalização e um objeto de retorno, e `histcounts` retorna contagens sem desenhar."
+      },
+      "examples": [
+        {"title": {"en": "Counts and centers", "pt": "Contagens e centros"}, "code": "y = [1 2 2 3 3 3 4 4 5 9];\n[n, c] = hist(y, 3)\nhist(y, [2 5 8])"}
+      ],
+      "see": ["histogram", "histcounts", "histc", "bar", "accumarray"]
+    },
+    "histc": {
+      "summary": {"en": "Counts how many values fall in each interval defined by a vector of bin edges.", "pt": "Conta quantos valores caem em cada intervalo definido por um vetor de bordas."},
+      "syntax": [
+        {"code": "n = histc(x, edges)", "en": "Counts the elements of `x` in each bin `edges(k) <= x < edges(k+1)`.", "pt": "Conta os elementos de `x` em cada bin `edges(k) <= x < edges(k+1)`."},
+        {"code": "[n, bin] = histc(x, edges)", "en": "Also returns the bin index of each element of `x`.", "pt": "Também retorna o índice do bin de cada elemento de `x`."},
+        {"code": "n = histc(x, edges, dim)", "en": "Counts along dimension `dim`.", "pt": "Conta ao longo da dimensão `dim`."}
+      ],
+      "inputs": [
+        {"name": "x", "en": "Vector or array of values.", "pt": "Vetor ou array de valores."},
+        {"name": "edges", "en": "Monotonically non-decreasing vector of bin edges.", "pt": "Vetor de bordas, monotonicamente não decrescente."},
+        {"name": "dim", "en": "Dimension along which to count; by default the first non-singleton one.", "pt": "Dimensão ao longo da qual contar; por padrão a primeira não unitária."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Counts, with as many elements along the counting dimension as `edges`. The last element counts values equal to `edges(end)`.", "pt": "Contagens, com tantos elementos na dimensão de contagem quanto `edges`. O último elemento conta valores iguais a `edges(end)`."},
+        {"name": "bin", "en": "Bin index for each element of `x`, or `0` when it falls outside all bins.", "pt": "Índice do bin de cada elemento de `x`, ou `0` quando cai fora de todos os bins."}
+      ],
+      "description": {
+        "en": "Every bin is closed on the left and open on the right, except for the last, which holds only values exactly equal to the final edge. Values below the first edge or above the last one are not counted. For a matrix, each column is counted separately.\n\n`histc` is kept for compatibility; `histcounts` is the recommended replacement and its last bin includes the right edge.",
+        "pt": "Todo bin é fechado à esquerda e aberto à direita, exceto o último, que contém apenas valores exatamente iguais à última borda. Valores abaixo da primeira borda ou acima da última não são contados. Para uma matriz, cada coluna é contada separadamente.\n\n`histc` é mantida por compatibilidade; `histcounts` é a substituta recomendada e seu último bin inclui a borda direita."
+      },
+      "examples": [
+        {"title": {"en": "Counts and bin indices", "pt": "Contagens e índices de bin"}, "code": "x = [1 2 2 3 3 3 4 4 5 9];\n[n, bin] = histc(x, [0 3 6 9])"}
+      ],
+      "see": ["histcounts", "discretize", "hist", "accumarray", "histogram"]
+    },
+    "histogram": {
+      "summary": {"en": "Plots a histogram of the data and returns an object with the bins and counts.", "pt": "Plota um histograma dos dados e retorna um objeto com os bins e as contagens."},
+      "syntax": [
+        {"code": "histogram(X)", "en": "Chooses the bins automatically and draws the counts.", "pt": "Escolhe os bins automaticamente e desenha as contagens."},
+        {"code": "histogram(X, nbins)", "en": "Uses `nbins` bins.", "pt": "Usa `nbins` bins."},
+        {"code": "histogram(X, edges)", "en": "Uses the vector `edges` as bin edges.", "pt": "Usa o vetor `edges` como bordas dos bins."},
+        {"code": "histogram(___, Name, Value)", "en": "Sets options such as `'Normalization'`, `'BinWidth'`, `'BinLimits'` or `'BinMethod'`.", "pt": "Define opções como `'Normalization'`, `'BinWidth'`, `'BinLimits'` ou `'BinMethod'`."},
+        {"code": "h = histogram(___)", "en": "Also returns the Histogram object.", "pt": "Também retorna o objeto Histogram."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Numeric data. It is treated as a vector, whatever its shape.", "pt": "Dados numéricos. São tratados como vetor, seja qual for a forma."},
+        {"name": "'Normalization'", "en": "`'count'` (default), `'probability'`, `'percentage'`, `'countdensity'`, `'pdf'`, `'cumcount'` or `'cdf'`.", "pt": "`'count'` (padrão), `'probability'`, `'percentage'`, `'countdensity'`, `'pdf'`, `'cumcount'` ou `'cdf'`."},
+        {"name": "'BinEdges'", "en": "Vector of bin edges.", "pt": "Vetor de bordas dos bins."},
+        {"name": "'BinWidth'", "en": "Width of every bin.", "pt": "Largura de todos os bins."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Histogram object. Read `h.Values`, `h.BinEdges`, `h.NumBins`, `h.BinWidth` and `h.BinLimits`; changing them redraws the plot.", "pt": "Objeto Histogram. Leia `h.Values`, `h.BinEdges`, `h.NumBins`, `h.BinWidth` e `h.BinLimits`; alterá-los redesenha o gráfico."}
+      ],
+      "description": {
+        "en": "Bins are closed on the left and open on the right, except for the last one, which includes both edges. `NaN` values are ignored. Without options the number and width of bins come from an automatic rule that depends on the data.\n\nThe returned object lets you inspect the result numerically or adjust it after the fact, with `morebins` and `fewerbins`. To get counts without a plot, use `histcounts`.",
+        "pt": "Os bins são fechados à esquerda e abertos à direita, exceto o último, que inclui as duas bordas. Valores `NaN` são ignorados. Sem opções, o número e a largura dos bins vêm de uma regra automática que depende dos dados.\n\nO objeto retornado permite inspecionar o resultado numericamente ou ajustá-lo depois, com `morebins` e `fewerbins`. Para obter contagens sem gráfico, use `histcounts`."
+      },
+      "notes": {
+        "en": "When only a number of bins is given, MatLivre may place the rounded edges differently from MATLAB. With explicit edges, widths or limits the counts match.",
+        "pt": "Quando só o número de bins é dado, o MatLivre pode posicionar as bordas arredondadas de forma diferente do MATLAB. Com bordas, larguras ou limites explícitos, as contagens coincidem."
+      },
+      "examples": [
+        {"title": {"en": "Explicit edges", "pt": "Bordas explícitas"}, "code": "x = [1 2 2 3 3 3 4 4 5 9];\nh = histogram(x, [0 2 4 10]);\nh.Values\nh.BinWidth"},
+        {"title": {"en": "Probability normalization", "pt": "Normalização por probabilidade"}, "code": "x = [1 2 2 3 3 3 4 4 5 9];\nh = histogram(x, 'BinEdges', 0:3:9, 'Normalization', 'probability');\ndisp(h.Values)\ndisp(sum(h.Values))"}
+      ],
+      "see": ["histcounts", "histogram2", "hist", "morebins", "fewerbins", "bar"]
+    },
+    "histogram2": {
+      "summary": {"en": "Bivariate histogram that counts pairs of values in a grid of bins and draws it as 3-D bars.", "pt": "Histograma bivariado que conta pares de valores em uma grade de bins e o desenha como barras 3-D."},
+      "syntax": [
+        {"code": "histogram2(X, Y)", "en": "Bins the pairs `(X(k), Y(k))` automatically and draws the counts.", "pt": "Agrupa os pares `(X(k), Y(k))` automaticamente e desenha as contagens."},
+        {"code": "histogram2(X, Y, nbins)", "en": "Uses `nbins` bins in each direction, or `[nx ny]`.", "pt": "Usa `nbins` bins em cada direção, ou `[nx ny]`."},
+        {"code": "histogram2(X, Y, Xedges, Yedges)", "en": "Uses the given bin edges in each direction.", "pt": "Usa as bordas dadas em cada direção."},
+        {"code": "histogram2(___, Name, Value)", "en": "Sets options such as `'Normalization'`, `'XBinEdges'` or `'YBinEdges'`.", "pt": "Define opções como `'Normalization'`, `'XBinEdges'` ou `'YBinEdges'`."},
+        {"code": "h = histogram2(___)", "en": "Also returns the Histogram2 object.", "pt": "Também retorna o objeto Histogram2."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Data vectors of the same length.", "pt": "Vetores de dados de mesmo comprimento."},
+        {"name": "Xedges, Yedges", "en": "Vectors of bin edges for each coordinate.", "pt": "Vetores de bordas dos bins para cada coordenada."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Histogram2 object. `h.Values` is the matrix of counts, with `x` bins down the rows and `y` bins across the columns.", "pt": "Objeto Histogram2. `h.Values` é a matriz de contagens, com os bins de `x` nas linhas e os de `y` nas colunas."}
+      ],
+      "description": {
+        "en": "Each pair falls in one rectangular cell of the grid, and the height of the bar over a cell is the number of pairs in it. The bins are half-open like those of `histogram`, and pairs containing `NaN` are skipped.",
+        "pt": "Cada par cai em uma célula retangular da grade e a altura da barra sobre a célula é o número de pares nela. Os bins são semiabertos como os de `histogram`, e pares com `NaN` são ignorados."
+      },
+      "examples": [
+        {"title": {"en": "Counts on a grid", "pt": "Contagens em uma grade"}, "code": "x = [1 2 2 3 4];\ny = [1 1 2 3 4];\nh = histogram2(x, y, [0 2 4 6], [0 2 4 6]);\nh.Values"}
+      ],
+      "see": ["histogram", "histcounts2", "hist3", "heatmap", "scatter"]
+    },
+    "im2frame": {
+      "summary": {"en": "Converts an image into a movie frame structure.", "pt": "Converte uma imagem em uma estrutura de quadro de filme."},
+      "syntax": [
+        {"code": "F = im2frame(RGB)", "en": "Makes a frame from a truecolor `m`-by-`n`-by-3 image.", "pt": "Cria um quadro a partir de uma imagem truecolor `m`-por-`n`-por-3."},
+        {"code": "F = im2frame(X, map)", "en": "Makes a frame from an indexed image and its colormap.", "pt": "Cria um quadro a partir de uma imagem indexada e seu colormap."}
+      ],
+      "inputs": [
+        {"name": "RGB", "en": "Truecolor image of class `uint8`.", "pt": "Imagem truecolor de classe `uint8`."},
+        {"name": "X, map", "en": "Indexed image and a colormap with three columns.", "pt": "Imagem indexada e um colormap com três colunas."}
+      ],
+      "outputs": [
+        {"name": "F", "en": "Structure with fields `cdata` and `colormap`. For a truecolor image `colormap` is empty.", "pt": "Estrutura com os campos `cdata` e `colormap`. Para uma imagem truecolor, `colormap` é vazio."}
+      ],
+      "description": {
+        "en": "A movie is a struct array of frames. `im2frame` lets you build those frames from images you already have, for instance read from files or computed, and then play them with `movie`. `frame2im` goes the other way. A truecolor image must have exactly three planes; an indexed image needs a colormap.",
+        "pt": "Um filme é um array de structs de quadros. `im2frame` permite montar esses quadros a partir de imagens que você já tem, lidas de arquivos ou calculadas, e depois reproduzi-los com `movie`. `frame2im` faz o caminho inverso. Uma imagem truecolor deve ter exatamente três planos; uma imagem indexada precisa de um colormap."
+      },
+      "examples": [
+        {"title": {"en": "Indexed and truecolor frames", "pt": "Quadros indexado e truecolor"}, "code": "F = im2frame(uint8([0 1; 2 3]), gray(4));\nsize(F.cdata)\nsize(F.colormap)\nG = im2frame(uint8(cat(3, ones(2), 2*ones(2), 3*ones(2))));\nsize(G.cdata)"}
+      ],
+      "see": ["frame2im", "movie", "getframe", "imshow"]
+    },
+    "interpstreamspeed": {
+      "summary": {"en": "Resamples stream line vertices so that their spacing is proportional to the local speed of the vector field.", "pt": "Reamostra os vértices de linhas de corrente para que o espaçamento seja proporcional à velocidade local do campo vetorial."},
+      "syntax": [
+        {"code": "verts = interpstreamspeed(X, Y, U, V, verts0)", "en": "Resamples the 2-D stream lines in the cell array `verts0` over the field `(U, V)` on the grid `(X, Y)`.", "pt": "Reamostra as linhas de corrente 2-D do cell array `verts0` sobre o campo `(U, V)` na grade `(X, Y)`."},
+        {"code": "verts = interpstreamspeed(X, Y, Z, U, V, W, verts0)", "en": "The 3-D form.", "pt": "A forma 3-D."},
+        {"code": "verts = interpstreamspeed(___, sf)", "en": "Scales the step size by the factor `sf`, 1 by default.", "pt": "Multiplica o tamanho do passo pelo fator `sf`, 1 por padrão."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Grid coordinates, as from `meshgrid`.", "pt": "Coordenadas da grade, como as de `meshgrid`."},
+        {"name": "U, V, W", "en": "Components of the vector field on the grid.", "pt": "Componentes do campo vetorial na grade."},
+        {"name": "verts0", "en": "Cell array in which each cell is an `n`-by-2 (or `n`-by-3) matrix of stream line vertices, as returned by `stream2` or `stream3`.", "pt": "Cell array em que cada célula é uma matriz `n`-por-2 (ou `n`-por-3) de vértices de linha de corrente, como as retornadas por `stream2` ou `stream3`."},
+        {"name": "sf", "en": "Scale factor for the distance between output vertices.", "pt": "Fator de escala para a distância entre os vértices de saída."}
+      ],
+      "outputs": [
+        {"name": "verts", "en": "Cell array with the resampled vertices of each line.", "pt": "Cell array com os vértices reamostrados de cada linha."}
+      ],
+      "description": {
+        "en": "Walking along a stream line, the function takes steps whose length is the field speed at the current point times `sf`. Where the flow is fast the output vertices are far apart, and where it is slow they bunch up. The result is meant for `streamparticles`, so that animated particles move faster in fast regions.",
+        "pt": "Percorrendo uma linha de corrente, a função dá passos cujo comprimento é a velocidade do campo no ponto atual vezes `sf`. Onde o fluxo é rápido, os vértices de saída ficam distantes; onde é lento, ficam juntos. O resultado serve para `streamparticles`, de modo que partículas animadas se movam mais rápido nas regiões rápidas."
+      },
+      "examples": [
+        {"title": {"en": "Uniform field", "pt": "Campo uniforme"}, "code": "[x, y] = meshgrid(1:5);\nu = ones(5);\nv = zeros(5);\nout = interpstreamspeed(x, y, u, v, {[1 2; 5 2]});\nout{1}"}
+      ],
+      "see": ["streamparticles", "stream2", "stream3", "streamline", "meshgrid"]
+    },
+    "isocaps": {
+      "summary": {"en": "Computes the faces that close the open ends of an isosurface where it meets the volume boundary.", "pt": "Calcula as faces que fecham as extremidades abertas de uma isosuperfície onde ela encontra o limite do volume."},
+      "syntax": [
+        {"code": "fv = isocaps(X, Y, Z, V, isovalue)", "en": "Returns a structure of cap faces for the data `V` on the grid `(X, Y, Z)`.", "pt": "Retorna uma estrutura com as faces das tampas para os dados `V` na grade `(X, Y, Z)`."},
+        {"code": "fv = isocaps(V, isovalue)", "en": "Uses the grid `1:n` in each direction.", "pt": "Usa a grade `1:n` em cada direção."},
+        {"code": "fv = isocaps(___, which)", "en": "Selects which caps to compute: `'above'` or `'below'` the isovalue.", "pt": "Seleciona quais tampas calcular: `'above'` ou `'below'` o isovalor."},
+        {"code": "[f, v, c] = isocaps(___)", "en": "Returns faces, vertices and colors as separate arrays.", "pt": "Retorna faces, vértices e cores como arrays separados."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Coordinate arrays, as from `meshgrid`.", "pt": "Arrays de coordenadas, como os de `meshgrid`."},
+        {"name": "V", "en": "3-D array of scalar volume data.", "pt": "Array 3-D de dados escalares do volume."},
+        {"name": "isovalue", "en": "Value that defines the surface.", "pt": "Valor que define a superfície."}
+      ],
+      "outputs": [
+        {"name": "fv", "en": "Structure with the fields `vertices`, `faces` and `facevertexcdata`, ready for `patch`.", "pt": "Estrutura com os campos `vertices`, `faces` e `facevertexcdata`, pronta para `patch`."}
+      ],
+      "description": {
+        "en": "An isosurface made with `isosurface` is open wherever it leaves the volume, like a hollow shell cut off at the edges. `isocaps` produces polygons that fill those openings and are colored by the data, so the cut looks solid. Draw both with `patch`.",
+        "pt": "Uma isosuperfície feita com `isosurface` fica aberta onde sai do volume, como uma casca oca cortada nas bordas. `isocaps` produz polígonos que preenchem essas aberturas e são coloridos pelos dados, de modo que o corte pareça sólido. Desenhe ambos com `patch`."
+      },
+      "examples": [
+        {"title": {"en": "Caps as a patch structure", "pt": "Tampas como estrutura de patch"}, "code": "[x, y, z] = meshgrid(-1:0.5:1);\nv = x.^2 + y.^2 + z.^2;\nfv = isocaps(x, y, z, v, 0.5);\nfieldnames(fv)\nsize(fv.faces, 2)"}
+      ],
+      "see": ["isosurface", "isonormals", "isocolors", "patch", "smooth3"]
+    },
+    "isocolors": {
+      "summary": {"en": "Computes the colors of isosurface vertices from a second volume of data.", "pt": "Calcula as cores dos vértices de uma isosuperfície a partir de um segundo volume de dados."},
+      "syntax": [
+        {"code": "cdata = isocolors(X, Y, Z, C, verts)", "en": "Interpolates the volume `C` at the vertices `verts`.", "pt": "Interpola o volume `C` nos vértices `verts`."},
+        {"code": "cdata = isocolors(C, verts)", "en": "Uses the grid `1:n` in each direction.", "pt": "Usa a grade `1:n` em cada direção."},
+        {"code": "isocolors(___, p)", "en": "Sets the colors of the patch `p` directly.", "pt": "Define diretamente as cores do patch `p`."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Coordinate arrays of the volume.", "pt": "Arrays de coordenadas do volume."},
+        {"name": "C", "en": "3-D array of color values, or an `m`-by-`n`-by-`p`-by-3 array of RGB values.", "pt": "Array 3-D de valores de cor, ou array `m`-por-`n`-por-`p`-por-3 de valores RGB."},
+        {"name": "verts", "en": "`n`-by-3 matrix of vertices, typically `fv.vertices` from `isosurface`.", "pt": "Matriz `n`-por-3 de vértices, tipicamente `fv.vertices` de `isosurface`."}
+      ],
+      "outputs": [
+        {"name": "cdata", "en": "One color value per vertex: a column vector for scalar data, or `n`-by-3 for RGB data.", "pt": "Um valor de cor por vértice: vetor coluna para dados escalares, ou `n`-por-3 para dados RGB."}
+      ],
+      "description": {
+        "en": "The shape of an isosurface comes from one variable, but you may want to color it by another, such as temperature over a pressure surface. `isocolors` samples that second volume at each vertex by interpolation. Assign the result to the `FaceVertexCData` property of the patch.",
+        "pt": "A forma de uma isosuperfície vem de uma variável, mas pode-se querer colori-la por outra, como a temperatura sobre uma superfície de pressão. `isocolors` amostra esse segundo volume em cada vértice por interpolação. Atribua o resultado à propriedade `FaceVertexCData` do patch."
+      },
+      "examples": [
+        {"title": {"en": "Color by a second field", "pt": "Cor por um segundo campo"}, "code": "[x, y, z] = meshgrid(-1:0.5:1);\nv = x.^2 + y.^2 + z.^2;\nfv = isosurface(x, y, z, v, 0.5);\nc = isocolors(x, y, z, x, fv.vertices);\nsize(c)\nmin(c), max(c)"}
+      ],
+      "see": ["isosurface", "isocaps", "isonormals", "patch", "interp3"]
+    },
+    "isonormals": {
+      "summary": {"en": "Computes surface normals of an isosurface from the gradient of the volume data.", "pt": "Calcula as normais de uma isosuperfície a partir do gradiente dos dados do volume."},
+      "syntax": [
+        {"code": "n = isonormals(X, Y, Z, V, verts)", "en": "Returns the normals at the vertices `verts` using the gradient of `V`.", "pt": "Retorna as normais nos vértices `verts` usando o gradiente de `V`."},
+        {"code": "n = isonormals(V, verts)", "en": "Uses the grid `1:n` in each direction.", "pt": "Usa a grade `1:n` em cada direção."},
+        {"code": "isonormals(___, p)", "en": "Sets the vertex normals of the patch `p`.", "pt": "Define as normais dos vértices do patch `p`."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z, V", "en": "Grid and scalar volume data.", "pt": "Grade e dados escalares do volume."},
+        {"name": "verts", "en": "`n`-by-3 matrix of vertices.", "pt": "Matriz `n`-por-3 de vértices."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "`n`-by-3 matrix of unit normal vectors, one per vertex.", "pt": "Matriz `n`-por-3 de vetores normais unitários, um por vértice."}
+      ],
+      "description": {
+        "en": "Lighting a surface needs normals. The normals computed from the data gradient are smoother and more faithful than those derived from the triangles, so a lit isosurface looks round instead of faceted.",
+        "pt": "Iluminar uma superfície exige normais. As normais calculadas a partir do gradiente dos dados são mais suaves e mais fiéis do que as derivadas dos triângulos, então uma isosuperfície iluminada parece arredondada, e não facetada."
+      },
+      "examples": [
+        {"title": {"en": "Normals of a sphere", "pt": "Normais de uma esfera"}, "code": "[x, y, z] = meshgrid(-1:0.5:1);\nv = x.^2 + y.^2 + z.^2;\nfv = isosurface(x, y, z, v, 0.5);\nn = isonormals(x, y, z, v, fv.vertices);\nsize(n)\nnorm(n(1,:))"}
+      ],
+      "see": ["isosurface", "isocaps", "isocolors", "patch", "lighting"]
+    },
+    "isosurface": {
+      "summary": {"en": "Extracts the surface where 3-D volume data equals a chosen value, as faces and vertices.", "pt": "Extrai a superfície onde os dados de um volume 3-D valem um certo valor, como faces e vértices."},
+      "syntax": [
+        {"code": "fv = isosurface(X, Y, Z, V, isovalue)", "en": "Returns a structure with `faces` and `vertices` for the surface `V = isovalue` on the grid `(X, Y, Z)`.", "pt": "Retorna uma estrutura com `faces` e `vertices` da superfície `V = isovalue` na grade `(X, Y, Z)`."},
+        {"code": "fv = isosurface(V, isovalue)", "en": "Uses the grid `1:n` in each direction.", "pt": "Usa a grade `1:n` em cada direção."},
+        {"code": "[f, v] = isosurface(___)", "en": "Returns faces and vertices as two arrays.", "pt": "Retorna faces e vértices como dois arrays."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Coordinate arrays, as from `meshgrid`.", "pt": "Arrays de coordenadas, como os de `meshgrid`."},
+        {"name": "V", "en": "3-D array of scalar data.", "pt": "Array 3-D de dados escalares."},
+        {"name": "isovalue", "en": "The level at which to cut the data.", "pt": "O nível em que cortar os dados."}
+      ],
+      "outputs": [
+        {"name": "fv", "en": "Structure with `vertices` (`n`-by-3) and `faces` (`m`-by-3 triangles indexing the vertices), ready for `patch`.", "pt": "Estrutura com `vertices` (`n`-por-3) e `faces` (`m`-por-3 triângulos que indexam os vértices), pronta para `patch`."},
+        {"name": "f, v", "en": "The faces and the vertices as separate arrays.", "pt": "As faces e os vértices como arrays separados."}
+      ],
+      "description": {
+        "en": "The function is the 3-D analog of a contour line. It walks through the cells of the volume and builds triangles wherever the data crosses the isovalue. The vertex positions are linearly interpolated between grid points.\n\nDraw the result with `patch(fv, 'FaceColor', 'r')`, then add `view(3)` and `camlight` for a lit 3-D look.",
+        "pt": "A função é o análogo 3-D de uma curva de nível. Ela percorre as células do volume e cria triângulos onde os dados cruzam o isovalor. As posições dos vértices são interpoladas linearmente entre os pontos da grade.\n\nDesenhe o resultado com `patch(fv, 'FaceColor', 'r')` e adicione `view(3)` e `camlight` para um visual 3-D iluminado."
+      },
+      "examples": [
+        {"title": {"en": "Sphere from a distance field", "pt": "Esfera a partir de um campo de distância"}, "code": "[x, y, z] = meshgrid(-1:0.5:1);\nv = x.^2 + y.^2 + z.^2;\nfv = isosurface(x, y, z, v, 0.5);\nsize(fv.faces)\nsize(fv.vertices)\nmax(fv.vertices)"}
+      ],
+      "see": ["isocaps", "isonormals", "isocolors", "patch", "reducepatch", "contour3"]
+    },
+    "loglog": {
+      "summary": {"en": "Plots data with logarithmic scales on both axes.", "pt": "Plota dados com escalas logarítmicas nos dois eixos."},
+      "syntax": [
+        {"code": "loglog(X, Y)", "en": "Plots `Y` against `X` with both axes logarithmic.", "pt": "Plota `Y` contra `X` com os dois eixos logarítmicos."},
+        {"code": "loglog(Y)", "en": "Plots `Y` against its index.", "pt": "Plota `Y` contra o índice."},
+        {"code": "loglog(X, Y, LineSpec)", "en": "Sets color, line style and marker.", "pt": "Define cor, estilo de linha e marcador."},
+        {"code": "loglog(___, Name, Value)", "en": "Sets line properties.", "pt": "Define propriedades da linha."},
+        {"code": "h = loglog(___)", "en": "Also returns the line handles.", "pt": "Também retorna os handles das linhas."}
+      ],
+      "inputs": [
+        {"name": "X, Y", "en": "Vectors or matrices. Values must be positive to appear on a logarithmic axis.", "pt": "Vetores ou matrizes. Os valores devem ser positivos para aparecer em um eixo logarítmico."},
+        {"name": "LineSpec", "en": "Color, line style and marker string such as `'r--o'`.", "pt": "String de cor, estilo de linha e marcador, como `'r--o'`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Line handles.", "pt": "Handles das linhas."}
+      ],
+      "description": {
+        "en": "A power law `y = a*x^b` becomes a straight line on log-log axes, with slope `b`, so this plot is the standard way to check for power-law behavior and to compare quantities that span several orders of magnitude. It sets the `XScale` and `YScale` of the axes to `'log'`.",
+        "pt": "Uma lei de potência `y = a*x^b` vira uma reta em eixos log-log, com inclinação `b`, de modo que este gráfico é a forma padrão de verificar comportamento de lei de potência e de comparar grandezas que abrangem várias ordens de grandeza. Ele define `XScale` e `YScale` dos eixos como `'log'`."
+      },
+      "examples": [
+        {"title": {"en": "A power law", "pt": "Uma lei de potência"}, "silent": true, "code": "x = logspace(0, 3, 30);\nloglog(x, 2*x.^1.5, 'o-')\ngrid on", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["semilogx", "semilogy", "plot", "logspace", "grid"]
+    },
+    "mesh": {
+      "summary": {"en": "Draws a wireframe surface from a matrix of heights.", "pt": "Desenha uma superfície de malha de arame a partir de uma matriz de alturas."},
+      "syntax": [
+        {"code": "mesh(Z)", "en": "Plots the heights `Z` over the grid of column and row indices.", "pt": "Plota as alturas `Z` sobre a grade de índices de coluna e linha."},
+        {"code": "mesh(X, Y, Z)", "en": "Uses the coordinates `X` and `Y`, as matrices or as vectors.", "pt": "Usa as coordenadas `X` e `Y`, como matrizes ou como vetores."},
+        {"code": "mesh(X, Y, Z, C)", "en": "Colors the mesh by the values in `C`.", "pt": "Colore a malha pelos valores em `C`."},
+        {"code": "mesh(___, Name, Value)", "en": "Sets surface properties such as `'EdgeColor'`.", "pt": "Define propriedades da superfície, como `'EdgeColor'`."},
+        {"code": "h = mesh(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "Z", "en": "Matrix of heights. Its size gives the number of grid lines in each direction.", "pt": "Matriz de alturas. Seu tamanho dá o número de linhas da grade em cada direção."},
+        {"name": "X, Y", "en": "Coordinates: matrices of the size of `Z`, or vectors with `length(X) = columns` and `length(Y) = rows`.", "pt": "Coordenadas: matrizes do tamanho de `Z`, ou vetores com `length(X) = colunas` e `length(Y) = linhas`."},
+        {"name": "C", "en": "Color data of the size of `Z`; by default the colors follow the height.", "pt": "Dados de cor do tamanho de `Z`; por padrão as cores seguem a altura."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "description": {
+        "en": "`mesh` connects neighboring grid points with colored lines. Use `meshgrid` to build `X` and `Y` from vectors, and `view`, `colormap` and `colorbar` to adjust the look. For solid faces use `surf`.",
+        "pt": "`mesh` liga pontos vizinhos da grade com linhas coloridas. Use `meshgrid` para criar `X` e `Y` a partir de vetores, e `view`, `colormap` e `colorbar` para ajustar a aparência. Para faces sólidas, use `surf`."
+      },
+      "examples": [
+        {"title": {"en": "The peaks surface", "pt": "A superfície peaks"}, "silent": true, "code": "[X, Y, Z] = peaks(30);\nmesh(X, Y, Z)\ncolorbar", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["surf", "meshc", "meshz", "meshgrid", "peaks", "contour"]
+    },
+    "meshc": {
+      "summary": {"en": "Draws a wireframe surface with a contour plot beneath it.", "pt": "Desenha uma superfície de malha de arame com um gráfico de contorno embaixo."},
+      "syntax": [
+        {"code": "meshc(Z)", "en": "Plots the mesh of `Z` with its contour lines drawn on the floor of the plot.", "pt": "Plota a malha de `Z` com as curvas de nível desenhadas no piso do gráfico."},
+        {"code": "meshc(X, Y, Z)", "en": "Uses the coordinates `X` and `Y`.", "pt": "Usa as coordenadas `X` e `Y`."},
+        {"code": "h = meshc(___)", "en": "Also returns the handles of the surface and the contour.", "pt": "Também retorna os handles da superfície e do contorno."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Coordinates and heights, as for `mesh`.", "pt": "Coordenadas e alturas, como em `mesh`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handles of the two objects created: the mesh and the contour.", "pt": "Handles dos dois objetos criados: a malha e o contorno."}
+      ],
+      "description": {
+        "en": "The contour projection helps to read where the peaks and valleys are, since the position of a height on a tilted 3-D view is hard to judge. All other properties behave as in `mesh`.",
+        "pt": "A projeção do contorno ajuda a ver onde estão os picos e vales, já que a posição de uma altura em uma vista 3-D inclinada é difícil de julgar. As demais propriedades se comportam como em `mesh`."
+      },
+      "examples": [
+        {"title": {"en": "Mesh with contour", "pt": "Malha com contorno"}, "silent": true, "code": "[X, Y, Z] = peaks(30);\nmeshc(X, Y, Z)", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["mesh", "meshz", "surfc", "contour", "peaks"]
+    },
+    "meshz": {
+      "summary": {"en": "Draws a wireframe surface with a curtain around its edges.", "pt": "Desenha uma superfície de malha de arame com uma cortina ao redor das bordas."},
+      "syntax": [
+        {"code": "meshz(Z)", "en": "Plots the mesh of `Z` with vertical lines dropping from the edges to the base.", "pt": "Plota a malha de `Z` com linhas verticais descendo das bordas até a base."},
+        {"code": "meshz(X, Y, Z)", "en": "Uses the coordinates `X` and `Y`.", "pt": "Usa as coordenadas `X` e `Y`."},
+        {"code": "h = meshz(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "X, Y, Z", "en": "Coordinates and heights, as for `mesh`.", "pt": "Coordenadas e alturas, como em `mesh`."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "description": {
+        "en": "The curtain is drawn down to the minimum height of the data, which frames the surface and makes its outline easy to see. Apart from that, `meshz` is `mesh`.",
+        "pt": "A cortina desce até a altura mínima dos dados, o que emoldura a superfície e deixa seu contorno fácil de ver. Fora isso, `meshz` é `mesh`."
+      },
+      "examples": [
+        {"title": {"en": "Mesh with a curtain", "pt": "Malha com cortina"}, "silent": true, "code": "[X, Y, Z] = peaks(20);\nmeshz(X, Y, Z)", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["mesh", "meshc", "surf", "waterfall"]
+    },
+    "morebins": {
+      "summary": {"en": "Increases the number of bins of an existing histogram object.", "pt": "Aumenta o número de bins de um objeto de histograma existente."},
+      "syntax": [
+        {"code": "morebins(h)", "en": "Makes the histogram `h` use more, narrower bins.", "pt": "Faz o histograma `h` usar mais bins, mais estreitos."},
+        {"code": "n = morebins(h)", "en": "Also returns the new number of bins.", "pt": "Também retorna o novo número de bins."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Histogram object created by `histogram`.", "pt": "Objeto de histograma criado por `histogram`."}
+      ],
+      "outputs": [
+        {"name": "n", "en": "Number of bins after the change.", "pt": "Número de bins depois da alteração."}
+      ],
+      "description": {
+        "en": "The binning of `h` is changed in place and the figure is redrawn with finer bins. Each call raises the bin count by one step, so it can be repeated until the detail you want shows. `fewerbins` does the opposite.",
+        "pt": "Os bins de `h` são alterados no próprio objeto e a figura é redesenhada com bins mais finos. Cada chamada aumenta o número de bins em um passo, então pode ser repetida até aparecer o detalhe desejado. `fewerbins` faz o oposto."
+      },
+      "examples": [
+        {"title": {"en": "Finer bins", "pt": "Bins mais finos"}, "code": "h = histogram(1:100);\nbefore = h.NumBins\nafter = morebins(h)"}
+      ],
+      "see": ["fewerbins", "histogram", "histcounts", "hist"]
+    },
+    "movie": {
+      "summary": {"en": "Plays a sequence of movie frames in a figure.", "pt": "Reproduz uma sequência de quadros de filme em uma figura."},
+      "syntax": [
+        {"code": "movie(M)", "en": "Plays the frames in the struct array `M` once.", "pt": "Reproduz uma vez os quadros do array de structs `M`."},
+        {"code": "movie(M, n)", "en": "Plays the movie `n` times.", "pt": "Reproduz o filme `n` vezes."},
+        {"code": "movie(M, n, fps)", "en": "Plays at `fps` frames per second.", "pt": "Reproduz a `fps` quadros por segundo."}
+      ],
+      "inputs": [
+        {"name": "M", "en": "Struct array of frames with `cdata` and `colormap` fields, from `getframe` or `im2frame`.", "pt": "Array de structs de quadros com os campos `cdata` e `colormap`, de `getframe` ou `im2frame`."},
+        {"name": "n", "en": "Number of repetitions, 1 by default.", "pt": "Número de repetições, 1 por padrão."},
+        {"name": "fps", "en": "Frame rate in frames per second, 12 by default.", "pt": "Taxa de quadros em quadros por segundo, 12 por padrão."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "A typical animation loop draws a plot, grabs it with `getframe`, stores the frame in `M(k)` and, after the loop, calls `movie(M)`. The frames are shown in the current axes, scaled to fit. Frames made with `im2frame` work as well.",
+        "pt": "Um laço de animação típico desenha um gráfico, captura-o com `getframe`, guarda o quadro em `M(k)` e, depois do laço, chama `movie(M)`. Os quadros são exibidos nos eixos atuais, ajustados ao tamanho. Quadros criados com `im2frame` também funcionam."
+      },
+      "examples": [
+        {"title": {"en": "Play generated frames", "pt": "Reproduzir quadros gerados"}, "silent": true, "code": "for k = 1:3\n    M(k) = im2frame(uint8(cat(3, 80*k*ones(40), 40*ones(40), 200*ones(40))));\nend\nmovie(M, 2)", "note": {"en": "In the app, the frames play below the code.", "pt": "No app, os quadros são reproduzidos abaixo do código."}}
+      ],
+      "see": ["getframe", "im2frame", "frame2im", "VideoWriter", "drawnow"]
+    },
+    "parallelplot": {
+      "summary": {"en": "Parallel coordinates plot, one line per observation across several variables.", "pt": "Gráfico de coordenadas paralelas, uma linha por observação ao longo de várias variáveis."},
+      "syntax": [
+        {"code": "parallelplot(data)", "en": "Draws one vertical axis per column of the matrix `data` and one line per row.", "pt": "Desenha um eixo vertical por coluna da matriz `data` e uma linha por linha."},
+        {"code": "parallelplot(tbl)", "en": "Uses the numeric variables of a table; variable names label the axes.", "pt": "Usa as variáveis numéricas de uma tabela; os nomes das variáveis rotulam os eixos."},
+        {"code": "parallelplot(___, Name, Value)", "en": "Sets options such as `'GroupData'`, `'CoordinateTickLabels'` or `'Jitter'`.", "pt": "Define opções como `'GroupData'`, `'CoordinateTickLabels'` ou `'Jitter'`."},
+        {"code": "p = parallelplot(___)", "en": "Also returns the chart object.", "pt": "Também retorna o objeto do gráfico."}
+      ],
+      "inputs": [
+        {"name": "data", "en": "Numeric matrix, rows are observations and columns are variables.", "pt": "Matriz numérica, linhas são observações e colunas são variáveis."},
+        {"name": "'GroupData'", "en": "Grouping variable; each group is drawn in its own color.", "pt": "Variável de agrupamento; cada grupo é desenhado com uma cor."},
+        {"name": "'CoordinateTickLabels'", "en": "Cell array of labels for the variable axes.", "pt": "Cell array de rótulos para os eixos das variáveis."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "ParallelCoordinatesPlot object.", "pt": "Objeto ParallelCoordinatesPlot."}
+      ],
+      "description": {
+        "en": "Each variable is rescaled onto its own vertical axis, and an observation becomes a line that crosses all of them. Groups of similar observations show up as bundles of lines, and variables that separate groups well show as places where the bundles pull apart.",
+        "pt": "Cada variável é reescalada em seu próprio eixo vertical, e uma observação vira uma linha que cruza todos eles. Grupos de observações parecidas aparecem como feixes de linhas, e variáveis que separam bem os grupos aparecem onde os feixes se afastam."
+      },
+      "examples": [
+        {"title": {"en": "Four variables, two groups", "pt": "Quatro variáveis, dois grupos"}, "silent": true, "code": "data = [1 5 3 8; 2 6 2 9; 7 1 8 2; 8 2 9 1; 2 5 3 7; 7 2 8 3];\ngrp = [1; 1; 2; 2; 1; 2];\nparallelplot(data, 'GroupData', grp, 'CoordinateTickLabels', {'a','b','c','d'});", "note": {"en": "In the app, the chart is drawn below the code.", "pt": "No app, o gráfico é desenhado abaixo do código."}}
+      ],
+      "see": ["plotmatrix", "heatmap", "scatter", "plot"]
+    },
+    "pareto": {
+      "summary": {"en": "Pareto chart: bars sorted in descending order with a line of the cumulative percentage.", "pt": "Gráfico de Pareto: barras em ordem decrescente com uma linha da porcentagem acumulada."},
+      "syntax": [
+        {"code": "pareto(y)", "en": "Sorts the values `y` from largest to smallest, plots them as bars and adds the cumulative total as a line.", "pt": "Ordena os valores `y` do maior para o menor, plota como barras e acrescenta o total acumulado como linha."},
+        {"code": "pareto(y, names)", "en": "Labels the bars with `names` (cell array or string array).", "pt": "Rotula as barras com `names` (cell array ou array de strings)."},
+        {"code": "pareto(y, x)", "en": "Labels the bars with the numeric vector `x`.", "pt": "Rotula as barras com o vetor numérico `x`."},
+        {"code": "pareto(___, threshold)", "en": "Shows only the bars needed to reach the fraction `threshold` of the total, 0.95 by default.", "pt": "Mostra apenas as barras necessárias para atingir a fração `threshold` do total, 0.95 por padrão."}
+      ],
+      "inputs": [
+        {"name": "y", "en": "Vector of non-negative values, for instance the number of defects per cause.", "pt": "Vetor de valores não negativos, por exemplo o número de defeitos por causa."},
+        {"name": "names", "en": "Labels, one per value.", "pt": "Rótulos, um por valor."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "The chart supports the rule of thumb that a few causes account for most of the total. The bars show each cause, largest first, and the right-hand axis shows the running percentage. Only the bars that bring the total up to the threshold are drawn.",
+        "pt": "O gráfico apoia a regra prática de que poucas causas respondem pela maior parte do total. As barras mostram cada causa, da maior para a menor, e o eixo da direita mostra a porcentagem acumulada. Só as barras que levam o total até o limite são desenhadas."
+      },
+      "notes": {
+        "en": "In MatLivre `pareto` returns only the graphics handle: the two-output form `[h, ax] = pareto(...)` of MATLAB is not available.",
+        "pt": "No MatLivre, `pareto` retorna apenas o handle gráfico: a forma com duas saídas `[h, ax] = pareto(...)` do MATLAB não está disponível."
+      },
+      "examples": [
+        {"title": {"en": "Causes of defects", "pt": "Causas de defeitos"}, "silent": true, "code": "defects = [24 5 40 9 3 19];\ncauses = {'Scratch','Dent','Crack','Stain','Burr','Chip'};\npareto(defects, causes)", "note": {"en": "In the app, the chart is drawn below the code.", "pt": "No app, o gráfico é desenhado abaixo do código."}}
+      ],
+      "see": ["bar", "histogram", "cumsum", "sort", "pie"]
+    },
+    "pcolor": {
+      "summary": {"en": "Pseudocolor plot: a flat grid of colored cells whose colors come from a matrix.", "pt": "Gráfico pseudocolorido: uma grade plana de células coloridas cujas cores vêm de uma matriz."},
+      "syntax": [
+        {"code": "pcolor(C)", "en": "Colors the grid by the values of `C`, using the current colormap.", "pt": "Colore a grade pelos valores de `C`, usando o colormap atual."},
+        {"code": "pcolor(X, Y, C)", "en": "Places the grid vertices at the coordinates `X` and `Y`.", "pt": "Posiciona os vértices da grade nas coordenadas `X` e `Y`."},
+        {"code": "h = pcolor(___)", "en": "Also returns the surface handle.", "pt": "Também retorna o handle da superfície."}
+      ],
+      "inputs": [
+        {"name": "C", "en": "Matrix of values; each cell takes its color from them.", "pt": "Matriz de valores; cada célula toma deles sua cor."},
+        {"name": "X, Y", "en": "Vertex coordinates, as matrices or vectors.", "pt": "Coordenadas dos vértices, como matrizes ou vetores."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Handle to the surface object.", "pt": "Handle do objeto de superfície."}
+      ],
+      "description": {
+        "en": "`pcolor` is a flat surface seen from above. The value `C(i,j)` is the color at the vertex `(i,j)`, and the last row and column of `C` are not drawn as cells, because a cell needs four corners. For that reason the picture has one cell fewer in each direction than `C` has elements.\n\nUse `shading interp` for a smooth blend and `shading flat` for uniform cells. `imagesc` draws every element as a cell instead.",
+        "pt": "`pcolor` é uma superfície plana vista de cima. O valor `C(i,j)` é a cor no vértice `(i,j)`, e a última linha e coluna de `C` não são desenhadas como células, pois uma célula precisa de quatro cantos. Por isso a figura tem uma célula a menos em cada direção do que `C` tem elementos.\n\nUse `shading interp` para uma mistura suave e `shading flat` para células uniformes. `imagesc` desenha cada elemento como uma célula."
+      },
+      "examples": [
+        {"title": {"en": "Smooth pseudocolor", "pt": "Pseudocor suave"}, "silent": true, "code": "[X, Y, Z] = peaks(30);\npcolor(X, Y, Z)\nshading interp\ncolorbar", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["imagesc", "surf", "contourf", "shading", "heatmap"]
+    },
+    "peaks": {
+      "summary": {"en": "Sample function of two variables made of Gaussian peaks, used to try out surface plots.", "pt": "Função de exemplo de duas variáveis feita de picos gaussianos, usada para testar gráficos de superfície."},
+      "syntax": [
+        {"code": "Z = peaks", "en": "Returns the 49-by-49 values of the function on a default grid from -3 to 3.", "pt": "Retorna os 49-por-49 valores da função em uma grade padrão de -3 a 3."},
+        {"code": "Z = peaks(n)", "en": "Returns an `n`-by-`n` matrix over the same range.", "pt": "Retorna uma matriz `n`-por-`n` na mesma faixa."},
+        {"code": "Z = peaks(V)", "en": "Uses the vector `V` for both the x and y coordinates.", "pt": "Usa o vetor `V` para as coordenadas x e y."},
+        {"code": "Z = peaks(X, Y)", "en": "Evaluates the function at the matrices `X` and `Y`.", "pt": "Avalia a função nas matrizes `X` e `Y`."},
+        {"code": "[X, Y, Z] = peaks(___)", "en": "Also returns the grid coordinates.", "pt": "Também retorna as coordenadas da grade."}
+      ],
+      "inputs": [
+        {"name": "n", "en": "Grid size, 49 by default.", "pt": "Tamanho da grade, 49 por padrão."},
+        {"name": "V", "en": "Vector of coordinates for both directions.", "pt": "Vetor de coordenadas para as duas direções."},
+        {"name": "X, Y", "en": "Matrices of coordinates of the same size.", "pt": "Matrizes de coordenadas de mesmo tamanho."}
+      ],
+      "outputs": [
+        {"name": "Z", "en": "Function values, a matrix of the size of the grid.", "pt": "Valores da função, uma matriz do tamanho da grade."},
+        {"name": "X, Y", "en": "Grid coordinates from `meshgrid`.", "pt": "Coordenadas da grade, de `meshgrid`."}
+      ],
+      "description": {
+        "en": "The function is a mix of three Gaussians, `3*(1-x).^2.*exp(-x.^2-(y+1).^2) - 10*(x/5-x.^3-y.^5).*exp(-x.^2-y.^2) - exp(-(x+1).^2-y.^2)/3`. It has several peaks and valleys, which makes it a handy test for `surf`, `mesh`, `contour` and colormaps. The highest value is about 8.1.",
+        "pt": "A função é uma mistura de três gaussianas, `3*(1-x).^2.*exp(-x.^2-(y+1).^2) - 10*(x/5-x.^3-y.^5).*exp(-x.^2-y.^2) - exp(-(x+1).^2-y.^2)/3`. Tem vários picos e vales, o que a torna um bom teste para `surf`, `mesh`, `contour` e colormaps. O maior valor é cerca de 8,1."
+      },
+      "examples": [
+        {"title": {"en": "Values on a small grid", "pt": "Valores em uma grade pequena"}, "code": "Z = peaks(5)\nmax(max(peaks))"}
+      ],
+      "see": ["surf", "mesh", "contour", "meshgrid"]
+    },
+    "pie": {
+      "summary": {"en": "Pie chart of the values in a vector, with percentage labels.", "pt": "Gráfico de pizza dos valores de um vetor, com rótulos em porcentagem."},
+      "syntax": [
+        {"code": "pie(X)", "en": "Draws one slice per element, with area proportional to its share of the total.", "pt": "Desenha uma fatia por elemento, com área proporcional à sua parte do total."},
+        {"code": "pie(X, explode)", "en": "Pulls out the slices where `explode` is nonzero.", "pt": "Afasta do centro as fatias em que `explode` é diferente de zero."},
+        {"code": "pie(X, labels)", "en": "Labels the slices with the cell array `labels` instead of percentages.", "pt": "Rotula as fatias com o cell array `labels` em vez de porcentagens."},
+        {"code": "h = pie(___)", "en": "Also returns the handles of the slices and their labels.", "pt": "Também retorna os handles das fatias e de seus rótulos."}
+      ],
+      "inputs": [
+        {"name": "X", "en": "Vector of non-negative values. If the sum is less than 1, a partial pie is drawn using the values directly as fractions.", "pt": "Vetor de valores não negativos. Se a soma for menor que 1, desenha-se uma pizza parcial usando os valores diretamente como frações."},
+        {"name": "explode", "en": "Logical or numeric vector of the same length as `X`.", "pt": "Vetor lógico ou numérico de mesmo comprimento que `X`."},
+        {"name": "labels", "en": "Cell array of text, one per slice.", "pt": "Cell array de textos, um por fatia."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Array of handles, alternating between a slice and its text label.", "pt": "Array de handles, alternando entre uma fatia e seu rótulo de texto."}
+      ],
+      "description": {
+        "en": "Percentages are rounded to whole numbers, so the labels may not add up to exactly 100%. The text labels are graphics objects you can read, for example `h(2).String` gives the label of the first slice.\n\nPies are best for a handful of categories; for many categories or exact comparison a bar chart reads more clearly.",
+        "pt": "As porcentagens são arredondadas para inteiros, então os rótulos podem não somar exatamente 100%. Os rótulos de texto são objetos gráficos que podem ser lidos, por exemplo `h(2).String` dá o rótulo da primeira fatia.\n\nPizzas funcionam melhor com poucas categorias; para muitas categorias ou comparação exata, um gráfico de barras é mais claro."
+      },
+      "examples": [
+        {"title": {"en": "Slice labels", "pt": "Rótulos das fatias"}, "code": "p = pie([1 2 3]);\nfor k = 2:2:6\n    disp(p(k).String)\nend"},
+        {"title": {"en": "Exploded slice with custom labels", "pt": "Fatia afastada com rótulos próprios"}, "silent": true, "code": "pie([2 3 5], [0 1 0], {'North', 'Center', 'South'})", "note": {"en": "In the app, the figure is drawn below the code.", "pt": "No app, a figura é desenhada abaixo do código."}}
+      ],
+      "see": ["pie3", "piechart", "bar", "histogram", "donutchart"]
+    }
+  }
+}

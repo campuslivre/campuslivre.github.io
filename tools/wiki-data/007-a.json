@@ -1,0 +1,501 @@
+{
+  "functions": {
+    "yyaxis": {
+      "summary": {"en": "Selects the left or right y-axis so one plot can use two different y scales.", "pt": "Seleciona o eixo y esquerdo ou direito para que um gráfico use duas escalas y diferentes."},
+      "syntax": [
+        {"code": "yyaxis left", "en": "Makes the left y-axis active. The first call also creates the pair of axes.", "pt": "Ativa o eixo y esquerdo. A primeira chamada também cria o par de eixos."},
+        {"code": "yyaxis right", "en": "Makes the right y-axis active. Later `plot` calls draw against it.", "pt": "Ativa o eixo y direito. As chamadas seguintes de `plot` desenham contra ele."},
+        {"code": "yyaxis(ax, side)", "en": "Applies the choice to the axes object `ax` instead of the current axes.", "pt": "Aplica a escolha ao objeto de eixos `ax` em vez dos eixos atuais."}
+      ],
+      "inputs": [
+        {"name": "side", "en": "`'left'` or `'right'`.", "pt": "`'left'` ou `'right'`."},
+        {"name": "ax", "en": "Optional axes handle.", "pt": "Handle de eixos opcional."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Each side of a two-sided plot has its own limits, ticks and label, and each keeps its own set of lines. After `yyaxis left`, commands such as `plot`, `ylabel` and `ylim` act on the left scale; after `yyaxis right` they act on the right one.\n\nThis is the usual way to compare quantities with very different magnitudes over the same x range, for example a quadratic and an exponential.",
+        "pt": "Cada lado de um gráfico com dois eixos tem seus próprios limites, marcas e rótulo, e mantém seu próprio conjunto de linhas. Depois de `yyaxis left`, comandos como `plot`, `ylabel` e `ylim` agem na escala da esquerda; depois de `yyaxis right`, agem na da direita.\n\nÉ a forma usual de comparar grandezas de ordens muito diferentes sobre o mesmo intervalo de x, por exemplo uma quadrática e uma exponencial."
+      },
+      "examples": [
+        {"title": {"en": "Two y scales", "pt": "Duas escalas y"}, "code": "x = 0:0.5:2;\nyyaxis left\nplot(x, x.^2)\nylabel('square')\nyyaxis right\nplot(x, exp(x))\nylabel('exponential')\nax = gca;\ndisp(ax.YAxisLocation)"}
+      ],
+      "see": ["plot", "ylabel", "ylim", "gca", "hold"]
+    },
+    "zlabel": {
+      "summary": {"en": "Sets the label of the z-axis of a 3-D plot.", "pt": "Define o rótulo do eixo z de um gráfico 3-D."},
+      "syntax": [
+        {"code": "zlabel(txt)", "en": "Labels the z-axis of the current axes with `txt`.", "pt": "Rotula o eixo z dos eixos atuais com `txt`."},
+        {"code": "zlabel(txt, Name, Value)", "en": "Also sets text properties such as `'FontSize'`.", "pt": "Também define propriedades de texto, como `'FontSize'`."},
+        {"code": "t = zlabel(___)", "en": "Returns the text object of the label.", "pt": "Retorna o objeto de texto do rótulo."}
+      ],
+      "inputs": [
+        {"name": "txt", "en": "Character vector, string or cell array of lines.", "pt": "Vetor de caracteres, string ou cell array de linhas."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Handle of the label text object.", "pt": "Handle do objeto de texto do rótulo."}
+      ],
+      "description": {
+        "en": "`zlabel` is the z counterpart of `xlabel` and `ylabel`. The label belongs to the axes, so it survives later plot calls on the same axes unless the axes are reset.",
+        "pt": "`zlabel` é a versão de z de `xlabel` e `ylabel`. O rótulo pertence aos eixos, portanto permanece em chamadas de plot posteriores nos mesmos eixos, a menos que os eixos sejam reiniciados."
+      },
+      "examples": [
+        {"title": {"en": "Label a surface", "pt": "Rotular uma superfície"}, "code": "surf(peaks(10))\nh = zlabel('Height', 'FontSize', 14);\ndisp(h.String)"}
+      ],
+      "see": ["xlabel", "ylabel", "zlim", "title", "surf"]
+    },
+    "zlim": {
+      "summary": {"en": "Gets or sets the limits of the z-axis.", "pt": "Obtém ou define os limites do eixo z."},
+      "syntax": [
+        {"code": "zlim([zmin zmax])", "en": "Sets the z limits of the current axes.", "pt": "Define os limites de z dos eixos atuais."},
+        {"code": "lim = zlim", "en": "Returns the current limits as a two-element vector.", "pt": "Retorna os limites atuais como um vetor de dois elementos."},
+        {"code": "zlim('auto')", "en": "Returns to automatic limits that fit the data.", "pt": "Volta aos limites automáticos, que se ajustam aos dados."},
+        {"code": "m = zlim('mode')", "en": "Returns `'auto'` or `'manual'`.", "pt": "Retorna `'auto'` ou `'manual'`."}
+      ],
+      "inputs": [
+        {"name": "[zmin zmax]", "en": "Two increasing numbers.", "pt": "Dois números em ordem crescente."}
+      ],
+      "outputs": [
+        {"name": "lim", "en": "Two-element row vector `[zmin zmax]`.", "pt": "Vetor linha `[zmin zmax]`."}
+      ],
+      "description": {
+        "en": "Setting the limits switches the mode to manual, so later plots no longer rescale the z-axis. `zlim('auto')` undoes this. Data outside the limits is clipped.",
+        "pt": "Definir os limites muda o modo para manual, então plots posteriores deixam de reescalar o eixo z. `zlim('auto')` desfaz isso. Dados fora dos limites são cortados."
+      },
+      "examples": [
+        {"title": {"en": "Fix and read z limits", "pt": "Fixar e ler limites de z"}, "code": "surf(peaks(10))\nzlim([-5 5])\ndisp(zlim)\nzlim('auto')\ndisp(zlim('mode'))"}
+      ],
+      "see": ["xlim", "ylim", "axis", "zlabel", "surf"]
+    },
+    "zscale": {
+      "summary": {"en": "Chooses a linear or logarithmic scale for the z-axis.", "pt": "Escolhe escala linear ou logarítmica para o eixo z."},
+      "syntax": [
+        {"code": "zscale('linear')", "en": "Uses a linear z-axis.", "pt": "Usa um eixo z linear."},
+        {"code": "zscale('log')", "en": "Uses a base-10 logarithmic z-axis; data must be positive.", "pt": "Usa um eixo z logarítmico na base 10; os dados devem ser positivos."},
+        {"code": "s = zscale", "en": "Returns the current scale.", "pt": "Retorna a escala atual."}
+      ],
+      "inputs": [
+        {"name": "'linear' | 'log'", "en": "Scale name.", "pt": "Nome da escala."}
+      ],
+      "outputs": [
+        {"name": "s", "en": "The current scale, as text.", "pt": "A escala atual, como texto."}
+      ],
+      "description": {
+        "en": "A log scale spreads out data that spans several orders of magnitude. It is the z analog of `xscale` and `yscale` and sets the `ZScale` property of the axes.",
+        "pt": "Uma escala logarítmica espalha dados que cobrem várias ordens de grandeza. É o análogo em z de `xscale` e `yscale` e define a propriedade `ZScale` dos eixos."
+      },
+      "notes": {
+        "en": "In MatLivre `zscale` is accepted but has no visible effect: the z-axis stays linear, and the returned value form is not available.",
+        "pt": "No MatLivre `zscale` é aceito, mas não tem efeito visível: o eixo z continua linear, e a forma com valor de retorno não está disponível."
+      },
+      "examples": [
+        {"title": {"en": "Request a log z-axis", "pt": "Pedir eixo z logarítmico"}, "silent": true, "code": "[X, Y] = meshgrid(1:5);\nsurf(X, Y, 10.^X)\nzscale('log')", "note": {"en": "MatLivre accepts the call but still draws a linear z-axis.", "pt": "O MatLivre aceita a chamada, mas ainda desenha o eixo z linear."}}
+      ],
+      "see": ["xscale", "yscale", "zlim", "surf", "loglog"]
+    },
+    "zsecondarylabel": {
+      "summary": {"en": "Sets the secondary label of the z-axis, shown next to the tick labels.", "pt": "Define o rótulo secundário do eixo z, exibido junto aos rótulos das marcas."},
+      "syntax": [
+        {"code": "zsecondarylabel(txt)", "en": "Sets the secondary label of the z-axis of the current axes.", "pt": "Define o rótulo secundário do eixo z dos eixos atuais."},
+        {"code": "t = zsecondarylabel(___)", "en": "Returns the text object.", "pt": "Retorna o objeto de texto."}
+      ],
+      "inputs": [
+        {"name": "txt", "en": "Character vector or string.", "pt": "Vetor de caracteres ou string."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Handle of the secondary label.", "pt": "Handle do rótulo secundário."}
+      ],
+      "description": {
+        "en": "The secondary label is a small annotation placed by the tick labels, normally holding a multiplier or a unit such as `x10^3`. MATLAB fills it automatically when tick values are large; this function overrides that text.",
+        "pt": "O rótulo secundário é uma pequena anotação ao lado dos rótulos das marcas, normalmente com um multiplicador ou uma unidade, como `x10^3`. O MATLAB o preenche automaticamente quando os valores das marcas são grandes; esta função substitui esse texto."
+      },
+      "examples": [
+        {"title": {"en": "Annotate the z tick labels", "pt": "Anotar os rótulos de z"}, "silent": true, "code": "[X, Y] = meshgrid(1:5);\nsurf(X, Y, 1000*X.*Y)\nzsecondarylabel('x1000 units')"}
+      ],
+      "see": ["zlabel", "xsecondarylabel", "ysecondarylabel", "ztickformat"]
+    },
+    "ztickangle": {
+      "summary": {"en": "Rotates the tick labels of the z-axis.", "pt": "Gira os rótulos das marcas do eixo z."},
+      "syntax": [
+        {"code": "ztickangle(angle)", "en": "Rotates the z tick labels by `angle` degrees.", "pt": "Gira os rótulos de z em `angle` graus."},
+        {"code": "a = ztickangle", "en": "Returns the current rotation.", "pt": "Retorna a rotação atual."}
+      ],
+      "inputs": [
+        {"name": "angle", "en": "Rotation in degrees, counterclockwise.", "pt": "Rotação em graus, no sentido anti-horário."}
+      ],
+      "outputs": [
+        {"name": "a", "en": "Current rotation in degrees.", "pt": "Rotação atual em graus."}
+      ],
+      "description": {
+        "en": "Rotation helps when long labels overlap. The call sets the `ZTickLabelRotation` property of the axes and is the z counterpart of `xtickangle` and `ytickangle`.",
+        "pt": "Girar os rótulos ajuda quando rótulos longos se sobrepõem. A chamada define a propriedade `ZTickLabelRotation` dos eixos e é a versão de z de `xtickangle` e `ytickangle`."
+      },
+      "notes": {
+        "en": "In MatLivre `ztickangle` is accepted but ignored, and the value-returning form is not available.",
+        "pt": "No MatLivre `ztickangle` é aceito, mas ignorado, e a forma que retorna valor não está disponível."
+      },
+      "examples": [
+        {"title": {"en": "Tilt the z labels", "pt": "Inclinar os rótulos de z"}, "silent": true, "code": "surf(peaks(10))\nztickangle(45)"}
+      ],
+      "see": ["xtickangle", "ytickangle", "zticklabels", "zticks"]
+    },
+    "ztickformat": {
+      "summary": {"en": "Sets the numeric format of the z tick labels.", "pt": "Define o formato numérico dos rótulos das marcas de z."},
+      "syntax": [
+        {"code": "ztickformat(fmt)", "en": "Formats the z tick labels with `fmt`, for example `'%.1f'`.", "pt": "Formata os rótulos de z com `fmt`, por exemplo `'%.1f'`."},
+        {"code": "f = ztickformat", "en": "Returns the current format.", "pt": "Retorna o formato atual."}
+      ],
+      "inputs": [
+        {"name": "fmt", "en": "A `sprintf`-style format such as `'%d'` or `'%.2f'`; for datetime or duration axes, a date or duration format.", "pt": "Formato no estilo `sprintf`, como `'%d'` ou `'%.2f'`; para eixos de datetime ou duration, um formato de data ou duração."}
+      ],
+      "outputs": [
+        {"name": "f", "en": "Current format text.", "pt": "Texto do formato atual."}
+      ],
+      "description": {
+        "en": "The format controls how tick values are converted to text, so it can fix the number of decimals or add a unit, as in `'%g m'`. It is the z version of `xtickformat` and `ytickformat`.",
+        "pt": "O formato controla como os valores das marcas viram texto, podendo fixar o número de casas decimais ou acrescentar uma unidade, como em `'%g m'`. É a versão de z de `xtickformat` e `ytickformat`."
+      },
+      "notes": {
+        "en": "In MatLivre `ztickformat` is accepted but ignored.",
+        "pt": "No MatLivre `ztickformat` é aceito, mas ignorado."
+      },
+      "examples": [
+        {"title": {"en": "One decimal on z ticks", "pt": "Uma casa decimal nas marcas de z"}, "silent": true, "code": "surf(peaks(10))\nztickformat('%.1f')"}
+      ],
+      "see": ["xtickformat", "ytickformat", "zticks", "zticklabels"]
+    },
+    "zticklabels": {
+      "summary": {"en": "Sets or gets the text of the z-axis tick labels.", "pt": "Define ou obtém o texto dos rótulos das marcas do eixo z."},
+      "syntax": [
+        {"code": "zticklabels(labels)", "en": "Uses `labels` for the z ticks, in order.", "pt": "Usa `labels` nas marcas de z, em ordem."},
+        {"code": "lbl = zticklabels", "en": "Returns the current labels as a cell array.", "pt": "Retorna os rótulos atuais como cell array."},
+        {"code": "zticklabels('auto')", "en": "Restores automatic labels.", "pt": "Restaura os rótulos automáticos."}
+      ],
+      "inputs": [
+        {"name": "labels", "en": "Cell array of character vectors or a string array. If it is shorter than the number of ticks, the labels repeat.", "pt": "Cell array de vetores de caracteres ou array de strings. Se for menor que o número de marcas, os rótulos se repetem."}
+      ],
+      "outputs": [
+        {"name": "lbl", "en": "Cell array of tick label text.", "pt": "Cell array com o texto dos rótulos."}
+      ],
+      "description": {
+        "en": "Custom labels let a numeric axis show names, such as `'low'`, `'mid'` and `'high'`. Pair the call with `zticks` so each label sits where you expect.",
+        "pt": "Rótulos personalizados permitem que um eixo numérico mostre nomes, como `'low'`, `'mid'` e `'high'`. Use em conjunto com `zticks` para que cada rótulo fique no lugar desejado."
+      },
+      "notes": {
+        "en": "In MatLivre `zticklabels` is accepted but ignored, and the value-returning form is not available.",
+        "pt": "No MatLivre `zticklabels` é aceito, mas ignorado, e a forma que retorna valor não está disponível."
+      },
+      "examples": [
+        {"title": {"en": "Named z ticks", "pt": "Marcas de z com nomes"}, "silent": true, "code": "surf(peaks(10))\nzticks([-5 0 5])\nzticklabels({'low', 'mid', 'high'})"}
+      ],
+      "see": ["zticks", "xticklabels", "yticklabels", "ztickformat"]
+    },
+    "zticks": {
+      "summary": {"en": "Sets or gets the positions of the z-axis tick marks.", "pt": "Define ou obtém as posições das marcas do eixo z."},
+      "syntax": [
+        {"code": "zticks(values)", "en": "Places z ticks at the given values.", "pt": "Coloca marcas de z nos valores dados."},
+        {"code": "t = zticks", "en": "Returns the current tick positions.", "pt": "Retorna as posições atuais das marcas."},
+        {"code": "zticks('auto')", "en": "Returns to automatic tick placement.", "pt": "Volta à colocação automática das marcas."}
+      ],
+      "inputs": [
+        {"name": "values", "en": "Vector of increasing positions.", "pt": "Vetor de posições crescentes."}
+      ],
+      "outputs": [
+        {"name": "t", "en": "Row vector of tick positions.", "pt": "Vetor linha com as posições das marcas."}
+      ],
+      "description": {
+        "en": "Explicit ticks are useful for highlighting meaningful levels. Setting them switches tick mode to manual, which also keeps them fixed when the data changes. `zticks` sets the `ZTick` property of the axes.",
+        "pt": "Marcas explícitas servem para destacar níveis relevantes. Defini-las muda o modo das marcas para manual, o que também as mantém fixas quando os dados mudam. `zticks` define a propriedade `ZTick` dos eixos."
+      },
+      "notes": {
+        "en": "In MatLivre `zticks` is accepted but ignored, and the value-returning form is not available.",
+        "pt": "No MatLivre `zticks` é aceito, mas ignorado, e a forma que retorna valor não está disponível."
+      },
+      "examples": [
+        {"title": {"en": "Three z ticks", "pt": "Três marcas em z"}, "silent": true, "code": "surf(peaks(10))\nzticks([-5 0 5])"}
+      ],
+      "see": ["xticks", "yticks", "zticklabels", "zlim"]
+    },
+    "allchild": {
+      "summary": {"en": "Returns all children of graphics objects, including hidden ones.", "pt": "Retorna todos os filhos de objetos gráficos, inclusive os ocultos."},
+      "syntax": [
+        {"code": "c = allchild(h)", "en": "Returns the children of `h`; for several handles, a cell array with one entry each.", "pt": "Retorna os filhos de `h`; para vários handles, um cell array com uma entrada para cada um."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Handle or array of handles to figures, axes or other containers.", "pt": "Handle ou array de handles de figuras, eixos ou outros contêineres."}
+      ],
+      "outputs": [
+        {"name": "c", "en": "Column array of child handles (a cell array for multiple parents).", "pt": "Array coluna com os handles dos filhos (cell array para vários pais)."}
+      ],
+      "description": {
+        "en": "Unlike reading the `Children` property, `allchild` also lists objects whose `HandleVisibility` is off. It is the dependable way to inspect what an axes or figure really contains. The newest object comes first.",
+        "pt": "Diferente de ler a propriedade `Children`, `allchild` também lista objetos com `HandleVisibility` desligada. É a forma confiável de inspecionar o que uma figura ou eixos realmente contém. O objeto mais novo vem primeiro."
+      },
+      "examples": [
+        {"title": {"en": "Children of an axes", "pt": "Filhos de um eixo"}, "code": "figure\nax = axes;\nh = plot(1:3);\nc = allchild(ax);\ndisp(numel(c))\ndisp(c == h)"}
+      ],
+      "see": ["findobj", "findall", "ancestor", "gca", "delete"]
+    },
+    "ancestor": {
+      "summary": {"en": "Finds the closest enclosing object of a given type, such as the axes or figure of a line.", "pt": "Encontra o objeto envolvente mais próximo de um tipo dado, como os eixos ou a figura de uma linha."},
+      "syntax": [
+        {"code": "p = ancestor(h, type)", "en": "Walks up from `h` and returns the first ancestor of the given type.", "pt": "Sobe a partir de `h` e retorna o primeiro ancestral do tipo dado."},
+        {"code": "p = ancestor(h, type, 'toplevel')", "en": "Returns the highest ancestor of that type instead of the nearest.", "pt": "Retorna o ancestral mais alto desse tipo em vez do mais próximo."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Graphics handle or array of handles.", "pt": "Handle gráfico ou array de handles."},
+        {"name": "type", "en": "Type name such as `'axes'` or `'figure'`, or a cell array of names.", "pt": "Nome do tipo, como `'axes'` ou `'figure'`, ou um cell array de nomes."}
+      ],
+      "outputs": [
+        {"name": "p", "en": "Handle of the ancestor, or an empty array if none matches.", "pt": "Handle do ancestral, ou um array vazio se nenhum corresponder."}
+      ],
+      "description": {
+        "en": "`ancestor` follows the `Parent` chain upward until it meets an object of the requested type. If `h` itself has that type it is returned unchanged. This is handy inside callbacks, where the source object is known but its axes or figure is not.",
+        "pt": "`ancestor` segue a cadeia de `Parent` para cima até encontrar um objeto do tipo pedido. Se o próprio `h` tem esse tipo, ele é devolvido sem mudança. É útil em callbacks, onde o objeto de origem é conhecido mas seus eixos ou figura não."
+      },
+      "examples": [
+        {"title": {"en": "Axes and figure of a line", "pt": "Eixos e figura de uma linha"}, "code": "f = figure;\nax = axes;\nh = plot(1:3);\ndisp(ancestor(h, 'axes') == ax)\ndisp(ancestor(h, 'figure') == f)"}
+      ],
+      "see": ["allchild", "findobj", "gca", "gcf", "get"]
+    },
+    "copyobj": {
+      "summary": {"en": "Copies graphics objects into a new parent.", "pt": "Copia objetos gráficos para um novo pai."},
+      "syntax": [
+        {"code": "new = copyobj(h, parent)", "en": "Copies the objects in `h` and attaches the copies to `parent`.", "pt": "Copia os objetos de `h` e anexa as cópias a `parent`."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Handle or array of handles to copy, including their children.", "pt": "Handle ou array de handles a copiar, incluindo seus filhos."},
+        {"name": "parent", "en": "Destination: a figure, axes or other valid container, or an array matching `h`.", "pt": "Destino: uma figura, eixos ou outro contêiner válido, ou um array do mesmo tamanho de `h`."}
+      ],
+      "outputs": [
+        {"name": "new", "en": "Handles of the copies.", "pt": "Handles das cópias."}
+      ],
+      "description": {
+        "en": "The copy keeps the property values of the original. The parent must be able to hold that kind of object: a line goes into axes, an axes goes into a figure. Copying a line into another axes is the quick way to reuse a curve in a second plot.",
+        "pt": "A cópia mantém os valores de propriedades do original. O pai precisa aceitar aquele tipo de objeto: uma linha vai para eixos, eixos vão para uma figura. Copiar uma linha para outros eixos é a forma rápida de reaproveitar uma curva em um segundo gráfico."
+      },
+      "examples": [
+        {"title": {"en": "Duplicate a line", "pt": "Duplicar uma linha"}, "code": "figure\nax = axes;\nh = plot(1:3);\ng = copyobj(h, ax);\ndisp(numel(allchild(ax)))"}
+      ],
+      "see": ["allchild", "delete", "findobj", "plot"]
+    },
+    "delete": {
+      "summary": {"en": "Deletes graphics objects, or files by name.", "pt": "Apaga objetos gráficos ou arquivos pelo nome."},
+      "syntax": [
+        {"code": "delete(h)", "en": "Removes the graphics objects with handles `h`, together with their children.", "pt": "Remove os objetos gráficos com handles `h`, junto com seus filhos."},
+        {"code": "delete(filename)", "en": "Deletes the named file; wildcards such as `*.tmp` are allowed.", "pt": "Apaga o arquivo indicado; curingas como `*.tmp` são permitidos."}
+      ],
+      "inputs": [
+        {"name": "h", "en": "Handle or array of handles.", "pt": "Handle ou array de handles."},
+        {"name": "filename", "en": "Text with a file name or pattern.", "pt": "Texto com um nome ou padrão de arquivo."}
+      ],
+      "outputs": [],
+      "description": {
+        "en": "After `delete(h)` the handle variable still exists but is no longer valid; test it with `isvalid` or `ishandle`. Deleting an axes or figure removes everything inside it. For a file, `delete` is silent when the file is missing, apart from a warning.",
+        "pt": "Depois de `delete(h)` a variável com o handle continua existindo, mas deixa de ser válida; teste com `isvalid` ou `ishandle`. Apagar eixos ou uma figura remove tudo que está dentro. Para arquivos, `delete` apenas avisa quando o arquivo não existe."
+      },
+      "examples": [
+        {"title": {"en": "Remove a line", "pt": "Remover uma linha"}, "code": "figure\nax = axes;\nh = plot(1:3);\ndisp(numel(allchild(ax)))\ndelete(h)\ndisp(numel(allchild(ax)))"}
+      ],
+      "see": ["close", "ishandle", "allchild", "copyobj"]
+    },
+    "findall": {
+      "summary": {"en": "Finds graphics objects of all kinds, including hidden ones, by property values.", "pt": "Encontra objetos gráficos de qualquer tipo, inclusive ocultos, por valores de propriedades."},
+      "syntax": [
+        {"code": "h = findall(parent)", "en": "Returns `parent` and all of its descendants.", "pt": "Retorna `parent` e todos os seus descendentes."},
+        {"code": "h = findall(parent, Name, Value)", "en": "Keeps only objects whose properties match, for example `'Type','line'`.", "pt": "Mantém só os objetos cujas propriedades coincidem, por exemplo `'Type','line'`."}
+      ],
+      "inputs": [
+        {"name": "parent", "en": "Starting object, usually a figure or axes; `0` (the root) searches all figures.", "pt": "Objeto inicial, em geral uma figura ou eixos; `0` (a raiz) pesquisa todas as figuras."},
+        {"name": "Name, Value", "en": "Property name and value to match.", "pt": "Nome e valor de propriedade a casar."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Column array of matching handles.", "pt": "Array coluna com os handles encontrados."}
+      ],
+      "description": {
+        "en": "`findall` behaves like `findobj` but ignores `HandleVisibility`, so it also sees objects that are normally hidden, such as tick-label helpers or colorbar parts. Use it for thorough clean-up or inspection; use `findobj` for everyday searches.",
+        "pt": "`findall` se comporta como `findobj`, mas ignora `HandleVisibility`, então também enxerga objetos normalmente ocultos, como auxiliares de rótulos ou partes de colorbar. Use para limpeza ou inspeção completas; use `findobj` nas buscas do dia a dia."
+      },
+      "examples": [
+        {"title": {"en": "Find lines by tag", "pt": "Achar linhas por tag"}, "code": "f = figure;\nplot(1:3, 'Tag', 'a');\nhold on\nplot(3:-1:1, 'Tag', 'b');\nh = findall(f, 'Type', 'line');\ndisp(numel(h))\ndisp(numel(findall(f, 'Tag', 'b')))"}
+      ],
+      "see": ["findobj", "allchild", "ancestor", "get"]
+    },
+    "findfigs": {
+      "summary": {"en": "Brings figures that are off-screen back into view.", "pt": "Traz de volta à vista as figuras que estão fora da tela."},
+      "syntax": [
+        {"code": "findfigs", "en": "Moves every figure that lies outside the visible screen area onto the screen.", "pt": "Move para dentro da tela toda figura que esteja fora da área visível."}
+      ],
+      "inputs": [],
+      "outputs": [],
+      "description": {
+        "en": "Figures can end up off-screen after a monitor is disconnected or a resolution changes. `findfigs` repositions them so that they can be seen and moved. It has no inputs or outputs and does nothing to figures that are already visible.",
+        "pt": "Figuras podem ficar fora da tela depois que um monitor é desconectado ou a resolução muda. `findfigs` as reposiciona para que possam ser vistas e movidas. Não tem entradas nem saídas e não mexe em figuras já visíveis."
+      },
+      "notes": {
+        "en": "MatLivre draws figures inline below the code, so there are no windows to lose and the call has no effect.",
+        "pt": "O MatLivre desenha as figuras em linha, abaixo do código, então não há janelas a perder e a chamada não tem efeito."
+      },
+      "examples": [
+        {"title": {"en": "Recover figure windows", "pt": "Recuperar janelas de figuras"}, "silent": true, "code": "figure\nplot(1:3)\nfindfigs"}
+      ],
+      "see": ["figure", "gcf", "shg", "movegui"]
+    },
+    "findobj": {
+      "summary": {"en": "Finds visible graphics objects by property values.", "pt": "Encontra objetos gráficos visíveis por valores de propriedades."},
+      "syntax": [
+        {"code": "h = findobj", "en": "Returns the root and all visible objects.", "pt": "Retorna a raiz e todos os objetos visíveis."},
+        {"code": "h = findobj(Name, Value)", "en": "Returns objects anywhere whose property matches.", "pt": "Retorna objetos de qualquer lugar cuja propriedade coincide."},
+        {"code": "h = findobj(parent, Name, Value)", "en": "Searches `parent` and its descendants only.", "pt": "Pesquisa apenas `parent` e seus descendentes."},
+        {"code": "h = findobj(parent, '-depth', d, ___)", "en": "Limits how many levels below `parent` are searched.", "pt": "Limita quantos níveis abaixo de `parent` são pesquisados."}
+      ],
+      "inputs": [
+        {"name": "parent", "en": "Figure, axes or other object to search under.", "pt": "Figura, eixos ou outro objeto onde pesquisar."},
+        {"name": "Name, Value", "en": "Property and the value to match; several pairs are combined with AND (use `'-or'` for OR).", "pt": "Propriedade e valor a casar; vários pares são combinados com E (use `'-or'` para OU)."}
+      ],
+      "outputs": [
+        {"name": "h", "en": "Column array of handles; empty if nothing matches.", "pt": "Array coluna de handles; vazio se nada coincidir."}
+      ],
+      "description": {
+        "en": "A common use is picking one line out of a plot by `Tag` or `DisplayName` to change it afterwards. Objects with `HandleVisibility` set to `'off'` are skipped; use `findall` to include them.",
+        "pt": "Um uso comum é escolher uma linha de um gráfico por `Tag` ou `DisplayName` para alterá-la depois. Objetos com `HandleVisibility` em `'off'` são ignorados; use `findall` para incluí-los."
+      },
+      "examples": [
+        {"title": {"en": "Pick a line by tag", "pt": "Escolher uma linha pela tag"}, "code": "f = figure;\nax = axes;\nl1 = plot(1:3, 'Tag', 'one');\nhold on\nl2 = plot(3:-1:1, 'Tag', 'two');\no = findobj(ax, 'Tag', 'two');\ndisp(o == l2)\ndisp(numel(findobj(f, 'Type', 'line')))"}
+      ],
+      "see": ["findall", "allchild", "get", "set", "ancestor"]
+    },
+    "gca": {
+      "summary": {"en": "Returns the handle of the current axes, creating one if needed.", "pt": "Retorna o handle dos eixos atuais, criando-os se necessário."},
+      "syntax": [
+        {"code": "ax = gca", "en": "Returns the current axes of the current figure.", "pt": "Retorna os eixos atuais da figura atual."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "ax", "en": "Axes object, used to read or set properties such as limits and labels.", "pt": "Objeto de eixos, usado para ler ou definir propriedades como limites e rótulos."}
+      ],
+      "description": {
+        "en": "Most plotting commands act on the current axes. `gca` gives you a handle to it, so you can use dot notation (`ax.XLim = [0 5]`) or `get` and `set`. If there is no figure or axes yet, one is created.",
+        "pt": "A maioria dos comandos de plotagem age nos eixos atuais. `gca` dá um handle para eles, permitindo a notação de ponto (`ax.XLim = [0 5]`) ou `get` e `set`. Se ainda não houver figura ou eixos, eles são criados."
+      },
+      "examples": [
+        {"title": {"en": "Read and change axes properties", "pt": "Ler e alterar propriedades dos eixos"}, "code": "plot(1:3)\nax = gca;\nax.XLim = [0 5];\ndisp(ax.XLim)\ndisp(get(ax, 'Type'))"}
+      ],
+      "see": ["gcf", "axes", "get", "set", "gco"]
+    },
+    "gcbf": {
+      "summary": {"en": "Returns the figure that contains the object whose callback is running.", "pt": "Retorna a figura que contém o objeto cujo callback está em execução."},
+      "syntax": [
+        {"code": "fig = gcbf", "en": "Returns the callback figure, or an empty object when no callback is running.", "pt": "Retorna a figura do callback, ou um objeto vazio quando nenhum callback está em execução."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "fig", "en": "Handle of the figure, or an empty placeholder.", "pt": "Handle da figura, ou um placeholder vazio."}
+      ],
+      "description": {
+        "en": "Inside a callback of a UI control or graphics object, `gcbf` identifies the figure that holds it, which is not necessarily the current figure. It is the figure that owns the object returned by `gcbo`. Outside any callback it returns an empty `GraphicsPlaceholder`.",
+        "pt": "Dentro de um callback de um controle de UI ou de um objeto gráfico, `gcbf` identifica a figura que o contém, que não é necessariamente a figura atual. É a figura dona do objeto retornado por `gcbo`. Fora de qualquer callback, retorna um `GraphicsPlaceholder` vazio."
+      },
+      "examples": [
+        {"title": {"en": "Outside a callback", "pt": "Fora de um callback"}, "code": "f = gcbf;\ndisp(class(f))"}
+      ],
+      "see": ["gcbo", "gcf", "gco", "ancestor"]
+    },
+    "gcbo": {
+      "summary": {"en": "Returns the object whose callback is currently executing.", "pt": "Retorna o objeto cujo callback está em execução."},
+      "syntax": [
+        {"code": "obj = gcbo", "en": "Returns the callback object, or an empty object when no callback is running.", "pt": "Retorna o objeto do callback, ou um objeto vazio quando nenhum callback está em execução."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "obj", "en": "Handle of the object that triggered the callback, or an empty placeholder.", "pt": "Handle do objeto que disparou o callback, ou um placeholder vazio."}
+      ],
+      "description": {
+        "en": "Callbacks normally receive the source object as their first argument, which is the cleaner way to reach it. `gcbo` is the older alternative, useful when a callback is a plain function without arguments. Outside a callback it is empty.",
+        "pt": "Os callbacks normalmente recebem o objeto de origem como primeiro argumento, que é a forma mais limpa de alcançá-lo. `gcbo` é a alternativa mais antiga, útil quando o callback é uma função simples sem argumentos. Fora de um callback, é vazio."
+      },
+      "examples": [
+        {"title": {"en": "Outside a callback", "pt": "Fora de um callback"}, "code": "o = gcbo;\ndisp(class(o))"}
+      ],
+      "see": ["gcbf", "gco", "gcf", "ancestor"]
+    },
+    "gcf": {
+      "summary": {"en": "Returns the handle of the current figure, creating one if needed.", "pt": "Retorna o handle da figura atual, criando-a se necessário."},
+      "syntax": [
+        {"code": "fig = gcf", "en": "Returns the current figure.", "pt": "Retorna a figura atual."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "fig", "en": "Figure object; use it with `get`, `set`, `saveas` or `close`.", "pt": "Objeto de figura; use com `get`, `set`, `saveas` ou `close`."}
+      ],
+      "description": {
+        "en": "The current figure is the one that new plots draw into. It is the most recently created or selected figure. If none exists, `gcf` creates an empty one, so calling it can have the side effect of making a figure.",
+        "pt": "A figura atual é aquela em que os novos gráficos são desenhados: a criada ou selecionada mais recentemente. Se não existir nenhuma, `gcf` cria uma vazia, de modo que chamá-la pode ter o efeito colateral de criar uma figura."
+      },
+      "examples": [
+        {"title": {"en": "Name the current figure", "pt": "Nomear a figura atual"}, "code": "f = figure;\nplot(1:3)\nset(gcf, 'Name', 'demo')\ndisp(get(gcf, 'Name'))\ndisp(gcf == f)"}
+      ],
+      "see": ["gca", "figure", "close", "get", "set"]
+    },
+    "gco": {
+      "summary": {"en": "Returns the graphics object that was last clicked.", "pt": "Retorna o objeto gráfico clicado por último."},
+      "syntax": [
+        {"code": "obj = gco", "en": "Returns the current object of the current figure, or an empty object if none.", "pt": "Retorna o objeto atual da figura atual, ou um objeto vazio se não houver."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "obj", "en": "Handle of the current object, or an empty placeholder.", "pt": "Handle do objeto atual, ou um placeholder vazio."}
+      ],
+      "description": {
+        "en": "The current object is the one under the mouse at the last click in the figure. It is stored in the `CurrentObject` property of the figure, and `gco` just reads it. Until something has been clicked, the result is empty.",
+        "pt": "O objeto atual é o que estava sob o mouse no último clique na figura. Fica guardado na propriedade `CurrentObject` da figura, e `gco` apenas a lê. Enquanto nada for clicado, o resultado é vazio."
+      },
+      "examples": [
+        {"title": {"en": "Nothing clicked yet", "pt": "Ainda sem cliques"}, "code": "figure\nplot(1:3)\no = gco;\ndisp(class(o))"}
+      ],
+      "see": ["gcf", "gca", "gcbo", "get"]
+    },
+    "gobjects": {
+      "summary": {"en": "Creates an array of placeholder graphics objects for preallocation.", "pt": "Cria um array de objetos gráficos vazios para pré-alocação."},
+      "syntax": [
+        {"code": "G = gobjects(n)", "en": "Creates an n-by-n array of placeholders.", "pt": "Cria um array n por n de placeholders."},
+        {"code": "G = gobjects(sz1, ..., szN)", "en": "Creates an array of the given size.", "pt": "Cria um array do tamanho dado."}
+      ],
+      "inputs": [
+        {"name": "n, sz1, ..., szN", "en": "Non-negative integer sizes.", "pt": "Tamanhos inteiros não negativos."}
+      ],
+      "outputs": [
+        {"name": "G", "en": "Array of `GraphicsPlaceholder` objects, later replaced with real handles.", "pt": "Array de objetos `GraphicsPlaceholder`, depois substituídos por handles reais."}
+      ],
+      "description": {
+        "en": "Preallocating a handle array before a loop avoids growing it element by element, and gives it the right class for graphics handles. Each element is an empty placeholder until you assign a handle to it.",
+        "pt": "Pré-alocar um array de handles antes de um laço evita fazê-lo crescer elemento a elemento e dá a ele a classe correta para handles gráficos. Cada elemento é um placeholder vazio até que se atribua um handle."
+      },
+      "notes": {
+        "en": "In MatLivre the placeholder array can be created and inspected, but assigning handles into its elements is not supported yet.",
+        "pt": "No MatLivre o array de placeholders pode ser criado e inspecionado, mas atribuir handles aos seus elementos ainda não é suportado."
+      },
+      "examples": [
+        {"title": {"en": "Preallocate handles", "pt": "Pré-alocar handles"}, "code": "G = gobjects(2, 1);\ndisp(class(G))\ndisp(size(G))"}
+      ],
+      "see": ["zeros", "plot", "ishandle", "isgraphics"]
+    },
+    "groot": {
+      "summary": {"en": "Returns the graphics root object, the top of the graphics hierarchy.", "pt": "Retorna o objeto raiz de gráficos, o topo da hierarquia gráfica."},
+      "syntax": [
+        {"code": "r = groot", "en": "Returns the root object (the same as handle `0`).", "pt": "Retorna o objeto raiz (o mesmo que o handle `0`)."}
+      ],
+      "inputs": [],
+      "outputs": [
+        {"name": "r", "en": "Root object. Its `Children` are the open figures and its properties hold session defaults.", "pt": "Objeto raiz. Seus `Children` são as figuras abertas e suas propriedades guardam padrões da sessão."}
+      ],
+      "description": {
+        "en": "Every figure descends from the root. Through it you can list all figures with `r.Children`, query the current figure with `r.CurrentFigure`, or set defaults for new objects, such as `set(groot, 'defaultLineLineWidth', 2)`.",
+        "pt": "Toda figura descende da raiz. Por meio dela é possível listar todas as figuras com `r.Children`, consultar a figura atual com `r.CurrentFigure` ou definir padrões para novos objetos, como `set(groot, 'defaultLineLineWidth', 2)`."
+      },
+      "examples": [
+        {"title": {"en": "The root object", "pt": "O objeto raiz"}, "code": "r = groot;\ndisp(class(r))"}
+      ],
+      "see": ["gcf", "gca", "figure", "findobj", "get"]
+    }
+  }
+}

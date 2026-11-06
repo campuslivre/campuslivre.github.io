@@ -1,0 +1,1012 @@
+{
+ "functions": {
+  "fminbnd": {
+   "summary": {
+    "en": "Finds a local minimum of a function of one variable inside a fixed interval.",
+    "pt": "Encontra um mínimo local de uma função de uma variável dentro de um intervalo fixo."
+   },
+   "syntax": [
+    {
+     "code": "x = fminbnd(fun, x1, x2)",
+     "en": "Returns the point in `[x1, x2]` where `fun` reaches a local minimum.",
+     "pt": "Retorna o ponto em `[x1, x2]` onde `fun` atinge um mínimo local."
+    },
+    {
+     "code": "x = fminbnd(fun, x1, x2, options)",
+     "en": "Same, with settings created by `optimset`.",
+     "pt": "Igual, com configurações criadas por `optimset`."
+    },
+    {
+     "code": "[x, fval, exitflag, output] = fminbnd(___)",
+     "en": "Also returns the minimum value, a status flag and a struct with run statistics.",
+     "pt": "Também retorna o valor mínimo, um indicador de status e uma struct com estatísticas da execução."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle that takes a scalar and returns a scalar.",
+     "pt": "Handle de função que recebe um escalar e retorna um escalar."
+    },
+    {
+     "name": "x1, x2",
+     "en": "Finite end points of the search interval, with `x1 < x2`.",
+     "pt": "Extremos finitos do intervalo de busca, com `x1 < x2`."
+    },
+    {
+     "name": "options",
+     "en": "Struct from `optimset`; `TolX` (default `1e-4`) and `MaxIter` are the options that matter.",
+     "pt": "Struct de `optimset`; `TolX` (padrão `1e-4`) e `MaxIter` são as opções relevantes."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The location of the minimum found inside the interval.",
+     "pt": "A posição do mínimo encontrado dentro do intervalo."
+    },
+    {
+     "name": "fval",
+     "en": "Value of `fun` at `x`.",
+     "pt": "Valor de `fun` em `x`."
+    },
+    {
+     "name": "exitflag",
+     "en": "`1` when the method converged, `0` when the iteration limit was reached.",
+     "pt": "`1` quando o método convergiu, `0` quando o limite de iterações foi atingido."
+    },
+    {
+     "name": "output",
+     "en": "Struct with the fields `iterations`, `funcCount`, `algorithm` and `message`.",
+     "pt": "Struct com os campos `iterations`, `funcCount`, `algorithm` e `message`."
+    }
+   ],
+   "description": {
+    "en": "The method combines golden section search, which always shrinks the interval by a fixed ratio, with parabolic interpolation, which converges faster when the function is smooth near the minimum. It needs no derivatives.\n\nOnly a local minimum is guaranteed, and it can lie on an end point if the function keeps decreasing toward it. To maximize, minimize the negative of the function.",
+    "pt": "O método combina a busca por seção áurea, que sempre reduz o intervalo por uma razão fixa, com a interpolação parabólica, que converge mais rápido quando a função é suave perto do mínimo. Não precisa de derivadas.\n\nSó se garante um mínimo local, e ele pode estar em um extremo se a função continuar decrescendo até lá. Para maximizar, minimize o negativo da função."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Minimum of a parabola",
+      "pt": "Mínimo de uma parábola"
+     },
+     "code": "[x, fval, flag] = fminbnd(@(x) (x-2)^2 + 1, 0, 5);\nfprintf('x = %.4f, f = %.4f, flag = %d\\n', x, fval, flag)"
+    },
+    {
+     "title": {
+      "en": "Trough of the sine",
+      "pt": "Vale do seno"
+     },
+     "code": "x = fminbnd(@sin, 3, 6);\nfprintf('%.4f (3*pi/2 = %.4f)\\n', x, 3*pi/2)"
+    }
+   ],
+   "see": [
+    "fminsearch",
+    "fzero",
+    "optimset",
+    "optimget"
+   ]
+  },
+  "fminsearch": {
+   "summary": {
+    "en": "Finds a local minimum of a function of several variables without using derivatives.",
+    "pt": "Encontra um mínimo local de uma função de várias variáveis sem usar derivadas."
+   },
+   "syntax": [
+    {
+     "code": "x = fminsearch(fun, x0)",
+     "en": "Starts at `x0` and returns the point where `fun` reaches a local minimum.",
+     "pt": "Parte de `x0` e retorna o ponto onde `fun` atinge um mínimo local."
+    },
+    {
+     "code": "x = fminsearch(fun, x0, options)",
+     "en": "Same, with settings created by `optimset`.",
+     "pt": "Igual, com configurações criadas por `optimset`."
+    },
+    {
+     "code": "[x, fval, exitflag, output] = fminsearch(___)",
+     "en": "Also returns the minimum value, a status flag and run statistics.",
+     "pt": "Também retorna o valor mínimo, um indicador de status e estatísticas da execução."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle that takes one array argument (the whole vector of unknowns) and returns a scalar.",
+     "pt": "Handle de função que recebe um único array (o vetor completo de incógnitas) e retorna um escalar."
+    },
+    {
+     "name": "x0",
+     "en": "Initial guess. Its size is the size of `x`.",
+     "pt": "Estimativa inicial. Seu tamanho é o tamanho de `x`."
+    },
+    {
+     "name": "options",
+     "en": "Struct from `optimset`. `TolX`, `TolFun`, `MaxIter` and `MaxFunEvals` control stopping.",
+     "pt": "Struct de `optimset`. `TolX`, `TolFun`, `MaxIter` e `MaxFunEvals` controlam a parada."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The point found, with the same shape as `x0`.",
+     "pt": "O ponto encontrado, com o mesmo formato de `x0`."
+    },
+    {
+     "name": "fval",
+     "en": "Value of `fun` at `x`.",
+     "pt": "Valor de `fun` em `x`."
+    },
+    {
+     "name": "exitflag",
+     "en": "`1` on convergence, `0` if a limit on iterations or function evaluations stopped the search.",
+     "pt": "`1` na convergência, `0` se um limite de iterações ou de avaliações interrompeu a busca."
+    },
+    {
+     "name": "output",
+     "en": "Struct with `iterations`, `funcCount`, `algorithm` and `message`.",
+     "pt": "Struct com `iterations`, `funcCount`, `algorithm` e `message`."
+    }
+   ],
+   "description": {
+    "en": "`fminsearch` runs the Nelder-Mead simplex method: it keeps n+1 trial points, and at each step replaces the worst one by reflecting, expanding or contracting it through the others. The simplex crawls downhill and shrinks around a minimum.\n\nIt is robust for rough or non-smooth functions but slow for many variables, and it can stall at a point that is not a minimum. Different starting points may give different answers.",
+    "pt": "`fminsearch` executa o método simplex de Nelder-Mead: mantém n+1 pontos de teste e, a cada passo, substitui o pior por uma reflexão, expansão ou contração através dos demais. O simplex desce a superfície e se contrai ao redor de um mínimo.\n\nÉ robusto para funções irregulares ou não suaves, mas lento com muitas variáveis, e pode parar em um ponto que não é mínimo. Pontos iniciais diferentes podem dar respostas diferentes."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Rosenbrock banana function",
+      "pt": "Função banana de Rosenbrock"
+     },
+     "code": "banana = @(p) 100*(p(2) - p(1)^2)^2 + (1 - p(1))^2;\n[p, fval] = fminsearch(banana, [-1.2 1]);\nfprintf('p = (%.3f, %.3f), f = %.1e\\n', p, fval)"
+    }
+   ],
+   "see": [
+    "fminbnd",
+    "fzero",
+    "optimset",
+    "optimget"
+   ]
+  },
+  "fzero": {
+   "summary": {
+    "en": "Finds a root of a function of one variable.",
+    "pt": "Encontra uma raiz de uma função de uma variável."
+   },
+   "syntax": [
+    {
+     "code": "x = fzero(fun, x0)",
+     "en": "Searches from the scalar `x0` for a point where `fun` changes sign.",
+     "pt": "Busca a partir do escalar `x0` um ponto onde `fun` muda de sinal."
+    },
+    {
+     "code": "x = fzero(fun, [a b])",
+     "en": "Searches inside an interval whose end values have opposite signs.",
+     "pt": "Busca dentro de um intervalo cujos valores nos extremos têm sinais opostos."
+    },
+    {
+     "code": "x = fzero(fun, x0, options)",
+     "en": "Same, with settings created by `optimset`.",
+     "pt": "Igual, com configurações criadas por `optimset`."
+    },
+    {
+     "code": "[x, fval, exitflag, output] = fzero(___)",
+     "en": "Also returns the function value, a status flag and run statistics.",
+     "pt": "Também retorna o valor da função, um indicador de status e estatísticas da execução."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "fun",
+     "en": "Function handle that takes a scalar and returns a scalar.",
+     "pt": "Handle de função que recebe um escalar e retorna um escalar."
+    },
+    {
+     "name": "x0",
+     "en": "Starting guess. The method expands a bracket around it until it finds a sign change.",
+     "pt": "Estimativa inicial. O método expande um intervalo ao redor dela até encontrar uma mudança de sinal."
+    },
+    {
+     "name": "[a b]",
+     "en": "Bracketing interval. `fun(a)` and `fun(b)` must have different signs, otherwise it is an error.",
+     "pt": "Intervalo que contém a raiz. `fun(a)` e `fun(b)` devem ter sinais diferentes, senão ocorre um erro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "x",
+     "en": "The root found.",
+     "pt": "A raiz encontrada."
+    },
+    {
+     "name": "fval",
+     "en": "`fun(x)`, close to zero.",
+     "pt": "`fun(x)`, próximo de zero."
+    },
+    {
+     "name": "exitflag",
+     "en": "`1` when a root was found.",
+     "pt": "`1` quando uma raiz foi encontrada."
+    },
+    {
+     "name": "output",
+     "en": "Struct with `intervaliterations`, `iterations`, `funcCount`, `algorithm` and `message`.",
+     "pt": "Struct com `intervaliterations`, `iterations`, `funcCount`, `algorithm` e `message`."
+    }
+   ],
+   "description": {
+    "en": "`fzero` combines bisection, the secant method and inverse quadratic interpolation. Bisection guarantees progress and the faster methods are used whenever they stay inside the bracket.\n\nIt finds points where the function crosses zero. A root where the function only touches zero without changing sign, such as `x^2` at 0, cannot be bracketed and is usually missed. It returns one root per call; to find others, use a different starting point or interval.",
+    "pt": "`fzero` combina bisseção, método da secante e interpolação quadrática inversa. A bisseção garante progresso, e os métodos mais rápidos são usados sempre que ficam dentro do intervalo.\n\nEle encontra pontos em que a função cruza o zero. Uma raiz em que a função apenas toca o zero sem trocar de sinal, como `x^2` em 0, não pode ser delimitada e costuma passar despercebida. Retorna uma raiz por chamada; para achar outras, use outro ponto inicial ou outro intervalo."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Root in an interval and from a guess",
+      "pt": "Raiz em um intervalo e a partir de uma estimativa"
+     },
+     "code": "x = fzero(@cos, [1 2]);\nfprintf('%.6f\\n', x)\n[r, fval, flag] = fzero(@(t) t^2 - 2, 1);\nfprintf('%.6f %.1e %d\\n', r, abs(fval), flag)"
+    }
+   ],
+   "see": [
+    "fminbnd",
+    "fminsearch",
+    "roots",
+    "optimset",
+    "fplot"
+   ]
+  },
+  "optimget": {
+   "summary": {
+    "en": "Reads one option from an options struct created by `optimset`.",
+    "pt": "Lê uma opção de uma struct de opções criada por `optimset`."
+   },
+   "syntax": [
+    {
+     "code": "val = optimget(options, 'name')",
+     "en": "Returns the value of option `name`, or `[]` if it is not set.",
+     "pt": "Retorna o valor da opção `name`, ou `[]` se não estiver definida."
+    },
+    {
+     "code": "val = optimget(options, 'name', default)",
+     "en": "Returns `default` when the option is empty or missing.",
+     "pt": "Retorna `default` quando a opção está vazia ou ausente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "options",
+     "en": "Struct made by `optimset`.",
+     "pt": "Struct criada por `optimset`."
+    },
+    {
+     "name": "'name'",
+     "en": "Option name, such as `'TolX'` or `'MaxIter'`. Matching ignores letter case.",
+     "pt": "Nome da opção, como `'TolX'` ou `'MaxIter'`. A comparação ignora maiúsculas e minúsculas."
+    },
+    {
+     "name": "default",
+     "en": "Value to use when the option holds `[]`.",
+     "pt": "Valor a usar quando a opção contém `[]`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "val",
+     "en": "The option value, or the default.",
+     "pt": "O valor da opção, ou o padrão."
+    }
+   ],
+   "description": {
+    "en": "Solvers such as `fzero` and `fminsearch` call `optimget` to read their settings, so that an unset option falls back to the solver's own default. Calling it yourself is useful to check what a struct contains or to build your own function with the same option style.",
+    "pt": "Solvers como `fzero` e `fminsearch` chamam `optimget` para ler suas configurações, de modo que uma opção não definida use o padrão do próprio solver. Chamá-la diretamente é útil para conferir o conteúdo de uma struct ou para construir uma função própria no mesmo estilo de opções."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reading with and without defaults",
+      "pt": "Leitura com e sem valor padrão"
+     },
+     "code": "o = optimset('MaxIter', 50);\noptimget(o, 'MaxIter')\noptimget(o, 'TolX', 1e-6)\nisempty(optimget(o, 'TolX'))"
+    }
+   ],
+   "see": [
+    "optimset",
+    "fzero",
+    "fminsearch",
+    "fminbnd"
+   ]
+  },
+  "optimset": {
+   "summary": {
+    "en": "Creates or updates an options struct for the optimization and root-finding solvers.",
+    "pt": "Cria ou atualiza uma struct de opções para os solvers de otimização e de busca de raízes."
+   },
+   "syntax": [
+    {
+     "code": "options = optimset('name1', value1, 'name2', value2)",
+     "en": "Creates a struct with the given options set and all the others empty.",
+     "pt": "Cria uma struct com as opções indicadas e todas as demais vazias."
+    },
+    {
+     "code": "options = optimset(oldopts, 'name', value)",
+     "en": "Copies `oldopts` and changes the given options.",
+     "pt": "Copia `oldopts` e altera as opções indicadas."
+    },
+    {
+     "code": "options = optimset(oldopts, newopts)",
+     "en": "Merges two structs: non-empty fields of `newopts` replace those of `oldopts`.",
+     "pt": "Combina duas structs: os campos não vazios de `newopts` substituem os de `oldopts`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "'Display'",
+     "en": "Output level: `'off'`, `'iter'`, `'final'` or `'notify'`.",
+     "pt": "Nível de saída: `'off'`, `'iter'`, `'final'` ou `'notify'`."
+    },
+    {
+     "name": "'TolX'",
+     "en": "Tolerance on the position of the answer.",
+     "pt": "Tolerância na posição da resposta."
+    },
+    {
+     "name": "'TolFun'",
+     "en": "Tolerance on the function value.",
+     "pt": "Tolerância no valor da função."
+    },
+    {
+     "name": "'MaxIter'",
+     "en": "Maximum number of iterations.",
+     "pt": "Número máximo de iterações."
+    },
+    {
+     "name": "'MaxFunEvals'",
+     "en": "Maximum number of function evaluations.",
+     "pt": "Número máximo de avaliações da função."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "options",
+     "en": "Struct with the fields `Display`, `FunValCheck`, `MaxFunEvals`, `MaxIter`, `OutputFcn`, `PlotFcns`, `TolFun` and `TolX`.",
+     "pt": "Struct com os campos `Display`, `FunValCheck`, `MaxFunEvals`, `MaxIter`, `OutputFcn`, `PlotFcns`, `TolFun` e `TolX`."
+    }
+   ],
+   "description": {
+    "en": "Options that are not set stay as `[]`, which tells each solver to use its own default. Names are matched without regard to letter case, and a unique abbreviation is accepted. Pass the result as the last argument of `fzero`, `fminbnd` or `fminsearch`.",
+    "pt": "As opções não definidas ficam como `[]`, o que faz cada solver usar o seu padrão. Os nomes são comparados sem distinção de maiúsculas e minúsculas, e uma abreviação única é aceita. Passe o resultado como último argumento de `fzero`, `fminbnd` ou `fminsearch`."
+   },
+   "notes": {
+    "en": "MatLivre implements the general-purpose options only. The result is the same struct as for the base solvers, with the eight fields listed above.",
+    "pt": "O MatLivre implementa apenas as opções de uso geral. O resultado é a mesma struct dos solvers básicos, com os oito campos listados acima."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Tightening the tolerance",
+      "pt": "Apertando a tolerância"
+     },
+     "code": "o = optimset('TolX', 1e-8, 'Display', 'off')\nx = fzero(@(x) x^3 - 2, [0 3], o);\nfprintf('%.8f\\n', x)"
+    }
+   ],
+   "see": [
+    "optimget",
+    "fzero",
+    "fminsearch",
+    "fminbnd"
+   ]
+  },
+  "randi": {
+   "summary": {
+    "en": "Random integers drawn uniformly from a range.",
+    "pt": "Inteiros aleatórios sorteados de forma uniforme em um intervalo."
+   },
+   "syntax": [
+    {
+     "code": "r = randi(imax)",
+     "en": "Returns one integer from `1` to `imax`.",
+     "pt": "Retorna um inteiro de `1` a `imax`."
+    },
+    {
+     "code": "r = randi(imax, n)",
+     "en": "Returns an `n`-by-`n` matrix.",
+     "pt": "Retorna uma matriz `n`-por-`n`."
+    },
+    {
+     "code": "r = randi(imax, sz1, ..., szN)",
+     "en": "Returns an array with the given dimensions.",
+     "pt": "Retorna um array com as dimensões indicadas."
+    },
+    {
+     "code": "r = randi([imin imax], ___)",
+     "en": "Draws from `imin` to `imax` instead of starting at 1.",
+     "pt": "Sorteia de `imin` a `imax` em vez de começar em 1."
+    },
+    {
+     "code": "r = randi(___, classname)",
+     "en": "Returns integers of the given class, such as `'int8'` or `'uint16'`.",
+     "pt": "Retorna inteiros da classe indicada, como `'int8'` ou `'uint16'`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "imax",
+     "en": "Positive integer: the largest value possible.",
+     "pt": "Inteiro positivo: o maior valor possível."
+    },
+    {
+     "name": "[imin imax]",
+     "en": "Two-element vector with `imin <= imax`; negatives are allowed.",
+     "pt": "Vetor de dois elementos com `imin <= imax`; negativos são permitidos."
+    },
+    {
+     "name": "classname",
+     "en": "Result class: `'double'` (default), `'single'` or an integer class.",
+     "pt": "Classe do resultado: `'double'` (padrão), `'single'` ou uma classe inteira."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "r",
+     "en": "Array of integers, every value in the range equally likely.",
+     "pt": "Array de inteiros, com todos os valores do intervalo igualmente prováveis."
+    }
+   ],
+   "description": {
+    "en": "Each element is an independent draw from the discrete uniform distribution on the range. The values come from the global random stream, so `rng` makes them repeatable.\n\nThe result is a double by default even though the values are whole numbers. Passing an integer class gives a compact array of that type.",
+    "pt": "Cada elemento é um sorteio independente da distribuição uniforme discreta no intervalo. Os valores vêm do fluxo aleatório global, de modo que `rng` os torna repetíveis.\n\nO resultado é double por padrão, embora os valores sejam inteiros. Informar uma classe inteira gera um array compacto desse tipo."
+   },
+   "notes": {
+    "en": "The generator is seeded like MATLAB's, but the integers produced for a given seed may differ from the ones MATLAB gives.",
+    "pt": "O gerador é inicializado como o do MATLAB, mas os inteiros produzidos para uma dada semente podem diferir dos que o MATLAB fornece."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Dice, a range and an integer class",
+      "pt": "Dados, um intervalo e uma classe inteira"
+     },
+     "code": "rng(1);\nrandi(6, 1, 8)\nrandi([-2 2], 2, 3)\nclass(randi(9, 2, 'uint8'))"
+    }
+   ],
+   "see": [
+    "rand",
+    "randn",
+    "randperm",
+    "rng",
+    "RandStream"
+   ]
+  },
+  "randn": {
+   "summary": {
+    "en": "Normally distributed random numbers with mean 0 and variance 1.",
+    "pt": "Números aleatórios com distribuição normal, média 0 e variância 1."
+   },
+   "syntax": [
+    {
+     "code": "X = randn",
+     "en": "Returns one random scalar.",
+     "pt": "Retorna um escalar aleatório."
+    },
+    {
+     "code": "X = randn(n)",
+     "en": "Returns an `n`-by-`n` matrix.",
+     "pt": "Retorna uma matriz `n`-por-`n`."
+    },
+    {
+     "code": "X = randn(sz1, ..., szN)",
+     "en": "Returns an array with the given dimensions.",
+     "pt": "Retorna um array com as dimensões indicadas."
+    },
+    {
+     "code": "X = randn(___, classname)",
+     "en": "Returns `'double'` or `'single'` values.",
+     "pt": "Retorna valores `'double'` ou `'single'`."
+    },
+    {
+     "code": "X = randn(s, ___)",
+     "en": "Draws from the `RandStream` object `s` instead of the global stream.",
+     "pt": "Sorteia do objeto `RandStream` `s` em vez do fluxo global."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "sz1, ..., szN",
+     "en": "Dimension sizes. A single value `n` gives a square matrix; `0` gives an empty array.",
+     "pt": "Tamanhos das dimensões. Um único valor `n` gera uma matriz quadrada; `0` gera um array vazio."
+    },
+    {
+     "name": "classname",
+     "en": "`'double'` (default) or `'single'`.",
+     "pt": "`'double'` (padrão) ou `'single'`."
+    },
+    {
+     "name": "s",
+     "en": "A `RandStream` object.",
+     "pt": "Um objeto `RandStream`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "X",
+     "en": "Array of samples from the standard normal distribution.",
+     "pt": "Array de amostras da distribuição normal padrão."
+    }
+   ],
+   "description": {
+    "en": "The samples follow the bell-shaped distribution with mean 0 and standard deviation 1. For a different mean and spread, scale and shift: `mu + sigma*randn(...)`.\n\nValues come from the global stream and can be repeated by calling `rng` first.",
+    "pt": "As amostras seguem a distribuição em forma de sino com média 0 e desvio padrão 1. Para outra média e outra dispersão, escale e desloque: `mu + sigma*randn(...)`.\n\nOs valores vêm do fluxo global e podem ser repetidos chamando `rng` antes."
+   },
+   "notes": {
+    "en": "The values drawn for a given seed do not match the ones MATLAB produces, although the distribution is the same.",
+    "pt": "Os valores sorteados para uma dada semente não coincidem com os do MATLAB, embora a distribuição seja a mesma."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Repeatable samples, shifted and scaled",
+      "pt": "Amostras repetíveis, deslocadas e escaladas"
+     },
+     "code": "rng(1);\nx = randn(1, 3);\nrng(1);\ny = randn(1, 3);\nisequal(x, y)\nz = 10 + 2*randn(2, 2);\nsize(z)\nclass(randn(2, 'single'))"
+    }
+   ],
+   "see": [
+    "rand",
+    "randi",
+    "randperm",
+    "rng"
+   ]
+  },
+  "randperm": {
+   "summary": {
+    "en": "Random permutation of the integers 1 to n.",
+    "pt": "Permutação aleatória dos inteiros de 1 a n."
+   },
+   "syntax": [
+    {
+     "code": "p = randperm(n)",
+     "en": "Returns a row vector with the integers `1` to `n` in random order.",
+     "pt": "Retorna um vetor linha com os inteiros de `1` a `n` em ordem aleatória."
+    },
+    {
+     "code": "p = randperm(n, k)",
+     "en": "Returns `k` unique integers chosen at random from `1:n`.",
+     "pt": "Retorna `k` inteiros únicos escolhidos ao acaso em `1:n`."
+    },
+    {
+     "code": "p = randperm(s, ___)",
+     "en": "Uses the `RandStream` object `s` instead of the global stream.",
+     "pt": "Usa o objeto `RandStream` `s` em vez do fluxo global."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "n",
+     "en": "Nonnegative integer scalar.",
+     "pt": "Escalar inteiro não negativo."
+    },
+    {
+     "name": "k",
+     "en": "Number of values to return, with `0 <= k <= n`; otherwise it is an error.",
+     "pt": "Quantidade de valores a retornar, com `0 <= k <= n`; caso contrário ocorre um erro."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "p",
+     "en": "Row vector of unique integers, every ordering equally likely.",
+     "pt": "Vetor linha de inteiros únicos, com todas as ordens igualmente prováveis."
+    }
+   ],
+   "description": {
+    "en": "Every value appears at most once, so `randperm` samples without replacement. It is the usual way to shuffle: `x(randperm(numel(x)))` reorders a vector, and `randperm(n, k)` picks `k` random indices.",
+    "pt": "Cada valor aparece no máximo uma vez, então `randperm` amostra sem reposição. É a forma usual de embaralhar: `x(randperm(numel(x)))` reordena um vetor, e `randperm(n, k)` escolhe `k` índices aleatórios."
+   },
+   "notes": {
+    "en": "The order produced for a given seed may differ from the one MATLAB gives.",
+    "pt": "A ordem produzida para uma dada semente pode diferir da que o MATLAB fornece."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Shuffling and sampling",
+      "pt": "Embaralhar e amostrar"
+     },
+     "code": "rng(1);\nrandperm(6)\nrandperm(10, 3)\nx = [10 20 30 40];\nx(randperm(4))"
+    }
+   ],
+   "see": [
+    "randi",
+    "rand",
+    "sort",
+    "rng",
+    "nchoosek"
+   ]
+  },
+  "RandStream": {
+   "summary": {
+    "en": "Object that holds an independent random number stream.",
+    "pt": "Objeto que guarda um fluxo independente de números aleatórios."
+   },
+   "syntax": [
+    {
+     "code": "s = RandStream(type)",
+     "en": "Creates a stream with the generator named by `type`.",
+     "pt": "Cria um fluxo com o gerador indicado por `type`."
+    },
+    {
+     "code": "s = RandStream(type, 'Seed', seed)",
+     "en": "Creates a stream initialized with a given seed.",
+     "pt": "Cria um fluxo inicializado com uma semente dada."
+    },
+    {
+     "code": "rand(s, ___), randn(s, ___), randi(s, ___), randperm(s, ___)",
+     "en": "Draw from `s` instead of the global stream.",
+     "pt": "Sorteiam de `s` em vez do fluxo global."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "type",
+     "en": "Generator name. MatLivre supports `'mt19937ar'` (also `'twister'`).",
+     "pt": "Nome do gerador. O MatLivre aceita `'mt19937ar'` (também `'twister'`)."
+    },
+    {
+     "name": "'Seed'",
+     "en": "Nonnegative integer, or `'shuffle'`/`'default'` for an arbitrary or the standard seed.",
+     "pt": "Inteiro não negativo, ou `'shuffle'`/`'default'` para uma semente arbitrária ou a padrão."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A `RandStream` handle with properties such as `Type` and `Seed`.",
+     "pt": "Um handle `RandStream` com propriedades como `Type` e `Seed`."
+    }
+   ],
+   "description": {
+    "en": "A stream is a generator with its own state. Streams let different parts of a program draw random numbers without disturbing each other: values taken from one stream do not change what another produces, and two streams built with the same seed yield the same numbers.\n\nThe global stream used by plain `rand`, `randn`, `randi` and `randperm` is itself a `RandStream`, available through `RandStream.getGlobalStream`.",
+    "pt": "Um fluxo é um gerador com estado próprio. Fluxos permitem que partes diferentes de um programa sorteiem números sem se atrapalhar: valores tirados de um fluxo não alteram o que outro produz, e dois fluxos criados com a mesma semente geram os mesmos números.\n\nO fluxo global usado por `rand`, `randn`, `randi` e `randperm` comuns é também um `RandStream`, acessível por `RandStream.getGlobalStream`."
+   },
+   "notes": {
+    "en": "Only the Mersenne Twister generator is available. Other types, such as `'threefry'` or `'mrg32k3a'`, give an error. The `State` property is not exposed.",
+    "pt": "Só o gerador Mersenne Twister está disponível. Outros tipos, como `'threefry'` ou `'mrg32k3a'`, geram um erro. A propriedade `State` não é exposta."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "A private stream",
+      "pt": "Um fluxo privado"
+     },
+     "code": "s = RandStream('mt19937ar', 'Seed', 1);\nrand(s, 1, 3)\ns.Type\ns2 = RandStream('mt19937ar', 'Seed', 1);\nisequal(rand(s2, 1, 3), rand(RandStream('mt19937ar', 'Seed', 1), 1, 3))"
+    }
+   ],
+   "see": [
+    "RandStream.create",
+    "RandStream.getGlobalStream",
+    "rng",
+    "reset (RandStream)",
+    "rand"
+   ]
+  },
+  "RandStream.create": {
+   "summary": {
+    "en": "Creates a random number stream with a named generator.",
+    "pt": "Cria um fluxo de números aleatórios com um gerador nomeado."
+   },
+   "syntax": [
+    {
+     "code": "s = RandStream.create(type)",
+     "en": "Creates a stream with the generator `type`.",
+     "pt": "Cria um fluxo com o gerador `type`."
+    },
+    {
+     "code": "s = RandStream.create(type, 'Seed', seed)",
+     "en": "Creates it with a given seed.",
+     "pt": "Cria-o com uma semente dada."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "type",
+     "en": "Generator name; `'mt19937ar'` is the one MatLivre supports.",
+     "pt": "Nome do gerador; `'mt19937ar'` é o que o MatLivre aceita."
+    },
+    {
+     "name": "'Seed'",
+     "en": "Nonnegative integer seed.",
+     "pt": "Semente inteira não negativa."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "A `RandStream` object.",
+     "pt": "Um objeto `RandStream`."
+    }
+   ],
+   "description": {
+    "en": "`RandStream.create` is the static form of the `RandStream` constructor. In MATLAB it also builds several independent streams at once with the `'NumStreams'` option, which is how parallel code gets non-overlapping sequences; for a single stream it behaves like `RandStream(type, ...)`.\n\nAfter creating a stream, pass it as the first argument to `rand`, `randn`, `randi` or `randperm`, or make it the global stream with `RandStream.setGlobalStream`.",
+    "pt": "`RandStream.create` é a forma estática do construtor `RandStream`. No MATLAB ela também cria vários fluxos independentes de uma vez com a opção `'NumStreams'`, que é como código paralelo obtém sequências sem sobreposição; para um único fluxo, comporta-se como `RandStream(type, ...)`.\n\nDepois de criar o fluxo, passe-o como primeiro argumento de `rand`, `randn`, `randi` ou `randperm`, ou torne-o o fluxo global com `RandStream.setGlobalStream`."
+   },
+   "notes": {
+    "en": "Only `'mt19937ar'` is supported, and creating multiple streams with `'NumStreams'` is not.",
+    "pt": "Só `'mt19937ar'` é aceito, e a criação de vários fluxos com `'NumStreams'` não é suportada."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Create and draw",
+      "pt": "Criar e sortear"
+     },
+     "code": "s = RandStream.create('mt19937ar', 'Seed', 7);\nx = rand(s, 1, 2);\nreset(s);\ny = rand(s, 1, 2);\nisequal(x, y)"
+    }
+   ],
+   "see": [
+    "RandStream",
+    "RandStream.setGlobalStream",
+    "reset (RandStream)",
+    "rng"
+   ]
+  },
+  "RandStream.getGlobalStream": {
+   "summary": {
+    "en": "Returns the stream used by `rand`, `randn`, `randi` and `randperm`.",
+    "pt": "Retorna o fluxo usado por `rand`, `randn`, `randi` e `randperm`."
+   },
+   "syntax": [
+    {
+     "code": "s = RandStream.getGlobalStream",
+     "en": "Returns the current global random stream.",
+     "pt": "Retorna o fluxo aleatório global atual."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "The global `RandStream` object.",
+     "pt": "O objeto `RandStream` global."
+    }
+   ],
+   "description": {
+    "en": "When no stream is passed explicitly, the random functions draw from the global stream. Getting a handle to it lets you read its properties or draw from it directly. The handle refers to the same stream, so drawing through `s` advances the state seen by plain `rand`.\n\n`rng` is the simpler interface to seed and restore the global stream.",
+    "pt": "Quando nenhum fluxo é passado explicitamente, as funções aleatórias sorteiam do fluxo global. Obter um handle dele permite ler suas propriedades ou sortear diretamente. O handle se refere ao mesmo fluxo, então sortear por `s` avança o estado visto pelo `rand` comum.\n\n`rng` é a interface mais simples para semear e restaurar o fluxo global."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Inspecting the global stream",
+      "pt": "Inspecionando o fluxo global"
+     },
+     "code": "rng(5);\ng = RandStream.getGlobalStream;\ng.Type\nclass(g)\na = rand(g, 1, 2);\nrng(5);\nb = rand(1, 2);\nisequal(a, b)"
+    }
+   ],
+   "see": [
+    "RandStream.setGlobalStream",
+    "RandStream",
+    "rng",
+    "rand"
+   ]
+  },
+  "RandStream.list": {
+   "summary": {
+    "en": "Lists the random number generator algorithms available.",
+    "pt": "Lista os algoritmos geradores de números aleatórios disponíveis."
+   },
+   "syntax": [
+    {
+     "code": "RandStream.list",
+     "en": "Prints the names and descriptions of the available generators.",
+     "pt": "Mostra os nomes e as descrições dos geradores disponíveis."
+    }
+   ],
+   "inputs": [],
+   "outputs": [],
+   "description": {
+    "en": "Use it to find which values are valid for the `type` argument of `RandStream` and `RandStream.create`. It prints one line per generator with a short description.",
+    "pt": "Serve para descobrir quais valores são válidos no argumento `type` de `RandStream` e `RandStream.create`. Imprime uma linha por gerador com uma breve descrição."
+   },
+   "notes": {
+    "en": "MATLAB lists several generators (such as `threefry` and `philox4x32_10`); MatLivre lists only `mt19937ar`.",
+    "pt": "O MATLAB lista vários geradores (como `threefry` e `philox4x32_10`); o MatLivre lista apenas `mt19937ar`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Available generators",
+      "pt": "Geradores disponíveis"
+     },
+     "code": "RandStream.list"
+    }
+   ],
+   "see": [
+    "RandStream",
+    "RandStream.create",
+    "rng"
+   ]
+  },
+  "RandStream.setGlobalStream": {
+   "summary": {
+    "en": "Makes a given stream the global random stream.",
+    "pt": "Torna um fluxo dado o fluxo aleatório global."
+   },
+   "syntax": [
+    {
+     "code": "RandStream.setGlobalStream(s)",
+     "en": "Makes `s` the stream used by `rand`, `randn`, `randi` and `randperm`.",
+     "pt": "Faz de `s` o fluxo usado por `rand`, `randn`, `randi` e `randperm`."
+    },
+    {
+     "code": "old = RandStream.setGlobalStream(s)",
+     "en": "Also returns the stream that was global before.",
+     "pt": "Também retorna o fluxo que era global antes."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "A `RandStream` object.",
+     "pt": "Um objeto `RandStream`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "old",
+     "en": "The previous global stream, so it can be restored later.",
+     "pt": "O fluxo global anterior, para restaurá-lo depois."
+    }
+   ],
+   "description": {
+    "en": "After the call, plain `rand(1,2)` continues from the state of `s`. This is useful to run a section of code with its own reproducible sequence and then put the old stream back by passing `old` to `RandStream.setGlobalStream`.",
+    "pt": "Depois da chamada, um `rand(1,2)` comum continua a partir do estado de `s`. É útil para executar um trecho de código com sua própria sequência reproduzível e depois recolocar o fluxo antigo passando `old` a `RandStream.setGlobalStream`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Swap in a stream and restore",
+      "pt": "Trocar o fluxo e restaurar"
+     },
+     "code": "s = RandStream('mt19937ar', 'Seed', 4);\nold = RandStream.setGlobalStream(s);\nx = rand(1, 2);\nRandStream.setGlobalStream(old);\nclass(old)\nisequal(x, rand(RandStream('mt19937ar', 'Seed', 4), 1, 2))"
+    }
+   ],
+   "see": [
+    "RandStream.getGlobalStream",
+    "RandStream",
+    "rng"
+   ]
+  },
+  "reset (RandStream)": {
+   "summary": {
+    "en": "Returns a random stream to its initial state, or to a new seed.",
+    "pt": "Devolve um fluxo aleatório ao estado inicial, ou a uma nova semente."
+   },
+   "syntax": [
+    {
+     "code": "reset(s)",
+     "en": "Restores stream `s` to the state it had when it was created or last seeded.",
+     "pt": "Restaura o fluxo `s` ao estado que tinha quando foi criado ou semeado pela última vez."
+    },
+    {
+     "code": "reset(s, seed)",
+     "en": "Reinitializes `s` with a new seed.",
+     "pt": "Reinicializa `s` com uma nova semente."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "s",
+     "en": "A `RandStream` object.",
+     "pt": "Um objeto `RandStream`."
+    },
+    {
+     "name": "seed",
+     "en": "Nonnegative integer seed.",
+     "pt": "Semente inteira não negativa."
+    }
+   ],
+   "outputs": [],
+   "description": {
+    "en": "`reset` makes a stream repeat itself: after it, the same sequence of numbers comes out again. It changes `s` in place because a `RandStream` is a handle object.\n\nTo reset the global stream, use `rng('default')` or `reset(RandStream.getGlobalStream)`.",
+    "pt": "`reset` faz um fluxo se repetir: depois dela, a mesma sequência de números sai de novo. Altera `s` no próprio objeto, pois `RandStream` é um objeto handle.\n\nPara reiniciar o fluxo global, use `rng('default')` ou `reset(RandStream.getGlobalStream)`."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Replaying a sequence",
+      "pt": "Repetindo uma sequência"
+     },
+     "code": "s = RandStream('mt19937ar', 'Seed', 1);\na = rand(s, 1, 2);\nreset(s)\nb = rand(s, 1, 2);\nisequal(a, b)\nreset(s, 2)\nrand(s, 1, 1)"
+    }
+   ],
+   "see": [
+    "RandStream",
+    "rng",
+    "RandStream.create",
+    "rand"
+   ]
+  },
+  "rng": {
+   "summary": {
+    "en": "Controls the seed and generator of the global random number stream.",
+    "pt": "Controla a semente e o gerador do fluxo global de números aleatórios."
+   },
+   "syntax": [
+    {
+     "code": "rng(seed)",
+     "en": "Seeds the Mersenne Twister generator with a nonnegative integer.",
+     "pt": "Semeia o gerador Mersenne Twister com um inteiro não negativo."
+    },
+    {
+     "code": "rng('default')",
+     "en": "Restores the startup settings: Mersenne Twister, seed 0.",
+     "pt": "Restaura as configurações iniciais: Mersenne Twister, semente 0."
+    },
+    {
+     "code": "rng('shuffle')",
+     "en": "Seeds from the current time, giving a different sequence each run.",
+     "pt": "Semeia a partir do horário atual, gerando uma sequência diferente a cada execução."
+    },
+    {
+     "code": "rng(seed, generator)",
+     "en": "Chooses the generator, for example `'twister'`.",
+     "pt": "Escolhe o gerador, por exemplo `'twister'`."
+    },
+    {
+     "code": "s = rng",
+     "en": "Returns the current settings as a struct, to restore later with `rng(s)`.",
+     "pt": "Retorna as configurações atuais como struct, para restaurar depois com `rng(s)`."
+    }
+   ],
+   "inputs": [
+    {
+     "name": "seed",
+     "en": "Nonnegative integer, `'default'` or `'shuffle'`.",
+     "pt": "Inteiro não negativo, `'default'` ou `'shuffle'`."
+    },
+    {
+     "name": "generator",
+     "en": "Generator name: `'twister'` (or `'mt19937ar'`).",
+     "pt": "Nome do gerador: `'twister'` (ou `'mt19937ar'`)."
+    },
+    {
+     "name": "s",
+     "en": "Struct with fields `Type`, `Seed` and `State`, as returned by `rng`.",
+     "pt": "Struct com os campos `Type`, `Seed` e `State`, como retornada por `rng`."
+    }
+   ],
+   "outputs": [
+    {
+     "name": "s",
+     "en": "The settings in effect before the call.",
+     "pt": "As configurações em vigor antes da chamada."
+    }
+   ],
+   "description": {
+    "en": "`rng` sets the state of the global stream, which is what `rand`, `randn`, `randi` and `randperm` use. Seeding with the same value before a computation makes it reproducible: it is the first line of most scripts that use random data.\n\nTo run a piece of code and then go back to the previous random state, save `s = rng` first and call `rng(s)` afterward.",
+    "pt": "`rng` define o estado do fluxo global, que é o usado por `rand`, `randn`, `randi` e `randperm`. Semear com o mesmo valor antes de um cálculo o torna reproduzível: é a primeira linha da maioria dos scripts que usam dados aleatórios.\n\nPara executar um trecho de código e depois voltar ao estado aleatório anterior, guarde `s = rng` antes e chame `rng(s)` depois."
+   },
+   "notes": {
+    "en": "Only the Mersenne Twister generator (`'twister'`) is available. The `rand` values for a given seed match MATLAB's; `randn`, `randi` and `randperm` may not.",
+    "pt": "Só o gerador Mersenne Twister (`'twister'`) está disponível. Os valores de `rand` para uma dada semente coincidem com os do MATLAB; os de `randn`, `randi` e `randperm` podem não coincidir."
+   },
+   "examples": [
+    {
+     "title": {
+      "en": "Reproducible numbers and saved state",
+      "pt": "Números reprodutíveis e estado salvo"
+     },
+     "code": "rng(42);\na = rand;\nrng(42);\nb = rand;\na == b\ns = rng;\nx = rand(1, 2);\nrng(s);\nisequal(x, rand(1, 2))\nrng('default');\nrand"
+    }
+   ],
+   "see": [
+    "rand",
+    "randn",
+    "randi",
+    "randperm",
+    "RandStream"
+   ]
+  }
+ }
+}
