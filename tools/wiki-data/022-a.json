@@ -31,8 +31,8 @@
     "pt": "`metaclass` é a forma programática da sintaxe `?NomeDaClasse`: dá acesso aos dados de reflexão de uma classe. Use `mc.Name` para o nome da classe, `mc.SuperclassList` para as superclasses diretas e as listas de propriedades e métodos para ver o que a classe define.\n\nComo recebe uma instância, `metaclass(x)` sempre descreve `class(x)`. Para partir apenas de um nome de classe, crie ou passe uma instância dessa classe."
    },
    "notes": {
-    "en": "MatLivre does not parse the `?ClassName` syntax; call `metaclass` with an instance instead. The property and method lists contain the members MatLivre knows, so their lengths can differ from MATLAB's.",
-    "pt": "O MatLivre não interpreta a sintaxe `?NomeDaClasse`; chame `metaclass` com uma instância. As listas de propriedades e métodos contêm os membros que o MatLivre conhece, então seus tamanhos podem diferir dos do MATLAB."
+    "en": "For built-in classes the property and method lists contain the members MatLivre knows, so their lengths can differ from MATLAB's.",
+    "pt": "Para classes internas, as listas de propriedades e métodos contêm os membros que o MatLivre conhece, então seus tamanhos podem diferir dos do MATLAB."
    },
    "examples": [
     {
@@ -92,8 +92,8 @@
     "pt": "`methods` diz o que se pode chamar em um objeto. A lista inclui o construtor, cujo nome é igual ao da classe, e os métodos públicos que a classe define ou herda. Métodos ocultos e privados ficam de fora.\n\nCom um argumento de saída, os nomes voltam em um cell array, o que facilita testes como `ismember('keys', methods(obj))`."
    },
    "notes": {
-    "en": "The list holds the methods MatLivre implements for each class, which for built-in classes such as `containers.Map` is shorter than MATLAB's. A class name given as text must name a class defined in a file on the path or a class MatLivre provides; names like `'double'` are not accepted.",
-    "pt": "A lista contém os métodos que o MatLivre implementa em cada classe, que para classes internas como `containers.Map` é mais curta que a do MATLAB. Um nome de classe dado como texto deve ser de uma classe definida em arquivo no path ou fornecida pelo MatLivre; nomes como `'double'` não são aceitos."
+    "en": "The list holds the methods MatLivre implements for each class, which for built-in classes such as `containers.Map` is shorter than MATLAB's. A class name given as text must name a class defined in a file on the path; built-in names such as `'double'` or `'containers.Map'` are not accepted, so pass an object instead.",
+    "pt": "A lista contém os métodos que o MatLivre implementa em cada classe, que para classes internas como `containers.Map` é mais curta que a do MATLAB. Um nome de classe dado como texto deve ser de uma classe definida em arquivo no path; nomes de classes internas, como `'double'` ou `'containers.Map'`, não são aceitos, então passe um objeto."
    },
    "examples": [
     {
@@ -838,10 +838,6 @@
     "en": "The current folder is where relative file names are resolved and where function files are searched first. `cd` is how a script moves between data folders. Saving the returned `oldfolder` makes it easy to go back with `cd(oldfolder)`.\n\nWith no output argument and no input, `cd` prints the current folder. Changing to a folder that does not exist is an error.",
     "pt": "A pasta atual é onde nomes relativos de arquivo são resolvidos e onde os arquivos de função são procurados primeiro. `cd` é como um script se move entre pastas de dados. Guardar o `oldfolder` retornado facilita voltar com `cd(oldfolder)`.\n\nSem argumento de saída e sem entrada, `cd` imprime a pasta atual. Mudar para uma pasta que não existe é um erro."
    },
-   "notes": {
-    "en": "MatLivre does not accept `cd ..` in command syntax; write `cd('..')`.",
-    "pt": "O MatLivre não aceita `cd ..` na sintaxe de comando; escreva `cd('..')`."
-   },
    "examples": [
     {
      "title": {
@@ -1089,8 +1085,8 @@
     "pt": "A struct de atributos tem um campo para cada propriedade do item. `Name` guarda o caminho completo, `directory` é 1 para uma pasta, e os campos `User...` dizem se o usuário atual pode ler, gravar ou executar.\n\nUse a primeira saída para testar a existência sem gerar erro: um nome que não existe dá status falso."
    },
    "notes": {
-    "en": "MatLivre reads attributes; changing them with a mode string such as `'+w'` is not covered.",
-    "pt": "O MatLivre lê atributos; alterá-los com uma string de modo como `'+w'` não é coberto."
+    "en": "MatLivre reads attributes; a mode string such as `'+w'` or `'-w'` is accepted but does not change them.",
+    "pt": "O MatLivre lê atributos; uma string de modo como `'+w'` ou `'-w'` é aceita, mas não os altera."
    },
    "examples": [
     {

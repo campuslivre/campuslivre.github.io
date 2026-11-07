@@ -1,433 +1,1111 @@
 {
   "functions": {
     "balance": {
-      "summary": {"en": "Balances a matrix by a diagonal similarity transformation to improve eigenvalue accuracy.", "pt": "Balanceia uma matriz por uma transformação de similaridade diagonal para melhorar a precisão dos autovalores."},
+      "summary": {
+        "en": "Balances a matrix by a diagonal similarity transformation to improve eigenvalue accuracy.",
+        "pt": "Balanceia uma matriz por uma transformação de similaridade diagonal para melhorar a precisão dos autovalores."
+      },
       "syntax": [
-        {"code": "B = balance(A)", "en": "Returns the balanced matrix.", "pt": "Retorna a matriz balanceada."},
-        {"code": "[T, B] = balance(A)", "en": "Also returns the transformation `T` with `B = T\\A*T`.", "pt": "Retorna também a transformação `T`, com `B = T\\A*T`."},
-        {"code": "[S, P, B] = balance(A)", "en": "Returns the scaling vector `S` and the permutation vector `P` separately.", "pt": "Retorna separadamente o vetor de escala `S` e o vetor de permutação `P`."},
-        {"code": "B = balance(A, 'noperm')", "en": "Only scales; does not permute rows and columns.", "pt": "Apenas escala; não permuta linhas e colunas."}
+        {
+          "code": "B = balance(A)",
+          "en": "Returns the balanced matrix.",
+          "pt": "Retorna a matriz balanceada."
+        },
+        {
+          "code": "[T, B] = balance(A)",
+          "en": "Also returns the transformation `T` with `B = T\\A*T`.",
+          "pt": "Retorna também a transformação `T`, com `B = T\\A*T`."
+        },
+        {
+          "code": "[S, P, B] = balance(A)",
+          "en": "Returns the scaling vector `S` and the permutation vector `P` separately.",
+          "pt": "Retorna separadamente o vetor de escala `S` e o vetor de permutação `P`."
+        },
+        {
+          "code": "B = balance(A, 'noperm')",
+          "en": "Only scales; does not permute rows and columns.",
+          "pt": "Apenas escala; não permuta linhas e colunas."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        }
       ],
       "outputs": [
-        {"name": "B", "en": "Balanced matrix, similar to `A` and so with the same eigenvalues.", "pt": "Matriz balanceada, semelhante a `A` e portanto com os mesmos autovalores."},
-        {"name": "T", "en": "Similarity transformation (diagonal scaling combined with a permutation).", "pt": "Transformação de similaridade (escala diagonal combinada com uma permutação)."}
+        {
+          "name": "B",
+          "en": "Balanced matrix, similar to `A` and so with the same eigenvalues.",
+          "pt": "Matriz balanceada, semelhante a `A` e portanto com os mesmos autovalores."
+        },
+        {
+          "name": "T",
+          "en": "Similarity transformation (diagonal scaling combined with a permutation).",
+          "pt": "Transformação de similaridade (escala diagonal combinada com uma permutação)."
+        }
       ],
       "description": {
         "en": "When the entries of a matrix vary over many orders of magnitude, rounding errors can spoil the computed eigenvalues. Balancing rescales rows and columns, by powers of two so that no rounding is introduced, until the norms of corresponding rows and columns are comparable.\n\nBecause `B` is similar to `A`, `eig(B)` equals `eig(A)` in exact arithmetic, but is typically computed more accurately. `eig` already balances internally by default.",
         "pt": "Quando as entradas de uma matriz variam por muitas ordens de grandeza, erros de arredondamento podem estragar os autovalores calculados. O balanceamento reescala linhas e colunas, por potências de dois para não introduzir arredondamento, até que as normas das linhas e colunas correspondentes fiquem comparáveis.\n\nComo `B` é semelhante a `A`, `eig(B)` é igual a `eig(A)` em aritmética exata, mas costuma ser calculado com mais precisão. A função `eig` já balanceia internamente por padrão."
       },
       "examples": [
-        {"title": {"en": "A badly scaled matrix", "pt": "Uma matriz mal escalada"}, "code": "A = [1 100 10000; 0.01 1 100; 0.0001 0.01 1];\n[T, B] = balance(A);\nB\ndiag(T)'"}
+        {
+          "title": {
+            "en": "A badly scaled matrix",
+            "pt": "Uma matriz mal escalada"
+          },
+          "code": "A = [1 100 10000; 0.01 1 100; 0.0001 0.01 1];\n[T, B] = balance(A);\nB\ndiag(T)'"
+        }
       ],
-      "see": ["eig", "schur", "cond", "hess"]
+      "see": [
+        "eig",
+        "schur",
+        "cond",
+        "hess"
+      ]
     },
     "bandwidth": {
-      "summary": {"en": "Lower and upper bandwidth of a matrix.", "pt": "Largura de banda inferior e superior de uma matriz."},
+      "summary": {
+        "en": "Lower and upper bandwidth of a matrix.",
+        "pt": "Largura de banda inferior e superior de uma matriz."
+      },
       "syntax": [
-        {"code": "[lower, upper] = bandwidth(A)", "en": "Returns both bandwidths.", "pt": "Retorna as duas larguras de banda."},
-        {"code": "B = bandwidth(A, type)", "en": "Returns one bandwidth, where `type` is `'lower'` or `'upper'`.", "pt": "Retorna uma largura de banda, em que `type` é `'lower'` ou `'upper'`."}
+        {
+          "code": "[lower, upper] = bandwidth(A)",
+          "en": "Returns both bandwidths.",
+          "pt": "Retorna as duas larguras de banda."
+        },
+        {
+          "code": "B = bandwidth(A, type)",
+          "en": "Returns one bandwidth, where `type` is `'lower'` or `'upper'`.",
+          "pt": "Retorna uma largura de banda, em que `type` é `'lower'` ou `'upper'`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Numeric matrix.", "pt": "Matriz numérica."},
-        {"name": "type", "en": "`'lower'` or `'upper'`.", "pt": "`'lower'` ou `'upper'`."}
+        {
+          "name": "A",
+          "en": "Numeric matrix.",
+          "pt": "Matriz numérica."
+        },
+        {
+          "name": "type",
+          "en": "`'lower'` or `'upper'`.",
+          "pt": "`'lower'` ou `'upper'`."
+        }
       ],
       "outputs": [
-        {"name": "lower", "en": "Number of diagonals below the main one that hold a nonzero.", "pt": "Número de diagonais abaixo da principal que contêm algum não zero."},
-        {"name": "upper", "en": "Number of diagonals above the main one that hold a nonzero.", "pt": "Número de diagonais acima da principal que contêm algum não zero."}
+        {
+          "name": "lower",
+          "en": "Number of diagonals below the main one that hold a nonzero.",
+          "pt": "Número de diagonais abaixo da principal que contêm algum não zero."
+        },
+        {
+          "name": "upper",
+          "en": "Number of diagonals above the main one that hold a nonzero.",
+          "pt": "Número de diagonais acima da principal que contêm algum não zero."
+        }
       ],
       "description": {
         "en": "The lower bandwidth is the largest `i - j` over the nonzero entries `A(i,j)` with `i > j`, and the upper bandwidth is the largest `j - i`. A diagonal matrix has both equal to 0, a tridiagonal matrix has both equal to 1, and a full square `n`-by-`n` matrix has both equal to `n - 1` (when its triangles are nonzero).\n\nBandwidth tells which solver or storage scheme is worthwhile: banded systems can be solved in time proportional to `n` times the bandwidth squared.",
         "pt": "A largura de banda inferior é o maior valor de `i - j` entre as entradas não nulas `A(i,j)` com `i > j`, e a superior é o maior `j - i`. Uma matriz diagonal tem as duas iguais a 0, uma tridiagonal tem as duas iguais a 1, e uma matriz quadrada cheia `n` por `n` tem as duas iguais a `n - 1` (quando seus triângulos são não nulos).\n\nA largura de banda indica qual solver ou esquema de armazenamento compensa: sistemas em banda podem ser resolvidos em tempo proporcional a `n` vezes o quadrado da largura."
       },
       "examples": [
-        {"title": {"en": "A tridiagonal matrix", "pt": "Uma matriz tridiagonal"}, "code": "A = [1 2 0 0; 3 4 5 0; 0 6 7 8; 0 0 9 10];\n[lo, up] = bandwidth(A)\nbandwidth(A, 'lower')"}
+        {
+          "title": {
+            "en": "A tridiagonal matrix",
+            "pt": "Uma matriz tridiagonal"
+          },
+          "code": "A = [1 2 0 0; 3 4 5 0; 0 6 7 8; 0 0 9 10];\n[lo, up] = bandwidth(A)\nbandwidth(A, 'lower')"
+        }
       ],
-      "see": ["isbanded", "istril", "istriu", "isdiag", "diag"]
+      "see": [
+        "isbanded",
+        "istril",
+        "istriu",
+        "isdiag",
+        "diag"
+      ]
     },
     "cdf2rdf": {
-      "summary": {"en": "Converts a complex diagonal eigendecomposition to real block-diagonal form.", "pt": "Converte uma decomposição espectral complexa diagonal para a forma real em blocos diagonais."},
+      "summary": {
+        "en": "Converts a complex diagonal eigendecomposition to real block-diagonal form.",
+        "pt": "Converte uma decomposição espectral complexa diagonal para a forma real em blocos diagonais."
+      },
       "syntax": [
-        {"code": "[V, D] = cdf2rdf(V, D)", "en": "Returns real `V` and block-diagonal real `D` from the complex eigenvectors `V` and eigenvalue matrix `D` of a real matrix.", "pt": "Retorna `V` real e `D` real em blocos diagonais a partir dos autovetores complexos `V` e da matriz de autovalores `D` de uma matriz real."}
+        {
+          "code": "[V, D] = cdf2rdf(V, D)",
+          "en": "Returns real `V` and block-diagonal real `D` from the complex eigenvectors `V` and eigenvalue matrix `D` of a real matrix.",
+          "pt": "Retorna `V` real e `D` real em blocos diagonais a partir dos autovetores complexos `V` e da matriz de autovalores `D` de uma matriz real."
+        }
       ],
       "inputs": [
-        {"name": "V", "en": "Complex eigenvector matrix of a real matrix.", "pt": "Matriz de autovetores complexos de uma matriz real."},
-        {"name": "D", "en": "Diagonal eigenvalue matrix whose complex values come in conjugate pairs on neighbouring diagonal positions.", "pt": "Matriz diagonal de autovalores cujos valores complexos aparecem em pares conjugados em posições vizinhas da diagonal."}
+        {
+          "name": "V",
+          "en": "Complex eigenvector matrix of a real matrix.",
+          "pt": "Matriz de autovetores complexos de uma matriz real."
+        },
+        {
+          "name": "D",
+          "en": "Diagonal eigenvalue matrix whose complex values come in conjugate pairs on neighbouring diagonal positions.",
+          "pt": "Matriz diagonal de autovalores cujos valores complexos aparecem em pares conjugados em posições vizinhas da diagonal."
+        }
       ],
       "outputs": [
-        {"name": "V", "en": "Real matrix of transformed eigenvectors.", "pt": "Matriz real de autovetores transformados."},
-        {"name": "D", "en": "Real matrix in which each complex pair `a +- bi` becomes the 2-by-2 block `[a b; -b a]`.", "pt": "Matriz real em que cada par complexo `a +- bi` vira o bloco 2 por 2 `[a b; -b a]`."}
+        {
+          "name": "V",
+          "en": "Real matrix of transformed eigenvectors.",
+          "pt": "Matriz real de autovetores transformados."
+        },
+        {
+          "name": "D",
+          "en": "Real matrix in which each complex pair `a +- bi` becomes the 2-by-2 block `[a b; -b a]`.",
+          "pt": "Matriz real em que cada par complexo `a +- bi` vira o bloco 2 por 2 `[a b; -b a]`."
+        }
       ],
       "description": {
         "en": "A real matrix `A` with complex eigenvalues satisfies `A*V = V*D` with complex `V` and `D`. The same relation holds with real matrices if each conjugate pair is replaced by a 2-by-2 block, which is useful when complex arithmetic is undesirable, for example when solving real linear differential equations.\n\nThe new eigenvector columns are combinations `(v1 + v2)` and `1i*(v1 - v2)` of each conjugate pair, scaled by `1/sqrt(2)` in the standard convention.",
         "pt": "Uma matriz real `A` com autovalores complexos satisfaz `A*V = V*D` com `V` e `D` complexas. A mesma relação vale com matrizes reais se cada par conjugado for trocado por um bloco 2 por 2, o que é útil quando se quer evitar aritmética complexa, por exemplo ao resolver equações diferenciais lineares reais.\n\nAs novas colunas de autovetores são combinações `(v1 + v2)` e `1i*(v1 - v2)` de cada par conjugado, escaladas por `1/sqrt(2)` na convenção usual."
       },
-      "notes": {"en": "In MatLivre, `[V,D] = eig(A)` does not yet return eigenvectors of nonsymmetric matrices, and `diag` of a complex vector drops the imaginary parts, so build `V` and `D` as explicit matrices as in the example.", "pt": "No MatLivre, `[V,D] = eig(A)` ainda não retorna autovetores de matrizes não simétricas, e `diag` de um vetor complexo descarta as partes imaginárias; construa `V` e `D` como matrizes explícitas, como no exemplo."},
       "examples": [
-        {"title": {"en": "One conjugate pair", "pt": "Um par conjugado"}, "code": "V = [1 1; 1i -1i];\nD = [1+2i 0; 0 1-2i];\n[Vr, Dr] = cdf2rdf(V, D)"}
+        {
+          "title": {
+            "en": "One conjugate pair",
+            "pt": "Um par conjugado"
+          },
+          "code": "V = [1 1; 1i -1i];\nD = [1+2i 0; 0 1-2i];\n[Vr, Dr] = cdf2rdf(V, D)"
+        }
       ],
-      "see": ["eig", "rsf2csf", "schur", "expm"]
+      "see": [
+        "eig",
+        "rsf2csf",
+        "schur",
+        "expm"
+      ]
     },
     "chol": {
-      "summary": {"en": "Cholesky factorization of a symmetric positive definite matrix.", "pt": "Fatoração de Cholesky de uma matriz simétrica positiva definida."},
+      "summary": {
+        "en": "Cholesky factorization of a symmetric positive definite matrix.",
+        "pt": "Fatoração de Cholesky de uma matriz simétrica positiva definida."
+      },
       "syntax": [
-        {"code": "R = chol(A)", "en": "Returns the upper triangular `R` with `R'*R = A`.", "pt": "Retorna a triangular superior `R` com `R'*R = A`."},
-        {"code": "L = chol(A, 'lower')", "en": "Returns the lower triangular `L` with `L*L' = A`.", "pt": "Retorna a triangular inferior `L` com `L*L' = A`."},
-        {"code": "[R, p] = chol(A)", "en": "Does not raise an error when `A` is not positive definite; `p` is 0 on success.", "pt": "Não gera erro quando `A` não é positiva definida; `p` vale 0 em caso de sucesso."}
+        {
+          "code": "R = chol(A)",
+          "en": "Returns the upper triangular `R` with `R'*R = A`.",
+          "pt": "Retorna a triangular superior `R` com `R'*R = A`."
+        },
+        {
+          "code": "L = chol(A, 'lower')",
+          "en": "Returns the lower triangular `L` with `L*L' = A`.",
+          "pt": "Retorna a triangular inferior `L` com `L*L' = A`."
+        },
+        {
+          "code": "[R, p] = chol(A)",
+          "en": "Does not raise an error when `A` is not positive definite; `p` is 0 on success.",
+          "pt": "Não gera erro quando `A` não é positiva definida; `p` vale 0 em caso de sucesso."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square symmetric (or Hermitian) matrix. Only the upper triangle is read.", "pt": "Matriz quadrada simétrica (ou hermitiana). Apenas o triângulo superior é lido."},
-        {"name": "'lower'", "en": "Option that returns the lower triangular factor.", "pt": "Opção que retorna o fator triangular inferior."}
+        {
+          "name": "A",
+          "en": "Square symmetric (or Hermitian) matrix. Only the upper triangle is read.",
+          "pt": "Matriz quadrada simétrica (ou hermitiana). Apenas o triângulo superior é lido."
+        },
+        {
+          "name": "'lower'",
+          "en": "Option that returns the lower triangular factor.",
+          "pt": "Opção que retorna o fator triangular inferior."
+        }
       ],
       "outputs": [
-        {"name": "R", "en": "Triangular factor with positive diagonal.", "pt": "Fator triangular com diagonal positiva."},
-        {"name": "p", "en": "0 if `A` is positive definite; otherwise the index of the failing pivot, and `R` is the factor of the leading block of order `p - 1`.", "pt": "0 se `A` é positiva definida; caso contrário, o índice do pivô que falhou, e `R` é o fator do bloco principal de ordem `p - 1`."}
+        {
+          "name": "R",
+          "en": "Triangular factor with positive diagonal.",
+          "pt": "Fator triangular com diagonal positiva."
+        },
+        {
+          "name": "p",
+          "en": "0 if `A` is positive definite; otherwise the index of the failing pivot, and `R` is the factor of the leading block of order `p - 1`.",
+          "pt": "0 se `A` é positiva definida; caso contrário, o índice do pivô que falhou, e `R` é o fator do bloco principal de ordem `p - 1`."
+        }
       ],
       "description": {
         "en": "A matrix is positive definite when it is symmetric and all its eigenvalues are positive. Such a matrix factors uniquely as `R'*R` with `R` upper triangular and positive diagonal. The factorization takes about half the work of `lu` and is numerically stable without pivoting.\n\nIt solves systems with `x = R\\(R'\\b)`, tests positive definiteness cheaply (use the two-output form), and generates correlated random numbers from a covariance matrix. With a single output, a matrix that is not positive definite raises an error.",
         "pt": "Uma matriz é positiva definida quando é simétrica e todos os seus autovalores são positivos. Tal matriz se fatora de modo único como `R'*R`, com `R` triangular superior e diagonal positiva. A fatoração custa cerca de metade de `lu` e é numericamente estável sem pivotamento.\n\nServe para resolver sistemas com `x = R\\(R'\\b)`, para testar barato se uma matriz é positiva definida (use a forma de duas saídas) e para gerar números aleatórios correlacionados a partir de uma matriz de covariância. Com uma única saída, uma matriz que não é positiva definida gera um erro."
       },
       "examples": [
-        {"title": {"en": "Factor, check, and a failing case", "pt": "Fatorar, conferir e um caso que falha"}, "code": "A = [4 2; 2 3];\nR = chol(A)\nR'*R\nL = chol(A, 'lower')\n[~, p] = chol([1 2; 2 1])"}
+        {
+          "title": {
+            "en": "Factor, check, and a failing case",
+            "pt": "Fatorar, conferir e um caso que falha"
+          },
+          "code": "A = [4 2; 2 3];\nR = chol(A)\nR'*R\nL = chol(A, 'lower')\n[~, p] = chol([1 2; 2 1])"
+        }
       ],
-      "see": ["cholupdate", "lu", "ldl", "qr", "eig"]
+      "see": [
+        "cholupdate",
+        "lu",
+        "ldl",
+        "qr",
+        "eig"
+      ]
     },
     "cholupdate": {
-      "summary": {"en": "Rank-one update or downdate of a Cholesky factor.", "pt": "Atualização ou desatualização de posto um de um fator de Cholesky."},
+      "summary": {
+        "en": "Rank-one update or downdate of a Cholesky factor.",
+        "pt": "Atualização ou desatualização de posto um de um fator de Cholesky."
+      },
       "syntax": [
-        {"code": "R1 = cholupdate(R, x)", "en": "Returns the Cholesky factor of `R'*R + x*x'`.", "pt": "Retorna o fator de Cholesky de `R'*R + x*x'`."},
-        {"code": "R1 = cholupdate(R, x, '-')", "en": "Returns the factor of `R'*R - x*x'` (a downdate).", "pt": "Retorna o fator de `R'*R - x*x'` (uma desatualização)."}
+        {
+          "code": "R1 = cholupdate(R, x)",
+          "en": "Returns the Cholesky factor of `R'*R + x*x'`.",
+          "pt": "Retorna o fator de Cholesky de `R'*R + x*x'`."
+        },
+        {
+          "code": "R1 = cholupdate(R, x, '-')",
+          "en": "Returns the factor of `R'*R - x*x'` (a downdate).",
+          "pt": "Retorna o fator de `R'*R - x*x'` (uma desatualização)."
+        }
       ],
       "inputs": [
-        {"name": "R", "en": "Upper triangular Cholesky factor.", "pt": "Fator de Cholesky triangular superior."},
-        {"name": "x", "en": "Column vector with `size(R,1)` elements.", "pt": "Vetor coluna com `size(R,1)` elementos."},
-        {"name": "'-'", "en": "Selects the downdate. The default sign is `'+'`.", "pt": "Seleciona a desatualização. O sinal padrão é `'+'`."}
+        {
+          "name": "R",
+          "en": "Upper triangular Cholesky factor.",
+          "pt": "Fator de Cholesky triangular superior."
+        },
+        {
+          "name": "x",
+          "en": "Column vector with `size(R,1)` elements.",
+          "pt": "Vetor coluna com `size(R,1)` elementos."
+        },
+        {
+          "name": "'-'",
+          "en": "Selects the downdate. The default sign is `'+'`.",
+          "pt": "Seleciona a desatualização. O sinal padrão é `'+'`."
+        }
       ],
       "outputs": [
-        {"name": "R1", "en": "Updated upper triangular factor.", "pt": "Fator triangular superior atualizado."}
+        {
+          "name": "R1",
+          "en": "Updated upper triangular factor.",
+          "pt": "Fator triangular superior atualizado."
+        }
       ],
       "description": {
         "en": "When a matrix changes by a rank-one term, recomputing its Cholesky factor from scratch costs order `n^3` operations. `cholupdate` obtains the new factor from the old one with plane rotations in order `n^2` operations, which pays off in algorithms that add one data sample at a time.\n\nA downdate is only possible when the result stays positive definite; otherwise an error is raised.",
         "pt": "Quando uma matriz muda por um termo de posto um, recalcular seu fator de Cholesky do zero custa da ordem de `n^3` operações. `cholupdate` obtém o novo fator a partir do antigo com rotações planas em ordem de `n^2` operações, o que compensa em algoritmos que incorporam uma amostra de cada vez.\n\nA desatualização só é possível quando o resultado continua positivo definido; caso contrário, é gerado um erro."
       },
       "examples": [
-        {"title": {"en": "Adding x*x' to A = R'*R", "pt": "Somando x*x' a A = R'*R"}, "code": "A = [4 2; 2 3];\nR = chol(A);\nx = [1; 1];\nR1 = cholupdate(R, x)\ndisp(norm(R1'*R1 - (A + x*x')) < 1e-12)"}
+        {
+          "title": {
+            "en": "Adding x*x' to A = R'*R",
+            "pt": "Somando x*x' a A = R'*R"
+          },
+          "code": "A = [4 2; 2 3];\nR = chol(A);\nx = [1; 1];\nR1 = cholupdate(R, x)\ndisp(norm(R1'*R1 - (A + x*x')) < 1e-12)"
+        }
       ],
-      "see": ["chol", "qrupdate", "qr", "lu"]
+      "see": [
+        "chol",
+        "qrupdate",
+        "qr",
+        "lu"
+      ]
     },
     "cond": {
-      "summary": {"en": "Condition number of a matrix with respect to inversion.", "pt": "Número de condição de uma matriz em relação à inversão."},
+      "summary": {
+        "en": "Condition number of a matrix with respect to inversion.",
+        "pt": "Número de condição de uma matriz em relação à inversão."
+      },
       "syntax": [
-        {"code": "c = cond(A)", "en": "Returns the 2-norm condition number, the ratio of the largest to the smallest singular value.", "pt": "Retorna o número de condição na norma 2, a razão entre o maior e o menor valores singulares."},
-        {"code": "c = cond(A, p)", "en": "Uses the norm `p`: `1`, `2`, `Inf` or `'fro'`.", "pt": "Usa a norma `p`: `1`, `2`, `Inf` ou `'fro'`."}
+        {
+          "code": "c = cond(A)",
+          "en": "Returns the 2-norm condition number, the ratio of the largest to the smallest singular value.",
+          "pt": "Retorna o número de condição na norma 2, a razão entre o maior e o menor valores singulares."
+        },
+        {
+          "code": "c = cond(A, p)",
+          "en": "Uses the norm `p`: `1`, `2`, `Inf` or `'fro'`.",
+          "pt": "Usa a norma `p`: `1`, `2`, `Inf` ou `'fro'`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Matrix. For `p` other than 2 it must be square.", "pt": "Matriz. Para `p` diferente de 2, deve ser quadrada."},
-        {"name": "p", "en": "Norm type, default 2.", "pt": "Tipo de norma, padrão 2."}
+        {
+          "name": "A",
+          "en": "Matrix. For `p` other than 2 it must be square.",
+          "pt": "Matriz. Para `p` diferente de 2, deve ser quadrada."
+        },
+        {
+          "name": "p",
+          "en": "Norm type, default 2.",
+          "pt": "Tipo de norma, padrão 2."
+        }
       ],
       "outputs": [
-        {"name": "c", "en": "The condition number, at least 1. It is `Inf` for a singular matrix.", "pt": "O número de condição, no mínimo 1. Vale `Inf` para uma matriz singular."}
+        {
+          "name": "c",
+          "en": "The condition number, at least 1. It is `Inf` for a singular matrix.",
+          "pt": "O número de condição, no mínimo 1. Vale `Inf` para uma matriz singular."
+        }
       ],
       "description": {
         "en": "The condition number measures how much a relative error in the data of a linear system `A*x = b` can be amplified in the solution. As a rule of thumb, you lose about `log10(cond(A))` decimal digits of accuracy. Orthogonal matrices have condition 1; a singular matrix has an infinite one.\n\nThe condition number is a property of the matrix, not of the algorithm, and it is not the same as the size of the determinant. For large sparse matrices use `condest`, which estimates it cheaply.",
         "pt": "O número de condição mede quanto um erro relativo nos dados de um sistema linear `A*x = b` pode ser ampliado na solução. Como regra prática, perdem-se cerca de `log10(cond(A))` dígitos decimais de precisão. Matrizes ortogonais têm condição 1; uma matriz singular tem condição infinita.\n\nO número de condição é uma propriedade da matriz, não do algoritmo, e não tem relação com o tamanho do determinante. Para matrizes esparsas grandes, use `condest`, que o estima a baixo custo."
       },
       "examples": [
-        {"title": {"en": "Different norms", "pt": "Normas diferentes"}, "code": "A = [1 2; 3 4];\ncond(A)\ncond(A, 1)\ncond(A, 'fro')\ncond([1 2; 2 4])"}
+        {
+          "title": {
+            "en": "Different norms",
+            "pt": "Normas diferentes"
+          },
+          "code": "A = [1 2; 3 4];\ncond(A)\ncond(A, 1)\ncond(A, 'fro')\ncond([1 2; 2 4])"
+        }
       ],
-      "see": ["condest", "rcond", "norm", "svd", "inv"]
+      "see": [
+        "condest",
+        "rcond",
+        "norm",
+        "svd",
+        "inv"
+      ]
     },
     "condeig": {
-      "summary": {"en": "Condition numbers of the eigenvalues of a matrix.", "pt": "Números de condição dos autovalores de uma matriz."},
+      "summary": {
+        "en": "Condition numbers of the eigenvalues of a matrix.",
+        "pt": "Números de condição dos autovalores de uma matriz."
+      },
       "syntax": [
-        {"code": "c = condeig(A)", "en": "Returns a vector with the condition number of each eigenvalue of `A`.", "pt": "Retorna um vetor com o número de condição de cada autovalor de `A`."}
+        {
+          "code": "c = condeig(A)",
+          "en": "Returns a vector with the condition number of each eigenvalue of `A`.",
+          "pt": "Retorna um vetor com o número de condição de cada autovalor de `A`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        }
       ],
       "outputs": [
-        {"name": "c", "en": "Column vector; large entries mark eigenvalues that are sensitive to perturbation of `A`.", "pt": "Vetor coluna; entradas grandes indicam autovalores sensíveis a perturbações de `A`."}
+        {
+          "name": "c",
+          "en": "Column vector; large entries mark eigenvalues that are sensitive to perturbation of `A`.",
+          "pt": "Vetor coluna; entradas grandes indicam autovalores sensíveis a perturbações de `A`."
+        }
       ],
       "description": {
         "en": "The condition number of an eigenvalue is the reciprocal of the cosine of the angle between its left and right eigenvectors. It is 1 for every eigenvalue of a normal matrix (symmetric matrices are the common case) and grows as the matrix approaches one that is not diagonalizable.\n\nThis is a different measure from `cond(A)`: a matrix can be well conditioned for inversion while some of its eigenvalues are very sensitive.",
         "pt": "O número de condição de um autovalor é o inverso do cosseno do ângulo entre seus autovetores à esquerda e à direita. Vale 1 para todo autovalor de uma matriz normal (o caso comum são as simétricas) e cresce à medida que a matriz se aproxima de uma não diagonalizável.\n\nÉ uma medida diferente de `cond(A)`: uma matriz pode ser bem condicionada para inversão e ainda assim ter autovalores muito sensíveis."
       },
       "examples": [
-        {"title": {"en": "A nearly defective matrix", "pt": "Uma matriz quase defeituosa"}, "code": "A = [1 1000; 0 1.001];\ncondeig(A)"}
+        {
+          "title": {
+            "en": "A nearly defective matrix",
+            "pt": "Uma matriz quase defeituosa"
+          },
+          "code": "A = [1 1000; 0 1.001];\ncondeig(A)"
+        }
       ],
-      "see": ["eig", "cond", "balance", "schur"]
+      "see": [
+        "eig",
+        "cond",
+        "balance",
+        "schur"
+      ]
     },
     "condest": {
-      "summary": {"en": "Estimate of the 1-norm condition number of a matrix.", "pt": "Estimativa do número de condição na norma 1 de uma matriz."},
+      "summary": {
+        "en": "Estimate of the 1-norm condition number of a matrix.",
+        "pt": "Estimativa do número de condição na norma 1 de uma matriz."
+      },
       "syntax": [
-        {"code": "c = condest(A)", "en": "Estimates `cond(A,1)` without forming the inverse explicitly.", "pt": "Estima `cond(A,1)` sem formar a inversa explicitamente."}
+        {
+          "code": "c = condest(A)",
+          "en": "Estimates `cond(A,1)` without forming the inverse explicitly.",
+          "pt": "Estima `cond(A,1)` sem formar a inversa explicitamente."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix, typically sparse.", "pt": "Matriz quadrada, tipicamente esparsa."}
+        {
+          "name": "A",
+          "en": "Square matrix, typically sparse.",
+          "pt": "Matriz quadrada, tipicamente esparsa."
+        }
       ],
       "outputs": [
-        {"name": "c", "en": "Lower bound for the 1-norm condition number; usually within a small factor of the true value.", "pt": "Limite inferior para o número de condição na norma 1; costuma ficar a um fator pequeno do valor verdadeiro."}
+        {
+          "name": "c",
+          "en": "Lower bound for the 1-norm condition number; usually within a small factor of the true value.",
+          "pt": "Limite inferior para o número de condição na norma 1; costuma ficar a um fator pequeno do valor verdadeiro."
+        }
       ],
       "description": {
         "en": "Computing `cond` needs a singular value decomposition, which is too expensive for large sparse matrices. `condest` instead estimates the 1-norm of the inverse using only products with `inv(A)`, obtained from an LU factorization, and multiplies it by the 1-norm of `A`.\n\nFor small matrices the estimate often equals `cond(A,1)` exactly.",
         "pt": "Calcular `cond` exige uma decomposição em valores singulares, cara demais para matrizes esparsas grandes. `condest` estima a norma 1 da inversa usando apenas produtos com `inv(A)`, obtidos de uma fatoração LU, e multiplica o resultado pela norma 1 de `A`.\n\nPara matrizes pequenas, a estimativa costuma coincidir exatamente com `cond(A,1)`."
       },
       "examples": [
-        {"title": {"en": "Estimate against the exact value", "pt": "Estimativa contra o valor exato"}, "code": "A = [4 1; 2 3];\ncondest(sparse(A))\ncond(A, 1)"}
+        {
+          "title": {
+            "en": "Estimate against the exact value",
+            "pt": "Estimativa contra o valor exato"
+          },
+          "code": "A = [4 1; 2 3];\ncondest(sparse(A))\ncond(A, 1)"
+        }
       ],
-      "see": ["cond", "rcond", "normest", "lu"]
+      "see": [
+        "cond",
+        "rcond",
+        "normest",
+        "lu"
+      ]
     },
     "cross": {
-      "summary": {"en": "Cross product of two 3-element vectors.", "pt": "Produto vetorial de dois vetores de 3 elementos."},
+      "summary": {
+        "en": "Cross product of two 3-element vectors.",
+        "pt": "Produto vetorial de dois vetores de 3 elementos."
+      },
       "syntax": [
-        {"code": "C = cross(A, B)", "en": "Returns the vector `A x B`, perpendicular to both.", "pt": "Retorna o vetor `A x B`, perpendicular a ambos."}
+        {
+          "code": "C = cross(A, B)",
+          "en": "Returns the vector `A x B`, perpendicular to both.",
+          "pt": "Retorna o vetor `A x B`, perpendicular a ambos."
+        }
       ],
       "inputs": [
-        {"name": "A, B", "en": "Vectors with three elements each.", "pt": "Vetores com três elementos cada."}
+        {
+          "name": "A, B",
+          "en": "Vectors with three elements each.",
+          "pt": "Vetores com três elementos cada."
+        }
       ],
       "outputs": [
-        {"name": "C", "en": "Vector with the components `[A2*B3 - A3*B2, A3*B1 - A1*B3, A1*B2 - A2*B1]`.", "pt": "Vetor com as componentes `[A2*B3 - A3*B2, A3*B1 - A1*B3, A1*B2 - A2*B1]`."}
+        {
+          "name": "C",
+          "en": "Vector with the components `[A2*B3 - A3*B2, A3*B1 - A1*B3, A1*B2 - A2*B1]`.",
+          "pt": "Vetor com as componentes `[A2*B3 - A3*B2, A3*B1 - A1*B3, A1*B2 - A2*B1]`."
+        }
       ],
       "description": {
         "en": "The cross product is perpendicular to both inputs, follows the right-hand rule, and has length equal to the area of the parallelogram they span. It is zero when the vectors are parallel, and `cross(B, A) = -cross(A, B)`.\n\nIn MATLAB, `cross` also accepts arrays of 3-vectors and a dimension argument.",
         "pt": "O produto vetorial é perpendicular aos dois vetores, segue a regra da mão direita e tem comprimento igual à área do paralelogramo que eles formam. É nulo quando os vetores são paralelos, e `cross(B, A) = -cross(A, B)`.\n\nNo MATLAB, `cross` também aceita arrays de vetores 3-D e um argumento de dimensão."
       },
-      "notes": {"en": "MatLivre computes `cross` for single 3-element vectors; arrays of several vectors raise an error.", "pt": "O MatLivre calcula `cross` para vetores individuais de 3 elementos; arrays com vários vetores geram um erro."},
       "examples": [
-        {"title": {"en": "Unit vectors and a general pair", "pt": "Vetores unitários e um par qualquer"}, "code": "cross([1 0 0], [0 1 0])\ncross([1 2 3], [4 5 6])"}
+        {
+          "title": {
+            "en": "Unit vectors and a general pair",
+            "pt": "Vetores unitários e um par qualquer"
+          },
+          "code": "cross([1 0 0], [0 1 0])\ncross([1 2 3], [4 5 6])"
+        }
       ],
-      "see": ["dot", "kron", "norm", "null"]
+      "see": [
+        "dot",
+        "kron",
+        "norm",
+        "null"
+      ]
     },
     "decomposition": {
-      "summary": {"en": "Matrix decomposition object for solving linear systems repeatedly.", "pt": "Objeto de decomposição de matriz para resolver sistemas lineares repetidamente."},
+      "summary": {
+        "en": "Matrix decomposition object for solving linear systems repeatedly.",
+        "pt": "Objeto de decomposição de matriz para resolver sistemas lineares repetidamente."
+      },
       "syntax": [
-        {"code": "dA = decomposition(A)", "en": "Chooses a factorization suited to the structure of `A`.", "pt": "Escolhe uma fatoração adequada à estrutura de `A`."},
-        {"code": "dA = decomposition(A, type)", "en": "Uses the named factorization, such as `'lu'`, `'chol'`, `'qr'`, `'ldl'` or `'diagonal'`.", "pt": "Usa a fatoração indicada, como `'lu'`, `'chol'`, `'qr'`, `'ldl'` ou `'diagonal'`."},
-        {"code": "x = dA\\b", "en": "Solves `A*x = b` reusing the stored factorization.", "pt": "Resolve `A*x = b` reaproveitando a fatoração guardada."}
+        {
+          "code": "dA = decomposition(A)",
+          "en": "Chooses a factorization suited to the structure of `A`.",
+          "pt": "Escolhe uma fatoração adequada à estrutura de `A`."
+        },
+        {
+          "code": "dA = decomposition(A, type)",
+          "en": "Uses the named factorization, such as `'lu'`, `'chol'`, `'qr'`, `'ldl'` or `'diagonal'`.",
+          "pt": "Usa a fatoração indicada, como `'lu'`, `'chol'`, `'qr'`, `'ldl'` ou `'diagonal'`."
+        },
+        {
+          "code": "x = dA\\b",
+          "en": "Solves `A*x = b` reusing the stored factorization.",
+          "pt": "Resolve `A*x = b` reaproveitando a fatoração guardada."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square or rectangular matrix.", "pt": "Matriz quadrada ou retangular."},
-        {"name": "type", "en": "Name of the factorization to compute.", "pt": "Nome da fatoração a calcular."}
+        {
+          "name": "A",
+          "en": "Square or rectangular matrix.",
+          "pt": "Matriz quadrada ou retangular."
+        },
+        {
+          "name": "type",
+          "en": "Name of the factorization to compute.",
+          "pt": "Nome da fatoração a calcular."
+        }
       ],
       "outputs": [
-        {"name": "dA", "en": "Object with properties such as `Type` and `MatrixSize`, which also works with `\\`, `/`, `isIllConditioned` and `rcond`.", "pt": "Objeto com propriedades como `Type` e `MatrixSize`, que também funciona com `\\`, `/`, `isIllConditioned` e `rcond`."}
+        {
+          "name": "dA",
+          "en": "Object with properties such as `Type` and `MatrixSize`, which also works with `\\`, `/`, `isIllConditioned` and `rcond`.",
+          "pt": "Objeto com propriedades como `Type` e `MatrixSize`, que também funciona com `\\`, `/`, `isIllConditioned` e `rcond`."
+        }
       ],
       "description": {
         "en": "Solving `A\\b` factors `A` each time. When the same matrix is used with many right-hand sides, building a `decomposition` once and then writing `dA\\b` skips the repeated factorization and gives the same answers.\n\nThe object keeps the factorization type it picked, which can be read from `dA.Type`. It cannot be used as an ordinary matrix: multiplying, indexing and similar operations are not defined for it.",
         "pt": "Resolver `A\\b` fatora `A` a cada vez. Quando a mesma matriz é usada com muitos vetores do lado direito, criar uma `decomposition` uma vez e escrever `dA\\b` evita a fatoração repetida e dá as mesmas respostas.\n\nO objeto guarda o tipo de fatoração escolhido, que pode ser lido em `dA.Type`. Ele não pode ser usado como uma matriz comum: multiplicação, indexação e operações parecidas não são definidas para ele."
       },
       "examples": [
-        {"title": {"en": "Solving with a stored factorization", "pt": "Resolvendo com uma fatoração guardada"}, "code": "A = [4 1; 2 3];\ndA = decomposition(A);\nx = dA\\[1; 2]\ndA.Type\ndisp(dA.MatrixSize)"}
+        {
+          "title": {
+            "en": "Solving with a stored factorization",
+            "pt": "Resolvendo com uma fatoração guardada"
+          },
+          "code": "A = [4 1; 2 3];\ndA = decomposition(A);\nx = dA\\[1; 2]\ndA.Type\ndisp(dA.MatrixSize)"
+        }
       ],
-      "see": ["lu", "chol", "qr", "mldivide", "isIllConditioned"]
+      "see": [
+        "lu",
+        "chol",
+        "qr",
+        "mldivide",
+        "isIllConditioned"
+      ]
     },
     "det": {
-      "summary": {"en": "Determinant of a square matrix.", "pt": "Determinante de uma matriz quadrada."},
+      "summary": {
+        "en": "Determinant of a square matrix.",
+        "pt": "Determinante de uma matriz quadrada."
+      },
       "syntax": [
-        {"code": "d = det(A)", "en": "Returns the determinant of `A`.", "pt": "Retorna o determinante de `A`."}
+        {
+          "code": "d = det(A)",
+          "en": "Returns the determinant of `A`.",
+          "pt": "Retorna o determinante de `A`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        }
       ],
       "outputs": [
-        {"name": "d", "en": "Scalar determinant. The determinant of an empty matrix is 1.", "pt": "Determinante escalar. O determinante de uma matriz vazia é 1."}
+        {
+          "name": "d",
+          "en": "Scalar determinant. The determinant of an empty matrix is 1.",
+          "pt": "Determinante escalar. O determinante de uma matriz vazia é 1."
+        }
       ],
       "description": {
         "en": "`det` factors the matrix with `lu` and multiplies the diagonal of `U` by the sign of the permutation. The result is exact for small integer matrices only up to rounding, so a singular matrix can return a tiny nonzero value instead of 0.\n\nThe determinant is a poor test for singularity, because it scales with the entries: multiplying an `n`-by-`n` matrix by 10 multiplies the determinant by `10^n`. Use `rank` or `cond` instead.",
         "pt": "`det` fatora a matriz com `lu` e multiplica a diagonal de `U` pelo sinal da permutação. O resultado só é exato, até o arredondamento, para matrizes inteiras pequenas, então uma matriz singular pode retornar um valor minúsculo diferente de zero em vez de 0.\n\nO determinante é um mau teste de singularidade, pois depende da escala das entradas: multiplicar uma matriz `n` por `n` por 10 multiplica o determinante por `10^n`. Use `rank` ou `cond`."
       },
       "examples": [
-        {"title": {"en": "Small matrices", "pt": "Matrizes pequenas"}, "code": "det([1 2; 3 4])\ndet(magic(3))\ndet(eye(3))\ndet([])"}
+        {
+          "title": {
+            "en": "Small matrices",
+            "pt": "Matrizes pequenas"
+          },
+          "code": "det([1 2; 3 4])\ndet(magic(3))\ndet(eye(3))\ndet([])"
+        }
       ],
-      "see": ["inv", "lu", "rank", "cond", "trace"]
+      "see": [
+        "inv",
+        "lu",
+        "rank",
+        "cond",
+        "trace"
+      ]
     },
     "dot": {
-      "summary": {"en": "Dot product of two vectors.", "pt": "Produto escalar de dois vetores."},
+      "summary": {
+        "en": "Dot product of two vectors.",
+        "pt": "Produto escalar de dois vetores."
+      },
       "syntax": [
-        {"code": "c = dot(A, B)", "en": "Returns the sum of the products of corresponding elements, conjugating `A` first.", "pt": "Retorna a soma dos produtos dos elementos correspondentes, conjugando `A` antes."},
-        {"code": "c = dot(A, B, dim)", "en": "Works along the dimension `dim` for arrays.", "pt": "Opera ao longo da dimensão `dim` para arrays."}
+        {
+          "code": "c = dot(A, B)",
+          "en": "Returns the sum of the products of corresponding elements, conjugating `A` first.",
+          "pt": "Retorna a soma dos produtos dos elementos correspondentes, conjugando `A` antes."
+        },
+        {
+          "code": "c = dot(A, B, dim)",
+          "en": "Works along the dimension `dim` for arrays.",
+          "pt": "Opera ao longo da dimensão `dim` para arrays."
+        }
       ],
       "inputs": [
-        {"name": "A, B", "en": "Vectors or arrays of the same size.", "pt": "Vetores ou arrays de mesmo tamanho."},
-        {"name": "dim", "en": "Dimension along which to take the products (arrays only).", "pt": "Dimensão ao longo da qual tomar os produtos (somente arrays)."}
+        {
+          "name": "A, B",
+          "en": "Vectors or arrays of the same size.",
+          "pt": "Vetores ou arrays de mesmo tamanho."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension along which to take the products (arrays only).",
+          "pt": "Dimensão ao longo da qual tomar os produtos (somente arrays)."
+        }
       ],
       "outputs": [
-        {"name": "c", "en": "The scalar `sum(conj(A).*B)` for vectors.", "pt": "O escalar `sum(conj(A).*B)` para vetores."}
+        {
+          "name": "c",
+          "en": "The scalar `sum(conj(A).*B)` for vectors.",
+          "pt": "O escalar `sum(conj(A).*B)` para vetores."
+        }
       ],
       "description": {
         "en": "For real vectors the dot product equals `A(:)'*B(:)` and measures how much the vectors point in the same direction: it is zero for perpendicular vectors, and `dot(A,A)` is the squared length of `A`.\n\nFor complex inputs the first argument is conjugated, so `dot(A,A)` is always real and non-negative.",
         "pt": "Para vetores reais, o produto escalar é igual a `A(:)'*B(:)` e mede o quanto os vetores apontam na mesma direção: é zero para vetores perpendiculares, e `dot(A,A)` é o comprimento ao quadrado de `A`.\n\nPara entradas complexas, o primeiro argumento é conjugado, então `dot(A,A)` é sempre real e não negativo."
       },
-      "notes": {"en": "In MatLivre, `dot` is reliable for vectors. For two matrices it returns a single total instead of one value per column, so use `sum(A.*B)` there.", "pt": "No MatLivre, `dot` é confiável para vetores. Para duas matrizes, retorna um único total em vez de um valor por coluna; use `sum(A.*B)` nesse caso."},
       "examples": [
-        {"title": {"en": "Real and complex vectors", "pt": "Vetores reais e complexos"}, "code": "dot([1 2 3], [4 5 6])\ndot([1 2], [-2 1])\ndot([1+2i 3], [2 1i])"}
+        {
+          "title": {
+            "en": "Real and complex vectors",
+            "pt": "Vetores reais e complexos"
+          },
+          "code": "dot([1 2 3], [4 5 6])\ndot([1 2], [-2 1])\ndot([1+2i 3], [2 1i])"
+        }
       ],
-      "see": ["cross", "mtimes", "norm", "sum", "kron"]
+      "see": [
+        "cross",
+        "mtimes",
+        "norm",
+        "sum",
+        "kron"
+      ]
     },
     "eig": {
-      "summary": {"en": "Eigenvalues and eigenvectors of a square matrix.", "pt": "Autovalores e autovetores de uma matriz quadrada."},
+      "summary": {
+        "en": "Eigenvalues and eigenvectors of a square matrix.",
+        "pt": "Autovalores e autovetores de uma matriz quadrada."
+      },
       "syntax": [
-        {"code": "e = eig(A)", "en": "Returns a column vector with the eigenvalues of `A`.", "pt": "Retorna um vetor coluna com os autovalores de `A`."},
-        {"code": "[V, D] = eig(A)", "en": "Returns eigenvectors as the columns of `V` and eigenvalues on the diagonal of `D`, with `A*V = V*D`.", "pt": "Retorna os autovetores nas colunas de `V` e os autovalores na diagonal de `D`, com `A*V = V*D`."},
-        {"code": "e = eig(A, B)", "en": "Solves the generalized problem `A*v = lambda*B*v`.", "pt": "Resolve o problema generalizado `A*v = lambda*B*v`."}
+        {
+          "code": "e = eig(A)",
+          "en": "Returns a column vector with the eigenvalues of `A`.",
+          "pt": "Retorna um vetor coluna com os autovalores de `A`."
+        },
+        {
+          "code": "[V, D] = eig(A)",
+          "en": "Returns eigenvectors as the columns of `V` and eigenvalues on the diagonal of `D`, with `A*V = V*D`.",
+          "pt": "Retorna os autovetores nas colunas de `V` e os autovalores na diagonal de `D`, com `A*V = V*D`."
+        },
+        {
+          "code": "e = eig(A, B)",
+          "en": "Solves the generalized problem `A*v = lambda*B*v`.",
+          "pt": "Resolve o problema generalizado `A*v = lambda*B*v`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."},
-        {"name": "B", "en": "Square matrix of the same size, for the generalized problem.", "pt": "Matriz quadrada do mesmo tamanho, para o problema generalizado."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        },
+        {
+          "name": "B",
+          "en": "Square matrix of the same size, for the generalized problem.",
+          "pt": "Matriz quadrada do mesmo tamanho, para o problema generalizado."
+        }
       ],
       "outputs": [
-        {"name": "e", "en": "Eigenvalues, real or complex. For a symmetric matrix they are real and in ascending order.", "pt": "Autovalores, reais ou complexos. Para uma matriz simétrica são reais e em ordem crescente."},
-        {"name": "V", "en": "Eigenvector matrix; for symmetric `A` its columns are orthonormal.", "pt": "Matriz de autovetores; para `A` simétrica, as colunas são ortonormais."},
-        {"name": "D", "en": "Diagonal matrix of eigenvalues.", "pt": "Matriz diagonal de autovalores."}
+        {
+          "name": "e",
+          "en": "Eigenvalues, real or complex. For a symmetric matrix they are real and in ascending order.",
+          "pt": "Autovalores, reais ou complexos. Para uma matriz simétrica são reais e em ordem crescente."
+        },
+        {
+          "name": "V",
+          "en": "Eigenvector matrix; for symmetric `A` its columns are orthonormal.",
+          "pt": "Matriz de autovetores; para `A` simétrica, as colunas são ortonormais."
+        },
+        {
+          "name": "D",
+          "en": "Diagonal matrix of eigenvalues.",
+          "pt": "Matriz diagonal de autovalores."
+        }
       ],
       "description": {
         "en": "An eigenvector of `A` keeps its direction when multiplied by `A`, and the eigenvalue is the factor by which its length changes. Eigenvalues are the roots of the characteristic polynomial `det(A - lambda*I)`, but they are computed by iteration on the matrix itself, not by finding those roots.\n\nA real nonsymmetric matrix can have complex eigenvalues, which come in conjugate pairs. Eigenvector signs and scaling are not unique, so compare results through the relation `A*V = V*D` rather than entry by entry.",
         "pt": "Um autovetor de `A` mantém sua direção quando multiplicado por `A`, e o autovalor é o fator pelo qual seu comprimento muda. Os autovalores são as raízes do polinômio característico `det(A - lambda*I)`, mas são calculados por iteração sobre a própria matriz, e não pela busca dessas raízes.\n\nUma matriz real não simétrica pode ter autovalores complexos, que aparecem em pares conjugados. O sinal e a escala dos autovetores não são únicos; compare resultados pela relação `A*V = V*D`, e não elemento a elemento."
       },
-      "notes": {"en": "In MatLivre, the eigenvector outputs `[V, D] = eig(A)` are available for symmetric (Hermitian) matrices; for nonsymmetric matrices only the eigenvalues are returned and the two-output form raises an error.", "pt": "No MatLivre, as saídas de autovetores `[V, D] = eig(A)` estão disponíveis para matrizes simétricas (hermitianas); para matrizes não simétricas apenas os autovalores são retornados e a forma com duas saídas gera um erro."},
       "examples": [
-        {"title": {"en": "Symmetric and general matrices", "pt": "Matrizes simétricas e gerais"}, "code": "[V, D] = eig([2 1; 1 2])\neig([1 2; 3 4])\neig([2 0; 0 1], [1 0; 0 2])"}
+        {
+          "title": {
+            "en": "Symmetric and general matrices",
+            "pt": "Matrizes simétricas e gerais"
+          },
+          "code": "[V, D] = eig([2 1; 1 2])\neig([1 2; 3 4])\neig([2 0; 0 1], [1 0; 0 2])"
+        }
       ],
-      "see": ["eigs", "svd", "schur", "balance", "polyeig", "roots"]
+      "see": [
+        "eigs",
+        "svd",
+        "schur",
+        "balance",
+        "polyeig",
+        "roots"
+      ]
     },
     "eigs": {
-      "summary": {"en": "A few eigenvalues of a large matrix.", "pt": "Alguns autovalores de uma matriz grande."},
+      "summary": {
+        "en": "A few eigenvalues of a large matrix.",
+        "pt": "Alguns autovalores de uma matriz grande."
+      },
       "syntax": [
-        {"code": "d = eigs(A)", "en": "Returns the six largest-magnitude eigenvalues.", "pt": "Retorna os seis autovalores de maior módulo."},
-        {"code": "d = eigs(A, k)", "en": "Returns `k` eigenvalues.", "pt": "Retorna `k` autovalores."},
-        {"code": "d = eigs(A, k, sigma)", "en": "Chooses which: `'largestabs'`, `'smallestabs'`, `'largestreal'`, `'smallestreal'`, or the ones closest to a number `sigma`.", "pt": "Escolhe quais: `'largestabs'`, `'smallestabs'`, `'largestreal'`, `'smallestreal'`, ou os mais próximos de um número `sigma`."},
-        {"code": "[V, D] = eigs(A, ...)", "en": "Also returns the eigenvectors.", "pt": "Retorna também os autovetores."}
+        {
+          "code": "d = eigs(A)",
+          "en": "Returns the six largest-magnitude eigenvalues.",
+          "pt": "Retorna os seis autovalores de maior módulo."
+        },
+        {
+          "code": "d = eigs(A, k)",
+          "en": "Returns `k` eigenvalues.",
+          "pt": "Retorna `k` autovalores."
+        },
+        {
+          "code": "d = eigs(A, k, sigma)",
+          "en": "Chooses which: `'largestabs'`, `'smallestabs'`, `'largestreal'`, `'smallestreal'`, or the ones closest to a number `sigma`.",
+          "pt": "Escolhe quais: `'largestabs'`, `'smallestabs'`, `'largestreal'`, `'smallestreal'`, ou os mais próximos de um número `sigma`."
+        },
+        {
+          "code": "[V, D] = eigs(A, ...)",
+          "en": "Also returns the eigenvectors.",
+          "pt": "Retorna também os autovetores."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix, often large and sparse.", "pt": "Matriz quadrada, geralmente grande e esparsa."},
-        {"name": "k", "en": "Number of eigenvalues wanted (default 6).", "pt": "Número de autovalores desejados (padrão 6)."},
-        {"name": "sigma", "en": "Selection rule: a keyword or a numeric shift.", "pt": "Regra de seleção: uma palavra-chave ou um deslocamento numérico."}
+        {
+          "name": "A",
+          "en": "Square matrix, often large and sparse.",
+          "pt": "Matriz quadrada, geralmente grande e esparsa."
+        },
+        {
+          "name": "k",
+          "en": "Number of eigenvalues wanted (default 6).",
+          "pt": "Número de autovalores desejados (padrão 6)."
+        },
+        {
+          "name": "sigma",
+          "en": "Selection rule: a keyword or a numeric shift.",
+          "pt": "Regra de seleção: uma palavra-chave ou um deslocamento numérico."
+        }
       ],
       "outputs": [
-        {"name": "d", "en": "Column vector of the selected eigenvalues.", "pt": "Vetor coluna dos autovalores escolhidos."},
-        {"name": "V, D", "en": "Eigenvectors and diagonal eigenvalue matrix.", "pt": "Autovetores e matriz diagonal de autovalores."}
+        {
+          "name": "d",
+          "en": "Column vector of the selected eigenvalues.",
+          "pt": "Vetor coluna dos autovalores escolhidos."
+        },
+        {
+          "name": "V, D",
+          "en": "Eigenvectors and diagonal eigenvalue matrix.",
+          "pt": "Autovetores e matriz diagonal de autovalores."
+        }
       ],
       "description": {
         "en": "Computing every eigenvalue of an `n`-by-`n` matrix costs order `n^3`. When only a few are needed, for instance the dominant modes of a large system, `eigs` finds them with iterative methods that only need products with `A`.\n\nFor a small matrix `eigs` selects the same numbers that `eig` would give.",
         "pt": "Calcular todos os autovalores de uma matriz `n` por `n` custa da ordem de `n^3`. Quando só alguns são necessários, por exemplo os modos dominantes de um sistema grande, `eigs` os encontra com métodos iterativos que precisam apenas de produtos com `A`.\n\nPara uma matriz pequena, `eigs` seleciona os mesmos números que `eig` daria."
       },
       "examples": [
-        {"title": {"en": "Largest and smallest eigenvalues of diag(1:10)", "pt": "Maiores e menores autovalores de diag(1:10)"}, "code": "A = diag(1:10);\neigs(A, 3)\neigs(A, 2, 'smallestabs')"}
+        {
+          "title": {
+            "en": "Largest and smallest eigenvalues of diag(1:10)",
+            "pt": "Maiores e menores autovalores de diag(1:10)"
+          },
+          "code": "A = diag(1:10);\neigs(A, 3)\neigs(A, 2, 'smallestabs')"
+        }
       ],
-      "see": ["eig", "svds", "svd", "sparse"]
+      "see": [
+        "eig",
+        "svds",
+        "svd",
+        "sparse"
+      ]
     },
     "expm": {
-      "summary": {"en": "Matrix exponential.", "pt": "Exponencial de matriz."},
+      "summary": {
+        "en": "Matrix exponential.",
+        "pt": "Exponencial de matriz."
+      },
       "syntax": [
-        {"code": "E = expm(A)", "en": "Returns the matrix exponential `exp(A)` of the square matrix `A`.", "pt": "Retorna a exponencial de matriz `exp(A)` da matriz quadrada `A`."}
+        {
+          "code": "E = expm(A)",
+          "en": "Returns the matrix exponential `exp(A)` of the square matrix `A`.",
+          "pt": "Retorna a exponencial de matriz `exp(A)` da matriz quadrada `A`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        }
       ],
       "outputs": [
-        {"name": "E", "en": "Matrix of the same size defined by the power series `I + A + A^2/2! + ...`.", "pt": "Matriz do mesmo tamanho definida pela série de potências `I + A + A^2/2! + ...`."}
+        {
+          "name": "E",
+          "en": "Matrix of the same size defined by the power series `I + A + A^2/2! + ...`.",
+          "pt": "Matriz do mesmo tamanho definida pela série de potências `I + A + A^2/2! + ...`."
+        }
       ],
       "description": {
         "en": "The matrix exponential solves linear systems of differential equations: the solution of `x' = A*x` with `x(0) = x0` is `x(t) = expm(t*A)*x0`. It is computed with scaling and squaring and a Pade approximant, not entry by entry.\n\nDo not confuse it with `exp(A)`, which exponentiates each element separately. The two agree only for diagonal matrices.",
         "pt": "A exponencial de matriz resolve sistemas lineares de equações diferenciais: a solução de `x' = A*x` com `x(0) = x0` é `x(t) = expm(t*A)*x0`. Ela é calculada por escalonamento e quadrados sucessivos com uma aproximante de Padé, e não elemento a elemento.\n\nNão a confunda com `exp(A)`, que exponencia cada elemento separadamente. As duas só coincidem para matrizes diagonais."
       },
       "examples": [
-        {"title": {"en": "Nilpotent matrix and a rotation", "pt": "Matriz nilpotente e uma rotação"}, "code": "expm(zeros(2))\nexpm([0 1; 0 0])\nexpm([0 pi; -pi 0])"}
+        {
+          "title": {
+            "en": "Nilpotent matrix and a rotation",
+            "pt": "Matriz nilpotente e uma rotação"
+          },
+          "code": "expm(zeros(2))\nexpm([0 1; 0 0])\nexpm([0 pi; -pi 0])"
+        }
       ],
-      "see": ["logm", "sqrtm", "funm", "expmv", "exp"]
+      "see": [
+        "logm",
+        "sqrtm",
+        "funm",
+        "expmv",
+        "exp"
+      ]
     },
     "expmv": {
-      "summary": {"en": "Product of a matrix exponential and a vector.", "pt": "Produto da exponencial de uma matriz por um vetor."},
+      "summary": {
+        "en": "Product of a matrix exponential and a vector.",
+        "pt": "Produto da exponencial de uma matriz por um vetor."
+      },
       "syntax": [
-        {"code": "y = expmv(A, b)", "en": "Returns `expm(A)*b`.", "pt": "Retorna `expm(A)*b`."},
-        {"code": "y = expmv(A, b, t)", "en": "Returns `expm(t*A)*b`.", "pt": "Retorna `expm(t*A)*b`."}
+        {
+          "code": "y = expmv(A, b)",
+          "en": "Returns `expm(A)*b`.",
+          "pt": "Retorna `expm(A)*b`."
+        },
+        {
+          "code": "y = expmv(A, b, t)",
+          "en": "Returns `expm(t*A)*b`.",
+          "pt": "Retorna `expm(t*A)*b`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."},
-        {"name": "b", "en": "Vector or matrix with `size(A,1)` rows.", "pt": "Vetor ou matriz com `size(A,1)` linhas."},
-        {"name": "t", "en": "Optional scalar multiplying `A`.", "pt": "Escalar opcional que multiplica `A`."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        },
+        {
+          "name": "b",
+          "en": "Vector or matrix with `size(A,1)` rows.",
+          "pt": "Vetor ou matriz com `size(A,1)` linhas."
+        },
+        {
+          "name": "t",
+          "en": "Optional scalar multiplying `A`.",
+          "pt": "Escalar opcional que multiplica `A`."
+        }
       ],
       "outputs": [
-        {"name": "y", "en": "The product `expm(t*A)*b`.", "pt": "O produto `expm(t*A)*b`."}
+        {
+          "name": "y",
+          "en": "The product `expm(t*A)*b`.",
+          "pt": "O produto `expm(t*A)*b`."
+        }
       ],
       "description": {
         "en": "`expmv` gives the state at time `t` of the linear system `x' = A*x` that starts at `b`, without asking the caller to build the matrix exponential first.\n\nMatLivre evaluates it as `expm(t*A)*b`. In large sparse problems, dedicated algorithms avoid forming the full exponential; the numerical result is the same.",
         "pt": "`expmv` dá o estado no instante `t` do sistema linear `x' = A*x` que parte de `b`, sem que quem chama precise montar antes a exponencial da matriz.\n\nO MatLivre a calcula como `expm(t*A)*b`. Em problemas esparsos grandes, algoritmos dedicados evitam formar a exponencial completa; o resultado numérico é o mesmo."
       },
-      "notes": {"en": "`expmv` is not part of core MATLAB. MatLivre uses the argument order `(A, b, t)`, with `t` optional and defaulting to 1.", "pt": "`expmv` não faz parte do MATLAB básico. O MatLivre usa a ordem de argumentos `(A, b, t)`, com `t` opcional e valor padrão 1."},
+      "notes": {
+        "en": "`expmv` is not part of core MATLAB. MatLivre uses the argument order `(A, b, t)`, with `t` optional and defaulting to 1.",
+        "pt": "`expmv` não faz parte do MATLAB básico. O MatLivre usa a ordem de argumentos `(A, b, t)`, com `t` opcional e valor padrão 1."
+      },
       "examples": [
-        {"title": {"en": "Flow of a shear system", "pt": "Fluxo de um sistema de cisalhamento"}, "code": "A = [0 1; 0 0];\nb = [1; 1];\nexpmv(A, b)\nexpmv(A, b, 2)"}
+        {
+          "title": {
+            "en": "Flow of a shear system",
+            "pt": "Fluxo de um sistema de cisalhamento"
+          },
+          "code": "A = [0 1; 0 0];\nb = [1; 1];\nexpmv(A, b)\nexpmv(A, b, 2)"
+        }
       ],
-      "see": ["expm", "logm", "funm", "ode45"]
+      "see": [
+        "expm",
+        "logm",
+        "funm",
+        "ode45"
+      ]
     },
     "funm": {
-      "summary": {"en": "Evaluates a general function of a square matrix.", "pt": "Avalia uma função geral de uma matriz quadrada."},
+      "summary": {
+        "en": "Evaluates a general function of a square matrix.",
+        "pt": "Avalia uma função geral de uma matriz quadrada."
+      },
       "syntax": [
-        {"code": "F = funm(A, fun)", "en": "Returns `fun` applied to `A` as a matrix function, where `fun` is a function handle such as `@exp`.", "pt": "Retorna `fun` aplicada a `A` como função de matriz, em que `fun` é um handle como `@exp`."}
+        {
+          "code": "F = funm(A, fun)",
+          "en": "Returns `fun` applied to `A` as a matrix function, where `fun` is a function handle such as `@exp`.",
+          "pt": "Retorna `fun` aplicada a `A` como função de matriz, em que `fun` é um handle como `@exp`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."},
-        {"name": "fun", "en": "Handle of a scalar function that also works elementwise, for example `@exp`, `@sin` or `@sqrt`.", "pt": "Handle de uma função escalar que também funciona elemento a elemento, por exemplo `@exp`, `@sin` ou `@sqrt`."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        },
+        {
+          "name": "fun",
+          "en": "Handle of a scalar function that also works elementwise, for example `@exp`, `@sin` or `@sqrt`.",
+          "pt": "Handle de uma função escalar que também funciona elemento a elemento, por exemplo `@exp`, `@sin` ou `@sqrt`."
+        }
       ],
       "outputs": [
-        {"name": "F", "en": "Matrix of the same size as `A`.", "pt": "Matriz do mesmo tamanho de `A`."}
+        {
+          "name": "F",
+          "en": "Matrix of the same size as `A`.",
+          "pt": "Matriz do mesmo tamanho de `A`."
+        }
       ],
       "description": {
         "en": "A function of a matrix is not the function applied to each entry. It is defined through the eigenstructure of `A`: for a diagonalizable `A = V*D/V`, `f(A) = V*f(D)/V`. `funm` computes it with the Schur form and works even when `A` is not diagonalizable.\n\nFor `@exp` it agrees with `expm`, and for `@log` with `logm`, but `funm` is less accurate than those dedicated functions.",
         "pt": "Uma função de matriz não é a função aplicada a cada elemento. Ela é definida pela estrutura espectral de `A`: para `A = V*D/V` diagonalizável, `f(A) = V*f(D)/V`. `funm` a calcula pela forma de Schur e funciona mesmo quando `A` não é diagonalizável.\n\nPara `@exp` coincide com `expm`, e para `@log` com `logm`, mas `funm` é menos precisa que essas funções específicas."
       },
       "examples": [
-        {"title": {"en": "Matrix exponential through funm", "pt": "Exponencial de matriz via funm"}, "code": "A = [1 2; 0 3];\nF = funm(A, @exp)\ndisp(norm(F - expm(A)) < 1e-10)"}
+        {
+          "title": {
+            "en": "Matrix exponential through funm",
+            "pt": "Exponencial de matriz via funm"
+          },
+          "code": "A = [1 2; 0 3];\nF = funm(A, @exp)\ndisp(norm(F - expm(A)) < 1e-10)"
+        }
       ],
-      "see": ["expm", "logm", "sqrtm", "schur"]
+      "see": [
+        "expm",
+        "logm",
+        "sqrtm",
+        "schur"
+      ]
     },
     "gsvd": {
-      "summary": {"en": "Generalized singular value decomposition of a pair of matrices.", "pt": "Decomposição em valores singulares generalizada de um par de matrizes."},
+      "summary": {
+        "en": "Generalized singular value decomposition of a pair of matrices.",
+        "pt": "Decomposição em valores singulares generalizada de um par de matrizes."
+      },
       "syntax": [
-        {"code": "sigma = gsvd(A, B)", "en": "Returns the generalized singular values of `A` and `B`.", "pt": "Retorna os valores singulares generalizados de `A` e `B`."},
-        {"code": "[U, V, X, C, S] = gsvd(A, B)", "en": "Returns the factors with `A = U*C*X'` and `B = V*S*X'`, where `C'*C + S'*S = I`.", "pt": "Retorna os fatores com `A = U*C*X'` e `B = V*S*X'`, em que `C'*C + S'*S = I`."}
+        {
+          "code": "sigma = gsvd(A, B)",
+          "en": "Returns the generalized singular values of `A` and `B`.",
+          "pt": "Retorna os valores singulares generalizados de `A` e `B`."
+        },
+        {
+          "code": "[U, V, X, C, S] = gsvd(A, B)",
+          "en": "Returns the factors with `A = U*C*X'` and `B = V*S*X'`, where `C'*C + S'*S = I`.",
+          "pt": "Retorna os fatores com `A = U*C*X'` e `B = V*S*X'`, em que `C'*C + S'*S = I`."
+        }
       ],
       "inputs": [
-        {"name": "A, B", "en": "Matrices with the same number of columns.", "pt": "Matrizes com o mesmo número de colunas."}
+        {
+          "name": "A, B",
+          "en": "Matrices with the same number of columns.",
+          "pt": "Matrizes com o mesmo número de colunas."
+        }
       ],
       "outputs": [
-        {"name": "sigma", "en": "Column vector of generalized singular values `sqrt(diag(C'*C)) ./ sqrt(diag(S'*S))`.", "pt": "Vetor coluna dos valores singulares generalizados `sqrt(diag(C'*C)) ./ sqrt(diag(S'*S))`."},
-        {"name": "U, V", "en": "Unitary matrices.", "pt": "Matrizes unitárias."},
-        {"name": "X", "en": "Nonsingular matrix shared by both factorizations.", "pt": "Matriz não singular compartilhada pelas duas fatorações."},
-        {"name": "C, S", "en": "Diagonal-like matrices whose squares add up to the identity.", "pt": "Matrizes tipo diagonal cujos quadrados somam a identidade."}
+        {
+          "name": "sigma",
+          "en": "Column vector of generalized singular values `sqrt(diag(C'*C)) ./ sqrt(diag(S'*S))`.",
+          "pt": "Vetor coluna dos valores singulares generalizados `sqrt(diag(C'*C)) ./ sqrt(diag(S'*S))`."
+        },
+        {
+          "name": "U, V",
+          "en": "Unitary matrices.",
+          "pt": "Matrizes unitárias."
+        },
+        {
+          "name": "X",
+          "en": "Nonsingular matrix shared by both factorizations.",
+          "pt": "Matriz não singular compartilhada pelas duas fatorações."
+        },
+        {
+          "name": "C, S",
+          "en": "Diagonal-like matrices whose squares add up to the identity.",
+          "pt": "Matrizes tipo diagonal cujos quadrados somam a identidade."
+        }
       ],
       "description": {
         "en": "The GSVD factors two matrices at once with a shared right factor `X`. It underlies constrained least-squares problems and the comparison of two data sets: a large generalized singular value means a direction in which `A` dominates `B`.\n\nIt reduces to the ordinary SVD when `B` is the identity. The ordering of the generalized singular values follows the shape conventions of MATLAB.",
         "pt": "A GSVD fatora duas matrizes ao mesmo tempo com um fator à direita `X` compartilhado. Está na base de problemas de mínimos quadrados com restrições e da comparação entre dois conjuntos de dados: um valor singular generalizado grande indica uma direção em que `A` domina `B`.\n\nReduz-se à SVD comum quando `B` é a identidade. A ordenação dos valores singulares generalizados segue as convenções de forma do MATLAB."
       },
       "examples": [
-        {"title": {"en": "Generalized singular values and a check", "pt": "Valores singulares generalizados e uma conferência"}, "code": "A = [1 0; 0 2; 1 1];\nB = [1 1; 0 1];\nsigma = gsvd(A, B)\n[U, V, X, C, S] = gsvd(A, B);\ndisp(round(C'*C + S'*S))"}
+        {
+          "title": {
+            "en": "Generalized singular values and a check",
+            "pt": "Valores singulares generalizados e uma conferência"
+          },
+          "code": "A = [1 0; 0 2; 1 1];\nB = [1 1; 0 1];\nsigma = gsvd(A, B)\n[U, V, X, C, S] = gsvd(A, B);\ndisp(round(C'*C + S'*S))"
+        }
       ],
-      "see": ["svd", "qz", "eig", "lscov"]
+      "see": [
+        "svd",
+        "qz",
+        "eig",
+        "lscov"
+      ]
     },
     "hess": {
-      "summary": {"en": "Hessenberg form of a square matrix.", "pt": "Forma de Hessenberg de uma matriz quadrada."},
+      "summary": {
+        "en": "Hessenberg form of a square matrix.",
+        "pt": "Forma de Hessenberg de uma matriz quadrada."
+      },
       "syntax": [
-        {"code": "H = hess(A)", "en": "Returns the upper Hessenberg matrix similar to `A`.", "pt": "Retorna a matriz de Hessenberg superior semelhante a `A`."},
-        {"code": "[P, H] = hess(A)", "en": "Also returns the unitary matrix `P` with `A = P*H*P'`.", "pt": "Retorna também a matriz unitária `P` com `A = P*H*P'`."}
+        {
+          "code": "H = hess(A)",
+          "en": "Returns the upper Hessenberg matrix similar to `A`.",
+          "pt": "Retorna a matriz de Hessenberg superior semelhante a `A`."
+        },
+        {
+          "code": "[P, H] = hess(A)",
+          "en": "Also returns the unitary matrix `P` with `A = P*H*P'`.",
+          "pt": "Retorna também a matriz unitária `P` com `A = P*H*P'`."
+        }
       ],
       "inputs": [
-        {"name": "A", "en": "Square matrix.", "pt": "Matriz quadrada."}
+        {
+          "name": "A",
+          "en": "Square matrix.",
+          "pt": "Matriz quadrada."
+        }
       ],
       "outputs": [
-        {"name": "H", "en": "Matrix with zeros below the first subdiagonal.", "pt": "Matriz com zeros abaixo da primeira subdiagonal."},
-        {"name": "P", "en": "Orthogonal (unitary) transformation matrix.", "pt": "Matriz de transformação ortogonal (unitária)."}
+        {
+          "name": "H",
+          "en": "Matrix with zeros below the first subdiagonal.",
+          "pt": "Matriz com zeros abaixo da primeira subdiagonal."
+        },
+        {
+          "name": "P",
+          "en": "Orthogonal (unitary) transformation matrix.",
+          "pt": "Matriz de transformação ortogonal (unitária)."
+        }
       ],
       "description": {
         "en": "An upper Hessenberg matrix is nearly triangular: all entries below the first subdiagonal are zero. Any square matrix can be reduced to this form by a sequence of orthogonal reflections, so `H` has the same eigenvalues as `A`.\n\nThe reduction is the first step of the QR algorithm for eigenvalues: working with `H` makes each iteration much cheaper. For a symmetric `A` the result `H` is tridiagonal up to rounding.",
         "pt": "Uma matriz de Hessenberg superior é quase triangular: todas as entradas abaixo da primeira subdiagonal são nulas. Qualquer matriz quadrada pode ser reduzida a essa forma por uma sequência de reflexões ortogonais, de modo que `H` tem os mesmos autovalores de `A`.\n\nA redução é o primeiro passo do algoritmo QR para autovalores: trabalhar com `H` torna cada iteração muito mais barata. Para `A` simétrica, `H` é tridiagonal a menos de arredondamento."
       },
       "examples": [
-        {"title": {"en": "Reducing a 3-by-3 matrix", "pt": "Reduzindo uma matriz 3 por 3"}, "code": "A = [1 2 3; 4 5 6; 7 8 10];\n[P, H] = hess(A);\nH\ndisp(norm(P*H*P' - A) < 1e-10)"}
+        {
+          "title": {
+            "en": "Reducing a 3-by-3 matrix",
+            "pt": "Reduzindo uma matriz 3 por 3"
+          },
+          "code": "A = [1 2 3; 4 5 6; 7 8 10];\n[P, H] = hess(A);\nH\ndisp(norm(P*H*P' - A) < 1e-10)"
+        }
       ],
-      "see": ["schur", "eig", "qr", "balance"]
+      "see": [
+        "schur",
+        "eig",
+        "qr",
+        "balance"
+      ]
     }
   }
 }

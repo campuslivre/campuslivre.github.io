@@ -1,1269 +1,1257 @@
 {
- "functions": {
-  "issortedrows": {
-   "summary": {
-    "en": "Tests whether the rows of a matrix are sorted.",
-    "pt": "Testa se as linhas de uma matriz estão ordenadas."
-   },
-   "syntax": [
-    {
-     "code": "tf = issortedrows(A)",
-     "en": "True when the rows are in ascending order, comparing column 1 first, then column 2 on ties, and so on.",
-     "pt": "Verdadeiro quando as linhas estão em ordem crescente, comparando a coluna 1 primeiro, depois a coluna 2 nos empates, e assim por diante."
+  "functions": {
+    "issortedrows": {
+      "summary": {
+        "en": "Tests whether the rows of a matrix are sorted.",
+        "pt": "Testa se as linhas de uma matriz estão ordenadas."
+      },
+      "syntax": [
+        {
+          "code": "tf = issortedrows(A)",
+          "en": "True when the rows are in ascending order, comparing column 1 first, then column 2 on ties, and so on.",
+          "pt": "Verdadeiro quando as linhas estão em ordem crescente, comparando a coluna 1 primeiro, depois a coluna 2 nos empates, e assim por diante."
+        },
+        {
+          "code": "tf = issortedrows(A, col)",
+          "en": "Compares the listed columns; a negative index means descending for that column.",
+          "pt": "Compara as colunas listadas; um índice negativo significa decrescente naquela coluna."
+        },
+        {
+          "code": "tf = issortedrows(A, direction)",
+          "en": "Applies `'ascend'` or `'descend'` to all columns.",
+          "pt": "Aplica `'ascend'` ou `'descend'` a todas as colunas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric matrix or table.",
+          "pt": "Matriz numérica ou tabela."
+        },
+        {
+          "name": "col",
+          "en": "Vector of column numbers, with sign giving the direction.",
+          "pt": "Vetor de números de coluna, com o sinal indicando a direção."
+        },
+        {
+          "name": "direction",
+          "en": "`'ascend'`, `'descend'` or `'monotonic'`.",
+          "pt": "`'ascend'`, `'descend'` ou `'monotonic'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "Rows are compared like words in a dictionary: the first column decides, and later columns only break ties. The result tells whether `sortrows(A)` would leave the matrix unchanged, without doing the sort.",
+        "pt": "As linhas são comparadas como palavras em um dicionário: a primeira coluna decide, e as seguintes só desempatam. O resultado diz se `sortrows(A)` deixaria a matriz inalterada, sem fazer a ordenação."
+      },
+      "examples": [
+        {
+          "code": "A = [1 1; 1 2; 2 0];\nissortedrows(A)\nissortedrows([1 2; 1 1])\nissortedrows([1 2; 1 1], [1 -2])"
+        }
+      ],
+      "see": [
+        "sortrows",
+        "issorted",
+        "sort",
+        "unique"
+      ]
     },
-    {
-     "code": "tf = issortedrows(A, col)",
-     "en": "Compares the listed columns; a negative index means descending for that column.",
-     "pt": "Compara as colunas listadas; um índice negativo significa decrescente naquela coluna."
+    "isuniform": {
+      "summary": {
+        "en": "Tests whether the elements of a vector are evenly spaced.",
+        "pt": "Testa se os elementos de um vetor são igualmente espaçados."
+      },
+      "syntax": [
+        {
+          "code": "tf = isuniform(v)",
+          "en": "True when consecutive differences are all equal, within rounding.",
+          "pt": "Verdadeiro quando as diferenças consecutivas são todas iguais, a menos de arredondamento."
+        },
+        {
+          "code": "[tf, delta] = isuniform(v)",
+          "en": "Also returns the common spacing.",
+          "pt": "Também retorna o espaçamento comum."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v",
+          "en": "Numeric vector, with at least two elements to be uniform.",
+          "pt": "Vetor numérico, com pelo menos dois elementos para ser uniforme."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        },
+        {
+          "name": "delta",
+          "en": "The spacing between neighbours when `tf` is true.",
+          "pt": "O espaçamento entre vizinhos quando `tf` é verdadeiro."
+        }
+      ],
+      "description": {
+        "en": "Floating point values such as `0:0.1:0.3` differ by amounts that are not exactly equal, so the test allows a small tolerance relative to the spacing. Uniform sample points are a precondition for some fast algorithms, for instance FFT-based methods and fast interpolation.",
+        "pt": "Valores de ponto flutuante como `0:0.1:0.3` diferem por quantidades que não são exatamente iguais, então o teste permite uma pequena tolerância relativa ao espaçamento. Pontos de amostra uniformes são pré-requisito de alguns algoritmos rápidos, como os baseados em FFT e a interpolação rápida."
+      },
+      "examples": [
+        {
+          "code": "isuniform([0 0.1 0.2 0.3])\nisuniform([1 2 4])\n[tf, d] = isuniform([2 4 6])"
+        }
+      ],
+      "see": [
+        "diff",
+        "linspace",
+        "issorted",
+        "interp1"
+      ]
     },
-    {
-     "code": "tf = issortedrows(A, direction)",
-     "en": "Applies `'ascend'` or `'descend'` to all columns.",
-     "pt": "Aplica `'ascend'` ou `'descend'` a todas as colunas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric matrix.",
-     "pt": "Matriz numérica."
+    "isvector": {
+      "summary": {
+        "en": "Tests whether the input is a vector.",
+        "pt": "Testa se a entrada é um vetor."
+      },
+      "syntax": [
+        {
+          "code": "tf = isvector(A)",
+          "en": "True when `A` is 1-by-`n` or `n`-by-1, in either orientation.",
+          "pt": "Verdadeiro quando `A` é 1 por `n` ou `n` por 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Any array.",
+          "pt": "Qualquer array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "A vector is a 2-D array with one dimension equal to 1, so `isvector` accepts rows and columns. Scalars count (they are 1-by-1), an empty `[]` does not, and an array like `ones(1, 1, 3)` is not a vector because it has three dimensions.",
+        "pt": "Um vetor é um array 2-D em que uma das dimensões vale 1, então `isvector` aceita linhas e colunas. Escalares contam (são 1 por 1), um `[]` vazio não, e um array como `ones(1, 1, 3)` não é vetor porque tem três dimensões."
+      },
+      "examples": [
+        {
+          "code": "isvector([1 2 3])\nisvector([1; 2])\nisvector([1 2; 3 4])\nisvector([])"
+        }
+      ],
+      "see": [
+        "isrow",
+        "iscolumn",
+        "isscalar",
+        "ismatrix"
+      ]
     },
-    {
-     "name": "col",
-     "en": "Vector of column numbers, with sign giving the direction.",
-     "pt": "Vetor de números de coluna, com o sinal indicando a direção."
+    "length": {
+      "summary": {
+        "en": "Length of the largest dimension of an array.",
+        "pt": "Comprimento da maior dimensão de um array."
+      },
+      "syntax": [
+        {
+          "code": "n = length(A)",
+          "en": "Returns `max(size(A))`, or 0 for an empty array.",
+          "pt": "Retorna `max(size(A))`, ou 0 para um array vazio."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Nonnegative integer scalar.",
+          "pt": "Escalar inteiro não negativo."
+        }
+      ],
+      "description": {
+        "en": "For a vector, `length` is the number of elements, which is its main use in loops: `for k = 1:length(v)`. For a matrix it is the larger of rows and columns, which is rarely what you want, so prefer `size(A, 1)`, `size(A, 2)` or `numel` when the array is not a vector.\n\nAny array with a zero dimension has length 0, even `zeros(3, 0)`.",
+        "pt": "Para um vetor, `length` é o número de elementos, seu principal uso em laços: `for k = 1:length(v)`. Para uma matriz é o maior entre linhas e colunas, o que raramente é o desejado, então prefira `size(A, 1)`, `size(A, 2)` ou `numel` quando o array não for vetor.\n\nQualquer array com uma dimensão zero tem comprimento 0, até `zeros(3, 0)`."
+      },
+      "examples": [
+        {
+          "code": "length([4 5 6 7])\nlength(ones(3, 7))\nlength('hello')\nlength(zeros(3, 0))"
+        }
+      ],
+      "see": [
+        "size",
+        "numel",
+        "ndims",
+        "isempty"
+      ]
     },
-    {
-     "name": "direction",
-     "en": "`'ascend'`, `'descend'` or `'monotonic'`.",
-     "pt": "`'ascend'`, `'descend'` ou `'monotonic'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "Rows are compared like words in a dictionary: the first column decides, and later columns only break ties. The result tells whether `sortrows(A)` would leave the matrix unchanged, without doing the sort.",
-    "pt": "As linhas são comparadas como palavras em um dicionário: a primeira coluna decide, e as seguintes só desempatam. O resultado diz se `sortrows(A)` deixaria a matriz inalterada, sem fazer a ordenação."
-   },
-   "notes": {
-    "en": "In MatLivre tables are not accepted; the input must be numeric.",
-    "pt": "No MatLivre tabelas não são aceitas; a entrada deve ser numérica."
-   },
-   "examples": [
-    {
-     "code": "A = [1 1; 1 2; 2 0];\nissortedrows(A)\nissortedrows([1 2; 1 1])\nissortedrows([1 2; 1 1], [1 -2])"
-    }
-   ],
-   "see": [
-    "sortrows",
-    "issorted",
-    "sort",
-    "unique"
-   ]
-  },
-  "isuniform": {
-   "summary": {
-    "en": "Tests whether the elements of a vector are evenly spaced.",
-    "pt": "Testa se os elementos de um vetor são igualmente espaçados."
-   },
-   "syntax": [
-    {
-     "code": "tf = isuniform(v)",
-     "en": "True when consecutive differences are all equal, within rounding.",
-     "pt": "Verdadeiro quando as diferenças consecutivas são todas iguais, a menos de arredondamento."
+    "linspace": {
+      "summary": {
+        "en": "Vector of evenly spaced points between two limits.",
+        "pt": "Vetor de pontos igualmente espaçados entre dois limites."
+      },
+      "syntax": [
+        {
+          "code": "y = linspace(a, b)",
+          "en": "100 points from `a` to `b`.",
+          "pt": "100 pontos de `a` até `b`."
+        },
+        {
+          "code": "y = linspace(a, b, n)",
+          "en": "`n` points from `a` to `b`, endpoints included.",
+          "pt": "`n` pontos de `a` até `b`, incluindo as extremidades."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Start and end values. `a` may be larger than `b`.",
+          "pt": "Valores inicial e final. `a` pode ser maior que `b`."
+        },
+        {
+          "name": "n",
+          "en": "Number of points (default 100). With `n = 1` the result is `b`.",
+          "pt": "Número de pontos (padrão 100). Com `n = 1` o resultado é `b`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Row vector of `n` values with constant step `(b-a)/(n-1)`.",
+          "pt": "Vetor linha de `n` valores com passo constante `(b-a)/(n-1)`."
+        }
+      ],
+      "description": {
+        "en": "Unlike `a:step:b`, you choose the number of points rather than the step, and the last point is exactly `b` with no rounding drift. That makes it the usual way to build a sampling grid for plots and function evaluation: `x = linspace(0, 2*pi, 200)`.\n\nWith `n` below 1 the result is an empty `1`-by-`0` vector.",
+        "pt": "Ao contrário de `a:passo:b`, você escolhe o número de pontos em vez do passo, e o último ponto é exatamente `b`, sem deriva de arredondamento. É o jeito usual de montar uma grade de amostragem para gráficos e avaliação de funções: `x = linspace(0, 2*pi, 200)`.\n\nCom `n` menor que 1 o resultado é um vetor vazio `1` por `0`."
+      },
+      "notes": {
+        "en": "Vector limits (one row of points per element) are not supported: the call raises an error.",
+        "pt": "Limites vetoriais (uma linha de pontos por elemento) não são suportados: a chamada gera erro."
+      },
+      "examples": [
+        {
+          "code": "linspace(0, 1, 5)\nlinspace(5, 1, 3)\nsize(linspace(0, 1))"
+        }
+      ],
+      "see": [
+        "logspace",
+        "colon",
+        "meshgrid",
+        "repmat"
+      ]
     },
-    {
-     "code": "[tf, delta] = isuniform(v)",
-     "en": "Also returns the common spacing.",
-     "pt": "Também retorna o espaçamento comum."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "v",
-     "en": "Numeric vector, with at least two elements to be uniform.",
-     "pt": "Vetor numérico, com pelo menos dois elementos para ser uniforme."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
+    "logspace": {
+      "summary": {
+        "en": "Vector of logarithmically spaced points between two powers of ten.",
+        "pt": "Vetor de pontos espaçados logaritmicamente entre duas potências de dez."
+      },
+      "syntax": [
+        {
+          "code": "y = logspace(a, b)",
+          "en": "50 points from `10^a` to `10^b`.",
+          "pt": "50 pontos de `10^a` até `10^b`."
+        },
+        {
+          "code": "y = logspace(a, b, n)",
+          "en": "`n` points from `10^a` to `10^b`.",
+          "pt": "`n` pontos de `10^a` até `10^b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Exponents of the first and last points.",
+          "pt": "Expoentes do primeiro e do último ponto."
+        },
+        {
+          "name": "n",
+          "en": "Number of points (default 50).",
+          "pt": "Número de pontos (padrão 50)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Row vector whose logarithms are evenly spaced: `10.^linspace(a, b, n)`.",
+          "pt": "Vetor linha cujos logaritmos são igualmente espaçados: `10.^linspace(a, b, n)`."
+        }
+      ],
+      "description": {
+        "en": "The ratio between consecutive points is constant, so the points look evenly spread on a log axis. Typical uses are frequency sweeps and parameter scans that cover many orders of magnitude, for example `logspace(-3, 3, 7)`.\n\nNote that the inputs are exponents, not the limits themselves: `logspace(0, 2, 3)` is `1 10 100`.",
+        "pt": "A razão entre pontos consecutivos é constante, então os pontos parecem uniformes em um eixo logarítmico. Usos típicos são varreduras de frequência e de parâmetros que cobrem muitas ordens de grandeza, por exemplo `logspace(-3, 3, 7)`.\n\nObserve que as entradas são expoentes, não os limites: `logspace(0, 2, 3)` é `1 10 100`."
+      },
+      "notes": {
+        "en": "The special case where `b` is `pi` (points between `10^a` and `pi`) is not implemented; it is treated as an ordinary exponent.",
+        "pt": "O caso especial em que `b` é `pi` (pontos entre `10^a` e `pi`) não está implementado; é tratado como um expoente comum."
+      },
+      "examples": [
+        {
+          "code": "logspace(0, 2, 3)\nlogspace(-1, 1, 4)"
+        }
+      ],
+      "see": [
+        "linspace",
+        "semilogx",
+        "loglog",
+        "exp"
+      ]
     },
-    {
-     "name": "delta",
-     "en": "The spacing between neighbours when `tf` is true.",
-     "pt": "O espaçamento entre vizinhos quando `tf` é verdadeiro."
-    }
-   ],
-   "description": {
-    "en": "Floating point values such as `0:0.1:0.3` differ by amounts that are not exactly equal, so the test allows a small tolerance relative to the spacing. Uniform sample points are a precondition for some fast algorithms, for instance FFT-based methods and fast interpolation.",
-    "pt": "Valores de ponto flutuante como `0:0.1:0.3` diferem por quantidades que não são exatamente iguais, então o teste permite uma pequena tolerância relativa ao espaçamento. Pontos de amostra uniformes são pré-requisito de alguns algoritmos rápidos, como os baseados em FFT e a interpolação rápida."
-   },
-   "examples": [
-    {
-     "code": "isuniform([0 0.1 0.2 0.3])\nisuniform([1 2 4])\n[tf, d] = isuniform([2 4 6])"
-    }
-   ],
-   "see": [
-    "diff",
-    "linspace",
-    "issorted",
-    "interp1"
-   ]
-  },
-  "isvector": {
-   "summary": {
-    "en": "Tests whether the input is a vector.",
-    "pt": "Testa se a entrada é um vetor."
-   },
-   "syntax": [
-    {
-     "code": "tf = isvector(A)",
-     "en": "True when `A` is 1-by-`n` or `n`-by-1, in either orientation.",
-     "pt": "Verdadeiro quando `A` é 1 por `n` ou `n` por 1."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Any array.",
-     "pt": "Qualquer array."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "A vector is a 2-D array with one dimension equal to 1, so `isvector` accepts rows and columns. Scalars count (they are 1-by-1), an empty `[]` does not, and an array like `ones(1, 1, 3)` is not a vector because it has three dimensions.",
-    "pt": "Um vetor é um array 2-D em que uma das dimensões vale 1, então `isvector` aceita linhas e colunas. Escalares contam (são 1 por 1), um `[]` vazio não, e um array como `ones(1, 1, 3)` não é vetor porque tem três dimensões."
-   },
-   "examples": [
-    {
-     "code": "isvector([1 2 3])\nisvector([1; 2])\nisvector([1 2; 3 4])\nisvector([])"
-    }
-   ],
-   "see": [
-    "isrow",
-    "iscolumn",
-    "isscalar",
-    "ismatrix"
-   ]
-  },
-  "length": {
-   "summary": {
-    "en": "Length of the largest dimension of an array.",
-    "pt": "Comprimento da maior dimensão de um array."
-   },
-   "syntax": [
-    {
-     "code": "n = length(A)",
-     "en": "Returns `max(size(A))`, or 0 for an empty array.",
-     "pt": "Retorna `max(size(A))`, ou 0 para um array vazio."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "n",
-     "en": "Nonnegative integer scalar.",
-     "pt": "Escalar inteiro não negativo."
-    }
-   ],
-   "description": {
-    "en": "For a vector, `length` is the number of elements, which is its main use in loops: `for k = 1:length(v)`. For a matrix it is the larger of rows and columns, which is rarely what you want, so prefer `size(A, 1)`, `size(A, 2)` or `numel` when the array is not a vector.\n\nAny array with a zero dimension has length 0, even `zeros(3, 0)`.",
-    "pt": "Para um vetor, `length` é o número de elementos, seu principal uso em laços: `for k = 1:length(v)`. Para uma matriz é o maior entre linhas e colunas, o que raramente é o desejado, então prefira `size(A, 1)`, `size(A, 2)` ou `numel` quando o array não for vetor.\n\nQualquer array com uma dimensão zero tem comprimento 0, até `zeros(3, 0)`."
-   },
-   "examples": [
-    {
-     "code": "length([4 5 6 7])\nlength(ones(3, 7))\nlength('hello')\nlength(zeros(3, 0))"
-    }
-   ],
-   "see": [
-    "size",
-    "numel",
-    "ndims",
-    "isempty"
-   ]
-  },
-  "linspace": {
-   "summary": {
-    "en": "Vector of evenly spaced points between two limits.",
-    "pt": "Vetor de pontos igualmente espaçados entre dois limites."
-   },
-   "syntax": [
-    {
-     "code": "y = linspace(a, b)",
-     "en": "100 points from `a` to `b`.",
-     "pt": "100 pontos de `a` até `b`."
+    "meshgrid": {
+      "summary": {
+        "en": "Coordinate matrices for a 2-D or 3-D grid.",
+        "pt": "Matrizes de coordenadas para uma grade 2-D ou 3-D."
+      },
+      "syntax": [
+        {
+          "code": "[X, Y] = meshgrid(x, y)",
+          "en": "Grid from vectors `x` and `y`.",
+          "pt": "Grade a partir dos vetores `x` e `y`."
+        },
+        {
+          "code": "[X, Y] = meshgrid(x)",
+          "en": "Same as `meshgrid(x, x)`.",
+          "pt": "Igual a `meshgrid(x, x)`."
+        },
+        {
+          "code": "[X, Y, Z] = meshgrid(x, y, z)",
+          "en": "3-D grid.",
+          "pt": "Grade 3-D."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y, z",
+          "en": "Vectors of grid coordinates along each axis.",
+          "pt": "Vetores de coordenadas da grade ao longo de cada eixo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X, Y, Z",
+          "en": "Arrays with `numel(y)` rows and `numel(x)` columns. Every row of `X` is a copy of `x`; every column of `Y` is a copy of `y`.",
+          "pt": "Arrays com `numel(y)` linhas e `numel(x)` colunas. Cada linha de `X` é uma cópia de `x`; cada coluna de `Y` é uma cópia de `y`."
+        }
+      ],
+      "description": {
+        "en": "After the call, `X(i,j)` and `Y(i,j)` give the coordinates of the grid point in row `i` and column `j`. Evaluating a function over the plane then takes one vectorized expression, such as `Z = X.^2 + Y.^2`, ready for `surf`, `contour` or `mesh`.\n\n`meshgrid` puts `x` along the columns, matching the plot axes. `ndgrid` instead follows matrix index order.",
+        "pt": "Depois da chamada, `X(i,j)` e `Y(i,j)` dão as coordenadas do ponto da grade na linha `i` e coluna `j`. Avaliar uma função no plano exige então uma única expressão vetorizada, como `Z = X.^2 + Y.^2`, pronta para `surf`, `contour` ou `mesh`.\n\n`meshgrid` põe `x` ao longo das colunas, de acordo com os eixos do gráfico. Já `ndgrid` segue a ordem dos índices da matriz."
+      },
+      "examples": [
+        {
+          "code": "[X, Y] = meshgrid(1:3, 1:2)\nZ = X + 10*Y"
+        }
+      ],
+      "see": [
+        "ndgrid",
+        "linspace",
+        "surf",
+        "contour",
+        "repmat"
+      ]
     },
-    {
-     "code": "y = linspace(a, b, n)",
-     "en": "`n` points from `a` to `b`, endpoints included.",
-     "pt": "`n` pontos de `a` até `b`, incluindo as extremidades."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a, b",
-     "en": "Start and end values. `a` may be larger than `b`.",
-     "pt": "Valores inicial e final. `a` pode ser maior que `b`."
+    "ndgrid": {
+      "summary": {
+        "en": "Coordinate arrays for an N-D grid, in matrix index order.",
+        "pt": "Arrays de coordenadas para uma grade N-D, na ordem dos índices da matriz."
+      },
+      "syntax": [
+        {
+          "code": "[X1, X2, ...] = ndgrid(x1, x2, ...)",
+          "en": "One output array per input vector.",
+          "pt": "Um array de saída por vetor de entrada."
+        },
+        {
+          "code": "[X1, X2, ...] = ndgrid(x)",
+          "en": "Uses the same vector for every dimension.",
+          "pt": "Usa o mesmo vetor em todas as dimensões."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x1, x2, ...",
+          "en": "Coordinate vectors, one for each dimension.",
+          "pt": "Vetores de coordenadas, um para cada dimensão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X1, X2, ...",
+          "en": "Arrays of size `numel(x1)` by `numel(x2)` by ..., where `Xk` varies along dimension `k`.",
+          "pt": "Arrays de tamanho `numel(x1)` por `numel(x2)` por ..., em que `Xk` varia ao longo da dimensão `k`."
+        }
+      ],
+      "description": {
+        "en": "In the output, the first dimension runs through `x1`, the second through `x2`, and so on, exactly as array subscripts do. This is the layout expected by `interpn` and `griddedInterpolant`. `meshgrid` swaps the first two dimensions, which is why its output is the transpose of `ndgrid` for 2-D input.",
+        "pt": "Na saída, a primeira dimensão percorre `x1`, a segunda `x2`, e assim por diante, exatamente como os subscritos de um array. Esse é o formato esperado por `interpn` e `griddedInterpolant`. `meshgrid` troca as duas primeiras dimensões, por isso sua saída é a transposta de `ndgrid` para entrada 2-D."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A 2-by-3-by-2 grid",
+            "pt": "Uma grade 2 por 3 por 2"
+          },
+          "code": "[A, B, C] = ndgrid(1:2, 1:3, 1:2);\nsize(A)\nsize(C)\nB(:, :, 1)"
+        }
+      ],
+      "see": [
+        "meshgrid",
+        "interpn",
+        "linspace",
+        "repmat"
+      ]
     },
-    {
-     "name": "n",
-     "en": "Number of points (default 100). With `n = 1` the result is `b`.",
-     "pt": "Número de pontos (padrão 100). Com `n = 1` o resultado é `b`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "y",
-     "en": "Row vector of `n` values with constant step `(b-a)/(n-1)`.",
-     "pt": "Vetor linha de `n` valores com passo constante `(b-a)/(n-1)`."
-    }
-   ],
-   "description": {
-    "en": "Unlike `a:step:b`, you choose the number of points rather than the step, and the last point is exactly `b` with no rounding drift. That makes it the usual way to build a sampling grid for plots and function evaluation: `x = linspace(0, 2*pi, 200)`.\n\nWith `n` below 1 the result is an empty `1`-by-`0` vector.",
-    "pt": "Ao contrário de `a:passo:b`, você escolhe o número de pontos em vez do passo, e o último ponto é exatamente `b`, sem deriva de arredondamento. É o jeito usual de montar uma grade de amostragem para gráficos e avaliação de funções: `x = linspace(0, 2*pi, 200)`.\n\nCom `n` menor que 1 o resultado é um vetor vazio `1` por `0`."
-   },
-   "notes": {
-    "en": "Vector `a` and `b` (one row per line) and complex limits are not supported: the result is a single real row.",
-    "pt": "Limites vetoriais (uma linha de pontos por elemento) e limites complexos não são suportados: o resultado é uma única linha real."
-   },
-   "examples": [
-    {
-     "code": "linspace(0, 1, 5)\nlinspace(5, 1, 3)\nsize(linspace(0, 1))"
-    }
-   ],
-   "see": [
-    "logspace",
-    "colon",
-    "meshgrid",
-    "repmat"
-   ]
-  },
-  "logspace": {
-   "summary": {
-    "en": "Vector of logarithmically spaced points between two powers of ten.",
-    "pt": "Vetor de pontos espaçados logaritmicamente entre duas potências de dez."
-   },
-   "syntax": [
-    {
-     "code": "y = logspace(a, b)",
-     "en": "50 points from `10^a` to `10^b`.",
-     "pt": "50 pontos de `10^a` até `10^b`."
+    "ndims": {
+      "summary": {
+        "en": "Number of dimensions of an array.",
+        "pt": "Número de dimensões de um array."
+      },
+      "syntax": [
+        {
+          "code": "n = ndims(A)",
+          "en": "Returns `numel(size(A))`.",
+          "pt": "Retorna `numel(size(A))`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Integer, never less than 2.",
+          "pt": "Inteiro, nunca menor que 2."
+        }
+      ],
+      "description": {
+        "en": "Every MATLAB array is at least two-dimensional, so scalars, vectors and matrices all give 2. Trailing dimensions of size 1 are dropped, so `ones(2, 3, 1, 1)` has two dimensions. A dimension of size 0 still counts.",
+        "pt": "Todo array do MATLAB tem pelo menos duas dimensões, então escalares, vetores e matrizes dão todos 2. Dimensões finais de tamanho 1 são descartadas, então `ones(2, 3, 1, 1)` tem duas dimensões. Uma dimensão de tamanho 0 ainda conta."
+      },
+      "examples": [
+        {
+          "code": "ndims(5)\nndims(ones(2, 3))\nndims(ones(2, 3, 4))\nndims(zeros(2, 0, 3))"
+        }
+      ],
+      "see": [
+        "size",
+        "numel",
+        "length",
+        "squeeze"
+      ]
     },
-    {
-     "code": "y = logspace(a, b, n)",
-     "en": "`n` points from `10^a` to `10^b`.",
-     "pt": "`n` pontos de `10^a` até `10^b`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a, b",
-     "en": "Exponents of the first and last points.",
-     "pt": "Expoentes do primeiro e do último ponto."
+    "numel": {
+      "summary": {
+        "en": "Number of elements in an array.",
+        "pt": "Número de elementos de um array."
+      },
+      "syntax": [
+        {
+          "code": "n = numel(A)",
+          "en": "Returns `prod(size(A))`.",
+          "pt": "Retorna `prod(size(A))`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type: numeric, text, cell, struct array, table.",
+          "pt": "Array de qualquer tipo: numérico, texto, cell, array de structs, tabela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Nonnegative integer scalar.",
+          "pt": "Escalar inteiro não negativo."
+        }
+      ],
+      "description": {
+        "en": "`numel` counts elements whatever the shape, so a `3`-by-`4` matrix has 12. A character vector counts characters, a cell array counts cells (not what is inside them), and a struct array counts structs. A string array counts strings, so `numel(\"hello\")` is 1, while `strlength` gives the characters.",
+        "pt": "`numel` conta elementos seja qual for a forma, então uma matriz `3` por `4` tem 12. Um vetor de caracteres conta caracteres, um cell array conta células (não o que há dentro) e um array de structs conta structs. Um array de strings conta strings, então `numel(\"hello\")` é 1, enquanto `strlength` dá os caracteres."
+      },
+      "examples": [
+        {
+          "code": "numel(ones(2, 3))\nnumel('hello')\nnumel({1, 'ab', [1 2 3]})\nnumel(\"hello\")"
+        }
+      ],
+      "see": [
+        "size",
+        "length",
+        "ndims",
+        "isempty",
+        "strlength"
+      ]
     },
-    {
-     "name": "n",
-     "en": "Number of points (default 50).",
-     "pt": "Número de pontos (padrão 50)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "y",
-     "en": "Row vector whose logarithms are evenly spaced: `10.^linspace(a, b, n)`.",
-     "pt": "Vetor linha cujos logaritmos são igualmente espaçados: `10.^linspace(a, b, n)`."
-    }
-   ],
-   "description": {
-    "en": "The ratio between consecutive points is constant, so the points look evenly spread on a log axis. Typical uses are frequency sweeps and parameter scans that cover many orders of magnitude, for example `logspace(-3, 3, 7)`.\n\nNote that the inputs are exponents, not the limits themselves: `logspace(0, 2, 3)` is `1 10 100`.",
-    "pt": "A razão entre pontos consecutivos é constante, então os pontos parecem uniformes em um eixo logarítmico. Usos típicos são varreduras de frequência e de parâmetros que cobrem muitas ordens de grandeza, por exemplo `logspace(-3, 3, 7)`.\n\nObserve que as entradas são expoentes, não os limites: `logspace(0, 2, 3)` é `1 10 100`."
-   },
-   "notes": {
-    "en": "The special case where `b` is `pi` (points between `10^a` and `pi`) is not implemented; it is treated as an ordinary exponent.",
-    "pt": "O caso especial em que `b` é `pi` (pontos entre `10^a` e `pi`) não está implementado; é tratado como um expoente comum."
-   },
-   "examples": [
-    {
-     "code": "logspace(0, 2, 3)\nlogspace(-1, 1, 4)"
-    }
-   ],
-   "see": [
-    "linspace",
-    "semilogx",
-    "loglog",
-    "exp"
-   ]
-  },
-  "meshgrid": {
-   "summary": {
-    "en": "Coordinate matrices for a 2-D or 3-D grid.",
-    "pt": "Matrizes de coordenadas para uma grade 2-D ou 3-D."
-   },
-   "syntax": [
-    {
-     "code": "[X, Y] = meshgrid(x, y)",
-     "en": "Grid from vectors `x` and `y`.",
-     "pt": "Grade a partir dos vetores `x` e `y`."
+    "ones": {
+      "summary": {
+        "en": "Array of ones.",
+        "pt": "Array de uns."
+      },
+      "syntax": [
+        {
+          "code": "A = ones(n)",
+          "en": "n-by-n matrix of ones.",
+          "pt": "Matriz n por n de uns."
+        },
+        {
+          "code": "A = ones(m, n, ...)",
+          "en": "Array of the given size.",
+          "pt": "Array do tamanho indicado."
+        },
+        {
+          "code": "A = ones(sz)",
+          "en": "Size given as a vector.",
+          "pt": "Tamanho dado como vetor."
+        },
+        {
+          "code": "A = ones(___, classname)",
+          "en": "Result of the given class, such as `'int8'` or `'single'`.",
+          "pt": "Resultado da classe indicada, como `'int8'` ou `'single'`."
+        },
+        {
+          "code": "A = ones(___, 'like', p)",
+          "en": "Same class as the prototype `p`.",
+          "pt": "Mesma classe do protótipo `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m, ...",
+          "en": "Dimension sizes. A zero gives an empty array.",
+          "pt": "Tamanhos das dimensões. Um zero dá um array vazio."
+        },
+        {
+          "name": "classname",
+          "en": "Class of the result; default `'double'`.",
+          "pt": "Classe do resultado; padrão `'double'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "Array filled with 1.",
+          "pt": "Array preenchido com 1."
+        }
+      ],
+      "description": {
+        "en": "`ones` is the standard way to start an array of a constant: `5*ones(3)` is a 3-by-3 matrix of fives, and `ones(n, 1)` is a column of ones, useful as the constant column of a design matrix. For the logical equivalent see `true`.",
+        "pt": "`ones` é o jeito padrão de iniciar um array constante: `5*ones(3)` é uma matriz 3 por 3 de cincos, e `ones(n, 1)` é uma coluna de uns, útil como coluna constante de uma matriz de projeto. Para o equivalente lógico veja `true`."
+      },
+      "examples": [
+        {
+          "code": "ones(2, 3)\n5*ones(2)\nones(2, 'int8')\nclass(ones(1, 'uint8'))"
+        }
+      ],
+      "see": [
+        "zeros",
+        "eye",
+        "true",
+        "repmat",
+        "rand"
+      ]
     },
-    {
-     "code": "[X, Y] = meshgrid(x)",
-     "en": "Same as `meshgrid(x, x)`.",
-     "pt": "Igual a `meshgrid(x, x)`."
+    "paddata": {
+      "summary": {
+        "en": "Pads an array with extra values up to a given size.",
+        "pt": "Preenche um array com valores extras até um tamanho dado."
+      },
+      "syntax": [
+        {
+          "code": "B = paddata(A, len)",
+          "en": "Pads the first non-singleton dimension to length `len`, with zeros at the end.",
+          "pt": "Preenche a primeira dimensão de tamanho diferente de 1 até o comprimento `len`, com zeros no final."
+        },
+        {
+          "code": "B = paddata(A, sz)",
+          "en": "Pads to the full size `sz`.",
+          "pt": "Preenche até o tamanho completo `sz`."
+        },
+        {
+          "code": "B = paddata(___, Name, Value)",
+          "en": "Options: `'Dimension'`, `'FillValue'`, `'Pattern'`, `'Side'`.",
+          "pt": "Opções: `'Dimension'`, `'FillValue'`, `'Pattern'`, `'Side'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric array or cell array.",
+          "pt": "Array numérico ou cell array."
+        },
+        {
+          "name": "len, sz",
+          "en": "Target length, or target size vector. Never shrinks the array.",
+          "pt": "Comprimento alvo, ou vetor de tamanho alvo. Nunca encolhe o array."
+        },
+        {
+          "name": "'FillValue'",
+          "en": "Value used for the new elements (default 0).",
+          "pt": "Valor usado nos novos elementos (padrão 0)."
+        },
+        {
+          "name": "'Side'",
+          "en": "`'trailing'` (default) adds at the end, `'leading'` at the start, `'both'` on both sides.",
+          "pt": "`'trailing'` (padrão) acrescenta no fim, `'leading'` no início, `'both'` nos dois lados."
+        },
+        {
+          "name": "'Pattern'",
+          "en": "How to generate padding: `'constant'`, `'edge'`, `'circular'`, `'flip'` or `'reflect'`.",
+          "pt": "Como gerar o preenchimento: `'constant'`, `'edge'`, `'circular'`, `'flip'` ou `'reflect'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array padded to at least the requested size. If `A` is already large enough it is returned unchanged.",
+          "pt": "Array preenchido até pelo menos o tamanho pedido. Se `A` já for grande o bastante, é devolvido sem alteração."
+        }
+      ],
+      "description": {
+        "en": "It is used to make vectors of different lengths the same length before stacking them into a matrix. Unlike `resize`, `paddata` only adds: an array that is already larger than the target is left alone, never cropped.\n\nFor cell arrays the new cells are empty.",
+        "pt": "Serve para igualar o comprimento de vetores antes de empilhá-los em uma matriz. Ao contrário de `resize`, `paddata` só acrescenta: um array já maior que o alvo fica como está, nunca é cortado.\n\nEm cell arrays as novas células são vazias."
+      },
+      "examples": [
+        {
+          "code": "paddata([1 2 3], 5)\npaddata([1 2 3], 5, 'Side', 'leading')\npaddata([1 2; 3 4], 3, 'FillValue', -1)"
+        }
+      ],
+      "see": [
+        "resize",
+        "padarray",
+        "cat",
+        "zeros"
+      ]
     },
-    {
-     "code": "[X, Y, Z] = meshgrid(x, y, z)",
-     "en": "3-D grid.",
-     "pt": "Grade 3-D."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "x, y, z",
-     "en": "Vectors of grid coordinates along each axis.",
-     "pt": "Vetores de coordenadas da grade ao longo de cada eixo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "X, Y, Z",
-     "en": "Arrays with `numel(y)` rows and `numel(x)` columns. Every row of `X` is a copy of `x`; every column of `Y` is a copy of `y`.",
-     "pt": "Arrays com `numel(y)` linhas e `numel(x)` colunas. Cada linha de `X` é uma cópia de `x`; cada coluna de `Y` é uma cópia de `y`."
-    }
-   ],
-   "description": {
-    "en": "After the call, `X(i,j)` and `Y(i,j)` give the coordinates of the grid point in row `i` and column `j`. Evaluating a function over the plane then takes one vectorized expression, such as `Z = X.^2 + Y.^2`, ready for `surf`, `contour` or `mesh`.\n\n`meshgrid` puts `x` along the columns, matching the plot axes. `ndgrid` instead follows matrix index order.",
-    "pt": "Depois da chamada, `X(i,j)` e `Y(i,j)` dão as coordenadas do ponto da grade na linha `i` e coluna `j`. Avaliar uma função no plano exige então uma única expressão vetorizada, como `Z = X.^2 + Y.^2`, pronta para `surf`, `contour` ou `mesh`.\n\n`meshgrid` põe `x` ao longo das colunas, de acordo com os eixos do gráfico. Já `ndgrid` segue a ordem dos índices da matriz."
-   },
-   "examples": [
-    {
-     "code": "[X, Y] = meshgrid(1:3, 1:2)\nZ = X + 10*Y"
-    }
-   ],
-   "see": [
-    "ndgrid",
-    "linspace",
-    "surf",
-    "contour",
-    "repmat"
-   ]
-  },
-  "ndgrid": {
-   "summary": {
-    "en": "Coordinate arrays for an N-D grid, in matrix index order.",
-    "pt": "Arrays de coordenadas para uma grade N-D, na ordem dos índices da matriz."
-   },
-   "syntax": [
-    {
-     "code": "[X1, X2, ...] = ndgrid(x1, x2, ...)",
-     "en": "One output array per input vector.",
-     "pt": "Um array de saída por vetor de entrada."
+    "permute": {
+      "summary": {
+        "en": "Reorders the dimensions of an array.",
+        "pt": "Reordena as dimensões de um array."
+      },
+      "syntax": [
+        {
+          "code": "B = permute(A, order)",
+          "en": "Rearranges the dimensions of `A` in the order given by `order`.",
+          "pt": "Reorganiza as dimensões de `A` na ordem dada por `order`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "order",
+          "en": "Vector containing each dimension number exactly once, such as `[2 1]` or `[3 1 2]`.",
+          "pt": "Vetor que contém cada número de dimensão exatamente uma vez, como `[2 1]` ou `[3 1 2]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array with `size(B, k) == size(A, order(k))`.",
+          "pt": "Array com `size(B, k) == size(A, order(k))`."
+        }
+      ],
+      "description": {
+        "en": "`permute(A, [2 1])` is the ordinary transpose. With three or more dimensions it moves whole axes: `permute(A, [3 1 2])` makes the third dimension the first. Elements keep their values; only the indexing changes. It is often used to line up data so that a function operating along the first dimension can be applied to another axis.\n\n`ipermute` applies the inverse reordering.",
+        "pt": "`permute(A, [2 1])` é a transposta comum. Com três ou mais dimensões move eixos inteiros: `permute(A, [3 1 2])` faz da terceira dimensão a primeira. Os elementos mantêm seus valores; só a indexação muda. É muito usado para alinhar dados e aplicar a outro eixo uma função que atua na primeira dimensão.\n\n`ipermute` aplica a reordenação inversa."
+      },
+      "examples": [
+        {
+          "code": "A = reshape(1:6, 2, 3)\npermute(A, [2 1])\nsize(permute(ones(2, 3, 4), [3 1 2]))"
+        }
+      ],
+      "see": [
+        "ipermute",
+        "reshape",
+        "squeeze",
+        "transpose",
+        "shiftdim"
+      ]
     },
-    {
-     "code": "[X1, X2, ...] = ndgrid(x)",
-     "en": "Uses the same vector for every dimension.",
-     "pt": "Usa o mesmo vetor em todas as dimensões."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "x1, x2, ...",
-     "en": "Coordinate vectors, one for each dimension.",
-     "pt": "Vetores de coordenadas, um para cada dimensão."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "X1, X2, ...",
-     "en": "Arrays of size `numel(x1)` by `numel(x2)` by ..., where `Xk` varies along dimension `k`.",
-     "pt": "Arrays de tamanho `numel(x1)` por `numel(x2)` por ..., em que `Xk` varia ao longo da dimensão `k`."
-    }
-   ],
-   "description": {
-    "en": "In the output, the first dimension runs through `x1`, the second through `x2`, and so on, exactly as array subscripts do. This is the layout expected by `interpn` and `griddedInterpolant`. `meshgrid` swaps the first two dimensions, which is why its output is the transpose of `ndgrid` for 2-D input.",
-    "pt": "Na saída, a primeira dimensão percorre `x1`, a segunda `x2`, e assim por diante, exatamente como os subscritos de um array. Esse é o formato esperado por `interpn` e `griddedInterpolant`. `meshgrid` troca as duas primeiras dimensões, por isso sua saída é a transposta de `ndgrid` para entrada 2-D."
-   },
-   "notes": {
-    "en": "With exactly two input vectors, MatLivre returns the grid in `meshgrid` orientation (`numel(x2)` rows and `numel(x1)` columns) instead of the `numel(x1)` by `numel(x2)` shape that MATLAB gives. With three or more vectors the result follows MATLAB.",
-    "pt": "Com exatamente dois vetores de entrada, o MatLivre devolve a grade na orientação de `meshgrid` (`numel(x2)` linhas e `numel(x1)` colunas), em vez do formato `numel(x1)` por `numel(x2)` do MATLAB. Com três ou mais vetores o resultado segue o MATLAB."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "A 2-by-3-by-2 grid",
-      "pt": "Uma grade 2 por 3 por 2"
-     },
-     "code": "[A, B, C] = ndgrid(1:2, 1:3, 1:2);\nsize(A)\nsize(C)\nB(:, :, 1)"
-    }
-   ],
-   "see": [
-    "meshgrid",
-    "interpn",
-    "linspace",
-    "repmat"
-   ]
-  },
-  "ndims": {
-   "summary": {
-    "en": "Number of dimensions of an array.",
-    "pt": "Número de dimensões de um array."
-   },
-   "syntax": [
-    {
-     "code": "n = ndims(A)",
-     "en": "Returns `numel(size(A))`.",
-     "pt": "Retorna `numel(size(A))`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "n",
-     "en": "Integer, never less than 2.",
-     "pt": "Inteiro, nunca menor que 2."
-    }
-   ],
-   "description": {
-    "en": "Every MATLAB array is at least two-dimensional, so scalars, vectors and matrices all give 2. Trailing dimensions of size 1 are dropped, so `ones(2, 3, 1, 1)` has two dimensions. A dimension of size 0 still counts.",
-    "pt": "Todo array do MATLAB tem pelo menos duas dimensões, então escalares, vetores e matrizes dão todos 2. Dimensões finais de tamanho 1 são descartadas, então `ones(2, 3, 1, 1)` tem duas dimensões. Uma dimensão de tamanho 0 ainda conta."
-   },
-   "examples": [
-    {
-     "code": "ndims(5)\nndims(ones(2, 3))\nndims(ones(2, 3, 4))\nndims(zeros(2, 0, 3))"
-    }
-   ],
-   "see": [
-    "size",
-    "numel",
-    "length",
-    "squeeze"
-   ]
-  },
-  "numel": {
-   "summary": {
-    "en": "Number of elements in an array.",
-    "pt": "Número de elementos de um array."
-   },
-   "syntax": [
-    {
-     "code": "n = numel(A)",
-     "en": "Returns `prod(size(A))`.",
-     "pt": "Retorna `prod(size(A))`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type: numeric, text, cell, struct array, table.",
-     "pt": "Array de qualquer tipo: numérico, texto, cell, array de structs, tabela."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "n",
-     "en": "Nonnegative integer scalar.",
-     "pt": "Escalar inteiro não negativo."
-    }
-   ],
-   "description": {
-    "en": "`numel` counts elements whatever the shape, so a `3`-by-`4` matrix has 12. A character vector counts characters, a cell array counts cells (not what is inside them), and a struct array counts structs. A string array counts strings, so `numel(\"hello\")` is 1, while `strlength` gives the characters.",
-    "pt": "`numel` conta elementos seja qual for a forma, então uma matriz `3` por `4` tem 12. Um vetor de caracteres conta caracteres, um cell array conta células (não o que há dentro) e um array de structs conta structs. Um array de strings conta strings, então `numel(\"hello\")` é 1, enquanto `strlength` dá os caracteres."
-   },
-   "examples": [
-    {
-     "code": "numel(ones(2, 3))\nnumel('hello')\nnumel({1, 'ab', [1 2 3]})\nnumel(\"hello\")"
-    }
-   ],
-   "see": [
-    "size",
-    "length",
-    "ndims",
-    "isempty",
-    "strlength"
-   ]
-  },
-  "ones": {
-   "summary": {
-    "en": "Array of ones.",
-    "pt": "Array de uns."
-   },
-   "syntax": [
-    {
-     "code": "A = ones(n)",
-     "en": "n-by-n matrix of ones.",
-     "pt": "Matriz n por n de uns."
+    "rand": {
+      "summary": {
+        "en": "Uniformly distributed random numbers in the open interval (0, 1).",
+        "pt": "Números aleatórios com distribuição uniforme no intervalo aberto (0, 1)."
+      },
+      "syntax": [
+        {
+          "code": "r = rand",
+          "en": "A single random scalar.",
+          "pt": "Um único escalar aleatório."
+        },
+        {
+          "code": "r = rand(n)",
+          "en": "n-by-n matrix of random numbers.",
+          "pt": "Matriz n por n de números aleatórios."
+        },
+        {
+          "code": "r = rand(m, n, ...)",
+          "en": "Array of the given size.",
+          "pt": "Array do tamanho indicado."
+        },
+        {
+          "code": "r = rand(___, classname)",
+          "en": "`'double'` (default) or `'single'`.",
+          "pt": "`'double'` (padrão) ou `'single'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m, ...",
+          "en": "Dimension sizes.",
+          "pt": "Tamanhos das dimensões."
+        },
+        {
+          "name": "classname",
+          "en": "Class of the result.",
+          "pt": "Classe do resultado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Array of values strictly between 0 and 1.",
+          "pt": "Array de valores estritamente entre 0 e 1."
+        }
+      ],
+      "description": {
+        "en": "The numbers come from a pseudorandom generator whose state advances with every call, so two calls give different values. To get the same sequence again, reset the generator with `rng`: after `rng(1)`, the next `rand(1, 3)` is always `0.4170 0.7203 0.0001`. Fix the seed in any example, test or experiment that must be reproducible.\n\nTo scale to an interval, use `a + (b-a)*rand`. For integers use `randi`, and for normally distributed values use `randn`.",
+        "pt": "Os números vêm de um gerador pseudoaleatório cujo estado avança a cada chamada, então duas chamadas dão valores diferentes. Para obter a mesma sequência de novo, reinicie o gerador com `rng`: depois de `rng(1)`, o próximo `rand(1, 3)` é sempre `0.4170 0.7203 0.0001`. Fixe a semente em qualquer exemplo, teste ou experimento que precise ser reprodutível.\n\nPara mudar a escala para um intervalo, use `a + (b-a)*rand`. Para inteiros use `randi`, e para valores com distribuição normal use `randn`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A seeded draw",
+            "pt": "Um sorteio com semente"
+          },
+          "code": "rng(1)\nrand(1, 3)\nrng(1)\nsize(rand(2, 3, 4))"
+        }
+      ],
+      "see": [
+        "randn",
+        "randi",
+        "randperm",
+        "rng"
+      ]
     },
-    {
-     "code": "A = ones(m, n, ...)",
-     "en": "Array of the given size.",
-     "pt": "Array do tamanho indicado."
+    "repelem": {
+      "summary": {
+        "en": "Repeats each element of an array a given number of times.",
+        "pt": "Repete cada elemento de um array um número dado de vezes."
+      },
+      "syntax": [
+        {
+          "code": "B = repelem(v, n)",
+          "en": "Repeats every element of the vector `v` `n` times.",
+          "pt": "Repete cada elemento do vetor `v` `n` vezes."
+        },
+        {
+          "code": "B = repelem(v, counts)",
+          "en": "Repeats element `k` of `v` `counts(k)` times.",
+          "pt": "Repete o elemento `k` de `v` `counts(k)` vezes."
+        },
+        {
+          "code": "B = repelem(A, r1, r2, ...)",
+          "en": "For matrices, repeats along each dimension.",
+          "pt": "Para matrizes, repete ao longo de cada dimensão."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v, A",
+          "en": "Array of any type, including text and cell arrays.",
+          "pt": "Array de qualquer tipo, inclusive texto e cell arrays."
+        },
+        {
+          "name": "n, counts, r1, ...",
+          "en": "Repeat counts: a scalar, or a vector with one count per element.",
+          "pt": "Contagens de repetição: um escalar, ou um vetor com uma contagem por elemento."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array in which each element is repeated in place.",
+          "pt": "Array em que cada elemento é repetido no lugar."
+        }
+      ],
+      "description": {
+        "en": "Compare with `repmat`, which tiles the whole array: `repmat([1 2], 1, 2)` is `1 2 1 2` while `repelem([1 2], 2)` is `1 1 2 2`. In a matrix `repelem(A, 2, 3)` turns each element into a block of 2 rows by 3 columns, a way to enlarge an image or a grid without interpolation.",
+        "pt": "Compare com `repmat`, que ladrilha o array inteiro: `repmat([1 2], 1, 2)` é `1 2 1 2` enquanto `repelem([1 2], 2)` é `1 1 2 2`. Em uma matriz, `repelem(A, 2, 3)` transforma cada elemento em um bloco de 2 linhas por 3 colunas, um jeito de ampliar uma imagem ou grade sem interpolação."
+      },
+      "examples": [
+        {
+          "code": "repelem([1 2 3], 2)\nrepelem([1 2 3], [1 2 3])\nrepelem([1 2; 3 4], 2, 2)"
+        }
+      ],
+      "see": [
+        "repmat",
+        "kron",
+        "cat",
+        "reshape"
+      ]
     },
-    {
-     "code": "A = ones(sz)",
-     "en": "Size given as a vector.",
-     "pt": "Tamanho dado como vetor."
+    "repmat": {
+      "summary": {
+        "en": "Tiles copies of an array.",
+        "pt": "Cria cópias lado a lado de um array."
+      },
+      "syntax": [
+        {
+          "code": "B = repmat(A, n)",
+          "en": "n-by-n tiling of `A`.",
+          "pt": "Ladrilhamento n por n de `A`."
+        },
+        {
+          "code": "B = repmat(A, m, n, ...)",
+          "en": "`m` copies down, `n` across, and so on.",
+          "pt": "`m` cópias para baixo, `n` ao lado, e assim por diante."
+        },
+        {
+          "code": "B = repmat(A, sz)",
+          "en": "Repeat counts given as a vector.",
+          "pt": "Contagens de repetição dadas como vetor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "m, n, ...",
+          "en": "How many copies along each dimension.",
+          "pt": "Quantas cópias ao longo de cada dimensão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of size `size(A) .* [m n ...]`.",
+          "pt": "Array de tamanho `size(A) .* [m n ...]`."
+        }
+      ],
+      "description": {
+        "en": "The whole of `A` is copied as a block, so `repmat([1 2], 2, 2)` gives two rows of `1 2 1 2`. It works on text and cell arrays: `repmat('ab', 1, 3)` is `'ababab'` and `repmat({0}, 1, 3)` is a cell array of three zeros.\n\nSince implicit expansion handles most arithmetic cases, `repmat` is now mainly needed for building arrays rather than for matching sizes.",
+        "pt": "O `A` inteiro é copiado como bloco, então `repmat([1 2], 2, 2)` dá duas linhas `1 2 1 2`. Funciona com texto e cell arrays: `repmat('ab', 1, 3)` é `'ababab'` e `repmat({0}, 1, 3)` é um cell array de três zeros.\n\nComo a expansão implícita resolve a maioria dos casos aritméticos, `repmat` hoje serve sobretudo para construir arrays, não para igualar tamanhos."
+      },
+      "examples": [
+        {
+          "code": "repmat([1 2], 2, 2)\nrepmat('ab', 1, 3)\nrepmat({0}, 1, 3)"
+        }
+      ],
+      "see": [
+        "repelem",
+        "kron",
+        "cat",
+        "ones"
+      ]
     },
-    {
-     "code": "A = ones(___, classname)",
-     "en": "Result of the given class, such as `'int8'` or `'single'`.",
-     "pt": "Resultado da classe indicada, como `'int8'` ou `'single'`."
+    "reshape": {
+      "summary": {
+        "en": "Changes the size of an array without changing its elements.",
+        "pt": "Muda o tamanho de um array sem alterar seus elementos."
+      },
+      "syntax": [
+        {
+          "code": "B = reshape(A, m, n, ...)",
+          "en": "Arranges the elements into the given dimensions.",
+          "pt": "Reorganiza os elementos nas dimensões indicadas."
+        },
+        {
+          "code": "B = reshape(A, [], n)",
+          "en": "Leaves one size empty and lets MATLAB compute it.",
+          "pt": "Deixa um tamanho vazio e deixa o MATLAB calculá-lo."
+        },
+        {
+          "code": "B = reshape(A, sz)",
+          "en": "Size given as a vector.",
+          "pt": "Tamanho dado como vetor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "m, n, ...",
+          "en": "New dimension sizes; the product must equal `numel(A)`. At most one may be `[]`.",
+          "pt": "Novos tamanhos de dimensão; o produto deve ser igual a `numel(A)`. No máximo um pode ser `[]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array with the same elements in column-major order.",
+          "pt": "Array com os mesmos elementos em ordem de coluna."
+        }
+      ],
+      "description": {
+        "en": "The elements are read down the columns of `A` and written down the columns of the new shape, so `reshape(1:6, 2, 3)` is `[1 3 5; 2 4 6]`, not `[1 2 3; 4 5 6]`. To fill row by row, reshape to the transposed size and transpose back.\n\nIf the number of elements would change the call fails with an error; the `[]` form is the easy way to avoid computing a size by hand.",
+        "pt": "Os elementos são lidos descendo as colunas de `A` e escritos descendo as colunas da nova forma, então `reshape(1:6, 2, 3)` é `[1 3 5; 2 4 6]`, não `[1 2 3; 4 5 6]`. Para preencher por linhas, faça o reshape para o tamanho transposto e transponha de volta.\n\nSe o número de elementos mudasse, a chamada falha com erro; a forma com `[]` evita calcular um tamanho à mão."
+      },
+      "examples": [
+        {
+          "code": "reshape(1:6, 2, 3)\nreshape(1:6, [], 2)\nreshape(1:6, 3, 2)'"
+        }
+      ],
+      "see": [
+        "permute",
+        "squeeze",
+        "resize",
+        "colon",
+        "size"
+      ]
     },
-    {
-     "code": "A = ones(___, 'like', p)",
-     "en": "Same class as the prototype `p`.",
-     "pt": "Mesma classe do protótipo `p`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n, m, ...",
-     "en": "Dimension sizes. A zero gives an empty array.",
-     "pt": "Tamanhos das dimensões. Um zero dá um array vazio."
+    "resize": {
+      "summary": {
+        "en": "Changes the size of an array by cropping or padding.",
+        "pt": "Muda o tamanho de um array cortando ou preenchendo."
+      },
+      "syntax": [
+        {
+          "code": "B = resize(A, sz)",
+          "en": "Gives `B` the size `sz`, cropping or padding with zeros at the end of each dimension.",
+          "pt": "Dá a `B` o tamanho `sz`, cortando ou preenchendo com zeros no fim de cada dimensão."
+        },
+        {
+          "code": "B = resize(A, len, 'Dimension', d)",
+          "en": "Resizes only dimension `d`.",
+          "pt": "Redimensiona apenas a dimensão `d`."
+        },
+        {
+          "code": "B = resize(___, Name, Value)",
+          "en": "Options: `'FillValue'`, `'Pattern'`, `'Side'`.",
+          "pt": "Opções: `'FillValue'`, `'Pattern'`, `'Side'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric array or cell array.",
+          "pt": "Array numérico ou cell array."
+        },
+        {
+          "name": "sz",
+          "en": "Target size vector, or a single length together with `'Dimension'`.",
+          "pt": "Vetor de tamanho alvo, ou um comprimento único junto com `'Dimension'`."
+        },
+        {
+          "name": "'FillValue'",
+          "en": "Value for new elements (default 0).",
+          "pt": "Valor dos novos elementos (padrão 0)."
+        },
+        {
+          "name": "'Pattern'",
+          "en": "`'constant'` (default), `'edge'`, `'circular'`, `'flip'` or `'reflect'`.",
+          "pt": "`'constant'` (padrão), `'edge'`, `'circular'`, `'flip'` ou `'reflect'`."
+        },
+        {
+          "name": "'Side'",
+          "en": "`'trailing'` (default), `'leading'` or `'both'`: where to add or remove elements.",
+          "pt": "`'trailing'` (padrão), `'leading'` ou `'both'`: onde acrescentar ou remover elementos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of exactly the requested size.",
+          "pt": "Array exatamente do tamanho pedido."
+        }
+      ],
+      "description": {
+        "en": "When the target is larger than `A` the new elements are filled; when it is smaller, the extra elements are removed. It differs from `reshape`, which keeps all elements, and from `paddata`, which never shrinks. The original elements keep their positions when the side is `'trailing'`.",
+        "pt": "Quando o alvo é maior que `A`, os novos elementos são preenchidos; quando é menor, os elementos excedentes são removidos. Difere de `reshape`, que mantém todos os elementos, e de `paddata`, que nunca encolhe. Os elementos originais mantêm suas posições quando o lado é `'trailing'`."
+      },
+      "examples": [
+        {
+          "code": "resize([1 2; 3 4], [3 3])\nresize([1 2 3 4], 2, 'Side', 'leading')\nresize([1 2 3], 5, 'Pattern', 'circular')"
+        }
+      ],
+      "see": [
+        "paddata",
+        "reshape",
+        "padarray",
+        "imresize"
+      ]
     },
-    {
-     "name": "classname",
-     "en": "Class of the result; default `'double'`.",
-     "pt": "Classe do resultado; padrão `'double'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "A",
-     "en": "Array filled with 1.",
-     "pt": "Array preenchido com 1."
-    }
-   ],
-   "description": {
-    "en": "`ones` is the standard way to start an array of a constant: `5*ones(3)` is a 3-by-3 matrix of fives, and `ones(n, 1)` is a column of ones, useful as the constant column of a design matrix. For the logical equivalent see `true`.",
-    "pt": "`ones` é o jeito padrão de iniciar um array constante: `5*ones(3)` é uma matriz 3 por 3 de cincos, e `ones(n, 1)` é uma coluna de uns, útil como coluna constante de uma matriz de projeto. Para o equivalente lógico veja `true`."
-   },
-   "examples": [
-    {
-     "code": "ones(2, 3)\n5*ones(2)\nones(2, 'int8')\nclass(ones(1, 'uint8'))"
-    }
-   ],
-   "see": [
-    "zeros",
-    "eye",
-    "true",
-    "repmat",
-    "rand"
-   ]
-  },
-  "paddata": {
-   "summary": {
-    "en": "Pads an array with extra values up to a given size.",
-    "pt": "Preenche um array com valores extras até um tamanho dado."
-   },
-   "syntax": [
-    {
-     "code": "B = paddata(A, len)",
-     "en": "Pads the first non-singleton dimension to length `len`, with zeros at the end.",
-     "pt": "Preenche a primeira dimensão de tamanho diferente de 1 até o comprimento `len`, com zeros no final."
+    "rot90": {
+      "summary": {
+        "en": "Rotates a matrix by multiples of 90 degrees.",
+        "pt": "Gira uma matriz em múltiplos de 90 graus."
+      },
+      "syntax": [
+        {
+          "code": "B = rot90(A)",
+          "en": "Rotates 90 degrees counterclockwise.",
+          "pt": "Gira 90 graus no sentido anti-horário."
+        },
+        {
+          "code": "B = rot90(A, k)",
+          "en": "Rotates `k*90` degrees; negative `k` turns clockwise.",
+          "pt": "Gira `k*90` graus; `k` negativo gira no sentido horário."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "k",
+          "en": "Integer number of quarter turns (default 1).",
+          "pt": "Número inteiro de quartos de volta (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Rotated array. For odd `k` its rows and columns are swapped.",
+          "pt": "Array girado. Para `k` ímpar, linhas e colunas são trocadas."
+        }
+      ],
+      "description": {
+        "en": "The first row of `A` ends up as the first column of `B`, read from bottom to top, after one counterclockwise turn. Only `k` modulo 4 matters. For a half turn use `rot90(A, 2)`, which equals `flip(flip(A, 1), 2)`.",
+        "pt": "A primeira linha de `A` vira a primeira coluna de `B`, lida de baixo para cima, depois de um giro anti-horário. Só importa `k` módulo 4. Para meia volta use `rot90(A, 2)`, que equivale a `flip(flip(A, 1), 2)`."
+      },
+      "examples": [
+        {
+          "code": "A = [1 2; 3 4];\nrot90(A)\nrot90(A, -1)\nrot90(A, 2)"
+        }
+      ],
+      "see": [
+        "flip",
+        "fliplr",
+        "flipud",
+        "permute",
+        "circshift"
+      ]
     },
-    {
-     "code": "B = paddata(A, sz)",
-     "en": "Pads to the full size `sz`.",
-     "pt": "Preenche até o tamanho completo `sz`."
+    "shiftdim": {
+      "summary": {
+        "en": "Shifts the dimensions of an array, removing or adding leading singleton dimensions.",
+        "pt": "Desloca as dimensões de um array, removendo ou acrescentando dimensões iniciais de tamanho 1."
+      },
+      "syntax": [
+        {
+          "code": "B = shiftdim(A)",
+          "en": "Removes leading singleton dimensions.",
+          "pt": "Remove as dimensões iniciais de tamanho 1."
+        },
+        {
+          "code": "B = shiftdim(A, n)",
+          "en": "Shifts dimensions left by `n` (cyclically); a negative `n` adds `-n` leading singletons.",
+          "pt": "Desloca as dimensões `n` posições à esquerda (ciclicamente); um `n` negativo acrescenta `-n` dimensões iniciais de tamanho 1."
+        },
+        {
+          "code": "[B, ns] = shiftdim(A)",
+          "en": "Also returns the number of dimensions removed.",
+          "pt": "Também retorna o número de dimensões removidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "n",
+          "en": "Number of positions to shift; integer.",
+          "pt": "Número de posições do deslocamento; inteiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array with the same elements and shifted dimensions.",
+          "pt": "Array com os mesmos elementos e dimensões deslocadas."
+        },
+        {
+          "name": "ns",
+          "en": "Number of leading singleton dimensions that were removed.",
+          "pt": "Número de dimensões iniciais de tamanho 1 removidas."
+        }
+      ],
+      "description": {
+        "en": "A common case is an array of size `1`-by-`1`-by-`k`, produced by slicing a 3-D array; `shiftdim` turns it into a plain `k`-by-`1` vector. With a positive `n` the first `n` dimensions move to the end, so an array of size `[2 3 4]` shifted by 1 has size `[3 4 2]`. This is the same as a `permute` by a rotated order.",
+        "pt": "Um caso comum é um array de tamanho `1` por `1` por `k`, produzido por fatiar um array 3-D; `shiftdim` o transforma em um vetor simples `k` por `1`. Com `n` positivo as primeiras `n` dimensões vão para o fim, então um array de tamanho `[2 3 4]` deslocado por 1 tem tamanho `[3 4 2]`. Equivale a um `permute` com uma ordem rotacionada."
+      },
+      "examples": [
+        {
+          "code": "x = ones(1, 1, 3);\nsize(shiftdim(x))\nsize(shiftdim(ones(2, 3, 4), 1))\nsize(shiftdim(ones(2, 3), -1))"
+        }
+      ],
+      "see": [
+        "permute",
+        "squeeze",
+        "reshape",
+        "ipermute"
+      ]
     },
-    {
-     "code": "B = paddata(___, Name, Value)",
-     "en": "Options: `'Dimension'`, `'FillValue'`, `'Pattern'`, `'Side'`.",
-     "pt": "Opções: `'Dimension'`, `'FillValue'`, `'Pattern'`, `'Side'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric array or cell array.",
-     "pt": "Array numérico ou cell array."
+    "size": {
+      "summary": {
+        "en": "Size of an array along each dimension.",
+        "pt": "Tamanho de um array ao longo de cada dimensão."
+      },
+      "syntax": [
+        {
+          "code": "sz = size(A)",
+          "en": "Row vector with the length of every dimension.",
+          "pt": "Vetor linha com o comprimento de cada dimensão."
+        },
+        {
+          "code": "n = size(A, dim)",
+          "en": "Length along dimension `dim`.",
+          "pt": "Comprimento ao longo da dimensão `dim`."
+        },
+        {
+          "code": "[r, c, ...] = size(A)",
+          "en": "One output per dimension; the last absorbs any remaining dimensions.",
+          "pt": "Uma saída por dimensão; a última absorve as dimensões restantes."
+        },
+        {
+          "code": "sz = size(A, [d1 d2])",
+          "en": "Lengths along several chosen dimensions.",
+          "pt": "Comprimentos ao longo de várias dimensões escolhidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension number, or vector of dimension numbers.",
+          "pt": "Número de dimensão, ou vetor de números de dimensão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sz",
+          "en": "Row vector of sizes, at least two elements.",
+          "pt": "Vetor linha de tamanhos, com pelo menos dois elementos."
+        },
+        {
+          "name": "r, c, ...",
+          "en": "Sizes as separate scalars.",
+          "pt": "Tamanhos como escalares separados."
+        }
+      ],
+      "description": {
+        "en": "A scalar is `[1 1]`, the empty `[]` is `[0 0]`, and a character vector `'hello'` is `[1 5]`. Asking for a dimension past `ndims(A)` returns 1.\n\nWhen there are fewer outputs than dimensions, the last output holds the product of the rest: `[r, c] = size(ones(2, 3, 4))` gives `r = 2` and `c = 12`. Use `size(A, 1)` for rows and `size(A, 2)` for columns when you need only one number.",
+        "pt": "Um escalar é `[1 1]`, o vazio `[]` é `[0 0]`, e um vetor de caracteres `'hello'` é `[1 5]`. Pedir uma dimensão além de `ndims(A)` retorna 1.\n\nQuando há menos saídas que dimensões, a última saída guarda o produto das restantes: `[r, c] = size(ones(2, 3, 4))` dá `r = 2` e `c = 12`. Use `size(A, 1)` para linhas e `size(A, 2)` para colunas quando precisar de um número só."
+      },
+      "examples": [
+        {
+          "code": "A = ones(2, 3, 4);\nsize(A)\nsize(A, 2)\n[r, c] = size(A)"
+        }
+      ],
+      "see": [
+        "numel",
+        "length",
+        "ndims",
+        "reshape",
+        "isempty"
+      ]
     },
-    {
-     "name": "len, sz",
-     "en": "Target length, or target size vector. Never shrinks the array.",
-     "pt": "Comprimento alvo, ou vetor de tamanho alvo. Nunca encolhe o array."
-    },
-    {
-     "name": "'FillValue'",
-     "en": "Value used for the new elements (default 0).",
-     "pt": "Valor usado nos novos elementos (padrão 0)."
-    },
-    {
-     "name": "'Side'",
-     "en": "`'trailing'` (default) adds at the end, `'leading'` at the start, `'both'` on both sides.",
-     "pt": "`'trailing'` (padrão) acrescenta no fim, `'leading'` no início, `'both'` nos dois lados."
-    },
-    {
-     "name": "'Pattern'",
-     "en": "How to generate padding: `'constant'`, `'edge'`, `'circular'`, `'flip'` or `'reflect'`.",
-     "pt": "Como gerar o preenchimento: `'constant'`, `'edge'`, `'circular'`, `'flip'` ou `'reflect'`."
+    "sort": {
+      "summary": {
+        "en": "Sorts the elements of an array in ascending or descending order.",
+        "pt": "Ordena os elementos de um array em ordem crescente ou decrescente."
+      },
+      "syntax": [
+        {
+          "code": "B = sort(A)",
+          "en": "Sorts ascending along the first non-singleton dimension.",
+          "pt": "Ordena em ordem crescente ao longo da primeira dimensão de tamanho diferente de 1."
+        },
+        {
+          "code": "B = sort(A, dim)",
+          "en": "Sorts along dimension `dim`.",
+          "pt": "Ordena ao longo da dimensão `dim`."
+        },
+        {
+          "code": "B = sort(___, direction)",
+          "en": "`'ascend'` (default) or `'descend'`.",
+          "pt": "`'ascend'` (padrão) ou `'descend'`."
+        },
+        {
+          "code": "[B, I] = sort(___)",
+          "en": "Also returns the indices that map `A` to `B`.",
+          "pt": "Também retorna os índices que levam `A` a `B`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical, char, string, categorical or datetime array, or a cell array of character vectors.",
+          "pt": "Array numérico, lógico, char, string, categorical ou datetime, ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to sort along.",
+          "pt": "Dimensão ao longo da qual ordenar."
+        },
+        {
+          "name": "direction",
+          "en": "`'ascend'` or `'descend'`.",
+          "pt": "`'ascend'` ou `'descend'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Sorted array, the same size as `A`.",
+          "pt": "Array ordenado, do mesmo tamanho de `A`."
+        },
+        {
+          "name": "I",
+          "en": "Index array: `B = A(I)` for a vector.",
+          "pt": "Array de índices: `B = A(I)` para um vetor."
+        }
+      ],
+      "description": {
+        "en": "For a matrix, each column is sorted separately; use `sort(A, 2)` to sort each row. The sort is stable, so equal elements keep their original relative order, and `I` tells where each element came from. NaN values are placed last when ascending and first when descending. Complex numbers are ordered by magnitude, then by phase. Text is ordered by character code, so uppercase letters come before lowercase.\n\nTo sort whole rows by one column, use `sortrows`.",
+        "pt": "Em uma matriz, cada coluna é ordenada separadamente; use `sort(A, 2)` para ordenar cada linha. A ordenação é estável, então elementos iguais mantêm a ordem relativa original, e `I` diz de onde cada elemento veio. Valores NaN ficam por último em ordem crescente e primeiro em ordem decrescente. Números complexos são ordenados pelo módulo e depois pela fase. Texto é ordenado pelo código do caractere, então maiúsculas vêm antes de minúsculas.\n\nPara ordenar linhas inteiras por uma coluna, use `sortrows`."
+      },
+      "examples": [
+        {
+          "code": "[s, i] = sort([3 1 2])\nsort([3 1 2], 'descend')\nsort([3 1; 2 5], 2)\nsort({'pear', 'apple', 'fig'})"
+        }
+      ],
+      "see": [
+        "sortrows",
+        "issorted",
+        "max",
+        "unique",
+        "cummax"
+      ]
     }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array padded to at least the requested size. If `A` is already large enough it is returned unchanged.",
-     "pt": "Array preenchido até pelo menos o tamanho pedido. Se `A` já for grande o bastante, é devolvido sem alteração."
-    }
-   ],
-   "description": {
-    "en": "It is used to make vectors of different lengths the same length before stacking them into a matrix. Unlike `resize`, `paddata` only adds: an array that is already larger than the target is left alone, never cropped.\n\nFor cell arrays the new cells are empty.",
-    "pt": "Serve para igualar o comprimento de vetores antes de empilhá-los em uma matriz. Ao contrário de `resize`, `paddata` só acrescenta: um array já maior que o alvo fica como está, nunca é cortado.\n\nEm cell arrays as novas células são vazias."
-   },
-   "examples": [
-    {
-     "code": "paddata([1 2 3], 5)\npaddata([1 2 3], 5, 'Side', 'leading')\npaddata([1 2; 3 4], 3, 'FillValue', -1)"
-    }
-   ],
-   "see": [
-    "resize",
-    "padarray",
-    "cat",
-    "zeros"
-   ]
-  },
-  "permute": {
-   "summary": {
-    "en": "Reorders the dimensions of an array.",
-    "pt": "Reordena as dimensões de um array."
-   },
-   "syntax": [
-    {
-     "code": "B = permute(A, order)",
-     "en": "Rearranges the dimensions of `A` in the order given by `order`.",
-     "pt": "Reorganiza as dimensões de `A` na ordem dada por `order`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "order",
-     "en": "Vector containing each dimension number exactly once, such as `[2 1]` or `[3 1 2]`.",
-     "pt": "Vetor que contém cada número de dimensão exatamente uma vez, como `[2 1]` ou `[3 1 2]`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array with `size(B, k) == size(A, order(k))`.",
-     "pt": "Array com `size(B, k) == size(A, order(k))`."
-    }
-   ],
-   "description": {
-    "en": "`permute(A, [2 1])` is the ordinary transpose. With three or more dimensions it moves whole axes: `permute(A, [3 1 2])` makes the third dimension the first. Elements keep their values; only the indexing changes. It is often used to line up data so that a function operating along the first dimension can be applied to another axis.\n\n`ipermute` applies the inverse reordering.",
-    "pt": "`permute(A, [2 1])` é a transposta comum. Com três ou mais dimensões move eixos inteiros: `permute(A, [3 1 2])` faz da terceira dimensão a primeira. Os elementos mantêm seus valores; só a indexação muda. É muito usado para alinhar dados e aplicar a outro eixo uma função que atua na primeira dimensão.\n\n`ipermute` aplica a reordenação inversa."
-   },
-   "examples": [
-    {
-     "code": "A = reshape(1:6, 2, 3)\npermute(A, [2 1])\nsize(permute(ones(2, 3, 4), [3 1 2]))"
-    }
-   ],
-   "see": [
-    "ipermute",
-    "reshape",
-    "squeeze",
-    "transpose",
-    "shiftdim"
-   ]
-  },
-  "rand": {
-   "summary": {
-    "en": "Uniformly distributed random numbers in the open interval (0, 1).",
-    "pt": "Números aleatórios com distribuição uniforme no intervalo aberto (0, 1)."
-   },
-   "syntax": [
-    {
-     "code": "r = rand",
-     "en": "A single random scalar.",
-     "pt": "Um único escalar aleatório."
-    },
-    {
-     "code": "r = rand(n)",
-     "en": "n-by-n matrix of random numbers.",
-     "pt": "Matriz n por n de números aleatórios."
-    },
-    {
-     "code": "r = rand(m, n, ...)",
-     "en": "Array of the given size.",
-     "pt": "Array do tamanho indicado."
-    },
-    {
-     "code": "r = rand(___, classname)",
-     "en": "`'double'` (default) or `'single'`.",
-     "pt": "`'double'` (padrão) ou `'single'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n, m, ...",
-     "en": "Dimension sizes.",
-     "pt": "Tamanhos das dimensões."
-    },
-    {
-     "name": "classname",
-     "en": "Class of the result.",
-     "pt": "Classe do resultado."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "r",
-     "en": "Array of values strictly between 0 and 1.",
-     "pt": "Array de valores estritamente entre 0 e 1."
-    }
-   ],
-   "description": {
-    "en": "The numbers come from a pseudorandom generator whose state advances with every call, so two calls give different values. To get the same sequence again, reset the generator with `rng`: after `rng(1)`, the next `rand(1, 3)` is always `0.4170 0.7203 0.0001`. Fix the seed in any example, test or experiment that must be reproducible.\n\nTo scale to an interval, use `a + (b-a)*rand`. For integers use `randi`, and for normally distributed values use `randn`.",
-    "pt": "Os números vêm de um gerador pseudoaleatório cujo estado avança a cada chamada, então duas chamadas dão valores diferentes. Para obter a mesma sequência de novo, reinicie o gerador com `rng`: depois de `rng(1)`, o próximo `rand(1, 3)` é sempre `0.4170 0.7203 0.0001`. Fixe a semente em qualquer exemplo, teste ou experimento que precise ser reprodutível.\n\nPara mudar a escala para um intervalo, use `a + (b-a)*rand`. Para inteiros use `randi`, e para valores com distribuição normal use `randn`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "A seeded draw",
-      "pt": "Um sorteio com semente"
-     },
-     "code": "rng(1)\nrand(1, 3)\nrng(1)\nsize(rand(2, 3, 4))"
-    }
-   ],
-   "see": [
-    "randn",
-    "randi",
-    "randperm",
-    "rng"
-   ]
-  },
-  "repelem": {
-   "summary": {
-    "en": "Repeats each element of an array a given number of times.",
-    "pt": "Repete cada elemento de um array um número dado de vezes."
-   },
-   "syntax": [
-    {
-     "code": "B = repelem(v, n)",
-     "en": "Repeats every element of the vector `v` `n` times.",
-     "pt": "Repete cada elemento do vetor `v` `n` vezes."
-    },
-    {
-     "code": "B = repelem(v, counts)",
-     "en": "Repeats element `k` of `v` `counts(k)` times.",
-     "pt": "Repete o elemento `k` de `v` `counts(k)` vezes."
-    },
-    {
-     "code": "B = repelem(A, r1, r2, ...)",
-     "en": "For matrices, repeats along each dimension.",
-     "pt": "Para matrizes, repete ao longo de cada dimensão."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "v, A",
-     "en": "Array of any type, including text and cell arrays.",
-     "pt": "Array de qualquer tipo, inclusive texto e cell arrays."
-    },
-    {
-     "name": "n, counts, r1, ...",
-     "en": "Repeat counts: a scalar, or a vector with one count per element.",
-     "pt": "Contagens de repetição: um escalar, ou um vetor com uma contagem por elemento."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array in which each element is repeated in place.",
-     "pt": "Array em que cada elemento é repetido no lugar."
-    }
-   ],
-   "description": {
-    "en": "Compare with `repmat`, which tiles the whole array: `repmat([1 2], 1, 2)` is `1 2 1 2` while `repelem([1 2], 2)` is `1 1 2 2`. In a matrix `repelem(A, 2, 3)` turns each element into a block of 2 rows by 3 columns, a way to enlarge an image or a grid without interpolation.",
-    "pt": "Compare com `repmat`, que ladrilha o array inteiro: `repmat([1 2], 1, 2)` é `1 2 1 2` enquanto `repelem([1 2], 2)` é `1 1 2 2`. Em uma matriz, `repelem(A, 2, 3)` transforma cada elemento em um bloco de 2 linhas por 3 colunas, um jeito de ampliar uma imagem ou grade sem interpolação."
-   },
-   "examples": [
-    {
-     "code": "repelem([1 2 3], 2)\nrepelem([1 2 3], [1 2 3])\nrepelem([1 2; 3 4], 2, 2)"
-    }
-   ],
-   "see": [
-    "repmat",
-    "kron",
-    "cat",
-    "reshape"
-   ]
-  },
-  "repmat": {
-   "summary": {
-    "en": "Tiles copies of an array.",
-    "pt": "Cria cópias lado a lado de um array."
-   },
-   "syntax": [
-    {
-     "code": "B = repmat(A, n)",
-     "en": "n-by-n tiling of `A`.",
-     "pt": "Ladrilhamento n por n de `A`."
-    },
-    {
-     "code": "B = repmat(A, m, n, ...)",
-     "en": "`m` copies down, `n` across, and so on.",
-     "pt": "`m` cópias para baixo, `n` ao lado, e assim por diante."
-    },
-    {
-     "code": "B = repmat(A, sz)",
-     "en": "Repeat counts given as a vector.",
-     "pt": "Contagens de repetição dadas como vetor."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "m, n, ...",
-     "en": "How many copies along each dimension.",
-     "pt": "Quantas cópias ao longo de cada dimensão."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of size `size(A) .* [m n ...]`.",
-     "pt": "Array de tamanho `size(A) .* [m n ...]`."
-    }
-   ],
-   "description": {
-    "en": "The whole of `A` is copied as a block, so `repmat([1 2], 2, 2)` gives two rows of `1 2 1 2`. It works on text and cell arrays: `repmat('ab', 1, 3)` is `'ababab'` and `repmat({0}, 1, 3)` is a cell array of three zeros.\n\nSince implicit expansion handles most arithmetic cases, `repmat` is now mainly needed for building arrays rather than for matching sizes.",
-    "pt": "O `A` inteiro é copiado como bloco, então `repmat([1 2], 2, 2)` dá duas linhas `1 2 1 2`. Funciona com texto e cell arrays: `repmat('ab', 1, 3)` é `'ababab'` e `repmat({0}, 1, 3)` é um cell array de três zeros.\n\nComo a expansão implícita resolve a maioria dos casos aritméticos, `repmat` hoje serve sobretudo para construir arrays, não para igualar tamanhos."
-   },
-   "examples": [
-    {
-     "code": "repmat([1 2], 2, 2)\nrepmat('ab', 1, 3)\nrepmat({0}, 1, 3)"
-    }
-   ],
-   "see": [
-    "repelem",
-    "kron",
-    "cat",
-    "ones"
-   ]
-  },
-  "reshape": {
-   "summary": {
-    "en": "Changes the size of an array without changing its elements.",
-    "pt": "Muda o tamanho de um array sem alterar seus elementos."
-   },
-   "syntax": [
-    {
-     "code": "B = reshape(A, m, n, ...)",
-     "en": "Arranges the elements into the given dimensions.",
-     "pt": "Reorganiza os elementos nas dimensões indicadas."
-    },
-    {
-     "code": "B = reshape(A, [], n)",
-     "en": "Leaves one size empty and lets MATLAB compute it.",
-     "pt": "Deixa um tamanho vazio e deixa o MATLAB calculá-lo."
-    },
-    {
-     "code": "B = reshape(A, sz)",
-     "en": "Size given as a vector.",
-     "pt": "Tamanho dado como vetor."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "m, n, ...",
-     "en": "New dimension sizes; the product must equal `numel(A)`. At most one may be `[]`.",
-     "pt": "Novos tamanhos de dimensão; o produto deve ser igual a `numel(A)`. No máximo um pode ser `[]`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array with the same elements in column-major order.",
-     "pt": "Array com os mesmos elementos em ordem de coluna."
-    }
-   ],
-   "description": {
-    "en": "The elements are read down the columns of `A` and written down the columns of the new shape, so `reshape(1:6, 2, 3)` is `[1 3 5; 2 4 6]`, not `[1 2 3; 4 5 6]`. To fill row by row, reshape to the transposed size and transpose back.\n\nIf the number of elements would change the call fails with an error; the `[]` form is the easy way to avoid computing a size by hand.",
-    "pt": "Os elementos são lidos descendo as colunas de `A` e escritos descendo as colunas da nova forma, então `reshape(1:6, 2, 3)` é `[1 3 5; 2 4 6]`, não `[1 2 3; 4 5 6]`. Para preencher por linhas, faça o reshape para o tamanho transposto e transponha de volta.\n\nSe o número de elementos mudasse, a chamada falha com erro; a forma com `[]` evita calcular um tamanho à mão."
-   },
-   "examples": [
-    {
-     "code": "reshape(1:6, 2, 3)\nreshape(1:6, [], 2)\nreshape(1:6, 3, 2)'"
-    }
-   ],
-   "see": [
-    "permute",
-    "squeeze",
-    "resize",
-    "colon",
-    "size"
-   ]
-  },
-  "resize": {
-   "summary": {
-    "en": "Changes the size of an array by cropping or padding.",
-    "pt": "Muda o tamanho de um array cortando ou preenchendo."
-   },
-   "syntax": [
-    {
-     "code": "B = resize(A, sz)",
-     "en": "Gives `B` the size `sz`, cropping or padding with zeros at the end of each dimension.",
-     "pt": "Dá a `B` o tamanho `sz`, cortando ou preenchendo com zeros no fim de cada dimensão."
-    },
-    {
-     "code": "B = resize(A, len, 'Dimension', d)",
-     "en": "Resizes only dimension `d`.",
-     "pt": "Redimensiona apenas a dimensão `d`."
-    },
-    {
-     "code": "B = resize(___, Name, Value)",
-     "en": "Options: `'FillValue'`, `'Pattern'`, `'Side'`.",
-     "pt": "Opções: `'FillValue'`, `'Pattern'`, `'Side'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric array or cell array.",
-     "pt": "Array numérico ou cell array."
-    },
-    {
-     "name": "sz",
-     "en": "Target size vector, or a single length together with `'Dimension'`.",
-     "pt": "Vetor de tamanho alvo, ou um comprimento único junto com `'Dimension'`."
-    },
-    {
-     "name": "'FillValue'",
-     "en": "Value for new elements (default 0).",
-     "pt": "Valor dos novos elementos (padrão 0)."
-    },
-    {
-     "name": "'Pattern'",
-     "en": "`'constant'` (default), `'edge'`, `'circular'`, `'flip'` or `'reflect'`.",
-     "pt": "`'constant'` (padrão), `'edge'`, `'circular'`, `'flip'` ou `'reflect'`."
-    },
-    {
-     "name": "'Side'",
-     "en": "`'trailing'` (default), `'leading'` or `'both'`: where to add or remove elements.",
-     "pt": "`'trailing'` (padrão), `'leading'` ou `'both'`: onde acrescentar ou remover elementos."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of exactly the requested size.",
-     "pt": "Array exatamente do tamanho pedido."
-    }
-   ],
-   "description": {
-    "en": "When the target is larger than `A` the new elements are filled; when it is smaller, the extra elements are removed. It differs from `reshape`, which keeps all elements, and from `paddata`, which never shrinks. The original elements keep their positions when the side is `'trailing'`.",
-    "pt": "Quando o alvo é maior que `A`, os novos elementos são preenchidos; quando é menor, os elementos excedentes são removidos. Difere de `reshape`, que mantém todos os elementos, e de `paddata`, que nunca encolhe. Os elementos originais mantêm suas posições quando o lado é `'trailing'`."
-   },
-   "examples": [
-    {
-     "code": "resize([1 2; 3 4], [3 3])\nresize([1 2 3 4], 2, 'Side', 'leading')\nresize([1 2 3], 5, 'Pattern', 'circular')"
-    }
-   ],
-   "see": [
-    "paddata",
-    "reshape",
-    "padarray",
-    "imresize"
-   ]
-  },
-  "rot90": {
-   "summary": {
-    "en": "Rotates a matrix by multiples of 90 degrees.",
-    "pt": "Gira uma matriz em múltiplos de 90 graus."
-   },
-   "syntax": [
-    {
-     "code": "B = rot90(A)",
-     "en": "Rotates 90 degrees counterclockwise.",
-     "pt": "Gira 90 graus no sentido anti-horário."
-    },
-    {
-     "code": "B = rot90(A, k)",
-     "en": "Rotates `k*90` degrees; negative `k` turns clockwise.",
-     "pt": "Gira `k*90` graus; `k` negativo gira no sentido horário."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "k",
-     "en": "Integer number of quarter turns (default 1).",
-     "pt": "Número inteiro de quartos de volta (padrão 1)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Rotated array. For odd `k` its rows and columns are swapped.",
-     "pt": "Array girado. Para `k` ímpar, linhas e colunas são trocadas."
-    }
-   ],
-   "description": {
-    "en": "The first row of `A` ends up as the first column of `B`, read from bottom to top, after one counterclockwise turn. Only `k` modulo 4 matters. For a half turn use `rot90(A, 2)`, which equals `flip(flip(A, 1), 2)`.",
-    "pt": "A primeira linha de `A` vira a primeira coluna de `B`, lida de baixo para cima, depois de um giro anti-horário. Só importa `k` módulo 4. Para meia volta use `rot90(A, 2)`, que equivale a `flip(flip(A, 1), 2)`."
-   },
-   "examples": [
-    {
-     "code": "A = [1 2; 3 4];\nrot90(A)\nrot90(A, -1)\nrot90(A, 2)"
-    }
-   ],
-   "see": [
-    "flip",
-    "fliplr",
-    "flipud",
-    "permute",
-    "circshift"
-   ]
-  },
-  "shiftdim": {
-   "summary": {
-    "en": "Shifts the dimensions of an array, removing or adding leading singleton dimensions.",
-    "pt": "Desloca as dimensões de um array, removendo ou acrescentando dimensões iniciais de tamanho 1."
-   },
-   "syntax": [
-    {
-     "code": "B = shiftdim(A)",
-     "en": "Removes leading singleton dimensions.",
-     "pt": "Remove as dimensões iniciais de tamanho 1."
-    },
-    {
-     "code": "B = shiftdim(A, n)",
-     "en": "Shifts dimensions left by `n` (cyclically); a negative `n` adds `-n` leading singletons.",
-     "pt": "Desloca as dimensões `n` posições à esquerda (ciclicamente); um `n` negativo acrescenta `-n` dimensões iniciais de tamanho 1."
-    },
-    {
-     "code": "[B, ns] = shiftdim(A)",
-     "en": "Also returns the number of dimensions removed.",
-     "pt": "Também retorna o número de dimensões removidas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "n",
-     "en": "Number of positions to shift; integer.",
-     "pt": "Número de posições do deslocamento; inteiro."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array with the same elements and shifted dimensions.",
-     "pt": "Array com os mesmos elementos e dimensões deslocadas."
-    },
-    {
-     "name": "ns",
-     "en": "Number of leading singleton dimensions that were removed.",
-     "pt": "Número de dimensões iniciais de tamanho 1 removidas."
-    }
-   ],
-   "description": {
-    "en": "A common case is an array of size `1`-by-`1`-by-`k`, produced by slicing a 3-D array; `shiftdim` turns it into a plain `k`-by-`1` vector. With a positive `n` the first `n` dimensions move to the end, so an array of size `[2 3 4]` shifted by 1 has size `[3 4 2]`. This is the same as a `permute` by a rotated order.",
-    "pt": "Um caso comum é um array de tamanho `1` por `1` por `k`, produzido por fatiar um array 3-D; `shiftdim` o transforma em um vetor simples `k` por `1`. Com `n` positivo as primeiras `n` dimensões vão para o fim, então um array de tamanho `[2 3 4]` deslocado por 1 tem tamanho `[3 4 2]`. Equivale a um `permute` com uma ordem rotacionada."
-   },
-   "examples": [
-    {
-     "code": "x = ones(1, 1, 3);\nsize(shiftdim(x))\nsize(shiftdim(ones(2, 3, 4), 1))\nsize(shiftdim(ones(2, 3), -1))"
-    }
-   ],
-   "see": [
-    "permute",
-    "squeeze",
-    "reshape",
-    "ipermute"
-   ]
-  },
-  "size": {
-   "summary": {
-    "en": "Size of an array along each dimension.",
-    "pt": "Tamanho de um array ao longo de cada dimensão."
-   },
-   "syntax": [
-    {
-     "code": "sz = size(A)",
-     "en": "Row vector with the length of every dimension.",
-     "pt": "Vetor linha com o comprimento de cada dimensão."
-    },
-    {
-     "code": "n = size(A, dim)",
-     "en": "Length along dimension `dim`.",
-     "pt": "Comprimento ao longo da dimensão `dim`."
-    },
-    {
-     "code": "[r, c, ...] = size(A)",
-     "en": "One output per dimension; the last absorbs any remaining dimensions.",
-     "pt": "Uma saída por dimensão; a última absorve as dimensões restantes."
-    },
-    {
-     "code": "sz = size(A, [d1 d2])",
-     "en": "Lengths along several chosen dimensions.",
-     "pt": "Comprimentos ao longo de várias dimensões escolhidas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    },
-    {
-     "name": "dim",
-     "en": "Dimension number, or vector of dimension numbers.",
-     "pt": "Número de dimensão, ou vetor de números de dimensão."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "sz",
-     "en": "Row vector of sizes, at least two elements.",
-     "pt": "Vetor linha de tamanhos, com pelo menos dois elementos."
-    },
-    {
-     "name": "r, c, ...",
-     "en": "Sizes as separate scalars.",
-     "pt": "Tamanhos como escalares separados."
-    }
-   ],
-   "description": {
-    "en": "A scalar is `[1 1]`, the empty `[]` is `[0 0]`, and a character vector `'hello'` is `[1 5]`. Asking for a dimension past `ndims(A)` returns 1.\n\nWhen there are fewer outputs than dimensions, the last output holds the product of the rest: `[r, c] = size(ones(2, 3, 4))` gives `r = 2` and `c = 12`. Use `size(A, 1)` for rows and `size(A, 2)` for columns when you need only one number.",
-    "pt": "Um escalar é `[1 1]`, o vazio `[]` é `[0 0]`, e um vetor de caracteres `'hello'` é `[1 5]`. Pedir uma dimensão além de `ndims(A)` retorna 1.\n\nQuando há menos saídas que dimensões, a última saída guarda o produto das restantes: `[r, c] = size(ones(2, 3, 4))` dá `r = 2` e `c = 12`. Use `size(A, 1)` para linhas e `size(A, 2)` para colunas quando precisar de um número só."
-   },
-   "examples": [
-    {
-     "code": "A = ones(2, 3, 4);\nsize(A)\nsize(A, 2)\n[r, c] = size(A)"
-    }
-   ],
-   "see": [
-    "numel",
-    "length",
-    "ndims",
-    "reshape",
-    "isempty"
-   ]
-  },
-  "sort": {
-   "summary": {
-    "en": "Sorts the elements of an array in ascending or descending order.",
-    "pt": "Ordena os elementos de um array em ordem crescente ou decrescente."
-   },
-   "syntax": [
-    {
-     "code": "B = sort(A)",
-     "en": "Sorts ascending along the first non-singleton dimension.",
-     "pt": "Ordena em ordem crescente ao longo da primeira dimensão de tamanho diferente de 1."
-    },
-    {
-     "code": "B = sort(A, dim)",
-     "en": "Sorts along dimension `dim`.",
-     "pt": "Ordena ao longo da dimensão `dim`."
-    },
-    {
-     "code": "B = sort(___, direction)",
-     "en": "`'ascend'` (default) or `'descend'`.",
-     "pt": "`'ascend'` (padrão) ou `'descend'`."
-    },
-    {
-     "code": "[B, I] = sort(___)",
-     "en": "Also returns the indices that map `A` to `B`.",
-     "pt": "Também retorna os índices que levam `A` a `B`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric, logical, char, string, categorical or datetime array, or a cell array of character vectors.",
-     "pt": "Array numérico, lógico, char, string, categorical ou datetime, ou cell array de vetores de caracteres."
-    },
-    {
-     "name": "dim",
-     "en": "Dimension to sort along.",
-     "pt": "Dimensão ao longo da qual ordenar."
-    },
-    {
-     "name": "direction",
-     "en": "`'ascend'` or `'descend'`.",
-     "pt": "`'ascend'` ou `'descend'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Sorted array, the same size as `A`.",
-     "pt": "Array ordenado, do mesmo tamanho de `A`."
-    },
-    {
-     "name": "I",
-     "en": "Index array: `B = A(I)` for a vector.",
-     "pt": "Array de índices: `B = A(I)` para um vetor."
-    }
-   ],
-   "description": {
-    "en": "For a matrix, each column is sorted separately; use `sort(A, 2)` to sort each row. The sort is stable, so equal elements keep their original relative order, and `I` tells where each element came from. NaN values are placed last when ascending and first when descending. Complex numbers are ordered by magnitude, then by phase. Text is ordered by character code, so uppercase letters come before lowercase.\n\nTo sort whole rows by one column, use `sortrows`.",
-    "pt": "Em uma matriz, cada coluna é ordenada separadamente; use `sort(A, 2)` para ordenar cada linha. A ordenação é estável, então elementos iguais mantêm a ordem relativa original, e `I` diz de onde cada elemento veio. Valores NaN ficam por último em ordem crescente e primeiro em ordem decrescente. Números complexos são ordenados pelo módulo e depois pela fase. Texto é ordenado pelo código do caractere, então maiúsculas vêm antes de minúsculas.\n\nPara ordenar linhas inteiras por uma coluna, use `sortrows`."
-   },
-   "notes": {
-    "en": "The options `'MissingPlacement'` and `'ComparisonMethod'` are accepted but ignored.",
-    "pt": "As opções `'MissingPlacement'` e `'ComparisonMethod'` são aceitas mas ignoradas."
-   },
-   "examples": [
-    {
-     "code": "[s, i] = sort([3 1 2])\nsort([3 1 2], 'descend')\nsort([3 1; 2 5], 2)\nsort({'pear', 'apple', 'fig'})"
-    }
-   ],
-   "see": [
-    "sortrows",
-    "issorted",
-    "max",
-    "unique",
-    "cummax"
-   ]
   }
- }
 }

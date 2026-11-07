@@ -1,1030 +1,1030 @@
 {
- "functions": {
-  "ismembertol": {
-   "summary": {
-    "en": "Tests set membership of floating-point values within a tolerance.",
-    "pt": "Testa pertinência a um conjunto de valores de ponto flutuante dentro de uma tolerância."
-   },
-   "syntax": [
-    {
-     "code": "tf = ismembertol(a, S)",
-     "en": "Returns `true` for each element of `a` that is within the default tolerance of some element of `S`.",
-     "pt": "Retorna `true` para cada elemento de `a` que está dentro da tolerância padrão de algum elemento de `S`."
+  "functions": {
+    "ismembertol": {
+      "summary": {
+        "en": "Tests set membership of floating-point values within a tolerance.",
+        "pt": "Testa pertinência a um conjunto de valores de ponto flutuante dentro de uma tolerância."
+      },
+      "syntax": [
+        {
+          "code": "tf = ismembertol(a, S)",
+          "en": "Returns `true` for each element of `a` that is within the default tolerance of some element of `S`.",
+          "pt": "Retorna `true` para cada elemento de `a` que está dentro da tolerância padrão de algum elemento de `S`."
+        },
+        {
+          "code": "tf = ismembertol(a, S, tol)",
+          "en": "Uses the tolerance `tol`.",
+          "pt": "Usa a tolerância `tol`."
+        },
+        {
+          "code": "[tf, loc] = ismembertol(___)",
+          "en": "Also returns the index in `S` of a matching element.",
+          "pt": "Retorna também o índice em `S` de um elemento correspondente."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Values to look up.",
+          "pt": "Valores a procurar."
+        },
+        {
+          "name": "S",
+          "en": "Set of values to search in.",
+          "pt": "Conjunto de valores onde procurar."
+        },
+        {
+          "name": "tol",
+          "en": "Relative tolerance, scaled by the largest absolute value in `a` and `S`. Defaults are `1e-6` for single and `1e-12` for double.",
+          "pt": "Tolerância relativa, escalada pelo maior valor absoluto em `a` e `S`. Os padrões são `1e-6` para single e `1e-12` para double."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical array the size of `a`.",
+          "pt": "Array lógico com o tamanho de `a`."
+        },
+        {
+          "name": "loc",
+          "en": "Index into `S` for each match, `0` where there is none.",
+          "pt": "Índice em `S` para cada correspondência, `0` onde não há."
+        }
+      ],
+      "description": {
+        "en": "Two numbers are considered members of each other when `abs(u - v) <= tol * max(abs([a(:); S(:)]))`. Plain `ismember` demands exact equality, which fails for values such as `0.1 + 0.2` and `0.3` that differ in the last bits.\n\nThe tolerance is relative to the data, so it scales sensibly whether the numbers are tiny or huge.",
+        "pt": "Dois números são considerados membros um do outro quando `abs(u - v) <= tol * max(abs([a(:); S(:)]))`. O `ismember` comum exige igualdade exata, o que falha para valores como `0.1 + 0.2` e `0.3`, que diferem nos últimos bits.\n\nA tolerância é relativa aos dados, então se ajusta bem tanto para números minúsculos quanto enormes."
+      },
+      "examples": [
+        {
+          "code": "ismember(0.1 + 0.2, 0.3)\nismembertol(0.1 + 0.2, 0.3)\n[tf, loc] = ismembertol([0.1 + 0.2, 5], [0.3 1 5])"
+        }
+      ],
+      "see": [
+        "ismember",
+        "uniquetol",
+        "abs",
+        "eps"
+      ]
     },
-    {
-     "code": "tf = ismembertol(a, S, tol)",
-     "en": "Uses the tolerance `tol`.",
-     "pt": "Usa a tolerância `tol`."
+    "logical": {
+      "summary": {
+        "en": "Converts values to logical true or false.",
+        "pt": "Converte valores em lógico verdadeiro ou falso."
+      },
+      "syntax": [
+        {
+          "code": "L = logical(A)",
+          "en": "Returns an array of `true` where `A` is nonzero and `false` where it is zero.",
+          "pt": "Retorna um array com `true` onde `A` é diferente de zero e `false` onde é zero."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical array, or char. Must not contain `NaN`.",
+          "pt": "Array numérico, lógico ou de char. Não pode conter `NaN`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "L",
+          "en": "Logical array of the same size as `A`.",
+          "pt": "Array lógico do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "Any nonzero value, positive or negative, becomes `true`, so `logical([2 0 -1])` is `[1 0 1]`. The `logical` class occupies one byte per element and is what comparisons return. It is required for logical indexing: only `true`/`false` arrays select elements as a mask, while a numeric array of zeros and ones is read as subscripts.\n\n`NaN` has no truth value and raises an error.",
+        "pt": "Qualquer valor diferente de zero, positivo ou negativo, vira `true`, então `logical([2 0 -1])` é `[1 0 1]`. A classe `logical` ocupa um byte por elemento e é o que as comparações retornam. É necessária na indexação lógica: só arrays `true`/`false` selecionam elementos como máscara, enquanto um array numérico de zeros e uns é lido como subscritos.\n\n`NaN` não tem valor de verdade e gera erro."
+      },
+      "examples": [
+        {
+          "code": "m = logical([2 0 -1])\nx = [10 20 30];\nx(m)\nx(logical([0 1 1]))\nclass(m)"
+        }
+      ],
+      "see": [
+        "true",
+        "false",
+        "islogical",
+        "any",
+        "find"
+      ]
     },
-    {
-     "code": "[tf, loc] = ismembertol(___)",
-     "en": "Also returns the index in `S` of a matching element.",
-     "pt": "Retorna também o índice em `S` de um elemento correspondente."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a",
-     "en": "Values to look up.",
-     "pt": "Valores a procurar."
+    "mod": {
+      "summary": {
+        "en": "Remainder after division, with the sign of the divisor (modulo).",
+        "pt": "Resto da divisão, com o sinal do divisor (módulo)."
+      },
+      "syntax": [
+        {
+          "code": "r = mod(a, m)",
+          "en": "Returns `a - m .* floor(a ./ m)`.",
+          "pt": "Retorna `a - m .* floor(a ./ m)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Dividend: numeric array.",
+          "pt": "Dividendo: array numérico."
+        },
+        {
+          "name": "m",
+          "en": "Divisor: numeric array, compatible in size with `a`.",
+          "pt": "Divisor: array numérico, com tamanho compatível com `a`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Result with `0 <= r < m` for positive `m`, or `m < r <= 0` for negative `m`.",
+          "pt": "Resultado com `0 <= r < m` para `m` positivo, ou `m < r <= 0` para `m` negativo."
+        }
+      ],
+      "description": {
+        "en": "Because the quotient is rounded down, the result takes the sign of `m`: `mod(-7, 3)` is `2`, which fits clock arithmetic (`mod(h, 24)` always lands in `0..23`). Compare `rem`, which takes the sign of the dividend and gives `-1` here.\n\n`mod(a, 0)` returns `a`. Floating-point operands are allowed, so `mod(5.5, 2)` is `1.5`. For integer types the result keeps the class.",
+        "pt": "Como o quociente é arredondado para baixo, o resultado leva o sinal de `m`: `mod(-7, 3)` vale `2`, o que serve à aritmética de relógio (`mod(h, 24)` sempre cai em `0..23`). Compare com `rem`, que leva o sinal do dividendo e dá `-1` aqui.\n\n`mod(a, 0)` retorna `a`. Operandos de ponto flutuante são permitidos, então `mod(5.5, 2)` vale `1.5`. Para tipos inteiros o resultado mantém a classe."
+      },
+      "examples": [
+        {
+          "code": "mod(-7, 3)\nrem(-7, 3)\nmod(10, [3 4 -3])\nmod(5.5, 2)\nmod(5, 0)"
+        }
+      ],
+      "see": [
+        "rem",
+        "idivide",
+        "floor",
+        "gcd"
+      ]
     },
-    {
-     "name": "S",
-     "en": "Set of values to search in.",
-     "pt": "Conjunto de valores onde procurar."
+    "rem": {
+      "summary": {
+        "en": "Remainder after division, with the sign of the dividend.",
+        "pt": "Resto da divisão, com o sinal do dividendo."
+      },
+      "syntax": [
+        {
+          "code": "r = rem(a, b)",
+          "en": "Returns `a - b .* fix(a ./ b)`.",
+          "pt": "Retorna `a - b .* fix(a ./ b)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Dividend: numeric array.",
+          "pt": "Dividendo: array numérico."
+        },
+        {
+          "name": "b",
+          "en": "Divisor: numeric array, compatible in size with `a`.",
+          "pt": "Divisor: array numérico, com tamanho compatível com `a`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Remainder with the same sign as `a` and magnitude less than `abs(b)`.",
+          "pt": "Resto com o mesmo sinal de `a` e módulo menor que `abs(b)`."
+        }
+      ],
+      "description": {
+        "en": "The quotient is truncated toward zero, so the remainder follows the sign of `a`: `rem(-7, 3)` is `-1`, while `mod(-7, 3)` is `2`. For nonnegative operands the two functions agree.\n\n`rem(a, 0)` is `NaN` for floating-point input. Decimals work too: `rem(5.5, 2)` is `1.5`.",
+        "pt": "O quociente é truncado em direção a zero, então o resto acompanha o sinal de `a`: `rem(-7, 3)` vale `-1`, enquanto `mod(-7, 3)` vale `2`. Para operandos não negativos, as duas funções coincidem.\n\n`rem(a, 0)` é `NaN` para entrada de ponto flutuante. Decimais também funcionam: `rem(5.5, 2)` vale `1.5`."
+      },
+      "examples": [
+        {
+          "code": "rem(-7, 3)\nrem(7, -3)\nrem(10, [3 4])\nrem(5, 0)"
+        }
+      ],
+      "see": [
+        "mod",
+        "fix",
+        "idivide",
+        "gcd"
+      ]
     },
-    {
-     "name": "tol",
-     "en": "Relative tolerance, scaled by the largest absolute value in `a` and `S`. Defaults are `1e-6` for single and `1e-12` for double.",
-     "pt": "Tolerância relativa, escalada pelo maior valor absoluto em `a` e `S`. Os padrões são `1e-6` para single e `1e-12` para double."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical array the size of `a`.",
-     "pt": "Array lógico com o tamanho de `a`."
+    "movsum": {
+      "summary": {
+        "en": "Moving sum over a sliding window.",
+        "pt": "Soma móvel sobre uma janela deslizante."
+      },
+      "syntax": [
+        {
+          "code": "M = movsum(A, wlen)",
+          "en": "Sums over a window of `wlen` elements centered on each element.",
+          "pt": "Soma sobre uma janela de `wlen` elementos centrada em cada elemento."
+        },
+        {
+          "code": "M = movsum(A, [nb na])",
+          "en": "Uses a window of `nb` elements before and `na` after the current one.",
+          "pt": "Usa uma janela com `nb` elementos antes e `na` depois do elemento atual."
+        },
+        {
+          "code": "M = movsum(___, nanflag)",
+          "en": "Use `'omitnan'` to ignore NaN values, or `'includenan'` (default).",
+          "pt": "Use `'omitnan'` para ignorar valores NaN, ou `'includenan'` (padrão)."
+        },
+        {
+          "code": "M = movsum(___, 'Endpoints', ep)",
+          "en": "Chooses what to do at the edges, for example `'shrink'` (default), `'discard'` or `'fill'`.",
+          "pt": "Define o que fazer nas bordas, por exemplo `'shrink'` (padrão), `'discard'` ou `'fill'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric vector or matrix; a matrix is processed column by column.",
+          "pt": "Vetor ou matriz numérica; uma matriz é processada coluna a coluna."
+        },
+        {
+          "name": "wlen",
+          "en": "Window length. An odd value is centered; an even value includes one more element before the current one than after.",
+          "pt": "Comprimento da janela. Um valor ímpar fica centrado; um valor par inclui um elemento a mais antes do atual do que depois."
+        },
+        {
+          "name": "[nb na]",
+          "en": "Number of elements before and after the current one.",
+          "pt": "Número de elementos antes e depois do atual."
+        },
+        {
+          "name": "'Endpoints'",
+          "en": "Edge handling: `'shrink'`, `'discard'`, `'fill'` or a number.",
+          "pt": "Tratamento das bordas: `'shrink'`, `'discard'`, `'fill'` ou um número."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "M",
+          "en": "Array of window sums. Same size as `A` unless `'discard'` is used.",
+          "pt": "Array de somas por janela. Mesmo tamanho de `A`, exceto com `'discard'`."
+        }
+      ],
+      "description": {
+        "en": "With the default `'shrink'`, windows that stick out past the ends are cut to the available elements, so the first and last values sum fewer terms. `movsum(1:6, 3)` is `3 6 9 12 15 11`: the first window is `[1 2]` and the last is `[5 6]`.\n\nA moving sum is the basis of moving averages (`movmean` is the same sum divided by the window size) and of simple smoothing.",
+        "pt": "Com o padrão `'shrink'`, janelas que passam das pontas são reduzidas aos elementos disponíveis, de modo que o primeiro e o último valores somam menos termos. `movsum(1:6, 3)` vale `3 6 9 12 15 11`: a primeira janela é `[1 2]` e a última é `[5 6]`.\n\nA soma móvel é a base das médias móveis (`movmean` é a mesma soma dividida pelo tamanho da janela) e de suavizações simples."
+      },
+      "examples": [
+        {
+          "code": "movsum(1:6, 3)\nmovsum(1:6, [1 0])\nmovsum(1:6, 3, 'Endpoints', 'discard')\nmovsum([1 NaN 3 4], 3, 'omitnan')"
+        }
+      ],
+      "see": [
+        "movmean",
+        "cumsum",
+        "sum",
+        "conv",
+        "smoothdata"
+      ]
     },
-    {
-     "name": "loc",
-     "en": "Index into `S` for each match, `0` where there is none.",
-     "pt": "Índice em `S` para cada correspondência, `0` onde não há."
-    }
-   ],
-   "description": {
-    "en": "Two numbers are considered members of each other when `abs(u - v) <= tol * max(abs([a(:); S(:)]))`. Plain `ismember` demands exact equality, which fails for values such as `0.1 + 0.2` and `0.3` that differ in the last bits.\n\nThe tolerance is relative to the data, so it scales sensibly whether the numbers are tiny or huge.",
-    "pt": "Dois números são considerados membros um do outro quando `abs(u - v) <= tol * max(abs([a(:); S(:)]))`. O `ismember` comum exige igualdade exata, o que falha para valores como `0.1 + 0.2` e `0.3`, que diferem nos últimos bits.\n\nA tolerância é relativa aos dados, então se ajusta bem tanto para números minúsculos quanto enormes."
-   },
-   "examples": [
-    {
-     "code": "ismember(0.1 + 0.2, 0.3)\nismembertol(0.1 + 0.2, 0.3)\n[tf, loc] = ismembertol([0.1 + 0.2, 5], [0.3 1 5])"
-    }
-   ],
-   "see": [
-    "ismember",
-    "uniquetol",
-    "abs",
-    "eps"
-   ]
-  },
-  "logical": {
-   "summary": {
-    "en": "Converts values to logical true or false.",
-    "pt": "Converte valores em lógico verdadeiro ou falso."
-   },
-   "syntax": [
-    {
-     "code": "L = logical(A)",
-     "en": "Returns an array of `true` where `A` is nonzero and `false` where it is zero.",
-     "pt": "Retorna um array com `true` onde `A` é diferente de zero e `false` onde é zero."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical array, or char. Must not contain `NaN`.",
-     "pt": "Array numérico, lógico ou de char. Não pode conter `NaN`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "L",
-     "en": "Logical array of the same size as `A`.",
-     "pt": "Array lógico do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "Any nonzero value, positive or negative, becomes `true`, so `logical([2 0 -1])` is `[1 0 1]`. The `logical` class occupies one byte per element and is what comparisons return. It is required for logical indexing: only `true`/`false` arrays select elements as a mask, while a numeric array of zeros and ones is read as subscripts.\n\n`NaN` has no truth value and raises an error.",
-    "pt": "Qualquer valor diferente de zero, positivo ou negativo, vira `true`, então `logical([2 0 -1])` é `[1 0 1]`. A classe `logical` ocupa um byte por elemento e é o que as comparações retornam. É necessária na indexação lógica: só arrays `true`/`false` selecionam elementos como máscara, enquanto um array numérico de zeros e uns é lido como subscritos.\n\n`NaN` não tem valor de verdade e gera erro."
-   },
-   "examples": [
-    {
-     "code": "m = logical([2 0 -1])\nx = [10 20 30];\nx(m)\nx(logical([0 1 1]))\nclass(m)"
-    }
-   ],
-   "see": [
-    "true",
-    "false",
-    "islogical",
-    "any",
-    "find"
-   ]
-  },
-  "mod": {
-   "summary": {
-    "en": "Remainder after division, with the sign of the divisor (modulo).",
-    "pt": "Resto da divisão, com o sinal do divisor (módulo)."
-   },
-   "syntax": [
-    {
-     "code": "r = mod(a, m)",
-     "en": "Returns `a - m .* floor(a ./ m)`.",
-     "pt": "Retorna `a - m .* floor(a ./ m)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a",
-     "en": "Dividend: numeric array.",
-     "pt": "Dividendo: array numérico."
+    "pagetranspose": {
+      "summary": {
+        "en": "Transposes each page of an N-D array.",
+        "pt": "Transpõe cada página de um array N-D."
+      },
+      "syntax": [
+        {
+          "code": "B = pagetranspose(A)",
+          "en": "Swaps the first two dimensions of `A`, page by page.",
+          "pt": "Troca as duas primeiras dimensões de `A`, página por página."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array with 2 or more dimensions. Pages are the 2-D slices `A(:,:,k)`.",
+          "pt": "Array com 2 ou mais dimensões. As páginas são as fatias 2-D `A(:,:,k)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of size `[n m p ...]` for an input of size `[m n p ...]`, with no conjugation.",
+          "pt": "Array de tamanho `[n m p ...]` para uma entrada de tamanho `[m n p ...]`, sem conjugação."
+        }
+      ],
+      "description": {
+        "en": "A 3-D array can be viewed as a stack of matrices. `pagetranspose` transposes every matrix in the stack with one call, equivalent to `permute(A, [2 1 3:ndims(A)])`, without writing a loop over pages.\n\nFor conjugate transposes of complex pages use `pagectranspose`.",
+        "pt": "Um array 3-D pode ser visto como uma pilha de matrizes. `pagetranspose` transpõe todas as matrizes da pilha com uma chamada, equivalente a `permute(A, [2 1 3:ndims(A)])`, sem escrever um laço sobre as páginas.\n\nPara a transposta conjugada de páginas complexas use `pagectranspose`."
+      },
+      "examples": [
+        {
+          "code": "A = cat(3, [1 2 3; 4 5 6], [7 8 9; 10 11 12]);\nB = pagetranspose(A);\nsize(B)\nB(:, :, 2)"
+        }
+      ],
+      "see": [
+        "pagectranspose",
+        "pagemtimes",
+        "permute",
+        "transpose"
+      ]
     },
-    {
-     "name": "m",
-     "en": "Divisor: numeric array, compatible in size with `a`.",
-     "pt": "Divisor: array numérico, com tamanho compatível com `a`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "r",
-     "en": "Result with `0 <= r < m` for positive `m`, or `m < r <= 0` for negative `m`.",
-     "pt": "Resultado com `0 <= r < m` para `m` positivo, ou `m < r <= 0` para `m` negativo."
-    }
-   ],
-   "description": {
-    "en": "Because the quotient is rounded down, the result takes the sign of `m`: `mod(-7, 3)` is `2`, which fits clock arithmetic (`mod(h, 24)` always lands in `0..23`). Compare `rem`, which takes the sign of the dividend and gives `-1` here.\n\n`mod(a, 0)` returns `a`. Floating-point operands are allowed, so `mod(5.5, 2)` is `1.5`. For integer types the result keeps the class.",
-    "pt": "Como o quociente é arredondado para baixo, o resultado leva o sinal de `m`: `mod(-7, 3)` vale `2`, o que serve à aritmética de relógio (`mod(h, 24)` sempre cai em `0..23`). Compare com `rem`, que leva o sinal do dividendo e dá `-1` aqui.\n\n`mod(a, 0)` retorna `a`. Operandos de ponto flutuante são permitidos, então `mod(5.5, 2)` vale `1.5`. Para tipos inteiros o resultado mantém a classe."
-   },
-   "examples": [
-    {
-     "code": "mod(-7, 3)\nrem(-7, 3)\nmod(10, [3 4 -3])\nmod(5.5, 2)\nmod(5, 0)"
-    }
-   ],
-   "see": [
-    "rem",
-    "idivide",
-    "floor",
-    "gcd"
-   ]
-  },
-  "rem": {
-   "summary": {
-    "en": "Remainder after division, with the sign of the dividend.",
-    "pt": "Resto da divisão, com o sinal do dividendo."
-   },
-   "syntax": [
-    {
-     "code": "r = rem(a, b)",
-     "en": "Returns `a - b .* fix(a ./ b)`.",
-     "pt": "Retorna `a - b .* fix(a ./ b)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a",
-     "en": "Dividend: numeric array.",
-     "pt": "Dividendo: array numérico."
+    "pagectranspose": {
+      "summary": {
+        "en": "Conjugate-transposes each page of an N-D array.",
+        "pt": "Transpõe e conjuga cada página de um array N-D."
+      },
+      "syntax": [
+        {
+          "code": "B = pagectranspose(A)",
+          "en": "Swaps the first two dimensions of `A` page by page and conjugates the values.",
+          "pt": "Troca as duas primeiras dimensões de `A` página por página e conjuga os valores."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array with 2 or more dimensions.",
+          "pt": "Array com 2 ou mais dimensões."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array with the first two dimensions swapped and every element conjugated.",
+          "pt": "Array com as duas primeiras dimensões trocadas e todos os elementos conjugados."
+        }
+      ],
+      "description": {
+        "en": "It applies `A'` to each 2-D page `A(:,:,k)`. For real data it is identical to `pagetranspose`. For complex data the conjugation matters when pages are later multiplied, as in `pagemtimes(A, 'ctranspose', A, 'none')`.",
+        "pt": "Aplica `A'` a cada página 2-D `A(:,:,k)`. Para dados reais é idêntica a `pagetranspose`. Para dados complexos a conjugação importa quando as páginas são depois multiplicadas, como em `pagemtimes(A, 'ctranspose', A, 'none')`."
+      },
+      "examples": [
+        {
+          "code": "A = cat(3, [1+2i 3], [4 5-1i]);\nB = pagectranspose(A);\nsize(B)\nB(:, :, 1)"
+        }
+      ],
+      "see": [
+        "pagetranspose",
+        "pagemtimes",
+        "ctranspose",
+        "conj"
+      ]
     },
-    {
-     "name": "b",
-     "en": "Divisor: numeric array, compatible in size with `a`.",
-     "pt": "Divisor: array numérico, com tamanho compatível com `a`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "r",
-     "en": "Remainder with the same sign as `a` and magnitude less than `abs(b)`.",
-     "pt": "Resto com o mesmo sinal de `a` e módulo menor que `abs(b)`."
-    }
-   ],
-   "description": {
-    "en": "The quotient is truncated toward zero, so the remainder follows the sign of `a`: `rem(-7, 3)` is `-1`, while `mod(-7, 3)` is `2`. For nonnegative operands the two functions agree.\n\n`rem(a, 0)` is `NaN` for floating-point input. Decimals work too: `rem(5.5, 2)` is `1.5`.",
-    "pt": "O quociente é truncado em direção a zero, então o resto acompanha o sinal de `a`: `rem(-7, 3)` vale `-1`, enquanto `mod(-7, 3)` vale `2`. Para operandos não negativos, as duas funções coincidem.\n\n`rem(a, 0)` é `NaN` para entrada de ponto flutuante. Decimais também funcionam: `rem(5.5, 2)` vale `1.5`."
-   },
-   "examples": [
-    {
-     "code": "rem(-7, 3)\nrem(7, -3)\nrem(10, [3 4])\nrem(5, 0)"
-    }
-   ],
-   "see": [
-    "mod",
-    "fix",
-    "idivide",
-    "gcd"
-   ]
-  },
-  "movsum": {
-   "summary": {
-    "en": "Moving sum over a sliding window.",
-    "pt": "Soma móvel sobre uma janela deslizante."
-   },
-   "syntax": [
-    {
-     "code": "M = movsum(A, wlen)",
-     "en": "Sums over a window of `wlen` elements centered on each element.",
-     "pt": "Soma sobre uma janela de `wlen` elementos centrada em cada elemento."
+    "pagemtimes": {
+      "summary": {
+        "en": "Matrix multiplication page by page for N-D arrays.",
+        "pt": "Multiplicação de matrizes página a página para arrays N-D."
+      },
+      "syntax": [
+        {
+          "code": "C = pagemtimes(A, B)",
+          "en": "Multiplies each page `A(:,:,k)` by the matching page `B(:,:,k)`.",
+          "pt": "Multiplica cada página `A(:,:,k)` pela página correspondente `B(:,:,k)`."
+        },
+        {
+          "code": "C = pagemtimes(A, transpA, B, transpB)",
+          "en": "Transposes pages first. The flags are `'none'`, `'transpose'` or `'ctranspose'`.",
+          "pt": "Transpõe as páginas antes. Os modos são `'none'`, `'transpose'` ou `'ctranspose'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric arrays whose pages are conformable for matrix multiplication. Dimensions beyond the second must match or be 1.",
+          "pt": "Arrays numéricos cujas páginas são conformes para multiplicação de matrizes. As dimensões além da segunda devem coincidir ou valer 1."
+        },
+        {
+          "name": "transpA, transpB",
+          "en": "Operation applied to each page before multiplying.",
+          "pt": "Operação aplicada a cada página antes de multiplicar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array with `size(C,1) = size(A,1)` and `size(C,2) = size(B,2)`, holding the products page by page.",
+          "pt": "Array com `size(C,1) = size(A,1)` e `size(C,2) = size(B,2)`, com os produtos página a página."
+        }
+      ],
+      "description": {
+        "en": "It is a batched `A*B`: for 3-D input it equals a loop `C(:,:,k) = A(:,:,k) * B(:,:,k)`, but in one call. A page dimension of size 1 is reused for all pages, so a single matrix can multiply a whole stack.\n\nThis is useful for rotating many points with the same matrix, or computing many small products at once.",
+        "pt": "É um `A*B` em lote: para entrada 3-D equivale a um laço `C(:,:,k) = A(:,:,k) * B(:,:,k)`, mas em uma só chamada. Uma dimensão de página de tamanho 1 é reutilizada em todas as páginas, então uma única matriz pode multiplicar toda uma pilha.\n\nÉ útil para girar muitos pontos com a mesma matriz, ou calcular muitos produtos pequenos de uma vez."
+      },
+      "examples": [
+        {
+          "code": "A = cat(3, [1 2; 3 4], [0 1; 1 0]);\nB = cat(3, [1 0; 0 1], [2 3; 4 5]);\nC = pagemtimes(A, B);\nC(:, :, 1)\nC(:, :, 2)\nsize(pagemtimes(ones(2, 3, 4), ones(3, 5, 4)))"
+        }
+      ],
+      "see": [
+        "pagetranspose",
+        "pagemldivide",
+        "mtimes",
+        "tensorprod",
+        "*"
+      ]
     },
-    {
-     "code": "M = movsum(A, [nb na])",
-     "en": "Uses a window of `nb` elements before and `na` after the current one.",
-     "pt": "Usa uma janela com `nb` elementos antes e `na` depois do elemento atual."
+    "pagemldivide": {
+      "summary": {
+        "en": "Solves linear systems page by page, A \\ B for each page.",
+        "pt": "Resolve sistemas lineares página a página, A \\ B para cada página."
+      },
+      "syntax": [
+        {
+          "code": "X = pagemldivide(A, B)",
+          "en": "For each page, solves `A(:,:,k) * X(:,:,k) = B(:,:,k)`.",
+          "pt": "Para cada página, resolve `A(:,:,k) * X(:,:,k) = B(:,:,k)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of coefficient pages, each `m`-by-`n`.",
+          "pt": "Array de páginas de coeficientes, cada uma `m`-por-`n`."
+        },
+        {
+          "name": "B",
+          "en": "Right-hand sides, each page with `m` rows. Pages beyond the second dimension must match or be 1.",
+          "pt": "Lados direitos, cada página com `m` linhas. As páginas além da segunda dimensão devem coincidir ou valer 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Solutions, each page with `n` rows.",
+          "pt": "Soluções, cada página com `n` linhas."
+        }
+      ],
+      "description": {
+        "en": "It is the page-wise version of the `\\` operator, so `pagemldivide(A, B)` gives the same result as solving each page in a loop, including least squares for non-square pages. A size-1 page dimension is reused: a single matrix `A` can be applied to a stack of right-hand sides.\n\nFor the right-hand version `X*A = B` use `pagemrdivide`.",
+        "pt": "É a versão por páginas do operador `\\`, então `pagemldivide(A, B)` dá o mesmo resultado que resolver cada página em um laço, inclusive mínimos quadrados para páginas não quadradas. Uma dimensão de página de tamanho 1 é reutilizada: uma única matriz `A` pode ser aplicada a uma pilha de lados direitos.\n\nPara a versão à direita `X*A = B` use `pagemrdivide`."
+      },
+      "examples": [
+        {
+          "code": "A = cat(3, [2 0; 0 2], [1 0; 0 4]);\nB = cat(3, [2; 2], [4; 4]);\nX = pagemldivide(A, B);\nX(:, :, 1)\nX(:, :, 2)"
+        }
+      ],
+      "see": [
+        "pagemrdivide",
+        "pagemtimes",
+        "\\",
+        "mldivide"
+      ]
     },
-    {
-     "code": "M = movsum(___, nanflag)",
-     "en": "Use `'omitnan'` to ignore NaN values, or `'includenan'` (default).",
-     "pt": "Use `'omitnan'` para ignorar valores NaN, ou `'includenan'` (padrão)."
+    "pagemrdivide": {
+      "summary": {
+        "en": "Right division page by page, A / B for each page.",
+        "pt": "Divisão à direita página a página, A / B para cada página."
+      },
+      "syntax": [
+        {
+          "code": "X = pagemrdivide(A, B)",
+          "en": "For each page, solves `X(:,:,k) * B(:,:,k) = A(:,:,k)`.",
+          "pt": "Para cada página, resolve `X(:,:,k) * B(:,:,k) = A(:,:,k)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of right-hand side pages, each `m`-by-`n`.",
+          "pt": "Array de páginas do lado direito, cada uma `m`-por-`n`."
+        },
+        {
+          "name": "B",
+          "en": "Array of coefficient pages, each `p`-by-`n`.",
+          "pt": "Array de páginas de coeficientes, cada uma `p`-por-`n`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Solutions, each page `m`-by-`p`.",
+          "pt": "Soluções, cada página `m`-por-`p`."
+        }
+      ],
+      "description": {
+        "en": "It is the page-wise version of the `/` operator: each page of `A` is divided on the right by the matching page of `B`. A size-1 page dimension is reused for all pages.\n\nThe operation is the transpose of the left-division problem, `X = (B' \\ A')'`, applied to every page.",
+        "pt": "É a versão por páginas do operador `/`: cada página de `A` é dividida à direita pela página correspondente de `B`. Uma dimensão de página de tamanho 1 é reutilizada em todas as páginas.\n\nA operação é a transposta do problema de divisão à esquerda, `X = (B' \\ A')'`, aplicada a cada página."
+      },
+      "examples": [
+        {
+          "code": "B = cat(3, [2 0; 0 2], [1 0; 0 4]);\nA = cat(3, [2 2], [4 4]);\nX = pagemrdivide(A, B);\nX(:, :, 1)\nX(:, :, 2)"
+        }
+      ],
+      "see": [
+        "pagemldivide",
+        "pagemtimes",
+        "/",
+        "mrdivide"
+      ]
     },
-    {
-     "code": "M = movsum(___, 'Endpoints', ep)",
-     "en": "Chooses what to do at the edges, for example `'shrink'` (default), `'discard'` or `'fill'`.",
-     "pt": "Define o que fazer nas bordas, por exemplo `'shrink'` (padrão), `'discard'` ou `'fill'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric vector or matrix; a matrix is processed column by column.",
-     "pt": "Vetor ou matriz numérica; uma matriz é processada coluna a coluna."
+    "prod": {
+      "summary": {
+        "en": "Product of array elements.",
+        "pt": "Produto dos elementos de um array."
+      },
+      "syntax": [
+        {
+          "code": "P = prod(A)",
+          "en": "Multiplies along the first non-singleton dimension: down the columns of a matrix, or along a vector.",
+          "pt": "Multiplica ao longo da primeira dimensão não singleton: pelas colunas de uma matriz, ou ao longo de um vetor."
+        },
+        {
+          "code": "P = prod(A, dim)",
+          "en": "Multiplies along dimension `dim`.",
+          "pt": "Multiplica ao longo da dimensão `dim`."
+        },
+        {
+          "code": "P = prod(A, 'all')",
+          "en": "Multiplies every element and returns a scalar.",
+          "pt": "Multiplica todos os elementos e retorna um escalar."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical array.",
+          "pt": "Array numérico ou lógico."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to multiply along.",
+          "pt": "Dimensão ao longo da qual multiplicar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "P",
+          "en": "The products. An empty array gives `1`.",
+          "pt": "Os produtos. Um array vazio dá `1`."
+        }
+      ],
+      "description": {
+        "en": "`prod(1:n)` is `n!`. Large products can overflow quickly: with doubles the result becomes `Inf` past about `1.8e308`, and integer types saturate at their maximum, so `prod(int8([100 2]))` is `127`.\n\nFor a sum of logarithms that avoids overflow, use `exp(sum(log(x)))` when all elements are positive.",
+        "pt": "`prod(1:n)` é `n!`. Produtos grandes podem estourar rápido: com doubles o resultado vira `Inf` acima de cerca de `1.8e308`, e tipos inteiros saturam no máximo, então `prod(int8([100 2]))` vale `127`.\n\nPara evitar estouro, use a soma de logaritmos `exp(sum(log(x)))` quando todos os elementos forem positivos."
+      },
+      "examples": [
+        {
+          "code": "prod(1:5)\nA = [1 2; 3 4];\nprod(A)\nprod(A, 2)\nprod(A, 'all')\nprod([])"
+        }
+      ],
+      "see": [
+        "sum",
+        "cumprod",
+        "factorial",
+        "max"
+      ]
     },
-    {
-     "name": "wlen",
-     "en": "Window length. An odd value is centered; an even value includes one more element before the current one than after.",
-     "pt": "Comprimento da janela. Um valor ímpar fica centrado; um valor par inclui um elemento a mais antes do atual do que depois."
+    "Short-Circuit &&": {
+      "summary": {
+        "en": "Short-circuit logical AND: the second operand is evaluated only if needed.",
+        "pt": "E lógico com curto-circuito: o segundo operando só é avaliado se necessário."
+      },
+      "syntax": [
+        {
+          "code": "tf = a && b",
+          "en": "Returns `true` if both `a` and `b` are true. `b` is not evaluated when `a` is false.",
+          "pt": "Retorna `true` se `a` e `b` são verdadeiros. `b` não é avaliado quando `a` é falso."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Expressions that evaluate to logical scalars (or arrays treated as true only if all elements are nonzero).",
+          "pt": "Expressões que resultam em escalares lógicos (ou arrays tratados como verdadeiros apenas se todos os elementos forem diferentes de zero)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "Evaluation goes left to right and stops at the first false operand. This guards expressions that would fail otherwise: `k <= numel(x) && x(k) > 0` never indexes beyond the end because the second test is skipped when `k` is too large.\n\n`&&` is meant for `if` and `while` conditions. For element-wise combination of arrays use `&`. Precedence: `&&` binds more loosely than `|`, and `||` more loosely than `&&`.",
+        "pt": "A avaliação vai da esquerda para a direita e para no primeiro operando falso. Isso protege expressões que falhariam: `k <= numel(x) && x(k) > 0` nunca indexa além do fim, pois o segundo teste é ignorado quando `k` é grande demais.\n\n`&&` serve para condições de `if` e `while`. Para combinar arrays elemento a elemento use `&`. Precedência: `&&` liga mais fraco que `|`, e `||` mais fraco que `&&`."
+      },
+      "examples": [
+        {
+          "code": "x = [3 -1 5];\nk = 4;\nk <= numel(x) && x(k) > 0\nk = 2;\nk <= numel(x) && x(k) > 0"
+        }
+      ],
+      "see": [
+        "||",
+        "&",
+        "if",
+        "while",
+        "any"
+      ]
     },
-    {
-     "name": "[nb na]",
-     "en": "Number of elements before and after the current one.",
-     "pt": "Número de elementos antes e depois do atual."
+    "Short-Circuit ||": {
+      "summary": {
+        "en": "Short-circuit logical OR: the second operand is evaluated only if needed.",
+        "pt": "OU lógico com curto-circuito: o segundo operando só é avaliado se necessário."
+      },
+      "syntax": [
+        {
+          "code": "tf = a || b",
+          "en": "Returns `true` if `a` or `b` is true. `b` is not evaluated when `a` is true.",
+          "pt": "Retorna `true` se `a` ou `b` é verdadeiro. `b` não é avaliado quando `a` é verdadeiro."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Expressions that evaluate to logical scalars (or arrays treated as true only if all elements are nonzero).",
+          "pt": "Expressões que resultam em escalares lógicos (ou arrays tratados como verdadeiros apenas se todos os elementos forem diferentes de zero)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "Evaluation stops at the first true operand. A common pattern is a cheap test first and an expensive or risky one second: `isempty(x) || x(1) == 0` is safe on an empty `x`, since the indexing is skipped.\n\n`||` is meant for `if` and `while` conditions with scalar results. Use `|` for element-wise OR of arrays.",
+        "pt": "A avaliação para no primeiro operando verdadeiro. Um padrão comum é um teste barato primeiro e um caro ou arriscado depois: `isempty(x) || x(1) == 0` é seguro com `x` vazio, pois a indexação é ignorada.\n\n`||` serve para condições de `if` e `while` com resultados escalares. Use `|` para o OU elemento a elemento de arrays."
+      },
+      "examples": [
+        {
+          "code": "x = [];\nisempty(x) || x(1) == 0\nx = [0 1];\nisempty(x) || x(1) == 0\nx = 7;\nx < 0 || x > 5"
+        }
+      ],
+      "see": [
+        "&&",
+        "|",
+        "if",
+        "while",
+        "any"
+      ]
     },
-    {
-     "name": "'Endpoints'",
-     "en": "Edge handling: `'shrink'`, `'discard'`, `'fill'` or a number.",
-     "pt": "Tratamento das bordas: `'shrink'`, `'discard'`, `'fill'` ou um número."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "M",
-     "en": "Array of window sums. Same size as `A` unless `'discard'` is used.",
-     "pt": "Array de somas por janela. Mesmo tamanho de `A`, exceto com `'discard'`."
-    }
-   ],
-   "description": {
-    "en": "With the default `'shrink'`, windows that stick out past the ends are cut to the available elements, so the first and last values sum fewer terms. `movsum(1:6, 3)` is `3 6 9 12 15 11`: the first window is `[1 2]` and the last is `[5 6]`.\n\nA moving sum is the basis of moving averages (`movmean` is the same sum divided by the window size) and of simple smoothing.",
-    "pt": "Com o padrão `'shrink'`, janelas que passam das pontas são reduzidas aos elementos disponíveis, de modo que o primeiro e o último valores somam menos termos. `movsum(1:6, 3)` vale `3 6 9 12 15 11`: a primeira janela é `[1 2]` e a última é `[5 6]`.\n\nA soma móvel é a base das médias móveis (`movmean` é a mesma soma dividida pelo tamanho da janela) e de suavizações simples."
-   },
-   "examples": [
-    {
-     "code": "movsum(1:6, 3)\nmovsum(1:6, [1 0])\nmovsum(1:6, 3, 'Endpoints', 'discard')\nmovsum([1 NaN 3 4], 3, 'omitnan')"
-    }
-   ],
-   "see": [
-    "movmean",
-    "cumsum",
-    "sum",
-    "conv",
-    "smoothdata"
-   ]
-  },
-  "pagetranspose": {
-   "summary": {
-    "en": "Transposes each page of an N-D array.",
-    "pt": "Transpõe cada página de um array N-D."
-   },
-   "syntax": [
-    {
-     "code": "B = pagetranspose(A)",
-     "en": "Swaps the first two dimensions of `A`, page by page.",
-     "pt": "Troca as duas primeiras dimensões de `A`, página por página."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array with 2 or more dimensions. Pages are the 2-D slices `A(:,:,k)`.",
-     "pt": "Array com 2 ou mais dimensões. As páginas são as fatias 2-D `A(:,:,k)`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of size `[n m p ...]` for an input of size `[m n p ...]`, with no conjugation.",
-     "pt": "Array de tamanho `[n m p ...]` para uma entrada de tamanho `[m n p ...]`, sem conjugação."
-    }
-   ],
-   "description": {
-    "en": "A 3-D array can be viewed as a stack of matrices. `pagetranspose` transposes every matrix in the stack with one call, equivalent to `permute(A, [2 1 3:ndims(A)])`, without writing a loop over pages.\n\nFor conjugate transposes of complex pages use `pagectranspose`.",
-    "pt": "Um array 3-D pode ser visto como uma pilha de matrizes. `pagetranspose` transpõe todas as matrizes da pilha com uma chamada, equivalente a `permute(A, [2 1 3:ndims(A)])`, sem escrever um laço sobre as páginas.\n\nPara a transposta conjugada de páginas complexas use `pagectranspose`."
-   },
-   "examples": [
-    {
-     "code": "A = cat(3, [1 2 3; 4 5 6], [7 8 9; 10 11 12]);\nB = pagetranspose(A);\nsize(B)\nB(:, :, 2)"
-    }
-   ],
-   "see": [
-    "pagectranspose",
-    "pagemtimes",
-    "permute",
-    "transpose"
-   ]
-  },
-  "pagectranspose": {
-   "summary": {
-    "en": "Conjugate-transposes each page of an N-D array.",
-    "pt": "Transpõe e conjuga cada página de um array N-D."
-   },
-   "syntax": [
-    {
-     "code": "B = pagectranspose(A)",
-     "en": "Swaps the first two dimensions of `A` page by page and conjugates the values.",
-     "pt": "Troca as duas primeiras dimensões de `A` página por página e conjuga os valores."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array with 2 or more dimensions.",
-     "pt": "Array com 2 ou mais dimensões."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array with the first two dimensions swapped and every element conjugated.",
-     "pt": "Array com as duas primeiras dimensões trocadas e todos os elementos conjugados."
-    }
-   ],
-   "description": {
-    "en": "It applies `A'` to each 2-D page `A(:,:,k)`. For real data it is identical to `pagetranspose`. For complex data the conjugation matters when pages are later multiplied, as in `pagemtimes(A, 'ctranspose', A, 'none')`.",
-    "pt": "Aplica `A'` a cada página 2-D `A(:,:,k)`. Para dados reais é idêntica a `pagetranspose`. Para dados complexos a conjugação importa quando as páginas são depois multiplicadas, como em `pagemtimes(A, 'ctranspose', A, 'none')`."
-   },
-   "examples": [
-    {
-     "code": "A = cat(3, [1+2i 3], [4 5-1i]);\nB = pagectranspose(A);\nsize(B)\nB(:, :, 1)"
-    }
-   ],
-   "see": [
-    "pagetranspose",
-    "pagemtimes",
-    "ctranspose",
-    "conj"
-   ]
-  },
-  "pagemtimes": {
-   "summary": {
-    "en": "Matrix multiplication page by page for N-D arrays.",
-    "pt": "Multiplicação de matrizes página a página para arrays N-D."
-   },
-   "syntax": [
-    {
-     "code": "C = pagemtimes(A, B)",
-     "en": "Multiplies each page `A(:,:,k)` by the matching page `B(:,:,k)`.",
-     "pt": "Multiplica cada página `A(:,:,k)` pela página correspondente `B(:,:,k)`."
+    "swapbytes": {
+      "summary": {
+        "en": "Reverses the byte order of integers (endianness swap).",
+        "pt": "Inverte a ordem dos bytes de inteiros (troca de endianness)."
+      },
+      "syntax": [
+        {
+          "code": "Y = swapbytes(X)",
+          "en": "Reverses the bytes of each element of `X`.",
+          "pt": "Inverte os bytes de cada elemento de `X`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Array of an integer class (`int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`) or `single` or `double`.",
+          "pt": "Array de uma classe inteira (`int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`), ou `single` ou `double`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Array of the same class and size as `X` with swapped byte order.",
+          "pt": "Array da mesma classe e tamanho de `X` com a ordem dos bytes trocada."
+        }
+      ],
+      "description": {
+        "en": "Data from files or network protocols may be stored with the opposite byte order from the one your machine uses. `swapbytes` converts between little-endian and big-endian: `swapbytes(uint16(1))` is `256`, because the bytes `00 01` become `01 00`, and `swapbytes(uint32(1))` is `16777216`.\n\nApplying it twice gives back the original value. 8-bit types have one byte, so they are unchanged.",
+        "pt": "Dados vindos de arquivos ou protocolos de rede podem estar guardados com a ordem de bytes oposta à da máquina. `swapbytes` converte entre little-endian e big-endian: `swapbytes(uint16(1))` vale `256`, pois os bytes `00 01` viram `01 00`, e `swapbytes(uint32(1))` vale `16777216`. \n\nAplicá-la duas vezes devolve o valor original. Tipos de 8 bits têm um só byte e não mudam."
+      },
+      "examples": [
+        {
+          "code": "swapbytes(uint16(1))\nswapbytes(uint16([1 256]))\nswapbytes(uint32(1))"
+        }
+      ],
+      "see": [
+        "typecast",
+        "bitshift",
+        "fread",
+        "bitand"
+      ]
     },
-    {
-     "code": "C = pagemtimes(A, transpA, B, transpB)",
-     "en": "Transposes pages first. The flags are `'none'`, `'transpose'` or `'ctranspose'`.",
-     "pt": "Transpõe as páginas antes. Os modos são `'none'`, `'transpose'` ou `'ctranspose'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric arrays whose pages are conformable for matrix multiplication. Dimensions beyond the second must match or be 1.",
-     "pt": "Arrays numéricos cujas páginas são conformes para multiplicação de matrizes. As dimensões além da segunda devem coincidir ou valer 1."
+    "tensorprod": {
+      "summary": {
+        "en": "Tensor product and contraction of arrays along chosen dimensions.",
+        "pt": "Produto tensorial e contração de arrays ao longo de dimensões escolhidas."
+      },
+      "syntax": [
+        {
+          "code": "C = tensorprod(A, B)",
+          "en": "Outer (tensor) product: every element of `A` times every element of `B`. The result has `ndims(A) + ndims(B)` dimensions.",
+          "pt": "Produto externo (tensorial): cada elemento de `A` vezes cada elemento de `B`. O resultado tem `ndims(A) + ndims(B)` dimensões."
+        },
+        {
+          "code": "C = tensorprod(A, B, dimA, dimB)",
+          "en": "Contracts: multiplies and sums over dimension `dimA` of `A` and `dimB` of `B`.",
+          "pt": "Contrai: multiplica e soma sobre a dimensão `dimA` de `A` e `dimB` de `B`."
+        },
+        {
+          "code": "C = tensorprod(A, B, 'all')",
+          "en": "Contracts over all dimensions, which gives the full inner product as a scalar.",
+          "pt": "Contrai em todas as dimensões, o que dá o produto interno completo como escalar."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric arrays.",
+          "pt": "Arrays numéricos."
+        },
+        {
+          "name": "dimA, dimB",
+          "en": "Dimensions to contract. They must have equal sizes in `A` and `B` and the same number of entries.",
+          "pt": "Dimensões a contrair. Devem ter tamanhos iguais em `A` e `B` e o mesmo número de entradas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The result. The remaining dimensions of `A` come first, followed by those of `B`.",
+          "pt": "O resultado. As dimensões restantes de `A` vêm primeiro, seguidas das de `B`."
+        }
+      ],
+      "description": {
+        "en": "Without contraction dimensions, `tensorprod` builds the outer product, so two vectors of lengths 3 and 3 give a result of size `1x3x1x3`. Contracting one pair of dimensions generalizes matrix multiplication: `tensorprod(A, B, 2, 1)` equals `A*B` for matrices. Contracting `[1 2]` with `[1 2]` sums the products of all matching elements.\n\nIt is the general tool behind dot products, matrix products and Einstein-summation style contractions.",
+        "pt": "Sem dimensões de contração, `tensorprod` faz o produto externo, e dois vetores de comprimento 3 e 3 dão um resultado de tamanho `1x3x1x3`. Contrair um par de dimensões generaliza a multiplicação de matrizes: `tensorprod(A, B, 2, 1)` é igual a `A*B` para matrizes. Contrair `[1 2]` com `[1 2]` soma os produtos de todos os elementos correspondentes.\n\nÉ a ferramenta geral por trás de produtos escalares, produtos de matrizes e contrações no estilo da soma de Einstein."
+      },
+      "examples": [
+        {
+          "code": "a = [1 2 3];\nb = [4 5 6];\nsize(tensorprod(a, b))\ntensorprod(a, b, 'all')\nA = [1 2; 3 4];\ntensorprod(A, A, 2, 1)"
+        }
+      ],
+      "see": [
+        "pagemtimes",
+        "kron",
+        "dot",
+        "mtimes",
+        "permute"
+      ]
     },
-    {
-     "name": "transpA, transpB",
-     "en": "Operation applied to each page before multiplying.",
-     "pt": "Operação aplicada a cada página antes de multiplicar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array with `size(C,1) = size(A,1)` and `size(C,2) = size(B,2)`, holding the products page by page.",
-     "pt": "Array com `size(C,1) = size(A,1)` e `size(C,2) = size(B,2)`, com os produtos página a página."
-    }
-   ],
-   "description": {
-    "en": "It is a batched `A*B`: for 3-D input it equals a loop `C(:,:,k) = A(:,:,k) * B(:,:,k)`, but in one call. A page dimension of size 1 is reused for all pages, so a single matrix can multiply a whole stack.\n\nThis is useful for rotating many points with the same matrix, or computing many small products at once.",
-    "pt": "É um `A*B` em lote: para entrada 3-D equivale a um laço `C(:,:,k) = A(:,:,k) * B(:,:,k)`, mas em uma só chamada. Uma dimensão de página de tamanho 1 é reutilizada em todas as páginas, então uma única matriz pode multiplicar toda uma pilha.\n\nÉ útil para girar muitos pontos com a mesma matriz, ou calcular muitos produtos pequenos de uma vez."
-   },
-   "examples": [
-    {
-     "code": "A = cat(3, [1 2; 3 4], [0 1; 1 0]);\nB = cat(3, [1 0; 0 1], [2 3; 4 5]);\nC = pagemtimes(A, B);\nC(:, :, 1)\nC(:, :, 2)\nsize(pagemtimes(ones(2, 3, 4), ones(3, 5, 4)))"
-    }
-   ],
-   "see": [
-    "pagetranspose",
-    "pagemldivide",
-    "mtimes",
-    "tensorprod",
-    "*"
-   ]
-  },
-  "pagemldivide": {
-   "summary": {
-    "en": "Solves linear systems page by page, A \\ B for each page.",
-    "pt": "Resolve sistemas lineares página a página, A \\ B para cada página."
-   },
-   "syntax": [
-    {
-     "code": "X = pagemldivide(A, B)",
-     "en": "For each page, solves `A(:,:,k) * X(:,:,k) = B(:,:,k)`.",
-     "pt": "Para cada página, resolve `A(:,:,k) * X(:,:,k) = B(:,:,k)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of coefficient pages, each `m`-by-`n`.",
-     "pt": "Array de páginas de coeficientes, cada uma `m`-por-`n`."
+    "uminus": {
+      "summary": {
+        "en": "Unary minus: changes the sign of each element.",
+        "pt": "Menos unário: troca o sinal de cada elemento."
+      },
+      "syntax": [
+        {
+          "code": "B = uminus(A)",
+          "en": "Negates every element of `A`. Same as `-A`.",
+          "pt": "Nega todos os elementos de `A`. Equivale a `-A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size holding `-A`. Logical and char inputs give double.",
+          "pt": "Array do mesmo tamanho com `-A`. Entradas lógicas e char dão double."
+        }
+      ],
+      "description": {
+        "en": "For unsigned integers the result saturates at 0: `uminus(uint8(5))` is `0`. For signed integers the most negative value saturates: `-int8(-128)` is `127`. Complex values have both parts negated.\n\nThe function form is useful when a handle is needed, as in `cellfun(@uminus, c)`.",
+        "pt": "Para inteiros sem sinal o resultado satura em 0: `uminus(uint8(5))` vale `0`. Para inteiros com sinal, o valor mais negativo satura: `-int8(-128)` vale `127`. Em valores complexos as duas partes são negadas.\n\nA forma funcional é útil quando se precisa de um handle, como em `cellfun(@uminus, c)`."
+      },
+      "examples": [
+        {
+          "code": "uminus([1 -2 3])\numinus(uint8(5))\numinus(1 + 2i)\numinus(int8(-128))"
+        }
+      ],
+      "see": [
+        "-",
+        "uplus",
+        "minus",
+        "abs"
+      ]
     },
-    {
-     "name": "B",
-     "en": "Right-hand sides, each page with `m` rows. Pages beyond the second dimension must match or be 1.",
-     "pt": "Lados direitos, cada página com `m` linhas. As páginas além da segunda dimensão devem coincidir ou valer 1."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "X",
-     "en": "Solutions, each page with `n` rows.",
-     "pt": "Soluções, cada página com `n` linhas."
-    }
-   ],
-   "description": {
-    "en": "It is the page-wise version of the `\\` operator, so `pagemldivide(A, B)` gives the same result as solving each page in a loop, including least squares for non-square pages. A size-1 page dimension is reused: a single matrix `A` can be applied to a stack of right-hand sides.\n\nFor the right-hand version `X*A = B` use `pagemrdivide`.",
-    "pt": "É a versão por páginas do operador `\\`, então `pagemldivide(A, B)` dá o mesmo resultado que resolver cada página em um laço, inclusive mínimos quadrados para páginas não quadradas. Uma dimensão de página de tamanho 1 é reutilizada: uma única matriz `A` pode ser aplicada a uma pilha de lados direitos.\n\nPara a versão à direita `X*A = B` use `pagemrdivide`."
-   },
-   "examples": [
-    {
-     "code": "A = cat(3, [2 0; 0 2], [1 0; 0 4]);\nB = cat(3, [2; 2], [4; 4]);\nX = pagemldivide(A, B);\nX(:, :, 1)\nX(:, :, 2)"
-    }
-   ],
-   "see": [
-    "pagemrdivide",
-    "pagemtimes",
-    "\\",
-    "mldivide"
-   ]
-  },
-  "pagemrdivide": {
-   "summary": {
-    "en": "Right division page by page, A / B for each page.",
-    "pt": "Divisão à direita página a página, A / B para cada página."
-   },
-   "syntax": [
-    {
-     "code": "X = pagemrdivide(A, B)",
-     "en": "For each page, solves `X(:,:,k) * B(:,:,k) = A(:,:,k)`.",
-     "pt": "Para cada página, resolve `X(:,:,k) * B(:,:,k) = A(:,:,k)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of right-hand side pages, each `m`-by-`n`.",
-     "pt": "Array de páginas do lado direito, cada uma `m`-por-`n`."
+    "uplus": {
+      "summary": {
+        "en": "Unary plus: returns its argument, with the numeric conversion of an operation.",
+        "pt": "Mais unário: retorna o argumento, com a conversão numérica de uma operação."
+      },
+      "syntax": [
+        {
+          "code": "B = uplus(A)",
+          "en": "Returns `A`. Same as `+A`.",
+          "pt": "Retorna `A`. Equivale a `+A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Same values as `A`. Logical and char inputs are converted to double.",
+          "pt": "Os mesmos valores de `A`. Entradas lógicas e char são convertidas para double."
+        }
+      ],
+      "description": {
+        "en": "Numeric values pass through untouched. The one visible effect is the class conversion: `+true` is the double `1` and `+'a'` is `97`, which is a short way to turn logicals or characters into numbers.\n\nClasses can define `uplus` to give the unary `+` a meaning of their own.",
+        "pt": "Valores numéricos passam sem alteração. O único efeito visível é a conversão de classe: `+true` é o double `1` e `+'a'` é `97`, uma forma curta de transformar lógicos ou caracteres em números.\n\nClasses podem definir `uplus` para dar um significado próprio ao `+` unário."
+      },
+      "examples": [
+        {
+          "code": "uplus([1 -2 3])\nclass(+true)\n+'a'"
+        }
+      ],
+      "see": [
+        "+",
+        "uminus",
+        "double",
+        "plus"
+      ]
     },
-    {
-     "name": "B",
-     "en": "Array of coefficient pages, each `p`-by-`n`.",
-     "pt": "Array de páginas de coeficientes, cada uma `p`-por-`n`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "X",
-     "en": "Solutions, each page `m`-by-`p`.",
-     "pt": "Soluções, cada página `m`-por-`p`."
-    }
-   ],
-   "description": {
-    "en": "It is the page-wise version of the `/` operator: each page of `A` is divided on the right by the matching page of `B`. A size-1 page dimension is reused for all pages.\n\nThe operation is the transpose of the left-division problem, `X = (B' \\ A')'`, applied to every page.",
-    "pt": "É a versão por páginas do operador `/`: cada página de `A` é dividida à direita pela página correspondente de `B`. Uma dimensão de página de tamanho 1 é reutilizada em todas as páginas.\n\nA operação é a transposta do problema de divisão à esquerda, `X = (B' \\ A')'`, aplicada a cada página."
-   },
-   "examples": [
-    {
-     "code": "B = cat(3, [2 0; 0 2], [1 0; 0 4]);\nA = cat(3, [2 2], [4 4]);\nX = pagemrdivide(A, B);\nX(:, :, 1)\nX(:, :, 2)"
-    }
-   ],
-   "see": [
-    "pagemldivide",
-    "pagemtimes",
-    "/",
-    "mrdivide"
-   ]
-  },
-  "prod": {
-   "summary": {
-    "en": "Product of array elements.",
-    "pt": "Produto dos elementos de um array."
-   },
-   "syntax": [
-    {
-     "code": "P = prod(A)",
-     "en": "Multiplies along the first non-singleton dimension: down the columns of a matrix, or along a vector.",
-     "pt": "Multiplica ao longo da primeira dimensão não singleton: pelas colunas de uma matriz, ou ao longo de um vetor."
+    "uniquetol": {
+      "summary": {
+        "en": "Unique values of a floating-point array within a tolerance.",
+        "pt": "Valores únicos de um array de ponto flutuante dentro de uma tolerância."
+      },
+      "syntax": [
+        {
+          "code": "C = uniquetol(A)",
+          "en": "Returns the sorted unique values, treating values within the default tolerance as equal.",
+          "pt": "Retorna os valores únicos ordenados, tratando como iguais valores dentro da tolerância padrão."
+        },
+        {
+          "code": "C = uniquetol(A, tol)",
+          "en": "Uses the tolerance `tol`.",
+          "pt": "Usa a tolerância `tol`."
+        },
+        {
+          "code": "[C, ia, ic] = uniquetol(___)",
+          "en": "Also returns indices such that `C = A(ia)` and `A` is approximately `C(ic)`.",
+          "pt": "Retorna também índices tais que `C = A(ia)` e `A` é aproximadamente `C(ic)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric array.",
+          "pt": "Array numérico."
+        },
+        {
+          "name": "tol",
+          "en": "Relative tolerance, scaled by `max(abs(A(:)))`. Default `1e-12` for double and `1e-6` for single.",
+          "pt": "Tolerância relativa, escalada por `max(abs(A(:)))`. Padrão `1e-12` para double e `1e-6` para single."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Sorted vector of representatives, one per group of nearly equal values.",
+          "pt": "Vetor ordenado de representantes, um por grupo de valores quase iguais."
+        },
+        {
+          "name": "ia, ic",
+          "en": "Index vectors relating `A` and `C`.",
+          "pt": "Vetores de índices que relacionam `A` e `C`."
+        }
+      ],
+      "description": {
+        "en": "`unique` treats numbers as different if they differ in even the last bit, so results of floating-point computations such as `0.3 - 0.2` and `0.1` are kept apart. `uniquetol` groups values that differ by at most `tol * max(abs(A))` and keeps one value from each group.\n\nThe output is always sorted and returned as a column or a row following the shape of `A`.",
+        "pt": "`unique` considera números diferentes se diferirem até no último bit, então resultados de cálculos de ponto flutuante como `0.3 - 0.2` e `0.1` ficam separados. `uniquetol` agrupa valores que diferem em no máximo `tol * max(abs(A))` e mantém um de cada grupo.\n\nA saída é sempre ordenada e vem como coluna ou linha, conforme a forma de `A`."
+      },
+      "examples": [
+        {
+          "code": "a = [0.1 0.3-0.2 0.7 0.7000001];\nnumel(unique(a))\nuniquetol(a, 1e-5)"
+        }
+      ],
+      "see": [
+        "unique",
+        "ismembertol",
+        "sort",
+        "abs"
+      ]
     },
-    {
-     "code": "P = prod(A, dim)",
-     "en": "Multiplies along dimension `dim`.",
-     "pt": "Multiplica ao longo da dimensão `dim`."
+    "xor": {
+      "summary": {
+        "en": "Logical exclusive OR.",
+        "pt": "OU exclusivo lógico."
+      },
+      "syntax": [
+        {
+          "code": "C = xor(A, B)",
+          "en": "Returns `true` where exactly one of `A` and `B` is nonzero.",
+          "pt": "Retorna `true` onde exatamente um entre `A` e `B` é diferente de zero."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric or logical arrays with compatible sizes. Nonzero means true.",
+          "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis. Diferente de zero significa verdadeiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: true where the operands disagree.",
+          "pt": "Array lógico: verdadeiro onde os operandos discordam."
+        }
+      ],
+      "description": {
+        "en": "The truth table is: false for two equal inputs, true for two different ones. It is equivalent to `(A | B) & ~(A & B)`, or `logical(A) ~= logical(B)`.\n\nThere is no operator for it. For bit-level exclusive OR of integers use `bitxor`.",
+        "pt": "A tabela-verdade dá falso para duas entradas iguais e verdadeiro para duas diferentes. É equivalente a `(A | B) & ~(A & B)`, ou `logical(A) ~= logical(B)`.\n\nNão existe operador para isso. Para o OU exclusivo bit a bit de inteiros use `bitxor`."
+      },
+      "examples": [
+        {
+          "code": "xor([1 1 0 0], [1 0 1 0])\nxor(true, [true false])\nxor(5, 0)"
+        }
+      ],
+      "see": [
+        "and",
+        "or",
+        "not",
+        "bitxor",
+        "any"
+      ]
     },
-    {
-     "code": "P = prod(A, 'all')",
-     "en": "Multiplies every element and returns a scalar.",
-     "pt": "Multiplica todos os elementos e retorna um escalar."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical array.",
-     "pt": "Array numérico ou lógico."
+    "|": {
+      "summary": {
+        "en": "Element-wise logical OR operator.",
+        "pt": "Operador OU lógico elemento a elemento."
+      },
+      "syntax": [
+        {
+          "code": "C = A | B",
+          "en": "Returns `1` where `A` or `B` (or both) is nonzero. Same as `or(A, B)`.",
+          "pt": "Retorna `1` onde `A` ou `B` (ou ambos) é diferente de zero. Equivale a `or(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Logical or numeric arrays with compatible sizes. Any nonzero value counts as true.",
+          "pt": "Arrays lógicos ou numéricos com tamanhos compatíveis. Qualquer valor diferente de zero conta como verdadeiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array of the size given by implicit expansion.",
+          "pt": "Array lógico com o tamanho dado pela expansão implícita."
+        }
+      ],
+      "description": {
+        "en": "`|` combines conditions on whole arrays: `x(x < 0 | x > 10)` selects the entries outside the interval `[0, 10]`. Both operands are always evaluated.\n\nFor scalar conditions in `if` and `while`, `||` is usually preferable because it skips the second test when the first is already true.",
+        "pt": "`|` combina condições sobre arrays inteiros: `x(x < 0 | x > 10)` seleciona as entradas fora do intervalo `[0, 10]`. Os dois operandos são sempre avaliados.\n\nPara condições escalares em `if` e `while`, `||` costuma ser melhor, pois pula o segundo teste quando o primeiro já é verdadeiro."
+      },
+      "examples": [
+        {
+          "code": "x = [-5 3 8 15];\nx < 0 | x > 10\nx(x < 0 | x > 10)\n[1 0 0] | [0 0 2]"
+        }
+      ],
+      "see": [
+        "or",
+        "&",
+        "||",
+        "~",
+        "xor"
+      ]
     },
-    {
-     "name": "dim",
-     "en": "Dimension to multiply along.",
-     "pt": "Dimensão ao longo da qual multiplicar."
+    "~": {
+      "summary": {
+        "en": "Logical NOT operator.",
+        "pt": "Operador NÃO lógico."
+      },
+      "syntax": [
+        {
+          "code": "B = ~A",
+          "en": "Returns `1` where `A` is zero and `0` where it is nonzero. Same as `not(A)`.",
+          "pt": "Retorna `1` onde `A` é zero e `0` onde é diferente de zero. Equivale a `not(A)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical array.",
+          "pt": "Array numérico ou lógico."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Logical array of the same size as `A`.",
+          "pt": "Array lógico do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "`~` inverts a mask: if `m = x > 3` marks the large values, `x(~m)` selects the others. It binds more tightly than comparison and arithmetic operators, so `~x == y` means `(~x) == y`, which is rarely what is wanted; write `~(x == y)` or use `x ~= y`.\n\nThe same symbol, placed in an output list, as in `[~, i] = max(x)`, tells MATLAB to ignore that output.",
+        "pt": "`~` inverte uma máscara: se `m = x > 3` marca os valores grandes, `x(~m)` seleciona os demais. Liga mais forte que os operadores de comparação e aritméticos, então `~x == y` significa `(~x) == y`, o que raramente é o desejado; escreva `~(x == y)` ou use `x ~= y`.\n\nO mesmo símbolo, em uma lista de saídas como em `[~, i] = max(x)`, diz ao MATLAB para ignorar aquela saída."
+      },
+      "examples": [
+        {
+          "code": "x = [1 5 3 8];\nm = x > 3\n~m\nx(~m)\n[~, i] = max(x)"
+        }
+      ],
+      "see": [
+        "not",
+        "&",
+        "|",
+        "xor",
+        "~="
+      ]
     }
-   ],
-   "outputs": [
-    {
-     "name": "P",
-     "en": "The products. An empty array gives `1`.",
-     "pt": "Os produtos. Um array vazio dá `1`."
-    }
-   ],
-   "description": {
-    "en": "`prod(1:n)` is `n!`. Large products can overflow quickly: with doubles the result becomes `Inf` past about `1.8e308`, and integer types saturate at their maximum, so `prod(int8([100 2]))` is `127`.\n\nFor a sum of logarithms that avoids overflow, use `exp(sum(log(x)))` when all elements are positive.",
-    "pt": "`prod(1:n)` é `n!`. Produtos grandes podem estourar rápido: com doubles o resultado vira `Inf` acima de cerca de `1.8e308`, e tipos inteiros saturam no máximo, então `prod(int8([100 2]))` vale `127`.\n\nPara evitar estouro, use a soma de logaritmos `exp(sum(log(x)))` quando todos os elementos forem positivos."
-   },
-   "examples": [
-    {
-     "code": "prod(1:5)\nA = [1 2; 3 4];\nprod(A)\nprod(A, 2)\nprod(A, 'all')\nprod([])"
-    }
-   ],
-   "see": [
-    "sum",
-    "cumprod",
-    "factorial",
-    "max"
-   ]
-  },
-  "Short-Circuit &&": {
-   "summary": {
-    "en": "Short-circuit logical AND: the second operand is evaluated only if needed.",
-    "pt": "E lógico com curto-circuito: o segundo operando só é avaliado se necessário."
-   },
-   "syntax": [
-    {
-     "code": "tf = a && b",
-     "en": "Returns `true` if both `a` and `b` are true. `b` is not evaluated when `a` is false.",
-     "pt": "Retorna `true` se `a` e `b` são verdadeiros. `b` não é avaliado quando `a` é falso."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a, b",
-     "en": "Expressions that evaluate to logical scalars (or arrays treated as true only if all elements are nonzero).",
-     "pt": "Expressões que resultam em escalares lógicos (ou arrays tratados como verdadeiros apenas se todos os elementos forem diferentes de zero)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "Evaluation goes left to right and stops at the first false operand. This guards expressions that would fail otherwise: `k <= numel(x) && x(k) > 0` never indexes beyond the end because the second test is skipped when `k` is too large.\n\n`&&` is meant for `if` and `while` conditions. For element-wise combination of arrays use `&`. Precedence: `&&` binds more loosely than `|`, and `||` more loosely than `&&`.",
-    "pt": "A avaliação vai da esquerda para a direita e para no primeiro operando falso. Isso protege expressões que falhariam: `k <= numel(x) && x(k) > 0` nunca indexa além do fim, pois o segundo teste é ignorado quando `k` é grande demais.\n\n`&&` serve para condições de `if` e `while`. Para combinar arrays elemento a elemento use `&`. Precedência: `&&` liga mais fraco que `|`, e `||` mais fraco que `&&`."
-   },
-   "examples": [
-    {
-     "code": "x = [3 -1 5];\nk = 4;\nk <= numel(x) && x(k) > 0\nk = 2;\nk <= numel(x) && x(k) > 0"
-    }
-   ],
-   "see": [
-    "||",
-    "&",
-    "if",
-    "while",
-    "any"
-   ]
-  },
-  "Short-Circuit ||": {
-   "summary": {
-    "en": "Short-circuit logical OR: the second operand is evaluated only if needed.",
-    "pt": "OU lógico com curto-circuito: o segundo operando só é avaliado se necessário."
-   },
-   "syntax": [
-    {
-     "code": "tf = a || b",
-     "en": "Returns `true` if `a` or `b` is true. `b` is not evaluated when `a` is true.",
-     "pt": "Retorna `true` se `a` ou `b` é verdadeiro. `b` não é avaliado quando `a` é verdadeiro."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a, b",
-     "en": "Expressions that evaluate to logical scalars (or arrays treated as true only if all elements are nonzero).",
-     "pt": "Expressões que resultam em escalares lógicos (ou arrays tratados como verdadeiros apenas se todos os elementos forem diferentes de zero)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "Evaluation stops at the first true operand. A common pattern is a cheap test first and an expensive or risky one second: `isempty(x) || x(1) == 0` is safe on an empty `x`, since the indexing is skipped.\n\n`||` is meant for `if` and `while` conditions with scalar results. Use `|` for element-wise OR of arrays.",
-    "pt": "A avaliação para no primeiro operando verdadeiro. Um padrão comum é um teste barato primeiro e um caro ou arriscado depois: `isempty(x) || x(1) == 0` é seguro com `x` vazio, pois a indexação é ignorada.\n\n`||` serve para condições de `if` e `while` com resultados escalares. Use `|` para o OU elemento a elemento de arrays."
-   },
-   "examples": [
-    {
-     "code": "x = [];\nisempty(x) || x(1) == 0\nx = [0 1];\nisempty(x) || x(1) == 0\nx = 7;\nx < 0 || x > 5"
-    }
-   ],
-   "see": [
-    "&&",
-    "|",
-    "if",
-    "while",
-    "any"
-   ]
-  },
-  "swapbytes": {
-   "summary": {
-    "en": "Reverses the byte order of integers (endianness swap).",
-    "pt": "Inverte a ordem dos bytes de inteiros (troca de endianness)."
-   },
-   "syntax": [
-    {
-     "code": "Y = swapbytes(X)",
-     "en": "Reverses the bytes of each element of `X`.",
-     "pt": "Inverte os bytes de cada elemento de `X`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Array of an integer class (`int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`) or `single` or `double`.",
-     "pt": "Array de uma classe inteira (`int16`, `uint16`, `int32`, `uint32`, `int64`, `uint64`), ou `single` ou `double`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Array of the same class and size as `X` with swapped byte order.",
-     "pt": "Array da mesma classe e tamanho de `X` com a ordem dos bytes trocada."
-    }
-   ],
-   "description": {
-    "en": "Data from files or network protocols may be stored with the opposite byte order from the one your machine uses. `swapbytes` converts between little-endian and big-endian: `swapbytes(uint16(1))` is `256`, because the bytes `00 01` become `01 00`, and `swapbytes(uint32(1))` is `16777216`.\n\nApplying it twice gives back the original value. 8-bit types have one byte, so they are unchanged.",
-    "pt": "Dados vindos de arquivos ou protocolos de rede podem estar guardados com a ordem de bytes oposta à da máquina. `swapbytes` converte entre little-endian e big-endian: `swapbytes(uint16(1))` vale `256`, pois os bytes `00 01` viram `01 00`, e `swapbytes(uint32(1))` vale `16777216`. \n\nAplicá-la duas vezes devolve o valor original. Tipos de 8 bits têm um só byte e não mudam."
-   },
-   "examples": [
-    {
-     "code": "swapbytes(uint16(1))\nswapbytes(uint16([1 256]))\nswapbytes(uint32(1))"
-    }
-   ],
-   "see": [
-    "typecast",
-    "bitshift",
-    "fread",
-    "bitand"
-   ]
-  },
-  "tensorprod": {
-   "summary": {
-    "en": "Tensor product and contraction of arrays along chosen dimensions.",
-    "pt": "Produto tensorial e contração de arrays ao longo de dimensões escolhidas."
-   },
-   "syntax": [
-    {
-     "code": "C = tensorprod(A, B)",
-     "en": "Outer (tensor) product: every element of `A` times every element of `B`. The result has `ndims(A) + ndims(B)` dimensions.",
-     "pt": "Produto externo (tensorial): cada elemento de `A` vezes cada elemento de `B`. O resultado tem `ndims(A) + ndims(B)` dimensões."
-    },
-    {
-     "code": "C = tensorprod(A, B, dimA, dimB)",
-     "en": "Contracts: multiplies and sums over dimension `dimA` of `A` and `dimB` of `B`.",
-     "pt": "Contrai: multiplica e soma sobre a dimensão `dimA` de `A` e `dimB` de `B`."
-    },
-    {
-     "code": "C = tensorprod(A, B, 'all')",
-     "en": "Contracts over all dimensions, which gives the full inner product as a scalar.",
-     "pt": "Contrai em todas as dimensões, o que dá o produto interno completo como escalar."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric arrays.",
-     "pt": "Arrays numéricos."
-    },
-    {
-     "name": "dimA, dimB",
-     "en": "Dimensions to contract. They must have equal sizes in `A` and `B` and the same number of entries.",
-     "pt": "Dimensões a contrair. Devem ter tamanhos iguais em `A` e `B` e o mesmo número de entradas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The result. The remaining dimensions of `A` come first, followed by those of `B`.",
-     "pt": "O resultado. As dimensões restantes de `A` vêm primeiro, seguidas das de `B`."
-    }
-   ],
-   "description": {
-    "en": "Without contraction dimensions, `tensorprod` builds the outer product, so two vectors of lengths 3 and 3 give a result of size `1x3x1x3`. Contracting one pair of dimensions generalizes matrix multiplication: `tensorprod(A, B, 2, 1)` equals `A*B` for matrices. Contracting `[1 2]` with `[1 2]` sums the products of all matching elements.\n\nIt is the general tool behind dot products, matrix products and Einstein-summation style contractions.",
-    "pt": "Sem dimensões de contração, `tensorprod` faz o produto externo, e dois vetores de comprimento 3 e 3 dão um resultado de tamanho `1x3x1x3`. Contrair um par de dimensões generaliza a multiplicação de matrizes: `tensorprod(A, B, 2, 1)` é igual a `A*B` para matrizes. Contrair `[1 2]` com `[1 2]` soma os produtos de todos os elementos correspondentes.\n\nÉ a ferramenta geral por trás de produtos escalares, produtos de matrizes e contrações no estilo da soma de Einstein."
-   },
-   "examples": [
-    {
-     "code": "a = [1 2 3];\nb = [4 5 6];\nsize(tensorprod(a, b))\ntensorprod(a, b, 'all')\nA = [1 2; 3 4];\ntensorprod(A, A, 2, 1)"
-    }
-   ],
-   "see": [
-    "pagemtimes",
-    "kron",
-    "dot",
-    "mtimes",
-    "permute"
-   ]
-  },
-  "uminus": {
-   "summary": {
-    "en": "Unary minus: changes the sign of each element.",
-    "pt": "Menos unário: troca o sinal de cada elemento."
-   },
-   "syntax": [
-    {
-     "code": "B = uminus(A)",
-     "en": "Negates every element of `A`. Same as `-A`.",
-     "pt": "Nega todos os elementos de `A`. Equivale a `-A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size holding `-A`. Logical and char inputs give double.",
-     "pt": "Array do mesmo tamanho com `-A`. Entradas lógicas e char dão double."
-    }
-   ],
-   "description": {
-    "en": "For unsigned integers the result saturates at 0: `uminus(uint8(5))` is `0`. For signed integers the most negative value saturates: `-int8(-128)` is `127`. Complex values have both parts negated.\n\nThe function form is useful when a handle is needed, as in `cellfun(@uminus, c)`.",
-    "pt": "Para inteiros sem sinal o resultado satura em 0: `uminus(uint8(5))` vale `0`. Para inteiros com sinal, o valor mais negativo satura: `-int8(-128)` vale `127`. Em valores complexos as duas partes são negadas.\n\nA forma funcional é útil quando se precisa de um handle, como em `cellfun(@uminus, c)`."
-   },
-   "examples": [
-    {
-     "code": "uminus([1 -2 3])\numinus(uint8(5))\numinus(1 + 2i)\numinus(int8(-128))"
-    }
-   ],
-   "see": [
-    "-",
-    "uplus",
-    "minus",
-    "abs"
-   ]
-  },
-  "uplus": {
-   "summary": {
-    "en": "Unary plus: returns its argument, with the numeric conversion of an operation.",
-    "pt": "Mais unário: retorna o argumento, com a conversão numérica de uma operação."
-   },
-   "syntax": [
-    {
-     "code": "B = uplus(A)",
-     "en": "Returns `A`. Same as `+A`.",
-     "pt": "Retorna `A`. Equivale a `+A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Same values as `A`. Logical and char inputs are converted to double.",
-     "pt": "Os mesmos valores de `A`. Entradas lógicas e char são convertidas para double."
-    }
-   ],
-   "description": {
-    "en": "Numeric values pass through untouched. The one visible effect is the class conversion: `+true` is the double `1` and `+'a'` is `97`, which is a short way to turn logicals or characters into numbers.\n\nClasses can define `uplus` to give the unary `+` a meaning of their own.",
-    "pt": "Valores numéricos passam sem alteração. O único efeito visível é a conversão de classe: `+true` é o double `1` e `+'a'` é `97`, uma forma curta de transformar lógicos ou caracteres em números.\n\nClasses podem definir `uplus` para dar um significado próprio ao `+` unário."
-   },
-   "examples": [
-    {
-     "code": "uplus([1 -2 3])\nclass(+true)\n+'a'"
-    }
-   ],
-   "see": [
-    "+",
-    "uminus",
-    "double",
-    "plus"
-   ]
-  },
-  "uniquetol": {
-   "summary": {
-    "en": "Unique values of a floating-point array within a tolerance.",
-    "pt": "Valores únicos de um array de ponto flutuante dentro de uma tolerância."
-   },
-   "syntax": [
-    {
-     "code": "C = uniquetol(A)",
-     "en": "Returns the sorted unique values, treating values within the default tolerance as equal.",
-     "pt": "Retorna os valores únicos ordenados, tratando como iguais valores dentro da tolerância padrão."
-    },
-    {
-     "code": "C = uniquetol(A, tol)",
-     "en": "Uses the tolerance `tol`.",
-     "pt": "Usa a tolerância `tol`."
-    },
-    {
-     "code": "[C, ia, ic] = uniquetol(___)",
-     "en": "Also returns indices such that `C = A(ia)` and `A` is approximately `C(ic)`.",
-     "pt": "Retorna também índices tais que `C = A(ia)` e `A` é aproximadamente `C(ic)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric array.",
-     "pt": "Array numérico."
-    },
-    {
-     "name": "tol",
-     "en": "Relative tolerance, scaled by `max(abs(A(:)))`. Default `1e-12` for double and `1e-6` for single.",
-     "pt": "Tolerância relativa, escalada por `max(abs(A(:)))`. Padrão `1e-12` para double e `1e-6` para single."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Sorted vector of representatives, one per group of nearly equal values.",
-     "pt": "Vetor ordenado de representantes, um por grupo de valores quase iguais."
-    },
-    {
-     "name": "ia, ic",
-     "en": "Index vectors relating `A` and `C`.",
-     "pt": "Vetores de índices que relacionam `A` e `C`."
-    }
-   ],
-   "description": {
-    "en": "`unique` treats numbers as different if they differ in even the last bit, so results of floating-point computations such as `0.3 - 0.2` and `0.1` are kept apart. `uniquetol` groups values that differ by at most `tol * max(abs(A))` and keeps one value from each group.\n\nThe output is always sorted and returned as a column or a row following the shape of `A`.",
-    "pt": "`unique` considera números diferentes se diferirem até no último bit, então resultados de cálculos de ponto flutuante como `0.3 - 0.2` e `0.1` ficam separados. `uniquetol` agrupa valores que diferem em no máximo `tol * max(abs(A))` e mantém um de cada grupo.\n\nA saída é sempre ordenada e vem como coluna ou linha, conforme a forma de `A`."
-   },
-   "examples": [
-    {
-     "code": "a = [0.1 0.3-0.2 0.7 0.7000001];\nnumel(unique(a))\nuniquetol(a, 1e-5)"
-    }
-   ],
-   "see": [
-    "unique",
-    "ismembertol",
-    "sort",
-    "abs"
-   ]
-  },
-  "xor": {
-   "summary": {
-    "en": "Logical exclusive OR.",
-    "pt": "OU exclusivo lógico."
-   },
-   "syntax": [
-    {
-     "code": "C = xor(A, B)",
-     "en": "Returns `true` where exactly one of `A` and `B` is nonzero.",
-     "pt": "Retorna `true` onde exatamente um entre `A` e `B` é diferente de zero."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric or logical arrays with compatible sizes. Nonzero means true.",
-     "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis. Diferente de zero significa verdadeiro."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: true where the operands disagree.",
-     "pt": "Array lógico: verdadeiro onde os operandos discordam."
-    }
-   ],
-   "description": {
-    "en": "The truth table is: false for two equal inputs, true for two different ones. It is equivalent to `(A | B) & ~(A & B)`, or `logical(A) ~= logical(B)`.\n\nThere is no operator for it. For bit-level exclusive OR of integers use `bitxor`.",
-    "pt": "A tabela-verdade dá falso para duas entradas iguais e verdadeiro para duas diferentes. É equivalente a `(A | B) & ~(A & B)`, ou `logical(A) ~= logical(B)`.\n\nNão existe operador para isso. Para o OU exclusivo bit a bit de inteiros use `bitxor`."
-   },
-   "examples": [
-    {
-     "code": "xor([1 1 0 0], [1 0 1 0])\nxor(true, [true false])\nxor(5, 0)"
-    }
-   ],
-   "see": [
-    "and",
-    "or",
-    "not",
-    "bitxor",
-    "any"
-   ]
-  },
-  "|": {
-   "summary": {
-    "en": "Element-wise logical OR operator.",
-    "pt": "Operador OU lógico elemento a elemento."
-   },
-   "syntax": [
-    {
-     "code": "C = A | B",
-     "en": "Returns `1` where `A` or `B` (or both) is nonzero. Same as `or(A, B)`.",
-     "pt": "Retorna `1` onde `A` ou `B` (ou ambos) é diferente de zero. Equivale a `or(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Logical or numeric arrays with compatible sizes. Any nonzero value counts as true.",
-     "pt": "Arrays lógicos ou numéricos com tamanhos compatíveis. Qualquer valor diferente de zero conta como verdadeiro."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array of the size given by implicit expansion.",
-     "pt": "Array lógico com o tamanho dado pela expansão implícita."
-    }
-   ],
-   "description": {
-    "en": "`|` combines conditions on whole arrays: `x(x < 0 | x > 10)` selects the entries outside the interval `[0, 10]`. Both operands are always evaluated.\n\nFor scalar conditions in `if` and `while`, `||` is usually preferable because it skips the second test when the first is already true.",
-    "pt": "`|` combina condições sobre arrays inteiros: `x(x < 0 | x > 10)` seleciona as entradas fora do intervalo `[0, 10]`. Os dois operandos são sempre avaliados.\n\nPara condições escalares em `if` e `while`, `||` costuma ser melhor, pois pula o segundo teste quando o primeiro já é verdadeiro."
-   },
-   "examples": [
-    {
-     "code": "x = [-5 3 8 15];\nx < 0 | x > 10\nx(x < 0 | x > 10)\n[1 0 0] | [0 0 2]"
-    }
-   ],
-   "see": [
-    "or",
-    "&",
-    "||",
-    "~",
-    "xor"
-   ]
-  },
-  "~": {
-   "summary": {
-    "en": "Logical NOT operator.",
-    "pt": "Operador NÃO lógico."
-   },
-   "syntax": [
-    {
-     "code": "B = ~A",
-     "en": "Returns `1` where `A` is zero and `0` where it is nonzero. Same as `not(A)`.",
-     "pt": "Retorna `1` onde `A` é zero e `0` onde é diferente de zero. Equivale a `not(A)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical array.",
-     "pt": "Array numérico ou lógico."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Logical array of the same size as `A`.",
-     "pt": "Array lógico do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "`~` inverts a mask: if `m = x > 3` marks the large values, `x(~m)` selects the others. It binds more tightly than comparison and arithmetic operators, so `~x == y` means `(~x) == y`, which is rarely what is wanted; write `~(x == y)` or use `x ~= y`.\n\nThe same symbol, placed in an output list, as in `[~, i] = max(x)`, tells MATLAB to ignore that output.",
-    "pt": "`~` inverte uma máscara: se `m = x > 3` marca os valores grandes, `x(~m)` seleciona os demais. Liga mais forte que os operadores de comparação e aritméticos, então `~x == y` significa `(~x) == y`, o que raramente é o desejado; escreva `~(x == y)` ou use `x ~= y`.\n\nO mesmo símbolo, em uma lista de saídas como em `[~, i] = max(x)`, diz ao MATLAB para ignorar aquela saída."
-   },
-   "examples": [
-    {
-     "code": "x = [1 5 3 8];\nm = x > 3\n~m\nx(~m)\n[~, i] = max(x)"
-    }
-   ],
-   "see": [
-    "not",
-    "&",
-    "|",
-    "xor",
-    "~="
-   ]
   }
- }
 }

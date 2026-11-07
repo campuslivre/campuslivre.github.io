@@ -1,1304 +1,1292 @@
 {
- "functions": {
-  "sortrows": {
-   "summary": {
-    "en": "Sorts the rows of a matrix or table by one or more columns.",
-    "pt": "Ordena as linhas de uma matriz ou tabela por uma ou mais colunas."
-   },
-   "syntax": [
-    {
-     "code": "B = sortrows(A)",
-     "en": "Sorts rows in ascending order, using the first column as the main key and the next ones to break ties.",
-     "pt": "Ordena as linhas em ordem crescente, usando a primeira coluna como chave principal e as seguintes para desempatar."
+  "functions": {
+    "sortrows": {
+      "summary": {
+        "en": "Sorts the rows of a matrix or table by one or more columns.",
+        "pt": "Ordena as linhas de uma matriz ou tabela por uma ou mais colunas."
+      },
+      "syntax": [
+        {
+          "code": "B = sortrows(A)",
+          "en": "Sorts rows in ascending order, using the first column as the main key and the next ones to break ties.",
+          "pt": "Ordena as linhas em ordem crescente, usando a primeira coluna como chave principal e as seguintes para desempatar."
+        },
+        {
+          "code": "B = sortrows(A, col)",
+          "en": "Sorts by the columns listed in `col`. A negative number sorts that column in descending order.",
+          "pt": "Ordena pelas colunas listadas em `col`. Um número negativo ordena essa coluna em ordem decrescente."
+        },
+        {
+          "code": "B = sortrows(A, col, direction)",
+          "en": "Applies `'ascend'` or `'descend'` to the chosen columns.",
+          "pt": "Aplica `'ascend'` ou `'descend'` às colunas escolhidas."
+        },
+        {
+          "code": "[B, I] = sortrows(___)",
+          "en": "Also returns the row permutation.",
+          "pt": "Retorna também a permutação das linhas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric matrix, table, cell array of character vectors or string array.",
+          "pt": "Matriz numérica, tabela, cell array de vetores de caracteres ou array de strings."
+        },
+        {
+          "name": "col",
+          "en": "Vector of column indices. The sign gives the direction for each column.",
+          "pt": "Vetor de índices de colunas. O sinal indica a direção de cada coluna."
+        },
+        {
+          "name": "direction",
+          "en": "`'ascend'` (default) or `'descend'`.",
+          "pt": "`'ascend'` (padrão) ou `'descend'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "`A` with its rows reordered. Each row stays intact.",
+          "pt": "`A` com as linhas reordenadas. Cada linha permanece inteira."
+        },
+        {
+          "name": "I",
+          "en": "Index vector such that `B = A(I,:)`.",
+          "pt": "Vetor de índices tal que `B = A(I,:)`."
+        }
+      ],
+      "description": {
+        "en": "Rows are compared lexicographically: the first key column decides, and later columns are consulted only when earlier ones are equal. The sort is stable, so rows that tie on every key keep their original relative order.\n\nUse the second output to apply the same reordering to other arrays, for example `names(I)`.",
+        "pt": "As linhas são comparadas em ordem lexicográfica: a primeira coluna-chave decide, e as seguintes só são consultadas quando as anteriores empatam. A ordenação é estável, então linhas que empatam em todas as chaves mantêm a ordem original.\n\nA segunda saída permite aplicar a mesma reordenação a outros arrays, por exemplo `names(I)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sorting by one or two keys",
+            "pt": "Ordenando por uma ou duas chaves"
+          },
+          "code": "A = [3 1; 1 2; 1 1; 2 9];\nsortrows(A)\n[B, I] = sortrows(A, [1 -2]);\nB\nI'"
+        }
+      ],
+      "see": [
+        "sort",
+        "issorted",
+        "unique",
+        "table"
+      ]
     },
-    {
-     "code": "B = sortrows(A, col)",
-     "en": "Sorts by the columns listed in `col`. A negative number sorts that column in descending order.",
-     "pt": "Ordena pelas colunas listadas em `col`. Um número negativo ordena essa coluna em ordem decrescente."
+    "squeeze": {
+      "summary": {
+        "en": "Removes dimensions of length 1 from an array.",
+        "pt": "Remove as dimensões de tamanho 1 de um array."
+      },
+      "syntax": [
+        {
+          "code": "B = squeeze(A)",
+          "en": "Returns `A` without its singleton dimensions.",
+          "pt": "Retorna `A` sem as dimensões singleton."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type and size.",
+          "pt": "Array de qualquer tipo e tamanho."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Same data as `A` with the size-1 dimensions dropped.",
+          "pt": "Os mesmos dados de `A`, sem as dimensões de tamanho 1."
+        }
+      ],
+      "description": {
+        "en": "A slice such as `A(1,:,:)` keeps a leading dimension of length 1. `squeeze` discards every size-1 dimension so the slice becomes an ordinary 2-D matrix. The elements and their order are not changed, only the size vector.\n\nA 2-D array is returned unchanged, and the result always has at least two dimensions: a `1x1x5` array becomes `5x1`, a column.",
+        "pt": "Uma fatia como `A(1,:,:)` mantém uma primeira dimensão de tamanho 1. `squeeze` descarta todas as dimensões de tamanho 1, e a fatia vira uma matriz 2-D comum. Os elementos e a ordem não mudam, só o vetor de tamanho.\n\nUm array 2-D é devolvido sem alteração, e o resultado sempre tem ao menos duas dimensões: um array `1x1x5` vira `5x1`, uma coluna."
+      },
+      "examples": [
+        {
+          "code": "A = reshape(1:6, 1, 2, 3);\nsize(A)\nB = squeeze(A)\nsize(squeeze(ones(1,1,4)))"
+        }
+      ],
+      "see": [
+        "reshape",
+        "permute",
+        "size",
+        "cat"
+      ]
     },
-    {
-     "code": "B = sortrows(A, col, direction)",
-     "en": "Applies `'ascend'` or `'descend'` to the chosen columns.",
-     "pt": "Aplica `'ascend'` ou `'descend'` às colunas escolhidas."
+    "sub2ind": {
+      "summary": {
+        "en": "Converts row and column subscripts to linear indices.",
+        "pt": "Converte subscritos de linha e coluna em índices lineares."
+      },
+      "syntax": [
+        {
+          "code": "ind = sub2ind(sz, I, J)",
+          "en": "Returns the linear index of element `(I,J)` in an array of size `sz`.",
+          "pt": "Retorna o índice linear do elemento `(I,J)` em um array de tamanho `sz`."
+        },
+        {
+          "code": "ind = sub2ind(sz, I1, I2, ..., In)",
+          "en": "Same for an N-dimensional array.",
+          "pt": "O mesmo para um array N-dimensional."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sz",
+          "en": "Size vector of the array, for example `[3 4]`.",
+          "pt": "Vetor de tamanho do array, por exemplo `[3 4]`."
+        },
+        {
+          "name": "I, J",
+          "en": "Subscript arrays of identical size. Each value must be a positive integer within the matching dimension of `sz`.",
+          "pt": "Arrays de subscritos de mesmo tamanho. Cada valor deve ser inteiro positivo dentro da dimensão correspondente de `sz`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ind",
+          "en": "Linear indices, same size as the subscript arguments.",
+          "pt": "Índices lineares, com o mesmo tamanho dos argumentos de subscrito."
+        }
+      ],
+      "description": {
+        "en": "MATLAB stores arrays column by column, so the element at row `i` and column `j` of an `m`-row matrix has linear index `i + (j-1)*m`. `sub2ind` applies that rule for any number of dimensions and checks that the subscripts are in range.\n\nIt is handy for picking scattered elements, such as a diagonal or a list of points, with a single index vector.",
+        "pt": "O MATLAB guarda os arrays coluna a coluna, então o elemento da linha `i` e coluna `j` de uma matriz com `m` linhas tem índice linear `i + (j-1)*m`. `sub2ind` aplica essa regra para qualquer número de dimensões e verifica se os subscritos estão dentro dos limites.\n\nÉ útil para escolher elementos espalhados, como uma diagonal ou uma lista de pontos, com um único vetor de índices."
+      },
+      "examples": [
+        {
+          "code": "M = magic(4);\nk = sub2ind(size(M), [1 2 3], [2 3 4])\nM(k)"
+        }
+      ],
+      "see": [
+        "ind2sub",
+        "find",
+        "size",
+        "reshape"
+      ]
     },
-    {
-     "code": "[B, I] = sortrows(___)",
-     "en": "Also returns the row permutation.",
-     "pt": "Retorna também a permutação das linhas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric matrix or table.",
-     "pt": "Matriz numérica ou tabela."
+    "tail": {
+      "summary": {
+        "en": "Returns the last rows of an array or table.",
+        "pt": "Retorna as últimas linhas de um array ou tabela."
+      },
+      "syntax": [
+        {
+          "code": "B = tail(A)",
+          "en": "Returns up to the last 8 rows of `A`.",
+          "pt": "Retorna até as últimas 8 linhas de `A`."
+        },
+        {
+          "code": "B = tail(A, k)",
+          "en": "Returns up to the last `k` rows.",
+          "pt": "Retorna até as últimas `k` linhas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array or table.",
+          "pt": "Array ou tabela."
+        },
+        {
+          "name": "k",
+          "en": "Number of rows to keep. If `A` has fewer rows, all of them are returned.",
+          "pt": "Número de linhas a manter. Se `A` tiver menos linhas, todas são retornadas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "The trailing rows of `A`, with all its columns.",
+          "pt": "As linhas finais de `A`, com todas as colunas."
+        }
+      ],
+      "description": {
+        "en": "`tail` is a quick way to inspect the end of a large table or column vector without printing everything. It is the counterpart of `head`, which returns the first rows.\n\nFor a vector the result keeps the orientation of the input.",
+        "pt": "`tail` é uma forma rápida de inspecionar o fim de uma tabela grande ou de um vetor coluna sem imprimir tudo. É o complemento de `head`, que retorna as primeiras linhas.\n\nPara um vetor, o resultado mantém a orientação da entrada."
+      },
+      "examples": [
+        {
+          "code": "x = (1:10)';\ntail(x, 3)\nT = table((1:5)', (6:10)', 'VariableNames', {'a','b'});\ntail(T, 2)"
+        }
+      ],
+      "see": [
+        "head",
+        "height",
+        "table",
+        "end"
+      ]
     },
-    {
-     "name": "col",
-     "en": "Vector of column indices. The sign gives the direction for each column.",
-     "pt": "Vetor de índices de colunas. O sinal indica a direção de cada coluna."
+    "transpose": {
+      "summary": {
+        "en": "Transposes a matrix, function form of the `.'` operator.",
+        "pt": "Transpõe uma matriz, forma funcional do operador `.'`."
+      },
+      "syntax": [
+        {
+          "code": "B = transpose(A)",
+          "en": "Swaps rows and columns of `A`. Same as `A.'`.",
+          "pt": "Troca as linhas e colunas de `A`. Equivale a `A.'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "2-D array of any type.",
+          "pt": "Array 2-D de qualquer tipo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "The transpose: element `B(j,i)` equals `A(i,j)`.",
+          "pt": "A transposta: o elemento `B(j,i)` é igual a `A(i,j)`."
+        }
+      ],
+      "description": {
+        "en": "The transpose is purely a rearrangement, so complex values are not conjugated. To get the conjugate transpose use `ctranspose` or the `'` operator.\n\nTransposing a row vector gives a column vector and vice versa. Arrays with more than two dimensions are an error; use `pagetranspose` or `permute` for those.",
+        "pt": "A transposição apenas reorganiza os elementos, então valores complexos não são conjugados. Para a transposta conjugada use `ctranspose` ou o operador `'`.\n\nTransportar um vetor linha dá um vetor coluna e vice-versa. Arrays com mais de duas dimensões geram erro; use `pagetranspose` ou `permute` nesses casos."
+      },
+      "examples": [
+        {
+          "code": "A = [1 2 3; 4 5 6];\ntranspose(A)\nz = [1+2i 3-1i];\ntranspose(z)"
+        }
+      ],
+      "see": [
+        ".'",
+        "'",
+        "pagetranspose",
+        "permute"
+      ]
     },
-    {
-     "name": "direction",
-     "en": "`'ascend'` (default) or `'descend'`.",
-     "pt": "`'ascend'` (padrão) ou `'descend'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "`A` with its rows reordered. Each row stays intact.",
-     "pt": "`A` com as linhas reordenadas. Cada linha permanece inteira."
+    "trimdata": {
+      "summary": {
+        "en": "Trims an array down to a target size.",
+        "pt": "Corta um array até um tamanho desejado."
+      },
+      "syntax": [
+        {
+          "code": "B = trimdata(A, n)",
+          "en": "Keeps the first `n` elements along the first non-singleton dimension.",
+          "pt": "Mantém os primeiros `n` elementos ao longo da primeira dimensão não singleton."
+        },
+        {
+          "code": "B = trimdata(A, sz)",
+          "en": "Trims to the size vector `sz`, one entry per dimension.",
+          "pt": "Corta para o vetor de tamanho `sz`, uma entrada por dimensão."
+        },
+        {
+          "code": "B = trimdata(___, 'Side', s)",
+          "en": "Chooses which end is removed: `'trailing'` (default), `'leading'` or `'both'`.",
+          "pt": "Escolhe qual extremidade é removida: `'trailing'` (padrão), `'leading'` ou `'both'`."
+        },
+        {
+          "code": "B = trimdata(___, 'Dimension', d)",
+          "en": "Restricts the trimming to dimension `d`.",
+          "pt": "Restringe o corte à dimensão `d`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array to trim.",
+          "pt": "Array a ser cortado."
+        },
+        {
+          "name": "n, sz",
+          "en": "Target length, or target size vector, with nonnegative integers.",
+          "pt": "Comprimento desejado, ou vetor de tamanho desejado, com inteiros não negativos."
+        },
+        {
+          "name": "'Side'",
+          "en": "Which end to cut: `'trailing'`, `'leading'` or `'both'`.",
+          "pt": "Qual extremidade cortar: `'trailing'`, `'leading'` ou `'both'`."
+        },
+        {
+          "name": "'Dimension'",
+          "en": "Dimension or dimensions affected by `n`.",
+          "pt": "Dimensão ou dimensões afetadas por `n`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "The trimmed array. Dimensions already smaller than the target are left alone.",
+          "pt": "O array cortado. Dimensões já menores que o alvo não são alteradas."
+        }
+      ],
+      "description": {
+        "en": "`trimdata` only ever removes elements; a dimension that is already at or below its target length stays as it is. With `'both'` the cut is split between the two ends.\n\nIts sibling `paddata` does the opposite and extends arrays, and `resize` does both.",
+        "pt": "`trimdata` apenas remove elementos; uma dimensão que já está no comprimento alvo ou abaixo dele permanece como está. Com `'both'` o corte é dividido entre as duas extremidades.\n\nA irmã `paddata` faz o oposto e estende arrays, e `resize` faz as duas coisas."
+      },
+      "examples": [
+        {
+          "code": "x = 1:5;\ntrimdata(x, 3)\ntrimdata(x, 2, 'Side', 'leading')\ntrimdata(x, 9)"
+        }
+      ],
+      "see": [
+        "paddata",
+        "resize",
+        "head",
+        "tail"
+      ]
     },
-    {
-     "name": "I",
-     "en": "Index vector such that `B = A(I,:)`.",
-     "pt": "Vetor de índices tal que `B = A(I,:)`."
-    }
-   ],
-   "description": {
-    "en": "Rows are compared lexicographically: the first key column decides, and later columns are consulted only when earlier ones are equal. The sort is stable, so rows that tie on every key keep their original relative order.\n\nUse the second output to apply the same reordering to other arrays, for example `names(I)`.",
-    "pt": "As linhas são comparadas em ordem lexicográfica: a primeira coluna-chave decide, e as seguintes só são consultadas quando as anteriores empatam. A ordenação é estável, então linhas que empatam em todas as chaves mantêm a ordem original.\n\nA segunda saída permite aplicar a mesma reordenação a outros arrays, por exemplo `names(I)`."
-   },
-   "notes": {
-    "en": "In MatLivre `sortrows` works on numeric matrices and tables. Cell arrays and string arrays are not supported yet.",
-    "pt": "No MatLivre, `sortrows` funciona com matrizes numéricas e tabelas. Cell arrays e arrays de strings ainda não são suportados."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Sorting by one or two keys",
-      "pt": "Ordenando por uma ou duas chaves"
-     },
-     "code": "A = [3 1; 1 2; 1 1; 2 9];\nsortrows(A)\n[B, I] = sortrows(A, [1 -2]);\nB\nI'"
-    }
-   ],
-   "see": [
-    "sort",
-    "issorted",
-    "unique",
-    "table"
-   ]
-  },
-  "squeeze": {
-   "summary": {
-    "en": "Removes dimensions of length 1 from an array.",
-    "pt": "Remove as dimensões de tamanho 1 de um array."
-   },
-   "syntax": [
-    {
-     "code": "B = squeeze(A)",
-     "en": "Returns `A` without its singleton dimensions.",
-     "pt": "Retorna `A` sem as dimensões singleton."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type and size.",
-     "pt": "Array de qualquer tipo e tamanho."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Same data as `A` with the size-1 dimensions dropped.",
-     "pt": "Os mesmos dados de `A`, sem as dimensões de tamanho 1."
-    }
-   ],
-   "description": {
-    "en": "A slice such as `A(1,:,:)` keeps a leading dimension of length 1. `squeeze` discards every size-1 dimension so the slice becomes an ordinary 2-D matrix. The elements and their order are not changed, only the size vector.\n\nA 2-D array is returned unchanged, and the result always has at least two dimensions: a `1x1x5` array becomes `5x1`, a column.",
-    "pt": "Uma fatia como `A(1,:,:)` mantém uma primeira dimensão de tamanho 1. `squeeze` descarta todas as dimensões de tamanho 1, e a fatia vira uma matriz 2-D comum. Os elementos e a ordem não mudam, só o vetor de tamanho.\n\nUm array 2-D é devolvido sem alteração, e o resultado sempre tem ao menos duas dimensões: um array `1x1x5` vira `5x1`, uma coluna."
-   },
-   "examples": [
-    {
-     "code": "A = reshape(1:6, 1, 2, 3);\nsize(A)\nB = squeeze(A)\nsize(squeeze(ones(1,1,4)))"
-    }
-   ],
-   "see": [
-    "reshape",
-    "permute",
-    "size",
-    "cat"
-   ]
-  },
-  "sub2ind": {
-   "summary": {
-    "en": "Converts row and column subscripts to linear indices.",
-    "pt": "Converte subscritos de linha e coluna em índices lineares."
-   },
-   "syntax": [
-    {
-     "code": "ind = sub2ind(sz, I, J)",
-     "en": "Returns the linear index of element `(I,J)` in an array of size `sz`.",
-     "pt": "Retorna o índice linear do elemento `(I,J)` em um array de tamanho `sz`."
+    "true": {
+      "summary": {
+        "en": "Logical true value, or an array filled with logical true.",
+        "pt": "Valor lógico verdadeiro, ou um array preenchido com verdadeiro lógico."
+      },
+      "syntax": [
+        {
+          "code": "t = true",
+          "en": "Returns the scalar logical `1`.",
+          "pt": "Retorna o escalar lógico `1`."
+        },
+        {
+          "code": "T = true(n)",
+          "en": "Returns an `n`-by-`n` logical matrix of ones.",
+          "pt": "Retorna uma matriz lógica `n`-por-`n` de uns."
+        },
+        {
+          "code": "T = true(m, n, ...)",
+          "en": "Returns a logical array of the given size.",
+          "pt": "Retorna um array lógico com o tamanho indicado."
+        },
+        {
+          "code": "T = true(sz)",
+          "en": "Takes the size from the vector `sz`.",
+          "pt": "Usa o tamanho do vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m, ...",
+          "en": "Nonnegative integers giving the dimensions. Negative values count as 0.",
+          "pt": "Inteiros não negativos com as dimensões. Valores negativos contam como 0."
+        },
+        {
+          "name": "sz",
+          "en": "Size vector.",
+          "pt": "Vetor de tamanho."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "Logical array whose elements are all `1`.",
+          "pt": "Array lógico em que todos os elementos são `1`."
+        }
+      ],
+      "description": {
+        "en": "`true` creates values of class `logical`, which take one byte each and behave as 0 and 1 in arithmetic. It is the usual way to build a mask that selects everything, to be switched off selectively later.\n\n`true` is a function call, not a literal, so `true(3)` is a matrix and not the number three.",
+        "pt": "`true` cria valores da classe `logical`, que ocupam um byte cada e se comportam como 0 e 1 na aritmética. É a forma usual de criar uma máscara que seleciona tudo, para desligar elementos seletivamente depois.\n\n`true` é uma chamada de função, não um literal, então `true(3)` é uma matriz e não o número três."
+      },
+      "examples": [
+        {
+          "code": "t = true\nM = true(2, 3);\nM(1, 2) = false\nclass(M)"
+        }
+      ],
+      "see": [
+        "false",
+        "logical",
+        "ones",
+        "zeros"
+      ]
     },
-    {
-     "code": "ind = sub2ind(sz, I1, I2, ..., In)",
-     "en": "Same for an N-dimensional array.",
-     "pt": "O mesmo para um array N-dimensional."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "sz",
-     "en": "Size vector of the array, for example `[3 4]`.",
-     "pt": "Vetor de tamanho do array, por exemplo `[3 4]`."
+    "vectorize": {
+      "summary": {
+        "en": "Adds element-wise operators to an expression string or inline function.",
+        "pt": "Troca operadores por versões elemento a elemento em uma expressão ou função inline."
+      },
+      "syntax": [
+        {
+          "code": "s2 = vectorize(s1)",
+          "en": "Returns the string `s1` with `*`, `/` and `^` replaced by `.*`, `./` and `.^`.",
+          "pt": "Retorna a string `s1` com `*`, `/` e `^` trocados por `.*`, `./` e `.^`."
+        },
+        {
+          "code": "g = vectorize(f)",
+          "en": "Does the same for an inline function object `f`.",
+          "pt": "Faz o mesmo para um objeto de função inline `f`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s1",
+          "en": "Character vector holding an expression.",
+          "pt": "Vetor de caracteres com uma expressão."
+        },
+        {
+          "name": "f",
+          "en": "Inline function object.",
+          "pt": "Objeto de função inline."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s2",
+          "en": "The expression rewritten with element-wise operators.",
+          "pt": "A expressão reescrita com operadores elemento a elemento."
+        }
+      ],
+      "description": {
+        "en": "Each `*`, `/` and `^` in the text gets a dot in front of it, unless it already has one. Evaluating the result on arrays then works element by element instead of performing matrix algebra.\n\nIt mainly serves older code that builds expressions from strings. With anonymous functions you simply write the dotted operators yourself.",
+        "pt": "Cada `*`, `/` e `^` no texto recebe um ponto antes, a menos que já tenha. Avaliar o resultado sobre arrays passa então a operar elemento a elemento, em vez de fazer álgebra matricial.\n\nServe sobretudo a códigos antigos que montam expressões a partir de strings. Com funções anônimas, basta escrever os operadores com ponto."
+      },
+      "examples": [
+        {
+          "code": "vectorize('x^2*y + 1/x')"
+        }
+      ],
+      "see": [
+        ".*",
+        "./",
+        ".^",
+        "inline",
+        "str2func"
+      ]
     },
-    {
-     "name": "I, J",
-     "en": "Subscript arrays of identical size. Each value must be a positive integer within the matching dimension of `sz`.",
-     "pt": "Arrays de subscritos de mesmo tamanho. Cada valor deve ser inteiro positivo dentro da dimensão correspondente de `sz`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "ind",
-     "en": "Linear indices, same size as the subscript arguments.",
-     "pt": "Índices lineares, com o mesmo tamanho dos argumentos de subscrito."
-    }
-   ],
-   "description": {
-    "en": "MATLAB stores arrays column by column, so the element at row `i` and column `j` of an `m`-row matrix has linear index `i + (j-1)*m`. `sub2ind` applies that rule for any number of dimensions and checks that the subscripts are in range.\n\nIt is handy for picking scattered elements, such as a diagonal or a list of points, with a single index vector.",
-    "pt": "O MATLAB guarda os arrays coluna a coluna, então o elemento da linha `i` e coluna `j` de uma matriz com `m` linhas tem índice linear `i + (j-1)*m`. `sub2ind` aplica essa regra para qualquer número de dimensões e verifica se os subscritos estão dentro dos limites.\n\nÉ útil para escolher elementos espalhados, como uma diagonal ou uma lista de pontos, com um único vetor de índices."
-   },
-   "examples": [
-    {
-     "code": "M = magic(4);\nk = sub2ind(size(M), [1 2 3], [2 3 4])\nM(k)"
-    }
-   ],
-   "see": [
-    "ind2sub",
-    "find",
-    "size",
-    "reshape"
-   ]
-  },
-  "tail": {
-   "summary": {
-    "en": "Returns the last rows of an array or table.",
-    "pt": "Retorna as últimas linhas de um array ou tabela."
-   },
-   "syntax": [
-    {
-     "code": "B = tail(A)",
-     "en": "Returns up to the last 8 rows of `A`.",
-     "pt": "Retorna até as últimas 8 linhas de `A`."
+    "vertcat": {
+      "summary": {
+        "en": "Concatenates arrays vertically.",
+        "pt": "Concatena arrays na vertical."
+      },
+      "syntax": [
+        {
+          "code": "C = vertcat(A1, A2, ...)",
+          "en": "Stacks the arguments one below the other. Same as `[A1; A2; ...]`.",
+          "pt": "Empilha os argumentos um abaixo do outro. Equivale a `[A1; A2; ...]`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A1, A2, ...",
+          "en": "Arrays with the same number of columns (and same size in all higher dimensions).",
+          "pt": "Arrays com o mesmo número de colunas (e o mesmo tamanho nas dimensões superiores)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The stacked array, with as many rows as all inputs together.",
+          "pt": "O array empilhado, com tantas linhas quanto todas as entradas somadas."
+        }
+      ],
+      "description": {
+        "en": "`vertcat` is the function behind the semicolon inside square brackets. Using the function form is convenient when the pieces are held in a cell array, since `vertcat(c{:})` stacks them all.\n\nMixing types follows the usual concatenation rules: integers win over doubles, and char combined with numbers gives char. Empty inputs `[]` are ignored.",
+        "pt": "`vertcat` é a função por trás do ponto e vírgula dentro de colchetes. A forma funcional é prática quando as partes estão em um cell array, pois `vertcat(c{:})` empilha todas.\n\nA mistura de tipos segue as regras usuais de concatenação: inteiros prevalecem sobre doubles, e char combinado com números dá char. Entradas vazias `[]` são ignoradas."
+      },
+      "examples": [
+        {
+          "code": "vertcat([1 2], [3 4], [5 6])\nc = {[1 2], [3 4]};\nvertcat(c{:})"
+        }
+      ],
+      "see": [
+        "horzcat",
+        "cat",
+        "repmat"
+      ]
     },
-    {
-     "code": "B = tail(A, k)",
-     "en": "Returns up to the last `k` rows.",
-     "pt": "Retorna até as últimas `k` linhas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array or table.",
-     "pt": "Array ou tabela."
+    "zeros": {
+      "summary": {
+        "en": "Creates an array of zeros.",
+        "pt": "Cria um array de zeros."
+      },
+      "syntax": [
+        {
+          "code": "Z = zeros(n)",
+          "en": "Returns an `n`-by-`n` matrix of zeros.",
+          "pt": "Retorna uma matriz `n`-por-`n` de zeros."
+        },
+        {
+          "code": "Z = zeros(m, n, ...)",
+          "en": "Returns an array of zeros with the given dimensions.",
+          "pt": "Retorna um array de zeros com as dimensões indicadas."
+        },
+        {
+          "code": "Z = zeros(sz)",
+          "en": "Takes the size from the vector `sz`.",
+          "pt": "Usa o tamanho do vetor `sz`."
+        },
+        {
+          "code": "Z = zeros(___, classname)",
+          "en": "Creates zeros of the given class, such as `'int8'` or `'single'`.",
+          "pt": "Cria zeros da classe indicada, como `'int8'` ou `'single'`."
+        },
+        {
+          "code": "Z = zeros(___, 'like', P)",
+          "en": "Matches the class (and complexness) of the prototype `P`.",
+          "pt": "Segue a classe (e a complexidade) do protótipo `P`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m, ...",
+          "en": "Nonnegative integer dimensions. Negative values count as 0.",
+          "pt": "Dimensões inteiras não negativas. Valores negativos contam como 0."
+        },
+        {
+          "name": "classname",
+          "en": "Output class; the default is `'double'`.",
+          "pt": "Classe de saída; o padrão é `'double'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Z",
+          "en": "Array of zeros of the requested size and class.",
+          "pt": "Array de zeros com o tamanho e a classe pedidos."
+        }
+      ],
+      "description": {
+        "en": "`zeros` is mainly used to preallocate: creating the output array up front and filling it inside a loop is much faster than growing it one element at a time.\n\nA dimension of 0 gives an empty array, for example `zeros(0,3)`. Calling `zeros` with no arguments returns the scalar `0`.",
+        "pt": "`zeros` serve principalmente para pré-alocar: criar o array de saída de antemão e preenchê-lo dentro de um laço é bem mais rápido do que fazê-lo crescer um elemento por vez.\n\nUma dimensão 0 gera um array vazio, por exemplo `zeros(0,3)`. Chamar `zeros` sem argumentos retorna o escalar `0`."
+      },
+      "examples": [
+        {
+          "code": "zeros(2, 3)\nzeros(2, 'int8')\nsize(zeros(0, 3))"
+        }
+      ],
+      "see": [
+        "ones",
+        "eye",
+        "nan",
+        "true",
+        "rand"
+      ]
     },
-    {
-     "name": "k",
-     "en": "Number of rows to keep. If `A` has fewer rows, all of them are returned.",
-     "pt": "Número de linhas a manter. Se `A` tiver menos linhas, todas são retornadas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "The trailing rows of `A`, with all its columns.",
-     "pt": "As linhas finais de `A`, com todas as colunas."
-    }
-   ],
-   "description": {
-    "en": "`tail` is a quick way to inspect the end of a large table or column vector without printing everything. It is the counterpart of `head`, which returns the first rows.\n\nFor a vector the result keeps the orientation of the input.",
-    "pt": "`tail` é uma forma rápida de inspecionar o fim de uma tabela grande ou de um vetor coluna sem imprimir tudo. É o complemento de `head`, que retorna as primeiras linhas.\n\nPara um vetor, o resultado mantém a orientação da entrada."
-   },
-   "examples": [
-    {
-     "code": "x = (1:10)';\ntail(x, 3)\nT = table((1:5)', (6:10)', 'VariableNames', {'a','b'});\ntail(T, 2)"
-    }
-   ],
-   "see": [
-    "head",
-    "height",
-    "table",
-    "end"
-   ]
-  },
-  "transpose": {
-   "summary": {
-    "en": "Transposes a matrix, function form of the `.'` operator.",
-    "pt": "Transpõe uma matriz, forma funcional do operador `.'`."
-   },
-   "syntax": [
-    {
-     "code": "B = transpose(A)",
-     "en": "Swaps rows and columns of `A`. Same as `A.'`.",
-     "pt": "Troca as linhas e colunas de `A`. Equivale a `A.'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "2-D array of any type.",
-     "pt": "Array 2-D de qualquer tipo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "The transpose: element `B(j,i)` equals `A(i,j)`.",
-     "pt": "A transposta: o elemento `B(j,i)` é igual a `A(i,j)`."
-    }
-   ],
-   "description": {
-    "en": "The transpose is purely a rearrangement, so complex values are not conjugated. To get the conjugate transpose use `ctranspose` or the `'` operator.\n\nTransposing a row vector gives a column vector and vice versa. Arrays with more than two dimensions are an error; use `pagetranspose` or `permute` for those.",
-    "pt": "A transposição apenas reorganiza os elementos, então valores complexos não são conjugados. Para a transposta conjugada use `ctranspose` ou o operador `'`.\n\nTransportar um vetor linha dá um vetor coluna e vice-versa. Arrays com mais de duas dimensões geram erro; use `pagetranspose` ou `permute` nesses casos."
-   },
-   "examples": [
-    {
-     "code": "A = [1 2 3; 4 5 6];\ntranspose(A)\nz = [1+2i 3-1i];\ntranspose(z)"
-    }
-   ],
-   "see": [
-    ".'",
-    "'",
-    "pagetranspose",
-    "permute"
-   ]
-  },
-  "trimdata": {
-   "summary": {
-    "en": "Trims an array down to a target size.",
-    "pt": "Corta um array até um tamanho desejado."
-   },
-   "syntax": [
-    {
-     "code": "B = trimdata(A, n)",
-     "en": "Keeps the first `n` elements along the first non-singleton dimension.",
-     "pt": "Mantém os primeiros `n` elementos ao longo da primeira dimensão não singleton."
+    "<": {
+      "summary": {
+        "en": "Less-than operator: tests element by element whether A is smaller than B.",
+        "pt": "Operador menor que: testa elemento a elemento se A é menor que B."
+      },
+      "syntax": [
+        {
+          "code": "C = A < B",
+          "en": "Applies the operator to `A` and `B`. Same as `lt(A, B)`.",
+          "pt": "Aplica o operador a `A` e `B`. Equivale a `lt(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
+          "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
+          "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
+        }
+      ],
+      "description": {
+        "en": "The comparison runs element by element with implicit expansion, so a matrix can be compared with a scalar or a row with a column. The result is a logical array that works as a mask: `x(x < 0)` picks the negative entries. Comparing with `NaN` always gives `0`.\n\nChar arguments are compared by their character codes.",
+        "pt": "A comparação é feita elemento a elemento com expansão implícita, então uma matriz pode ser comparada com um escalar, ou uma linha com uma coluna. O resultado é um array lógico que funciona como máscara: `x(x < 0)` seleciona as entradas negativas. Comparar com `NaN` sempre dá `0`.\n\nArgumentos char são comparados pelos códigos dos caracteres."
+      },
+      "examples": [
+        {
+          "code": "x = [4 -1 7 0];\nx < 3\nx(x < 3)\n[1 2 3] < [2; 3]"
+        }
+      ],
+      "see": [
+        "lt",
+        "<=",
+        ">",
+        "==",
+        "find"
+      ]
     },
-    {
-     "code": "B = trimdata(A, sz)",
-     "en": "Trims to the size vector `sz`, one entry per dimension.",
-     "pt": "Corta para o vetor de tamanho `sz`, uma entrada por dimensão."
+    "<=": {
+      "summary": {
+        "en": "Less-than-or-equal operator: tests element by element whether A is at most B.",
+        "pt": "Operador menor ou igual: testa elemento a elemento se A é no máximo B."
+      },
+      "syntax": [
+        {
+          "code": "C = A <= B",
+          "en": "Applies the operator to `A` and `B`. Same as `le(A, B)`.",
+          "pt": "Aplica o operador a `A` e `B`. Equivale a `le(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
+          "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
+          "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
+        }
+      ],
+      "description": {
+        "en": "Works like `<` but also accepts equality. Sizes follow implicit expansion rules and the result is a logical array. Any comparison involving `NaN` is `0`, including `NaN <= NaN`.\n\nWith floating-point numbers, exact equality may fail because of rounding; compare with a tolerance when that matters.",
+        "pt": "Funciona como `<`, mas aceita também a igualdade. Os tamanhos seguem as regras de expansão implícita e o resultado é um array lógico. Qualquer comparação com `NaN` dá `0`, inclusive `NaN <= NaN`.\n\nCom números de ponto flutuante, a igualdade exata pode falhar por arredondamento; compare com uma tolerância quando isso importar."
+      },
+      "examples": [
+        {
+          "code": "x = [1 2 3 4 5];\nx <= 3\nsum(x <= 3)\nNaN <= NaN"
+        }
+      ],
+      "see": [
+        "le",
+        "<",
+        ">=",
+        "==",
+        "any"
+      ]
     },
-    {
-     "code": "B = trimdata(___, 'Side', s)",
-     "en": "Chooses which end is removed: `'trailing'` (default), `'leading'` or `'both'`.",
-     "pt": "Escolhe qual extremidade é removida: `'trailing'` (padrão), `'leading'` ou `'both'`."
+    ">": {
+      "summary": {
+        "en": "Greater-than operator: tests element by element whether A is larger than B.",
+        "pt": "Operador maior que: testa elemento a elemento se A é maior que B."
+      },
+      "syntax": [
+        {
+          "code": "C = A > B",
+          "en": "Applies the operator to `A` and `B`. Same as `gt(A, B)`.",
+          "pt": "Aplica o operador a `A` e `B`. Equivale a `gt(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
+          "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
+          "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
+        }
+      ],
+      "description": {
+        "en": "The comparison is element-wise with implicit expansion and returns a logical array. It is typically used to build conditions, to count with `sum(x > t)`, or to filter with `x(x > t)`. Comparisons with `NaN` are always `0`.\n\nInside `if` and `while`, an array condition is true only when all its elements are nonzero.",
+        "pt": "A comparação é elemento a elemento, com expansão implícita, e retorna um array lógico. É usada para montar condições, contar com `sum(x > t)` ou filtrar com `x(x > t)`. Comparações com `NaN` são sempre `0`.\n\nDentro de `if` e `while`, uma condição em array só é verdadeira quando todos os elementos são diferentes de zero."
+      },
+      "examples": [
+        {
+          "code": "x = [4 -1 7 0];\nx > 0\nsum(x > 0)\nx(x > 0)"
+        }
+      ],
+      "see": [
+        "gt",
+        ">=",
+        "<",
+        "==",
+        "sum"
+      ]
     },
-    {
-     "code": "B = trimdata(___, 'Dimension', d)",
-     "en": "Restricts the trimming to dimension `d`.",
-     "pt": "Restringe o corte à dimensão `d`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array to trim.",
-     "pt": "Array a ser cortado."
+    ">=": {
+      "summary": {
+        "en": "Greater-than-or-equal operator: tests element by element whether A is at least B.",
+        "pt": "Operador maior ou igual: testa elemento a elemento se A é no mínimo B."
+      },
+      "syntax": [
+        {
+          "code": "C = A >= B",
+          "en": "Applies the operator to `A` and `B`. Same as `ge(A, B)`.",
+          "pt": "Aplica o operador a `A` e `B`. Equivale a `ge(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
+          "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
+          "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
+        }
+      ],
+      "description": {
+        "en": "Works like `>` but also accepts equality. The result is a logical array whose size follows implicit expansion. Comparisons with `NaN` are `0`.\n\nFor complex operands only the real parts are compared.",
+        "pt": "Funciona como `>`, mas aceita também a igualdade. O resultado é um array lógico cujo tamanho segue a expansão implícita. Comparações com `NaN` dão `0`.\n\nPara operandos complexos, apenas as partes reais são comparadas."
+      },
+      "examples": [
+        {
+          "code": "scores = [55 70 62 90];\nscores >= 60\nmean(scores >= 60)"
+        }
+      ],
+      "see": [
+        "ge",
+        ">",
+        "<=",
+        "==",
+        "all"
+      ]
     },
-    {
-     "name": "n, sz",
-     "en": "Target length, or target size vector, with nonnegative integers.",
-     "pt": "Comprimento desejado, ou vetor de tamanho desejado, com inteiros não negativos."
+    "==": {
+      "summary": {
+        "en": "Equality operator: tests element by element whether A and B are equal.",
+        "pt": "Operador de igualdade: testa elemento a elemento se A e B são iguais."
+      },
+      "syntax": [
+        {
+          "code": "C = A == B",
+          "en": "Applies the operator to `A` and `B`. Same as `eq(A, B)`.",
+          "pt": "Aplica o operador a `A` e `B`. Equivale a `eq(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
+          "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
+          "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
+        }
+      ],
+      "description": {
+        "en": "The test is element-wise with implicit expansion, and `NaN` is never equal to anything, itself included. To compare whole arrays as one yes or no answer use `isequal`.\n\nFor char arrays the comparison is per character, so the two strings must have the same length or one must be a single character. Use `strcmp` to compare text as a whole.",
+        "pt": "O teste é elemento a elemento, com expansão implícita, e `NaN` nunca é igual a nada, nem a si mesmo. Para comparar arrays inteiros com uma única resposta sim ou não use `isequal`.\n\nPara arrays de char a comparação é caractere a caractere, então as duas strings devem ter o mesmo comprimento ou uma delas ser um único caractere. Use `strcmp` para comparar textos como um todo."
+      },
+      "examples": [
+        {
+          "code": "[1 2 3] == [1 5 3]\n'hello' == 'l'\nNaN == NaN\nisequal([1 2 3], [1 2 3])"
+        }
+      ],
+      "see": [
+        "eq",
+        "isequal",
+        "strcmp",
+        "~=",
+        "ismember"
+      ],
+      "notes": {
+        "en": "Floating-point results that look equal can differ in the last bits, for example `0.1 + 0.2 == 0.3` is `0`.",
+        "pt": "Resultados de ponto flutuante que parecem iguais podem diferir nos últimos bits, por exemplo `0.1 + 0.2 == 0.3` é `0`."
+      }
     },
-    {
-     "name": "'Side'",
-     "en": "Which end to cut: `'trailing'`, `'leading'` or `'both'`.",
-     "pt": "Qual extremidade cortar: `'trailing'`, `'leading'` ou `'both'`."
+    "'": {
+      "summary": {
+        "en": "Complex conjugate transpose operator.",
+        "pt": "Operador de transposta conjugada."
+      },
+      "syntax": [
+        {
+          "code": "B = A'",
+          "en": "Swaps rows and columns of `A` and conjugates complex values. Same as `ctranspose(A)`.",
+          "pt": "Troca as linhas e colunas de `A` e conjuga os valores complexos. Equivale a `ctranspose(A)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "2-D numeric, logical or char array.",
+          "pt": "Array 2-D numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Transposed array: element `B(j,i)` is `conj(A(i,j))`.",
+          "pt": "Array transposto: o elemento `B(j,i)` é `conj(A(i,j))`."
+        }
+      ],
+      "description": {
+        "en": "For real data `A'` is the plain transpose, turning a row into a column and the reverse. For complex data every element is also conjugated, which is the transpose that appears in inner products and least squares: `x'*y` is the dot product of two column vectors.\n\nThe quote is only an operator when it directly follows a value, a name, a closing bracket or another transpose. Elsewhere it starts a character vector such as `'abc'`. Use `.'` for the transpose without conjugation.",
+        "pt": "Para dados reais, `A'` é a transposta simples, que transforma linha em coluna e vice-versa. Para dados complexos, cada elemento também é conjugado, que é a transposta usada em produtos internos e mínimos quadrados: `x'*y` é o produto escalar de dois vetores coluna.\n\nA aspa só é um operador quando segue diretamente um valor, um nome, um colchete fechado ou outra transposição. Em outros lugares ela inicia um vetor de caracteres como `'abc'`. Use `.'` para a transposta sem conjugação."
+      },
+      "examples": [
+        {
+          "code": "A = [1 2 3; 4 5 6];\nA'\nz = [1+2i; 3-1i];\nz'\nz.'"
+        }
+      ],
+      "see": [
+        "ctranspose",
+        ".'",
+        "transpose",
+        "conj"
+      ]
     },
-    {
-     "name": "'Dimension'",
-     "en": "Dimension or dimensions affected by `n`.",
-     "pt": "Dimensão ou dimensões afetadas por `n`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "The trimmed array. Dimensions already smaller than the target are left alone.",
-     "pt": "O array cortado. Dimensões já menores que o alvo não são alteradas."
-    }
-   ],
-   "description": {
-    "en": "`trimdata` only ever removes elements; a dimension that is already at or below its target length stays as it is. With `'both'` the cut is split between the two ends.\n\nIts sibling `paddata` does the opposite and extends arrays, and `resize` does both.",
-    "pt": "`trimdata` apenas remove elementos; uma dimensão que já está no comprimento alvo ou abaixo dele permanece como está. Com `'both'` o corte é dividido entre as duas extremidades.\n\nA irmã `paddata` faz o oposto e estende arrays, e `resize` faz as duas coisas."
-   },
-   "examples": [
-    {
-     "code": "x = 1:5;\ntrimdata(x, 3)\ntrimdata(x, 2, 'Side', 'leading')\ntrimdata(x, 9)"
-    }
-   ],
-   "see": [
-    "paddata",
-    "resize",
-    "head",
-    "tail"
-   ]
-  },
-  "true": {
-   "summary": {
-    "en": "Logical true value, or an array filled with logical true.",
-    "pt": "Valor lógico verdadeiro, ou um array preenchido com verdadeiro lógico."
-   },
-   "syntax": [
-    {
-     "code": "t = true",
-     "en": "Returns the scalar logical `1`.",
-     "pt": "Retorna o escalar lógico `1`."
+    ".'": {
+      "summary": {
+        "en": "Transpose operator without conjugation.",
+        "pt": "Operador de transposta sem conjugação."
+      },
+      "syntax": [
+        {
+          "code": "B = A.'",
+          "en": "Swaps rows and columns of `A`, leaving complex values as they are. Same as `transpose(A)`.",
+          "pt": "Troca as linhas e colunas de `A`, sem alterar valores complexos. Equivale a `transpose(A)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "2-D array of any type.",
+          "pt": "Array 2-D de qualquer tipo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array with `B(j,i) = A(i,j)`.",
+          "pt": "Array com `B(j,i) = A(i,j)`."
+        }
+      ],
+      "description": {
+        "en": "`A.'` only rearranges elements. For real arrays it gives the same result as `A'`; for complex arrays it does not conjugate, which is the right choice when the values are just stored as complex numbers and not treated as vectors in an inner product space.\n\nArrays with more than two dimensions are an error. Use `pagetranspose` to transpose each page.",
+        "pt": "`A.'` apenas reorganiza elementos. Para arrays reais dá o mesmo resultado que `A'`; para arrays complexos não conjuga, o que é adequado quando os valores são apenas números complexos armazenados e não vetores em um espaço com produto interno.\n\nArrays com mais de duas dimensões geram erro. Use `pagetranspose` para transpor cada página."
+      },
+      "examples": [
+        {
+          "code": "z = [1+2i 3-1i];\nz.'\nz'"
+        }
+      ],
+      "see": [
+        "transpose",
+        "'",
+        "pagetranspose",
+        "permute"
+      ]
     },
-    {
-     "code": "T = true(n)",
-     "en": "Returns an `n`-by-`n` logical matrix of ones.",
-     "pt": "Retorna uma matriz lógica `n`-por-`n` de uns."
+    "*": {
+      "summary": {
+        "en": "Matrix multiplication operator.",
+        "pt": "Operador de multiplicação de matrizes."
+      },
+      "syntax": [
+        {
+          "code": "C = A * B",
+          "en": "Matrix product of `A` and `B`. Same as `mtimes(A, B)`.",
+          "pt": "Produto matricial de `A` e `B`. Equivale a `mtimes(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical matrix, `m`-by-`k`, or a scalar.",
+          "pt": "Matriz numérica ou lógica `m`-por-`k`, ou um escalar."
+        },
+        {
+          "name": "B",
+          "en": "Numeric or logical matrix, `k`-by-`n`, or a scalar.",
+          "pt": "Matriz numérica ou lógica `k`-por-`n`, ou um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The `m`-by-`n` product with `C(i,j) = sum(A(i,:) .* B(:,j))`.",
+          "pt": "O produto `m`-por-`n`, com `C(i,j) = sum(A(i,:) .* B(:,j))`."
+        }
+      ],
+      "description": {
+        "en": "The number of columns of `A` must equal the number of rows of `B`, otherwise MatLivre reports an error about incompatible dimensions. If either operand is a scalar, `*` multiplies every element, just like `.*`.\n\nA row times a column gives a scalar (the dot product) and a column times a row gives a matrix (the outer product). For element by element products use `.*`.",
+        "pt": "O número de colunas de `A` deve ser igual ao número de linhas de `B`, caso contrário o MatLivre informa um erro de dimensões incompatíveis. Se um dos operandos for escalar, `*` multiplica todos os elementos, como `.*`.\n\nUma linha vezes uma coluna dá um escalar (o produto escalar) e uma coluna vezes uma linha dá uma matriz (o produto externo). Para produtos elemento a elemento use `.*`."
+      },
+      "examples": [
+        {
+          "code": "A = [1 2; 3 4];\nA * [1; 1]\nA * A\n[1 2 3] * [4; 5; 6]\n[1; 2] * [3 4]"
+        }
+      ],
+      "see": [
+        "mtimes",
+        ".*",
+        "^",
+        "\\",
+        "dot"
+      ]
     },
-    {
-     "code": "T = true(m, n, ...)",
-     "en": "Returns a logical array of the given size.",
-     "pt": "Retorna um array lógico com o tamanho indicado."
+    "-": {
+      "summary": {
+        "en": "Subtraction and negation operator.",
+        "pt": "Operador de subtração e negação."
+      },
+      "syntax": [
+        {
+          "code": "C = A - B",
+          "en": "Subtracts `B` from `A` element by element. Same as `minus(A, B)`.",
+          "pt": "Subtrai `B` de `A` elemento a elemento. Equivale a `minus(A, B)`."
+        },
+        {
+          "code": "B = -A",
+          "en": "Changes the sign of every element. Same as `uminus(A)`.",
+          "pt": "Troca o sinal de todos os elementos. Equivale a `uminus(A)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or char arrays with compatible sizes.",
+          "pt": "Arrays numéricos, lógicos ou de char com tamanhos compatíveis."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The difference, with the size given by implicit expansion.",
+          "pt": "A diferença, com o tamanho dado pela expansão implícita."
+        }
+      ],
+      "description": {
+        "en": "Sizes are compatible when each dimension is equal or one of them is 1, so a row vector minus a column vector gives a matrix. Subtracting the mean from a matrix, `A - mean(A)`, relies on this.\n\nInteger arithmetic saturates: `uint8(5) - uint8(10)` is `0`. Mixing different integer types is an error, but an integer with a double gives an integer. Logical and char operands are converted to double.",
+        "pt": "Os tamanhos são compatíveis quando cada dimensão é igual ou uma delas vale 1, então um vetor linha menos um vetor coluna dá uma matriz. Subtrair a média de uma matriz, `A - mean(A)`, depende disso.\n\nA aritmética de inteiros satura: `uint8(5) - uint8(10)` vale `0`. Misturar tipos inteiros diferentes é um erro, mas inteiro com double dá inteiro. Operandos lógicos e char são convertidos para double."
+      },
+      "examples": [
+        {
+          "code": "[5 7 9] - 1\n[1; 2] - [10 20 30]\n-[1 -2 3]\nuint8(5) - uint8(10)"
+        }
+      ],
+      "see": [
+        "minus",
+        "uminus",
+        "+",
+        "diff"
+      ]
     },
-    {
-     "code": "T = true(sz)",
-     "en": "Takes the size from the vector `sz`.",
-     "pt": "Usa o tamanho do vetor `sz`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n, m, ...",
-     "en": "Nonnegative integers giving the dimensions. Negative values count as 0.",
-     "pt": "Inteiros não negativos com as dimensões. Valores negativos contam como 0."
+    ".*": {
+      "summary": {
+        "en": "Element-wise multiplication operator.",
+        "pt": "Operador de multiplicação elemento a elemento."
+      },
+      "syntax": [
+        {
+          "code": "C = A .* B",
+          "en": "Multiplies corresponding elements of `A` and `B`. Same as `times(A, B)`.",
+          "pt": "Multiplica os elementos correspondentes de `A` e `B`. Equivale a `times(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric or logical arrays with compatible sizes.",
+          "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array of products, with the size given by implicit expansion.",
+          "pt": "Array de produtos, com o tamanho dado pela expansão implícita."
+        }
+      ],
+      "description": {
+        "en": "Each element of `A` is multiplied by the element at the same position in `B`. A size-1 dimension is stretched to match the other operand, so `(1:3)' .* (1:3)` builds a multiplication table. This is different from `*`, which performs matrix multiplication.\n\nInteger types saturate at their limits, and combining two different integer types is an error.",
+        "pt": "Cada elemento de `A` é multiplicado pelo elemento da mesma posição em `B`. Uma dimensão de tamanho 1 é esticada para casar com o outro operando, então `(1:3)' .* (1:3)` monta uma tabuada. Isso difere de `*`, que faz a multiplicação de matrizes.\n\nOs tipos inteiros saturam nos limites, e combinar dois tipos inteiros diferentes é um erro."
+      },
+      "examples": [
+        {
+          "code": "[1 2 3] .* [4 5 6]\n(1:3)' .* (1:4)\nint8(100) .* int8(2)"
+        }
+      ],
+      "see": [
+        "times",
+        "*",
+        "./",
+        ".^",
+        "prod"
+      ]
     },
-    {
-     "name": "sz",
-     "en": "Size vector.",
-     "pt": "Vetor de tamanho."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "T",
-     "en": "Logical array whose elements are all `1`.",
-     "pt": "Array lógico em que todos os elementos são `1`."
-    }
-   ],
-   "description": {
-    "en": "`true` creates values of class `logical`, which take one byte each and behave as 0 and 1 in arithmetic. It is the usual way to build a mask that selects everything, to be switched off selectively later.\n\n`true` is a function call, not a literal, so `true(3)` is a matrix and not the number three.",
-    "pt": "`true` cria valores da classe `logical`, que ocupam um byte cada e se comportam como 0 e 1 na aritmética. É a forma usual de criar uma máscara que seleciona tudo, para desligar elementos seletivamente depois.\n\n`true` é uma chamada de função, não um literal, então `true(3)` é uma matriz e não o número três."
-   },
-   "examples": [
-    {
-     "code": "t = true\nM = true(2, 3);\nM(1, 2) = false\nclass(M)"
-    }
-   ],
-   "see": [
-    "false",
-    "logical",
-    "ones",
-    "zeros"
-   ]
-  },
-  "vectorize": {
-   "summary": {
-    "en": "Adds element-wise operators to an expression string or inline function.",
-    "pt": "Troca operadores por versões elemento a elemento em uma expressão ou função inline."
-   },
-   "syntax": [
-    {
-     "code": "s2 = vectorize(s1)",
-     "en": "Returns the string `s1` with `*`, `/` and `^` replaced by `.*`, `./` and `.^`.",
-     "pt": "Retorna a string `s1` com `*`, `/` e `^` trocados por `.*`, `./` e `.^`."
+    "./": {
+      "summary": {
+        "en": "Element-wise right division operator.",
+        "pt": "Operador de divisão à direita elemento a elemento."
+      },
+      "syntax": [
+        {
+          "code": "C = A ./ B",
+          "en": "Divides each element of `A` by the matching element of `B`. Same as `rdivide(A, B)`.",
+          "pt": "Divide cada elemento de `A` pelo elemento correspondente de `B`. Equivale a `rdivide(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numerator: numeric or logical array.",
+          "pt": "Numerador: array numérico ou lógico."
+        },
+        {
+          "name": "B",
+          "en": "Denominator, with a size compatible with `A`.",
+          "pt": "Denominador, com tamanho compatível com `A`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array of quotients.",
+          "pt": "Array de quocientes."
+        }
+      ],
+      "description": {
+        "en": "Floating-point division by zero does not raise an error: `1./0` is `Inf`, `-1./0` is `-Inf` and `0./0` is `NaN`. Sizes are expanded implicitly, so `x ./ sum(x)` normalizes a vector and `A ./ max(A)` scales each column of a matrix.\n\nFor integer types the quotient is rounded to the nearest integer and saturates; dividing by zero gives the largest value, or `0` for `0./0`.",
+        "pt": "A divisão de ponto flutuante por zero não gera erro: `1./0` vale `Inf`, `-1./0` vale `-Inf` e `0./0` vale `NaN`. Os tamanhos são expandidos implicitamente, então `x ./ sum(x)` normaliza um vetor e `A ./ max(A)` escala cada coluna de uma matriz.\n\nPara tipos inteiros o quociente é arredondado para o inteiro mais próximo e satura; dividir por zero dá o maior valor, ou `0` para `0./0`."
+      },
+      "examples": [
+        {
+          "code": "[2 4 6] ./ [1 2 3]\n[1 0 -1] ./ 0\nx = [1 2 3 4];\nx ./ sum(x)\nint32(7) ./ int32(2)"
+        }
+      ],
+      "see": [
+        "rdivide",
+        ".\\",
+        "/",
+        ".*",
+        "idivide"
+      ]
     },
-    {
-     "code": "g = vectorize(f)",
-     "en": "Does the same for an inline function object `f`.",
-     "pt": "Faz o mesmo para um objeto de função inline `f`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "s1",
-     "en": "Character vector holding an expression.",
-     "pt": "Vetor de caracteres com uma expressão."
+    ".\\": {
+      "summary": {
+        "en": "Element-wise left division operator.",
+        "pt": "Operador de divisão à esquerda elemento a elemento."
+      },
+      "syntax": [
+        {
+          "code": "C = A .\\ B",
+          "en": "Divides each element of `B` by the matching element of `A`. Same as `ldivide(A, B)`, or `B ./ A`.",
+          "pt": "Divide cada elemento de `B` pelo elemento correspondente de `A`. Equivale a `ldivide(A, B)`, ou `B ./ A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Denominator: numeric or logical array.",
+          "pt": "Denominador: array numérico ou lógico."
+        },
+        {
+          "name": "B",
+          "en": "Numerator, with a size compatible with `A`.",
+          "pt": "Numerador, com tamanho compatível com `A`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array of quotients `B ./ A`.",
+          "pt": "Array de quocientes `B ./ A`."
+        }
+      ],
+      "description": {
+        "en": "The backslash points toward the operand that is divided: the quantity on the right is divided by the one on the left. It is the same operation as `./` with the operands swapped, and it is rarely needed. Division by zero follows IEEE rules and yields `Inf` or `NaN`.\n\nDo not confuse it with `\\`, the matrix left division that solves linear systems.",
+        "pt": "A barra invertida aponta para o operando que é dividido: a grandeza da direita é dividida pela da esquerda. É a mesma operação de `./` com os operandos trocados e raramente é necessária. A divisão por zero segue as regras IEEE e resulta em `Inf` ou `NaN`.\n\nNão confundir com `\\`, a divisão matricial à esquerda que resolve sistemas lineares."
+      },
+      "examples": [
+        {
+          "code": "[1 2 4] .\\ [2 4 8]\n2 .\\ [1 2 3]"
+        }
+      ],
+      "see": [
+        "ldivide",
+        "./",
+        "\\",
+        ".*"
+      ]
     },
-    {
-     "name": "f",
-     "en": "Inline function object.",
-     "pt": "Objeto de função inline."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "s2",
-     "en": "The expression rewritten with element-wise operators.",
-     "pt": "A expressão reescrita com operadores elemento a elemento."
-    }
-   ],
-   "description": {
-    "en": "Each `*`, `/` and `^` in the text gets a dot in front of it, unless it already has one. Evaluating the result on arrays then works element by element instead of performing matrix algebra.\n\nIt mainly serves older code that builds expressions from strings. With anonymous functions you simply write the dotted operators yourself.",
-    "pt": "Cada `*`, `/` e `^` no texto recebe um ponto antes, a menos que já tenha. Avaliar o resultado sobre arrays passa então a operar elemento a elemento, em vez de fazer álgebra matricial.\n\nServe sobretudo a códigos antigos que montam expressões a partir de strings. Com funções anônimas, basta escrever os operadores com ponto."
-   },
-   "examples": [
-    {
-     "code": "vectorize('x^2*y + 1/x')"
-    }
-   ],
-   "see": [
-    ".*",
-    "./",
-    ".^",
-    "inline",
-    "str2func"
-   ]
-  },
-  "vertcat": {
-   "summary": {
-    "en": "Concatenates arrays vertically.",
-    "pt": "Concatena arrays na vertical."
-   },
-   "syntax": [
-    {
-     "code": "C = vertcat(A1, A2, ...)",
-     "en": "Stacks the arguments one below the other. Same as `[A1; A2; ...]`.",
-     "pt": "Empilha os argumentos um abaixo do outro. Equivale a `[A1; A2; ...]`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A1, A2, ...",
-     "en": "Arrays with the same number of columns (and same size in all higher dimensions).",
-     "pt": "Arrays com o mesmo número de colunas (e o mesmo tamanho nas dimensões superiores)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The stacked array, with as many rows as all inputs together.",
-     "pt": "O array empilhado, com tantas linhas quanto todas as entradas somadas."
-    }
-   ],
-   "description": {
-    "en": "`vertcat` is the function behind the semicolon inside square brackets. Using the function form is convenient when the pieces are held in a cell array, since `vertcat(c{:})` stacks them all.\n\nMixing types follows the usual concatenation rules: integers win over doubles, and char combined with numbers gives char. Empty inputs `[]` are ignored.",
-    "pt": "`vertcat` é a função por trás do ponto e vírgula dentro de colchetes. A forma funcional é prática quando as partes estão em um cell array, pois `vertcat(c{:})` empilha todas.\n\nA mistura de tipos segue as regras usuais de concatenação: inteiros prevalecem sobre doubles, e char combinado com números dá char. Entradas vazias `[]` são ignoradas."
-   },
-   "examples": [
-    {
-     "code": "vertcat([1 2], [3 4], [5 6])\nc = {[1 2], [3 4]};\nvertcat(c{:})"
-    }
-   ],
-   "see": [
-    "horzcat",
-    "cat",
-    "repmat"
-   ]
-  },
-  "zeros": {
-   "summary": {
-    "en": "Creates an array of zeros.",
-    "pt": "Cria um array de zeros."
-   },
-   "syntax": [
-    {
-     "code": "Z = zeros(n)",
-     "en": "Returns an `n`-by-`n` matrix of zeros.",
-     "pt": "Retorna uma matriz `n`-por-`n` de zeros."
+    ".^": {
+      "summary": {
+        "en": "Element-wise power operator.",
+        "pt": "Operador de potência elemento a elemento."
+      },
+      "syntax": [
+        {
+          "code": "C = A .^ B",
+          "en": "Raises each element of `A` to the matching power in `B`. Same as `power(A, B)`.",
+          "pt": "Eleva cada elemento de `A` à potência correspondente em `B`. Equivale a `power(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Base: numeric or logical array.",
+          "pt": "Base: array numérico ou lógico."
+        },
+        {
+          "name": "B",
+          "en": "Exponent, with a size compatible with `A`.",
+          "pt": "Expoente, com tamanho compatível com `A`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array of powers, with the size given by implicit expansion.",
+          "pt": "Array de potências, com o tamanho dado pela expansão implícita."
+        }
+      ],
+      "description": {
+        "en": "A negative base with a non-integer exponent gives a complex result instead of `NaN`: `(-8).^(1/3)` is complex, and its real cube root is obtained with `nthroot`. `0.^0` is `1`.\n\nUnlike `^`, which raises a square matrix to a power in the linear algebra sense, `.^` always works element by element, so `A.^2` squares every entry.",
+        "pt": "Uma base negativa com expoente não inteiro dá um resultado complexo em vez de `NaN`: `(-8).^(1/3)` é complexo, e a raiz cúbica real se obtém com `nthroot`. `0.^0` vale `1`.\n\nAo contrário de `^`, que eleva uma matriz quadrada a uma potência no sentido da álgebra linear, `.^` sempre atua elemento a elemento, então `A.^2` eleva ao quadrado cada entrada."
+      },
+      "examples": [
+        {
+          "code": "[1 2 3] .^ 2\n2 .^ [1 2 3 4]\n[1 2; 3 4] .^ 2\n(-8) .^ (1/3)"
+        }
+      ],
+      "see": [
+        "power",
+        "^",
+        "sqrt",
+        "nthroot",
+        "exp"
+      ]
     },
-    {
-     "code": "Z = zeros(m, n, ...)",
-     "en": "Returns an array of zeros with the given dimensions.",
-     "pt": "Retorna um array de zeros com as dimensões indicadas."
+    "/": {
+      "summary": {
+        "en": "Right division operator: a / b divides, or solves x*B = A for matrices.",
+        "pt": "Operador de divisão à direita: a / b divide, ou resolve x*B = A para matrizes."
+      },
+      "syntax": [
+        {
+          "code": "C = A / B",
+          "en": "For a scalar `B`, divides each element of `A` by it. For matrices, solves `C*B = A`. Same as `mrdivide(A, B)`.",
+          "pt": "Para `B` escalar, divide cada elemento de `A` por ele. Para matrizes, resolve `C*B = A`. Equivale a `mrdivide(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric array. With a matrix `B`, `A` must have as many columns as `B`.",
+          "pt": "Array numérico. Com `B` matriz, `A` deve ter o mesmo número de colunas que `B`."
+        },
+        {
+          "name": "B",
+          "en": "Scalar, or matrix whose number of columns equals that of `A`.",
+          "pt": "Escalar, ou matriz cujo número de colunas é igual ao de `A`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The quotient. For matrices it equals `A * inv(B)`, computed by a more accurate solver.",
+          "pt": "O quociente. Para matrizes equivale a `A * inv(B)`, calculado por um resolvedor mais preciso."
+        }
+      ],
+      "description": {
+        "en": "With a scalar denominator, `/` behaves like `./`. With a square matrix `B` it solves the linear system `C*B = A` and is equivalent to `(B' \\ A')'`. If `B` is not square, the least-squares solution is returned.\n\nPrefer `A/B` to `A*inv(B)`: it is faster and more accurate.",
+        "pt": "Com denominador escalar, `/` se comporta como `./`. Com uma matriz quadrada `B`, resolve o sistema linear `C*B = A` e equivale a `(B' \\ A')'`. Se `B` não for quadrada, retorna a solução de mínimos quadrados.\n\nPrefira `A/B` a `A*inv(B)`: é mais rápido e mais preciso."
+      },
+      "examples": [
+        {
+          "code": "[2 4 6] / 2\nA = [1 2; 3 4];\nX = [5 6] / A\nX * A"
+        }
+      ],
+      "see": [
+        "mrdivide",
+        "\\",
+        "./",
+        "inv",
+        "mldivide"
+      ]
     },
-    {
-     "code": "Z = zeros(sz)",
-     "en": "Takes the size from the vector `sz`.",
-     "pt": "Usa o tamanho do vetor `sz`."
+    "\\": {
+      "summary": {
+        "en": "Left division operator: solves the linear system A*x = B.",
+        "pt": "Operador de divisão à esquerda: resolve o sistema linear A*x = B."
+      },
+      "syntax": [
+        {
+          "code": "X = A \\ B",
+          "en": "Solves `A*X = B`. Same as `mldivide(A, B)`.",
+          "pt": "Resolve `A*X = B`. Equivale a `mldivide(A, B)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Coefficient matrix, `m`-by-`n`.",
+          "pt": "Matriz de coeficientes, `m`-por-`n`."
+        },
+        {
+          "name": "B",
+          "en": "Right-hand side with `m` rows. Each column is a separate system.",
+          "pt": "Lado direito com `m` linhas. Cada coluna é um sistema separado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Solution with `n` rows. For a square `A` it satisfies `A*X = B`; otherwise it is the least-squares solution.",
+          "pt": "Solução com `n` linhas. Para `A` quadrada satisfaz `A*X = B`; caso contrário é a solução de mínimos quadrados."
+        }
+      ],
+      "description": {
+        "en": "For a square, nonsingular `A`, the system is solved by factorization (LU, or Cholesky and triangular shortcuts when the matrix has that structure). This is both faster and more accurate than `inv(A)*B`.\n\nWhen `A` has more rows than columns, the result minimizes `norm(A*X - B)`. With a scalar `A`, `A \\ B` is just `B / A`.",
+        "pt": "Para uma `A` quadrada e não singular, o sistema é resolvido por fatoração (LU, ou atalhos com Cholesky e matrizes triangulares quando a matriz tem essa estrutura). Isso é mais rápido e mais preciso do que `inv(A)*B`.\n\nQuando `A` tem mais linhas do que colunas, o resultado minimiza `norm(A*X - B)`. Com `A` escalar, `A \\ B` é simplesmente `B / A`."
+      },
+      "examples": [
+        {
+          "code": "A = [2 1; 1 3];\nb = [3; 5];\nx = A \\ b\nA * x\nt = (0:3)';\n[ones(4,1) t] \\ [1; 3; 5; 7]"
+        }
+      ],
+      "see": [
+        "mldivide",
+        "/",
+        "inv",
+        "linsolve",
+        "lsqminnorm"
+      ]
     },
-    {
-     "code": "Z = zeros(___, classname)",
-     "en": "Creates zeros of the given class, such as `'int8'` or `'single'`.",
-     "pt": "Cria zeros da classe indicada, como `'int8'` ou `'single'`."
-    },
-    {
-     "code": "Z = zeros(___, 'like', P)",
-     "en": "Matches the class (and complexness) of the prototype `P`.",
-     "pt": "Segue a classe (e a complexidade) do protótipo `P`."
+    "^": {
+      "summary": {
+        "en": "Matrix power operator.",
+        "pt": "Operador de potência de matrizes."
+      },
+      "syntax": [
+        {
+          "code": "C = A ^ p",
+          "en": "Raises the square matrix `A` to the power `p`. Same as `mpower(A, p)`.",
+          "pt": "Eleva a matriz quadrada `A` à potência `p`. Equivale a `mpower(A, p)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Square matrix, or a scalar.",
+          "pt": "Matriz quadrada, ou um escalar."
+        },
+        {
+          "name": "p",
+          "en": "Scalar exponent. An integer gives repeated multiplication; a negative integer uses the inverse.",
+          "pt": "Expoente escalar. Um inteiro dá multiplicações repetidas; um inteiro negativo usa a inversa."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The matrix power, of the same size as the matrix operand.",
+          "pt": "A potência da matriz, com o mesmo tamanho do operando matricial."
+        }
+      ],
+      "description": {
+        "en": "`A^2` is `A*A`, and `A^-1` is `inv(A)`. Use `sqrtm` for a matrix square root.\n\nWhen both operands are scalars the result is the ordinary power. For element-wise powers of an array use `.^`.",
+        "pt": "`A^2` é `A*A`, e `A^-1` é `inv(A)`. Para a raiz quadrada de uma matriz use `sqrtm`.\n\nQuando os dois operandos são escalares o resultado é a potência comum. Para potências elemento a elemento use `.^`."
+      },
+      "examples": [
+        {
+          "code": "A = [1 1; 1 0];\nA ^ 5\nA ^ -1"
+        }
+      ],
+      "see": [
+        "mpower",
+        ".^",
+        "expm",
+        "inv",
+        "sqrtm"
+      ]
     }
-   ],
-   "inputs": [
-    {
-     "name": "n, m, ...",
-     "en": "Nonnegative integer dimensions. Negative values count as 0.",
-     "pt": "Dimensões inteiras não negativas. Valores negativos contam como 0."
-    },
-    {
-     "name": "classname",
-     "en": "Output class; the default is `'double'`.",
-     "pt": "Classe de saída; o padrão é `'double'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Z",
-     "en": "Array of zeros of the requested size and class.",
-     "pt": "Array de zeros com o tamanho e a classe pedidos."
-    }
-   ],
-   "description": {
-    "en": "`zeros` is mainly used to preallocate: creating the output array up front and filling it inside a loop is much faster than growing it one element at a time.\n\nA dimension of 0 gives an empty array, for example `zeros(0,3)`. Calling `zeros` with no arguments returns the scalar `0`.",
-    "pt": "`zeros` serve principalmente para pré-alocar: criar o array de saída de antemão e preenchê-lo dentro de um laço é bem mais rápido do que fazê-lo crescer um elemento por vez.\n\nUma dimensão 0 gera um array vazio, por exemplo `zeros(0,3)`. Chamar `zeros` sem argumentos retorna o escalar `0`."
-   },
-   "examples": [
-    {
-     "code": "zeros(2, 3)\nzeros(2, 'int8')\nsize(zeros(0, 3))"
-    }
-   ],
-   "see": [
-    "ones",
-    "eye",
-    "nan",
-    "true",
-    "rand"
-   ]
-  },
-  "<": {
-   "summary": {
-    "en": "Less-than operator: tests element by element whether A is smaller than B.",
-    "pt": "Operador menor que: testa elemento a elemento se A é menor que B."
-   },
-   "syntax": [
-    {
-     "code": "C = A < B",
-     "en": "Applies the operator to `A` and `B`. Same as `lt(A, B)`.",
-     "pt": "Aplica o operador a `A` e `B`. Equivale a `lt(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
-     "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
-     "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
-    }
-   ],
-   "description": {
-    "en": "The comparison runs element by element with implicit expansion, so a matrix can be compared with a scalar or a row with a column. The result is a logical array that works as a mask: `x(x < 0)` picks the negative entries. Comparing with `NaN` always gives `0`.\n\nChar arguments are compared by their character codes.",
-    "pt": "A comparação é feita elemento a elemento com expansão implícita, então uma matriz pode ser comparada com um escalar, ou uma linha com uma coluna. O resultado é um array lógico que funciona como máscara: `x(x < 0)` seleciona as entradas negativas. Comparar com `NaN` sempre dá `0`.\n\nArgumentos char são comparados pelos códigos dos caracteres."
-   },
-   "examples": [
-    {
-     "code": "x = [4 -1 7 0];\nx < 3\nx(x < 3)\n[1 2 3] < [2; 3]"
-    }
-   ],
-   "see": [
-    "lt",
-    "<=",
-    ">",
-    "==",
-    "find"
-   ]
-  },
-  "<=": {
-   "summary": {
-    "en": "Less-than-or-equal operator: tests element by element whether A is at most B.",
-    "pt": "Operador menor ou igual: testa elemento a elemento se A é no máximo B."
-   },
-   "syntax": [
-    {
-     "code": "C = A <= B",
-     "en": "Applies the operator to `A` and `B`. Same as `le(A, B)`.",
-     "pt": "Aplica o operador a `A` e `B`. Equivale a `le(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
-     "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
-     "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
-    }
-   ],
-   "description": {
-    "en": "Works like `<` but also accepts equality. Sizes follow implicit expansion rules and the result is a logical array. Any comparison involving `NaN` is `0`, including `NaN <= NaN`.\n\nWith floating-point numbers, exact equality may fail because of rounding; compare with a tolerance when that matters.",
-    "pt": "Funciona como `<`, mas aceita também a igualdade. Os tamanhos seguem as regras de expansão implícita e o resultado é um array lógico. Qualquer comparação com `NaN` dá `0`, inclusive `NaN <= NaN`.\n\nCom números de ponto flutuante, a igualdade exata pode falhar por arredondamento; compare com uma tolerância quando isso importar."
-   },
-   "examples": [
-    {
-     "code": "x = [1 2 3 4 5];\nx <= 3\nsum(x <= 3)\nNaN <= NaN"
-    }
-   ],
-   "see": [
-    "le",
-    "<",
-    ">=",
-    "==",
-    "any"
-   ]
-  },
-  ">": {
-   "summary": {
-    "en": "Greater-than operator: tests element by element whether A is larger than B.",
-    "pt": "Operador maior que: testa elemento a elemento se A é maior que B."
-   },
-   "syntax": [
-    {
-     "code": "C = A > B",
-     "en": "Applies the operator to `A` and `B`. Same as `gt(A, B)`.",
-     "pt": "Aplica o operador a `A` e `B`. Equivale a `gt(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
-     "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
-     "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
-    }
-   ],
-   "description": {
-    "en": "The comparison is element-wise with implicit expansion and returns a logical array. It is typically used to build conditions, to count with `sum(x > t)`, or to filter with `x(x > t)`. Comparisons with `NaN` are always `0`.\n\nInside `if` and `while`, an array condition is true only when all its elements are nonzero.",
-    "pt": "A comparação é elemento a elemento, com expansão implícita, e retorna um array lógico. É usada para montar condições, contar com `sum(x > t)` ou filtrar com `x(x > t)`. Comparações com `NaN` são sempre `0`.\n\nDentro de `if` e `while`, uma condição em array só é verdadeira quando todos os elementos são diferentes de zero."
-   },
-   "examples": [
-    {
-     "code": "x = [4 -1 7 0];\nx > 0\nsum(x > 0)\nx(x > 0)"
-    }
-   ],
-   "see": [
-    "gt",
-    ">=",
-    "<",
-    "==",
-    "sum"
-   ]
-  },
-  ">=": {
-   "summary": {
-    "en": "Greater-than-or-equal operator: tests element by element whether A is at least B.",
-    "pt": "Operador maior ou igual: testa elemento a elemento se A é no mínimo B."
-   },
-   "syntax": [
-    {
-     "code": "C = A >= B",
-     "en": "Applies the operator to `A` and `B`. Same as `ge(A, B)`.",
-     "pt": "Aplica o operador a `A` e `B`. Equivale a `ge(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
-     "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
-     "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
-    }
-   ],
-   "description": {
-    "en": "Works like `>` but also accepts equality. The result is a logical array whose size follows implicit expansion. Comparisons with `NaN` are `0`.\n\nFor complex operands only the real parts are compared.",
-    "pt": "Funciona como `>`, mas aceita também a igualdade. O resultado é um array lógico cujo tamanho segue a expansão implícita. Comparações com `NaN` dão `0`.\n\nPara operandos complexos, apenas as partes reais são comparadas."
-   },
-   "examples": [
-    {
-     "code": "scores = [55 70 62 90];\nscores >= 60\nmean(scores >= 60)"
-    }
-   ],
-   "see": [
-    "ge",
-    ">",
-    "<=",
-    "==",
-    "all"
-   ]
-  },
-  "==": {
-   "summary": {
-    "en": "Equality operator: tests element by element whether A and B are equal.",
-    "pt": "Operador de igualdade: testa elemento a elemento se A e B são iguais."
-   },
-   "syntax": [
-    {
-     "code": "C = A == B",
-     "en": "Applies the operator to `A` and `B`. Same as `eq(A, B)`.",
-     "pt": "Aplica o operador a `A` e `B`. Equivale a `eq(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays (only the real part is compared for complex values). Sizes must be compatible, or one of them a scalar.",
-     "pt": "Arrays numéricos, lógicos ou de char (para valores complexos só a parte real é comparada). Os tamanhos devem ser compatíveis, ou um deles um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Logical array: `1` where the relation holds, `0` elsewhere.",
-     "pt": "Array lógico: `1` onde a relação vale, `0` nos demais."
-    }
-   ],
-   "description": {
-    "en": "The test is element-wise with implicit expansion, and `NaN` is never equal to anything, itself included. To compare whole arrays as one yes or no answer use `isequal`.\n\nFor char arrays the comparison is per character, so the two strings must have the same length or one must be a single character. Use `strcmp` to compare text as a whole.",
-    "pt": "O teste é elemento a elemento, com expansão implícita, e `NaN` nunca é igual a nada, nem a si mesmo. Para comparar arrays inteiros com uma única resposta sim ou não use `isequal`.\n\nPara arrays de char a comparação é caractere a caractere, então as duas strings devem ter o mesmo comprimento ou uma delas ser um único caractere. Use `strcmp` para comparar textos como um todo."
-   },
-   "examples": [
-    {
-     "code": "[1 2 3] == [1 5 3]\n'hello' == 'l'\nNaN == NaN\nisequal([1 2 3], [1 2 3])"
-    }
-   ],
-   "see": [
-    "eq",
-    "isequal",
-    "strcmp",
-    "~=",
-    "ismember"
-   ],
-   "notes": {
-    "en": "Floating-point results that look equal can differ in the last bits, for example `0.1 + 0.2 == 0.3` is `0`.",
-    "pt": "Resultados de ponto flutuante que parecem iguais podem diferir nos últimos bits, por exemplo `0.1 + 0.2 == 0.3` é `0`."
-   }
-  },
-  "'": {
-   "summary": {
-    "en": "Complex conjugate transpose operator.",
-    "pt": "Operador de transposta conjugada."
-   },
-   "syntax": [
-    {
-     "code": "B = A'",
-     "en": "Swaps rows and columns of `A` and conjugates complex values. Same as `ctranspose(A)`.",
-     "pt": "Troca as linhas e colunas de `A` e conjuga os valores complexos. Equivale a `ctranspose(A)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "2-D numeric, logical or char array.",
-     "pt": "Array 2-D numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Transposed array: element `B(j,i)` is `conj(A(i,j))`.",
-     "pt": "Array transposto: o elemento `B(j,i)` é `conj(A(i,j))`."
-    }
-   ],
-   "description": {
-    "en": "For real data `A'` is the plain transpose, turning a row into a column and the reverse. For complex data every element is also conjugated, which is the transpose that appears in inner products and least squares: `x'*y` is the dot product of two column vectors.\n\nThe quote is only an operator when it directly follows a value, a name, a closing bracket or another transpose. Elsewhere it starts a character vector such as `'abc'`. Use `.'` for the transpose without conjugation.",
-    "pt": "Para dados reais, `A'` é a transposta simples, que transforma linha em coluna e vice-versa. Para dados complexos, cada elemento também é conjugado, que é a transposta usada em produtos internos e mínimos quadrados: `x'*y` é o produto escalar de dois vetores coluna.\n\nA aspa só é um operador quando segue diretamente um valor, um nome, um colchete fechado ou outra transposição. Em outros lugares ela inicia um vetor de caracteres como `'abc'`. Use `.'` para a transposta sem conjugação."
-   },
-   "examples": [
-    {
-     "code": "A = [1 2 3; 4 5 6];\nA'\nz = [1+2i; 3-1i];\nz'\nz.'"
-    }
-   ],
-   "see": [
-    "ctranspose",
-    ".'",
-    "transpose",
-    "conj"
-   ]
-  },
-  ".'": {
-   "summary": {
-    "en": "Transpose operator without conjugation.",
-    "pt": "Operador de transposta sem conjugação."
-   },
-   "syntax": [
-    {
-     "code": "B = A.'",
-     "en": "Swaps rows and columns of `A`, leaving complex values as they are. Same as `transpose(A)`.",
-     "pt": "Troca as linhas e colunas de `A`, sem alterar valores complexos. Equivale a `transpose(A)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "2-D array of any type.",
-     "pt": "Array 2-D de qualquer tipo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array with `B(j,i) = A(i,j)`.",
-     "pt": "Array com `B(j,i) = A(i,j)`."
-    }
-   ],
-   "description": {
-    "en": "`A.'` only rearranges elements. For real arrays it gives the same result as `A'`; for complex arrays it does not conjugate, which is the right choice when the values are just stored as complex numbers and not treated as vectors in an inner product space.\n\nArrays with more than two dimensions are an error. Use `pagetranspose` to transpose each page.",
-    "pt": "`A.'` apenas reorganiza elementos. Para arrays reais dá o mesmo resultado que `A'`; para arrays complexos não conjuga, o que é adequado quando os valores são apenas números complexos armazenados e não vetores em um espaço com produto interno.\n\nArrays com mais de duas dimensões geram erro. Use `pagetranspose` para transpor cada página."
-   },
-   "examples": [
-    {
-     "code": "z = [1+2i 3-1i];\nz.'\nz'"
-    }
-   ],
-   "see": [
-    "transpose",
-    "'",
-    "pagetranspose",
-    "permute"
-   ]
-  },
-  "*": {
-   "summary": {
-    "en": "Matrix multiplication operator.",
-    "pt": "Operador de multiplicação de matrizes."
-   },
-   "syntax": [
-    {
-     "code": "C = A * B",
-     "en": "Matrix product of `A` and `B`. Same as `mtimes(A, B)`.",
-     "pt": "Produto matricial de `A` e `B`. Equivale a `mtimes(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical matrix, `m`-by-`k`, or a scalar.",
-     "pt": "Matriz numérica ou lógica `m`-por-`k`, ou um escalar."
-    },
-    {
-     "name": "B",
-     "en": "Numeric or logical matrix, `k`-by-`n`, or a scalar.",
-     "pt": "Matriz numérica ou lógica `k`-por-`n`, ou um escalar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The `m`-by-`n` product with `C(i,j) = sum(A(i,:) .* B(:,j))`.",
-     "pt": "O produto `m`-por-`n`, com `C(i,j) = sum(A(i,:) .* B(:,j))`."
-    }
-   ],
-   "description": {
-    "en": "The number of columns of `A` must equal the number of rows of `B`, otherwise MatLivre reports an error about incompatible dimensions. If either operand is a scalar, `*` multiplies every element, just like `.*`.\n\nA row times a column gives a scalar (the dot product) and a column times a row gives a matrix (the outer product). For element by element products use `.*`.",
-    "pt": "O número de colunas de `A` deve ser igual ao número de linhas de `B`, caso contrário o MatLivre informa um erro de dimensões incompatíveis. Se um dos operandos for escalar, `*` multiplica todos os elementos, como `.*`.\n\nUma linha vezes uma coluna dá um escalar (o produto escalar) e uma coluna vezes uma linha dá uma matriz (o produto externo). Para produtos elemento a elemento use `.*`."
-   },
-   "examples": [
-    {
-     "code": "A = [1 2; 3 4];\nA * [1; 1]\nA * A\n[1 2 3] * [4; 5; 6]\n[1; 2] * [3 4]"
-    }
-   ],
-   "see": [
-    "mtimes",
-    ".*",
-    "^",
-    "\\",
-    "dot"
-   ]
-  },
-  "-": {
-   "summary": {
-    "en": "Subtraction and negation operator.",
-    "pt": "Operador de subtração e negação."
-   },
-   "syntax": [
-    {
-     "code": "C = A - B",
-     "en": "Subtracts `B` from `A` element by element. Same as `minus(A, B)`.",
-     "pt": "Subtrai `B` de `A` elemento a elemento. Equivale a `minus(A, B)`."
-    },
-    {
-     "code": "B = -A",
-     "en": "Changes the sign of every element. Same as `uminus(A)`.",
-     "pt": "Troca o sinal de todos os elementos. Equivale a `uminus(A)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric, logical or char arrays with compatible sizes.",
-     "pt": "Arrays numéricos, lógicos ou de char com tamanhos compatíveis."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The difference, with the size given by implicit expansion.",
-     "pt": "A diferença, com o tamanho dado pela expansão implícita."
-    }
-   ],
-   "description": {
-    "en": "Sizes are compatible when each dimension is equal or one of them is 1, so a row vector minus a column vector gives a matrix. Subtracting the mean from a matrix, `A - mean(A)`, relies on this.\n\nInteger arithmetic saturates: `uint8(5) - uint8(10)` is `0`. Mixing different integer types is an error, but an integer with a double gives an integer. Logical and char operands are converted to double.",
-    "pt": "Os tamanhos são compatíveis quando cada dimensão é igual ou uma delas vale 1, então um vetor linha menos um vetor coluna dá uma matriz. Subtrair a média de uma matriz, `A - mean(A)`, depende disso.\n\nA aritmética de inteiros satura: `uint8(5) - uint8(10)` vale `0`. Misturar tipos inteiros diferentes é um erro, mas inteiro com double dá inteiro. Operandos lógicos e char são convertidos para double."
-   },
-   "examples": [
-    {
-     "code": "[5 7 9] - 1\n[1; 2] - [10 20 30]\n-[1 -2 3]\nuint8(5) - uint8(10)"
-    }
-   ],
-   "see": [
-    "minus",
-    "uminus",
-    "+",
-    "diff"
-   ]
-  },
-  ".*": {
-   "summary": {
-    "en": "Element-wise multiplication operator.",
-    "pt": "Operador de multiplicação elemento a elemento."
-   },
-   "syntax": [
-    {
-     "code": "C = A .* B",
-     "en": "Multiplies corresponding elements of `A` and `B`. Same as `times(A, B)`.",
-     "pt": "Multiplica os elementos correspondentes de `A` e `B`. Equivale a `times(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric or logical arrays with compatible sizes.",
-     "pt": "Arrays numéricos ou lógicos com tamanhos compatíveis."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array of products, with the size given by implicit expansion.",
-     "pt": "Array de produtos, com o tamanho dado pela expansão implícita."
-    }
-   ],
-   "description": {
-    "en": "Each element of `A` is multiplied by the element at the same position in `B`. A size-1 dimension is stretched to match the other operand, so `(1:3)' .* (1:3)` builds a multiplication table. This is different from `*`, which performs matrix multiplication.\n\nInteger types saturate at their limits, and combining two different integer types is an error.",
-    "pt": "Cada elemento de `A` é multiplicado pelo elemento da mesma posição em `B`. Uma dimensão de tamanho 1 é esticada para casar com o outro operando, então `(1:3)' .* (1:3)` monta uma tabuada. Isso difere de `*`, que faz a multiplicação de matrizes.\n\nOs tipos inteiros saturam nos limites, e combinar dois tipos inteiros diferentes é um erro."
-   },
-   "examples": [
-    {
-     "code": "[1 2 3] .* [4 5 6]\n(1:3)' .* (1:4)\nint8(100) .* int8(2)"
-    }
-   ],
-   "see": [
-    "times",
-    "*",
-    "./",
-    ".^",
-    "prod"
-   ]
-  },
-  "./": {
-   "summary": {
-    "en": "Element-wise right division operator.",
-    "pt": "Operador de divisão à direita elemento a elemento."
-   },
-   "syntax": [
-    {
-     "code": "C = A ./ B",
-     "en": "Divides each element of `A` by the matching element of `B`. Same as `rdivide(A, B)`.",
-     "pt": "Divide cada elemento de `A` pelo elemento correspondente de `B`. Equivale a `rdivide(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numerator: numeric or logical array.",
-     "pt": "Numerador: array numérico ou lógico."
-    },
-    {
-     "name": "B",
-     "en": "Denominator, with a size compatible with `A`.",
-     "pt": "Denominador, com tamanho compatível com `A`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array of quotients.",
-     "pt": "Array de quocientes."
-    }
-   ],
-   "description": {
-    "en": "Floating-point division by zero does not raise an error: `1./0` is `Inf`, `-1./0` is `-Inf` and `0./0` is `NaN`. Sizes are expanded implicitly, so `x ./ sum(x)` normalizes a vector and `A ./ max(A)` scales each column of a matrix.\n\nFor integer types the quotient is rounded to the nearest integer and saturates; dividing by zero gives the largest value, or `0` for `0./0`.",
-    "pt": "A divisão de ponto flutuante por zero não gera erro: `1./0` vale `Inf`, `-1./0` vale `-Inf` e `0./0` vale `NaN`. Os tamanhos são expandidos implicitamente, então `x ./ sum(x)` normaliza um vetor e `A ./ max(A)` escala cada coluna de uma matriz.\n\nPara tipos inteiros o quociente é arredondado para o inteiro mais próximo e satura; dividir por zero dá o maior valor, ou `0` para `0./0`."
-   },
-   "examples": [
-    {
-     "code": "[2 4 6] ./ [1 2 3]\n[1 0 -1] ./ 0\nx = [1 2 3 4];\nx ./ sum(x)\nint32(7) ./ int32(2)"
-    }
-   ],
-   "see": [
-    "rdivide",
-    ".\\",
-    "/",
-    ".*",
-    "idivide"
-   ]
-  },
-  ".\\": {
-   "summary": {
-    "en": "Element-wise left division operator.",
-    "pt": "Operador de divisão à esquerda elemento a elemento."
-   },
-   "syntax": [
-    {
-     "code": "C = A .\\ B",
-     "en": "Divides each element of `B` by the matching element of `A`. Same as `ldivide(A, B)`, or `B ./ A`.",
-     "pt": "Divide cada elemento de `B` pelo elemento correspondente de `A`. Equivale a `ldivide(A, B)`, ou `B ./ A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Denominator: numeric or logical array.",
-     "pt": "Denominador: array numérico ou lógico."
-    },
-    {
-     "name": "B",
-     "en": "Numerator, with a size compatible with `A`.",
-     "pt": "Numerador, com tamanho compatível com `A`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array of quotients `B ./ A`.",
-     "pt": "Array de quocientes `B ./ A`."
-    }
-   ],
-   "description": {
-    "en": "The backslash points toward the operand that is divided: the quantity on the right is divided by the one on the left. It is the same operation as `./` with the operands swapped, and it is rarely needed. Division by zero follows IEEE rules and yields `Inf` or `NaN`.\n\nDo not confuse it with `\\`, the matrix left division that solves linear systems.",
-    "pt": "A barra invertida aponta para o operando que é dividido: a grandeza da direita é dividida pela da esquerda. É a mesma operação de `./` com os operandos trocados e raramente é necessária. A divisão por zero segue as regras IEEE e resulta em `Inf` ou `NaN`.\n\nNão confundir com `\\`, a divisão matricial à esquerda que resolve sistemas lineares."
-   },
-   "examples": [
-    {
-     "code": "[1 2 4] .\\ [2 4 8]\n2 .\\ [1 2 3]"
-    }
-   ],
-   "see": [
-    "ldivide",
-    "./",
-    "\\",
-    ".*"
-   ]
-  },
-  ".^": {
-   "summary": {
-    "en": "Element-wise power operator.",
-    "pt": "Operador de potência elemento a elemento."
-   },
-   "syntax": [
-    {
-     "code": "C = A .^ B",
-     "en": "Raises each element of `A` to the matching power in `B`. Same as `power(A, B)`.",
-     "pt": "Eleva cada elemento de `A` à potência correspondente em `B`. Equivale a `power(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Base: numeric or logical array.",
-     "pt": "Base: array numérico ou lógico."
-    },
-    {
-     "name": "B",
-     "en": "Exponent, with a size compatible with `A`.",
-     "pt": "Expoente, com tamanho compatível com `A`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array of powers, with the size given by implicit expansion.",
-     "pt": "Array de potências, com o tamanho dado pela expansão implícita."
-    }
-   ],
-   "description": {
-    "en": "A negative base with a non-integer exponent gives a complex result instead of `NaN`: `(-8).^(1/3)` is complex, and its real cube root is obtained with `nthroot`. `0.^0` is `1`.\n\nUnlike `^`, which raises a square matrix to a power in the linear algebra sense, `.^` always works element by element, so `A.^2` squares every entry.",
-    "pt": "Uma base negativa com expoente não inteiro dá um resultado complexo em vez de `NaN`: `(-8).^(1/3)` é complexo, e a raiz cúbica real se obtém com `nthroot`. `0.^0` vale `1`.\n\nAo contrário de `^`, que eleva uma matriz quadrada a uma potência no sentido da álgebra linear, `.^` sempre atua elemento a elemento, então `A.^2` eleva ao quadrado cada entrada."
-   },
-   "examples": [
-    {
-     "code": "[1 2 3] .^ 2\n2 .^ [1 2 3 4]\n[1 2; 3 4] .^ 2\n(-8) .^ (1/3)"
-    }
-   ],
-   "see": [
-    "power",
-    "^",
-    "sqrt",
-    "nthroot",
-    "exp"
-   ]
-  },
-  "/": {
-   "summary": {
-    "en": "Right division operator: a / b divides, or solves x*B = A for matrices.",
-    "pt": "Operador de divisão à direita: a / b divide, ou resolve x*B = A para matrizes."
-   },
-   "syntax": [
-    {
-     "code": "C = A / B",
-     "en": "For a scalar `B`, divides each element of `A` by it. For matrices, solves `C*B = A`. Same as `mrdivide(A, B)`.",
-     "pt": "Para `B` escalar, divide cada elemento de `A` por ele. Para matrizes, resolve `C*B = A`. Equivale a `mrdivide(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric array. With a matrix `B`, `A` must have as many columns as `B`.",
-     "pt": "Array numérico. Com `B` matriz, `A` deve ter o mesmo número de colunas que `B`."
-    },
-    {
-     "name": "B",
-     "en": "Scalar, or matrix whose number of columns equals that of `A`.",
-     "pt": "Escalar, ou matriz cujo número de colunas é igual ao de `A`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The quotient. For matrices it equals `A * inv(B)`, computed by a more accurate solver.",
-     "pt": "O quociente. Para matrizes equivale a `A * inv(B)`, calculado por um resolvedor mais preciso."
-    }
-   ],
-   "description": {
-    "en": "With a scalar denominator, `/` behaves like `./`. With a square matrix `B` it solves the linear system `C*B = A` and is equivalent to `(B' \\ A')'`. If `B` is not square, the least-squares solution is returned.\n\nPrefer `A/B` to `A*inv(B)`: it is faster and more accurate.",
-    "pt": "Com denominador escalar, `/` se comporta como `./`. Com uma matriz quadrada `B`, resolve o sistema linear `C*B = A` e equivale a `(B' \\ A')'`. Se `B` não for quadrada, retorna a solução de mínimos quadrados.\n\nPrefira `A/B` a `A*inv(B)`: é mais rápido e mais preciso."
-   },
-   "examples": [
-    {
-     "code": "[2 4 6] / 2\nA = [1 2; 3 4];\nX = [5 6] / A\nX * A"
-    }
-   ],
-   "see": [
-    "mrdivide",
-    "\\",
-    "./",
-    "inv",
-    "mldivide"
-   ]
-  },
-  "\\": {
-   "summary": {
-    "en": "Left division operator: solves the linear system A*x = B.",
-    "pt": "Operador de divisão à esquerda: resolve o sistema linear A*x = B."
-   },
-   "syntax": [
-    {
-     "code": "X = A \\ B",
-     "en": "Solves `A*X = B`. Same as `mldivide(A, B)`.",
-     "pt": "Resolve `A*X = B`. Equivale a `mldivide(A, B)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Coefficient matrix, `m`-by-`n`.",
-     "pt": "Matriz de coeficientes, `m`-por-`n`."
-    },
-    {
-     "name": "B",
-     "en": "Right-hand side with `m` rows. Each column is a separate system.",
-     "pt": "Lado direito com `m` linhas. Cada coluna é um sistema separado."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "X",
-     "en": "Solution with `n` rows. For a square `A` it satisfies `A*X = B`; otherwise it is the least-squares solution.",
-     "pt": "Solução com `n` linhas. Para `A` quadrada satisfaz `A*X = B`; caso contrário é a solução de mínimos quadrados."
-    }
-   ],
-   "description": {
-    "en": "For a square, nonsingular `A`, the system is solved by factorization (LU, or Cholesky and triangular shortcuts when the matrix has that structure). This is both faster and more accurate than `inv(A)*B`.\n\nWhen `A` has more rows than columns, the result minimizes `norm(A*X - B)`. With a scalar `A`, `A \\ B` is just `B / A`.",
-    "pt": "Para uma `A` quadrada e não singular, o sistema é resolvido por fatoração (LU, ou atalhos com Cholesky e matrizes triangulares quando a matriz tem essa estrutura). Isso é mais rápido e mais preciso do que `inv(A)*B`.\n\nQuando `A` tem mais linhas do que colunas, o resultado minimiza `norm(A*X - B)`. Com `A` escalar, `A \\ B` é simplesmente `B / A`."
-   },
-   "notes": {
-    "en": "MatLivre raises an error (`Matrix is singular to working precision.`) for an exactly singular square `A`, where MATLAB prints a warning and returns `Inf` values.",
-    "pt": "O MatLivre gera um erro (`Matrix is singular to working precision.`) para uma `A` quadrada exatamente singular, onde o MATLAB exibe um aviso e retorna valores `Inf`."
-   },
-   "examples": [
-    {
-     "code": "A = [2 1; 1 3];\nb = [3; 5];\nx = A \\ b\nA * x\nt = (0:3)';\n[ones(4,1) t] \\ [1; 3; 5; 7]"
-    }
-   ],
-   "see": [
-    "mldivide",
-    "/",
-    "inv",
-    "linsolve",
-    "lsqminnorm"
-   ]
-  },
-  "^": {
-   "summary": {
-    "en": "Matrix power operator.",
-    "pt": "Operador de potência de matrizes."
-   },
-   "syntax": [
-    {
-     "code": "C = A ^ p",
-     "en": "Raises the square matrix `A` to the power `p`. Same as `mpower(A, p)`.",
-     "pt": "Eleva a matriz quadrada `A` à potência `p`. Equivale a `mpower(A, p)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Square matrix, or a scalar.",
-     "pt": "Matriz quadrada, ou um escalar."
-    },
-    {
-     "name": "p",
-     "en": "Scalar exponent. An integer gives repeated multiplication; a negative integer uses the inverse.",
-     "pt": "Expoente escalar. Um inteiro dá multiplicações repetidas; um inteiro negativo usa a inversa."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The matrix power, of the same size as the matrix operand.",
-     "pt": "A potência da matriz, com o mesmo tamanho do operando matricial."
-    }
-   ],
-   "description": {
-    "en": "`A^2` is `A*A`, and `A^-1` is `inv(A)`. Use `sqrtm` for a matrix square root.\n\nWhen both operands are scalars the result is the ordinary power. For element-wise powers of an array use `.^`.",
-    "pt": "`A^2` é `A*A`, e `A^-1` é `inv(A)`. Para a raiz quadrada de uma matriz use `sqrtm`.\n\nQuando os dois operandos são escalares o resultado é a potência comum. Para potências elemento a elemento use `.^`."
-   },
-   "notes": {
-    "en": "MatLivre supports integer exponents only. A non-integer exponent, or a scalar raised to a matrix, reports an error.",
-    "pt": "O MatLivre aceita apenas expoentes inteiros. Um expoente não inteiro, ou um escalar elevado a uma matriz, gera um erro."
-   },
-   "examples": [
-    {
-     "code": "A = [1 1; 1 0];\nA ^ 5\nA ^ -1"
-    }
-   ],
-   "see": [
-    "mpower",
-    ".^",
-    "expm",
-    "inv",
-    "sqrtm"
-   ]
   }
- }
 }

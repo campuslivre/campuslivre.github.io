@@ -98,8 +98,8 @@
         "pt": "É o equivalente de `arrayfun` para tabelas. Com `@(a, b) a + b` e uma tabela de duas variáveis, a função recebe os valores `A` e `B` de cada linha e os resultados formam a coluna de saída. Por padrão as variáveis de saída têm nomes como `Var1`, `Var2`, ...; passe `'OutputVariableNames'` para escolhê-los."
       },
       "notes": {
-        "en": "Grouping and the `'SeparateInputs'` option are not fully supported yet in MatLivre; for grouped results, use `splitapply` or `groupsummary`.",
-        "pt": "Agrupamento e a opção `'SeparateInputs'` ainda não são totalmente suportados no MatLivre; para resultados agrupados use `splitapply` ou `groupsummary`."
+        "en": "The `'SeparateInputs'` option is not applied in MatLivre: `func` always receives the values of a row as separate arguments.",
+        "pt": "A opção `'SeparateInputs'` não é aplicada no MatLivre: `func` sempre recebe os valores de uma linha como argumentos separados."
       },
       "examples": [
         {
@@ -528,7 +528,7 @@
       },
       "syntax": [
         {
-          "code": "tsc = settimeseriesnames(tsc, newname, oldname)",
+          "code": "tsc = settimeseriesnames(tsc, oldname, newname)",
           "en": "Renames the member `oldname` to `newname`.",
           "pt": "Renomeia o membro `oldname` para `newname`."
         }
@@ -556,13 +556,9 @@
         "en": "Members of a `tscollection` are addressed by name, so renaming changes how they are accessed afterwards. The new name must be a valid identifier that is not already used by another member. `gettimeseriesnames` lists the current names.",
         "pt": "Os membros de uma `tscollection` são acessados pelo nome, então renomear muda como serão acessados depois. O novo nome deve ser um identificador válido que não seja usado por outro membro. `gettimeseriesnames` lista os nomes atuais."
       },
-      "notes": {
-        "en": "In MatLivre the rename call currently has no effect on the collection.",
-        "pt": "No MatLivre a chamada de renomeação hoje não tem efeito sobre a coleção."
-      },
       "examples": [
         {
-          "code": "ts1 = timeseries([1 2 3]', [0 1 2], 'Name', 'a');\nts2 = timeseries([4 5 6]', [0 1 2], 'Name', 'b');\ntsc = tscollection({ts1, ts2});\ngettimeseriesnames(tsc)\ntsc = settimeseriesnames(tsc, 'z', 'b');",
+          "code": "ts1 = timeseries([1 2 3]', [0 1 2], 'Name', 'a');\nts2 = timeseries([4 5 6]', [0 1 2], 'Name', 'b');\ntsc = tscollection({ts1, ts2});\ngettimeseriesnames(tsc)\ntsc = settimeseriesnames(tsc, 'b', 'z');",
           "note": {
             "en": "Call `gettimeseriesnames` again afterwards to see the new name.",
             "pt": "Chame `gettimeseriesnames` de novo depois para ver o novo nome."

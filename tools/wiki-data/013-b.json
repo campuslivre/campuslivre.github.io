@@ -1,1220 +1,1212 @@
 {
- "functions": {
-  "cat": {
-   "summary": {
-    "en": "Joins arrays along a chosen dimension.",
-    "pt": "Junta arrays ao longo de uma dimensão escolhida."
-   },
-   "syntax": [
-    {
-     "code": "C = cat(dim, A, B, ...)",
-     "en": "Concatenates the inputs along dimension `dim`.",
-     "pt": "Concatena as entradas ao longo da dimensão `dim`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "dim",
-     "en": "Positive integer: 1 stacks vertically, 2 side by side, 3 along pages.",
-     "pt": "Inteiro positivo: 1 empilha na vertical, 2 lado a lado, 3 ao longo das páginas."
+  "functions": {
+    "cat": {
+      "summary": {
+        "en": "Joins arrays along a chosen dimension.",
+        "pt": "Junta arrays ao longo de uma dimensão escolhida."
+      },
+      "syntax": [
+        {
+          "code": "C = cat(dim, A, B, ...)",
+          "en": "Concatenates the inputs along dimension `dim`.",
+          "pt": "Concatena as entradas ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "dim",
+          "en": "Positive integer: 1 stacks vertically, 2 side by side, 3 along pages.",
+          "pt": "Inteiro positivo: 1 empilha na vertical, 2 lado a lado, 3 ao longo das páginas."
+        },
+        {
+          "name": "A, B, ...",
+          "en": "Arrays of the same class (or compatible classes). All sizes must agree except along `dim`.",
+          "pt": "Arrays da mesma classe (ou classes compatíveis). Todos os tamanhos devem coincidir, exceto ao longo de `dim`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The joined array. Its size along `dim` is the sum of the input sizes.",
+          "pt": "O array unido. Seu tamanho ao longo de `dim` é a soma dos tamanhos das entradas."
+        }
+      ],
+      "description": {
+        "en": "`cat(1, A, B)` is the same as `[A; B]` and `cat(2, A, B)` the same as `[A, B]`. Its real use is `dim` 3 or higher, which brackets cannot express, for example to stack matrices into a 3-D array.\n\nCell arrays, strings and other array types can be joined too. If the other dimensions do not match, the call fails with a dimension error.",
+        "pt": "`cat(1, A, B)` equivale a `[A; B]` e `cat(2, A, B)` a `[A, B]`. Seu uso real é com `dim` 3 ou mais, que os colchetes não expressam, por exemplo para empilhar matrizes em um array 3-D.\n\nCell arrays, strings e outros tipos de array também podem ser unidos. Se as outras dimensões não coincidirem, a chamada falha com erro de dimensão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Stack two matrices into pages",
+            "pt": "Empilhar duas matrizes em páginas"
+          },
+          "code": "A = [1 2; 3 4];\nB = [5 6; 7 8];\nC = cat(3, A, B);\nsize(C)\nC(:, :, 2)"
+        }
+      ],
+      "see": [
+        "horzcat",
+        "vertcat",
+        "repmat",
+        "permute",
+        "reshape"
+      ]
     },
-    {
-     "name": "A, B, ...",
-     "en": "Arrays of the same class (or compatible classes). All sizes must agree except along `dim`.",
-     "pt": "Arrays da mesma classe (ou classes compatíveis). Todos os tamanhos devem coincidir, exceto ao longo de `dim`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The joined array. Its size along `dim` is the sum of the input sizes.",
-     "pt": "O array unido. Seu tamanho ao longo de `dim` é a soma dos tamanhos das entradas."
-    }
-   ],
-   "description": {
-    "en": "`cat(1, A, B)` is the same as `[A; B]` and `cat(2, A, B)` the same as `[A, B]`. Its real use is `dim` 3 or higher, which brackets cannot express, for example to stack matrices into a 3-D array.\n\nCell arrays, strings and other array types can be joined too. If the other dimensions do not match, the call fails with a dimension error.",
-    "pt": "`cat(1, A, B)` equivale a `[A; B]` e `cat(2, A, B)` a `[A, B]`. Seu uso real é com `dim` 3 ou mais, que os colchetes não expressam, por exemplo para empilhar matrizes em um array 3-D.\n\nCell arrays, strings e outros tipos de array também podem ser unidos. Se as outras dimensões não coincidirem, a chamada falha com erro de dimensão."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Stack two matrices into pages",
-      "pt": "Empilhar duas matrizes em páginas"
-     },
-     "code": "A = [1 2; 3 4];\nB = [5 6; 7 8];\nC = cat(3, A, B);\nsize(C)\nC(:, :, 2)"
-    }
-   ],
-   "see": [
-    "horzcat",
-    "vertcat",
-    "repmat",
-    "permute",
-    "reshape"
-   ]
-  },
-  "circshift": {
-   "summary": {
-    "en": "Shifts array elements circularly.",
-    "pt": "Desloca os elementos de um array de forma circular."
-   },
-   "syntax": [
-    {
-     "code": "B = circshift(A, k)",
-     "en": "Shifts along the first non-singleton dimension by `k` positions.",
-     "pt": "Desloca ao longo da primeira dimensão de tamanho diferente de 1 por `k` posições."
+    "circshift": {
+      "summary": {
+        "en": "Shifts array elements circularly.",
+        "pt": "Desloca os elementos de um array de forma circular."
+      },
+      "syntax": [
+        {
+          "code": "B = circshift(A, k)",
+          "en": "Shifts along the first non-singleton dimension by `k` positions.",
+          "pt": "Desloca ao longo da primeira dimensão de tamanho diferente de 1 por `k` posições."
+        },
+        {
+          "code": "B = circshift(A, k, dim)",
+          "en": "Shifts along dimension `dim`.",
+          "pt": "Desloca ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "k",
+          "en": "Integer shift. Positive moves elements toward higher indices, negative toward lower.",
+          "pt": "Deslocamento inteiro. Positivo move os elementos para índices maiores, negativo para menores."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to shift along.",
+          "pt": "Dimensão ao longo da qual deslocar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size as `A`.",
+          "pt": "Array do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "Elements pushed off one end re-enter at the other, so nothing is lost and the size does not change. A shift larger than the dimension wraps around, so shifting a length-5 vector by 7 is the same as shifting by 2.\n\nFor a matrix, a shift along dimension 1 moves rows and along dimension 2 moves columns.",
+        "pt": "Elementos empurrados para fora por uma ponta reentram pela outra, então nada se perde e o tamanho não muda. Um deslocamento maior que a dimensão dá a volta, então deslocar um vetor de comprimento 5 por 7 equivale a deslocar por 2.\n\nEm uma matriz, o deslocamento na dimensão 1 move linhas e na dimensão 2 move colunas."
+      },
+      "examples": [
+        {
+          "code": "circshift(1:5, 2)\ncircshift(1:5, -1)\ncircshift([1 2 3; 4 5 6], 1, 2)"
+        }
+      ],
+      "see": [
+        "permute",
+        "flip",
+        "rot90",
+        "reshape"
+      ]
     },
-    {
-     "code": "B = circshift(A, k, dim)",
-     "en": "Shifts along dimension `dim`.",
-     "pt": "Desloca ao longo da dimensão `dim`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
+    "colon": {
+      "summary": {
+        "en": "Function form of the colon operator, which builds evenly spaced vectors.",
+        "pt": "Forma de função do operador dois-pontos, que constrói vetores igualmente espaçados."
+      },
+      "syntax": [
+        {
+          "code": "v = colon(a, b)",
+          "en": "Same as `a:b`, steps of 1.",
+          "pt": "Igual a `a:b`, passos de 1."
+        },
+        {
+          "code": "v = colon(a, d, b)",
+          "en": "Same as `a:d:b`, steps of `d`.",
+          "pt": "Igual a `a:d:b`, passos de `d`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "First value.",
+          "pt": "Primeiro valor."
+        },
+        {
+          "name": "d",
+          "en": "Step size (default 1). May be negative.",
+          "pt": "Tamanho do passo (padrão 1). Pode ser negativo."
+        },
+        {
+          "name": "b",
+          "en": "Limit: the sequence stops at or before it.",
+          "pt": "Limite: a sequência termina nele ou antes dele."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "Row vector. It is empty when the step points away from the limit.",
+          "pt": "Vetor linha. É vazio quando o passo aponta para longe do limite."
+        }
+      ],
+      "description": {
+        "en": "The function exists so that the colon can be passed around as a function handle or used in `cellfun` and `arrayfun` calls, where the syntax `a:b` is not available. The number of elements is `floor((b-a)/d) + 1`, computed with a small tolerance to absorb rounding in fractional steps.",
+        "pt": "A função existe para que o dois-pontos possa ser passado como function handle ou usado em chamadas de `cellfun` e `arrayfun`, onde a sintaxe `a:b` não está disponível. O número de elementos é `floor((b-a)/d) + 1`, calculado com uma pequena tolerância para absorver arredondamentos em passos fracionários."
+      },
+      "examples": [
+        {
+          "code": "colon(1, 4)\ncolon(10, -3, 0)"
+        }
+      ],
+      "see": [
+        "linspace",
+        "repmat",
+        "numel"
+      ]
     },
-    {
-     "name": "k",
-     "en": "Integer shift. Positive moves elements toward higher indices, negative toward lower.",
-     "pt": "Deslocamento inteiro. Positivo move os elementos para índices maiores, negativo para menores."
+    "combinations": {
+      "summary": {
+        "en": "Table of all combinations of the elements of several lists.",
+        "pt": "Tabela com todas as combinações dos elementos de várias listas."
+      },
+      "syntax": [
+        {
+          "code": "T = combinations(A, B, ...)",
+          "en": "Returns one row for each way to pick one element from each input.",
+          "pt": "Retorna uma linha para cada modo de escolher um elemento de cada entrada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B, ...",
+          "en": "Vectors, string arrays or cell arrays of any length. Inputs of different types are fine.",
+          "pt": "Vetores, arrays de strings ou cell arrays de qualquer comprimento. Entradas de tipos diferentes são aceitas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "A table with one variable per input and `numel(A)*numel(B)*...` rows.",
+          "pt": "Uma tabela com uma variável por entrada e `numel(A)*numel(B)*...` linhas."
+        }
+      ],
+      "description": {
+        "en": "This is the Cartesian product of the inputs. The last input varies fastest, so the rows read like an odometer. The result is handy for parameter sweeps: loop over the rows of `T` and run each configuration.\n\nThe number of rows grows as the product of the lengths, so a few long inputs can produce a very large table.",
+        "pt": "É o produto cartesiano das entradas. A última entrada varia mais rápido, então as linhas se leem como um hodômetro. O resultado serve para varreduras de parâmetros: percorra as linhas de `T` e execute cada configuração.\n\nO número de linhas cresce como o produto dos comprimentos, então algumas entradas longas podem gerar uma tabela enorme."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Pairs of values",
+            "pt": "Pares de valores"
+          },
+          "code": "T = combinations([1 2], [3 4])\nT2 = combinations([1 2], {'a','b'});\nheight(T2)"
+        }
+      ],
+      "see": [
+        "table",
+        "nchoosek",
+        "meshgrid",
+        "ndgrid",
+        "perms"
+      ]
     },
-    {
-     "name": "dim",
-     "en": "Dimension to shift along.",
-     "pt": "Dimensão ao longo da qual deslocar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size as `A`.",
-     "pt": "Array do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "Elements pushed off one end re-enter at the other, so nothing is lost and the size does not change. A shift larger than the dimension wraps around, so shifting a length-5 vector by 7 is the same as shifting by 2.\n\nFor a matrix, a shift along dimension 1 moves rows and along dimension 2 moves columns.",
-    "pt": "Elementos empurrados para fora por uma ponta reentram pela outra, então nada se perde e o tamanho não muda. Um deslocamento maior que a dimensão dá a volta, então deslocar um vetor de comprimento 5 por 7 equivale a deslocar por 2.\n\nEm uma matriz, o deslocamento na dimensão 1 move linhas e na dimensão 2 move colunas."
-   },
-   "notes": {
-    "en": "Only a scalar shift is applied reliably. When `k` is a vector with one shift per dimension, MatLivre applies just the first entry.",
-    "pt": "Só um deslocamento escalar é aplicado de forma confiável. Quando `k` é um vetor com um deslocamento por dimensão, o MatLivre aplica apenas a primeira entrada."
-   },
-   "examples": [
-    {
-     "code": "circshift(1:5, 2)\ncircshift(1:5, -1)\ncircshift([1 2 3; 4 5 6], 1, 2)"
-    }
-   ],
-   "see": [
-    "permute",
-    "flip",
-    "rot90",
-    "reshape"
-   ]
-  },
-  "colon": {
-   "summary": {
-    "en": "Function form of the colon operator, which builds evenly spaced vectors.",
-    "pt": "Forma de função do operador dois-pontos, que constrói vetores igualmente espaçados."
-   },
-   "syntax": [
-    {
-     "code": "v = colon(a, b)",
-     "en": "Same as `a:b`, steps of 1.",
-     "pt": "Igual a `a:b`, passos de 1."
+    "ctranspose": {
+      "summary": {
+        "en": "Complex conjugate transpose, the function form of the `'` operator.",
+        "pt": "Transposta conjugada complexa, a forma de função do operador `'`."
+      },
+      "syntax": [
+        {
+          "code": "B = ctranspose(A)",
+          "en": "Same as `A'`.",
+          "pt": "Igual a `A'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical or char array with 2 dimensions.",
+          "pt": "Array numérico, lógico ou char com 2 dimensões."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "The transposed array with each element conjugated.",
+          "pt": "O array transposto com cada elemento conjugado."
+        }
+      ],
+      "description": {
+        "en": "Rows become columns and the sign of every imaginary part flips. For real data it is the plain transpose. Use `transpose` (the `.'` operator) when you want the transpose without conjugating.\n\nFor a complex column vector `v`, `v' * v` is the squared norm, which is why the conjugate matters.",
+        "pt": "Linhas viram colunas e o sinal de toda parte imaginária se inverte. Para dados reais é a transposta simples. Use `transpose` (o operador `.'`) quando quiser a transposta sem conjugar.\n\nPara um vetor coluna complexo `v`, `v' * v` é a norma ao quadrado, e por isso a conjugação importa."
+      },
+      "examples": [
+        {
+          "code": "A = [1+2i 3; 4 5-1i];\nctranspose(A)\nA.'"
+        }
+      ],
+      "see": [
+        "transpose",
+        "conj",
+        "'",
+        "permute"
+      ]
     },
-    {
-     "code": "v = colon(a, d, b)",
-     "en": "Same as `a:d:b`, steps of `d`.",
-     "pt": "Igual a `a:d:b`, passos de `d`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "a",
-     "en": "First value.",
-     "pt": "Primeiro valor."
+    "diag": {
+      "summary": {
+        "en": "Builds a diagonal matrix from a vector, or extracts a diagonal from a matrix.",
+        "pt": "Constrói uma matriz diagonal a partir de um vetor, ou extrai uma diagonal de uma matriz."
+      },
+      "syntax": [
+        {
+          "code": "D = diag(v)",
+          "en": "Square matrix with vector `v` on the main diagonal.",
+          "pt": "Matriz quadrada com o vetor `v` na diagonal principal."
+        },
+        {
+          "code": "D = diag(v, k)",
+          "en": "Places `v` on the `k`-th diagonal: `k > 0` above the main one, `k < 0` below.",
+          "pt": "Coloca `v` na `k`-ésima diagonal: `k > 0` acima da principal, `k < 0` abaixo."
+        },
+        {
+          "code": "d = diag(A)",
+          "en": "Column vector with the main diagonal of matrix `A`.",
+          "pt": "Vetor coluna com a diagonal principal da matriz `A`."
+        },
+        {
+          "code": "d = diag(A, k)",
+          "en": "Column vector with the `k`-th diagonal of `A`.",
+          "pt": "Vetor coluna com a `k`-ésima diagonal de `A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v",
+          "en": "Vector whose elements go on the diagonal.",
+          "pt": "Vetor cujos elementos vão na diagonal."
+        },
+        {
+          "name": "A",
+          "en": "Matrix to read a diagonal from.",
+          "pt": "Matriz de onde ler uma diagonal."
+        },
+        {
+          "name": "k",
+          "en": "Diagonal index; 0 (default) is the main diagonal.",
+          "pt": "Índice da diagonal; 0 (padrão) é a diagonal principal."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Matrix of size `numel(v)+abs(k)` per side, zeros off the diagonal.",
+          "pt": "Matriz de lado `numel(v)+abs(k)`, com zeros fora da diagonal."
+        },
+        {
+          "name": "d",
+          "en": "Column vector with the chosen diagonal.",
+          "pt": "Vetor coluna com a diagonal escolhida."
+        }
+      ],
+      "description": {
+        "en": "The same name does both jobs, decided by the input: a vector builds a matrix and a matrix yields a vector.  A matrix with a single row or column counts as a vector, so `diag` of it builds a matrix.\n\nApplying `diag` twice to a vector gives back the same vector as a column.",
+        "pt": "O mesmo nome faz as duas tarefas, conforme a entrada: um vetor constrói uma matriz e uma matriz devolve um vetor. Uma matriz com uma única linha ou coluna conta como vetor, então `diag` dela constrói uma matriz. Aplicar `diag` duas vezes a um vetor devolve o mesmo vetor como coluna."
+      },
+      "examples": [
+        {
+          "code": "diag([1 2 3])\ndiag([1 2], 1)\nA = [1 2 3; 4 5 6; 7 8 9];\ndiag(A)'\ndiag(A, -1)'"
+        }
+      ],
+      "see": [
+        "eye",
+        "blkdiag",
+        "tril",
+        "triu",
+        "trace"
+      ]
     },
-    {
-     "name": "d",
-     "en": "Step size (default 1). May be negative.",
-     "pt": "Tamanho do passo (padrão 1). Pode ser negativo."
+    "eye": {
+      "summary": {
+        "en": "Identity matrix.",
+        "pt": "Matriz identidade."
+      },
+      "syntax": [
+        {
+          "code": "I = eye(n)",
+          "en": "n-by-n identity matrix.",
+          "pt": "Matriz identidade n por n."
+        },
+        {
+          "code": "I = eye(m, n)",
+          "en": "m-by-n matrix with ones on the main diagonal and zeros elsewhere.",
+          "pt": "Matriz m por n com uns na diagonal principal e zeros no restante."
+        },
+        {
+          "code": "I = eye(sz)",
+          "en": "Size given as a vector `[m n]`.",
+          "pt": "Tamanho dado como vetor `[m n]`."
+        },
+        {
+          "code": "I = eye(___, classname)",
+          "en": "Result of the given class, such as `'int8'` or `'single'`.",
+          "pt": "Resultado da classe indicada, como `'int8'` ou `'single'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m",
+          "en": "Number of rows and columns.",
+          "pt": "Número de linhas e colunas."
+        },
+        {
+          "name": "classname",
+          "en": "Class of the result; default `'double'`.",
+          "pt": "Classe do resultado; padrão `'double'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "I",
+          "en": "Matrix with ones where the row and column index are equal.",
+          "pt": "Matriz com uns onde o índice de linha e o de coluna são iguais."
+        }
+      ],
+      "description": {
+        "en": "The identity leaves a matrix unchanged under multiplication, `A*eye(n) == A`. It is also a quick way to start a matrix of known structure, for instance `3*eye(4)` or `eye(3) + ones(3)`.\n\nNon-square sizes are allowed; the ones sit on the main diagonal as far as it goes. `eye` takes no more than two dimensions.",
+        "pt": "A identidade deixa uma matriz inalterada na multiplicação, `A*eye(n) == A`. Também é um jeito rápido de iniciar uma matriz de estrutura conhecida, como `3*eye(4)` ou `eye(3) + ones(3)`.\n\nTamanhos não quadrados são permitidos; os uns ficam na diagonal principal até onde ela vai. `eye` aceita no máximo duas dimensões."
+      },
+      "examples": [
+        {
+          "code": "eye(3)\neye(2, 3)\neye(2, 'int8')"
+        }
+      ],
+      "see": [
+        "diag",
+        "ones",
+        "zeros",
+        "inv",
+        "kron"
+      ]
     },
-    {
-     "name": "b",
-     "en": "Limit: the sequence stops at or before it.",
-     "pt": "Limite: a sequência termina nele ou antes dele."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "v",
-     "en": "Row vector. It is empty when the step points away from the limit.",
-     "pt": "Vetor linha. É vazio quando o passo aponta para longe do limite."
-    }
-   ],
-   "description": {
-    "en": "The function exists so that the colon can be passed around as a function handle or used in `cellfun` and `arrayfun` calls, where the syntax `a:b` is not available. The number of elements is `floor((b-a)/d) + 1`, computed with a small tolerance to absorb rounding in fractional steps.",
-    "pt": "A função existe para que o dois-pontos possa ser passado como function handle ou usado em chamadas de `cellfun` e `arrayfun`, onde a sintaxe `a:b` não está disponível. O número de elementos é `floor((b-a)/d) + 1`, calculado com uma pequena tolerância para absorver arredondamentos em passos fracionários."
-   },
-   "examples": [
-    {
-     "code": "colon(1, 4)\ncolon(10, -3, 0)"
-    }
-   ],
-   "see": [
-    "linspace",
-    "repmat",
-    "numel"
-   ]
-  },
-  "combinations": {
-   "summary": {
-    "en": "Table of all combinations of the elements of several lists.",
-    "pt": "Tabela com todas as combinações dos elementos de várias listas."
-   },
-   "syntax": [
-    {
-     "code": "T = combinations(A, B, ...)",
-     "en": "Returns one row for each way to pick one element from each input.",
-     "pt": "Retorna uma linha para cada modo de escolher um elemento de cada entrada."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B, ...",
-     "en": "Vectors, string arrays or cell arrays of any length. Inputs of different types are fine.",
-     "pt": "Vetores, arrays de strings ou cell arrays de qualquer comprimento. Entradas de tipos diferentes são aceitas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "T",
-     "en": "A table with one variable per input and `numel(A)*numel(B)*...` rows.",
-     "pt": "Uma tabela com uma variável por entrada e `numel(A)*numel(B)*...` linhas."
-    }
-   ],
-   "description": {
-    "en": "This is the Cartesian product of the inputs. The last input varies fastest, so the rows read like an odometer. The result is handy for parameter sweeps: loop over the rows of `T` and run each configuration.\n\nThe number of rows grows as the product of the lengths, so a few long inputs can produce a very large table.",
-    "pt": "É o produto cartesiano das entradas. A última entrada varia mais rápido, então as linhas se leem como um hodômetro. O resultado serve para varreduras de parâmetros: percorra as linhas de `T` e execute cada configuração.\n\nO número de linhas cresce como o produto dos comprimentos, então algumas entradas longas podem gerar uma tabela enorme."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Pairs of values",
-      "pt": "Pares de valores"
-     },
-     "code": "T = combinations([1 2], [3 4])\nT2 = combinations([1 2], {'a','b'});\nheight(T2)"
-    }
-   ],
-   "see": [
-    "table",
-    "nchoosek",
-    "meshgrid",
-    "ndgrid",
-    "perms"
-   ]
-  },
-  "ctranspose": {
-   "summary": {
-    "en": "Complex conjugate transpose, the function form of the `'` operator.",
-    "pt": "Transposta conjugada complexa, a forma de função do operador `'`."
-   },
-   "syntax": [
-    {
-     "code": "B = ctranspose(A)",
-     "en": "Same as `A'`.",
-     "pt": "Igual a `A'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric, logical or char array with 2 dimensions.",
-     "pt": "Array numérico, lógico ou char com 2 dimensões."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "The transposed array with each element conjugated.",
-     "pt": "O array transposto com cada elemento conjugado."
-    }
-   ],
-   "description": {
-    "en": "Rows become columns and the sign of every imaginary part flips. For real data it is the plain transpose. Use `transpose` (the `.'` operator) when you want the transpose without conjugating.\n\nFor a complex column vector `v`, `v' * v` is the squared norm, which is why the conjugate matters.",
-    "pt": "Linhas viram colunas e o sinal de toda parte imaginária se inverte. Para dados reais é a transposta simples. Use `transpose` (o operador `.'`) quando quiser a transposta sem conjugar.\n\nPara um vetor coluna complexo `v`, `v' * v` é a norma ao quadrado, e por isso a conjugação importa."
-   },
-   "examples": [
-    {
-     "code": "A = [1+2i 3; 4 5-1i];\nctranspose(A)\nA.'"
-    }
-   ],
-   "see": [
-    "transpose",
-    "conj",
-    "'",
-    "permute"
-   ]
-  },
-  "diag": {
-   "summary": {
-    "en": "Builds a diagonal matrix from a vector, or extracts a diagonal from a matrix.",
-    "pt": "Constrói uma matriz diagonal a partir de um vetor, ou extrai uma diagonal de uma matriz."
-   },
-   "syntax": [
-    {
-     "code": "D = diag(v)",
-     "en": "Square matrix with vector `v` on the main diagonal.",
-     "pt": "Matriz quadrada com o vetor `v` na diagonal principal."
+    "false": {
+      "summary": {
+        "en": "Array of logical false values.",
+        "pt": "Array de valores lógicos falsos."
+      },
+      "syntax": [
+        {
+          "code": "F = false",
+          "en": "Scalar `false`.",
+          "pt": "Escalar `false`."
+        },
+        {
+          "code": "F = false(n)",
+          "en": "n-by-n array of `false`.",
+          "pt": "Array n por n de `false`."
+        },
+        {
+          "code": "F = false(m, n, ...)",
+          "en": "Array of the given size.",
+          "pt": "Array do tamanho indicado."
+        },
+        {
+          "code": "F = false(sz)",
+          "en": "Size given as a vector.",
+          "pt": "Tamanho dado como vetor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n, m, ...",
+          "en": "Dimension sizes. Zero gives an empty array.",
+          "pt": "Tamanhos das dimensões. Zero dá um array vazio."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "F",
+          "en": "Logical array filled with 0.",
+          "pt": "Array lógico preenchido com 0."
+        }
+      ],
+      "description": {
+        "en": "`false` is both a constant and an array constructor. A logical array uses one byte per element, much less than a double mask, and works directly as an index. A typical pattern is to start from `false(size(x))` and set the positions you want to select to `true`.\n\nThe companion `true` does the same with ones.",
+        "pt": "`false` é ao mesmo tempo uma constante e um construtor de array. Um array lógico usa um byte por elemento, bem menos que uma máscara double, e funciona direto como índice. Um padrão comum é partir de `false(size(x))` e marcar `true` nas posições que se quer selecionar.\n\nO par `true` faz o mesmo com uns."
+      },
+      "examples": [
+        {
+          "code": "m = false(2, 3);\nm(1, 2) = true;\nm\nclass(m)"
+        }
+      ],
+      "see": [
+        "true",
+        "zeros",
+        "logical",
+        "ones"
+      ]
     },
-    {
-     "code": "D = diag(v, k)",
-     "en": "Places `v` on the `k`-th diagonal: `k > 0` above the main one, `k < 0` below.",
-     "pt": "Coloca `v` na `k`-ésima diagonal: `k > 0` acima da principal, `k < 0` abaixo."
+    "flip": {
+      "summary": {
+        "en": "Reverses the order of elements along a dimension.",
+        "pt": "Inverte a ordem dos elementos ao longo de uma dimensão."
+      },
+      "syntax": [
+        {
+          "code": "B = flip(A)",
+          "en": "Reverses along the first non-singleton dimension.",
+          "pt": "Inverte ao longo da primeira dimensão de tamanho diferente de 1."
+        },
+        {
+          "code": "B = flip(A, dim)",
+          "en": "Reverses along dimension `dim`.",
+          "pt": "Inverte ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type, including text and cell arrays.",
+          "pt": "Array de qualquer tipo, inclusive texto e cell arrays."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to flip: 1 turns rows upside down, 2 mirrors left to right.",
+          "pt": "Dimensão a inverter: 1 vira as linhas de cabeça para baixo, 2 espelha da esquerda para a direita."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size and class as `A`.",
+          "pt": "Array de mesmo tamanho e classe de `A`."
+        }
+      ],
+      "description": {
+        "en": "For a vector, `flip` reverses it whatever its orientation. For a matrix without `dim` it flips the rows, like `flipud`; with `dim = 2` it flips the columns, like `fliplr`. It also reverses text, so `flip('abc')` is `'cba'`.",
+        "pt": "Para um vetor, `flip` o inverte seja qual for a orientação. Para uma matriz sem `dim` inverte as linhas, como `flipud`; com `dim = 2` inverte as colunas, como `fliplr`. Também inverte texto, então `flip('abc')` é `'cba'`."
+      },
+      "examples": [
+        {
+          "code": "flip([1 2 3])\nflip([1 2; 3 4])\nflip([1 2; 3 4], 2)\nflip('abc')"
+        }
+      ],
+      "see": [
+        "fliplr",
+        "flipud",
+        "rot90",
+        "circshift",
+        "sort"
+      ]
     },
-    {
-     "code": "d = diag(A)",
-     "en": "Column vector with the main diagonal of matrix `A`.",
-     "pt": "Vetor coluna com a diagonal principal da matriz `A`."
+    "flipdim": {
+      "summary": {
+        "en": "Reverses the order of elements along a dimension (older name of `flip`).",
+        "pt": "Inverte a ordem dos elementos ao longo de uma dimensão (nome antigo de `flip`)."
+      },
+      "syntax": [
+        {
+          "code": "B = flipdim(A, dim)",
+          "en": "Reverses `A` along dimension `dim`.",
+          "pt": "Inverte `A` ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to reverse.",
+          "pt": "Dimensão a inverter."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size as `A`.",
+          "pt": "Array do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "`flipdim(A, dim)` returns the same result as `flip(A, dim)`. The name is kept for old code; new code should call `flip`. Unlike `flip`, the dimension is required.",
+        "pt": "`flipdim(A, dim)` devolve o mesmo resultado que `flip(A, dim)`. O nome é mantido para código antigo; código novo deve chamar `flip`. Ao contrário de `flip`, a dimensão é obrigatória."
+      },
+      "examples": [
+        {
+          "code": "flipdim([1 2; 3 4], 1)\nflipdim([1 2; 3 4], 2)"
+        }
+      ],
+      "see": [
+        "flip",
+        "fliplr",
+        "flipud",
+        "permute"
+      ]
     },
-    {
-     "code": "d = diag(A, k)",
-     "en": "Column vector with the `k`-th diagonal of `A`.",
-     "pt": "Vetor coluna com a `k`-ésima diagonal de `A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "v",
-     "en": "Vector whose elements go on the diagonal.",
-     "pt": "Vetor cujos elementos vão na diagonal."
+    "fliplr": {
+      "summary": {
+        "en": "Flips an array from left to right.",
+        "pt": "Inverte um array da esquerda para a direita."
+      },
+      "syntax": [
+        {
+          "code": "B = fliplr(A)",
+          "en": "Reverses the order of the columns of `A`.",
+          "pt": "Inverte a ordem das colunas de `A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type; for N-D arrays the columns of each page are reversed.",
+          "pt": "Array de qualquer tipo; em arrays N-D as colunas de cada página são invertidas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size as `A`.",
+          "pt": "Array do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "The first column becomes the last. For a row vector this reverses the whole vector. It equals `flip(A, 2)` and is also `A(:, end:-1:1)`.",
+        "pt": "A primeira coluna vira a última. Para um vetor linha, inverte o vetor inteiro. Equivale a `flip(A, 2)` e também a `A(:, end:-1:1)`."
+      },
+      "examples": [
+        {
+          "code": "fliplr([1 2 3; 4 5 6])"
+        }
+      ],
+      "see": [
+        "flipud",
+        "flip",
+        "rot90",
+        "circshift"
+      ]
     },
-    {
-     "name": "A",
-     "en": "Matrix to read a diagonal from.",
-     "pt": "Matriz de onde ler uma diagonal."
+    "flipud": {
+      "summary": {
+        "en": "Flips an array from top to bottom.",
+        "pt": "Inverte um array de cima para baixo."
+      },
+      "syntax": [
+        {
+          "code": "B = flipud(A)",
+          "en": "Reverses the order of the rows of `A`.",
+          "pt": "Inverte a ordem das linhas de `A`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type.",
+          "pt": "Array de qualquer tipo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Array of the same size as `A`.",
+          "pt": "Array do mesmo tamanho de `A`."
+        }
+      ],
+      "description": {
+        "en": "The first row becomes the last. For a column vector this reverses the whole vector. It equals `flip(A, 1)` and `A(end:-1:1, :)`.",
+        "pt": "A primeira linha vira a última. Para um vetor coluna, inverte o vetor inteiro. Equivale a `flip(A, 1)` e a `A(end:-1:1, :)`."
+      },
+      "examples": [
+        {
+          "code": "flipud([1 2; 3 4; 5 6])"
+        }
+      ],
+      "see": [
+        "fliplr",
+        "flip",
+        "rot90",
+        "circshift"
+      ]
     },
-    {
-     "name": "k",
-     "en": "Diagonal index; 0 (default) is the main diagonal.",
-     "pt": "Índice da diagonal; 0 (padrão) é a diagonal principal."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "D",
-     "en": "Matrix of size `numel(v)+abs(k)` per side, zeros off the diagonal.",
-     "pt": "Matriz de lado `numel(v)+abs(k)`, com zeros fora da diagonal."
+    "freqspace": {
+      "summary": {
+        "en": "Frequency grid for frequency responses, normalized so that 1 is the Nyquist frequency.",
+        "pt": "Grade de frequências para respostas em frequência, normalizada de modo que 1 é a frequência de Nyquist."
+      },
+      "syntax": [
+        {
+          "code": "f = freqspace(n)",
+          "en": "Frequencies for an n-point response, from 0 up to just below 1.",
+          "pt": "Frequências para uma resposta de n pontos, de 0 até logo abaixo de 1."
+        },
+        {
+          "code": "f = freqspace(n, 'whole')",
+          "en": "Covers the whole circle, 0 up to just below 2.",
+          "pt": "Cobre o círculo inteiro, de 0 até logo abaixo de 2."
+        },
+        {
+          "code": "[f1, f2] = freqspace(n)",
+          "en": "Frequency vectors for a 2-D response, each from about -1 to 1.",
+          "pt": "Vetores de frequência para uma resposta 2-D, cada um de cerca de -1 a 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of frequency points (a scalar), or `[m n]` for a 2-D grid.",
+          "pt": "Número de pontos de frequência (um escalar), ou `[m n]` para uma grade 2-D."
+        },
+        {
+          "name": "'whole'",
+          "en": "Return the full circle instead of the half up to Nyquist.",
+          "pt": "Retorna o círculo inteiro em vez da metade até Nyquist."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "Row vector of frequencies in units of pi radians per sample.",
+          "pt": "Vetor linha de frequências em unidades de pi radianos por amostra."
+        },
+        {
+          "name": "f1, f2",
+          "en": "For the 2-D form, vectors along each frequency axis.",
+          "pt": "Na forma 2-D, vetores ao longo de cada eixo de frequência."
+        }
+      ],
+      "description": {
+        "en": "In one dimension the spacing is `2/n`, starting at 0, so `freqspace(4)` gives `0 0.5 1` and `freqspace(5)` gives `0 0.4 0.8`. Multiply by `pi` to get radians per sample, or by half the sampling rate to get hertz.\n\nThe 2-D form returns the spacing used to evaluate filters and windows on a grid; feed `f1` and `f2` to `meshgrid` to cover the plane.",
+        "pt": "Em uma dimensão o espaçamento é `2/n`, começando em 0, então `freqspace(4)` dá `0 0.5 1` e `freqspace(5)` dá `0 0.4 0.8`. Multiplique por `pi` para obter radianos por amostra, ou pela metade da taxa de amostragem para obter hertz.\n\nA forma 2-D devolve o espaçamento usado para avaliar filtros e janelas em uma grade; passe `f1` e `f2` a `meshgrid` para cobrir o plano."
+      },
+      "examples": [
+        {
+          "code": "freqspace(4)\nfreqspace(4, 'whole')\n[f1, f2] = freqspace(3);\nf1"
+        }
+      ],
+      "see": [
+        "linspace",
+        "meshgrid",
+        "fft",
+        "freqz"
+      ]
     },
-    {
-     "name": "d",
-     "en": "Column vector with the chosen diagonal.",
-     "pt": "Vetor coluna com a diagonal escolhida."
-    }
-   ],
-   "description": {
-    "en": "The same name does both jobs, decided by the input: a vector builds a matrix and a matrix yields a vector.  A matrix with a single row or column counts as a vector, so `diag` of it builds a matrix.\n\nApplying `diag` twice to a vector gives back the same vector as a column.",
-    "pt": "O mesmo nome faz as duas tarefas, conforme a entrada: um vetor constrói uma matriz e uma matriz devolve um vetor. Uma matriz com uma única linha ou coluna conta como vetor, então `diag` dela constrói uma matriz. Aplicar `diag` duas vezes a um vetor devolve o mesmo vetor como coluna."
-   },
-   "examples": [
-    {
-     "code": "diag([1 2 3])\ndiag([1 2], 1)\nA = [1 2 3; 4 5 6; 7 8 9];\ndiag(A)'\ndiag(A, -1)'"
-    }
-   ],
-   "see": [
-    "eye",
-    "blkdiag",
-    "tril",
-    "triu",
-    "trace"
-   ]
-  },
-  "eye": {
-   "summary": {
-    "en": "Identity matrix.",
-    "pt": "Matriz identidade."
-   },
-   "syntax": [
-    {
-     "code": "I = eye(n)",
-     "en": "n-by-n identity matrix.",
-     "pt": "Matriz identidade n por n."
+    "head": {
+      "summary": {
+        "en": "First rows of an array or table.",
+        "pt": "Primeiras linhas de um array ou tabela."
+      },
+      "syntax": [
+        {
+          "code": "B = head(A)",
+          "en": "Returns the first 8 rows.",
+          "pt": "Retorna as primeiras 8 linhas."
+        },
+        {
+          "code": "B = head(A, k)",
+          "en": "Returns the first `k` rows.",
+          "pt": "Retorna as primeiras `k` linhas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array, table or timetable.",
+          "pt": "Array, tabela ou timetable."
+        },
+        {
+          "name": "k",
+          "en": "Number of rows to keep.",
+          "pt": "Número de linhas a manter."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "The top rows of `A`, with all columns. Fewer rows are returned if `A` is shorter.",
+          "pt": "As linhas do topo de `A`, com todas as colunas. Menos linhas são devolvidas se `A` for mais curto."
+        }
+      ],
+      "description": {
+        "en": "`head` is a quick look at the start of a long data set. It counts rows, so for a row vector (one row) the whole vector is returned; use a column vector or index with `v(1:k)` to take the first elements.\n\n`tail` is the counterpart for the last rows.",
+        "pt": "`head` é uma olhada rápida no início de um conjunto de dados longo. Conta linhas, então para um vetor linha (uma linha só) o vetor inteiro é devolvido; use um vetor coluna ou indexe com `v(1:k)` para pegar os primeiros elementos.\n\n`tail` é o equivalente para as últimas linhas."
+      },
+      "examples": [
+        {
+          "code": "T = table((1:10)', (10:10:100)', 'VariableNames', {'k', 'v'});\nhead(T, 3)\nhead((1:20)', 2)"
+        }
+      ],
+      "see": [
+        "tail",
+        "height",
+        "table",
+        "topkrows"
+      ]
     },
-    {
-     "code": "I = eye(m, n)",
-     "en": "m-by-n matrix with ones on the main diagonal and zeros elsewhere.",
-     "pt": "Matriz m por n com uns na diagonal principal e zeros no restante."
+    "horzcat": {
+      "summary": {
+        "en": "Joins arrays side by side.",
+        "pt": "Junta arrays lado a lado."
+      },
+      "syntax": [
+        {
+          "code": "C = horzcat(A, B, ...)",
+          "en": "Same as `[A, B, ...]`.",
+          "pt": "Igual a `[A, B, ...]`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B, ...",
+          "en": "Arrays with the same number of rows.",
+          "pt": "Arrays com o mesmo número de linhas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Array whose columns are those of the inputs in order.",
+          "pt": "Array cujas colunas são as das entradas, em ordem."
+        }
+      ],
+      "description": {
+        "en": "The function form of the bracket syntax is useful with `cellfun` or when the list of inputs is built at run time as a cell array, as in `horzcat(c{:})`. It also joins text (`horzcat('ab', 'cd')` is `'abcd'`) and cell arrays.\n\nIf the row counts differ the call fails with a dimension error.",
+        "pt": "A forma de função da sintaxe de colchetes é útil com `cellfun` ou quando a lista de entradas é montada em tempo de execução como cell array, como em `horzcat(c{:})`. Também junta texto (`horzcat('ab', 'cd')` é `'abcd'`) e cell arrays.\n\nSe o número de linhas diferir, a chamada falha com erro de dimensão."
+      },
+      "examples": [
+        {
+          "code": "horzcat([1; 2], [3; 4])\nhorzcat('ab', 'cd')\nc = {[1 2], [3], [4 5 6]};\nhorzcat(c{:})"
+        }
+      ],
+      "see": [
+        "vertcat",
+        "cat",
+        "repmat",
+        "["
+      ]
     },
-    {
-     "code": "I = eye(sz)",
-     "en": "Size given as a vector `[m n]`.",
-     "pt": "Tamanho dado como vetor `[m n]`."
+    "ind2sub": {
+      "summary": {
+        "en": "Converts linear indices to row, column and higher subscripts.",
+        "pt": "Converte índices lineares em subscritos de linha, coluna e dimensões maiores."
+      },
+      "syntax": [
+        {
+          "code": "[r, c] = ind2sub(sz, ind)",
+          "en": "Subscripts for a matrix of size `sz`.",
+          "pt": "Subscritos para uma matriz de tamanho `sz`."
+        },
+        {
+          "code": "[i1, i2, ..., iN] = ind2sub(sz, ind)",
+          "en": "One subscript per dimension.",
+          "pt": "Um subscrito por dimensão."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sz",
+          "en": "Size vector of the array, such as `[3 4]` or `size(A)`.",
+          "pt": "Vetor de tamanho do array, como `[3 4]` ou `size(A)`."
+        },
+        {
+          "name": "ind",
+          "en": "Linear index (or array of indices) in column-major order.",
+          "pt": "Índice linear (ou array de índices) em ordem de coluna."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r, c, ...",
+          "en": "Subscript arrays, each the same size as `ind`.",
+          "pt": "Arrays de subscritos, cada um do mesmo tamanho de `ind`."
+        }
+      ],
+      "description": {
+        "en": "MATLAB stores arrays down the columns, so index 1 to `m` is the first column of an `m`-row matrix, and so on. `ind2sub` undoes that numbering, which is what you need after `find` or `max` returned a position in the flattened array. `sub2ind` is the inverse.\n\nIf fewer outputs are requested than the array has dimensions, the last output absorbs the remaining ones.",
+        "pt": "O MATLAB armazena arrays descendo pelas colunas, então os índices 1 a `m` formam a primeira coluna de uma matriz de `m` linhas, e assim por diante. `ind2sub` desfaz essa numeração, o que é preciso depois que `find` ou `max` devolve uma posição no array achatado. `sub2ind` é a inversa.\n\nSe forem pedidas menos saídas que dimensões, a última saída absorve as restantes."
+      },
+      "notes": {
+        "en": "An index beyond the array size is not reported as an error in MatLivre.",
+        "pt": "Um índice além do tamanho do array não é reportado como erro no MatLivre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Back to subscripts",
+            "pt": "De volta aos subscritos"
+          },
+          "code": "[r, c] = ind2sub([2 3], [1 4 6])\n[r, c, p] = ind2sub([2 3 2], 11)"
+        }
+      ],
+      "see": [
+        "sub2ind",
+        "find",
+        "size",
+        "max"
+      ]
     },
-    {
-     "code": "I = eye(___, classname)",
-     "en": "Result of the given class, such as `'int8'` or `'single'`.",
-     "pt": "Resultado da classe indicada, como `'int8'` ou `'single'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n, m",
-     "en": "Number of rows and columns.",
-     "pt": "Número de linhas e colunas."
+    "inline": {
+      "summary": {
+        "en": "Creates a function object from a text expression (older style).",
+        "pt": "Cria um objeto de função a partir de uma expressão em texto (estilo antigo)."
+      },
+      "syntax": [
+        {
+          "code": "f = inline(expr)",
+          "en": "Builds a function of the variables found in `expr`.",
+          "pt": "Cria uma função das variáveis encontradas em `expr`."
+        },
+        {
+          "code": "f = inline(expr, arg1, arg2, ...)",
+          "en": "Fixes the argument names and their order.",
+          "pt": "Fixa os nomes dos argumentos e a ordem deles."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "expr",
+          "en": "Text with a MATLAB expression, such as `'x^2 + 1'`.",
+          "pt": "Texto com uma expressão do MATLAB, como `'x^2 + 1'`."
+        },
+        {
+          "name": "arg1, ...",
+          "en": "Names of the arguments.",
+          "pt": "Nomes dos argumentos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "An inline function object. Call it like a function; `formula(f)` and `argnames(f)` read it back.",
+          "pt": "Um objeto de função inline. Chame-o como função; `formula(f)` e `argnames(f)` o leem de volta."
+        }
+      ],
+      "description": {
+        "en": "Without explicit names, the arguments are the identifiers in the expression, in alphabetical order. This is why `inline('a*x+b')` takes `(a, b, x)`; give the names to control the order.\n\nAnonymous functions, `@(x) x.^2 + 1`, replace `inline` in current code: they are faster and capture variables from the workspace.",
+        "pt": "Sem nomes explícitos, os argumentos são os identificadores da expressão, em ordem alfabética. Por isso `inline('a*x+b')` recebe `(a, b, x)`; informe os nomes para controlar a ordem.\n\nFunções anônimas, `@(x) x.^2 + 1`, substituem `inline` no código atual: são mais rápidas e capturam variáveis do workspace."
+      },
+      "examples": [
+        {
+          "code": "f = inline('a*x + b', 'x', 'a', 'b');\nf(2, 3, 4)\nformula(f)"
+        }
+      ],
+      "see": [
+        "formula",
+        "argnames",
+        "feval",
+        "func2str"
+      ]
     },
-    {
-     "name": "classname",
-     "en": "Class of the result; default `'double'`.",
-     "pt": "Classe do resultado; padrão `'double'`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "I",
-     "en": "Matrix with ones where the row and column index are equal.",
-     "pt": "Matriz com uns onde o índice de linha e o de coluna são iguais."
-    }
-   ],
-   "description": {
-    "en": "The identity leaves a matrix unchanged under multiplication, `A*eye(n) == A`. It is also a quick way to start a matrix of known structure, for instance `3*eye(4)` or `eye(3) + ones(3)`.\n\nNon-square sizes are allowed; the ones sit on the main diagonal as far as it goes. `eye` takes no more than two dimensions.",
-    "pt": "A identidade deixa uma matriz inalterada na multiplicação, `A*eye(n) == A`. Também é um jeito rápido de iniciar uma matriz de estrutura conhecida, como `3*eye(4)` ou `eye(3) + ones(3)`.\n\nTamanhos não quadrados são permitidos; os uns ficam na diagonal principal até onde ela vai. `eye` aceita no máximo duas dimensões."
-   },
-   "examples": [
-    {
-     "code": "eye(3)\neye(2, 3)\neye(2, 'int8')"
-    }
-   ],
-   "see": [
-    "diag",
-    "ones",
-    "zeros",
-    "inv",
-    "kron"
-   ]
-  },
-  "false": {
-   "summary": {
-    "en": "Array of logical false values.",
-    "pt": "Array de valores lógicos falsos."
-   },
-   "syntax": [
-    {
-     "code": "F = false",
-     "en": "Scalar `false`.",
-     "pt": "Escalar `false`."
+    "ipermute": {
+      "summary": {
+        "en": "Inverse of `permute`: restores the original dimension order.",
+        "pt": "Inversa de `permute`: restaura a ordem original das dimensões."
+      },
+      "syntax": [
+        {
+          "code": "A = ipermute(B, order)",
+          "en": "Undoes `B = permute(A, order)`.",
+          "pt": "Desfaz `B = permute(A, order)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "B",
+          "en": "Array that was produced by `permute`.",
+          "pt": "Array produzido por `permute`."
+        },
+        {
+          "name": "order",
+          "en": "The same permutation vector that was given to `permute`.",
+          "pt": "O mesmo vetor de permutação que foi dado a `permute`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "Array with the dimension order before the permutation.",
+          "pt": "Array com a ordem das dimensões anterior à permutação."
+        }
+      ],
+      "description": {
+        "en": "`permute` and `ipermute` use the same vector, so `ipermute(permute(A, p), p)` is always `A`. This matters for permutations that are not their own inverse, such as `[3 1 2]`: applying `permute` with the same vector again would not restore the array.",
+        "pt": "`permute` e `ipermute` usam o mesmo vetor, então `ipermute(permute(A, p), p)` é sempre `A`. Isso importa para permutações que não são a própria inversa, como `[3 1 2]`: aplicar `permute` de novo com o mesmo vetor não restauraria o array."
+      },
+      "examples": [
+        {
+          "code": "A = ones(2, 3, 4);\np = [3 1 2];\nB = permute(A, p);\nsize(B)\nsize(ipermute(B, p))"
+        }
+      ],
+      "see": [
+        "permute",
+        "reshape",
+        "squeeze",
+        "shiftdim"
+      ]
     },
-    {
-     "code": "F = false(n)",
-     "en": "n-by-n array of `false`.",
-     "pt": "Array n por n de `false`."
+    "iscolumn": {
+      "summary": {
+        "en": "Tests whether the input is a column vector.",
+        "pt": "Testa se a entrada é um vetor coluna."
+      },
+      "syntax": [
+        {
+          "code": "tf = iscolumn(A)",
+          "en": "True when `A` is `n`-by-1 with `n` of any size, including 0 or 1.",
+          "pt": "Verdadeiro quando `A` é `n` por 1, com `n` de qualquer tamanho, inclusive 0 ou 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Any array.",
+          "pt": "Qualquer array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "A scalar is a column (and a row). An empty `0`-by-`1` array is a column, but the plain `[]` (0 by 0) is not. For a vector in either orientation, see `isvector`.",
+        "pt": "Um escalar é uma coluna (e uma linha). Um array vazio `0` por `1` é uma coluna, mas o simples `[]` (0 por 0) não é. Para vetor em qualquer orientação, veja `isvector`."
+      },
+      "examples": [
+        {
+          "code": "iscolumn([1; 2; 3])\niscolumn([1 2 3])\niscolumn(5)\niscolumn([])"
+        }
+      ],
+      "see": [
+        "isrow",
+        "isvector",
+        "isscalar",
+        "ismatrix"
+      ]
     },
-    {
-     "code": "F = false(m, n, ...)",
-     "en": "Array of the given size.",
-     "pt": "Array do tamanho indicado."
+    "isempty": {
+      "summary": {
+        "en": "Tests whether an array has no elements.",
+        "pt": "Testa se um array não tem elementos."
+      },
+      "syntax": [
+        {
+          "code": "tf = isempty(A)",
+          "en": "True if any dimension of `A` is 0.",
+          "pt": "Verdadeiro se alguma dimensão de `A` for 0."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Array of any type: numeric, text, cell, struct, table.",
+          "pt": "Array de qualquer tipo: numérico, texto, cell, struct, tabela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "`isempty(A)` is the same as `numel(A) == 0`. `''`, `{}` and `zeros(0, 3)` are empty, while a single space `' '`, a zero and `struct()` are not. A common use is guarding the result of `find` or an optional argument: `if isempty(idx)`.",
+        "pt": "`isempty(A)` equivale a `numel(A) == 0`. `''`, `{}` e `zeros(0, 3)` são vazios, enquanto um espaço `' '`, um zero e `struct()` não são. Um uso comum é proteger o resultado de `find` ou um argumento opcional: `if isempty(idx)`."
+      },
+      "examples": [
+        {
+          "code": "isempty([])\nisempty(zeros(0, 3))\nisempty('')\nisempty(' ')\nisempty(find([1 2 3] > 5))"
+        }
+      ],
+      "see": [
+        "numel",
+        "size",
+        "ismissing",
+        "isscalar"
+      ]
     },
-    {
-     "code": "F = false(sz)",
-     "en": "Size given as a vector.",
-     "pt": "Tamanho dado como vetor."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n, m, ...",
-     "en": "Dimension sizes. Zero gives an empty array.",
-     "pt": "Tamanhos das dimensões. Zero dá um array vazio."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "F",
-     "en": "Logical array filled with 0.",
-     "pt": "Array lógico preenchido com 0."
-    }
-   ],
-   "description": {
-    "en": "`false` is both a constant and an array constructor. A logical array uses one byte per element, much less than a double mask, and works directly as an index. A typical pattern is to start from `false(size(x))` and set the positions you want to select to `true`.\n\nThe companion `true` does the same with ones.",
-    "pt": "`false` é ao mesmo tempo uma constante e um construtor de array. Um array lógico usa um byte por elemento, bem menos que uma máscara double, e funciona direto como índice. Um padrão comum é partir de `false(size(x))` e marcar `true` nas posições que se quer selecionar.\n\nO par `true` faz o mesmo com uns."
-   },
-   "examples": [
-    {
-     "code": "m = false(2, 3);\nm(1, 2) = true;\nm\nclass(m)"
-    }
-   ],
-   "see": [
-    "true",
-    "zeros",
-    "logical",
-    "ones"
-   ]
-  },
-  "flip": {
-   "summary": {
-    "en": "Reverses the order of elements along a dimension.",
-    "pt": "Inverte a ordem dos elementos ao longo de uma dimensão."
-   },
-   "syntax": [
-    {
-     "code": "B = flip(A)",
-     "en": "Reverses along the first non-singleton dimension.",
-     "pt": "Inverte ao longo da primeira dimensão de tamanho diferente de 1."
+    "ismatrix": {
+      "summary": {
+        "en": "Tests whether the input is a 2-D array.",
+        "pt": "Testa se a entrada é um array 2-D."
+      },
+      "syntax": [
+        {
+          "code": "tf = ismatrix(A)",
+          "en": "True when `A` has exactly two dimensions.",
+          "pt": "Verdadeiro quando `A` tem exatamente duas dimensões."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Any array.",
+          "pt": "Qualquer array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "Every scalar, vector and ordinary matrix, empty or not, counts as a matrix. Only arrays with three or more dimensions fail the test (`ndims(A) > 2`). The name suggests a stricter check, so use `isvector`, `isscalar` or `size` when you need a particular shape.",
+        "pt": "Todo escalar, vetor e matriz comum, vazio ou não, conta como matriz. Só arrays com três ou mais dimensões falham no teste (`ndims(A) > 2`). O nome sugere uma checagem mais rigorosa, então use `isvector`, `isscalar` ou `size` quando precisar de um formato específico."
+      },
+      "examples": [
+        {
+          "code": "ismatrix(5)\nismatrix([1 2; 3 4])\nismatrix(ones(2, 3, 4))"
+        }
+      ],
+      "see": [
+        "isvector",
+        "isscalar",
+        "ndims",
+        "size"
+      ]
     },
-    {
-     "code": "B = flip(A, dim)",
-     "en": "Reverses along dimension `dim`.",
-     "pt": "Inverte ao longo da dimensão `dim`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type, including text and cell arrays.",
-     "pt": "Array de qualquer tipo, inclusive texto e cell arrays."
+    "isrow": {
+      "summary": {
+        "en": "Tests whether the input is a row vector.",
+        "pt": "Testa se a entrada é um vetor linha."
+      },
+      "syntax": [
+        {
+          "code": "tf = isrow(A)",
+          "en": "True when `A` is 1-by-`n` with `n` of any size, including 0 or 1.",
+          "pt": "Verdadeiro quando `A` é 1 por `n`, com `n` de qualquer tamanho, inclusive 0 ou 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Any array.",
+          "pt": "Qualquer array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "A scalar is a row, and so is the empty `1`-by-`0` array. A column of length 2 or more is not. Use `isvector` to accept either orientation.",
+        "pt": "Um escalar é uma linha, assim como o array vazio `1` por `0`. Uma coluna de comprimento 2 ou mais não é. Use `isvector` para aceitar qualquer orientação."
+      },
+      "examples": [
+        {
+          "code": "isrow([1 2 3])\nisrow([1; 2; 3])\nisrow(7)"
+        }
+      ],
+      "see": [
+        "iscolumn",
+        "isvector",
+        "isscalar",
+        "ismatrix"
+      ]
     },
-    {
-     "name": "dim",
-     "en": "Dimension to flip: 1 turns rows upside down, 2 mirrors left to right.",
-     "pt": "Dimensão a inverter: 1 vira as linhas de cabeça para baixo, 2 espelha da esquerda para a direita."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size and class as `A`.",
-     "pt": "Array de mesmo tamanho e classe de `A`."
-    }
-   ],
-   "description": {
-    "en": "For a vector, `flip` reverses it whatever its orientation. For a matrix without `dim` it flips the rows, like `flipud`; with `dim = 2` it flips the columns, like `fliplr`. It also reverses text, so `flip('abc')` is `'cba'`.",
-    "pt": "Para um vetor, `flip` o inverte seja qual for a orientação. Para uma matriz sem `dim` inverte as linhas, como `flipud`; com `dim = 2` inverte as colunas, como `fliplr`. Também inverte texto, então `flip('abc')` é `'cba'`."
-   },
-   "examples": [
-    {
-     "code": "flip([1 2 3])\nflip([1 2; 3 4])\nflip([1 2; 3 4], 2)\nflip('abc')"
-    }
-   ],
-   "see": [
-    "fliplr",
-    "flipud",
-    "rot90",
-    "circshift",
-    "sort"
-   ]
-  },
-  "flipdim": {
-   "summary": {
-    "en": "Reverses the order of elements along a dimension (older name of `flip`).",
-    "pt": "Inverte a ordem dos elementos ao longo de uma dimensão (nome antigo de `flip`)."
-   },
-   "syntax": [
-    {
-     "code": "B = flipdim(A, dim)",
-     "en": "Reverses `A` along dimension `dim`.",
-     "pt": "Inverte `A` ao longo da dimensão `dim`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
+    "isscalar": {
+      "summary": {
+        "en": "Tests whether the input has exactly one element.",
+        "pt": "Testa se a entrada tem exatamente um elemento."
+      },
+      "syntax": [
+        {
+          "code": "tf = isscalar(A)",
+          "en": "True when `A` is 1-by-1.",
+          "pt": "Verdadeiro quando `A` é 1 por 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Any array, including cell arrays, structs and text.",
+          "pt": "Qualquer array, inclusive cell arrays, structs e texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "The test is on the size, not the class: a one-element cell `{1}` and a string scalar `\"abc\"` are scalars, while a character vector `'abc'` is not because it has three elements. An empty array is not a scalar.",
+        "pt": "O teste é sobre o tamanho, não a classe: uma cell de um elemento `{1}` e uma string escalar `\"abc\"` são escalares, enquanto um vetor de caracteres `'abc'` não é, pois tem três elementos. Um array vazio não é escalar."
+      },
+      "examples": [
+        {
+          "code": "isscalar(5)\nisscalar([1 2])\nisscalar({1})\nisscalar(\"abc\")\nisscalar('abc')"
+        }
+      ],
+      "see": [
+        "isvector",
+        "isrow",
+        "iscolumn",
+        "isempty"
+      ]
     },
-    {
-     "name": "dim",
-     "en": "Dimension to reverse.",
-     "pt": "Dimensão a inverter."
+    "issorted": {
+      "summary": {
+        "en": "Tests whether the elements of a vector are in sorted order.",
+        "pt": "Testa se os elementos de um vetor estão em ordem."
+      },
+      "syntax": [
+        {
+          "code": "tf = issorted(A)",
+          "en": "True when `A` is in ascending order (equal neighbours allowed).",
+          "pt": "Verdadeiro quando `A` está em ordem crescente (vizinhos iguais permitidos)."
+        },
+        {
+          "code": "tf = issorted(A, direction)",
+          "en": "Checks a specific order: `'ascend'`, `'descend'`, `'monotonic'`, `'strictascend'`, `'strictdescend'` or `'strictmonotonic'`.",
+          "pt": "Verifica uma ordem específica: `'ascend'`, `'descend'`, `'monotonic'`, `'strictascend'`, `'strictdescend'` ou `'strictmonotonic'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical vector.",
+          "pt": "Vetor numérico ou lógico."
+        },
+        {
+          "name": "direction",
+          "en": "Text naming the order to test; the `strict` variants forbid equal neighbours.",
+          "pt": "Texto com a ordem a testar; as variantes `strict` proíbem vizinhos iguais."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "Logical scalar.",
+          "pt": "Escalar lógico."
+        }
+      ],
+      "description": {
+        "en": "It is a cheap check that is worth doing before a function that assumes sorted input, such as `interp1` or a binary search. Checking is a single pass, so it is faster than sorting and comparing.\n\nNaN values count as the largest in ascending order, so they are expected at the end.",
+        "pt": "É uma verificação barata que vale a pena antes de uma função que assume entrada ordenada, como `interp1` ou uma busca binária. A checagem é uma passada só, então é mais rápida que ordenar e comparar.\n\nOs NaN contam como os maiores na ordem crescente, então são esperados no final."
+      },
+      "examples": [
+        {
+          "code": "issorted([1 2 2 5])\nissorted([1 2 2 5], 'strictascend')\nissorted([3 1 2])"
+        }
+      ],
+      "see": [
+        "sort",
+        "issortedrows",
+        "sortrows",
+        "isuniform"
+      ]
     }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size as `A`.",
-     "pt": "Array do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "`flipdim(A, dim)` returns the same result as `flip(A, dim)`. The name is kept for old code; new code should call `flip`. Unlike `flip`, the dimension is required.",
-    "pt": "`flipdim(A, dim)` devolve o mesmo resultado que `flip(A, dim)`. O nome é mantido para código antigo; código novo deve chamar `flip`. Ao contrário de `flip`, a dimensão é obrigatória."
-   },
-   "examples": [
-    {
-     "code": "flipdim([1 2; 3 4], 1)\nflipdim([1 2; 3 4], 2)"
-    }
-   ],
-   "see": [
-    "flip",
-    "fliplr",
-    "flipud",
-    "permute"
-   ]
-  },
-  "fliplr": {
-   "summary": {
-    "en": "Flips an array from left to right.",
-    "pt": "Inverte um array da esquerda para a direita."
-   },
-   "syntax": [
-    {
-     "code": "B = fliplr(A)",
-     "en": "Reverses the order of the columns of `A`.",
-     "pt": "Inverte a ordem das colunas de `A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type; for N-D arrays the columns of each page are reversed.",
-     "pt": "Array de qualquer tipo; em arrays N-D as colunas de cada página são invertidas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size as `A`.",
-     "pt": "Array do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "The first column becomes the last. For a row vector this reverses the whole vector. It equals `flip(A, 2)` and is also `A(:, end:-1:1)`.",
-    "pt": "A primeira coluna vira a última. Para um vetor linha, inverte o vetor inteiro. Equivale a `flip(A, 2)` e também a `A(:, end:-1:1)`."
-   },
-   "examples": [
-    {
-     "code": "fliplr([1 2 3; 4 5 6])"
-    }
-   ],
-   "see": [
-    "flipud",
-    "flip",
-    "rot90",
-    "circshift"
-   ]
-  },
-  "flipud": {
-   "summary": {
-    "en": "Flips an array from top to bottom.",
-    "pt": "Inverte um array de cima para baixo."
-   },
-   "syntax": [
-    {
-     "code": "B = flipud(A)",
-     "en": "Reverses the order of the rows of `A`.",
-     "pt": "Inverte a ordem das linhas de `A`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type.",
-     "pt": "Array de qualquer tipo."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Array of the same size as `A`.",
-     "pt": "Array do mesmo tamanho de `A`."
-    }
-   ],
-   "description": {
-    "en": "The first row becomes the last. For a column vector this reverses the whole vector. It equals `flip(A, 1)` and `A(end:-1:1, :)`.",
-    "pt": "A primeira linha vira a última. Para um vetor coluna, inverte o vetor inteiro. Equivale a `flip(A, 1)` e a `A(end:-1:1, :)`."
-   },
-   "examples": [
-    {
-     "code": "flipud([1 2; 3 4; 5 6])"
-    }
-   ],
-   "see": [
-    "fliplr",
-    "flip",
-    "rot90",
-    "circshift"
-   ]
-  },
-  "freqspace": {
-   "summary": {
-    "en": "Frequency grid for frequency responses, normalized so that 1 is the Nyquist frequency.",
-    "pt": "Grade de frequências para respostas em frequência, normalizada de modo que 1 é a frequência de Nyquist."
-   },
-   "syntax": [
-    {
-     "code": "f = freqspace(n)",
-     "en": "Frequencies for an n-point response, from 0 up to just below 1.",
-     "pt": "Frequências para uma resposta de n pontos, de 0 até logo abaixo de 1."
-    },
-    {
-     "code": "f = freqspace(n, 'whole')",
-     "en": "Covers the whole circle, 0 up to just below 2.",
-     "pt": "Cobre o círculo inteiro, de 0 até logo abaixo de 2."
-    },
-    {
-     "code": "[f1, f2] = freqspace(n)",
-     "en": "Frequency vectors for a 2-D response, each from about -1 to 1.",
-     "pt": "Vetores de frequência para uma resposta 2-D, cada um de cerca de -1 a 1."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "n",
-     "en": "Number of frequency points (a scalar), or `[m n]` for a 2-D grid.",
-     "pt": "Número de pontos de frequência (um escalar), ou `[m n]` para uma grade 2-D."
-    },
-    {
-     "name": "'whole'",
-     "en": "Return the full circle instead of the half up to Nyquist.",
-     "pt": "Retorna o círculo inteiro em vez da metade até Nyquist."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "f",
-     "en": "Row vector of frequencies in units of pi radians per sample.",
-     "pt": "Vetor linha de frequências em unidades de pi radianos por amostra."
-    },
-    {
-     "name": "f1, f2",
-     "en": "For the 2-D form, vectors along each frequency axis.",
-     "pt": "Na forma 2-D, vetores ao longo de cada eixo de frequência."
-    }
-   ],
-   "description": {
-    "en": "In one dimension the spacing is `2/n`, starting at 0, so `freqspace(4)` gives `0 0.5 1` and `freqspace(5)` gives `0 0.4 0.8`. Multiply by `pi` to get radians per sample, or by half the sampling rate to get hertz.\n\nThe 2-D form returns the spacing used to evaluate filters and windows on a grid; feed `f1` and `f2` to `meshgrid` to cover the plane.",
-    "pt": "Em uma dimensão o espaçamento é `2/n`, começando em 0, então `freqspace(4)` dá `0 0.5 1` e `freqspace(5)` dá `0 0.4 0.8`. Multiplique por `pi` para obter radianos por amostra, ou pela metade da taxa de amostragem para obter hertz.\n\nA forma 2-D devolve o espaçamento usado para avaliar filtros e janelas em uma grade; passe `f1` e `f2` a `meshgrid` para cobrir o plano."
-   },
-   "examples": [
-    {
-     "code": "freqspace(4)\nfreqspace(4, 'whole')\n[f1, f2] = freqspace(3);\nf1"
-    }
-   ],
-   "see": [
-    "linspace",
-    "meshgrid",
-    "fft",
-    "freqz"
-   ]
-  },
-  "head": {
-   "summary": {
-    "en": "First rows of an array or table.",
-    "pt": "Primeiras linhas de um array ou tabela."
-   },
-   "syntax": [
-    {
-     "code": "B = head(A)",
-     "en": "Returns the first 8 rows.",
-     "pt": "Retorna as primeiras 8 linhas."
-    },
-    {
-     "code": "B = head(A, k)",
-     "en": "Returns the first `k` rows.",
-     "pt": "Retorna as primeiras `k` linhas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array, table or timetable.",
-     "pt": "Array, tabela ou timetable."
-    },
-    {
-     "name": "k",
-     "en": "Number of rows to keep.",
-     "pt": "Número de linhas a manter."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "The top rows of `A`, with all columns. Fewer rows are returned if `A` is shorter.",
-     "pt": "As linhas do topo de `A`, com todas as colunas. Menos linhas são devolvidas se `A` for mais curto."
-    }
-   ],
-   "description": {
-    "en": "`head` is a quick look at the start of a long data set. It counts rows, so for a row vector (one row) the whole vector is returned; use a column vector or index with `v(1:k)` to take the first elements.\n\n`tail` is the counterpart for the last rows.",
-    "pt": "`head` é uma olhada rápida no início de um conjunto de dados longo. Conta linhas, então para um vetor linha (uma linha só) o vetor inteiro é devolvido; use um vetor coluna ou indexe com `v(1:k)` para pegar os primeiros elementos.\n\n`tail` é o equivalente para as últimas linhas."
-   },
-   "examples": [
-    {
-     "code": "T = table((1:10)', (10:10:100)', 'VariableNames', {'k', 'v'});\nhead(T, 3)\nhead((1:20)', 2)"
-    }
-   ],
-   "see": [
-    "tail",
-    "height",
-    "table",
-    "topkrows"
-   ]
-  },
-  "horzcat": {
-   "summary": {
-    "en": "Joins arrays side by side.",
-    "pt": "Junta arrays lado a lado."
-   },
-   "syntax": [
-    {
-     "code": "C = horzcat(A, B, ...)",
-     "en": "Same as `[A, B, ...]`.",
-     "pt": "Igual a `[A, B, ...]`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B, ...",
-     "en": "Arrays with the same number of rows.",
-     "pt": "Arrays com o mesmo número de linhas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Array whose columns are those of the inputs in order.",
-     "pt": "Array cujas colunas são as das entradas, em ordem."
-    }
-   ],
-   "description": {
-    "en": "The function form of the bracket syntax is useful with `cellfun` or when the list of inputs is built at run time as a cell array, as in `horzcat(c{:})`. It also joins text (`horzcat('ab', 'cd')` is `'abcd'`) and cell arrays.\n\nIf the row counts differ the call fails with a dimension error.",
-    "pt": "A forma de função da sintaxe de colchetes é útil com `cellfun` ou quando a lista de entradas é montada em tempo de execução como cell array, como em `horzcat(c{:})`. Também junta texto (`horzcat('ab', 'cd')` é `'abcd'`) e cell arrays.\n\nSe o número de linhas diferir, a chamada falha com erro de dimensão."
-   },
-   "examples": [
-    {
-     "code": "horzcat([1; 2], [3; 4])\nhorzcat('ab', 'cd')\nc = {[1 2], [3], [4 5 6]};\nhorzcat(c{:})"
-    }
-   ],
-   "see": [
-    "vertcat",
-    "cat",
-    "repmat",
-    "["
-   ]
-  },
-  "ind2sub": {
-   "summary": {
-    "en": "Converts linear indices to row, column and higher subscripts.",
-    "pt": "Converte índices lineares em subscritos de linha, coluna e dimensões maiores."
-   },
-   "syntax": [
-    {
-     "code": "[r, c] = ind2sub(sz, ind)",
-     "en": "Subscripts for a matrix of size `sz`.",
-     "pt": "Subscritos para uma matriz de tamanho `sz`."
-    },
-    {
-     "code": "[i1, i2, ..., iN] = ind2sub(sz, ind)",
-     "en": "One subscript per dimension.",
-     "pt": "Um subscrito por dimensão."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "sz",
-     "en": "Size vector of the array, such as `[3 4]` or `size(A)`.",
-     "pt": "Vetor de tamanho do array, como `[3 4]` ou `size(A)`."
-    },
-    {
-     "name": "ind",
-     "en": "Linear index (or array of indices) in column-major order.",
-     "pt": "Índice linear (ou array de índices) em ordem de coluna."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "r, c, ...",
-     "en": "Subscript arrays, each the same size as `ind`.",
-     "pt": "Arrays de subscritos, cada um do mesmo tamanho de `ind`."
-    }
-   ],
-   "description": {
-    "en": "MATLAB stores arrays down the columns, so index 1 to `m` is the first column of an `m`-row matrix, and so on. `ind2sub` undoes that numbering, which is what you need after `find` or `max` returned a position in the flattened array. `sub2ind` is the inverse.\n\nIf fewer outputs are requested than the array has dimensions, the last output absorbs the remaining ones.",
-    "pt": "O MATLAB armazena arrays descendo pelas colunas, então os índices 1 a `m` formam a primeira coluna de uma matriz de `m` linhas, e assim por diante. `ind2sub` desfaz essa numeração, o que é preciso depois que `find` ou `max` devolve uma posição no array achatado. `sub2ind` é a inversa.\n\nSe forem pedidas menos saídas que dimensões, a última saída absorve as restantes."
-   },
-   "notes": {
-    "en": "With a single output MatLivre returns the linear index unchanged, and an index beyond the array size is not reported as an error.",
-    "pt": "Com uma única saída o MatLivre devolve o índice linear sem alteração, e um índice além do tamanho do array não é reportado como erro."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Back to subscripts",
-      "pt": "De volta aos subscritos"
-     },
-     "code": "[r, c] = ind2sub([2 3], [1 4 6])\n[r, c, p] = ind2sub([2 3 2], 11)"
-    }
-   ],
-   "see": [
-    "sub2ind",
-    "find",
-    "size",
-    "max"
-   ]
-  },
-  "inline": {
-   "summary": {
-    "en": "Creates a function object from a text expression (older style).",
-    "pt": "Cria um objeto de função a partir de uma expressão em texto (estilo antigo)."
-   },
-   "syntax": [
-    {
-     "code": "f = inline(expr)",
-     "en": "Builds a function of the variables found in `expr`.",
-     "pt": "Cria uma função das variáveis encontradas em `expr`."
-    },
-    {
-     "code": "f = inline(expr, arg1, arg2, ...)",
-     "en": "Fixes the argument names and their order.",
-     "pt": "Fixa os nomes dos argumentos e a ordem deles."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "expr",
-     "en": "Text with a MATLAB expression, such as `'x^2 + 1'`.",
-     "pt": "Texto com uma expressão do MATLAB, como `'x^2 + 1'`."
-    },
-    {
-     "name": "arg1, ...",
-     "en": "Names of the arguments.",
-     "pt": "Nomes dos argumentos."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "f",
-     "en": "An inline function object. Call it like a function; `formula(f)` and `argnames(f)` read it back.",
-     "pt": "Um objeto de função inline. Chame-o como função; `formula(f)` e `argnames(f)` o leem de volta."
-    }
-   ],
-   "description": {
-    "en": "Without explicit names, the arguments are the identifiers in the expression, in alphabetical order. This is why `inline('a*x+b')` takes `(a, b, x)`; give the names to control the order.\n\nAnonymous functions, `@(x) x.^2 + 1`, replace `inline` in current code: they are faster and capture variables from the workspace.",
-    "pt": "Sem nomes explícitos, os argumentos são os identificadores da expressão, em ordem alfabética. Por isso `inline('a*x+b')` recebe `(a, b, x)`; informe os nomes para controlar a ordem.\n\nFunções anônimas, `@(x) x.^2 + 1`, substituem `inline` no código atual: são mais rápidas e capturam variáveis do workspace."
-   },
-   "examples": [
-    {
-     "code": "f = inline('a*x + b', 'x', 'a', 'b');\nf(2, 3, 4)\nformula(f)"
-    }
-   ],
-   "see": [
-    "formula",
-    "argnames",
-    "feval",
-    "func2str"
-   ]
-  },
-  "ipermute": {
-   "summary": {
-    "en": "Inverse of `permute`: restores the original dimension order.",
-    "pt": "Inversa de `permute`: restaura a ordem original das dimensões."
-   },
-   "syntax": [
-    {
-     "code": "A = ipermute(B, order)",
-     "en": "Undoes `B = permute(A, order)`.",
-     "pt": "Desfaz `B = permute(A, order)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "B",
-     "en": "Array that was produced by `permute`.",
-     "pt": "Array produzido por `permute`."
-    },
-    {
-     "name": "order",
-     "en": "The same permutation vector that was given to `permute`.",
-     "pt": "O mesmo vetor de permutação que foi dado a `permute`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "A",
-     "en": "Array with the dimension order before the permutation.",
-     "pt": "Array com a ordem das dimensões anterior à permutação."
-    }
-   ],
-   "description": {
-    "en": "`permute` and `ipermute` use the same vector, so `ipermute(permute(A, p), p)` is always `A`. This matters for permutations that are not their own inverse, such as `[3 1 2]`: applying `permute` with the same vector again would not restore the array.",
-    "pt": "`permute` e `ipermute` usam o mesmo vetor, então `ipermute(permute(A, p), p)` é sempre `A`. Isso importa para permutações que não são a própria inversa, como `[3 1 2]`: aplicar `permute` de novo com o mesmo vetor não restauraria o array."
-   },
-   "examples": [
-    {
-     "code": "A = ones(2, 3, 4);\np = [3 1 2];\nB = permute(A, p);\nsize(B)\nsize(ipermute(B, p))"
-    }
-   ],
-   "see": [
-    "permute",
-    "reshape",
-    "squeeze",
-    "shiftdim"
-   ]
-  },
-  "iscolumn": {
-   "summary": {
-    "en": "Tests whether the input is a column vector.",
-    "pt": "Testa se a entrada é um vetor coluna."
-   },
-   "syntax": [
-    {
-     "code": "tf = iscolumn(A)",
-     "en": "True when `A` is `n`-by-1 with `n` of any size, including 0 or 1.",
-     "pt": "Verdadeiro quando `A` é `n` por 1, com `n` de qualquer tamanho, inclusive 0 ou 1."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Any array.",
-     "pt": "Qualquer array."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "A scalar is a column (and a row). An empty `0`-by-`1` array is a column, but the plain `[]` (0 by 0) is not. For a vector in either orientation, see `isvector`.",
-    "pt": "Um escalar é uma coluna (e uma linha). Um array vazio `0` por `1` é uma coluna, mas o simples `[]` (0 por 0) não é. Para vetor em qualquer orientação, veja `isvector`."
-   },
-   "examples": [
-    {
-     "code": "iscolumn([1; 2; 3])\niscolumn([1 2 3])\niscolumn(5)\niscolumn([])"
-    }
-   ],
-   "see": [
-    "isrow",
-    "isvector",
-    "isscalar",
-    "ismatrix"
-   ]
-  },
-  "isempty": {
-   "summary": {
-    "en": "Tests whether an array has no elements.",
-    "pt": "Testa se um array não tem elementos."
-   },
-   "syntax": [
-    {
-     "code": "tf = isempty(A)",
-     "en": "True if any dimension of `A` is 0.",
-     "pt": "Verdadeiro se alguma dimensão de `A` for 0."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Array of any type: numeric, text, cell, struct, table.",
-     "pt": "Array de qualquer tipo: numérico, texto, cell, struct, tabela."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "`isempty(A)` is the same as `numel(A) == 0`. `''`, `{}` and `zeros(0, 3)` are empty, while a single space `' '`, a zero and `struct()` are not. A common use is guarding the result of `find` or an optional argument: `if isempty(idx)`.",
-    "pt": "`isempty(A)` equivale a `numel(A) == 0`. `''`, `{}` e `zeros(0, 3)` são vazios, enquanto um espaço `' '`, um zero e `struct()` não são. Um uso comum é proteger o resultado de `find` ou um argumento opcional: `if isempty(idx)`."
-   },
-   "examples": [
-    {
-     "code": "isempty([])\nisempty(zeros(0, 3))\nisempty('')\nisempty(' ')\nisempty(find([1 2 3] > 5))"
-    }
-   ],
-   "see": [
-    "numel",
-    "size",
-    "ismissing",
-    "isscalar"
-   ]
-  },
-  "ismatrix": {
-   "summary": {
-    "en": "Tests whether the input is a 2-D array.",
-    "pt": "Testa se a entrada é um array 2-D."
-   },
-   "syntax": [
-    {
-     "code": "tf = ismatrix(A)",
-     "en": "True when `A` has exactly two dimensions.",
-     "pt": "Verdadeiro quando `A` tem exatamente duas dimensões."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Any array.",
-     "pt": "Qualquer array."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "Every scalar, vector and ordinary matrix, empty or not, counts as a matrix. Only arrays with three or more dimensions fail the test (`ndims(A) > 2`). The name suggests a stricter check, so use `isvector`, `isscalar` or `size` when you need a particular shape.",
-    "pt": "Todo escalar, vetor e matriz comum, vazio ou não, conta como matriz. Só arrays com três ou mais dimensões falham no teste (`ndims(A) > 2`). O nome sugere uma checagem mais rigorosa, então use `isvector`, `isscalar` ou `size` quando precisar de um formato específico."
-   },
-   "examples": [
-    {
-     "code": "ismatrix(5)\nismatrix([1 2; 3 4])\nismatrix(ones(2, 3, 4))"
-    }
-   ],
-   "see": [
-    "isvector",
-    "isscalar",
-    "ndims",
-    "size"
-   ]
-  },
-  "isrow": {
-   "summary": {
-    "en": "Tests whether the input is a row vector.",
-    "pt": "Testa se a entrada é um vetor linha."
-   },
-   "syntax": [
-    {
-     "code": "tf = isrow(A)",
-     "en": "True when `A` is 1-by-`n` with `n` of any size, including 0 or 1.",
-     "pt": "Verdadeiro quando `A` é 1 por `n`, com `n` de qualquer tamanho, inclusive 0 ou 1."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Any array.",
-     "pt": "Qualquer array."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "A scalar is a row, and so is the empty `1`-by-`0` array. A column of length 2 or more is not. Use `isvector` to accept either orientation.",
-    "pt": "Um escalar é uma linha, assim como o array vazio `1` por `0`. Uma coluna de comprimento 2 ou mais não é. Use `isvector` para aceitar qualquer orientação."
-   },
-   "examples": [
-    {
-     "code": "isrow([1 2 3])\nisrow([1; 2; 3])\nisrow(7)"
-    }
-   ],
-   "see": [
-    "iscolumn",
-    "isvector",
-    "isscalar",
-    "ismatrix"
-   ]
-  },
-  "isscalar": {
-   "summary": {
-    "en": "Tests whether the input has exactly one element.",
-    "pt": "Testa se a entrada tem exatamente um elemento."
-   },
-   "syntax": [
-    {
-     "code": "tf = isscalar(A)",
-     "en": "True when `A` is 1-by-1.",
-     "pt": "Verdadeiro quando `A` é 1 por 1."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Any array, including cell arrays, structs and text.",
-     "pt": "Qualquer array, inclusive cell arrays, structs e texto."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "The test is on the size, not the class: a one-element cell `{1}` and a string scalar `\"abc\"` are scalars, while a character vector `'abc'` is not because it has three elements. An empty array is not a scalar.",
-    "pt": "O teste é sobre o tamanho, não a classe: uma cell de um elemento `{1}` e uma string escalar `\"abc\"` são escalares, enquanto um vetor de caracteres `'abc'` não é, pois tem três elementos. Um array vazio não é escalar."
-   },
-   "examples": [
-    {
-     "code": "isscalar(5)\nisscalar([1 2])\nisscalar({1})\nisscalar(\"abc\")\nisscalar('abc')"
-    }
-   ],
-   "see": [
-    "isvector",
-    "isrow",
-    "iscolumn",
-    "isempty"
-   ]
-  },
-  "issorted": {
-   "summary": {
-    "en": "Tests whether the elements of a vector are in sorted order.",
-    "pt": "Testa se os elementos de um vetor estão em ordem."
-   },
-   "syntax": [
-    {
-     "code": "tf = issorted(A)",
-     "en": "True when `A` is in ascending order (equal neighbours allowed).",
-     "pt": "Verdadeiro quando `A` está em ordem crescente (vizinhos iguais permitidos)."
-    },
-    {
-     "code": "tf = issorted(A, direction)",
-     "en": "Checks a specific order: `'ascend'`, `'descend'`, `'monotonic'`, `'strictascend'`, `'strictdescend'` or `'strictmonotonic'`.",
-     "pt": "Verifica uma ordem específica: `'ascend'`, `'descend'`, `'monotonic'`, `'strictascend'`, `'strictdescend'` ou `'strictmonotonic'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical vector.",
-     "pt": "Vetor numérico ou lógico."
-    },
-    {
-     "name": "direction",
-     "en": "Text naming the order to test; the `strict` variants forbid equal neighbours.",
-     "pt": "Texto com a ordem a testar; as variantes `strict` proíbem vizinhos iguais."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tf",
-     "en": "Logical scalar.",
-     "pt": "Escalar lógico."
-    }
-   ],
-   "description": {
-    "en": "It is a cheap check that is worth doing before a function that assumes sorted input, such as `interp1` or a binary search. Checking is a single pass, so it is faster than sorting and comparing.\n\nNaN values count as the largest in ascending order, so they are expected at the end.",
-    "pt": "É uma verificação barata que vale a pena antes de uma função que assume entrada ordenada, como `interp1` ou uma busca binária. A checagem é uma passada só, então é mais rápida que ordenar e comparar.\n\nOs NaN contam como os maiores na ordem crescente, então são esperados no final."
-   },
-   "notes": {
-    "en": "In MatLivre `'descend'` and `'monotonic'` descending order are not recognised as sorted, and vectors containing NaN are reported as unsorted. Cell arrays of text are not supported.",
-    "pt": "No MatLivre a ordem decrescente com `'descend'` e `'monotonic'` não é reconhecida como ordenada, e vetores com NaN são considerados não ordenados. Cell arrays de texto não são suportados."
-   },
-   "examples": [
-    {
-     "code": "issorted([1 2 2 5])\nissorted([1 2 2 5], 'strictascend')\nissorted([3 1 2])"
-    }
-   ],
-   "see": [
-    "sort",
-    "issortedrows",
-    "sortrows",
-    "isuniform"
-   ]
   }
- }
 }

@@ -1,495 +1,1322 @@
 {
   "functions": {
     "toposort": {
-      "summary": {"en": "Topological order of the nodes of a directed acyclic graph.", "pt": "Ordem topológica dos nós de um grafo direcionado acíclico."},
+      "summary": {
+        "en": "Topological order of the nodes of a directed acyclic graph.",
+        "pt": "Ordem topológica dos nós de um grafo direcionado acíclico."
+      },
       "syntax": [
-        {"code": "N = toposort(G)", "en": "Returns the node indices of the digraph `G` in an order where every edge points from an earlier node to a later one.", "pt": "Retorna os índices dos nós do digraph `G` em uma ordem na qual toda aresta vai de um nó anterior para um posterior."}
+        {
+          "code": "N = toposort(G)",
+          "en": "Returns the node indices of the digraph `G` in an order where every edge points from an earlier node to a later one.",
+          "pt": "Retorna os índices dos nós do digraph `G` em uma ordem na qual toda aresta vai de um nó anterior para um posterior."
+        }
       ],
       "inputs": [
-        {"name": "G", "en": "A `digraph` object. It must have no directed cycles.", "pt": "Um objeto `digraph`. Não pode ter ciclos direcionados."}
+        {
+          "name": "G",
+          "en": "A `digraph` object. It must have no directed cycles.",
+          "pt": "Um objeto `digraph`. Não pode ter ciclos direcionados."
+        }
       ],
       "outputs": [
-        {"name": "N", "en": "Row vector with the node indices in topological order.", "pt": "Vetor linha com os índices dos nós em ordem topológica."}
+        {
+          "name": "N",
+          "en": "Row vector with the node indices in topological order.",
+          "pt": "Vetor linha com os índices dos nós em ordem topológica."
+        }
       ],
       "description": {
         "en": "A topological order lists the nodes so that for each edge `u -> v`, node `u` appears before `v`. It exists only when the graph has no directed cycle, and is typically used to schedule tasks that depend on one another.\n\nSeveral valid orders usually exist; `toposort` returns one of them. If the graph contains a cycle, the function raises an error.",
         "pt": "Uma ordem topológica lista os nós de modo que, para cada aresta `u -> v`, o nó `u` apareça antes de `v`. Ela só existe quando o grafo não tem ciclo direcionado, e é usada, por exemplo, para ordenar tarefas que dependem umas das outras.\n\nNormalmente há várias ordens válidas; `toposort` retorna uma delas. Se o grafo tiver um ciclo, a função gera um erro."
       },
-      "notes": {"en": "Only the single-output form is available in MatLivre.", "pt": "No MatLivre só está disponível a forma com uma única saída."},
       "examples": [
-        {"title": {"en": "Ordering a small dependency graph", "pt": "Ordenando um pequeno grafo de dependências"}, "code": "G = digraph([1 1 2 3], [2 3 4 4]);\nN = toposort(G)"}
+        {
+          "title": {
+            "en": "Ordering a small dependency graph",
+            "pt": "Ordenando um pequeno grafo de dependências"
+          },
+          "code": "G = digraph([1 1 2 3], [2 3 4 4]);\nN = toposort(G)"
+        }
       ],
-      "see": ["digraph", "transclosure", "transreduction", "dfsearch", "isdag"]
+      "see": [
+        "digraph",
+        "transclosure",
+        "transreduction",
+        "dfsearch",
+        "isdag"
+      ]
     },
     "transclosure": {
-      "summary": {"en": "Transitive closure of a directed graph.", "pt": "Fecho transitivo de um grafo direcionado."},
+      "summary": {
+        "en": "Transitive closure of a directed graph.",
+        "pt": "Fecho transitivo de um grafo direcionado."
+      },
       "syntax": [
-        {"code": "T = transclosure(G)", "en": "Returns a digraph with an edge from `u` to `v` whenever `v` is reachable from `u` in `G`.", "pt": "Retorna um digraph com uma aresta de `u` para `v` sempre que `v` é alcançável a partir de `u` em `G`."}
+        {
+          "code": "T = transclosure(G)",
+          "en": "Returns a digraph with an edge from `u` to `v` whenever `v` is reachable from `u` in `G`.",
+          "pt": "Retorna um digraph com uma aresta de `u` para `v` sempre que `v` é alcançável a partir de `u` em `G`."
+        }
       ],
       "inputs": [
-        {"name": "G", "en": "A `digraph` object.", "pt": "Um objeto `digraph`."}
+        {
+          "name": "G",
+          "en": "A `digraph` object.",
+          "pt": "Um objeto `digraph`."
+        }
       ],
       "outputs": [
-        {"name": "T", "en": "A `digraph` with the same nodes as `G` and the extra edges implied by reachability.", "pt": "Um `digraph` com os mesmos nós de `G` e as arestas adicionais implícitas pela alcançabilidade."}
+        {
+          "name": "T",
+          "en": "A `digraph` with the same nodes as `G` and the extra edges implied by reachability.",
+          "pt": "Um `digraph` com os mesmos nós de `G` e as arestas adicionais implícitas pela alcançabilidade."
+        }
       ],
       "description": {
         "en": "The transitive closure answers reachability questions directly: if there is a path of any length from node `u` to node `v`, the closure has the single edge `u -> v`. Edges already in `G` are kept.\n\nIn terms of the adjacency matrix, the closure is the pattern of nonzeros of the sum of its powers up to the number of nodes. Use `adjacency(T)` to read it as a matrix.",
         "pt": "O fecho transitivo responde diretamente a perguntas de alcançabilidade: se existe um caminho de qualquer comprimento do nó `u` ao nó `v`, o fecho tem a aresta `u -> v`. As arestas já existentes em `G` são mantidas.\n\nEm termos da matriz de adjacência, o fecho é o padrão de não zeros da soma de suas potências até o número de nós. Use `adjacency(T)` para lê-lo como matriz."
       },
       "examples": [
-        {"title": {"en": "Closure of a chain 1 -> 2 -> 3", "pt": "Fecho de uma cadeia 1 -> 2 -> 3"}, "code": "G = digraph([1 2], [2 3]);\nT = transclosure(G);\nfull(adjacency(T))"}
+        {
+          "title": {
+            "en": "Closure of a chain 1 -> 2 -> 3",
+            "pt": "Fecho de uma cadeia 1 -> 2 -> 3"
+          },
+          "code": "G = digraph([1 2], [2 3]);\nT = transclosure(G);\nfull(adjacency(T))"
+        }
       ],
-      "see": ["transreduction", "digraph", "adjacency", "toposort", "conncomp"]
+      "see": [
+        "transreduction",
+        "digraph",
+        "adjacency",
+        "toposort",
+        "conncomp"
+      ]
     },
     "transreduction": {
-      "summary": {"en": "Transitive reduction of a directed acyclic graph.", "pt": "Redução transitiva de um grafo direcionado acíclico."},
+      "summary": {
+        "en": "Transitive reduction of a directed acyclic graph.",
+        "pt": "Redução transitiva de um grafo direcionado acíclico."
+      },
       "syntax": [
-        {"code": "R = transreduction(G)", "en": "Returns the digraph with the fewest edges that has the same reachability as `G`.", "pt": "Retorna o digraph com o menor número de arestas que mantém a mesma alcançabilidade de `G`."}
+        {
+          "code": "R = transreduction(G)",
+          "en": "Returns the digraph with the fewest edges that has the same reachability as `G`.",
+          "pt": "Retorna o digraph com o menor número de arestas que mantém a mesma alcançabilidade de `G`."
+        }
       ],
       "inputs": [
-        {"name": "G", "en": "A `digraph` object, normally acyclic.", "pt": "Um objeto `digraph`, normalmente acíclico."}
+        {
+          "name": "G",
+          "en": "A `digraph` object, normally acyclic.",
+          "pt": "Um objeto `digraph`, normalmente acíclico."
+        }
       ],
       "outputs": [
-        {"name": "R", "en": "A `digraph` with the same nodes and only the edges that are not implied by longer paths.", "pt": "Um `digraph` com os mesmos nós e apenas as arestas que não são implicadas por caminhos mais longos."}
+        {
+          "name": "R",
+          "en": "A `digraph` with the same nodes and only the edges that are not implied by longer paths.",
+          "pt": "Um `digraph` com os mesmos nós e apenas as arestas que não são implicadas por caminhos mais longos."
+        }
       ],
       "description": {
         "en": "An edge `u -> v` is redundant when another path from `u` to `v` already exists. The transitive reduction removes every redundant edge while preserving which nodes can reach which.\n\nIt is the inverse of `transclosure` in the sense that both graphs have the same closure. A typical use is to draw a dependency diagram without clutter.",
         "pt": "Uma aresta `u -> v` é redundante quando já existe outro caminho de `u` a `v`. A redução transitiva remove todas as arestas redundantes, preservando quais nós alcançam quais.\n\nEla é o inverso de `transclosure` no sentido de que ambos os grafos têm o mesmo fecho. Um uso típico é desenhar um diagrama de dependências sem excesso de linhas."
       },
       "examples": [
-        {"title": {"en": "Dropping the shortcut edge 1 -> 3", "pt": "Removendo a aresta de atalho 1 -> 3"}, "code": "G = digraph([1 2 1], [2 3 3]);\nR = transreduction(G);\nR.Edges"}
+        {
+          "title": {
+            "en": "Dropping the shortcut edge 1 -> 3",
+            "pt": "Removendo a aresta de atalho 1 -> 3"
+          },
+          "code": "G = digraph([1 2 1], [2 3 3]);\nR = transreduction(G);\nR.Edges"
+        }
       ],
-      "see": ["transclosure", "digraph", "toposort", "isdag"]
+      "see": [
+        "transclosure",
+        "digraph",
+        "toposort",
+        "isdag"
+      ]
     },
     "griddata": {
-      "summary": {"en": "Interpolates scattered data at query points.", "pt": "Interpola dados espalhados em pontos de consulta."},
+      "summary": {
+        "en": "Interpolates scattered data at query points.",
+        "pt": "Interpola dados espalhados em pontos de consulta."
+      },
       "syntax": [
-        {"code": "vq = griddata(x, y, v, xq, yq)", "en": "Linear interpolation of the scattered samples `v(x,y)` at the points `(xq,yq)`.", "pt": "Interpolação linear das amostras espalhadas `v(x,y)` nos pontos `(xq,yq)`."},
-        {"code": "vq = griddata(x, y, v, xq, yq, method)", "en": "Uses the given method, such as `'nearest'`, `'linear'`, `'natural'`, `'cubic'` or `'v4'`.", "pt": "Usa o método indicado, como `'nearest'`, `'linear'`, `'natural'`, `'cubic'` ou `'v4'`."},
-        {"code": "vq = griddata(x, y, z, v, xq, yq, zq)", "en": "The same for samples in three dimensions.", "pt": "O mesmo para amostras em três dimensões."}
+        {
+          "code": "vq = griddata(x, y, v, xq, yq)",
+          "en": "Linear interpolation of the scattered samples `v(x,y)` at the points `(xq,yq)`.",
+          "pt": "Interpolação linear das amostras espalhadas `v(x,y)` nos pontos `(xq,yq)`."
+        },
+        {
+          "code": "vq = griddata(x, y, v, xq, yq, method)",
+          "en": "Uses the given method, such as `'nearest'`, `'linear'`, `'natural'`, `'cubic'` or `'v4'`.",
+          "pt": "Usa o método indicado, como `'nearest'`, `'linear'`, `'natural'`, `'cubic'` ou `'v4'`."
+        },
+        {
+          "code": "vq = griddata(x, y, z, v, xq, yq, zq)",
+          "en": "The same for samples in three dimensions.",
+          "pt": "O mesmo para amostras em três dimensões."
+        }
       ],
       "inputs": [
-        {"name": "x, y", "en": "Coordinates of the sample points, vectors of equal length.", "pt": "Coordenadas dos pontos de amostra, vetores de mesmo comprimento."},
-        {"name": "v", "en": "Sample values at those points.", "pt": "Valores das amostras nesses pontos."},
-        {"name": "xq, yq", "en": "Query coordinates. Vectors of the same shape give values at those points; a row and a column vector define a grid.", "pt": "Coordenadas de consulta. Vetores de mesma forma dão valores nesses pontos; um vetor linha e um coluna definem uma grade."},
-        {"name": "method", "en": "Interpolation method, default `'linear'`.", "pt": "Método de interpolação, padrão `'linear'`."}
+        {
+          "name": "x, y",
+          "en": "Coordinates of the sample points, vectors of equal length.",
+          "pt": "Coordenadas dos pontos de amostra, vetores de mesmo comprimento."
+        },
+        {
+          "name": "v",
+          "en": "Sample values at those points.",
+          "pt": "Valores das amostras nesses pontos."
+        },
+        {
+          "name": "xq, yq",
+          "en": "Query coordinates. Vectors of the same shape give values at those points; a row and a column vector define a grid.",
+          "pt": "Coordenadas de consulta. Vetores de mesma forma dão valores nesses pontos; um vetor linha e um coluna definem uma grade."
+        },
+        {
+          "name": "method",
+          "en": "Interpolation method, default `'linear'`.",
+          "pt": "Método de interpolação, padrão `'linear'`."
+        }
       ],
       "outputs": [
-        {"name": "vq", "en": "Interpolated values. Points outside the convex hull of the samples give `NaN`, except for the `'nearest'` method.", "pt": "Valores interpolados. Pontos fora do fecho convexo das amostras dão `NaN`, exceto no método `'nearest'`."}
+        {
+          "name": "vq",
+          "en": "Interpolated values. Points outside the convex hull of the samples give `NaN`, except for the `'nearest'` method.",
+          "pt": "Valores interpolados. Pontos fora do fecho convexo das amostras dão `NaN`, exceto no método `'nearest'`."
+        }
       ],
       "description": {
         "en": "`griddata` builds a Delaunay triangulation of the sample points and interpolates inside each triangle. The data need not lie on a regular grid, which distinguishes it from `interp2`.\n\nThe linear method is exact for data that come from a plane. The nearest method copies the value of the closest sample and is the only one that returns finite values outside the hull. For repeated queries on the same data, `scatteredInterpolant` avoids rebuilding the triangulation.",
         "pt": "`griddata` constrói uma triangulação de Delaunay dos pontos de amostra e interpola dentro de cada triângulo. Os dados não precisam estar em grade regular, o que a diferencia de `interp2`.\n\nO método linear é exato para dados que vêm de um plano. O método vizinho mais próximo copia o valor da amostra mais perto e é o único que retorna valores finitos fora do fecho. Para consultas repetidas sobre os mesmos dados, `scatteredInterpolant` evita refazer a triangulação."
       },
       "examples": [
-        {"title": {"en": "Interpolating samples of a plane", "pt": "Interpolando amostras de um plano"}, "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\ngriddata(x(:), y(:), v(:), 0.5, 1.5)\ngriddata(x(:), y(:), v(:), [0.4 1.6], [0.4 1.6], 'nearest')"}
+        {
+          "title": {
+            "en": "Interpolating samples of a plane",
+            "pt": "Interpolando amostras de um plano"
+          },
+          "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\ngriddata(x(:), y(:), v(:), 0.5, 1.5)\ngriddata(x(:), y(:), v(:), [0.4 1.6], [0.4 1.6], 'nearest')"
+        }
       ],
-      "see": ["scatteredInterpolant", "griddatan", "interp2", "delaunay", "meshgrid"]
+      "see": [
+        "scatteredInterpolant",
+        "griddatan",
+        "interp2",
+        "delaunay",
+        "meshgrid"
+      ]
     },
     "griddatan": {
-      "summary": {"en": "Interpolates scattered data in N dimensions.", "pt": "Interpola dados espalhados em N dimensões."},
+      "summary": {
+        "en": "Interpolates scattered data in N dimensions.",
+        "pt": "Interpola dados espalhados em N dimensões."
+      },
       "syntax": [
-        {"code": "yi = griddatan(X, y, xi)", "en": "Linear interpolation of the values `y` sampled at the rows of `X`, evaluated at the rows of `xi`.", "pt": "Interpolação linear dos valores `y` amostrados nas linhas de `X`, avaliada nas linhas de `xi`."},
-        {"code": "yi = griddatan(X, y, xi, method)", "en": "Chooses the method, `'linear'` or `'nearest'`.", "pt": "Escolhe o método, `'linear'` ou `'nearest'`."}
+        {
+          "code": "yi = griddatan(X, y, xi)",
+          "en": "Linear interpolation of the values `y` sampled at the rows of `X`, evaluated at the rows of `xi`.",
+          "pt": "Interpolação linear dos valores `y` amostrados nas linhas de `X`, avaliada nas linhas de `xi`."
+        },
+        {
+          "code": "yi = griddatan(X, y, xi, method)",
+          "en": "Chooses the method, `'linear'` or `'nearest'`.",
+          "pt": "Escolhe o método, `'linear'` ou `'nearest'`."
+        }
       ],
       "inputs": [
-        {"name": "X", "en": "m-by-n matrix; each row is a sample point in n dimensions.", "pt": "Matriz m por n; cada linha é um ponto de amostra em n dimensões."},
-        {"name": "y", "en": "Column vector of m sample values.", "pt": "Vetor coluna com m valores de amostra."},
-        {"name": "xi", "en": "p-by-n matrix of query points, one per row.", "pt": "Matriz p por n de pontos de consulta, um por linha."}
+        {
+          "name": "X",
+          "en": "m-by-n matrix; each row is a sample point in n dimensions.",
+          "pt": "Matriz m por n; cada linha é um ponto de amostra em n dimensões."
+        },
+        {
+          "name": "y",
+          "en": "Column vector of m sample values.",
+          "pt": "Vetor coluna com m valores de amostra."
+        },
+        {
+          "name": "xi",
+          "en": "p-by-n matrix of query points, one per row.",
+          "pt": "Matriz p por n de pontos de consulta, um por linha."
+        }
       ],
       "outputs": [
-        {"name": "yi", "en": "Column vector of p interpolated values; `NaN` for points outside the convex hull.", "pt": "Vetor coluna com p valores interpolados; `NaN` para pontos fora do fecho convexo."}
+        {
+          "name": "yi",
+          "en": "Column vector of p interpolated values; `NaN` for points outside the convex hull.",
+          "pt": "Vetor coluna com p valores interpolados; `NaN` para pontos fora do fecho convexo."
+        }
       ],
       "description": {
         "en": "`griddatan` is the N-dimensional counterpart of `griddata`. It triangulates the sample points (into simplices) and interpolates linearly inside the simplex that contains each query point.\n\nBecause the points are given as rows of one matrix, the dimension is taken from the number of columns of `X` rather than from the number of arguments.",
         "pt": "`griddatan` é a versão N-dimensional de `griddata`. Ela triangula os pontos de amostra (em simplexos) e interpola linearmente dentro do simplexo que contém cada ponto de consulta.\n\nComo os pontos vêm como linhas de uma única matriz, a dimensão é dada pelo número de colunas de `X`, e não pelo número de argumentos."
       },
       "examples": [
-        {"title": {"en": "Four corners of a square", "pt": "Quatro cantos de um quadrado"}, "code": "X = [0 0; 1 0; 0 1; 1 1];\nv = [0; 1; 2; 3];\ngriddatan(X, v, [0.25 0.25; 0.5 0.5])"}
+        {
+          "title": {
+            "en": "Four corners of a square",
+            "pt": "Quatro cantos de um quadrado"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1];\nv = [0; 1; 2; 3];\ngriddatan(X, v, [0.25 0.25; 0.5 0.5])"
+        }
       ],
-      "see": ["griddata", "scatteredInterpolant", "delaunayn", "tsearchn"]
+      "see": [
+        "griddata",
+        "scatteredInterpolant",
+        "delaunayn",
+        "tsearchn"
+      ]
     },
     "griddedInterpolant": {
-      "summary": {"en": "Interpolant object for data sampled on a grid.", "pt": "Objeto interpolador para dados amostrados em uma grade."},
+      "summary": {
+        "en": "Interpolant object for data sampled on a grid.",
+        "pt": "Objeto interpolador para dados amostrados em uma grade."
+      },
       "syntax": [
-        {"code": "F = griddedInterpolant(x, v)", "en": "Creates a 1-D interpolant over the grid vector `x` with values `v` (linear method).", "pt": "Cria um interpolador 1-D sobre o vetor de grade `x` com valores `v` (método linear)."},
-        {"code": "F = griddedInterpolant(X1, X2, ..., V)", "en": "Creates an interpolant on an N-D grid given by grid vectors or ndgrid arrays.", "pt": "Cria um interpolador em uma grade N-D dada por vetores de grade ou arrays no formato ndgrid."},
-        {"code": "F = griddedInterpolant(..., method, extrapMethod)", "en": "Selects the interpolation method and the extrapolation method.", "pt": "Seleciona o método de interpolação e o de extrapolação."},
-        {"code": "vq = F(xq)", "en": "Evaluates the interpolant at the query points.", "pt": "Avalia o interpolador nos pontos de consulta."}
+        {
+          "code": "F = griddedInterpolant(x, v)",
+          "en": "Creates a 1-D interpolant over the grid vector `x` with values `v` (linear method).",
+          "pt": "Cria um interpolador 1-D sobre o vetor de grade `x` com valores `v` (método linear)."
+        },
+        {
+          "code": "F = griddedInterpolant(X1, X2, ..., V)",
+          "en": "Creates an interpolant on an N-D grid given by grid vectors or ndgrid arrays.",
+          "pt": "Cria um interpolador em uma grade N-D dada por vetores de grade ou arrays no formato ndgrid."
+        },
+        {
+          "code": "F = griddedInterpolant(..., method, extrapMethod)",
+          "en": "Selects the interpolation method and the extrapolation method.",
+          "pt": "Seleciona o método de interpolação e o de extrapolação."
+        },
+        {
+          "code": "vq = F(xq)",
+          "en": "Evaluates the interpolant at the query points.",
+          "pt": "Avalia o interpolador nos pontos de consulta."
+        }
       ],
       "inputs": [
-        {"name": "x, X1, ...", "en": "Sample coordinates along each dimension, strictly increasing.", "pt": "Coordenadas de amostra em cada dimensão, estritamente crescentes."},
-        {"name": "V", "en": "Array of sample values, with one value for every grid point.", "pt": "Array de valores, com um valor para cada ponto da grade."},
-        {"name": "method", "en": "`'linear'` (default), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'spline'` or `'makima'`.", "pt": "`'linear'` (padrão), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'spline'` ou `'makima'`."},
-        {"name": "extrapMethod", "en": "Method used outside the grid; by default the interpolation method. Use `'none'` to get `NaN` there.", "pt": "Método usado fora da grade; por padrão, o método de interpolação. Use `'none'` para obter `NaN` ali."}
+        {
+          "name": "x, X1, ...",
+          "en": "Sample coordinates along each dimension, strictly increasing.",
+          "pt": "Coordenadas de amostra em cada dimensão, estritamente crescentes."
+        },
+        {
+          "name": "V",
+          "en": "Array of sample values, with one value for every grid point.",
+          "pt": "Array de valores, com um valor para cada ponto da grade."
+        },
+        {
+          "name": "method",
+          "en": "`'linear'` (default), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'spline'` or `'makima'`.",
+          "pt": "`'linear'` (padrão), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'spline'` ou `'makima'`."
+        },
+        {
+          "name": "extrapMethod",
+          "en": "Method used outside the grid; by default the interpolation method. Use `'none'` to get `NaN` there.",
+          "pt": "Método usado fora da grade; por padrão, o método de interpolação. Use `'none'` para obter `NaN` ali."
+        }
       ],
       "outputs": [
-        {"name": "F", "en": "Interpolant object with properties such as `GridVectors`, `Values` and `Method`; call it like a function.", "pt": "Objeto interpolador com propriedades como `GridVectors`, `Values` e `Method`; é chamado como uma função."}
+        {
+          "name": "F",
+          "en": "Interpolant object with properties such as `GridVectors`, `Values` and `Method`; call it like a function.",
+          "pt": "Objeto interpolador com propriedades como `GridVectors`, `Values` e `Method`; é chamado como uma função."
+        }
       ],
       "description": {
         "en": "The object stores the grid and the values once, so evaluating it many times is cheaper than repeated calls to `interp1` or `interpn`. Evaluation uses parenthesis syntax, `F(xq)` for one dimension or `F(xq, yq)` for two.\n\nThe `Values` and `GridVectors` properties can be read and changed after creation, for instance to reuse the same grid with new data.",
         "pt": "O objeto guarda a grade e os valores uma única vez, então avaliá-lo muitas vezes é mais barato do que chamar `interp1` ou `interpn` repetidamente. A avaliação usa parênteses: `F(xq)` em uma dimensão ou `F(xq, yq)` em duas.\n\nAs propriedades `Values` e `GridVectors` podem ser lidas e alteradas depois da criação, por exemplo para reaproveitar a mesma grade com dados novos."
       },
       "examples": [
-        {"title": {"en": "Linear and spline interpolants of x^2", "pt": "Interpoladores linear e spline de x^2"}, "code": "x = 1:4;\nv = x.^2;\nF = griddedInterpolant(x, v, 'linear');\nF(2.5)\nS = griddedInterpolant(x, v, 'spline');\nS(2.5)\nF.Values"}
+        {
+          "title": {
+            "en": "Linear and spline interpolants of x^2",
+            "pt": "Interpoladores linear e spline de x^2"
+          },
+          "code": "x = 1:4;\nv = x.^2;\nF = griddedInterpolant(x, v, 'linear');\nF(2.5)\nS = griddedInterpolant(x, v, 'spline');\nS(2.5)\nF.Values"
+        }
       ],
-      "see": ["interp1", "interpn", "scatteredInterpolant", "spline", "ndgrid"]
+      "see": [
+        "interp1",
+        "interpn",
+        "scatteredInterpolant",
+        "spline",
+        "ndgrid"
+      ]
     },
     "interp1": {
-      "summary": {"en": "One-dimensional interpolation of tabulated data.", "pt": "Interpolação unidimensional de dados tabelados."},
+      "summary": {
+        "en": "One-dimensional interpolation of tabulated data.",
+        "pt": "Interpolação unidimensional de dados tabelados."
+      },
       "syntax": [
-        {"code": "vq = interp1(x, v, xq)", "en": "Linear interpolation of the samples `v(x)` at the query points `xq`.", "pt": "Interpolação linear das amostras `v(x)` nos pontos de consulta `xq`."},
-        {"code": "vq = interp1(v, xq)", "en": "Takes the sample points as `1:numel(v)`.", "pt": "Assume os pontos de amostra como `1:numel(v)`."},
-        {"code": "vq = interp1(x, v, xq, method)", "en": "Uses the given interpolation method.", "pt": "Usa o método de interpolação indicado."},
-        {"code": "vq = interp1(x, v, xq, method, extrapolation)", "en": "Also controls values outside the range of `x`: `'extrap'` or a scalar fill value.", "pt": "Também controla os valores fora do intervalo de `x`: `'extrap'` ou um valor de preenchimento escalar."}
+        {
+          "code": "vq = interp1(x, v, xq)",
+          "en": "Linear interpolation of the samples `v(x)` at the query points `xq`.",
+          "pt": "Interpolação linear das amostras `v(x)` nos pontos de consulta `xq`."
+        },
+        {
+          "code": "vq = interp1(v, xq)",
+          "en": "Takes the sample points as `1:numel(v)`.",
+          "pt": "Assume os pontos de amostra como `1:numel(v)`."
+        },
+        {
+          "code": "vq = interp1(x, v, xq, method)",
+          "en": "Uses the given interpolation method.",
+          "pt": "Usa o método de interpolação indicado."
+        },
+        {
+          "code": "vq = interp1(x, v, xq, method, extrapolation)",
+          "en": "Also controls values outside the range of `x`: `'extrap'` or a scalar fill value.",
+          "pt": "Também controla os valores fora do intervalo de `x`: `'extrap'` ou um valor de preenchimento escalar."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Sample points, a vector of distinct values.", "pt": "Pontos de amostra, um vetor de valores distintos."},
-        {"name": "v", "en": "Sample values. A matrix is interpolated column by column.", "pt": "Valores de amostra. Uma matriz é interpolada coluna a coluna."},
-        {"name": "xq", "en": "Query points.", "pt": "Pontos de consulta."},
-        {"name": "method", "en": "`'linear'` (default), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'v5cubic'`, `'makima'` or `'spline'`.", "pt": "`'linear'` (padrão), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'v5cubic'`, `'makima'` ou `'spline'`."},
-        {"name": "extrapolation", "en": "`'extrap'` to extrapolate with the same method, or a number used for every point outside the data range. The default is `NaN`.", "pt": "`'extrap'` para extrapolar com o mesmo método, ou um número usado em todo ponto fora do intervalo dos dados. O padrão é `NaN`."}
+        {
+          "name": "x",
+          "en": "Sample points, a vector of distinct values.",
+          "pt": "Pontos de amostra, um vetor de valores distintos."
+        },
+        {
+          "name": "v",
+          "en": "Sample values. A matrix is interpolated column by column.",
+          "pt": "Valores de amostra. Uma matriz é interpolada coluna a coluna."
+        },
+        {
+          "name": "xq",
+          "en": "Query points.",
+          "pt": "Pontos de consulta."
+        },
+        {
+          "name": "method",
+          "en": "`'linear'` (default), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'v5cubic'`, `'makima'` or `'spline'`.",
+          "pt": "`'linear'` (padrão), `'nearest'`, `'next'`, `'previous'`, `'pchip'`, `'cubic'`, `'v5cubic'`, `'makima'` ou `'spline'`."
+        },
+        {
+          "name": "extrapolation",
+          "en": "`'extrap'` to extrapolate with the same method, or a number used for every point outside the data range. The default is `NaN`.",
+          "pt": "`'extrap'` para extrapolar com o mesmo método, ou um número usado em todo ponto fora do intervalo dos dados. O padrão é `NaN`."
+        }
       ],
       "outputs": [
-        {"name": "vq", "en": "Interpolated values, with the shape of `xq` (for vector `v`).", "pt": "Valores interpolados, com a forma de `xq` (para `v` vetor)."}
+        {
+          "name": "vq",
+          "en": "Interpolated values, with the shape of `xq` (for vector `v`).",
+          "pt": "Valores interpolados, com a forma de `xq` (para `v` vetor)."
+        }
       ],
       "description": {
         "en": "`interp1` fits a function through the points `(x, v)` and evaluates it at `xq`. The linear method joins neighbours with straight segments; `'nearest'`, `'previous'` and `'next'` give step functions; `'pchip'` and `'makima'` produce smooth curves that avoid overshoot; `'spline'` gives a cubic spline with not-a-knot ends and the smoothest result.\n\nAt a tie, `'nearest'` rounds toward the larger sample point. Query points outside the range of `x` return `NaN` unless an extrapolation option is given.",
         "pt": "`interp1` ajusta uma função aos pontos `(x, v)` e a avalia em `xq`. O método linear liga vizinhos por segmentos de reta; `'nearest'`, `'previous'` e `'next'` dão funções em degraus; `'pchip'` e `'makima'` produzem curvas suaves que evitam oscilações; `'spline'` dá uma spline cúbica com condição not-a-knot nas pontas e o resultado mais suave.\n\nEm um empate, `'nearest'` arredonda para o maior ponto de amostra. Pontos de consulta fora do intervalo de `x` retornam `NaN`, a menos que se indique extrapolação."
       },
       "examples": [
-        {"title": {"en": "Methods and out-of-range queries", "pt": "Métodos e consultas fora do intervalo"}, "code": "x = [1 2 3 4];\nv = [10 20 15 30];\ninterp1(x, v, 2.5)\ninterp1(x, v, [0 5])\ninterp1(x, v, [0 5], 'linear', 'extrap')\ninterp1(x, v, 2.5, 'pchip')\ninterp1(x, v, 2.5, 'spline')"}
+        {
+          "title": {
+            "en": "Methods and out-of-range queries",
+            "pt": "Métodos e consultas fora do intervalo"
+          },
+          "code": "x = [1 2 3 4];\nv = [10 20 15 30];\ninterp1(x, v, 2.5)\ninterp1(x, v, [0 5])\ninterp1(x, v, [0 5], 'linear', 'extrap')\ninterp1(x, v, 2.5, 'pchip')\ninterp1(x, v, 2.5, 'spline')"
+        }
       ],
-      "see": ["interp2", "spline", "pchip", "makima", "griddedInterpolant", "polyfit"]
+      "see": [
+        "interp2",
+        "spline",
+        "pchip",
+        "makima",
+        "griddedInterpolant",
+        "polyfit"
+      ]
     },
     "interp1q": {
-      "summary": {"en": "Quick linear 1-D interpolation on column data.", "pt": "Interpolação linear 1-D rápida para dados em coluna."},
+      "summary": {
+        "en": "Quick linear 1-D interpolation on column data.",
+        "pt": "Interpolação linear 1-D rápida para dados em coluna."
+      },
       "syntax": [
-        {"code": "yi = interp1q(x, Y, xi)", "en": "Linearly interpolates the columns of `Y` sampled at the column vector `x`, at the points `xi`.", "pt": "Interpola linearmente as colunas de `Y`, amostradas no vetor coluna `x`, nos pontos `xi`."}
+        {
+          "code": "yi = interp1q(x, Y, xi)",
+          "en": "Linearly interpolates the columns of `Y` sampled at the column vector `x`, at the points `xi`.",
+          "pt": "Interpola linearmente as colunas de `Y`, amostradas no vetor coluna `x`, nos pontos `xi`."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Column vector of increasing sample points.", "pt": "Vetor coluna de pontos de amostra crescentes."},
-        {"name": "Y", "en": "Column vector or matrix with one row per element of `x`.", "pt": "Vetor coluna ou matriz com uma linha por elemento de `x`."},
-        {"name": "xi", "en": "Column vector of query points.", "pt": "Vetor coluna de pontos de consulta."}
+        {
+          "name": "x",
+          "en": "Column vector of increasing sample points.",
+          "pt": "Vetor coluna de pontos de amostra crescentes."
+        },
+        {
+          "name": "Y",
+          "en": "Column vector or matrix with one row per element of `x`.",
+          "pt": "Vetor coluna ou matriz com uma linha por elemento de `x`."
+        },
+        {
+          "name": "xi",
+          "en": "Column vector of query points.",
+          "pt": "Vetor coluna de pontos de consulta."
+        }
       ],
       "outputs": [
-        {"name": "yi", "en": "Interpolated values, one row per query point. Points outside `x` give `NaN`.", "pt": "Valores interpolados, uma linha por ponto de consulta. Pontos fora de `x` dão `NaN`."}
+        {
+          "name": "yi",
+          "en": "Interpolated values, one row per query point. Points outside `x` give `NaN`.",
+          "pt": "Valores interpolados, uma linha por ponto de consulta. Pontos fora de `x` dão `NaN`."
+        }
       ],
       "description": {
         "en": "`interp1q` is a stripped-down form of `interp1`: it performs only linear interpolation and expects column vectors with sorted sample points, skipping the input checks that `interp1` does.\n\nIt is kept for older code. New code should call `interp1`, which also handles row vectors, other methods and extrapolation.",
         "pt": "`interp1q` é uma forma simplificada de `interp1`: faz apenas interpolação linear e espera vetores coluna com pontos de amostra ordenados, dispensando as verificações de entrada que `interp1` faz.\n\nEla é mantida para código antigo. Em código novo, use `interp1`, que também aceita vetores linha, outros métodos e extrapolação."
       },
       "examples": [
-        {"title": {"en": "Two query points", "pt": "Dois pontos de consulta"}, "code": "x = [1; 2; 3];\ny = [10; 20; 40];\ninterp1q(x, y, [1.5; 2.5])"}
+        {
+          "title": {
+            "en": "Two query points",
+            "pt": "Dois pontos de consulta"
+          },
+          "code": "x = [1; 2; 3];\ny = [10; 20; 40];\ninterp1q(x, y, [1.5; 2.5])"
+        }
       ],
-      "see": ["interp1", "spline", "pchip"]
+      "see": [
+        "interp1",
+        "spline",
+        "pchip"
+      ]
     },
     "interp2": {
-      "summary": {"en": "Interpolation of data on a 2-D grid.", "pt": "Interpolação de dados em uma grade 2-D."},
+      "summary": {
+        "en": "Interpolation of data on a 2-D grid.",
+        "pt": "Interpolação de dados em uma grade 2-D."
+      },
       "syntax": [
-        {"code": "Vq = interp2(X, Y, V, Xq, Yq)", "en": "Linear interpolation of `V` sampled on the grid `(X,Y)` at the points `(Xq,Yq)`.", "pt": "Interpolação linear de `V`, amostrada na grade `(X,Y)`, nos pontos `(Xq,Yq)`."},
-        {"code": "Vq = interp2(V, Xq, Yq)", "en": "Assumes the grid is `1:n` by `1:m`, the column and row indices of `V`.", "pt": "Assume que a grade é `1:n` por `1:m`, os índices de coluna e linha de `V`."},
-        {"code": "Vq = interp2(..., method, extrapval)", "en": "Selects the method (`'linear'`, `'nearest'`, `'cubic'`, `'spline'`, `'makima'`) and a value for points outside the grid.", "pt": "Seleciona o método (`'linear'`, `'nearest'`, `'cubic'`, `'spline'`, `'makima'`) e um valor para pontos fora da grade."}
+        {
+          "code": "Vq = interp2(X, Y, V, Xq, Yq)",
+          "en": "Linear interpolation of `V` sampled on the grid `(X,Y)` at the points `(Xq,Yq)`.",
+          "pt": "Interpolação linear de `V`, amostrada na grade `(X,Y)`, nos pontos `(Xq,Yq)`."
+        },
+        {
+          "code": "Vq = interp2(V, Xq, Yq)",
+          "en": "Assumes the grid is `1:n` by `1:m`, the column and row indices of `V`.",
+          "pt": "Assume que a grade é `1:n` por `1:m`, os índices de coluna e linha de `V`."
+        },
+        {
+          "code": "Vq = interp2(..., method, extrapval)",
+          "en": "Selects the method (`'linear'`, `'nearest'`, `'cubic'`, `'spline'`, `'makima'`) and a value for points outside the grid.",
+          "pt": "Seleciona o método (`'linear'`, `'nearest'`, `'cubic'`, `'spline'`, `'makima'`) e um valor para pontos fora da grade."
+        }
       ],
       "inputs": [
-        {"name": "X, Y", "en": "Grid coordinates as `meshgrid` arrays or as vectors (X along columns, Y along rows).", "pt": "Coordenadas da grade como arrays de `meshgrid` ou como vetores (X nas colunas, Y nas linhas)."},
-        {"name": "V", "en": "Matrix of values; `V(i,j)` belongs to `(X(j), Y(i))`.", "pt": "Matriz de valores; `V(i,j)` pertence a `(X(j), Y(i))`."},
-        {"name": "Xq, Yq", "en": "Query coordinates. Vectors of equal shape are paired point by point.", "pt": "Coordenadas de consulta. Vetores de mesma forma são combinados ponto a ponto."}
+        {
+          "name": "X, Y",
+          "en": "Grid coordinates as `meshgrid` arrays or as vectors (X along columns, Y along rows).",
+          "pt": "Coordenadas da grade como arrays de `meshgrid` ou como vetores (X nas colunas, Y nas linhas)."
+        },
+        {
+          "name": "V",
+          "en": "Matrix of values; `V(i,j)` belongs to `(X(j), Y(i))`.",
+          "pt": "Matriz de valores; `V(i,j)` pertence a `(X(j), Y(i))`."
+        },
+        {
+          "name": "Xq, Yq",
+          "en": "Query coordinates. Vectors of equal shape are paired point by point.",
+          "pt": "Coordenadas de consulta. Vetores de mesma forma são combinados ponto a ponto."
+        }
       ],
       "outputs": [
-        {"name": "Vq", "en": "Interpolated values. Points outside the grid give `NaN` unless `extrapval` is given.", "pt": "Valores interpolados. Pontos fora da grade dão `NaN`, a menos que `extrapval` seja informado."}
+        {
+          "name": "Vq",
+          "en": "Interpolated values. Points outside the grid give `NaN` unless `extrapval` is given.",
+          "pt": "Valores interpolados. Pontos fora da grade dão `NaN`, a menos que `extrapval` seja informado."
+        }
       ],
       "description": {
         "en": "`interp2` works on data in `meshgrid` orientation, where the first index of `V` follows `Y` and the second follows `X`. The linear method is bilinear: it interpolates along one axis and then along the other inside each grid cell.\n\nFor grids in `ndgrid` orientation, or for more than two dimensions, use `interpn`.",
         "pt": "`interp2` trabalha com dados na orientação de `meshgrid`, em que o primeiro índice de `V` segue `Y` e o segundo segue `X`. O método linear é bilinear: interpola ao longo de um eixo e depois do outro dentro de cada célula da grade.\n\nPara grades na orientação de `ndgrid`, ou para mais de duas dimensões, use `interpn`."
       },
       "examples": [
-        {"title": {"en": "Bilinear and nearest lookups", "pt": "Consultas bilinear e vizinho mais próximo"}, "code": "[X, Y] = meshgrid(1:3);\nV = X + 10*Y;\ninterp2(X, Y, V, 1.5, 2.5)\ninterp2(V, 1.5, 2.5)\ninterp2(X, Y, V, 1.5, 2.5, 'nearest')\ninterp2(X, Y, V, 4, 4, 'linear', 0)"}
+        {
+          "title": {
+            "en": "Bilinear and nearest lookups",
+            "pt": "Consultas bilinear e vizinho mais próximo"
+          },
+          "code": "[X, Y] = meshgrid(1:3);\nV = X + 10*Y;\ninterp2(X, Y, V, 1.5, 2.5)\ninterp2(V, 1.5, 2.5)\ninterp2(X, Y, V, 1.5, 2.5, 'nearest')\ninterp2(X, Y, V, 4, 4, 'linear', 0)"
+        }
       ],
-      "see": ["interp1", "interp3", "interpn", "griddata", "meshgrid"]
+      "see": [
+        "interp1",
+        "interp3",
+        "interpn",
+        "griddata",
+        "meshgrid"
+      ]
     },
     "interp3": {
-      "summary": {"en": "Interpolation of data on a 3-D grid.", "pt": "Interpolação de dados em uma grade 3-D."},
+      "summary": {
+        "en": "Interpolation of data on a 3-D grid.",
+        "pt": "Interpolação de dados em uma grade 3-D."
+      },
       "syntax": [
-        {"code": "Vq = interp3(X, Y, Z, V, Xq, Yq, Zq)", "en": "Linear interpolation of `V` sampled on the grid `(X,Y,Z)` at the query points.", "pt": "Interpolação linear de `V`, amostrada na grade `(X,Y,Z)`, nos pontos de consulta."},
-        {"code": "Vq = interp3(V, Xq, Yq, Zq)", "en": "Assumes the grid is made of the index values of `V`.", "pt": "Assume que a grade é formada pelos índices de `V`."},
-        {"code": "Vq = interp3(..., method, extrapval)", "en": "Selects the method and a fill value for points outside the grid.", "pt": "Seleciona o método e um valor de preenchimento para pontos fora da grade."}
+        {
+          "code": "Vq = interp3(X, Y, Z, V, Xq, Yq, Zq)",
+          "en": "Linear interpolation of `V` sampled on the grid `(X,Y,Z)` at the query points.",
+          "pt": "Interpolação linear de `V`, amostrada na grade `(X,Y,Z)`, nos pontos de consulta."
+        },
+        {
+          "code": "Vq = interp3(V, Xq, Yq, Zq)",
+          "en": "Assumes the grid is made of the index values of `V`.",
+          "pt": "Assume que a grade é formada pelos índices de `V`."
+        },
+        {
+          "code": "Vq = interp3(..., method, extrapval)",
+          "en": "Selects the method and a fill value for points outside the grid.",
+          "pt": "Seleciona o método e um valor de preenchimento para pontos fora da grade."
+        }
       ],
       "inputs": [
-        {"name": "X, Y, Z", "en": "Grid coordinates, as `meshgrid` arrays or as vectors.", "pt": "Coordenadas da grade, como arrays de `meshgrid` ou como vetores."},
-        {"name": "V", "en": "3-D array of values.", "pt": "Array 3-D de valores."},
-        {"name": "Xq, Yq, Zq", "en": "Query coordinates.", "pt": "Coordenadas de consulta."}
+        {
+          "name": "X, Y, Z",
+          "en": "Grid coordinates, as `meshgrid` arrays or as vectors.",
+          "pt": "Coordenadas da grade, como arrays de `meshgrid` ou como vetores."
+        },
+        {
+          "name": "V",
+          "en": "3-D array of values.",
+          "pt": "Array 3-D de valores."
+        },
+        {
+          "name": "Xq, Yq, Zq",
+          "en": "Query coordinates.",
+          "pt": "Coordenadas de consulta."
+        }
       ],
       "outputs": [
-        {"name": "Vq", "en": "Interpolated values, with `NaN` outside the grid by default.", "pt": "Valores interpolados, com `NaN` fora da grade por padrão."}
+        {
+          "name": "Vq",
+          "en": "Interpolated values, with `NaN` outside the grid by default.",
+          "pt": "Valores interpolados, com `NaN` fora da grade por padrão."
+        }
       ],
       "description": {
         "en": "`interp3` extends `interp2` to volumes, using the same `meshgrid` orientation: the first index of `V` follows `Y`, the second follows `X`, the third follows `Z`. The linear method is trilinear, averaging the eight corners of the cell that holds the query point.",
         "pt": "`interp3` estende `interp2` para volumes, com a mesma orientação de `meshgrid`: o primeiro índice de `V` segue `Y`, o segundo segue `X` e o terceiro segue `Z`. O método linear é trilinear e combina os oito vértices da célula que contém o ponto de consulta."
       },
       "examples": [
-        {"title": {"en": "Trilinear lookup", "pt": "Consulta trilinear"}, "code": "[X, Y, Z] = meshgrid(1:3);\nV = X + 10*Y + 100*Z;\ninterp3(X, Y, Z, V, 1.5, 2.5, 1.5)"}
+        {
+          "title": {
+            "en": "Trilinear lookup",
+            "pt": "Consulta trilinear"
+          },
+          "code": "[X, Y, Z] = meshgrid(1:3);\nV = X + 10*Y + 100*Z;\ninterp3(X, Y, Z, V, 1.5, 2.5, 1.5)"
+        }
       ],
-      "see": ["interp2", "interpn", "meshgrid", "griddedInterpolant"]
+      "see": [
+        "interp2",
+        "interpn",
+        "meshgrid",
+        "griddedInterpolant"
+      ]
     },
     "interpft": {
-      "summary": {"en": "Resamples a periodic signal using the Fourier transform.", "pt": "Reamostra um sinal periódico usando a transformada de Fourier."},
+      "summary": {
+        "en": "Resamples a periodic signal using the Fourier transform.",
+        "pt": "Reamostra um sinal periódico usando a transformada de Fourier."
+      },
       "syntax": [
-        {"code": "y = interpft(x, n)", "en": "Returns `n` equally spaced samples of the periodic signal whose samples are `x`.", "pt": "Retorna `n` amostras igualmente espaçadas do sinal periódico cujas amostras são `x`."},
-        {"code": "y = interpft(x, n, dim)", "en": "Resamples along dimension `dim`.", "pt": "Reamostra ao longo da dimensão `dim`."}
+        {
+          "code": "y = interpft(x, n)",
+          "en": "Returns `n` equally spaced samples of the periodic signal whose samples are `x`.",
+          "pt": "Retorna `n` amostras igualmente espaçadas do sinal periódico cujas amostras são `x`."
+        },
+        {
+          "code": "y = interpft(x, n, dim)",
+          "en": "Resamples along dimension `dim`.",
+          "pt": "Reamostra ao longo da dimensão `dim`."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Vector or array of equally spaced samples over one period.", "pt": "Vetor ou array de amostras igualmente espaçadas ao longo de um período."},
-        {"name": "n", "en": "Number of output samples.", "pt": "Número de amostras na saída."},
-        {"name": "dim", "en": "Dimension to operate along. By default, the first non-singleton dimension.", "pt": "Dimensão de trabalho. Por padrão, a primeira dimensão não singleton."}
+        {
+          "name": "x",
+          "en": "Vector or array of equally spaced samples over one period.",
+          "pt": "Vetor ou array de amostras igualmente espaçadas ao longo de um período."
+        },
+        {
+          "name": "n",
+          "en": "Number of output samples.",
+          "pt": "Número de amostras na saída."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. By default, the first non-singleton dimension.",
+          "pt": "Dimensão de trabalho. Por padrão, a primeira dimensão não singleton."
+        }
       ],
       "outputs": [
-        {"name": "y", "en": "Resampled signal with `n` points along the chosen dimension.", "pt": "Sinal reamostrado com `n` pontos na dimensão escolhida."}
+        {
+          "name": "y",
+          "en": "Resampled signal with `n` points along the chosen dimension.",
+          "pt": "Sinal reamostrado com `n` pontos na dimensão escolhida."
+        }
       ],
       "description": {
         "en": "The signal is transformed with the FFT, zero-padded (or truncated) in the frequency domain to length `n`, and transformed back. This is exact trigonometric interpolation for signals that are band-limited and periodic over the sampled interval.\n\nWhen `n` is larger than the input length the result interpolates between the original points, which still appear in it; the output is scaled so amplitudes are preserved. Choosing `n` smaller than the input length decimates the signal, which discards high frequencies.",
         "pt": "O sinal é transformado com a FFT, preenchido com zeros (ou truncado) no domínio da frequência até o comprimento `n`, e transformado de volta. É uma interpolação trigonométrica exata para sinais de banda limitada e periódicos no intervalo amostrado.\n\nQuando `n` é maior que o comprimento da entrada, o resultado interpola entre os pontos originais, que continuam presentes; a saída é escalada de modo a preservar as amplitudes. Escolher `n` menor que o comprimento da entrada reduz a taxa de amostragem e descarta as altas frequências."
       },
       "examples": [
-        {"title": {"en": "Doubling the samples of one sine period", "pt": "Dobrando as amostras de um período de seno"}, "code": "x = [0 1 0 -1];\ny = interpft(x, 8);\ndisp(round(y*1000)/1000)"}
+        {
+          "title": {
+            "en": "Doubling the samples of one sine period",
+            "pt": "Dobrando as amostras de um período de seno"
+          },
+          "code": "x = [0 1 0 -1];\ny = interpft(x, 8);\ndisp(round(y*1000)/1000)"
+        }
       ],
-      "see": ["fft", "ifft", "interp1", "resample"]
+      "see": [
+        "fft",
+        "ifft",
+        "interp1",
+        "resample"
+      ]
     },
     "interpn": {
-      "summary": {"en": "Interpolation of data on an N-D grid.", "pt": "Interpolação de dados em uma grade N-D."},
+      "summary": {
+        "en": "Interpolation of data on an N-D grid.",
+        "pt": "Interpolação de dados em uma grade N-D."
+      },
       "syntax": [
-        {"code": "Vq = interpn(X1, X2, ..., Xn, V, Xq1, Xq2, ..., Xqn)", "en": "Interpolates `V` sampled on the grid defined by `X1`, ..., `Xn` at the query points.", "pt": "Interpola `V`, amostrada na grade definida por `X1`, ..., `Xn`, nos pontos de consulta."},
-        {"code": "Vq = interpn(V, Xq1, ..., Xqn)", "en": "Assumes the grid vectors are `1:size(V,k)`.", "pt": "Assume que os vetores de grade são `1:size(V,k)`."},
-        {"code": "Vq = interpn(..., method, extrapval)", "en": "Selects the method and a fill value for points outside the grid.", "pt": "Seleciona o método e um valor de preenchimento para pontos fora da grade."}
+        {
+          "code": "Vq = interpn(X1, X2, ..., Xn, V, Xq1, Xq2, ..., Xqn)",
+          "en": "Interpolates `V` sampled on the grid defined by `X1`, ..., `Xn` at the query points.",
+          "pt": "Interpola `V`, amostrada na grade definida por `X1`, ..., `Xn`, nos pontos de consulta."
+        },
+        {
+          "code": "Vq = interpn(V, Xq1, ..., Xqn)",
+          "en": "Assumes the grid vectors are `1:size(V,k)`.",
+          "pt": "Assume que os vetores de grade são `1:size(V,k)`."
+        },
+        {
+          "code": "Vq = interpn(..., method, extrapval)",
+          "en": "Selects the method and a fill value for points outside the grid.",
+          "pt": "Seleciona o método e um valor de preenchimento para pontos fora da grade."
+        }
       ],
       "inputs": [
-        {"name": "X1, ..., Xn", "en": "Grid vectors, one per dimension, strictly increasing.", "pt": "Vetores de grade, um por dimensão, estritamente crescentes."},
-        {"name": "V", "en": "N-D array of values; dimension k of `V` follows `Xk`.", "pt": "Array N-D de valores; a dimensão k de `V` segue `Xk`."},
-        {"name": "Xq1, ..., Xqn", "en": "Query coordinates, with matching shapes.", "pt": "Coordenadas de consulta, com formas compatíveis."}
+        {
+          "name": "X1, ..., Xn",
+          "en": "Grid vectors, one per dimension, strictly increasing.",
+          "pt": "Vetores de grade, um por dimensão, estritamente crescentes."
+        },
+        {
+          "name": "V",
+          "en": "N-D array of values; dimension k of `V` follows `Xk`.",
+          "pt": "Array N-D de valores; a dimensão k de `V` segue `Xk`."
+        },
+        {
+          "name": "Xq1, ..., Xqn",
+          "en": "Query coordinates, with matching shapes.",
+          "pt": "Coordenadas de consulta, com formas compatíveis."
+        }
       ],
       "outputs": [
-        {"name": "Vq", "en": "Interpolated values; `NaN` outside the grid unless a fill value is given.", "pt": "Valores interpolados; `NaN` fora da grade, a menos que se dê um valor de preenchimento."}
+        {
+          "name": "Vq",
+          "en": "Interpolated values; `NaN` outside the grid unless a fill value is given.",
+          "pt": "Valores interpolados; `NaN` fora da grade, a menos que se dê um valor de preenchimento."
+        }
       ],
       "description": {
         "en": "`interpn` uses `ndgrid` orientation: dimension k of `V` corresponds to the k-th coordinate, so for a matrix the first coordinate runs down the rows. This differs from `interp2`, which follows `meshgrid`.\n\nThe linear method is multilinear. Other methods include `'nearest'`, `'cubic'`, `'spline'` and `'makima'`.",
         "pt": "`interpn` usa a orientação de `ndgrid`: a dimensão k de `V` corresponde à k-ésima coordenada, então, em uma matriz, a primeira coordenada percorre as linhas. Isso difere de `interp2`, que segue `meshgrid`.\n\nO método linear é multilinear. Outros métodos incluem `'nearest'`, `'cubic'`, `'spline'` e `'makima'`."
       },
-      "notes": {"en": "MatLivre accepts grid vectors for the sample points. Passing full `ndgrid` arrays instead of vectors raises an error about monotonic sample points, so extract the vectors first.", "pt": "O MatLivre aceita vetores de grade para os pontos de amostra. Passar arrays completos de `ndgrid` no lugar dos vetores gera um erro sobre pontos de amostra monotônicos; extraia antes os vetores."},
       "examples": [
-        {"title": {"en": "A 3-by-3 table with vector grids", "pt": "Uma tabela 3 por 3 com grades em vetores"}, "code": "V = magic(3);\ninterpn(V, 1.5, 2.5)\ninterpn(1:3, 1:3, V, [1.5 2.5], [1.5 2.5])"}
+        {
+          "title": {
+            "en": "A 3-by-3 table with vector grids",
+            "pt": "Uma tabela 3 por 3 com grades em vetores"
+          },
+          "code": "V = magic(3);\ninterpn(V, 1.5, 2.5)\ninterpn(1:3, 1:3, V, [1.5 2.5], [1.5 2.5])"
+        }
       ],
-      "see": ["interp2", "interp3", "ndgrid", "griddedInterpolant"]
+      "see": [
+        "interp2",
+        "interp3",
+        "ndgrid",
+        "griddedInterpolant"
+      ]
     },
     "makima": {
-      "summary": {"en": "Modified Akima piecewise cubic Hermite interpolation.", "pt": "Interpolação cúbica de Hermite por partes de Akima modificada."},
+      "summary": {
+        "en": "Modified Akima piecewise cubic Hermite interpolation.",
+        "pt": "Interpolação cúbica de Hermite por partes de Akima modificada."
+      },
       "syntax": [
-        {"code": "yi = makima(x, y, xi)", "en": "Evaluates the modified Akima interpolant of `(x, y)` at the points `xi`.", "pt": "Avalia em `xi` o interpolador de Akima modificado de `(x, y)`."},
-        {"code": "pp = makima(x, y)", "en": "Returns the piecewise polynomial structure, for use with `ppval`.", "pt": "Retorna a estrutura do polinômio por partes, para uso com `ppval`."}
+        {
+          "code": "yi = makima(x, y, xi)",
+          "en": "Evaluates the modified Akima interpolant of `(x, y)` at the points `xi`.",
+          "pt": "Avalia em `xi` o interpolador de Akima modificado de `(x, y)`."
+        },
+        {
+          "code": "pp = makima(x, y)",
+          "en": "Returns the piecewise polynomial structure, for use with `ppval`.",
+          "pt": "Retorna a estrutura do polinômio por partes, para uso com `ppval`."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Vector of distinct, increasing sample points.", "pt": "Vetor de pontos de amostra distintos e crescentes."},
-        {"name": "y", "en": "Sample values at `x`.", "pt": "Valores de amostra em `x`."},
-        {"name": "xi", "en": "Points at which to evaluate.", "pt": "Pontos de avaliação."}
+        {
+          "name": "x",
+          "en": "Vector of distinct, increasing sample points.",
+          "pt": "Vetor de pontos de amostra distintos e crescentes."
+        },
+        {
+          "name": "y",
+          "en": "Sample values at `x`.",
+          "pt": "Valores de amostra em `x`."
+        },
+        {
+          "name": "xi",
+          "en": "Points at which to evaluate.",
+          "pt": "Pontos de avaliação."
+        }
       ],
       "outputs": [
-        {"name": "yi", "en": "Interpolated values at `xi`.", "pt": "Valores interpolados em `xi`."},
-        {"name": "pp", "en": "Piecewise polynomial in the form accepted by `ppval` and `unmkpp`.", "pt": "Polinômio por partes no formato aceito por `ppval` e `unmkpp`."}
+        {
+          "name": "yi",
+          "en": "Interpolated values at `xi`.",
+          "pt": "Valores interpolados em `xi`."
+        },
+        {
+          "name": "pp",
+          "en": "Piecewise polynomial in the form accepted by `ppval` and `unmkpp`.",
+          "pt": "Polinômio por partes no formato aceito por `ppval` e `unmkpp`."
+        }
       ],
       "description": {
         "en": "`makima` builds a cubic Hermite interpolant whose slopes at the data points come from a weighted average of neighbouring secant slopes. The weights make the curve flat across flat stretches of data, so it overshoots less than `spline` while being smoother than `pchip` near changes of slope.\n\nThe result is `C1` continuous. Points outside the range of `x` are extrapolated with the end polynomial pieces.",
         "pt": "`makima` constrói um interpolador cúbico de Hermite cujas inclinações nos pontos de dados vêm de uma média ponderada das inclinações das secantes vizinhas. Os pesos mantêm a curva plana em trechos planos dos dados, então ela oscila menos que `spline` e é mais suave que `pchip` perto de mudanças de inclinação.\n\nO resultado é contínuo em `C1`. Pontos fora do intervalo de `x` são extrapolados com os polinômios das extremidades."
       },
       "examples": [
-        {"title": {"en": "Smooth curve through six points", "pt": "Curva suave por seis pontos"}, "code": "x = 1:6;\ny = [1 3 2 5 4 6];\nmakima(x, y, [1.5 2.5 3.5])"}
+        {
+          "title": {
+            "en": "Smooth curve through six points",
+            "pt": "Curva suave por seis pontos"
+          },
+          "code": "x = 1:6;\ny = [1 3 2 5 4 6];\nmakima(x, y, [1.5 2.5 3.5])"
+        }
       ],
-      "see": ["pchip", "spline", "interp1", "ppval"]
+      "see": [
+        "pchip",
+        "spline",
+        "interp1",
+        "ppval"
+      ]
     },
     "mkpp": {
-      "summary": {"en": "Builds a piecewise polynomial structure.", "pt": "Constrói uma estrutura de polinômio por partes."},
+      "summary": {
+        "en": "Builds a piecewise polynomial structure.",
+        "pt": "Constrói uma estrutura de polinômio por partes."
+      },
       "syntax": [
-        {"code": "pp = mkpp(breaks, coefs)", "en": "Creates the structure from the break points and one row of coefficients per interval.", "pt": "Cria a estrutura a partir dos pontos de quebra e de uma linha de coeficientes por intervalo."},
-        {"code": "pp = mkpp(breaks, coefs, d)", "en": "Creates a vector-valued piecewise polynomial with values of size `d`.", "pt": "Cria um polinômio por partes vetorial com valores de tamanho `d`."}
+        {
+          "code": "pp = mkpp(breaks, coefs)",
+          "en": "Creates the structure from the break points and one row of coefficients per interval.",
+          "pt": "Cria a estrutura a partir dos pontos de quebra e de uma linha de coeficientes por intervalo."
+        },
+        {
+          "code": "pp = mkpp(breaks, coefs, d)",
+          "en": "Creates a vector-valued piecewise polynomial with values of size `d`.",
+          "pt": "Cria um polinômio por partes vetorial com valores de tamanho `d`."
+        }
       ],
       "inputs": [
-        {"name": "breaks", "en": "Vector of `L+1` increasing break points that define `L` intervals.", "pt": "Vetor de `L+1` pontos de quebra crescentes, que definem `L` intervalos."},
-        {"name": "coefs", "en": "Coefficients, one row per interval, highest power first, in the local variable `x - breaks(i)`.", "pt": "Coeficientes, uma linha por intervalo, da maior potência para a menor, na variável local `x - breaks(i)`."},
-        {"name": "d", "en": "Optional size of the value at each point, for vector-valued functions.", "pt": "Tamanho opcional do valor em cada ponto, para funções vetoriais."}
+        {
+          "name": "breaks",
+          "en": "Vector of `L+1` increasing break points that define `L` intervals.",
+          "pt": "Vetor de `L+1` pontos de quebra crescentes, que definem `L` intervalos."
+        },
+        {
+          "name": "coefs",
+          "en": "Coefficients, one row per interval, highest power first, in the local variable `x - breaks(i)`.",
+          "pt": "Coeficientes, uma linha por intervalo, da maior potência para a menor, na variável local `x - breaks(i)`."
+        },
+        {
+          "name": "d",
+          "en": "Optional size of the value at each point, for vector-valued functions.",
+          "pt": "Tamanho opcional do valor em cada ponto, para funções vetoriais."
+        }
       ],
       "outputs": [
-        {"name": "pp", "en": "Structure with fields `form`, `breaks`, `coefs`, `pieces`, `order` and `dim`.", "pt": "Estrutura com os campos `form`, `breaks`, `coefs`, `pieces`, `order` e `dim`."}
+        {
+          "name": "pp",
+          "en": "Structure with fields `form`, `breaks`, `coefs`, `pieces`, `order` and `dim`.",
+          "pt": "Estrutura com os campos `form`, `breaks`, `coefs`, `pieces`, `order` e `dim`."
+        }
       ],
       "description": {
         "en": "Each row of `coefs` holds the polynomial for one interval, written in powers of the offset from the left break point: the row `[a b c]` on the interval starting at `t` means `a*(x-t)^2 + b*(x-t) + c`.\n\nThe structure is what `spline`, `pchip` and `makima` return when called without query points. Evaluate it with `ppval` and take it apart with `unmkpp`.",
         "pt": "Cada linha de `coefs` guarda o polinômio de um intervalo, escrito em potências do deslocamento a partir do ponto de quebra à esquerda: a linha `[a b c]` no intervalo que começa em `t` significa `a*(x-t)^2 + b*(x-t) + c`.\n\nA estrutura é o que `spline`, `pchip` e `makima` retornam quando chamadas sem pontos de consulta. Avalie-a com `ppval` e desmonte-a com `unmkpp`."
       },
       "examples": [
-        {"title": {"en": "Two quadratic pieces", "pt": "Dois pedaços quadráticos"}, "code": "pp = mkpp([0 1 2], [1 0 0; 2 1 0]);\nppval(pp, [0.5 1.5])\npp.order"}
+        {
+          "title": {
+            "en": "Two quadratic pieces",
+            "pt": "Dois pedaços quadráticos"
+          },
+          "code": "pp = mkpp([0 1 2], [1 0 0; 2 1 0]);\nppval(pp, [0.5 1.5])\npp.order"
+        }
       ],
-      "see": ["ppval", "unmkpp", "spline", "pchip"]
+      "see": [
+        "ppval",
+        "unmkpp",
+        "spline",
+        "pchip"
+      ]
     },
     "padecoef": {
-      "summary": {"en": "Coefficients of a Pade approximation of a time delay.", "pt": "Coeficientes da aproximação de Padé de um atraso de tempo."},
+      "summary": {
+        "en": "Coefficients of a Pade approximation of a time delay.",
+        "pt": "Coeficientes da aproximação de Padé de um atraso de tempo."
+      },
       "syntax": [
-        {"code": "[num, den] = padecoef(T)", "en": "First-order Pade approximation of the delay `exp(-T*s)`.", "pt": "Aproximação de Padé de primeira ordem do atraso `exp(-T*s)`."},
-        {"code": "[num, den] = padecoef(T, N)", "en": "Approximation of order `N`.", "pt": "Aproximação de ordem `N`."}
+        {
+          "code": "[num, den] = padecoef(T)",
+          "en": "First-order Pade approximation of the delay `exp(-T*s)`.",
+          "pt": "Aproximação de Padé de primeira ordem do atraso `exp(-T*s)`."
+        },
+        {
+          "code": "[num, den] = padecoef(T, N)",
+          "en": "Approximation of order `N`.",
+          "pt": "Aproximação de ordem `N`."
+        }
       ],
       "inputs": [
-        {"name": "T", "en": "Length of the time delay, a non-negative scalar.", "pt": "Duração do atraso, um escalar não negativo."},
-        {"name": "N", "en": "Order of the approximation (default 1).", "pt": "Ordem da aproximação (padrão 1)."}
+        {
+          "name": "T",
+          "en": "Length of the time delay, a non-negative scalar.",
+          "pt": "Duração do atraso, um escalar não negativo."
+        },
+        {
+          "name": "N",
+          "en": "Order of the approximation (default 1).",
+          "pt": "Ordem da aproximação (padrão 1)."
+        }
       ],
       "outputs": [
-        {"name": "num", "en": "Numerator coefficients in descending powers of `s`.", "pt": "Coeficientes do numerador em potências decrescentes de `s`."},
-        {"name": "den", "en": "Denominator coefficients in descending powers of `s`.", "pt": "Coeficientes do denominador em potências decrescentes de `s`."}
+        {
+          "name": "num",
+          "en": "Numerator coefficients in descending powers of `s`.",
+          "pt": "Coeficientes do numerador em potências decrescentes de `s`."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients in descending powers of `s`.",
+          "pt": "Coeficientes do denominador em potências decrescentes de `s`."
+        }
       ],
       "description": {
         "en": "A pure delay `exp(-T*s)` is not a rational function, so control tools replace it by a ratio of polynomials that matches the delay's Taylor series up to a given order. `padecoef` returns that ratio as two coefficient vectors.\n\nFor `N = 1` the result is `(1 - T*s/2) / (1 + T*s/2)`, scaled to a monic denominator. The approximation is accurate at low frequency and has unit gain at all frequencies; higher `N` extends the range of good accuracy.",
         "pt": "Um atraso puro `exp(-T*s)` não é uma função racional, então ferramentas de controle o substituem por uma razão de polinômios que coincide com a série de Taylor do atraso até certa ordem. `padecoef` retorna essa razão como dois vetores de coeficientes.\n\nPara `N = 1` o resultado é `(1 - T*s/2) / (1 + T*s/2)`, escalado para ter denominador mônico. A aproximação é precisa em baixa frequência e tem ganho unitário em todas as frequências; um `N` maior amplia a faixa de boa precisão."
       },
       "examples": [
-        {"title": {"en": "Second-order approximation of a 1 s delay", "pt": "Aproximação de segunda ordem de um atraso de 1 s"}, "code": "[num, den] = padecoef(1, 2)"}
+        {
+          "title": {
+            "en": "Second-order approximation of a 1 s delay",
+            "pt": "Aproximação de segunda ordem de um atraso de 1 s"
+          },
+          "code": "[num, den] = padecoef(1, 2)"
+        }
       ],
-      "see": ["tf", "pade", "c2d"]
+      "see": [
+        "tf",
+        "pade",
+        "c2d"
+      ]
     },
     "pchip": {
-      "summary": {"en": "Shape-preserving piecewise cubic Hermite interpolation.", "pt": "Interpolação cúbica de Hermite por partes que preserva a forma."},
+      "summary": {
+        "en": "Shape-preserving piecewise cubic Hermite interpolation.",
+        "pt": "Interpolação cúbica de Hermite por partes que preserva a forma."
+      },
       "syntax": [
-        {"code": "yi = pchip(x, y, xi)", "en": "Evaluates the interpolant of `(x, y)` at the points `xi`.", "pt": "Avalia em `xi` o interpolador de `(x, y)`."},
-        {"code": "pp = pchip(x, y)", "en": "Returns the piecewise polynomial structure for use with `ppval`.", "pt": "Retorna a estrutura do polinômio por partes, para uso com `ppval`."}
+        {
+          "code": "yi = pchip(x, y, xi)",
+          "en": "Evaluates the interpolant of `(x, y)` at the points `xi`.",
+          "pt": "Avalia em `xi` o interpolador de `(x, y)`."
+        },
+        {
+          "code": "pp = pchip(x, y)",
+          "en": "Returns the piecewise polynomial structure for use with `ppval`.",
+          "pt": "Retorna a estrutura do polinômio por partes, para uso com `ppval`."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Vector of distinct sample points.", "pt": "Vetor de pontos de amostra distintos."},
-        {"name": "y", "en": "Sample values at `x`.", "pt": "Valores de amostra em `x`."},
-        {"name": "xi", "en": "Points at which to evaluate.", "pt": "Pontos de avaliação."}
+        {
+          "name": "x",
+          "en": "Vector of distinct sample points.",
+          "pt": "Vetor de pontos de amostra distintos."
+        },
+        {
+          "name": "y",
+          "en": "Sample values at `x`.",
+          "pt": "Valores de amostra em `x`."
+        },
+        {
+          "name": "xi",
+          "en": "Points at which to evaluate.",
+          "pt": "Pontos de avaliação."
+        }
       ],
       "outputs": [
-        {"name": "yi", "en": "Interpolated values.", "pt": "Valores interpolados."},
-        {"name": "pp", "en": "Piecewise polynomial structure.", "pt": "Estrutura do polinômio por partes."}
+        {
+          "name": "yi",
+          "en": "Interpolated values.",
+          "pt": "Valores interpolados."
+        },
+        {
+          "name": "pp",
+          "en": "Piecewise polynomial structure.",
+          "pt": "Estrutura do polinômio por partes."
+        }
       ],
       "description": {
         "en": "The slope at each sample point is chosen so that the interpolant is monotone wherever the data are monotone: it never overshoots the data, and where a local extremum occurs in the data it is placed at a sample point. The curve is `C1` but its second derivative can jump at the points.\n\nCompared with `spline`, `pchip` is less smooth and more faithful to the data, which makes it a good choice for values like prices or concentrations that should not ring.",
         "pt": "A inclinação em cada ponto de amostra é escolhida de modo que o interpolador seja monótono onde os dados forem monótonos: ele nunca ultrapassa os dados, e um extremo local dos dados fica sobre um ponto de amostra. A curva é `C1`, mas a derivada segunda pode ter saltos nos pontos.\n\nEm comparação com `spline`, `pchip` é menos suave e mais fiel aos dados, o que o torna adequado para grandezas como preços ou concentrações, que não devem oscilar."
       },
       "examples": [
-        {"title": {"en": "Evaluating directly and through a structure", "pt": "Avaliando direto e por meio de uma estrutura"}, "code": "x = 1:5;\ny = [1 4 2 5 3];\npchip(x, y, 2.5)\npp = pchip(x, y);\nppval(pp, 3.5)"}
+        {
+          "title": {
+            "en": "Evaluating directly and through a structure",
+            "pt": "Avaliando direto e por meio de uma estrutura"
+          },
+          "code": "x = 1:5;\ny = [1 4 2 5 3];\npchip(x, y, 2.5)\npp = pchip(x, y);\nppval(pp, 3.5)"
+        }
       ],
-      "see": ["spline", "makima", "interp1", "ppval", "mkpp"]
+      "see": [
+        "spline",
+        "makima",
+        "interp1",
+        "ppval",
+        "mkpp"
+      ]
     },
     "ppval": {
-      "summary": {"en": "Evaluates a piecewise polynomial.", "pt": "Avalia um polinômio por partes."},
+      "summary": {
+        "en": "Evaluates a piecewise polynomial.",
+        "pt": "Avalia um polinômio por partes."
+      },
       "syntax": [
-        {"code": "v = ppval(pp, xq)", "en": "Evaluates the piecewise polynomial `pp` at the points `xq`.", "pt": "Avalia o polinômio por partes `pp` nos pontos `xq`."}
+        {
+          "code": "v = ppval(pp, xq)",
+          "en": "Evaluates the piecewise polynomial `pp` at the points `xq`.",
+          "pt": "Avalia o polinômio por partes `pp` nos pontos `xq`."
+        }
       ],
       "inputs": [
-        {"name": "pp", "en": "Structure created by `mkpp`, `spline`, `pchip` or `makima`.", "pt": "Estrutura criada por `mkpp`, `spline`, `pchip` ou `makima`."},
-        {"name": "xq", "en": "Points of evaluation, any size.", "pt": "Pontos de avaliação, de qualquer tamanho."}
+        {
+          "name": "pp",
+          "en": "Structure created by `mkpp`, `spline`, `pchip` or `makima`.",
+          "pt": "Estrutura criada por `mkpp`, `spline`, `pchip` ou `makima`."
+        },
+        {
+          "name": "xq",
+          "en": "Points of evaluation, any size.",
+          "pt": "Pontos de avaliação, de qualquer tamanho."
+        }
       ],
       "outputs": [
-        {"name": "v", "en": "Values of `pp` at `xq`, with the shape of `xq` for scalar-valued `pp`.", "pt": "Valores de `pp` em `xq`, com a forma de `xq` quando `pp` é escalar."}
+        {
+          "name": "v",
+          "en": "Values of `pp` at `xq`, with the shape of `xq` for scalar-valued `pp`.",
+          "pt": "Valores de `pp` em `xq`, com a forma de `xq` quando `pp` é escalar."
+        }
       ],
       "description": {
         "en": "For each query point `ppval` finds the interval of `pp.breaks` that contains it and evaluates the polynomial of that interval in the local variable. Points beyond the first or last break point use the polynomial of the end interval, so the function extrapolates rather than returning `NaN`.",
         "pt": "Para cada ponto de consulta, `ppval` encontra o intervalo de `pp.breaks` que o contém e avalia o polinômio desse intervalo na variável local. Pontos além do primeiro ou do último ponto de quebra usam o polinômio do intervalo da extremidade, então a função extrapola em vez de retornar `NaN`."
       },
       "examples": [
-        {"title": {"en": "Spline through four points of x^3", "pt": "Spline por quatro pontos de x^3"}, "code": "pp = spline(0:3, [0 1 8 27]);\nppval(pp, [0.5 1.5 2.5])"}
+        {
+          "title": {
+            "en": "Spline through four points of x^3",
+            "pt": "Spline por quatro pontos de x^3"
+          },
+          "code": "pp = spline(0:3, [0 1 8 27]);\nppval(pp, [0.5 1.5 2.5])"
+        }
       ],
-      "see": ["mkpp", "unmkpp", "spline", "pchip", "polyval"]
+      "see": [
+        "mkpp",
+        "unmkpp",
+        "spline",
+        "pchip",
+        "polyval"
+      ]
     },
     "scatteredInterpolant": {
-      "summary": {"en": "Interpolant object for scattered data in 2-D or 3-D.", "pt": "Objeto interpolador para dados espalhados em 2-D ou 3-D."},
+      "summary": {
+        "en": "Interpolant object for scattered data in 2-D or 3-D.",
+        "pt": "Objeto interpolador para dados espalhados em 2-D ou 3-D."
+      },
       "syntax": [
-        {"code": "F = scatteredInterpolant(x, y, v)", "en": "Creates a 2-D interpolant from sample points `(x,y)` and values `v`.", "pt": "Cria um interpolador 2-D a partir de pontos `(x,y)` e valores `v`."},
-        {"code": "F = scatteredInterpolant(x, y, z, v)", "en": "Creates a 3-D interpolant.", "pt": "Cria um interpolador 3-D."},
-        {"code": "F = scatteredInterpolant(..., method, extrapMethod)", "en": "Selects `'linear'`, `'nearest'` or `'natural'` interpolation and the extrapolation method.", "pt": "Seleciona a interpolação `'linear'`, `'nearest'` ou `'natural'` e o método de extrapolação."},
-        {"code": "vq = F(xq, yq)", "en": "Evaluates the interpolant.", "pt": "Avalia o interpolador."}
+        {
+          "code": "F = scatteredInterpolant(x, y, v)",
+          "en": "Creates a 2-D interpolant from sample points `(x,y)` and values `v`.",
+          "pt": "Cria um interpolador 2-D a partir de pontos `(x,y)` e valores `v`."
+        },
+        {
+          "code": "F = scatteredInterpolant(x, y, z, v)",
+          "en": "Creates a 3-D interpolant.",
+          "pt": "Cria um interpolador 3-D."
+        },
+        {
+          "code": "F = scatteredInterpolant(..., method, extrapMethod)",
+          "en": "Selects `'linear'`, `'nearest'` or `'natural'` interpolation and the extrapolation method.",
+          "pt": "Seleciona a interpolação `'linear'`, `'nearest'` ou `'natural'` e o método de extrapolação."
+        },
+        {
+          "code": "vq = F(xq, yq)",
+          "en": "Evaluates the interpolant.",
+          "pt": "Avalia o interpolador."
+        }
       ],
       "inputs": [
-        {"name": "x, y, z", "en": "Coordinates of the sample points, column vectors of equal length.", "pt": "Coordenadas dos pontos de amostra, vetores coluna de mesmo comprimento."},
-        {"name": "v", "en": "Sample values.", "pt": "Valores de amostra."},
-        {"name": "method", "en": "Interpolation method, default `'linear'`.", "pt": "Método de interpolação, padrão `'linear'`."}
+        {
+          "name": "x, y, z",
+          "en": "Coordinates of the sample points, column vectors of equal length.",
+          "pt": "Coordenadas dos pontos de amostra, vetores coluna de mesmo comprimento."
+        },
+        {
+          "name": "v",
+          "en": "Sample values.",
+          "pt": "Valores de amostra."
+        },
+        {
+          "name": "method",
+          "en": "Interpolation method, default `'linear'`.",
+          "pt": "Método de interpolação, padrão `'linear'`."
+        }
       ],
       "outputs": [
-        {"name": "F", "en": "Interpolant object with properties such as `Points`, `Values`, `Method` and `ExtrapolationMethod`.", "pt": "Objeto interpolador com propriedades como `Points`, `Values`, `Method` e `ExtrapolationMethod`."}
+        {
+          "name": "F",
+          "en": "Interpolant object with properties such as `Points`, `Values`, `Method` and `ExtrapolationMethod`.",
+          "pt": "Objeto interpolador com propriedades como `Points`, `Values`, `Method` e `ExtrapolationMethod`."
+        }
       ],
       "description": {
         "en": "The object triangulates the sample points once and then evaluates quickly at any number of query points. Unlike `griddata`, it can also extrapolate outside the convex hull, and its `Values` property can be replaced without redoing the triangulation.\n\nThe `'nearest'` method returns the value of the closest sample, so the result is piecewise constant.",
         "pt": "O objeto triangula os pontos de amostra uma vez e depois avalia rapidamente em qualquer número de pontos de consulta. Diferente de `griddata`, também pode extrapolar fora do fecho convexo, e sua propriedade `Values` pode ser trocada sem refazer a triangulação.\n\nO método `'nearest'` retorna o valor da amostra mais próxima, portanto o resultado é constante por partes."
       },
       "examples": [
-        {"title": {"en": "Linear and nearest interpolation of a plane", "pt": "Interpolação linear e vizinho mais próximo de um plano"}, "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\nF = scatteredInterpolant(x(:), y(:), v(:));\nF(0.5, 1.5)\nF.Method\nN = scatteredInterpolant(x(:), y(:), v(:), 'nearest');\nN(0.4, 0.4)"}
+        {
+          "title": {
+            "en": "Linear and nearest interpolation of a plane",
+            "pt": "Interpolação linear e vizinho mais próximo de um plano"
+          },
+          "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\nF = scatteredInterpolant(x(:), y(:), v(:));\nF(0.5, 1.5)\nF.Method\nN = scatteredInterpolant(x(:), y(:), v(:), 'nearest');\nN(0.4, 0.4)"
+        }
       ],
-      "see": ["griddata", "griddedInterpolant", "delaunay", "interp2"]
+      "see": [
+        "griddata",
+        "griddedInterpolant",
+        "delaunay",
+        "interp2"
+      ]
     },
     "spline": {
-      "summary": {"en": "Cubic spline interpolation.", "pt": "Interpolação por spline cúbica."},
+      "summary": {
+        "en": "Cubic spline interpolation.",
+        "pt": "Interpolação por spline cúbica."
+      },
       "syntax": [
-        {"code": "yi = spline(x, y, xi)", "en": "Evaluates the not-a-knot cubic spline through `(x, y)` at `xi`.", "pt": "Avalia em `xi` a spline cúbica not-a-knot que passa por `(x, y)`."},
-        {"code": "pp = spline(x, y)", "en": "Returns the piecewise polynomial structure.", "pt": "Retorna a estrutura do polinômio por partes."}
+        {
+          "code": "yi = spline(x, y, xi)",
+          "en": "Evaluates the not-a-knot cubic spline through `(x, y)` at `xi`.",
+          "pt": "Avalia em `xi` a spline cúbica not-a-knot que passa por `(x, y)`."
+        },
+        {
+          "code": "pp = spline(x, y)",
+          "en": "Returns the piecewise polynomial structure.",
+          "pt": "Retorna a estrutura do polinômio por partes."
+        }
       ],
       "inputs": [
-        {"name": "x", "en": "Vector of distinct sample points.", "pt": "Vetor de pontos de amostra distintos."},
-        {"name": "y", "en": "Sample values. If `y` has two more entries than `x`, the first and last are the end slopes of a clamped spline.", "pt": "Valores de amostra. Se `y` tiver dois elementos a mais que `x`, o primeiro e o último são as inclinações nas pontas de uma spline fixada (clamped)."},
-        {"name": "xi", "en": "Points at which to evaluate.", "pt": "Pontos de avaliação."}
+        {
+          "name": "x",
+          "en": "Vector of distinct sample points.",
+          "pt": "Vetor de pontos de amostra distintos."
+        },
+        {
+          "name": "y",
+          "en": "Sample values. If `y` has two more entries than `x`, the first and last are the end slopes of a clamped spline.",
+          "pt": "Valores de amostra. Se `y` tiver dois elementos a mais que `x`, o primeiro e o último são as inclinações nas pontas de uma spline fixada (clamped)."
+        },
+        {
+          "name": "xi",
+          "en": "Points at which to evaluate.",
+          "pt": "Pontos de avaliação."
+        }
       ],
       "outputs": [
-        {"name": "yi", "en": "Interpolated values.", "pt": "Valores interpolados."},
-        {"name": "pp", "en": "Piecewise polynomial structure, usable with `ppval`.", "pt": "Estrutura do polinômio por partes, utilizável com `ppval`."}
+        {
+          "name": "yi",
+          "en": "Interpolated values.",
+          "pt": "Valores interpolados."
+        },
+        {
+          "name": "pp",
+          "en": "Piecewise polynomial structure, usable with `ppval`.",
+          "pt": "Estrutura do polinômio por partes, utilizável com `ppval`."
+        }
       ],
       "description": {
         "en": "A cubic spline is made of cubic pieces that join with continuous value, slope and curvature. With the default not-a-knot condition, the first two pieces share one cubic, and so do the last two. For this reason data that come from a cubic polynomial are reproduced exactly.\n\nGiving two extra values in `y` selects the clamped condition instead, with the given slopes at the ends. Splines can oscillate between points when the data change abruptly; `pchip` and `makima` are alternatives for that case.",
         "pt": "Uma spline cúbica é feita de pedaços cúbicos que se unem com valor, inclinação e curvatura contínuos. Com a condição padrão not-a-knot, os dois primeiros pedaços compartilham um mesmo polinômio cúbico, e os dois últimos também. Por isso dados que vêm de um polinômio cúbico são reproduzidos exatamente.\n\nFornecer dois valores extras em `y` seleciona a condição fixada (clamped), com as inclinações dadas nas pontas. Splines podem oscilar entre os pontos quando os dados mudam bruscamente; `pchip` e `makima` são alternativas nesse caso."
       },
       "examples": [
-        {"title": {"en": "Reproducing a cubic and inspecting the pieces", "pt": "Reproduzindo uma cúbica e inspecionando os pedaços"}, "code": "x = 0:4;\ny = x.^3;\nspline(x, y, 2.5)\npp = spline(x, y);\npp.pieces"}
+        {
+          "title": {
+            "en": "Reproducing a cubic and inspecting the pieces",
+            "pt": "Reproduzindo uma cúbica e inspecionando os pedaços"
+          },
+          "code": "x = 0:4;\ny = x.^3;\nspline(x, y, 2.5)\npp = spline(x, y);\npp.pieces"
+        }
       ],
-      "see": ["pchip", "makima", "interp1", "ppval", "mkpp"]
+      "see": [
+        "pchip",
+        "makima",
+        "interp1",
+        "ppval",
+        "mkpp"
+      ]
     },
     "TriScatteredInterp": {
-      "summary": {"en": "Older name of scatteredInterpolant for scattered-data interpolation.", "pt": "Nome antigo de scatteredInterpolant para interpolação de dados espalhados."},
+      "summary": {
+        "en": "Older name of scatteredInterpolant for scattered-data interpolation.",
+        "pt": "Nome antigo de scatteredInterpolant para interpolação de dados espalhados."
+      },
       "syntax": [
-        {"code": "F = TriScatteredInterp(x, y, v)", "en": "Creates a 2-D interpolant from the sample points `(x,y)` and values `v`.", "pt": "Cria um interpolador 2-D a partir dos pontos `(x,y)` e dos valores `v`."},
-        {"code": "F = TriScatteredInterp(x, y, z, v)", "en": "Creates a 3-D interpolant.", "pt": "Cria um interpolador 3-D."},
-        {"code": "vq = F(xq, yq)", "en": "Evaluates the interpolant at the query points.", "pt": "Avalia o interpolador nos pontos de consulta."}
+        {
+          "code": "F = TriScatteredInterp(x, y, v)",
+          "en": "Creates a 2-D interpolant from the sample points `(x,y)` and values `v`.",
+          "pt": "Cria um interpolador 2-D a partir dos pontos `(x,y)` e dos valores `v`."
+        },
+        {
+          "code": "F = TriScatteredInterp(x, y, z, v)",
+          "en": "Creates a 3-D interpolant.",
+          "pt": "Cria um interpolador 3-D."
+        },
+        {
+          "code": "vq = F(xq, yq)",
+          "en": "Evaluates the interpolant at the query points.",
+          "pt": "Avalia o interpolador nos pontos de consulta."
+        }
       ],
       "inputs": [
-        {"name": "x, y, z", "en": "Coordinates of the sample points, column vectors.", "pt": "Coordenadas dos pontos de amostra, vetores coluna."},
-        {"name": "v", "en": "Sample values.", "pt": "Valores de amostra."}
+        {
+          "name": "x, y, z",
+          "en": "Coordinates of the sample points, column vectors.",
+          "pt": "Coordenadas dos pontos de amostra, vetores coluna."
+        },
+        {
+          "name": "v",
+          "en": "Sample values.",
+          "pt": "Valores de amostra."
+        }
       ],
       "outputs": [
-        {"name": "F", "en": "Interpolant object that is evaluated like a function.", "pt": "Objeto interpolador avaliado como uma função."}
+        {
+          "name": "F",
+          "en": "Interpolant object that is evaluated like a function.",
+          "pt": "Objeto interpolador avaliado como uma função."
+        }
       ],
       "description": {
         "en": "`TriScatteredInterp` was the class used before `scatteredInterpolant` and is kept so that old code still runs. It triangulates the points and interpolates linearly inside each triangle.\n\nNew code should use `scatteredInterpolant`, which also supports extrapolation and more methods.",
         "pt": "`TriScatteredInterp` era a classe usada antes de `scatteredInterpolant` e é mantida para que código antigo continue funcionando. Ela triangula os pontos e interpola linearmente dentro de cada triângulo.\n\nEm código novo, use `scatteredInterpolant`, que também oferece extrapolação e mais métodos."
       },
       "examples": [
-        {"title": {"en": "Interpolating samples of a plane", "pt": "Interpolando amostras de um plano"}, "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\nF = TriScatteredInterp(x(:), y(:), v(:));\nF(0.5, 1.5)"}
+        {
+          "title": {
+            "en": "Interpolating samples of a plane",
+            "pt": "Interpolando amostras de um plano"
+          },
+          "code": "[x, y] = meshgrid(0:2);\nv = x + 2*y;\nF = TriScatteredInterp(x(:), y(:), v(:));\nF(0.5, 1.5)"
+        }
       ],
-      "see": ["scatteredInterpolant", "griddata", "delaunay"]
+      "see": [
+        "scatteredInterpolant",
+        "griddata",
+        "delaunay"
+      ]
     },
     "unmkpp": {
-      "summary": {"en": "Extracts the parts of a piecewise polynomial structure.", "pt": "Extrai as partes de uma estrutura de polinômio por partes."},
+      "summary": {
+        "en": "Extracts the parts of a piecewise polynomial structure.",
+        "pt": "Extrai as partes de uma estrutura de polinômio por partes."
+      },
       "syntax": [
-        {"code": "[x, c, l, k, d] = unmkpp(pp)", "en": "Returns the break points, coefficients, number of pieces, order and dimension of `pp`.", "pt": "Retorna os pontos de quebra, os coeficientes, o número de pedaços, a ordem e a dimensão de `pp`."}
+        {
+          "code": "[x, c, l, k, d] = unmkpp(pp)",
+          "en": "Returns the break points, coefficients, number of pieces, order and dimension of `pp`.",
+          "pt": "Retorna os pontos de quebra, os coeficientes, o número de pedaços, a ordem e a dimensão de `pp`."
+        }
       ],
       "inputs": [
-        {"name": "pp", "en": "Piecewise polynomial structure created by `mkpp`, `spline`, `pchip` or `makima`.", "pt": "Estrutura de polinômio por partes criada por `mkpp`, `spline`, `pchip` ou `makima`."}
+        {
+          "name": "pp",
+          "en": "Piecewise polynomial structure created by `mkpp`, `spline`, `pchip` or `makima`.",
+          "pt": "Estrutura de polinômio por partes criada por `mkpp`, `spline`, `pchip` ou `makima`."
+        }
       ],
       "outputs": [
-        {"name": "x", "en": "Break points.", "pt": "Pontos de quebra."},
-        {"name": "c", "en": "Coefficient matrix, one row per piece.", "pt": "Matriz de coeficientes, uma linha por pedaço."},
-        {"name": "l", "en": "Number of pieces.", "pt": "Número de pedaços."},
-        {"name": "k", "en": "Order of the polynomials (degree plus one).", "pt": "Ordem dos polinômios (grau mais um)."},
-        {"name": "d", "en": "Dimension of the function value.", "pt": "Dimensão do valor da função."}
+        {
+          "name": "x",
+          "en": "Break points.",
+          "pt": "Pontos de quebra."
+        },
+        {
+          "name": "c",
+          "en": "Coefficient matrix, one row per piece.",
+          "pt": "Matriz de coeficientes, uma linha por pedaço."
+        },
+        {
+          "name": "l",
+          "en": "Number of pieces.",
+          "pt": "Número de pedaços."
+        },
+        {
+          "name": "k",
+          "en": "Order of the polynomials (degree plus one).",
+          "pt": "Ordem dos polinômios (grau mais um)."
+        },
+        {
+          "name": "d",
+          "en": "Dimension of the function value.",
+          "pt": "Dimensão do valor da função."
+        }
       ],
       "description": {
         "en": "`unmkpp` is the inverse of `mkpp`: it reads the fields of the structure so that its coefficients can be inspected or modified, for example to differentiate each piece by hand. Reading the fields directly, as in `pp.coefs`, gives the same information.",
         "pt": "`unmkpp` é o inverso de `mkpp`: lê os campos da estrutura para que seus coeficientes possam ser inspecionados ou alterados, por exemplo para derivar cada pedaço manualmente. Ler os campos diretamente, como em `pp.coefs`, dá a mesma informação."
       },
       "examples": [
-        {"title": {"en": "Taking a structure apart", "pt": "Desmontando uma estrutura"}, "code": "pp = mkpp([0 1 2], [1 0 0; 2 1 0]);\n[x, c, l, k, d] = unmkpp(pp)"}
+        {
+          "title": {
+            "en": "Taking a structure apart",
+            "pt": "Desmontando uma estrutura"
+          },
+          "code": "pp = mkpp([0 1 2], [1 0 0; 2 1 0]);\n[x, c, l, k, d] = unmkpp(pp)"
+        }
       ],
-      "see": ["mkpp", "ppval", "spline", "polyder"]
+      "see": [
+        "mkpp",
+        "ppval",
+        "spline",
+        "polyder"
+      ]
     }
   }
 }

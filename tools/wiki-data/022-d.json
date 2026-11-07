@@ -530,10 +530,6 @@
     "en": "A string that already differs from everything in `exclusions` is returned unchanged. Otherwise the function appends `_1`, `_2`, and so on until the name is free. For a cell array without `exclusions`, the first occurrence is kept and later duplicates receive suffixes in order.\n\nA typical use is naming new items, files or table variables without overwriting existing ones.",
     "pt": "Uma string que já difere de tudo em `exclusions` é retornada sem alteração. Caso contrário, a função anexa `_1`, `_2` e assim por diante até o nome ficar livre. Em um cell array sem `exclusions`, a primeira ocorrência é mantida e as duplicatas seguintes recebem sufixos em ordem.\n\nUm uso típico é nomear novos itens, arquivos ou variáveis de tabela sem sobrescrever os existentes."
    },
-   "notes": {
-    "en": "MatLivre returns a single output; the second output (a logical showing which strings were modified) is not supported.",
-    "pt": "O MatLivre retorna uma única saída; a segunda saída (um lógico que indica quais strings foram modificadas) não é suportada."
-   },
    "examples": [
     {
      "title": {
@@ -589,10 +585,6 @@
    "description": {
     "en": "Valid names are returned unchanged. Spaces are removed and the letter after each is capitalized (`'my value'` becomes `'myValue'`), other illegal characters become underscores, and a name that starts with a digit or is a reserved word gets the prefix `x`. The function does not make names unique; combine it with `matlab.lang.makeUniqueStrings` for that.\n\nTables use this rule to turn column headings of imported files into variable names.",
     "pt": "Nomes válidos são retornados sem alteração. Espaços são removidos e a letra seguinte é posta em maiúscula (`'my value'` vira `'myValue'`), outros caracteres ilegais viram sublinhados, e um nome que começa com dígito ou é palavra reservada recebe o prefixo `x`. A função não torna os nomes únicos; combine com `matlab.lang.makeUniqueStrings` para isso.\n\nTabelas usam essa regra para transformar cabeçalhos de colunas de arquivos importados em nomes de variáveis."
-   },
-   "notes": {
-    "en": "MatLivre ignores the `'ReplacementStyle'` and `'Prefix'` options: replacements are always underscores and the prefix is always `x`.",
-    "pt": "O MatLivre ignora as opções `'ReplacementStyle'` e `'Prefix'`: as substituições são sempre sublinhados e o prefixo é sempre `x`."
    },
    "examples": [
     {
@@ -706,10 +698,6 @@
     "en": "A function becomes locked when it calls `mlock`; `munlock` unlocks it. A locked function keeps its persistent variables when `clear` is used, so `mislocked` tells whether a `clear` would reset them. A function that never called `mlock` is not locked.",
     "pt": "Uma função fica travada quando chama `mlock`; `munlock` a destrava. Uma função travada mantém as variáveis persistentes quando se usa `clear`, então `mislocked` informa se um `clear` as reiniciaria. Uma função que nunca chamou `mlock` não está travada."
    },
-   "notes": {
-    "en": "MatLivre does not track locks: `mislocked` always returns `false`, even after the function called `mlock`.",
-    "pt": "O MatLivre não registra travas: `mislocked` sempre retorna `false`, mesmo depois de a função chamar `mlock`."
-   },
    "examples": [
     {
      "title": {
@@ -745,8 +733,8 @@
     "pt": "Variáveis persistentes normalmente desaparecem quando a função é limpa com `clear` ou `clear all`. Uma função travada fica na memória, então suas variáveis persistentes sobrevivem até `munlock` ser chamada ou a sessão terminar. `mlock` só vale dentro de um arquivo de função; chame uma vez, em geral no início.\n\nUse para estado que precisa durar além de um `clear`, como um contador de chamadas ou um cache."
    },
    "notes": {
-    "en": "In MatLivre `mlock` is accepted but does not record a lock; `mislocked` stays `false`.",
-    "pt": "No MatLivre, `mlock` é aceita mas não registra uma trava; `mislocked` continua `false`."
+    "en": "In MatLivre `mlock` records the lock, so `mislocked` reports `true`, but `clear` never resets the persistent variables of any function, locked or not.",
+    "pt": "No MatLivre, `mlock` registra a trava, então `mislocked` informa `true`, mas `clear` nunca zera as variáveis persistentes de nenhuma função, travada ou não."
    },
    "examples": [
     {

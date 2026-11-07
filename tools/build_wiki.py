@@ -40,8 +40,8 @@ from wiki_guide import L, esc, slug  # noqa: E402
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = 'https://campuslivre.github.io'
 REPO = 'https://github.com/campuslivre/matlivre'
-VERSION = 'v0.1.3'
-TODAY = '2026-11-06'
+VERSION = 'v0.1.4'
+TODAY = '2026-11-07'
 DATA_DIR = os.path.join(SITE, 'tools', 'wiki-data')
 CACHE = os.path.join(SITE, 'tools', 'wiki-cache', 'outputs.json')
 WIKI = os.path.join(SITE, 'matlivre', 'wiki')

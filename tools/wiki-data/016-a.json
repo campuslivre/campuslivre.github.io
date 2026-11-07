@@ -1,874 +1,870 @@
 {
- "functions": {
-  "tetramesh": {
-   "summary": {
-    "en": "Draws a tetrahedral mesh as semi-transparent solid elements.",
-    "pt": "Desenha uma malha tetraédrica como elementos sólidos semitransparentes."
-   },
-   "syntax": [
-    {
-     "code": "tetramesh(T, X)",
-     "en": "Draws the tetrahedra whose vertex indices are the rows of `T`, using the coordinates in `X`.",
-     "pt": "Desenha os tetraedros cujos índices de vértices são as linhas de `T`, usando as coordenadas em `X`."
+  "functions": {
+    "tetramesh": {
+      "summary": {
+        "en": "Draws a tetrahedral mesh as semi-transparent solid elements.",
+        "pt": "Desenha uma malha tetraédrica como elementos sólidos semitransparentes."
+      },
+      "syntax": [
+        {
+          "code": "tetramesh(T, X)",
+          "en": "Draws the tetrahedra whose vertex indices are the rows of `T`, using the coordinates in `X`.",
+          "pt": "Desenha os tetraedros cujos índices de vértices são as linhas de `T`, usando as coordenadas em `X`."
+        },
+        {
+          "code": "tetramesh(TR)",
+          "en": "Draws the tetrahedral mesh stored in a `triangulation` or `delaunayTriangulation` object.",
+          "pt": "Desenha a malha tetraédrica guardada em um objeto `triangulation` ou `delaunayTriangulation`."
+        },
+        {
+          "code": "h = tetramesh(___)",
+          "en": "Also returns the graphics handle of the patch objects.",
+          "pt": "Também retorna o handle dos objetos patch."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "m-by-4 matrix. Each row lists the four vertex indices of one tetrahedron.",
+          "pt": "Matriz m por 4. Cada linha lista os quatro índices de vértices de um tetraedro."
+        },
+        {
+          "name": "X",
+          "en": "n-by-3 matrix of vertex coordinates, one point per row.",
+          "pt": "Matriz n por 3 com as coordenadas dos vértices, um ponto por linha."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Handle to the patch graphics object that draws the mesh.",
+          "pt": "Handle do objeto gráfico patch que desenha a malha."
+        }
+      ],
+      "description": {
+        "en": "Each row of `T` selects four rows of `X`, and `tetramesh` draws the four triangular faces of that tetrahedron on the current axes. Faces are partly transparent, so the interior structure of a mesh can be seen. The axes are set to a 3-D view.\n\nThe mesh itself is usually produced by `delaunayn` or `delaunayTriangulation` applied to a 3-D point set.",
+        "pt": "Cada linha de `T` seleciona quatro linhas de `X`, e `tetramesh` desenha as quatro faces triangulares desse tetraedro nos eixos atuais. As faces são parcialmente transparentes, de modo que a estrutura interna de uma malha pode ser vista. Os eixos ficam em visão 3-D.\n\nA malha em si costuma vir de `delaunayn` ou `delaunayTriangulation` aplicados a um conjunto de pontos 3-D."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A single tetrahedron",
+            "pt": "Um único tetraedro"
+          },
+          "code": "X = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 2 3 4];\ntetramesh(T, X);",
+          "silent": true
+        }
+      ],
+      "see": [
+        "delaunayn",
+        "delaunayTriangulation",
+        "trimesh",
+        "triplot"
+      ]
     },
-    {
-     "code": "tetramesh(TR)",
-     "en": "Draws the tetrahedral mesh stored in a `triangulation` or `delaunayTriangulation` object.",
-     "pt": "Desenha a malha tetraédrica guardada em um objeto `triangulation` ou `delaunayTriangulation`."
+    "translate": {
+      "summary": {
+        "en": "Shifts a polyshape by a given offset in x and y.",
+        "pt": "Desloca um polyshape por um deslocamento dado em x e y."
+      },
+      "syntax": [
+        {
+          "code": "PG2 = translate(PG, v)",
+          "en": "Moves every vertex of `PG` by the two-element vector `v`.",
+          "pt": "Move todos os vértices de `PG` pelo vetor de dois elementos `v`."
+        },
+        {
+          "code": "PG2 = translate(PG, x, y)",
+          "en": "Moves the vertices by `x` along the x-axis and `y` along the y-axis.",
+          "pt": "Move os vértices em `x` ao longo do eixo x e em `y` ao longo do eixo y."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "PG",
+          "en": "A `polyshape` object.",
+          "pt": "Um objeto `polyshape`."
+        },
+        {
+          "name": "v",
+          "en": "Two-element vector `[dx dy]` with the displacement.",
+          "pt": "Vetor de dois elementos `[dx dy]` com o deslocamento."
+        },
+        {
+          "name": "x, y",
+          "en": "Scalar displacements along each axis (second form).",
+          "pt": "Deslocamentos escalares em cada eixo (segunda forma)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "PG2",
+          "en": "A new `polyshape` with the same shape, moved by the offset.",
+          "pt": "Um novo `polyshape` com a mesma forma, deslocado pelo valor dado."
+        }
+      ],
+      "description": {
+        "en": "`translate` adds the offset to the coordinates of every boundary, holes included. Shape, area and orientation are unchanged, only the position moves. The input object is not modified; a new object is returned.\n\nIn this wiki the function is listed under computational geometry, and it acts on `polyshape` objects.",
+        "pt": "`translate` soma o deslocamento às coordenadas de todas as fronteiras, inclusive os furos. Forma, área e orientação não mudam, apenas a posição. O objeto de entrada não é alterado; um novo objeto é retornado.\n\nNesta wiki a função aparece em geometria computacional e atua sobre objetos `polyshape`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Move a square",
+            "pt": "Mover um quadrado"
+          },
+          "code": "P = polyshape([0 1 1 0], [0 0 1 1]);\nQ = translate(P, [2 3]);\ndisp(Q.Vertices)"
+        }
+      ],
+      "see": [
+        "polyshape",
+        "rotate",
+        "scale",
+        "centroid"
+      ]
     },
-    {
-     "code": "h = tetramesh(___)",
-     "en": "Also returns the graphics handle of the patch objects.",
-     "pt": "Também retorna o handle dos objetos patch."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "m-by-4 matrix. Each row lists the four vertex indices of one tetrahedron.",
-     "pt": "Matriz m por 4. Cada linha lista os quatro índices de vértices de um tetraedro."
+    "triangulation": {
+      "summary": {
+        "en": "Stores a 2-D or 3-D triangulation and answers queries about it.",
+        "pt": "Guarda uma triangulação 2-D ou 3-D e responde consultas sobre ela."
+      },
+      "syntax": [
+        {
+          "code": "TR = triangulation(T, P)",
+          "en": "Creates a triangulation from the connectivity list `T` and the point coordinates `P`.",
+          "pt": "Cria uma triangulação a partir da lista de conectividade `T` e das coordenadas `P`."
+        },
+        {
+          "code": "TR = triangulation(T, x, y)",
+          "en": "Same, with the coordinates of a 2-D triangulation given as separate column vectors.",
+          "pt": "Igual, com as coordenadas de uma triangulação 2-D dadas como vetores coluna separados."
+        },
+        {
+          "code": "TR = triangulation(T, x, y, z)",
+          "en": "Same, for 3-D points.",
+          "pt": "Igual, para pontos 3-D."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "m-by-3 (triangles) or m-by-4 (tetrahedra) matrix of indices into the points.",
+          "pt": "Matriz m por 3 (triângulos) ou m por 4 (tetraedros) de índices dos pontos."
+        },
+        {
+          "name": "P",
+          "en": "n-by-2 or n-by-3 matrix of point coordinates.",
+          "pt": "Matriz n por 2 ou n por 3 com as coordenadas dos pontos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TR",
+          "en": "A `triangulation` object with properties `Points` and `ConnectivityList`.",
+          "pt": "Um objeto `triangulation` com as propriedades `Points` e `ConnectivityList`."
+        }
+      ],
+      "description": {
+        "en": "The object keeps the points and the connectivity list together and offers query methods such as `pointLocation`, `vertexAttachments`, `vertexNormal`, `neighbors` and `freeBoundary`. It does not build a mesh by itself: the connectivity list normally comes from `delaunay`, or from an external mesher.\n\nThe properties can be read with dot notation, for example `TR.Points` and `TR.ConnectivityList`.",
+        "pt": "O objeto mantém os pontos e a lista de conectividade juntos e oferece métodos de consulta como `pointLocation`, `vertexAttachments`, `vertexNormal`, `neighbors` e `freeBoundary`. Ele não gera a malha sozinho: a lista de conectividade costuma vir de `delaunay` ou de um gerador de malha externo.\n\nAs propriedades são lidas com notação de ponto, por exemplo `TR.Points` e `TR.ConnectivityList`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two triangles forming a square",
+            "pt": "Dois triângulos formando um quadrado"
+          },
+          "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = triangulation(T, P);\ndisp(size(TR.Points))\ndisp(TR.ConnectivityList)"
+        }
+      ],
+      "see": [
+        "delaunay",
+        "delaunayTriangulation",
+        "triplot",
+        "TriRep"
+      ]
     },
-    {
-     "name": "X",
-     "en": "n-by-3 matrix of vertex coordinates, one point per row.",
-     "pt": "Matriz n por 3 com as coordenadas dos vértices, um ponto por linha."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "h",
-     "en": "Handle to the patch graphics object that draws the mesh.",
-     "pt": "Handle do objeto gráfico patch que desenha a malha."
-    }
-   ],
-   "description": {
-    "en": "Each row of `T` selects four rows of `X`, and `tetramesh` draws the four triangular faces of that tetrahedron on the current axes. Faces are partly transparent, so the interior structure of a mesh can be seen. The axes are set to a 3-D view.\n\nThe mesh itself is usually produced by `delaunayn` or `delaunayTriangulation` applied to a 3-D point set.",
-    "pt": "Cada linha de `T` seleciona quatro linhas de `X`, e `tetramesh` desenha as quatro faces triangulares desse tetraedro nos eixos atuais. As faces são parcialmente transparentes, de modo que a estrutura interna de uma malha pode ser vista. Os eixos ficam em visão 3-D.\n\nA malha em si costuma vir de `delaunayn` ou `delaunayTriangulation` aplicados a um conjunto de pontos 3-D."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "A single tetrahedron",
-      "pt": "Um único tetraedro"
-     },
-     "code": "X = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = [1 2 3 4];\ntetramesh(T, X);",
-     "silent": true
-    }
-   ],
-   "see": [
-    "delaunayn",
-    "delaunayTriangulation",
-    "trimesh",
-    "triplot"
-   ]
-  },
-  "translate": {
-   "summary": {
-    "en": "Shifts a polyshape by a given offset in x and y.",
-    "pt": "Desloca um polyshape por um deslocamento dado em x e y."
-   },
-   "syntax": [
-    {
-     "code": "PG2 = translate(PG, v)",
-     "en": "Moves every vertex of `PG` by the two-element vector `v`.",
-     "pt": "Move todos os vértices de `PG` pelo vetor de dois elementos `v`."
+    "trimesh": {
+      "summary": {
+        "en": "Plots a triangular mesh as wireframe edges.",
+        "pt": "Plota uma malha triangular como arestas em wireframe."
+      },
+      "syntax": [
+        {
+          "code": "trimesh(T, x, y, z)",
+          "en": "Draws the triangles listed in `T` as a 3-D mesh, with vertex coordinates `x`, `y` and heights `z`.",
+          "pt": "Desenha os triângulos listados em `T` como uma malha 3-D, com coordenadas `x`, `y` e alturas `z`."
+        },
+        {
+          "code": "trimesh(T, x, y)",
+          "en": "Draws the triangles in the plane.",
+          "pt": "Desenha os triângulos no plano."
+        },
+        {
+          "code": "trimesh(TR)",
+          "en": "Draws the mesh of a `triangulation` object.",
+          "pt": "Desenha a malha de um objeto `triangulation`."
+        },
+        {
+          "code": "h = trimesh(___)",
+          "en": "Also returns the handle of the mesh.",
+          "pt": "Também retorna o handle da malha."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "m-by-3 matrix; each row holds three vertex indices.",
+          "pt": "Matriz m por 3; cada linha tem três índices de vértices."
+        },
+        {
+          "name": "x, y, z",
+          "en": "Vectors with the coordinates of the vertices.",
+          "pt": "Vetores com as coordenadas dos vértices."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Handle to the patch object that draws the mesh.",
+          "pt": "Handle do objeto patch que desenha a malha."
+        }
+      ],
+      "description": {
+        "en": "`trimesh` draws only the edges of each triangle, with the faces left transparent, which makes it a quick way to inspect a mesh. For shaded faces, use `trisurf`. For a flat 2-D mesh, `triplot` is the usual choice.\n\nWhen `z` is given, the vertices are lifted to those heights and the axes switch to a 3-D view.",
+        "pt": "`trimesh` desenha apenas as arestas de cada triângulo, deixando as faces transparentes, o que o torna uma forma rápida de inspecionar uma malha. Para faces coloridas, use `trisurf`. Para uma malha plana 2-D, `triplot` é a escolha comum.\n\nQuando `z` é informado, os vértices são elevados a essas alturas e os eixos passam para visão 3-D."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A mesh lifted into 3-D",
+            "pt": "Uma malha elevada para 3-D"
+          },
+          "code": "x = [0 1 0 1]';\ny = [0 0 1 1]';\nz = [0 1 1 2]';\nT = [1 2 3; 2 4 3];\ntrimesh(T, x, y, z);",
+          "silent": true
+        }
+      ],
+      "see": [
+        "trisurf",
+        "triplot",
+        "tetramesh",
+        "delaunay"
+      ]
     },
-    {
-     "code": "PG2 = translate(PG, x, y)",
-     "en": "Moves the vertices by `x` along the x-axis and `y` along the y-axis.",
-     "pt": "Move os vértices em `x` ao longo do eixo x e em `y` ao longo do eixo y."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "PG",
-     "en": "A `polyshape` object.",
-     "pt": "Um objeto `polyshape`."
+    "triplot": {
+      "summary": {
+        "en": "Plots a 2-D triangulation as line edges.",
+        "pt": "Plota uma triangulação 2-D como arestas de linha."
+      },
+      "syntax": [
+        {
+          "code": "triplot(T, x, y)",
+          "en": "Draws the edges of the triangles `T` with vertex coordinates `x` and `y`.",
+          "pt": "Desenha as arestas dos triângulos `T` com coordenadas `x` e `y`."
+        },
+        {
+          "code": "triplot(TR)",
+          "en": "Draws a `triangulation` or `delaunayTriangulation` object.",
+          "pt": "Desenha um objeto `triangulation` ou `delaunayTriangulation`."
+        },
+        {
+          "code": "h = triplot(___)",
+          "en": "Also returns the line handle.",
+          "pt": "Também retorna o handle da linha."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "m-by-3 matrix of vertex indices, one triangle per row.",
+          "pt": "Matriz m por 3 de índices de vértices, um triângulo por linha."
+        },
+        {
+          "name": "x, y",
+          "en": "Column vectors with the coordinates of the vertices.",
+          "pt": "Vetores coluna com as coordenadas dos vértices."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Handle to a line object holding all edges.",
+          "pt": "Handle de um objeto de linha que contém todas as arestas."
+        }
+      ],
+      "description": {
+        "en": "`triplot` is the standard way to see a 2-D mesh. All triangle edges are drawn as one line object, so large meshes stay cheap to render. It is commonly paired with `delaunay` to visualize the triangulation of a point set, and combined with `hold on` and `plot` to overlay the points.",
+        "pt": "`triplot` é a forma padrão de ver uma malha 2-D. Todas as arestas dos triângulos são desenhadas como um único objeto de linha, então malhas grandes continuam leves de renderizar. É comum usá-lo com `delaunay` para visualizar a triangulação de um conjunto de pontos e com `hold on` e `plot` para sobrepor os pontos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Delaunay triangulation of five points",
+            "pt": "Triangulação de Delaunay de cinco pontos"
+          },
+          "code": "x = [0 1 0 1 0.5];\ny = [0 0 1 1 0.5];\nT = delaunay(x, y);\ntriplot(T, x, y);",
+          "silent": true
+        }
+      ],
+      "see": [
+        "delaunay",
+        "trimesh",
+        "trisurf",
+        "voronoi"
+      ]
     },
-    {
-     "name": "v",
-     "en": "Two-element vector `[dx dy]` with the displacement.",
-     "pt": "Vetor de dois elementos `[dx dy]` com o deslocamento."
+    "TriRep": {
+      "summary": {
+        "en": "Legacy triangulation representation class, replaced by triangulation.",
+        "pt": "Classe legada de representação de triangulação, substituída por triangulation."
+      },
+      "syntax": [
+        {
+          "code": "TR = TriRep(T, X)",
+          "en": "Creates a triangulation representation from the connectivity `T` and the points `X`.",
+          "pt": "Cria uma representação de triangulação a partir da conectividade `T` e dos pontos `X`."
+        },
+        {
+          "code": "TR = TriRep(T, x, y)",
+          "en": "Same, with 2-D coordinates given as separate vectors.",
+          "pt": "Igual, com coordenadas 2-D em vetores separados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "Matrix of vertex indices, three or four columns.",
+          "pt": "Matriz de índices de vértices, com três ou quatro colunas."
+        },
+        {
+          "name": "X",
+          "en": "Matrix of point coordinates, one point per row.",
+          "pt": "Matriz de coordenadas dos pontos, um ponto por linha."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TR",
+          "en": "A `TriRep` object with properties `X` (points) and `Triangulation` (connectivity).",
+          "pt": "Um objeto `TriRep` com as propriedades `X` (pontos) e `Triangulation` (conectividade)."
+        }
+      ],
+      "description": {
+        "en": "`TriRep` is the older class for holding a triangulation and querying it. It stores the points in `X` and the connectivity in `Triangulation`. New code should use `triangulation`, whose properties are named `Points` and `ConnectivityList`, and which has more methods.",
+        "pt": "`TriRep` é a classe antiga para guardar uma triangulação e consultá-la. Ela armazena os pontos em `X` e a conectividade em `Triangulation`. Código novo deve usar `triangulation`, cujas propriedades se chamam `Points` e `ConnectivityList` e que tem mais métodos."
+      },
+      "notes": {
+        "en": "MATLAB keeps `TriRep` only for compatibility and recommends `triangulation` instead.",
+        "pt": "O MATLAB mantém `TriRep` apenas por compatibilidade e recomenda `triangulation`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Create and read a TriRep",
+            "pt": "Criar e ler um TriRep"
+          },
+          "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = TriRep(T, P);\ndisp(TR.X)"
+        }
+      ],
+      "see": [
+        "triangulation",
+        "delaunayTriangulation",
+        "triplot"
+      ]
     },
-    {
-     "name": "x, y",
-     "en": "Scalar displacements along each axis (second form).",
-     "pt": "Deslocamentos escalares em cada eixo (segunda forma)."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "PG2",
-     "en": "A new `polyshape` with the same shape, moved by the offset.",
-     "pt": "Um novo `polyshape` com a mesma forma, deslocado pelo valor dado."
-    }
-   ],
-   "description": {
-    "en": "`translate` adds the offset to the coordinates of every boundary, holes included. Shape, area and orientation are unchanged, only the position moves. The input object is not modified; a new object is returned.\n\nIn this wiki the function is listed under computational geometry, and it acts on `polyshape` objects.",
-    "pt": "`translate` soma o deslocamento às coordenadas de todas as fronteiras, inclusive os furos. Forma, área e orientação não mudam, apenas a posição. O objeto de entrada não é alterado; um novo objeto é retornado.\n\nNesta wiki a função aparece em geometria computacional e atua sobre objetos `polyshape`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Move a square",
-      "pt": "Mover um quadrado"
-     },
-     "code": "P = polyshape([0 1 1 0], [0 0 1 1]);\nQ = translate(P, [2 3]);\ndisp(Q.Vertices)"
-    }
-   ],
-   "see": [
-    "polyshape",
-    "rotate",
-    "scale",
-    "centroid"
-   ]
-  },
-  "triangulation": {
-   "summary": {
-    "en": "Stores a 2-D or 3-D triangulation and answers queries about it.",
-    "pt": "Guarda uma triangulação 2-D ou 3-D e responde consultas sobre ela."
-   },
-   "syntax": [
-    {
-     "code": "TR = triangulation(T, P)",
-     "en": "Creates a triangulation from the connectivity list `T` and the point coordinates `P`.",
-     "pt": "Cria uma triangulação a partir da lista de conectividade `T` e das coordenadas `P`."
+    "trisurf": {
+      "summary": {
+        "en": "Plots a triangular surface with shaded faces.",
+        "pt": "Plota uma superfície triangular com faces sombreadas."
+      },
+      "syntax": [
+        {
+          "code": "trisurf(T, x, y, z)",
+          "en": "Draws the triangles `T` as a surface with vertex heights `z`, colored by height.",
+          "pt": "Desenha os triângulos `T` como uma superfície com alturas `z` nos vértices, colorida pela altura."
+        },
+        {
+          "code": "trisurf(T, x, y, z, C)",
+          "en": "Colors the surface using the values in `C`.",
+          "pt": "Colore a superfície usando os valores em `C`."
+        },
+        {
+          "code": "trisurf(TR)",
+          "en": "Draws a `triangulation` object.",
+          "pt": "Desenha um objeto `triangulation`."
+        },
+        {
+          "code": "h = trisurf(___)",
+          "en": "Also returns the patch handle.",
+          "pt": "Também retorna o handle do patch."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "T",
+          "en": "m-by-3 matrix of vertex indices, one triangle per row.",
+          "pt": "Matriz m por 3 de índices de vértices, um triângulo por linha."
+        },
+        {
+          "name": "x, y, z",
+          "en": "Vectors with the vertex coordinates.",
+          "pt": "Vetores com as coordenadas dos vértices."
+        },
+        {
+          "name": "C",
+          "en": "Optional color data, one value per vertex.",
+          "pt": "Dados de cor opcionais, um valor por vértice."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Handle to the patch object.",
+          "pt": "Handle do objeto patch."
+        }
+      ],
+      "description": {
+        "en": "`trisurf` is the filled counterpart of `trimesh`: each triangle becomes a colored face and the edges are drawn in black. It is the way to plot a surface defined on scattered points, since a triangulation of the `(x, y)` locations (from `delaunay`) supplies the connectivity.",
+        "pt": "`trisurf` é a versão preenchida de `trimesh`: cada triângulo vira uma face colorida e as arestas são desenhadas em preto. É a forma de plotar uma superfície definida em pontos espalhados, já que uma triangulação das posições `(x, y)` (obtida com `delaunay`) fornece a conectividade."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Surface over scattered points",
+            "pt": "Superfície sobre pontos espalhados"
+          },
+          "code": "rng(1);\nx = rand(20, 1);\ny = rand(20, 1);\nz = x .* y;\nT = delaunay(x, y);\ntrisurf(T, x, y, z);",
+          "silent": true
+        }
+      ],
+      "see": [
+        "trimesh",
+        "triplot",
+        "delaunay",
+        "surf"
+      ]
     },
-    {
-     "code": "TR = triangulation(T, x, y)",
-     "en": "Same, with the coordinates of a 2-D triangulation given as separate column vectors.",
-     "pt": "Igual, com as coordenadas de uma triangulação 2-D dadas como vetores coluna separados."
+    "tsearchn": {
+      "summary": {
+        "en": "Finds the enclosing simplex of query points in an n-D triangulation.",
+        "pt": "Encontra o simplex que contém cada ponto de consulta em uma triangulação n-D."
+      },
+      "syntax": [
+        {
+          "code": "t = tsearchn(X, T, XI)",
+          "en": "Returns the index of the simplex (row of `T`) that contains each query point.",
+          "pt": "Retorna o índice do simplex (linha de `T`) que contém cada ponto de consulta."
+        },
+        {
+          "code": "[t, P] = tsearchn(X, T, XI)",
+          "en": "Also returns the barycentric coordinates of each query point in its simplex.",
+          "pt": "Também retorna as coordenadas baricêntricas de cada ponto de consulta no seu simplex."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-d matrix of triangulation vertices.",
+          "pt": "Matriz n por d com os vértices da triangulação."
+        },
+        {
+          "name": "T",
+          "en": "m-by-(d+1) connectivity matrix.",
+          "pt": "Matriz de conectividade m por (d+1)."
+        },
+        {
+          "name": "XI",
+          "en": "p-by-d matrix of query points.",
+          "pt": "Matriz p por d de pontos de consulta."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Column vector of simplex indices. `NaN` marks a point outside the triangulation.",
+          "pt": "Vetor coluna com os índices dos simplex. `NaN` marca um ponto fora da triangulação."
+        },
+        {
+          "name": "P",
+          "en": "p-by-(d+1) barycentric coordinates; rows are `NaN` for points outside.",
+          "pt": "Coordenadas baricêntricas p por (d+1); as linhas são `NaN` para pontos fora."
+        }
+      ],
+      "description": {
+        "en": "For every query point `tsearchn` finds the triangle (or tetrahedron, in higher dimension) that contains it. The barycentric coordinates are weights of the simplex vertices that sum to 1 and reproduce the point; they are all non-negative exactly when the point is inside. They are handy for interpolating vertex data to arbitrary points.\n\nUnlike `tsearch`, it works in any dimension.",
+        "pt": "Para cada ponto de consulta, `tsearchn` encontra o triângulo (ou tetraedro, em dimensões maiores) que o contém. As coordenadas baricêntricas são pesos dos vértices do simplex que somam 1 e reproduzem o ponto; todas são não negativas exatamente quando o ponto está dentro. São úteis para interpolar dados dos vértices em pontos arbitrários.\n\nDiferente de `tsearch`, funciona em qualquer dimensão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Locate points in two triangles",
+            "pt": "Localizar pontos em dois triângulos"
+          },
+          "code": "x = [0 1 0 1]';\ny = [0 0 1 1]';\nT = [1 2 3; 2 4 3];\n[t, bc] = tsearchn([x y], T, [0.2 0.2; 0.8 0.8; 2 2])"
+        }
+      ],
+      "see": [
+        "pointLocation",
+        "delaunay",
+        "triangulation",
+        "dsearchn"
+      ]
     },
-    {
-     "code": "TR = triangulation(T, x, y, z)",
-     "en": "Same, for 3-D points.",
-     "pt": "Igual, para pontos 3-D."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "m-by-3 (triangles) or m-by-4 (tetrahedra) matrix of indices into the points.",
-     "pt": "Matriz m por 3 (triângulos) ou m por 4 (tetraedros) de índices dos pontos."
+    "turningdist": {
+      "summary": {
+        "en": "Turning-function distance between two polyshape boundaries.",
+        "pt": "Distância da função de giro entre as fronteiras de dois polyshape."
+      },
+      "syntax": [
+        {
+          "code": "d = turningdist(PG1, PG2)",
+          "en": "Returns a dissimilarity measure between the shapes of `PG1` and `PG2`.",
+          "pt": "Retorna uma medida de dissimilaridade entre as formas de `PG1` e `PG2`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "PG1, PG2",
+          "en": "`polyshape` objects, each with a single boundary.",
+          "pt": "Objetos `polyshape`, cada um com uma única fronteira."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Non-negative scalar. It is `0` for identical shapes and grows as the shapes differ.",
+          "pt": "Escalar não negativo. É `0` para formas idênticas e cresce conforme as formas diferem."
+        }
+      ],
+      "description": {
+        "en": "The distance compares the turning functions of the two polygons: the direction of the edge as a function of the arc length along the boundary, with lengths normalized by the perimeter. The measure is intended to ignore translation and uniform scaling, so it focuses on shape rather than position or size.\n\nBoth polyshapes must have exactly one boundary; otherwise an error is raised.",
+        "pt": "A distância compara as funções de giro dos dois polígonos: a direção da aresta em função do comprimento de arco ao longo da fronteira, com os comprimentos normalizados pelo perímetro. A medida pretende ignorar translação e escala uniforme, de modo que foca a forma, não a posição ou o tamanho.\n\nOs dois polyshape precisam ter exatamente uma fronteira; caso contrário, ocorre um erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Square versus rectangle",
+            "pt": "Quadrado contra retângulo"
+          },
+          "code": "P = polyshape([0 1 1 0], [0 0 1 1]);\nQ = polyshape([0 2 2 0], [0 0 1 1]);\nd1 = turningdist(P, P)\nd2 = turningdist(P, Q)"
+        }
+      ],
+      "see": [
+        "polyshape",
+        "area",
+        "perimeter",
+        "translate"
+      ]
     },
-    {
-     "name": "P",
-     "en": "n-by-2 or n-by-3 matrix of point coordinates.",
-     "pt": "Matriz n por 2 ou n por 3 com as coordenadas dos pontos."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "TR",
-     "en": "A `triangulation` object with properties `Points` and `ConnectivityList`.",
-     "pt": "Um objeto `triangulation` com as propriedades `Points` e `ConnectivityList`."
-    }
-   ],
-   "description": {
-    "en": "The object keeps the points and the connectivity list together and offers query methods such as `pointLocation`, `vertexAttachments`, `vertexNormal`, `neighbors` and `freeBoundary`. It does not build a mesh by itself: the connectivity list normally comes from `delaunay`, or from an external mesher.\n\nThe properties can be read with dot notation, for example `TR.Points` and `TR.ConnectivityList`.",
-    "pt": "O objeto mantém os pontos e a lista de conectividade juntos e oferece métodos de consulta como `pointLocation`, `vertexAttachments`, `vertexNormal`, `neighbors` e `freeBoundary`. Ele não gera a malha sozinho: a lista de conectividade costuma vir de `delaunay` ou de um gerador de malha externo.\n\nAs propriedades são lidas com notação de ponto, por exemplo `TR.Points` e `TR.ConnectivityList`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Two triangles forming a square",
-      "pt": "Dois triângulos formando um quadrado"
-     },
-     "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = triangulation(T, P);\ndisp(size(TR.Points))\ndisp(TR.ConnectivityList)"
-    }
-   ],
-   "see": [
-    "delaunay",
-    "delaunayTriangulation",
-    "triplot",
-    "TriRep"
-   ]
-  },
-  "trimesh": {
-   "summary": {
-    "en": "Plots a triangular mesh as wireframe edges.",
-    "pt": "Plota uma malha triangular como arestas em wireframe."
-   },
-   "syntax": [
-    {
-     "code": "trimesh(T, x, y, z)",
-     "en": "Draws the triangles listed in `T` as a 3-D mesh, with vertex coordinates `x`, `y` and heights `z`.",
-     "pt": "Desenha os triângulos listados em `T` como uma malha 3-D, com coordenadas `x`, `y` e alturas `z`."
+    "vertexAttachments": {
+      "summary": {
+        "en": "Lists the triangles or tetrahedra attached to given vertices.",
+        "pt": "Lista os triângulos ou tetraedros ligados aos vértices dados."
+      },
+      "syntax": [
+        {
+          "code": "ID = vertexAttachments(TR, vi)",
+          "en": "Returns, for each vertex index in `vi`, the elements that use that vertex.",
+          "pt": "Retorna, para cada índice de vértice em `vi`, os elementos que usam esse vértice."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "TR",
+          "en": "A `triangulation` object.",
+          "pt": "Um objeto `triangulation`."
+        },
+        {
+          "name": "vi",
+          "en": "Vertex indices (a vector). If omitted, all vertices are used.",
+          "pt": "Índices de vértices (um vetor). Se omitido, todos os vértices são usados."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ID",
+          "en": "Cell array with one row vector per vertex, holding indices of the elements (rows of the connectivity list) that contain that vertex.",
+          "pt": "Cell array com um vetor linha por vértice, contendo os índices dos elementos (linhas da lista de conectividade) que contêm esse vértice."
+        }
+      ],
+      "description": {
+        "en": "The result answers the question of which triangles touch a given point. It is the inverse view of the connectivity list, which instead says which vertices form each triangle. A vertex on the border of the mesh is attached to fewer elements than an interior one.",
+        "pt": "O resultado responde quais triângulos tocam um ponto dado. É a visão inversa da lista de conectividade, que diz quais vértices formam cada triângulo. Um vértice na borda da malha está ligado a menos elementos do que um interno."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Triangles around a vertex",
+            "pt": "Triângulos ao redor de um vértice"
+          },
+          "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = triangulation(T, P);\nID = vertexAttachments(TR, 1);\ndisp(ID{1})"
+        }
+      ],
+      "see": [
+        "triangulation",
+        "neighbors",
+        "vertexNormal",
+        "pointLocation"
+      ]
     },
-    {
-     "code": "trimesh(T, x, y)",
-     "en": "Draws the triangles in the plane.",
-     "pt": "Desenha os triângulos no plano."
+    "vertexNormal": {
+      "summary": {
+        "en": "Unit normal vector at the vertices of a triangulated surface.",
+        "pt": "Vetor normal unitário nos vértices de uma superfície triangulada."
+      },
+      "syntax": [
+        {
+          "code": "N = vertexNormal(TR, vi)",
+          "en": "Returns the normal at each vertex listed in `vi`.",
+          "pt": "Retorna a normal em cada vértice listado em `vi`."
+        },
+        {
+          "code": "N = vertexNormal(TR)",
+          "en": "Returns the normals at all vertices.",
+          "pt": "Retorna as normais em todos os vértices."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "TR",
+          "en": "A `triangulation` of a surface in 3-D (triangles with 3-D points).",
+          "pt": "Uma `triangulation` de uma superfície em 3-D (triângulos com pontos 3-D)."
+        },
+        {
+          "name": "vi",
+          "en": "Vertex indices. Optional.",
+          "pt": "Índices de vértices. Opcional."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "N",
+          "en": "Matrix with one unit vector per row.",
+          "pt": "Matriz com um vetor unitário por linha."
+        }
+      ],
+      "description": {
+        "en": "The normal at a vertex is an average of the normals of the triangles attached to it, which gives a smooth direction for shading or for offsetting the surface. The orientation follows the vertex order of each triangle (right-hand rule).",
+        "pt": "A normal em um vértice é uma média das normais dos triângulos ligados a ele, o que dá uma direção suave para sombreamento ou para deslocar a superfície. A orientação segue a ordem dos vértices de cada triângulo (regra da mão direita)."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal of a tilted triangle",
+            "pt": "Normal de um triângulo inclinado"
+          },
+          "code": "P = [0 0 0; 1 0 0; 0 1 1];\nTR = triangulation([1 2 3], P);\nN = vertexNormal(TR, 1)"
+        }
+      ],
+      "see": [
+        "triangulation",
+        "vertexAttachments",
+        "trisurf",
+        "cross"
+      ]
     },
-    {
-     "code": "trimesh(TR)",
-     "en": "Draws the mesh of a `triangulation` object.",
-     "pt": "Desenha a malha de um objeto `triangulation`."
+    "volume": {
+      "summary": {
+        "en": "Volume enclosed by a 3-D alpha shape.",
+        "pt": "Volume delimitado por um alpha shape 3-D."
+      },
+      "syntax": [
+        {
+          "code": "V = volume(shp)",
+          "en": "Returns the volume of the alpha shape `shp`.",
+          "pt": "Retorna o volume do alpha shape `shp`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object built from 3-D points.",
+          "pt": "Um objeto `alphaShape` construído a partir de pontos 3-D."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "V",
+          "en": "Scalar volume of the region the shape occupies.",
+          "pt": "Volume escalar da região ocupada pela forma."
+        }
+      ],
+      "description": {
+        "en": "`volume` is a method of `alphaShape`. It adds up the volume of the tetrahedra that make up the shape for the current alpha radius. For a shape built from the four corners of a unit tetrahedron, the result is 1/6.\n\nFor a 2-D alpha shape, use `area` instead.",
+        "pt": "`volume` é um método de `alphaShape`. Ele soma o volume dos tetraedros que formam a forma para o raio alpha atual. Para uma forma construída com os quatro vértices de um tetraedro unitário, o resultado é 1/6.\n\nPara um alpha shape 2-D, use `area`."
+      },
+      "notes": {
+        "en": "Calling `volume` on a 2-D `alphaShape` raises the error \"Use area for 2-D alpha shapes.\"",
+        "pt": "Chamar `volume` em um `alphaShape` 2-D gera o erro \"Use area for 2-D alpha shapes.\""
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Volume of a unit tetrahedron",
+            "pt": "Volume de um tetraedro unitário"
+          },
+          "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nshp = alphaShape(P);\nV = volume(shp)"
+        }
+      ],
+      "see": [
+        "alphaShape",
+        "area",
+        "surfaceArea",
+        "convhulln"
+      ]
     },
-    {
-     "code": "h = trimesh(___)",
-     "en": "Also returns the handle of the mesh.",
-     "pt": "Também retorna o handle da malha."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "m-by-3 matrix; each row holds three vertex indices.",
-     "pt": "Matriz m por 3; cada linha tem três índices de vértices."
+    "voronoi": {
+      "summary": {
+        "en": "Computes or plots the Voronoi diagram of 2-D points.",
+        "pt": "Calcula ou plota o diagrama de Voronoi de pontos 2-D."
+      },
+      "syntax": [
+        {
+          "code": "voronoi(x, y)",
+          "en": "Plots the Voronoi diagram of the points `(x, y)`.",
+          "pt": "Plota o diagrama de Voronoi dos pontos `(x, y)`."
+        },
+        {
+          "code": "[vx, vy] = voronoi(x, y)",
+          "en": "Returns the edges of the diagram as two matrices instead of plotting.",
+          "pt": "Retorna as arestas do diagrama como duas matrizes, sem plotar."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Vectors with the coordinates of the generating points.",
+          "pt": "Vetores com as coordenadas dos pontos geradores."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "vx, vy",
+          "en": "Each column describes one edge: the first row holds the start, the second the end of the edge. Edges that go to infinity are clipped to a finite length.",
+          "pt": "Cada coluna descreve uma aresta: a primeira linha traz o início, a segunda o fim. Arestas que vão ao infinito são cortadas em um comprimento finito."
+        }
+      ],
+      "description": {
+        "en": "The Voronoi cell of a point is the region of the plane closer to that point than to any other. `voronoi` finds the shared boundaries between these cells. They are dual to the Delaunay triangulation: the Voronoi vertices are the circumcenters of the Delaunay triangles.\n\nFor cell-by-cell information (vertices of each cell), use `voronoin` or `voronoiDiagram`.",
+        "pt": "A célula de Voronoi de um ponto é a região do plano mais próxima desse ponto do que de qualquer outro. `voronoi` encontra as fronteiras compartilhadas entre essas células. Elas são duais da triangulação de Delaunay: os vértices de Voronoi são os circuncentros dos triângulos de Delaunay.\n\nPara informação célula a célula (vértices de cada célula), use `voronoin` ou `voronoiDiagram`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Edges of a Voronoi diagram",
+            "pt": "Arestas de um diagrama de Voronoi"
+          },
+          "code": "x = [0 1 0 1 0.5];\ny = [0 0 1 1 0.5];\n[vx, vy] = voronoi(x, y);\ndisp(size(vx))"
+        }
+      ],
+      "see": [
+        "voronoin",
+        "voronoiDiagram",
+        "delaunay",
+        "triplot"
+      ]
     },
-    {
-     "name": "x, y, z",
-     "en": "Vectors with the coordinates of the vertices.",
-     "pt": "Vetores com as coordenadas dos vértices."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "h",
-     "en": "Handle to the patch object that draws the mesh.",
-     "pt": "Handle do objeto patch que desenha a malha."
-    }
-   ],
-   "description": {
-    "en": "`trimesh` draws only the edges of each triangle, with the faces left transparent, which makes it a quick way to inspect a mesh. For shaded faces, use `trisurf`. For a flat 2-D mesh, `triplot` is the usual choice.\n\nWhen `z` is given, the vertices are lifted to those heights and the axes switch to a 3-D view.",
-    "pt": "`trimesh` desenha apenas as arestas de cada triângulo, deixando as faces transparentes, o que o torna uma forma rápida de inspecionar uma malha. Para faces coloridas, use `trisurf`. Para uma malha plana 2-D, `triplot` é a escolha comum.\n\nQuando `z` é informado, os vértices são elevados a essas alturas e os eixos passam para visão 3-D."
-   },
-   "notes": {
-    "en": "In MatLivre the 3-argument call `trimesh(T, x, y)` without `z` raises \"Not enough input arguments.\"; pass `z` (even zeros) or use `triplot` for flat meshes.",
-    "pt": "No MatLivre, a chamada `trimesh(T, x, y)` sem `z` gera o erro \"Not enough input arguments.\"; informe `z` (mesmo zeros) ou use `triplot` para malhas planas."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "A mesh lifted into 3-D",
-      "pt": "Uma malha elevada para 3-D"
-     },
-     "code": "x = [0 1 0 1]';\ny = [0 0 1 1]';\nz = [0 1 1 2]';\nT = [1 2 3; 2 4 3];\ntrimesh(T, x, y, z);",
-     "silent": true
-    }
-   ],
-   "see": [
-    "trisurf",
-    "triplot",
-    "tetramesh",
-    "delaunay"
-   ]
-  },
-  "triplot": {
-   "summary": {
-    "en": "Plots a 2-D triangulation as line edges.",
-    "pt": "Plota uma triangulação 2-D como arestas de linha."
-   },
-   "syntax": [
-    {
-     "code": "triplot(T, x, y)",
-     "en": "Draws the edges of the triangles `T` with vertex coordinates `x` and `y`.",
-     "pt": "Desenha as arestas dos triângulos `T` com coordenadas `x` e `y`."
+    "voronoiDiagram": {
+      "summary": {
+        "en": "Returns vertices and cells of the Voronoi diagram of a delaunayTriangulation.",
+        "pt": "Retorna vértices e células do diagrama de Voronoi de uma delaunayTriangulation."
+      },
+      "syntax": [
+        {
+          "code": "[V, R] = voronoiDiagram(DT)",
+          "en": "Returns the Voronoi vertices `V` and the cells `R` of the triangulation `DT`.",
+          "pt": "Retorna os vértices de Voronoi `V` e as células `R` da triangulação `DT`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "DT",
+          "en": "A `delaunayTriangulation` object.",
+          "pt": "Um objeto `delaunayTriangulation`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "V",
+          "en": "Matrix of Voronoi vertices. The first row is `[Inf Inf]` and stands for the point at infinity.",
+          "pt": "Matriz de vértices de Voronoi. A primeira linha é `[Inf Inf]` e representa o ponto no infinito."
+        },
+        {
+          "name": "R",
+          "en": "Cell array, one entry per input point, listing the row indices into `V` that bound its cell. A cell containing `1` is unbounded.",
+          "pt": "Cell array, uma entrada por ponto de entrada, listando os índices de linha de `V` que delimitam a célula. Uma célula que contém `1` é ilimitada."
+        }
+      ],
+      "description": {
+        "en": "The function is the object-oriented way to get the Voronoi diagram. Cell `R{k}` belongs to the point `k` of `DT.Points`. Points on the convex hull have unbounded cells, which is why the index `1` (the point at infinity) appears in their lists.",
+        "pt": "A função é a forma orientada a objetos de obter o diagrama de Voronoi. A célula `R{k}` pertence ao ponto `k` de `DT.Points`. Pontos no fecho convexo têm células ilimitadas, e por isso o índice `1` (o ponto no infinito) aparece em suas listas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cells of a square with a center point",
+            "pt": "Células de um quadrado com ponto central"
+          },
+          "code": "P = [0 0; 1 0; 1 1; 0 1; 0.5 0.5];\nDT = delaunayTriangulation(P);\n[V, R] = voronoiDiagram(DT);\ndisp(size(V))\ndisp(numel(R))"
+        }
+      ],
+      "see": [
+        "voronoin",
+        "voronoi",
+        "delaunayTriangulation",
+        "convexHull"
+      ]
     },
-    {
-     "code": "triplot(TR)",
-     "en": "Draws a `triangulation` or `delaunayTriangulation` object.",
-     "pt": "Desenha um objeto `triangulation` ou `delaunayTriangulation`."
-    },
-    {
-     "code": "h = triplot(___)",
-     "en": "Also returns the line handle.",
-     "pt": "Também retorna o handle da linha."
+    "voronoin": {
+      "summary": {
+        "en": "Voronoi vertices and cells for points in n dimensions.",
+        "pt": "Vértices e células de Voronoi para pontos em n dimensões."
+      },
+      "syntax": [
+        {
+          "code": "[V, C] = voronoin(X)",
+          "en": "Returns the Voronoi vertices `V` and a cell array `C` of the cells for the points `X`.",
+          "pt": "Retorna os vértices de Voronoi `V` e um cell array `C` com as células dos pontos `X`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "m-by-n matrix with one point per row.",
+          "pt": "Matriz m por n com um ponto por linha."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "V",
+          "en": "Voronoi vertices, one per row. The first row is all `Inf`.",
+          "pt": "Vértices de Voronoi, um por linha. A primeira linha é toda `Inf`."
+        },
+        {
+          "name": "C",
+          "en": "Cell array. `C{k}` lists the rows of `V` that form the cell of point `X(k,:)`.",
+          "pt": "Cell array. `C{k}` lista as linhas de `V` que formam a célula do ponto `X(k,:)`."
+        }
+      ],
+      "description": {
+        "en": "Each cell holds the indices of the vertices of the Voronoi region around one input point. If the region is unbounded, its list contains `1`, which refers to the infinite vertex in the first row of `V`. Only cells without `1` are closed polygons.\n\nIn the example below, the four corner points have unbounded cells, while the central point has a bounded cell made from the four finite vertices.",
+        "pt": "Cada célula guarda os índices dos vértices da região de Voronoi ao redor de um ponto de entrada. Se a região é ilimitada, sua lista contém `1`, que se refere ao vértice infinito na primeira linha de `V`. Só as células sem `1` são polígonos fechados.\n\nNo exemplo abaixo, os quatro pontos dos cantos têm células ilimitadas, enquanto o ponto central tem uma célula limitada formada pelos quatro vértices finitos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Voronoi cells of five points",
+            "pt": "Células de Voronoi de cinco pontos"
+          },
+          "code": "X = [0 0; 1 0; 1 1; 0 1; 0.5 0.5];\n[V, C] = voronoin(X);\nV\nC{5}"
+        }
+      ],
+      "see": [
+        "voronoi",
+        "voronoiDiagram",
+        "delaunayn",
+        "convhulln"
+      ]
     }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "m-by-3 matrix of vertex indices, one triangle per row.",
-     "pt": "Matriz m por 3 de índices de vértices, um triângulo por linha."
-    },
-    {
-     "name": "x, y",
-     "en": "Column vectors with the coordinates of the vertices.",
-     "pt": "Vetores coluna com as coordenadas dos vértices."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "h",
-     "en": "Handle to a line object holding all edges.",
-     "pt": "Handle de um objeto de linha que contém todas as arestas."
-    }
-   ],
-   "description": {
-    "en": "`triplot` is the standard way to see a 2-D mesh. All triangle edges are drawn as one line object, so large meshes stay cheap to render. It is commonly paired with `delaunay` to visualize the triangulation of a point set, and combined with `hold on` and `plot` to overlay the points.",
-    "pt": "`triplot` é a forma padrão de ver uma malha 2-D. Todas as arestas dos triângulos são desenhadas como um único objeto de linha, então malhas grandes continuam leves de renderizar. É comum usá-lo com `delaunay` para visualizar a triangulação de um conjunto de pontos e com `hold on` e `plot` para sobrepor os pontos."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Delaunay triangulation of five points",
-      "pt": "Triangulação de Delaunay de cinco pontos"
-     },
-     "code": "x = [0 1 0 1 0.5];\ny = [0 0 1 1 0.5];\nT = delaunay(x, y);\ntriplot(T, x, y);",
-     "silent": true
-    }
-   ],
-   "see": [
-    "delaunay",
-    "trimesh",
-    "trisurf",
-    "voronoi"
-   ]
-  },
-  "TriRep": {
-   "summary": {
-    "en": "Legacy triangulation representation class, replaced by triangulation.",
-    "pt": "Classe legada de representação de triangulação, substituída por triangulation."
-   },
-   "syntax": [
-    {
-     "code": "TR = TriRep(T, X)",
-     "en": "Creates a triangulation representation from the connectivity `T` and the points `X`.",
-     "pt": "Cria uma representação de triangulação a partir da conectividade `T` e dos pontos `X`."
-    },
-    {
-     "code": "TR = TriRep(T, x, y)",
-     "en": "Same, with 2-D coordinates given as separate vectors.",
-     "pt": "Igual, com coordenadas 2-D em vetores separados."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "Matrix of vertex indices, three or four columns.",
-     "pt": "Matriz de índices de vértices, com três ou quatro colunas."
-    },
-    {
-     "name": "X",
-     "en": "Matrix of point coordinates, one point per row.",
-     "pt": "Matriz de coordenadas dos pontos, um ponto por linha."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "TR",
-     "en": "A `TriRep` object with properties `X` (points) and `Triangulation` (connectivity).",
-     "pt": "Um objeto `TriRep` com as propriedades `X` (pontos) e `Triangulation` (conectividade)."
-    }
-   ],
-   "description": {
-    "en": "`TriRep` is the older class for holding a triangulation and querying it. It stores the points in `X` and the connectivity in `Triangulation`. New code should use `triangulation`, whose properties are named `Points` and `ConnectivityList`, and which has more methods.",
-    "pt": "`TriRep` é a classe antiga para guardar uma triangulação e consultá-la. Ela armazena os pontos em `X` e a conectividade em `Triangulation`. Código novo deve usar `triangulation`, cujas propriedades se chamam `Points` e `ConnectivityList` e que tem mais métodos."
-   },
-   "notes": {
-    "en": "MATLAB keeps `TriRep` only for compatibility and recommends `triangulation` instead.",
-    "pt": "O MATLAB mantém `TriRep` apenas por compatibilidade e recomenda `triangulation`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Create and read a TriRep",
-      "pt": "Criar e ler um TriRep"
-     },
-     "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = TriRep(T, P);\ndisp(TR.X)"
-    }
-   ],
-   "see": [
-    "triangulation",
-    "delaunayTriangulation",
-    "triplot"
-   ]
-  },
-  "trisurf": {
-   "summary": {
-    "en": "Plots a triangular surface with shaded faces.",
-    "pt": "Plota uma superfície triangular com faces sombreadas."
-   },
-   "syntax": [
-    {
-     "code": "trisurf(T, x, y, z)",
-     "en": "Draws the triangles `T` as a surface with vertex heights `z`, colored by height.",
-     "pt": "Desenha os triângulos `T` como uma superfície com alturas `z` nos vértices, colorida pela altura."
-    },
-    {
-     "code": "trisurf(T, x, y, z, C)",
-     "en": "Colors the surface using the values in `C`.",
-     "pt": "Colore a superfície usando os valores em `C`."
-    },
-    {
-     "code": "trisurf(TR)",
-     "en": "Draws a `triangulation` object.",
-     "pt": "Desenha um objeto `triangulation`."
-    },
-    {
-     "code": "h = trisurf(___)",
-     "en": "Also returns the patch handle.",
-     "pt": "Também retorna o handle do patch."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "T",
-     "en": "m-by-3 matrix of vertex indices, one triangle per row.",
-     "pt": "Matriz m por 3 de índices de vértices, um triângulo por linha."
-    },
-    {
-     "name": "x, y, z",
-     "en": "Vectors with the vertex coordinates.",
-     "pt": "Vetores com as coordenadas dos vértices."
-    },
-    {
-     "name": "C",
-     "en": "Optional color data, one value per vertex.",
-     "pt": "Dados de cor opcionais, um valor por vértice."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "h",
-     "en": "Handle to the patch object.",
-     "pt": "Handle do objeto patch."
-    }
-   ],
-   "description": {
-    "en": "`trisurf` is the filled counterpart of `trimesh`: each triangle becomes a colored face and the edges are drawn in black. It is the way to plot a surface defined on scattered points, since a triangulation of the `(x, y)` locations (from `delaunay`) supplies the connectivity.",
-    "pt": "`trisurf` é a versão preenchida de `trimesh`: cada triângulo vira uma face colorida e as arestas são desenhadas em preto. É a forma de plotar uma superfície definida em pontos espalhados, já que uma triangulação das posições `(x, y)` (obtida com `delaunay`) fornece a conectividade."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Surface over scattered points",
-      "pt": "Superfície sobre pontos espalhados"
-     },
-     "code": "rng(1);\nx = rand(20, 1);\ny = rand(20, 1);\nz = x .* y;\nT = delaunay(x, y);\ntrisurf(T, x, y, z);",
-     "silent": true
-    }
-   ],
-   "see": [
-    "trimesh",
-    "triplot",
-    "delaunay",
-    "surf"
-   ]
-  },
-  "tsearchn": {
-   "summary": {
-    "en": "Finds the enclosing simplex of query points in an n-D triangulation.",
-    "pt": "Encontra o simplex que contém cada ponto de consulta em uma triangulação n-D."
-   },
-   "syntax": [
-    {
-     "code": "t = tsearchn(X, T, XI)",
-     "en": "Returns the index of the simplex (row of `T`) that contains each query point.",
-     "pt": "Retorna o índice do simplex (linha de `T`) que contém cada ponto de consulta."
-    },
-    {
-     "code": "[t, P] = tsearchn(X, T, XI)",
-     "en": "Also returns the barycentric coordinates of each query point in its simplex.",
-     "pt": "Também retorna as coordenadas baricêntricas de cada ponto de consulta no seu simplex."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "n-by-d matrix of triangulation vertices.",
-     "pt": "Matriz n por d com os vértices da triangulação."
-    },
-    {
-     "name": "T",
-     "en": "m-by-(d+1) connectivity matrix.",
-     "pt": "Matriz de conectividade m por (d+1)."
-    },
-    {
-     "name": "XI",
-     "en": "p-by-d matrix of query points.",
-     "pt": "Matriz p por d de pontos de consulta."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "t",
-     "en": "Column vector of simplex indices. `NaN` marks a point outside the triangulation.",
-     "pt": "Vetor coluna com os índices dos simplex. `NaN` marca um ponto fora da triangulação."
-    },
-    {
-     "name": "P",
-     "en": "p-by-(d+1) barycentric coordinates; rows are `NaN` for points outside.",
-     "pt": "Coordenadas baricêntricas p por (d+1); as linhas são `NaN` para pontos fora."
-    }
-   ],
-   "description": {
-    "en": "For every query point `tsearchn` finds the triangle (or tetrahedron, in higher dimension) that contains it. The barycentric coordinates are weights of the simplex vertices that sum to 1 and reproduce the point; they are all non-negative exactly when the point is inside. They are handy for interpolating vertex data to arbitrary points.\n\nUnlike `tsearch`, it works in any dimension.",
-    "pt": "Para cada ponto de consulta, `tsearchn` encontra o triângulo (ou tetraedro, em dimensões maiores) que o contém. As coordenadas baricêntricas são pesos dos vértices do simplex que somam 1 e reproduzem o ponto; todas são não negativas exatamente quando o ponto está dentro. São úteis para interpolar dados dos vértices em pontos arbitrários.\n\nDiferente de `tsearch`, funciona em qualquer dimensão."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Locate points in two triangles",
-      "pt": "Localizar pontos em dois triângulos"
-     },
-     "code": "x = [0 1 0 1]';\ny = [0 0 1 1]';\nT = [1 2 3; 2 4 3];\n[t, bc] = tsearchn([x y], T, [0.2 0.2; 0.8 0.8; 2 2])"
-    }
-   ],
-   "see": [
-    "pointLocation",
-    "delaunay",
-    "triangulation",
-    "dsearchn"
-   ]
-  },
-  "turningdist": {
-   "summary": {
-    "en": "Turning-function distance between two polyshape boundaries.",
-    "pt": "Distância da função de giro entre as fronteiras de dois polyshape."
-   },
-   "syntax": [
-    {
-     "code": "d = turningdist(PG1, PG2)",
-     "en": "Returns a dissimilarity measure between the shapes of `PG1` and `PG2`.",
-     "pt": "Retorna uma medida de dissimilaridade entre as formas de `PG1` e `PG2`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "PG1, PG2",
-     "en": "`polyshape` objects, each with a single boundary.",
-     "pt": "Objetos `polyshape`, cada um com uma única fronteira."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "d",
-     "en": "Non-negative scalar. It is `0` for identical shapes and grows as the shapes differ.",
-     "pt": "Escalar não negativo. É `0` para formas idênticas e cresce conforme as formas diferem."
-    }
-   ],
-   "description": {
-    "en": "The distance compares the turning functions of the two polygons: the direction of the edge as a function of the arc length along the boundary, with lengths normalized by the perimeter. The measure is intended to ignore translation and uniform scaling, so it focuses on shape rather than position or size.\n\nBoth polyshapes must have exactly one boundary; otherwise an error is raised.",
-    "pt": "A distância compara as funções de giro dos dois polígonos: a direção da aresta em função do comprimento de arco ao longo da fronteira, com os comprimentos normalizados pelo perímetro. A medida pretende ignorar translação e escala uniforme, de modo que foca a forma, não a posição ou o tamanho.\n\nOs dois polyshape precisam ter exatamente uma fronteira; caso contrário, ocorre um erro."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Square versus rectangle",
-      "pt": "Quadrado contra retângulo"
-     },
-     "code": "P = polyshape([0 1 1 0], [0 0 1 1]);\nQ = polyshape([0 2 2 0], [0 0 1 1]);\nd1 = turningdist(P, P)\nd2 = turningdist(P, Q)"
-    }
-   ],
-   "see": [
-    "polyshape",
-    "area",
-    "perimeter",
-    "translate"
-   ]
-  },
-  "vertexAttachments": {
-   "summary": {
-    "en": "Lists the triangles or tetrahedra attached to given vertices.",
-    "pt": "Lista os triângulos ou tetraedros ligados aos vértices dados."
-   },
-   "syntax": [
-    {
-     "code": "ID = vertexAttachments(TR, vi)",
-     "en": "Returns, for each vertex index in `vi`, the elements that use that vertex.",
-     "pt": "Retorna, para cada índice de vértice em `vi`, os elementos que usam esse vértice."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "TR",
-     "en": "A `triangulation` object.",
-     "pt": "Um objeto `triangulation`."
-    },
-    {
-     "name": "vi",
-     "en": "Vertex indices (a vector). If omitted, all vertices are used.",
-     "pt": "Índices de vértices (um vetor). Se omitido, todos os vértices são usados."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "ID",
-     "en": "Cell array with one row vector per vertex, holding indices of the elements (rows of the connectivity list) that contain that vertex.",
-     "pt": "Cell array com um vetor linha por vértice, contendo os índices dos elementos (linhas da lista de conectividade) que contêm esse vértice."
-    }
-   ],
-   "description": {
-    "en": "The result answers the question of which triangles touch a given point. It is the inverse view of the connectivity list, which instead says which vertices form each triangle. A vertex on the border of the mesh is attached to fewer elements than an interior one.",
-    "pt": "O resultado responde quais triângulos tocam um ponto dado. É a visão inversa da lista de conectividade, que diz quais vértices formam cada triângulo. Um vértice na borda da malha está ligado a menos elementos do que um interno."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Triangles around a vertex",
-      "pt": "Triângulos ao redor de um vértice"
-     },
-     "code": "P = [0 0; 1 0; 1 1; 0 1];\nT = [1 2 3; 1 3 4];\nTR = triangulation(T, P);\nID = vertexAttachments(TR, 1);\ndisp(ID{1})"
-    }
-   ],
-   "see": [
-    "triangulation",
-    "neighbors",
-    "vertexNormal",
-    "pointLocation"
-   ]
-  },
-  "vertexNormal": {
-   "summary": {
-    "en": "Unit normal vector at the vertices of a triangulated surface.",
-    "pt": "Vetor normal unitário nos vértices de uma superfície triangulada."
-   },
-   "syntax": [
-    {
-     "code": "N = vertexNormal(TR, vi)",
-     "en": "Returns the normal at each vertex listed in `vi`.",
-     "pt": "Retorna a normal em cada vértice listado em `vi`."
-    },
-    {
-     "code": "N = vertexNormal(TR)",
-     "en": "Returns the normals at all vertices.",
-     "pt": "Retorna as normais em todos os vértices."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "TR",
-     "en": "A `triangulation` of a surface in 3-D (triangles with 3-D points).",
-     "pt": "Uma `triangulation` de uma superfície em 3-D (triângulos com pontos 3-D)."
-    },
-    {
-     "name": "vi",
-     "en": "Vertex indices. Optional.",
-     "pt": "Índices de vértices. Opcional."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "N",
-     "en": "Matrix with one unit vector per row.",
-     "pt": "Matriz com um vetor unitário por linha."
-    }
-   ],
-   "description": {
-    "en": "The normal at a vertex is an average of the normals of the triangles attached to it, which gives a smooth direction for shading or for offsetting the surface. The orientation follows the vertex order of each triangle (right-hand rule).",
-    "pt": "A normal em um vértice é uma média das normais dos triângulos ligados a ele, o que dá uma direção suave para sombreamento ou para deslocar a superfície. A orientação segue a ordem dos vértices de cada triângulo (regra da mão direita)."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Normal of a tilted triangle",
-      "pt": "Normal de um triângulo inclinado"
-     },
-     "code": "P = [0 0 0; 1 0 0; 0 1 1];\nTR = triangulation([1 2 3], P);\nN = vertexNormal(TR, 1)"
-    }
-   ],
-   "see": [
-    "triangulation",
-    "vertexAttachments",
-    "trisurf",
-    "cross"
-   ]
-  },
-  "volume": {
-   "summary": {
-    "en": "Volume enclosed by a 3-D alpha shape.",
-    "pt": "Volume delimitado por um alpha shape 3-D."
-   },
-   "syntax": [
-    {
-     "code": "V = volume(shp)",
-     "en": "Returns the volume of the alpha shape `shp`.",
-     "pt": "Retorna o volume do alpha shape `shp`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "shp",
-     "en": "An `alphaShape` object built from 3-D points.",
-     "pt": "Um objeto `alphaShape` construído a partir de pontos 3-D."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "V",
-     "en": "Scalar volume of the region the shape occupies.",
-     "pt": "Volume escalar da região ocupada pela forma."
-    }
-   ],
-   "description": {
-    "en": "`volume` is a method of `alphaShape`. It adds up the volume of the tetrahedra that make up the shape for the current alpha radius. For a shape built from the four corners of a unit tetrahedron, the result is 1/6.\n\nFor a 2-D alpha shape, use `area` instead.",
-    "pt": "`volume` é um método de `alphaShape`. Ele soma o volume dos tetraedros que formam a forma para o raio alpha atual. Para uma forma construída com os quatro vértices de um tetraedro unitário, o resultado é 1/6.\n\nPara um alpha shape 2-D, use `area`."
-   },
-   "notes": {
-    "en": "Calling `volume` on a 2-D `alphaShape` raises the error \"Use area for 2-D alpha shapes.\"",
-    "pt": "Chamar `volume` em um `alphaShape` 2-D gera o erro \"Use area for 2-D alpha shapes.\""
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Volume of a unit tetrahedron",
-      "pt": "Volume de um tetraedro unitário"
-     },
-     "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nshp = alphaShape(P);\nV = volume(shp)"
-    }
-   ],
-   "see": [
-    "alphaShape",
-    "area",
-    "surfaceArea",
-    "convhulln"
-   ]
-  },
-  "voronoi": {
-   "summary": {
-    "en": "Computes or plots the Voronoi diagram of 2-D points.",
-    "pt": "Calcula ou plota o diagrama de Voronoi de pontos 2-D."
-   },
-   "syntax": [
-    {
-     "code": "voronoi(x, y)",
-     "en": "Plots the Voronoi diagram of the points `(x, y)`.",
-     "pt": "Plota o diagrama de Voronoi dos pontos `(x, y)`."
-    },
-    {
-     "code": "[vx, vy] = voronoi(x, y)",
-     "en": "Returns the edges of the diagram as two matrices instead of plotting.",
-     "pt": "Retorna as arestas do diagrama como duas matrizes, sem plotar."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "x, y",
-     "en": "Vectors with the coordinates of the generating points.",
-     "pt": "Vetores com as coordenadas dos pontos geradores."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "vx, vy",
-     "en": "Each column describes one edge: the first row holds the start, the second the end of the edge. Edges that go to infinity are clipped to a finite length.",
-     "pt": "Cada coluna descreve uma aresta: a primeira linha traz o início, a segunda o fim. Arestas que vão ao infinito são cortadas em um comprimento finito."
-    }
-   ],
-   "description": {
-    "en": "The Voronoi cell of a point is the region of the plane closer to that point than to any other. `voronoi` finds the shared boundaries between these cells. They are dual to the Delaunay triangulation: the Voronoi vertices are the circumcenters of the Delaunay triangles.\n\nFor cell-by-cell information (vertices of each cell), use `voronoin` or `voronoiDiagram`.",
-    "pt": "A célula de Voronoi de um ponto é a região do plano mais próxima desse ponto do que de qualquer outro. `voronoi` encontra as fronteiras compartilhadas entre essas células. Elas são duais da triangulação de Delaunay: os vértices de Voronoi são os circuncentros dos triângulos de Delaunay.\n\nPara informação célula a célula (vértices de cada célula), use `voronoin` ou `voronoiDiagram`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Edges of a Voronoi diagram",
-      "pt": "Arestas de um diagrama de Voronoi"
-     },
-     "code": "x = [0 1 0 1 0.5];\ny = [0 0 1 1 0.5];\n[vx, vy] = voronoi(x, y);\ndisp(size(vx))"
-    }
-   ],
-   "see": [
-    "voronoin",
-    "voronoiDiagram",
-    "delaunay",
-    "triplot"
-   ]
-  },
-  "voronoiDiagram": {
-   "summary": {
-    "en": "Returns vertices and cells of the Voronoi diagram of a delaunayTriangulation.",
-    "pt": "Retorna vértices e células do diagrama de Voronoi de uma delaunayTriangulation."
-   },
-   "syntax": [
-    {
-     "code": "[V, R] = voronoiDiagram(DT)",
-     "en": "Returns the Voronoi vertices `V` and the cells `R` of the triangulation `DT`.",
-     "pt": "Retorna os vértices de Voronoi `V` e as células `R` da triangulação `DT`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "DT",
-     "en": "A `delaunayTriangulation` object.",
-     "pt": "Um objeto `delaunayTriangulation`."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "V",
-     "en": "Matrix of Voronoi vertices. The first row is `[Inf Inf]` and stands for the point at infinity.",
-     "pt": "Matriz de vértices de Voronoi. A primeira linha é `[Inf Inf]` e representa o ponto no infinito."
-    },
-    {
-     "name": "R",
-     "en": "Cell array, one entry per input point, listing the row indices into `V` that bound its cell. A cell containing `1` is unbounded.",
-     "pt": "Cell array, uma entrada por ponto de entrada, listando os índices de linha de `V` que delimitam a célula. Uma célula que contém `1` é ilimitada."
-    }
-   ],
-   "description": {
-    "en": "The function is the object-oriented way to get the Voronoi diagram. Cell `R{k}` belongs to the point `k` of `DT.Points`. Points on the convex hull have unbounded cells, which is why the index `1` (the point at infinity) appears in their lists.",
-    "pt": "A função é a forma orientada a objetos de obter o diagrama de Voronoi. A célula `R{k}` pertence ao ponto `k` de `DT.Points`. Pontos no fecho convexo têm células ilimitadas, e por isso o índice `1` (o ponto no infinito) aparece em suas listas."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Cells of a square with a center point",
-      "pt": "Células de um quadrado com ponto central"
-     },
-     "code": "P = [0 0; 1 0; 1 1; 0 1; 0.5 0.5];\nDT = delaunayTriangulation(P);\n[V, R] = voronoiDiagram(DT);\ndisp(size(V))\ndisp(numel(R))"
-    }
-   ],
-   "see": [
-    "voronoin",
-    "voronoi",
-    "delaunayTriangulation",
-    "convexHull"
-   ]
-  },
-  "voronoin": {
-   "summary": {
-    "en": "Voronoi vertices and cells for points in n dimensions.",
-    "pt": "Vértices e células de Voronoi para pontos em n dimensões."
-   },
-   "syntax": [
-    {
-     "code": "[V, C] = voronoin(X)",
-     "en": "Returns the Voronoi vertices `V` and a cell array `C` of the cells for the points `X`.",
-     "pt": "Retorna os vértices de Voronoi `V` e um cell array `C` com as células dos pontos `X`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "m-by-n matrix with one point per row.",
-     "pt": "Matriz m por n com um ponto por linha."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "V",
-     "en": "Voronoi vertices, one per row. The first row is all `Inf`.",
-     "pt": "Vértices de Voronoi, um por linha. A primeira linha é toda `Inf`."
-    },
-    {
-     "name": "C",
-     "en": "Cell array. `C{k}` lists the rows of `V` that form the cell of point `X(k,:)`.",
-     "pt": "Cell array. `C{k}` lista as linhas de `V` que formam a célula do ponto `X(k,:)`."
-    }
-   ],
-   "description": {
-    "en": "Each cell holds the indices of the vertices of the Voronoi region around one input point. If the region is unbounded, its list contains `1`, which refers to the infinite vertex in the first row of `V`. Only cells without `1` are closed polygons.\n\nIn the example below, the four corner points have unbounded cells, while the central point has a bounded cell made from the four finite vertices.",
-    "pt": "Cada célula guarda os índices dos vértices da região de Voronoi ao redor de um ponto de entrada. Se a região é ilimitada, sua lista contém `1`, que se refere ao vértice infinito na primeira linha de `V`. Só as células sem `1` são polígonos fechados.\n\nNo exemplo abaixo, os quatro pontos dos cantos têm células ilimitadas, enquanto o ponto central tem uma célula limitada formada pelos quatro vértices finitos."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Voronoi cells of five points",
-      "pt": "Células de Voronoi de cinco pontos"
-     },
-     "code": "X = [0 0; 1 0; 1 1; 0 1; 0.5 0.5];\n[V, C] = voronoin(X);\nV\nC{5}"
-    }
-   ],
-   "see": [
-    "voronoi",
-    "voronoiDiagram",
-    "delaunayn",
-    "convhulln"
-   ]
   }
- }
 }

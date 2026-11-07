@@ -37,12 +37,12 @@
     }
    ],
    "description": {
-    "en": "The result equals `mod(a^b, m)`, but the power is reduced step by step by repeated squaring, so large exponents do not overflow. This is the basic operation behind modular arithmetic in number theory and in schemes such as RSA.\n\nThe arguments must be integers, the exponent nonnegative and the modulus positive; otherwise an error is raised. Array bases give an array of the same size.",
-    "pt": "O resultado é igual a `mod(a^b, m)`, mas a potência é reduzida passo a passo por quadrados sucessivos, de modo que expoentes grandes não estouram. É a operação básica da aritmética modular na teoria dos números e em esquemas como o RSA.\n\nOs argumentos devem ser inteiros, o expoente não negativo e o módulo positivo; caso contrário ocorre um erro. Bases em array produzem um array do mesmo tamanho."
+    "en": "The result equals `mod(a^b, m)`, but the power is reduced step by step by repeated squaring, so large exponents do not overflow. This is the basic operation behind modular arithmetic in number theory and in schemes such as RSA.\n\nThe arguments must be integers and the modulus positive; otherwise an error is raised. A negative exponent uses the modular inverse of the base, and the result is `NaN` when the base has no inverse. Array bases give an array of the same size.",
+    "pt": "O resultado é igual a `mod(a^b, m)`, mas a potência é reduzida passo a passo por quadrados sucessivos, de modo que expoentes grandes não estouram. É a operação básica da aritmética modular na teoria dos números e em esquemas como o RSA.\n\nOs argumentos devem ser inteiros e o módulo positivo; caso contrário ocorre um erro. Um expoente negativo usa o inverso modular da base, e o resultado é `NaN` quando a base não tem inverso. Bases em array produzem um array do mesmo tamanho."
    },
    "notes": {
-    "en": "In MatLivre `powermod` accepts numeric (double or integer type) arguments only; symbolic integers and negative exponents (modular inverses) raise an error.",
-    "pt": "No MatLivre `powermod` aceita apenas argumentos numéricos (double ou tipos inteiros); inteiros simbólicos e expoentes negativos (inversos modulares) geram erro."
+    "en": "In MatLivre `powermod` accepts numeric (double or integer type) arguments only; symbolic integers raise an error.",
+    "pt": "No MatLivre `powermod` aceita apenas argumentos numéricos (double ou tipos inteiros); inteiros simbólicos geram erro."
    },
    "examples": [
     {
@@ -572,8 +572,8 @@
     "pt": "`has` pesquisa a árvore inteira da expressão, então `has(x^2 + y, y)` é verdadeiro mesmo que `y` seja apenas uma parcela de uma soma. Compara estrutura, não valor, então `has(2*x, x)` é verdadeiro e `has(x^2, 4)` é falso.\n\nUm uso típico é decidir se uma expressão ainda depende de uma variável antes de derivar ou resolver em relação a ela."
    },
    "notes": {
-    "en": "In MatLivre `expr` and `sub` must both be scalar symbolic expressions; passing a symbolic array raises an error.",
-    "pt": "No MatLivre `expr` e `sub` devem ser expressões simbólicas escalares; passar um array simbólico gera erro."
+    "en": "In MatLivre `sub` must be a scalar symbolic expression; passing a symbolic array as `sub` raises an error. `expr` may be an array.",
+    "pt": "No MatLivre `sub` deve ser uma expressão simbólica escalar; passar um array simbólico como `sub` gera erro. `expr` pode ser um array."
    },
    "examples": [
     {
@@ -955,8 +955,8 @@
     "pt": "`sym` é a porta de entrada do Symbolic Math Toolbox. Um argumento string cria uma variável com esse nome; um argumento numérico vira um valor exato que a aritmética manterá exato. A conversão de ponto flutuante usa por padrão o racional simples mais próximo, então `sym(0.1)` é `1/10` e `sym(pi)` continua sendo o símbolo `pi`.\n\nPara criar várias variáveis de uma vez, `syms x y z` é mais curto. Misturar um sym com um double em uma expressão converte o double com `sym` antes, então `sym(1)/3` é o `1/3` exato, enquanto `1/3` sozinho é um double arredondado."
    },
    "notes": {
-    "en": "In MatLivre the flags `'f'` and `'e'` give the same rational result as `'r'`, so `sym(0.1, 'f')` is `1/10` and not the exact binary fraction. The pattern form `sym('a%d', [1 3])` is not expanded. Positivity and similar assumptions given as `sym('y', 'positive')` are not tracked, and `assumptions` reports only `real`.",
-    "pt": "No MatLivre os flags `'f'` e `'e'` dão o mesmo resultado racional que `'r'`, então `sym(0.1, 'f')` é `1/10` e não a fração binária exata. A forma com padrão `sym('a%d', [1 3])` não é expandida. Suposições como positividade, dadas em `sym('y', 'positive')`, não são rastreadas, e `assumptions` informa apenas `real`."
+    "en": "In MatLivre the flags `'f'` and `'e'` give the same rational result as `'r'`, so `sym(0.1, 'f')` is `1/10` and not the exact binary fraction. The pattern form `sym('a%d', [1 3])` is not expanded. Assumptions given as `sym('y', 'positive')` are not tracked, and `assumptions` returns nothing for them; use `syms y real` for the real assumption.",
+    "pt": "No MatLivre os flags `'f'` e `'e'` dão o mesmo resultado racional que `'r'`, então `sym(0.1, 'f')` é `1/10` e não a fração binária exata. A forma com padrão `sym('a%d', [1 3])` não é expandida. Suposições dadas em `sym('y', 'positive')` não são rastreadas, e `assumptions` não devolve nada para elas; use `syms y real` para a suposição de real."
    },
    "examples": [
     {
@@ -1014,10 +1014,6 @@
    "description": {
     "en": "A symfun is an expression bundled with its list of input variables. Calling it with values substitutes them, so `f(2, 3)` evaluates the formula at that point, and calling it with symbolic expressions gives the composed expression. Operations such as `diff`, `int` and arithmetic between symfuns return symfuns again.\n\n`argnames` returns the variable list and `formula` the expression. The declaration form `syms f(x)` followed by `f(x) = expr` is the most common way to build one.",
     "pt": "Uma symfun é uma expressão empacotada com sua lista de variáveis de entrada. Chamá-la com valores os substitui, então `f(2, 3)` avalia a fórmula nesse ponto, e chamá-la com expressões simbólicas dá a expressão composta. Operações como `diff`, `int` e a aritmética entre symfuns devolvem symfuns.\n\n`argnames` retorna a lista de variáveis e `formula` a expressão. A forma de declaração `syms f(x)` seguida de `f(x) = expr` é a maneira mais comum de construir uma."
-   },
-   "notes": {
-    "en": "In MatLivre the constructor call `symfun(expr, vars)` is not supported and raises an error; create symbolic functions with `syms f(x)` and `f(x) = expr`, or with the assignment `f(x) = expr` on a sym variable.",
-    "pt": "No MatLivre a chamada do construtor `symfun(expr, vars)` não é suportada e gera erro; crie funções simbólicas com `syms f(x)` e `f(x) = expr`, ou com a atribuição `f(x) = expr` sobre uma variável sym."
    },
    "examples": [
     {
@@ -1129,12 +1125,12 @@
     }
    ],
    "description": {
-    "en": "Preferences affect how results are displayed and how a few special values are defined. `'HeavisideAtOrigin'` sets the value of `heaviside(0)`, `'FourierParameters'` sets the convention of `fourier`, and `'PolynomialDisplayStyle'` controls the order of terms in polynomials.\n\nPreferences last for the session. Call `sympref('default')` to reset them, which is good practice at the start and end of a script that changes them.",
-    "pt": "As preferências afetam como os resultados são exibidos e como alguns valores especiais são definidos. `'HeavisideAtOrigin'` define o valor de `heaviside(0)`, `'FourierParameters'` define a convenção de `fourier` e `'PolynomialDisplayStyle'` controla a ordem dos termos nos polinômios.\n\nAs preferências valem durante a sessão. Chame `sympref('default')` para restaurá-las, o que é boa prática no início e no fim de um script que as altera."
+    "en": "Preferences affect how results are displayed and how a few special values are defined. `'HeavisideAtOrigin'` sets the value of `heaviside(0)`, `'FourierParameters'` sets the convention of `fourier`, and `'FloatingPointOutput'` shows results as floating-point numbers instead of exact values.\n\nPreferences last for the session. Call `sympref('default')` to reset them, which is good practice at the start and end of a script that changes them.",
+    "pt": "As preferências afetam como os resultados são exibidos e como alguns valores especiais são definidos. `'HeavisideAtOrigin'` define o valor de `heaviside(0)`, `'FourierParameters'` define a convenção de `fourier` e `'FloatingPointOutput'` mostra os resultados como números de ponto flutuante em vez de valores exatos.\n\nAs preferências valem durante a sessão. Chame `sympref('default')` para restaurá-las, o que é boa prática no início e no fim de um script que as altera."
    },
    "notes": {
-    "en": "MatLivre stores every preference, but of them only `'HeavisideAtOrigin'` and `'FourierParameters'` change results. The display preferences (`'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'MatrixWithSquareBrackets'`) are accepted and have no effect on the output.",
-    "pt": "O MatLivre guarda todas as preferências, mas apenas `'HeavisideAtOrigin'` e `'FourierParameters'` alteram resultados. As preferências de exibição (`'FloatingPointOutput'`, `'PolynomialDisplayStyle'`, `'MatrixWithSquareBrackets'`) são aceitas e não afetam a saída."
+    "en": "MatLivre stores every preference, but of them only `'HeavisideAtOrigin'`, `'FourierParameters'` and `'FloatingPointOutput'` change results. The display preferences `'PolynomialDisplayStyle'` and `'MatrixWithSquareBrackets'` are accepted and have no effect on the output.",
+    "pt": "O MatLivre guarda todas as preferências, mas apenas `'HeavisideAtOrigin'`, `'FourierParameters'` e `'FloatingPointOutput'` alteram resultados. As preferências de exibição `'PolynomialDisplayStyle'` e `'MatrixWithSquareBrackets'` são aceitas e não afetam a saída."
    },
    "examples": [
     {

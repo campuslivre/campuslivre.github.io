@@ -1,1189 +1,1185 @@
 {
- "functions": {
-  "topkrows": {
-   "summary": {
-    "en": "Returns the k rows of a matrix or table with the largest values.",
-    "pt": "Retorna as k linhas de uma matriz ou tabela com os maiores valores."
-   },
-   "syntax": [
-    {
-     "code": "B = topkrows(A, k)",
-     "en": "Returns the `k` rows with the largest values in the first column, in descending order.",
-     "pt": "Retorna as `k` linhas com os maiores valores na primeira coluna, em ordem decrescente."
+  "functions": {
+    "topkrows": {
+      "summary": {
+        "en": "Returns the k rows of a matrix or table with the largest values.",
+        "pt": "Retorna as k linhas de uma matriz ou tabela com os maiores valores."
+      },
+      "syntax": [
+        {
+          "code": "B = topkrows(A, k)",
+          "en": "Returns the `k` rows with the largest values in the first column, in descending order.",
+          "pt": "Retorna as `k` linhas com os maiores valores na primeira coluna, em ordem decrescente."
+        },
+        {
+          "code": "B = topkrows(A, k, col)",
+          "en": "Ranks by column `col` instead of the first.",
+          "pt": "Ordena pela coluna `col` em vez da primeira."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric matrix, or table.",
+          "pt": "Matriz numérica ou tabela."
+        },
+        {
+          "name": "k",
+          "en": "Number of rows to return.",
+          "pt": "Número de linhas a retornar."
+        },
+        {
+          "name": "col",
+          "en": "Column (or variable) used to rank the rows.",
+          "pt": "Coluna (ou variável) usada para ordenar as linhas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "`k` rows of `A`, largest first.",
+          "pt": "`k` linhas de `A`, as maiores primeiro."
+        }
+      ],
+      "description": {
+        "en": "`topkrows(A, k)` is the same as the first `k` rows of `sortrows(A, 1, 'descend')`, but written for the common case of picking a few best items from a large set. Whole rows move together, so the values in other columns stay attached to their ranking value.\n\nIf `k` is larger than the number of rows, all rows are returned in sorted order.",
+        "pt": "`topkrows(A, k)` equivale às primeiras `k` linhas de `sortrows(A, 1, 'descend')`, mas foi pensada para o caso comum de escolher alguns melhores itens em um conjunto grande. As linhas inteiras se movem juntas, então os valores das outras colunas continuam ligados ao valor usado na classificação.\n\nSe `k` for maior que o número de linhas, todas as linhas são devolvidas em ordem."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Top rows by first and second column",
+            "pt": "Melhores linhas pela primeira e pela segunda coluna"
+          },
+          "code": "A = [3 1; 9 2; 5 7; 1 4];\ntopkrows(A, 2)\ntopkrows(A, 2, 2)"
+        }
+      ],
+      "see": [
+        "sortrows",
+        "maxk",
+        "sort",
+        "max"
+      ]
     },
-    {
-     "code": "B = topkrows(A, k, col)",
-     "en": "Ranks by column `col` instead of the first.",
-     "pt": "Ordena pela coluna `col` em vez da primeira."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric matrix, or table.",
-     "pt": "Matriz numérica ou tabela."
+    "tscollection": {
+      "summary": {
+        "en": "Groups several time series that share a time vector (legacy object).",
+        "pt": "Agrupa várias séries temporais que compartilham um vetor de tempos (objeto legado)."
+      },
+      "syntax": [
+        {
+          "code": "tsc = tscollection(ts_cell)",
+          "en": "Creates a collection from a cell array of `timeseries` objects.",
+          "pt": "Cria uma coleção a partir de um cell array de objetos `timeseries`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ts_cell",
+          "en": "Cell array of timeseries objects with the same times. Each series needs its own name.",
+          "pt": "Cell array de objetos timeseries com os mesmos tempos. Cada série precisa de um nome próprio."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tsc",
+          "en": "Collection with the common times in `Time` and one member per series, reached by its name.",
+          "pt": "Coleção com os tempos comuns em `Time` e um membro por série, acessado pelo nome."
+        }
+      ],
+      "description": {
+        "en": "A `tscollection` keeps several signals aligned. The members are reached as properties named after the series, so a series named `A` is `tsc.A`, and its samples are `tsc.A.Data`. `tsc.Time` holds the shared time vector.\n\nIt is retained for compatibility; a `timetable` with several variables is the current way to store aligned signals, and `timeseries2timetable` converts a series.",
+        "pt": "Uma `tscollection` mantém vários sinais alinhados. Os membros são acessados como propriedades com o nome das séries, então uma série chamada `A` é `tsc.A`, e suas amostras são `tsc.A.Data`. `tsc.Time` guarda o vetor de tempos compartilhado.\n\nÉ mantida por compatibilidade; uma `timetable` com várias variáveis é a forma atual de guardar sinais alinhados, e `timeseries2timetable` converte uma série."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two aligned signals",
+            "pt": "Dois sinais alinhados"
+          },
+          "code": "ts1 = timeseries([1;2;3], [0;1;2], 'Name', 'A');\nts2 = timeseries([4;5;6], [0;1;2], 'Name', 'B');\ntsc = tscollection({ts1, ts2});\ntsc.Time'\ntsc.A.Data'\ntsc.B.Data'"
+        }
+      ],
+      "see": [
+        "timeseries",
+        "timetable",
+        "timeseries2timetable",
+        "synchronize"
+      ]
     },
-    {
-     "name": "k",
-     "en": "Number of rows to return.",
-     "pt": "Número de linhas a retornar."
+    "tsdata.event": {
+      "summary": {
+        "en": "Event marker attached to a time series at a given time.",
+        "pt": "Marcador de evento ligado a uma série temporal em um dado instante."
+      },
+      "syntax": [
+        {
+          "code": "e = tsdata.event(name, time)",
+          "en": "Creates an event called `name` at `time`.",
+          "pt": "Cria um evento chamado `name` no instante `time`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "name",
+          "en": "Name of the event, as text.",
+          "pt": "Nome do evento, como texto."
+        },
+        {
+          "name": "time",
+          "en": "Time of the event, in the units of the series.",
+          "pt": "Instante do evento, nas unidades da série."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "e",
+          "en": "Event object with properties `Name`, `Time`, `Units`, `StartDate` and `EventData`.",
+          "pt": "Objeto de evento com as propriedades `Name`, `Time`, `Units`, `StartDate` e `EventData`."
+        }
+      ],
+      "description": {
+        "en": "Events mark points of interest in a series, such as the moment a threshold is crossed. After creating one, attach it to a `timeseries` with `addevent`; the time of every event is then available from the series.\n\nThe event object is a plain container: it holds the name and time you gave it, and the other properties can be set by assignment.",
+        "pt": "Eventos marcam pontos de interesse em uma série, como o momento em que um limite é ultrapassado. Depois de criado, anexe-o a uma `timeseries` com `addevent`; o instante de cada evento fica disponível a partir da série.\n\nO objeto de evento é um contêiner simples: guarda o nome e o instante informados, e as demais propriedades podem ser definidas por atribuição."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Create an event",
+            "pt": "Criar um evento"
+          },
+          "code": "e = tsdata.event('peak', 2);\ne.Name\ne.Time\ne.Units"
+        }
+      ],
+      "see": [
+        "timeseries",
+        "addevent",
+        "tscollection",
+        "gettsafteratevent"
+      ]
     },
-    {
-     "name": "col",
-     "en": "Column (or variable) used to rank the rows.",
-     "pt": "Coluna (ou variável) usada para ordenar as linhas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "`k` rows of `A`, largest first.",
-     "pt": "`k` linhas de `A`, as maiores primeiro."
-    }
-   ],
-   "description": {
-    "en": "`topkrows(A, k)` is the same as the first `k` rows of `sortrows(A, 1, 'descend')`, but written for the common case of picking a few best items from a large set. Whole rows move together, so the values in other columns stay attached to their ranking value.\n\nIf `k` is larger than the number of rows, all rows are returned in sorted order.",
-    "pt": "`topkrows(A, k)` equivale às primeiras `k` linhas de `sortrows(A, 1, 'descend')`, mas foi pensada para o caso comum de escolher alguns melhores itens em um conjunto grande. As linhas inteiras se movem juntas, então os valores das outras colunas continuam ligados ao valor usado na classificação.\n\nSe `k` for maior que o número de linhas, todas as linhas são devolvidas em ordem."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Top rows by first and second column",
-      "pt": "Melhores linhas pela primeira e pela segunda coluna"
-     },
-     "code": "A = [3 1; 9 2; 5 7; 1 4];\ntopkrows(A, 2)\ntopkrows(A, 2, 2)"
-    }
-   ],
-   "see": [
-    "sortrows",
-    "maxk",
-    "sort",
-    "max"
-   ]
-  },
-  "tscollection": {
-   "summary": {
-    "en": "Groups several time series that share a time vector (legacy object).",
-    "pt": "Agrupa várias séries temporais que compartilham um vetor de tempos (objeto legado)."
-   },
-   "syntax": [
-    {
-     "code": "tsc = tscollection(ts_cell)",
-     "en": "Creates a collection from a cell array of `timeseries` objects.",
-     "pt": "Cria uma coleção a partir de um cell array de objetos `timeseries`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "ts_cell",
-     "en": "Cell array of timeseries objects with the same times. Each series needs its own name.",
-     "pt": "Cell array de objetos timeseries com os mesmos tempos. Cada série precisa de um nome próprio."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "tsc",
-     "en": "Collection with the common times in `Time` and one member per series, reached by its name.",
-     "pt": "Coleção com os tempos comuns em `Time` e um membro por série, acessado pelo nome."
-    }
-   ],
-   "description": {
-    "en": "A `tscollection` keeps several signals aligned. The members are reached as properties named after the series, so a series named `A` is `tsc.A`, and its samples are `tsc.A.Data`. `tsc.Time` holds the shared time vector.\n\nIt is retained for compatibility; a `timetable` with several variables is the current way to store aligned signals, and `timeseries2timetable` converts a series.",
-    "pt": "Uma `tscollection` mantém vários sinais alinhados. Os membros são acessados como propriedades com o nome das séries, então uma série chamada `A` é `tsc.A`, e suas amostras são `tsc.A.Data`. `tsc.Time` guarda o vetor de tempos compartilhado.\n\nÉ mantida por compatibilidade; uma `timetable` com várias variáveis é a forma atual de guardar sinais alinhados, e `timeseries2timetable` converte uma série."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Two aligned signals",
-      "pt": "Dois sinais alinhados"
-     },
-     "code": "ts1 = timeseries([1;2;3], [0;1;2], 'Name', 'A');\nts2 = timeseries([4;5;6], [0;1;2], 'Name', 'B');\ntsc = tscollection({ts1, ts2});\ntsc.Time'\ntsc.A.Data'\ntsc.B.Data'"
-    }
-   ],
-   "see": [
-    "timeseries",
-    "timetable",
-    "timeseries2timetable",
-    "synchronize"
-   ]
-  },
-  "tsdata.event": {
-   "summary": {
-    "en": "Event marker attached to a time series at a given time.",
-    "pt": "Marcador de evento ligado a uma série temporal em um dado instante."
-   },
-   "syntax": [
-    {
-     "code": "e = tsdata.event(name, time)",
-     "en": "Creates an event called `name` at `time`.",
-     "pt": "Cria um evento chamado `name` no instante `time`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "name",
-     "en": "Name of the event, as text.",
-     "pt": "Nome do evento, como texto."
+    "typecast": {
+      "summary": {
+        "en": "Reinterprets the bytes of a value as another numeric type, without converting the values.",
+        "pt": "Reinterpreta os bytes de um valor como outro tipo numérico, sem converter os valores."
+      },
+      "syntax": [
+        {
+          "code": "Y = typecast(X, type)",
+          "en": "Returns the bytes of `X` read as numbers of class `type`.",
+          "pt": "Retorna os bytes de `X` lidos como números da classe `type`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Numeric or logical vector.",
+          "pt": "Vetor numérico ou lógico."
+        },
+        {
+          "name": "type",
+          "en": "Target class: `'uint8'`, `'int16'`, `'single'`, `'double'`, and so on.",
+          "pt": "Classe de destino: `'uint8'`, `'int16'`, `'single'`, `'double'` e assim por diante."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Vector with the same bytes as `X`. The number of elements changes according to the sizes of the two types.",
+          "pt": "Vetor com os mesmos bytes de `X`. O número de elementos muda conforme os tamanhos dos dois tipos."
+        }
+      ],
+      "description": {
+        "en": "Unlike `double(x)` or `uint8(x)`, which convert values, `typecast` keeps the memory bits intact and only changes how they are read. For example, the single-precision number `1` has the bit pattern `0x3F800000`, so `typecast(single(1), 'uint32')` is `1065353216`.\n\nThe total number of bytes must fit evenly in the new type: eight `uint8` bytes make one `double`, but seven do not, and an error is raised. The result follows the byte order of the machine, which is little endian on common hardware.",
+        "pt": "Ao contrário de `double(x)` ou `uint8(x)`, que convertem valores, `typecast` preserva os bits da memória e muda apenas a forma como são lidos. Por exemplo, o número `1` em precisão simples tem o padrão de bits `0x3F800000`, então `typecast(single(1), 'uint32')` é `1065353216`.\n\nO total de bytes precisa caber exatamente no novo tipo: oito bytes `uint8` formam um `double`, mas sete não, e ocorre um erro. O resultado segue a ordem de bytes da máquina, que é little endian no hardware comum."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reading the same bytes as other types",
+            "pt": "Lendo os mesmos bytes como outros tipos"
+          },
+          "code": "typecast(single(1), 'uint32')\ntypecast(uint8([1 0 0 0]), 'uint32')\ntypecast(uint8([0 0 128 63]), 'single')\ntypecast(int8([-1 -1]), 'uint16')"
+        }
+      ],
+      "see": [
+        "cast",
+        "double",
+        "uint8",
+        "swapbytes",
+        "bitshift"
+      ]
     },
-    {
-     "name": "time",
-     "en": "Time of the event, in the units of the series.",
-     "pt": "Instante do evento, nas unidades da série."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "e",
-     "en": "Event object with properties `Name`, `Time`, `Units`, `StartDate` and `EventData`.",
-     "pt": "Objeto de evento com as propriedades `Name`, `Time`, `Units`, `StartDate` e `EventData`."
-    }
-   ],
-   "description": {
-    "en": "Events mark points of interest in a series, such as the moment a threshold is crossed. After creating one, attach it to a `timeseries` with `addevent`; the time of every event is then available from the series.\n\nThe event object is a plain container: it holds the name and time you gave it, and the other properties can be set by assignment.",
-    "pt": "Eventos marcam pontos de interesse em uma série, como o momento em que um limite é ultrapassado. Depois de criado, anexe-o a uma `timeseries` com `addevent`; o instante de cada evento fica disponível a partir da série.\n\nO objeto de evento é um contêiner simples: guarda o nome e o instante informados, e as demais propriedades podem ser definidas por atribuição."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Create an event",
-      "pt": "Criar um evento"
-     },
-     "code": "e = tsdata.event('peak', 2);\ne.Name\ne.Time\ne.Units"
-    }
-   ],
-   "see": [
-    "timeseries",
-    "addevent",
-    "tscollection",
-    "gettsafteratevent"
-   ]
-  },
-  "typecast": {
-   "summary": {
-    "en": "Reinterprets the bytes of a value as another numeric type, without converting the values.",
-    "pt": "Reinterpreta os bytes de um valor como outro tipo numérico, sem converter os valores."
-   },
-   "syntax": [
-    {
-     "code": "Y = typecast(X, type)",
-     "en": "Returns the bytes of `X` read as numbers of class `type`.",
-     "pt": "Retorna os bytes de `X` lidos como números da classe `type`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Numeric or logical vector.",
-     "pt": "Vetor numérico ou lógico."
+    "types": {
+      "summary": {
+        "en": "Key and value types of a dictionary.",
+        "pt": "Tipos das chaves e dos valores de um dictionary."
+      },
+      "syntax": [
+        {
+          "code": "[keyType, valueType] = types(D)",
+          "en": "Returns the data types that `D` was configured with.",
+          "pt": "Retorna os tipos de dados com que `D` foi configurado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "D",
+          "en": "dictionary object.",
+          "pt": "Objeto dictionary."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "keyType",
+          "en": "Class name of the keys, as a string.",
+          "pt": "Nome da classe das chaves, como string."
+        },
+        {
+          "name": "valueType",
+          "en": "Class name of the values, as a string.",
+          "pt": "Nome da classe dos valores, como string."
+        }
+      ],
+      "description": {
+        "en": "A `dictionary` stores values under keys; every key has the same type, and so does every value. `types` reports those two types, which is useful when a dictionary was built by other code and you want to know what it accepts.",
+        "pt": "Um `dictionary` guarda valores sob chaves; todas as chaves têm o mesmo tipo, assim como todos os valores. `types` informa esses dois tipos, o que é útil quando um dictionary foi montado por outro código e você quer saber o que ele aceita."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Types of a dictionary",
+            "pt": "Tipos de um dictionary"
+          },
+          "code": "d = dictionary(\"a\", 1);\n[kt, vt] = types(d)"
+        }
+      ],
+      "see": [
+        "dictionary",
+        "keys",
+        "values",
+        "numEntries",
+        "isKey"
+      ]
     },
-    {
-     "name": "type",
-     "en": "Target class: `'uint8'`, `'int16'`, `'single'`, `'double'`, and so on.",
-     "pt": "Classe de destino: `'uint8'`, `'int16'`, `'single'`, `'double'` e assim por diante."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Vector with the same bytes as `X`. The number of elements changes according to the sizes of the two types.",
-     "pt": "Vetor com os mesmos bytes de `X`. O número de elementos muda conforme os tamanhos dos dois tipos."
-    }
-   ],
-   "description": {
-    "en": "Unlike `double(x)` or `uint8(x)`, which convert values, `typecast` keeps the memory bits intact and only changes how they are read. For example, the single-precision number `1` has the bit pattern `0x3F800000`, so `typecast(single(1), 'uint32')` is `1065353216`.\n\nThe total number of bytes must fit evenly in the new type: eight `uint8` bytes make one `double`, but seven do not, and an error is raised. The result follows the byte order of the machine, which is little endian on common hardware.",
-    "pt": "Ao contrário de `double(x)` ou `uint8(x)`, que convertem valores, `typecast` preserva os bits da memória e muda apenas a forma como são lidos. Por exemplo, o número `1` em precisão simples tem o padrão de bits `0x3F800000`, então `typecast(single(1), 'uint32')` é `1065353216`.\n\nO total de bytes precisa caber exatamente no novo tipo: oito bytes `uint8` formam um `double`, mas sete não, e ocorre um erro. O resultado segue a ordem de bytes da máquina, que é little endian no hardware comum."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Reading the same bytes as other types",
-      "pt": "Lendo os mesmos bytes como outros tipos"
-     },
-     "code": "typecast(single(1), 'uint32')\ntypecast(uint8([1 0 0 0]), 'uint32')\ntypecast(uint8([0 0 128 63]), 'single')\ntypecast(int8([-1 -1]), 'uint16')"
-    }
-   ],
-   "see": [
-    "cast",
-    "double",
-    "uint8",
-    "swapbytes",
-    "bitshift"
-   ]
-  },
-  "types": {
-   "summary": {
-    "en": "Key and value types of a dictionary.",
-    "pt": "Tipos das chaves e dos valores de um dictionary."
-   },
-   "syntax": [
-    {
-     "code": "[keyType, valueType] = types(D)",
-     "en": "Returns the data types that `D` was configured with.",
-     "pt": "Retorna os tipos de dados com que `D` foi configurado."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "D",
-     "en": "dictionary object.",
-     "pt": "Objeto dictionary."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "keyType",
-     "en": "Class name of the keys, as a string.",
-     "pt": "Nome da classe das chaves, como string."
+    "tzoffset": {
+      "summary": {
+        "en": "Offset from UTC of the time zone of a datetime.",
+        "pt": "Deslocamento em relação ao UTC do fuso horário de um datetime."
+      },
+      "syntax": [
+        {
+          "code": "dt = tzoffset(d)",
+          "en": "Returns the offset from UTC that applies at each datetime in `d`.",
+          "pt": "Retorna o deslocamento em relação ao UTC que vale em cada datetime de `d`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "d",
+          "en": "datetime array that has a time zone.",
+          "pt": "Array de datetime que tem fuso horário."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "dt",
+          "en": "Duration array: the local time minus UTC, including any daylight saving shift on that date.",
+          "pt": "Array de duration: horário local menos UTC, incluindo qualquer ajuste de horário de verão naquela data."
+        }
+      ],
+      "description": {
+        "en": "The value depends on the date, not only the zone: New York is at `-05:00` in winter and `-04:00` in summer. A datetime with no time zone has no offset, and `tzoffset` returns `NaN` durations for it.\n\nTo see a zone's name use the `TimeZone` property, and to list valid zone names use `timezones`.",
+        "pt": "O valor depende da data, não só do fuso: Nova York fica em `-05:00` no inverno e `-04:00` no verão. Um datetime sem fuso horário não tem deslocamento, e `tzoffset` retorna durações `NaN` para ele.\n\nPara ver o nome do fuso use a propriedade `TimeZone`, e para listar nomes válidos use `timezones`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Offsets in three zones",
+            "pt": "Deslocamentos em três fusos"
+          },
+          "code": "d = datetime(2024,7,1,'TimeZone','America/New_York');\ntzoffset(d)\ntzoffset(datetime(2024,1,1,'TimeZone','America/Sao_Paulo'))\ntzoffset(datetime(2024,1,1,'TimeZone','UTC'))"
+        }
+      ],
+      "see": [
+        "timezones",
+        "datetime",
+        "posixtime",
+        "timeofday"
+      ]
     },
-    {
-     "name": "valueType",
-     "en": "Class name of the values, as a string.",
-     "pt": "Nome da classe dos valores, como string."
-    }
-   ],
-   "description": {
-    "en": "A `dictionary` stores values under keys; every key has the same type, and so does every value. `types` reports those two types, which is useful when a dictionary was built by other code and you want to know what it accepts.",
-    "pt": "Um `dictionary` guarda valores sob chaves; todas as chaves têm o mesmo tipo, assim como todos os valores. `types` informa esses dois tipos, o que é útil quando um dictionary foi montado por outro código e você quer saber o que ele aceita."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Types of a dictionary",
-      "pt": "Tipos de um dictionary"
-     },
-     "code": "d = dictionary(\"a\", 1);\n[kt, vt] = types(d)"
-    }
-   ],
-   "see": [
-    "dictionary",
-    "keys",
-    "values",
-    "numEntries",
-    "isKey"
-   ]
-  },
-  "tzoffset": {
-   "summary": {
-    "en": "Offset from UTC of the time zone of a datetime.",
-    "pt": "Deslocamento em relação ao UTC do fuso horário de um datetime."
-   },
-   "syntax": [
-    {
-     "code": "dt = tzoffset(d)",
-     "en": "Returns the offset from UTC that applies at each datetime in `d`.",
-     "pt": "Retorna o deslocamento em relação ao UTC que vale em cada datetime de `d`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "d",
-     "en": "datetime array that has a time zone.",
-     "pt": "Array de datetime que tem fuso horário."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "dt",
-     "en": "Duration array: the local time minus UTC, including any daylight saving shift on that date.",
-     "pt": "Array de duration: horário local menos UTC, incluindo qualquer ajuste de horário de verão naquela data."
-    }
-   ],
-   "description": {
-    "en": "The value depends on the date, not only the zone: New York is at `-05:00` in winter and `-04:00` in summer. A datetime with no time zone has no offset, and `tzoffset` returns `NaN` durations for it.\n\nTo see a zone's name use the `TimeZone` property, and to list valid zone names use `timezones`.",
-    "pt": "O valor depende da data, não só do fuso: Nova York fica em `-05:00` no inverno e `-04:00` no verão. Um datetime sem fuso horário não tem deslocamento, e `tzoffset` retorna durações `NaN` para ele.\n\nPara ver o nome do fuso use a propriedade `TimeZone`, e para listar nomes válidos use `timezones`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Offsets in three zones",
-      "pt": "Deslocamentos em três fusos"
-     },
-     "code": "d = datetime(2024,7,1,'TimeZone','America/New_York');\ntzoffset(d)\ntzoffset(datetime(2024,1,1,'TimeZone','America/Sao_Paulo'))\ntzoffset(datetime(2024,1,1,'TimeZone','UTC'))"
-    }
-   ],
-   "see": [
-    "timezones",
-    "datetime",
-    "posixtime",
-    "timeofday"
-   ]
-  },
-  "uint8": {
-   "summary": {
-    "en": "Converts values to unsigned 8-bit integers (0 to 255).",
-    "pt": "Converte valores em inteiros sem sinal de 8 bits (0 a 255)."
-   },
-   "syntax": [
-    {
-     "code": "Y = uint8(X)",
-     "en": "Converts `X` to class `uint8`.",
-     "pt": "Converte `X` para a classe `uint8`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Array of class `uint8` with the same size as `X`.",
-     "pt": "Array de classe `uint8` com o mesmo tamanho de `X`."
-    }
-   ],
-   "description": {
-    "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 255 becomes 255, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint8(300)` gives `255`.\n\nArithmetic between `uint8` and a double gives a `uint8` result, rounded and saturated again, so `uint8(7)/uint8(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint8')` gives the largest value. It is the usual class for image pixels.",
-    "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 255 vira 255, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint8(300)` dá `255`.\n\nA aritmética entre `uint8` e um double resulta em `uint8`, arredondada e saturada de novo, então `uint8(7)/uint8(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint8')` dá o maior valor. É a classe usual para pixels de imagens."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Rounding and saturation",
-      "pt": "Arredondamento e saturação"
-     },
-     "code": "a = uint8(250);\na + 10\na - 255\nuint8([1.4 1.5 2.5 -3])\nuint8(7)/uint8(2)"
-    }
-   ],
-   "see": [
-    "uint16",
-    "double",
-    "intmax",
-    "cast",
-    "im2uint8"
-   ]
-  },
-  "uint16": {
-   "summary": {
-    "en": "Converts values to unsigned 16-bit integers (0 to 65535).",
-    "pt": "Converte valores em inteiros sem sinal de 16 bits (0 a 65535)."
-   },
-   "syntax": [
-    {
-     "code": "Y = uint16(X)",
-     "en": "Converts `X` to class `uint16`.",
-     "pt": "Converte `X` para a classe `uint16`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Array of class `uint16` with the same size as `X`.",
-     "pt": "Array de classe `uint16` com o mesmo tamanho de `X`."
-    }
-   ],
-   "description": {
-    "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 65535 becomes 65535, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint16(70000)` gives `65535`.\n\nArithmetic between `uint16` and a double gives a `uint16` result, rounded and saturated again, so `uint16(7)/uint16(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint16')` gives the largest value.",
-    "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 65535 vira 65535, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint16(70000)` dá `65535`.\n\nA aritmética entre `uint16` e um double resulta em `uint16`, arredondada e saturada de novo, então `uint16(7)/uint16(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint16')` dá o maior valor."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Rounding and saturation",
-      "pt": "Arredondamento e saturação"
-     },
-     "code": "uint16(70000)\nuint16(-5)\nuint16(3.5)\nclass(uint16(1) + 2)"
-    }
-   ],
-   "see": [
-    "int8",
-    "double",
-    "intmax",
-    "cast",
-    "class"
-   ]
-  },
-  "uint32": {
-   "summary": {
-    "en": "Converts values to unsigned 32-bit integers (0 to 4294967295).",
-    "pt": "Converte valores em inteiros sem sinal de 32 bits (0 a 4294967295)."
-   },
-   "syntax": [
-    {
-     "code": "Y = uint32(X)",
-     "en": "Converts `X` to class `uint32`.",
-     "pt": "Converte `X` para a classe `uint32`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Array of class `uint32` with the same size as `X`.",
-     "pt": "Array de classe `uint32` com o mesmo tamanho de `X`."
-    }
-   ],
-   "description": {
-    "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 4294967295 becomes 4294967295, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint32(5e9)` gives `4294967295`.\n\nArithmetic between `uint32` and a double gives a `uint32` result, rounded and saturated again, so `uint32(7)/uint32(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint32')` gives the largest value.",
-    "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 4294967295 vira 4294967295, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint32(5e9)` dá `4294967295`.\n\nA aritmética entre `uint32` e um double resulta em `uint32`, arredondada e saturada de novo, então `uint32(7)/uint32(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint32')` dá o maior valor."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Rounding and saturation",
-      "pt": "Arredondamento e saturação"
-     },
-     "code": "uint32(5e9)\nuint32(7)/uint32(2)\nintmax('uint32')"
-    }
-   ],
-   "see": [
-    "int8",
-    "double",
-    "intmax",
-    "cast",
-    "class"
-   ]
-  },
-  "uint64": {
-   "summary": {
-    "en": "Converts values to unsigned 64-bit integers (0 to 18446744073709551615).",
-    "pt": "Converte valores em inteiros sem sinal de 64 bits (0 a 18446744073709551615)."
-   },
-   "syntax": [
-    {
-     "code": "Y = uint64(X)",
-     "en": "Converts `X` to class `uint64`.",
-     "pt": "Converte `X` para a classe `uint64`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Numeric, logical or char array.",
-     "pt": "Array numérico, lógico ou de char."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "Y",
-     "en": "Array of class `uint64` with the same size as `X`.",
-     "pt": "Array de classe `uint64` com o mesmo tamanho de `X`."
-    }
-   ],
-   "description": {
-    "en": "Values are rounded to the nearest integer and saturate at the limits of the type: negative numbers and `NaN` become `0`. `uint64` is the largest integer class, useful for counts and identifiers that do not fit in 32 bits.\n\nA double has 53 bits of precision, so integers above `2^53` converted from double may not be exact; build large values from smaller integer parts when exactness matters.\n\nArithmetic with a double gives a `uint64` result, rounded: `uint64(10)/uint64(4)` is `3`.",
-    "pt": "Os valores são arredondados para o inteiro mais próximo e saturam nos limites do tipo: números negativos e `NaN` viram `0`. `uint64` é a maior classe inteira, útil para contagens e identificadores que não cabem em 32 bits.\n\nUm double tem 53 bits de precisão, então inteiros acima de `2^53` convertidos de double podem não ser exatos; monte valores grandes a partir de partes inteiras menores quando a exatidão importar.\n\nA aritmética com um double resulta em `uint64`, arredondado: `uint64(10)/uint64(4)` é `3`."
-   },
-   "notes": {
-    "en": "Values above 9223372036854775807 (the `int64` maximum) saturate at that number, so `intmax('uint64')` does not reach 18446744073709551615.",
-    "pt": "Valores acima de 9223372036854775807 (o máximo de `int64`) saturam nesse número, então `intmax('uint64')` não chega a 18446744073709551615."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Arithmetic and saturation at zero",
-      "pt": "Aritmética e saturação em zero"
-     },
-     "code": "a = uint64(10);\na/4\nclass(a*2)\nuint64(-3)\nuint64(2)^62"
-    }
-   ],
-   "see": [
-    "int64",
-    "uint32",
-    "intmax",
-    "double",
-    "class"
-   ]
-  },
-  "underlyingType": {
-   "summary": {
-    "en": "Class of the data stored inside an array, looking through wrappers such as gpuArray.",
-    "pt": "Classe dos dados guardados dentro de um array, vendo através de contêineres como gpuArray."
-   },
-   "syntax": [
-    {
-     "code": "t = underlyingType(X)",
-     "en": "Returns the class name of the data that `X` holds.",
-     "pt": "Retorna o nome da classe dos dados que `X` guarda."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "X",
-     "en": "Any array.",
-     "pt": "Qualquer array."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "t",
-     "en": "Character vector with the class name, such as `'double'` or `'int8'`.",
-     "pt": "Vetor de caracteres com o nome da classe, como `'double'` ou `'int8'`."
-    }
-   ],
-   "description": {
-    "en": "For ordinary arrays `underlyingType(X)` is the same as `class(X)`. The difference appears for arrays that wrap data, such as a `gpuArray` or a `distributed` array, where `class` reports the wrapper and `underlyingType` reports the class of the numbers inside. Code that must work with or without such wrappers can call `underlyingType` instead of `class`.",
-    "pt": "Para arrays comuns, `underlyingType(X)` é o mesmo que `class(X)`. A diferença aparece em arrays que embrulham dados, como um `gpuArray` ou um array `distributed`, em que `class` informa o contêiner e `underlyingType` informa a classe dos números dentro. Código que precisa funcionar com ou sem esses contêineres pode chamar `underlyingType` em vez de `class`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Underlying class of ordinary arrays",
-      "pt": "Classe subjacente de arrays comuns"
-     },
-     "code": "underlyingType(int8(1))\nunderlyingType(3.5)\nunderlyingType(true)\nunderlyingType(single([1 2]))"
-    }
-   ],
-   "see": [
-    "class",
-    "isUnderlyingType",
-    "isa",
-    "cast"
-   ]
-  },
-  "unicode2native": {
-   "summary": {
-    "en": "Converts text to bytes in a given character encoding.",
-    "pt": "Converte texto em bytes de uma codificação de caracteres."
-   },
-   "syntax": [
-    {
-     "code": "b = unicode2native(str)",
-     "en": "Encodes with the default encoding of the system.",
-     "pt": "Codifica com a codificação padrão do sistema."
+    "uint8": {
+      "summary": {
+        "en": "Converts values to unsigned 8-bit integers (0 to 255).",
+        "pt": "Converte valores em inteiros sem sinal de 8 bits (0 a 255)."
+      },
+      "syntax": [
+        {
+          "code": "Y = uint8(X)",
+          "en": "Converts `X` to class `uint8`.",
+          "pt": "Converte `X` para a classe `uint8`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Array of class `uint8` with the same size as `X`.",
+          "pt": "Array de classe `uint8` com o mesmo tamanho de `X`."
+        }
+      ],
+      "description": {
+        "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 255 becomes 255, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint8(300)` gives `255`.\n\nArithmetic between `uint8` and a double gives a `uint8` result, rounded and saturated again, so `uint8(7)/uint8(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint8')` gives the largest value. It is the usual class for image pixels.",
+        "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 255 vira 255, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint8(300)` dá `255`.\n\nA aritmética entre `uint8` e um double resulta em `uint8`, arredondada e saturada de novo, então `uint8(7)/uint8(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint8')` dá o maior valor. É a classe usual para pixels de imagens."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Rounding and saturation",
+            "pt": "Arredondamento e saturação"
+          },
+          "code": "a = uint8(250);\na + 10\na - 255\nuint8([1.4 1.5 2.5 -3])\nuint8(7)/uint8(2)"
+        }
+      ],
+      "see": [
+        "uint16",
+        "double",
+        "intmax",
+        "cast",
+        "im2uint8"
+      ]
     },
-    {
-     "code": "b = unicode2native(str, encoding)",
-     "en": "Encodes with the named encoding, such as `'UTF-8'` or `'ISO-8859-1'`.",
-     "pt": "Codifica com a codificação indicada, como `'UTF-8'` ou `'ISO-8859-1'`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "str",
-     "en": "Character vector or string.",
-     "pt": "Vetor de caracteres ou string."
+    "uint16": {
+      "summary": {
+        "en": "Converts values to unsigned 16-bit integers (0 to 65535).",
+        "pt": "Converte valores em inteiros sem sinal de 16 bits (0 a 65535)."
+      },
+      "syntax": [
+        {
+          "code": "Y = uint16(X)",
+          "en": "Converts `X` to class `uint16`.",
+          "pt": "Converte `X` para a classe `uint16`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Array of class `uint16` with the same size as `X`.",
+          "pt": "Array de classe `uint16` com o mesmo tamanho de `X`."
+        }
+      ],
+      "description": {
+        "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 65535 becomes 65535, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint16(70000)` gives `65535`.\n\nArithmetic between `uint16` and a double gives a `uint16` result, rounded and saturated again, so `uint16(7)/uint16(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint16')` gives the largest value.",
+        "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 65535 vira 65535, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint16(70000)` dá `65535`.\n\nA aritmética entre `uint16` e um double resulta em `uint16`, arredondada e saturada de novo, então `uint16(7)/uint16(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint16')` dá o maior valor."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Rounding and saturation",
+            "pt": "Arredondamento e saturação"
+          },
+          "code": "uint16(70000)\nuint16(-5)\nuint16(3.5)\nclass(uint16(1) + 2)"
+        }
+      ],
+      "see": [
+        "int8",
+        "double",
+        "intmax",
+        "cast",
+        "class"
+      ]
     },
-    {
-     "name": "encoding",
-     "en": "Name of the character encoding.",
-     "pt": "Nome da codificação de caracteres."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "b",
-     "en": "Row vector of class `uint8` with the encoded bytes.",
-     "pt": "Vetor linha de classe `uint8` com os bytes codificados."
-    }
-   ],
-   "description": {
-    "en": "Text in MATLAB is Unicode, but files and network protocols carry bytes in a specific encoding. `unicode2native` produces those bytes. In UTF-8, `a` takes one byte and `é` takes two (`195 169`), while in `'ISO-8859-1'` both take one byte. The number of bytes is therefore not always the number of characters.\n\nThe inverse operation is `native2unicode`.",
-    "pt": "O texto no MATLAB é Unicode, mas arquivos e protocolos de rede carregam bytes em uma codificação específica. `unicode2native` produz esses bytes. Em UTF-8, `a` ocupa um byte e `é` ocupa dois (`195 169`), enquanto em `'ISO-8859-1'` ambos ocupam um byte. O número de bytes, portanto, nem sempre é o número de caracteres.\n\nA operação inversa é `native2unicode`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Bytes in two encodings",
-      "pt": "Bytes em duas codificações"
-     },
-     "code": "b = unicode2native('aé', 'UTF-8')\nclass(b)\nunicode2native('é', 'ISO-8859-1')"
-    }
-   ],
-   "see": [
-    "native2unicode",
-    "char",
-    "double",
-    "typecast",
-    "fopen"
-   ]
-  },
-  "union": {
-   "summary": {
-    "en": "Set union: the sorted values that appear in either of two arrays.",
-    "pt": "União de conjuntos: os valores ordenados que aparecem em qualquer um de dois arrays."
-   },
-   "syntax": [
-    {
-     "code": "C = union(A, B)",
-     "en": "Returns the distinct values in `A` or `B`, sorted.",
-     "pt": "Retorna os valores distintos de `A` ou `B`, ordenados."
+    "uint32": {
+      "summary": {
+        "en": "Converts values to unsigned 32-bit integers (0 to 4294967295).",
+        "pt": "Converte valores em inteiros sem sinal de 32 bits (0 a 4294967295)."
+      },
+      "syntax": [
+        {
+          "code": "Y = uint32(X)",
+          "en": "Converts `X` to class `uint32`.",
+          "pt": "Converte `X` para a classe `uint32`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Array of class `uint32` with the same size as `X`.",
+          "pt": "Array de classe `uint32` com o mesmo tamanho de `X`."
+        }
+      ],
+      "description": {
+        "en": "Values are rounded to the nearest integer (halves away from zero) and then saturate: anything above 4294967295 becomes 4294967295, and negative numbers and `NaN` become `0`. No error or warning is raised. For example, `uint32(5e9)` gives `4294967295`.\n\nArithmetic between `uint32` and a double gives a `uint32` result, rounded and saturated again, so `uint32(7)/uint32(2)` is `4`. Mixing two different integer classes in one operation is an error. `intmax('uint32')` gives the largest value.",
+        "pt": "Os valores são arredondados para o inteiro mais próximo (meios afastando-se de zero) e depois saturam: qualquer valor acima de 4294967295 vira 4294967295, e números negativos e `NaN` viram `0`. Nenhum erro ou aviso é gerado. Por exemplo, `uint32(5e9)` dá `4294967295`.\n\nA aritmética entre `uint32` e um double resulta em `uint32`, arredondada e saturada de novo, então `uint32(7)/uint32(2)` é `4`. Misturar duas classes inteiras diferentes em uma mesma operação é um erro. `intmax('uint32')` dá o maior valor."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Rounding and saturation",
+            "pt": "Arredondamento e saturação"
+          },
+          "code": "uint32(5e9)\nuint32(7)/uint32(2)\nintmax('uint32')"
+        }
+      ],
+      "see": [
+        "int8",
+        "double",
+        "intmax",
+        "cast",
+        "class"
+      ]
     },
-    {
-     "code": "[C, ia, ib] = union(A, B)",
-     "en": "Also returns index vectors such that `C` is built from `A(ia)` and `B(ib)`.",
-     "pt": "Também retorna vetores de índices tais que `C` é formado por `A(ia)` e `B(ib)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A, B",
-     "en": "Numeric arrays, cell arrays of character vectors, string arrays, or tables with compatible types.",
-     "pt": "Arrays numéricos, cell arrays de vetores de caracteres, arrays de strings ou tabelas com tipos compatíveis."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "Distinct sorted values (a row if both inputs are rows, otherwise a column).",
-     "pt": "Valores distintos ordenados (linha se as duas entradas forem linhas, senão coluna)."
+    "uint64": {
+      "summary": {
+        "en": "Converts values to unsigned 64-bit integers (0 to 18446744073709551615).",
+        "pt": "Converte valores em inteiros sem sinal de 64 bits (0 a 18446744073709551615)."
+      },
+      "syntax": [
+        {
+          "code": "Y = uint64(X)",
+          "en": "Converts `X` to class `uint64`.",
+          "pt": "Converte `X` para a classe `uint64`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Numeric, logical or char array.",
+          "pt": "Array numérico, lógico ou de char."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Array of class `uint64` with the same size as `X`.",
+          "pt": "Array de classe `uint64` com o mesmo tamanho de `X`."
+        }
+      ],
+      "description": {
+        "en": "Values are rounded to the nearest integer and saturate at the limits of the type: negative numbers and `NaN` become `0`. `uint64` is the largest integer class, useful for counts and identifiers that do not fit in 32 bits.\n\nA double has 53 bits of precision, so integers above `2^53` converted from double may not be exact; build large values from smaller integer parts when exactness matters.\n\nArithmetic with a double gives a `uint64` result, rounded: `uint64(10)/uint64(4)` is `3`.",
+        "pt": "Os valores são arredondados para o inteiro mais próximo e saturam nos limites do tipo: números negativos e `NaN` viram `0`. `uint64` é a maior classe inteira, útil para contagens e identificadores que não cabem em 32 bits.\n\nUm double tem 53 bits de precisão, então inteiros acima de `2^53` convertidos de double podem não ser exatos; monte valores grandes a partir de partes inteiras menores quando a exatidão importar.\n\nA aritmética com um double resulta em `uint64`, arredondado: `uint64(10)/uint64(4)` é `3`."
+      },
+      "notes": {
+        "en": "Values above 9223372036854775807 (the `int64` maximum) saturate at that number, so `intmax('uint64')` does not reach 18446744073709551615.",
+        "pt": "Valores acima de 9223372036854775807 (o máximo de `int64`) saturam nesse número, então `intmax('uint64')` não chega a 18446744073709551615."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Arithmetic and saturation at zero",
+            "pt": "Aritmética e saturação em zero"
+          },
+          "code": "a = uint64(10);\na/4\nclass(a*2)\nuint64(-3)\nuint64(2)^62"
+        }
+      ],
+      "see": [
+        "int64",
+        "uint32",
+        "intmax",
+        "double",
+        "class"
+      ]
     },
-    {
-     "name": "ia, ib",
-     "en": "Indices of the elements taken from `A` and from `B`. A value present in both is taken from `A`.",
-     "pt": "Índices dos elementos tomados de `A` e de `B`. Um valor presente nos dois é tomado de `A`."
-    }
-   ],
-   "description": {
-    "en": "Duplicates are removed, so the result has each value once, in ascending order for numbers and alphabetical order for text. Both inputs are treated as sets, so their original order and repeated values do not matter.\n\n`intersect` gives the common values, `setdiff` the values in one array only, and `setxor` those in exactly one of them.",
-    "pt": "As duplicatas são removidas, então o resultado tem cada valor uma só vez, em ordem crescente para números e em ordem alfabética para texto. As duas entradas são tratadas como conjuntos, de modo que a ordem original e valores repetidos não importam.\n\n`intersect` dá os valores comuns, `setdiff` os que estão só em um array e `setxor` os que estão em exatamente um deles."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Numbers, text and indices",
-      "pt": "Números, texto e índices"
-     },
-     "code": "union([3 1 2], [2 5 1])\nunion({'a','c'}, {'b','a'})\n[c, ia, ib] = union([1 2], [2 3])"
-    }
-   ],
-   "see": [
-    "intersect",
-    "setdiff",
-    "setxor",
-    "unique",
-    "ismember"
-   ]
-  },
-  "unique": {
-   "summary": {
-    "en": "Distinct values of an array, sorted, with optional index maps.",
-    "pt": "Valores distintos de um array, ordenados, com mapas de índices opcionais."
-   },
-   "syntax": [
-    {
-     "code": "C = unique(A)",
-     "en": "Returns the sorted distinct values of `A`.",
-     "pt": "Retorna os valores distintos de `A`, ordenados."
+    "underlyingType": {
+      "summary": {
+        "en": "Class of the data stored inside an array, looking through wrappers such as gpuArray.",
+        "pt": "Classe dos dados guardados dentro de um array, vendo através de contêineres como gpuArray."
+      },
+      "syntax": [
+        {
+          "code": "t = underlyingType(X)",
+          "en": "Returns the class name of the data that `X` holds.",
+          "pt": "Retorna o nome da classe dos dados que `X` guarda."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Any array.",
+          "pt": "Qualquer array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Character vector with the class name, such as `'double'` or `'int8'`.",
+          "pt": "Vetor de caracteres com o nome da classe, como `'double'` ou `'int8'`."
+        }
+      ],
+      "description": {
+        "en": "For ordinary arrays `underlyingType(X)` is the same as `class(X)`. The difference appears for arrays that wrap data, such as a `gpuArray` or a `distributed` array, where `class` reports the wrapper and `underlyingType` reports the class of the numbers inside. Code that must work with or without such wrappers can call `underlyingType` instead of `class`.",
+        "pt": "Para arrays comuns, `underlyingType(X)` é o mesmo que `class(X)`. A diferença aparece em arrays que embrulham dados, como um `gpuArray` ou um array `distributed`, em que `class` informa o contêiner e `underlyingType` informa a classe dos números dentro. Código que precisa funcionar com ou sem esses contêineres pode chamar `underlyingType` em vez de `class`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Underlying class of ordinary arrays",
+            "pt": "Classe subjacente de arrays comuns"
+          },
+          "code": "underlyingType(int8(1))\nunderlyingType(3.5)\nunderlyingType(true)\nunderlyingType(single([1 2]))"
+        }
+      ],
+      "see": [
+        "class",
+        "isUnderlyingType",
+        "isa",
+        "cast"
+      ]
     },
-    {
-     "code": "C = unique(A, 'stable')",
-     "en": "Keeps the order of first appearance instead of sorting.",
-     "pt": "Mantém a ordem da primeira aparição em vez de ordenar."
+    "unicode2native": {
+      "summary": {
+        "en": "Converts text to bytes in a given character encoding.",
+        "pt": "Converte texto em bytes de uma codificação de caracteres."
+      },
+      "syntax": [
+        {
+          "code": "b = unicode2native(str)",
+          "en": "Encodes with the default encoding of the system.",
+          "pt": "Codifica com a codificação padrão do sistema."
+        },
+        {
+          "code": "b = unicode2native(str, encoding)",
+          "en": "Encodes with the named encoding, such as `'UTF-8'` or `'ISO-8859-1'`.",
+          "pt": "Codifica com a codificação indicada, como `'UTF-8'` ou `'ISO-8859-1'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Character vector or string.",
+          "pt": "Vetor de caracteres ou string."
+        },
+        {
+          "name": "encoding",
+          "en": "Name of the character encoding.",
+          "pt": "Nome da codificação de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of class `uint8` with the encoded bytes.",
+          "pt": "Vetor linha de classe `uint8` com os bytes codificados."
+        }
+      ],
+      "description": {
+        "en": "Text in MATLAB is Unicode, but files and network protocols carry bytes in a specific encoding. `unicode2native` produces those bytes. In UTF-8, `a` takes one byte and `é` takes two (`195 169`), while in `'ISO-8859-1'` both take one byte. The number of bytes is therefore not always the number of characters.\n\nThe inverse operation is `native2unicode`.",
+        "pt": "O texto no MATLAB é Unicode, mas arquivos e protocolos de rede carregam bytes em uma codificação específica. `unicode2native` produz esses bytes. Em UTF-8, `a` ocupa um byte e `é` ocupa dois (`195 169`), enquanto em `'ISO-8859-1'` ambos ocupam um byte. O número de bytes, portanto, nem sempre é o número de caracteres.\n\nA operação inversa é `native2unicode`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bytes in two encodings",
+            "pt": "Bytes em duas codificações"
+          },
+          "code": "b = unicode2native('aé', 'UTF-8')\nclass(b)\nunicode2native('é', 'ISO-8859-1')"
+        }
+      ],
+      "see": [
+        "native2unicode",
+        "char",
+        "double",
+        "typecast",
+        "fopen"
+      ]
     },
-    {
-     "code": "[C, ia, ic] = unique(A)",
-     "en": "Also returns index vectors: `C = A(ia)` and `A = C(ic)`.",
-     "pt": "Também retorna vetores de índices: `C = A(ia)` e `A = C(ic)`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric, logical, char, string array, cell array of character vectors, categorical or table.",
-     "pt": "Array numérico, lógico, de char, de strings, cell array de vetores de caracteres, categórico ou tabela."
+    "union": {
+      "summary": {
+        "en": "Set union: the sorted values that appear in either of two arrays.",
+        "pt": "União de conjuntos: os valores ordenados que aparecem em qualquer um de dois arrays."
+      },
+      "syntax": [
+        {
+          "code": "C = union(A, B)",
+          "en": "Returns the distinct values in `A` or `B`, sorted.",
+          "pt": "Retorna os valores distintos de `A` ou `B`, ordenados."
+        },
+        {
+          "code": "[C, ia, ib] = union(A, B)",
+          "en": "Also returns index vectors such that `C` is built from `A(ia)` and `B(ib)`.",
+          "pt": "Também retorna vetores de índices tais que `C` é formado por `A(ia)` e `B(ib)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B",
+          "en": "Numeric arrays, cell arrays of character vectors, string arrays, or tables with compatible types.",
+          "pt": "Arrays numéricos, cell arrays de vetores de caracteres, arrays de strings ou tabelas com tipos compatíveis."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Distinct sorted values (a row if both inputs are rows, otherwise a column).",
+          "pt": "Valores distintos ordenados (linha se as duas entradas forem linhas, senão coluna)."
+        },
+        {
+          "name": "ia, ib",
+          "en": "Indices of the elements taken from `A` and from `B`. A value present in both is taken from `A`.",
+          "pt": "Índices dos elementos tomados de `A` e de `B`. Um valor presente nos dois é tomado de `A`."
+        }
+      ],
+      "description": {
+        "en": "Duplicates are removed, so the result has each value once, in ascending order for numbers and alphabetical order for text. Both inputs are treated as sets, so their original order and repeated values do not matter.\n\n`intersect` gives the common values, `setdiff` the values in one array only, and `setxor` those in exactly one of them.",
+        "pt": "As duplicatas são removidas, então o resultado tem cada valor uma só vez, em ordem crescente para números e em ordem alfabética para texto. As duas entradas são tratadas como conjuntos, de modo que a ordem original e valores repetidos não importam.\n\n`intersect` dá os valores comuns, `setdiff` os que estão só em um array e `setxor` os que estão em exatamente um deles."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Numbers, text and indices",
+            "pt": "Números, texto e índices"
+          },
+          "code": "union([3 1 2], [2 5 1])\nunion({'a','c'}, {'b','a'})\n[c, ia, ib] = union([1 2], [2 3])"
+        }
+      ],
+      "see": [
+        "intersect",
+        "setdiff",
+        "setxor",
+        "unique",
+        "ismember"
+      ]
     },
-    {
-     "name": "'stable'",
-     "en": "Return values in the order they first appear.",
-     "pt": "Retorna os valores na ordem em que aparecem pela primeira vez."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "C",
-     "en": "The distinct values. For a row vector input the result is a row; for a cell array of text it is a column.",
-     "pt": "Os valores distintos. Para entrada em vetor linha, o resultado é uma linha; para um cell array de texto, é uma coluna."
+    "unique": {
+      "summary": {
+        "en": "Distinct values of an array, sorted, with optional index maps.",
+        "pt": "Valores distintos de um array, ordenados, com mapas de índices opcionais."
+      },
+      "syntax": [
+        {
+          "code": "C = unique(A)",
+          "en": "Returns the sorted distinct values of `A`.",
+          "pt": "Retorna os valores distintos de `A`, ordenados."
+        },
+        {
+          "code": "C = unique(A, 'stable')",
+          "en": "Keeps the order of first appearance instead of sorting.",
+          "pt": "Mantém a ordem da primeira aparição em vez de ordenar."
+        },
+        {
+          "code": "[C, ia, ic] = unique(A)",
+          "en": "Also returns index vectors: `C = A(ia)` and `A = C(ic)`.",
+          "pt": "Também retorna vetores de índices: `C = A(ia)` e `A = C(ic)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric, logical, char, string array, cell array of character vectors, categorical or table.",
+          "pt": "Array numérico, lógico, de char, de strings, cell array de vetores de caracteres, categórico ou tabela."
+        },
+        {
+          "name": "'stable'",
+          "en": "Return values in the order they first appear.",
+          "pt": "Retorna os valores na ordem em que aparecem pela primeira vez."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "The distinct values. For a row vector input the result is a row; for a cell array of text it is a column.",
+          "pt": "Os valores distintos. Para entrada em vetor linha, o resultado é uma linha; para um cell array de texto, é uma coluna."
+        },
+        {
+          "name": "ia",
+          "en": "Indices of the first occurrence of each value of `C` in `A`.",
+          "pt": "Índices da primeira ocorrência de cada valor de `C` em `A`."
+        },
+        {
+          "name": "ic",
+          "en": "Indices that rebuild `A` from `C`, one per element of `A`. It is also a way to number groups.",
+          "pt": "Índices que reconstroem `A` a partir de `C`, um por elemento de `A`. Também serve para numerar grupos."
+        }
+      ],
+      "description": {
+        "en": "`unique` removes repeated values. Numbers are sorted ascending and text alphabetically. Several `NaN` values are all counted as different, so each `NaN` is kept.\n\nThe third output `ic` is especially useful: `accumarray(ic, 1)` counts how many times each distinct value occurs.",
+        "pt": "`unique` remove valores repetidos. Números são ordenados em ordem crescente e texto em ordem alfabética. Vários `NaN` são considerados todos diferentes, então cada `NaN` é mantido.\n\nA terceira saída `ic` é especialmente útil: `accumarray(ic, 1)` conta quantas vezes cada valor distinto ocorre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Values, indices and stable order",
+            "pt": "Valores, índices e ordem estável"
+          },
+          "code": "[u, i, j] = unique([3 1 1 2 3])\nunique({'b','a','b'})\nunique([3 1 1 2 3], 'stable')"
+        }
+      ],
+      "see": [
+        "union",
+        "intersect",
+        "histcounts",
+        "accumarray",
+        "sort",
+        "ismember"
+      ]
     },
-    {
-     "name": "ia",
-     "en": "Indices of the first occurrence of each value of `C` in `A`.",
-     "pt": "Índices da primeira ocorrência de cada valor de `C` em `A`."
+    "unstack": {
+      "summary": {
+        "en": "Reshapes a table from long to wide format.",
+        "pt": "Reorganiza uma tabela do formato longo para o largo."
+      },
+      "syntax": [
+        {
+          "code": "U = unstack(S, vars, ivar)",
+          "en": "Spreads the values of `vars` into new variables named by the categories in `ivar`.",
+          "pt": "Espalha os valores de `vars` em novas variáveis nomeadas pelas categorias de `ivar`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "S",
+          "en": "Table in long format.",
+          "pt": "Tabela em formato longo."
+        },
+        {
+          "name": "vars",
+          "en": "Data variable(s) whose values go into the new columns.",
+          "pt": "Variável(is) de dados cujos valores vão para as novas colunas."
+        },
+        {
+          "name": "ivar",
+          "en": "Variable whose distinct values become the names of the new columns.",
+          "pt": "Variável cujos valores distintos viram os nomes das novas colunas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "U",
+          "en": "Table with one row per distinct combination of the remaining variables and one new column per category of `ivar`.",
+          "pt": "Tabela com uma linha por combinação distinta das variáveis restantes e uma nova coluna por categoria de `ivar`."
+        }
+      ],
+      "description": {
+        "en": "In long format each measurement is one row, with a column saying what was measured. `unstack` turns that into one row per group with a column per measurement kind, which is the shape most plotting and statistics functions expect. The remaining variables identify the rows; they must determine a single value for each pair.\n\n`stack` does the opposite.",
+        "pt": "No formato longo, cada medição é uma linha, com uma coluna dizendo o que foi medido. `unstack` transforma isso em uma linha por grupo com uma coluna por tipo de medição, que é o formato esperado pela maioria das funções de gráficos e estatística. As demais variáveis identificam as linhas e devem determinar um único valor para cada par.\n\n`stack` faz o oposto."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Long to wide",
+            "pt": "De longo para largo"
+          },
+          "code": "T = table([1;1;2;2], {'p';'q';'p';'q'}, [10;20;30;40], 'VariableNames', {'id','key','val'});\nunstack(T, 'val', 'key')"
+        }
+      ],
+      "see": [
+        "stack",
+        "pivot",
+        "join",
+        "groupsummary",
+        "reshape"
+      ]
     },
-    {
-     "name": "ic",
-     "en": "Indices that rebuild `A` from `C`, one per element of `A`. It is also a way to number groups.",
-     "pt": "Índices que reconstroem `A` a partir de `C`, um por elemento de `A`. Também serve para numerar grupos."
-    }
-   ],
-   "description": {
-    "en": "`unique` removes repeated values. Numbers are sorted ascending and text alphabetically. Several `NaN` values are all counted as different, so each `NaN` is kept.\n\nThe third output `ic` is especially useful: `accumarray(ic, 1)` counts how many times each distinct value occurs.",
-    "pt": "`unique` remove valores repetidos. Números são ordenados em ordem crescente e texto em ordem alfabética. Vários `NaN` são considerados todos diferentes, então cada `NaN` é mantido.\n\nA terceira saída `ic` é especialmente útil: `accumarray(ic, 1)` conta quantas vezes cada valor distinto ocorre."
-   },
-   "notes": {
-    "en": "The `'rows'` and `'last'` options do not behave like MATLAB's in MatLivre (`'rows'` flattens the matrix, `'last'` still reports first occurrences); use `sortrows` or `'first'` semantics for now.",
-    "pt": "As opções `'rows'` e `'last'` não se comportam como as do MATLAB no MatLivre (`'rows'` achata a matriz e `'last'` ainda informa as primeiras ocorrências); por ora, use `sortrows` ou a semântica `'first'`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Values, indices and stable order",
-      "pt": "Valores, índices e ordem estável"
-     },
-     "code": "[u, i, j] = unique([3 1 1 2 3])\nunique({'b','a','b'})\nunique([3 1 1 2 3], 'stable')"
-    }
-   ],
-   "see": [
-    "union",
-    "intersect",
-    "histcounts",
-    "accumarray",
-    "sort",
-    "ismember"
-   ]
-  },
-  "unstack": {
-   "summary": {
-    "en": "Reshapes a table from long to wide format.",
-    "pt": "Reorganiza uma tabela do formato longo para o largo."
-   },
-   "syntax": [
-    {
-     "code": "U = unstack(S, vars, ivar)",
-     "en": "Spreads the values of `vars` into new variables named by the categories in `ivar`.",
-     "pt": "Espalha os valores de `vars` em novas variáveis nomeadas pelas categorias de `ivar`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "S",
-     "en": "Table in long format.",
-     "pt": "Tabela em formato longo."
+    "upper": {
+      "summary": {
+        "en": "Converts text to uppercase.",
+        "pt": "Converte texto para maiúsculas."
+      },
+      "syntax": [
+        {
+          "code": "s = upper(str)",
+          "en": "Returns `str` with all lowercase letters in uppercase.",
+          "pt": "Retorna `str` com todas as letras minúsculas em maiúsculas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "str",
+          "en": "Character vector, string array, or cell array of character vectors.",
+          "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Text of the same type and size.",
+          "pt": "Texto do mesmo tipo e tamanho."
+        }
+      ],
+      "description": {
+        "en": "Only letters change; digits, punctuation and spaces are kept. Letters outside the basic alphabet are also converted according to Unicode rules, and some conversions change the length: in `\"straße\"` the German `ß` becomes `SS`.\n\nIt raises an error for non-text input such as a number. `lower` is the opposite function.",
+        "pt": "Só as letras mudam; dígitos, pontuação e espaços são mantidos. Letras fora do alfabeto básico também são convertidas segundo as regras do Unicode, e algumas conversões mudam o comprimento: em `\"straße\"`, o `ß` alemão vira `SS`.\n\nGera erro para entradas que não são texto, como um número. `lower` é a função oposta."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Characters, cells and strings",
+            "pt": "Caracteres, células e strings"
+          },
+          "code": "upper('abc')\nupper({'ab','Cd'})\nupper(\"straße\")"
+        }
+      ],
+      "see": [
+        "lower",
+        "strcmpi",
+        "regexprep",
+        "char"
+      ]
     },
-    {
-     "name": "vars",
-     "en": "Data variable(s) whose values go into the new columns.",
-     "pt": "Variável(is) de dados cujos valores vão para as novas colunas."
+    "validateattributes": {
+      "summary": {
+        "en": "Checks that a value has the required class and properties, raising an error otherwise.",
+        "pt": "Verifica se um valor tem a classe e as propriedades exigidas, gerando erro caso contrário."
+      },
+      "syntax": [
+        {
+          "code": "validateattributes(A, classes, attributes)",
+          "en": "Checks that `A` belongs to one of `classes` and satisfies every attribute.",
+          "pt": "Verifica se `A` pertence a uma das `classes` e satisfaz todos os atributos."
+        },
+        {
+          "code": "validateattributes(A, classes, attributes, argIndex)",
+          "en": "Mentions the argument position in the error message.",
+          "pt": "Inclui a posição do argumento na mensagem de erro."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "The value to test.",
+          "pt": "O valor a testar."
+        },
+        {
+          "name": "classes",
+          "en": "Cell array of allowed class names such as `{'numeric'}`, `{'char','string'}`; `{}` allows any class.",
+          "pt": "Cell array de nomes de classes permitidas, como `{'numeric'}`, `{'char','string'}`; `{}` permite qualquer classe."
+        },
+        {
+          "name": "attributes",
+          "en": "Cell array of requirements such as `'positive'`, `'integer'`, `'scalar'`, `'vector'`, `'nonempty'`, `'size'`.",
+          "pt": "Cell array de requisitos como `'positive'`, `'integer'`, `'scalar'`, `'vector'`, `'nonempty'`, `'size'`."
+        }
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`validateattributes` is used at the start of functions to check arguments in one line instead of writing several `if` and `error` statements. When a requirement fails it throws an error whose message names the failed attribute. When everything is valid it does nothing and returns no value.\n\nFor new code, function argument blocks (`arguments`) cover the same checks declaratively.",
+        "pt": "`validateattributes` é usada no início de funções para verificar argumentos em uma só linha, em vez de escrever vários `if` e `error`. Quando um requisito falha, lança um erro cuja mensagem nomeia o atributo que falhou. Quando tudo é válido, não faz nada e não retorna valor.\n\nEm código novo, os blocos de argumentos (`arguments`) cobrem as mesmas verificações de forma declarativa."
+      },
+      "notes": {
+        "en": "In MatLivre `validateattributes` accepts its arguments but performs no checks and never raises an error.",
+        "pt": "No MatLivre, `validateattributes` aceita seus argumentos mas não faz nenhuma verificação e nunca gera erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A valid value passes silently",
+            "pt": "Um valor válido passa em silêncio"
+          },
+          "code": "validateattributes(5, {'numeric'}, {'positive','integer'});\ndisp('ok')"
+        }
+      ],
+      "see": [
+        "validatestring",
+        "inputParser",
+        "assert",
+        "isnumeric",
+        "narginchk"
+      ]
     },
-    {
-     "name": "ivar",
-     "en": "Variable whose distinct values become the names of the new columns.",
-     "pt": "Variável cujos valores distintos viram os nomes das novas colunas."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "U",
-     "en": "Table with one row per distinct combination of the remaining variables and one new column per category of `ivar`.",
-     "pt": "Tabela com uma linha por combinação distinta das variáveis restantes e uma nova coluna por categoria de `ivar`."
-    }
-   ],
-   "description": {
-    "en": "In long format each measurement is one row, with a column saying what was measured. `unstack` turns that into one row per group with a column per measurement kind, which is the shape most plotting and statistics functions expect. The remaining variables identify the rows; they must determine a single value for each pair.\n\n`stack` does the opposite.",
-    "pt": "No formato longo, cada medição é uma linha, com uma coluna dizendo o que foi medido. `unstack` transforma isso em uma linha por grupo com uma coluna por tipo de medição, que é o formato esperado pela maioria das funções de gráficos e estatística. As demais variáveis identificam as linhas e devem determinar um único valor para cada par.\n\n`stack` faz o oposto."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Long to wide",
-      "pt": "De longo para largo"
-     },
-     "code": "T = table([1;1;2;2], {'p';'q';'p';'q'}, [10;20;30;40], 'VariableNames', {'id','key','val'});\nunstack(T, 'val', 'key')"
-    }
-   ],
-   "see": [
-    "stack",
-    "pivot",
-    "join",
-    "groupsummary",
-    "reshape"
-   ]
-  },
-  "upper": {
-   "summary": {
-    "en": "Converts text to uppercase.",
-    "pt": "Converte texto para maiúsculas."
-   },
-   "syntax": [
-    {
-     "code": "s = upper(str)",
-     "en": "Returns `str` with all lowercase letters in uppercase.",
-     "pt": "Retorna `str` com todas as letras minúsculas em maiúsculas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "str",
-     "en": "Character vector, string array, or cell array of character vectors.",
-     "pt": "Vetor de caracteres, array de strings ou cell array de vetores de caracteres."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "s",
-     "en": "Text of the same type and size.",
-     "pt": "Texto do mesmo tipo e tamanho."
-    }
-   ],
-   "description": {
-    "en": "Only letters change; digits, punctuation and spaces are kept. Letters outside the basic alphabet are also converted according to Unicode rules, and some conversions change the length: in `\"straße\"` the German `ß` becomes `SS`.\n\nIt raises an error for non-text input such as a number. `lower` is the opposite function.",
-    "pt": "Só as letras mudam; dígitos, pontuação e espaços são mantidos. Letras fora do alfabeto básico também são convertidas segundo as regras do Unicode, e algumas conversões mudam o comprimento: em `\"straße\"`, o `ß` alemão vira `SS`.\n\nGera erro para entradas que não são texto, como um número. `lower` é a função oposta."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Characters, cells and strings",
-      "pt": "Caracteres, células e strings"
-     },
-     "code": "upper('abc')\nupper({'ab','Cd'})\nupper(\"straße\")"
-    }
-   ],
-   "see": [
-    "lower",
-    "strcmpi",
-    "regexprep",
-    "char"
-   ]
-  },
-  "validateattributes": {
-   "summary": {
-    "en": "Checks that a value has the required class and properties, raising an error otherwise.",
-    "pt": "Verifica se um valor tem a classe e as propriedades exigidas, gerando erro caso contrário."
-   },
-   "syntax": [
-    {
-     "code": "validateattributes(A, classes, attributes)",
-     "en": "Checks that `A` belongs to one of `classes` and satisfies every attribute.",
-     "pt": "Verifica se `A` pertence a uma das `classes` e satisfaz todos os atributos."
+    "values": {
+      "summary": {
+        "en": "Values stored in a containers.Map or dictionary.",
+        "pt": "Valores guardados em um containers.Map ou dictionary."
+      },
+      "syntax": [
+        {
+          "code": "v = values(M)",
+          "en": "Returns all values, ordered by key.",
+          "pt": "Retorna todos os valores, ordenados pela chave."
+        },
+        {
+          "code": "v = values(M, keys)",
+          "en": "Returns only the values of the given keys, in a cell array.",
+          "pt": "Retorna apenas os valores das chaves dadas, em um cell array."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "M",
+          "en": "containers.Map object or dictionary.",
+          "pt": "Objeto containers.Map ou dictionary."
+        },
+        {
+          "name": "keys",
+          "en": "Cell array of keys to look up. A missing key raises an error.",
+          "pt": "Cell array de chaves a consultar. Uma chave inexistente gera erro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "For a containers.Map, a 1-by-N cell array; for a dictionary, an array of the value type.",
+          "pt": "Para um containers.Map, um cell array 1-por-N; para um dictionary, um array do tipo dos valores."
+        }
+      ],
+      "description": {
+        "en": "A map keeps its keys sorted, so `values(M)` follows the order of `keys(M)`: the first value belongs to the first key, and so on. This pairing makes it easy to walk through both together or to convert a map to a table.\n\nFor reading a single value, indexing with the key, `M('a')`, is simpler.",
+        "pt": "Um mapa mantém suas chaves ordenadas, então `values(M)` segue a ordem de `keys(M)`: o primeiro valor pertence à primeira chave, e assim por diante. Esse pareamento facilita percorrer os dois juntos ou converter um mapa em tabela.\n\nPara ler um único valor, indexar com a chave, `M('a')`, é mais simples."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "All values and selected ones",
+            "pt": "Todos os valores e alguns selecionados"
+          },
+          "code": "m = containers.Map({'a','b'}, [1 2]);\nvalues(m)\nvalues(m, {'b'})"
+        }
+      ],
+      "see": [
+        "keys",
+        "isKey",
+        "remove",
+        "containers.Map",
+        "dictionary"
+      ]
     },
-    {
-     "code": "validateattributes(A, classes, attributes, argIndex)",
-     "en": "Mentions the argument position in the error message.",
-     "pt": "Inclui a posição do argumento na mensagem de erro."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "The value to test.",
-     "pt": "O valor a testar."
+    "var": {
+      "summary": {
+        "en": "Variance of the elements of an array.",
+        "pt": "Variância dos elementos de um array."
+      },
+      "syntax": [
+        {
+          "code": "v = var(A)",
+          "en": "Variance along the first non-singleton dimension, normalized by `N-1`.",
+          "pt": "Variância ao longo da primeira dimensão não unitária, normalizada por `N-1`."
+        },
+        {
+          "code": "v = var(A, w)",
+          "en": "Uses weight `0` (divide by `N-1`) or `1` (divide by `N`).",
+          "pt": "Usa o peso `0` (divide por `N-1`) ou `1` (divide por `N`)."
+        },
+        {
+          "code": "v = var(A, w, dim)",
+          "en": "Operates along dimension `dim`.",
+          "pt": "Opera ao longo da dimensão `dim`."
+        },
+        {
+          "code": "v = var(___, 'omitnan')",
+          "en": "Ignores `NaN` values.",
+          "pt": "Ignora valores `NaN`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A",
+          "en": "Numeric or logical vector, matrix or N-D array.",
+          "pt": "Vetor, matriz ou array N-D numérico ou lógico."
+        },
+        {
+          "name": "w",
+          "en": "`0` for the sample variance (default), `1` for the population variance, or a vector of weights.",
+          "pt": "`0` para a variância amostral (padrão), `1` para a variância populacional, ou um vetor de pesos."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along.",
+          "pt": "Dimensão ao longo da qual operar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "Variance, with the operating dimension reduced to size 1.",
+          "pt": "Variância, com a dimensão de operação reduzida a tamanho 1."
+        }
+      ],
+      "description": {
+        "en": "The variance is the mean squared distance from the mean. With the default `w = 0` the sum is divided by `N-1`, which gives an unbiased estimate when the data are a sample; `w = 1` divides by `N`, the right choice when the data are the whole population.\n\nA scalar has variance `0`. For a matrix, `var(A)` returns a row with the variance of each column. The standard deviation is `sqrt(var(A))`, which is `std`.",
+        "pt": "A variância é a média das distâncias quadradas até a média. Com o padrão `w = 0` a soma é dividida por `N-1`, o que dá uma estimativa não viesada quando os dados são uma amostra; `w = 1` divide por `N`, a escolha correta quando os dados são toda a população.\n\nUm escalar tem variância `0`. Para uma matriz, `var(A)` retorna uma linha com a variância de cada coluna. O desvio padrão é `sqrt(var(A))`, que é `std`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sample, population and per column",
+            "pt": "Amostral, populacional e por coluna"
+          },
+          "code": "x = [2 4 4 4 5 5 7 9];\nvar(x)\nvar(x, 1)\nvar([1 2; 3 8])"
+        }
+      ],
+      "see": [
+        "std",
+        "mean",
+        "median",
+        "cov",
+        "mode"
+      ]
     },
-    {
-     "name": "classes",
-     "en": "Cell array of allowed class names such as `{'numeric'}`, `{'char','string'}`; `{}` allows any class.",
-     "pt": "Cell array de nomes de classes permitidas, como `{'numeric'}`, `{'char','string'}`; `{}` permite qualquer classe."
+    "varfun": {
+      "summary": {
+        "en": "Applies a function to the variables of a table.",
+        "pt": "Aplica uma função às variáveis de uma tabela."
+      },
+      "syntax": [
+        {
+          "code": "B = varfun(func, A)",
+          "en": "Applies `func` to each variable of `A` and returns the results as a table.",
+          "pt": "Aplica `func` a cada variável de `A` e retorna os resultados como tabela."
+        },
+        {
+          "code": "B = varfun(func, A, 'InputVariables', vars)",
+          "en": "Applies `func` only to the chosen variables.",
+          "pt": "Aplica `func` apenas às variáveis escolhidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "func",
+          "en": "Function handle that takes a column and returns a value.",
+          "pt": "Handle de função que recebe uma coluna e retorna um valor."
+        },
+        {
+          "name": "A",
+          "en": "Table or timetable.",
+          "pt": "Tabela ou timetable."
+        },
+        {
+          "name": "'InputVariables'",
+          "en": "Names or positions of the variables to use.",
+          "pt": "Nomes ou posições das variáveis a usar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "B",
+          "en": "Table with one variable per input variable, named like `sum_a` after the function and the variable.",
+          "pt": "Tabela com uma variável por variável de entrada, nomeada como `sum_a`, a partir da função e da variável."
+        }
+      ],
+      "description": {
+        "en": "`varfun` computes a summary of every column at once: totals, means, minima. With a function that returns a column of the same height, the result has the same number of rows as `A`, as with `varfun(@(x) x*2, A)`, whose variables are named `Fun_a`, `Fun_b` when the function is anonymous.",
+        "pt": "`varfun` calcula um resumo de todas as colunas de uma vez: totais, médias, mínimos. Com uma função que retorna uma coluna da mesma altura, o resultado tem o mesmo número de linhas de `A`, como em `varfun(@(x) x*2, A)`, cujas variáveis se chamam `Fun_a`, `Fun_b` quando a função é anônima."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Column summaries",
+            "pt": "Resumos por coluna"
+          },
+          "code": "T = table([1;2;3], [4;5;6], 'VariableNames', {'a','b'});\nvarfun(@sum, T)\nvarfun(@mean, T, 'InputVariables', 'b')"
+        }
+      ],
+      "see": [
+        "rowfun",
+        "groupsummary",
+        "splitapply",
+        "cellfun",
+        "table"
+      ]
     },
-    {
-     "name": "attributes",
-     "en": "Cell array of requirements such as `'positive'`, `'integer'`, `'scalar'`, `'vector'`, `'nonempty'`, `'size'`.",
-     "pt": "Cell array de requisitos como `'positive'`, `'integer'`, `'scalar'`, `'vector'`, `'nonempty'`, `'size'`."
-    }
-   ],
-   "outputs": [],
-   "description": {
-    "en": "`validateattributes` is used at the start of functions to check arguments in one line instead of writing several `if` and `error` statements. When a requirement fails it throws an error whose message names the failed attribute. When everything is valid it does nothing and returns no value.\n\nFor new code, function argument blocks (`arguments`) cover the same checks declaratively.",
-    "pt": "`validateattributes` é usada no início de funções para verificar argumentos em uma só linha, em vez de escrever vários `if` e `error`. Quando um requisito falha, lança um erro cuja mensagem nomeia o atributo que falhou. Quando tudo é válido, não faz nada e não retorna valor.\n\nEm código novo, os blocos de argumentos (`arguments`) cobrem as mesmas verificações de forma declarativa."
-   },
-   "notes": {
-    "en": "In MatLivre `validateattributes` accepts its arguments but performs no checks and never raises an error.",
-    "pt": "No MatLivre, `validateattributes` aceita seus argumentos mas não faz nenhuma verificação e nunca gera erro."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "A valid value passes silently",
-      "pt": "Um valor válido passa em silêncio"
-     },
-     "code": "validateattributes(5, {'numeric'}, {'positive','integer'});\ndisp('ok')"
-    }
-   ],
-   "see": [
-    "validatestring",
-    "inputParser",
-    "assert",
-    "isnumeric",
-    "narginchk"
-   ]
-  },
-  "values": {
-   "summary": {
-    "en": "Values stored in a containers.Map or dictionary.",
-    "pt": "Valores guardados em um containers.Map ou dictionary."
-   },
-   "syntax": [
-    {
-     "code": "v = values(M)",
-     "en": "Returns all values, ordered by key.",
-     "pt": "Retorna todos os valores, ordenados pela chave."
+    "vartype": {
+      "summary": {
+        "en": "Selects table variables by data type, for use as a subscript.",
+        "pt": "Seleciona variáveis de uma tabela pelo tipo de dado, para usar como subscrito."
+      },
+      "syntax": [
+        {
+          "code": "S = vartype(type)",
+          "en": "Creates a subscript that selects variables of the given type.",
+          "pt": "Cria um subscrito que seleciona as variáveis do tipo dado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "type",
+          "en": "`'numeric'`, `'categorical'`, `'datetime'`, `'duration'`, `'logical'`, `'cellstr'`, `'string'`, `'char'`, or a class name.",
+          "pt": "`'numeric'`, `'categorical'`, `'datetime'`, `'duration'`, `'logical'`, `'cellstr'`, `'string'`, `'char'`, ou um nome de classe."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "S",
+          "en": "Subscript object, used as `T(:, vartype('numeric'))`.",
+          "pt": "Objeto de subscrito, usado como `T(:, vartype('numeric'))`."
+        }
+      ],
+      "description": {
+        "en": "`vartype` is a convenient way to apply an operation to one kind of column without naming them. For example `T(:, vartype('numeric'))` keeps only the numeric columns, and `varfun(@mean, T, 'InputVariables', vartype('numeric'))` averages only those.",
+        "pt": "`vartype` é uma forma prática de aplicar uma operação a um tipo de coluna sem citá-las pelo nome. Por exemplo, `T(:, vartype('numeric'))` mantém só as colunas numéricas, e `varfun(@mean, T, 'InputVariables', vartype('numeric'))` calcula a média apenas delas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Keep numeric columns",
+            "pt": "Manter as colunas numéricas"
+          },
+          "code": "T = table([1;2], {'a';'b'}, 'VariableNames', {'n','s'});\nT(:, vartype('numeric'))"
+        }
+      ],
+      "see": [
+        "varfun",
+        "table",
+        "splitvars",
+        "convertvars",
+        "isnumeric"
+      ]
     },
-    {
-     "code": "v = values(M, keys)",
-     "en": "Returns only the values of the given keys, in a cell array.",
-     "pt": "Retorna apenas os valores das chaves dadas, em um cell array."
+    "week": {
+      "summary": {
+        "en": "Week of the year for each datetime.",
+        "pt": "Semana do ano de cada datetime."
+      },
+      "syntax": [
+        {
+          "code": "w = week(d)",
+          "en": "Returns the week of the year of each date.",
+          "pt": "Retorna a semana do ano de cada data."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "d",
+          "en": "datetime array.",
+          "pt": "Array de datetime."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Double array with the week number, 1 to 53.",
+          "pt": "Array double com o número da semana, de 1 a 53."
+        }
+      ],
+      "description": {
+        "en": "The year starts in week 1, which contains January 1. Weeks start on Sunday, so the last days of December can belong to week 53. For example, March 5, 2024 is in week 10.\n\nUse `day`, `month` and `year` for other calendar parts.",
+        "pt": "O ano começa na semana 1, que contém 1º de janeiro. As semanas começam no domingo, então os últimos dias de dezembro podem pertencer à semana 53. Por exemplo, 5 de março de 2024 está na semana 10.\n\nUse `day`, `month` e `year` para outras partes do calendário."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Week numbers",
+            "pt": "Números de semana"
+          },
+          "code": "week(datetime(2024,3,5))\nweek(datetime(2024,1,1))"
+        }
+      ],
+      "see": [
+        "day",
+        "month",
+        "year",
+        "datetime",
+        "weekday"
+      ]
     }
-   ],
-   "inputs": [
-    {
-     "name": "M",
-     "en": "containers.Map object or dictionary.",
-     "pt": "Objeto containers.Map ou dictionary."
-    },
-    {
-     "name": "keys",
-     "en": "Cell array of keys to look up. A missing key raises an error.",
-     "pt": "Cell array de chaves a consultar. Uma chave inexistente gera erro."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "v",
-     "en": "For a containers.Map, a 1-by-N cell array; for a dictionary, an array of the value type.",
-     "pt": "Para um containers.Map, um cell array 1-por-N; para um dictionary, um array do tipo dos valores."
-    }
-   ],
-   "description": {
-    "en": "A map keeps its keys sorted, so `values(M)` follows the order of `keys(M)`: the first value belongs to the first key, and so on. This pairing makes it easy to walk through both together or to convert a map to a table.\n\nFor reading a single value, indexing with the key, `M('a')`, is simpler.",
-    "pt": "Um mapa mantém suas chaves ordenadas, então `values(M)` segue a ordem de `keys(M)`: o primeiro valor pertence à primeira chave, e assim por diante. Esse pareamento facilita percorrer os dois juntos ou converter um mapa em tabela.\n\nPara ler um único valor, indexar com a chave, `M('a')`, é mais simples."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "All values and selected ones",
-      "pt": "Todos os valores e alguns selecionados"
-     },
-     "code": "m = containers.Map({'a','b'}, [1 2]);\nvalues(m)\nvalues(m, {'b'})"
-    }
-   ],
-   "see": [
-    "keys",
-    "isKey",
-    "remove",
-    "containers.Map",
-    "dictionary"
-   ]
-  },
-  "var": {
-   "summary": {
-    "en": "Variance of the elements of an array.",
-    "pt": "Variância dos elementos de um array."
-   },
-   "syntax": [
-    {
-     "code": "v = var(A)",
-     "en": "Variance along the first non-singleton dimension, normalized by `N-1`.",
-     "pt": "Variância ao longo da primeira dimensão não unitária, normalizada por `N-1`."
-    },
-    {
-     "code": "v = var(A, w)",
-     "en": "Uses weight `0` (divide by `N-1`) or `1` (divide by `N`).",
-     "pt": "Usa o peso `0` (divide por `N-1`) ou `1` (divide por `N`)."
-    },
-    {
-     "code": "v = var(A, w, dim)",
-     "en": "Operates along dimension `dim`.",
-     "pt": "Opera ao longo da dimensão `dim`."
-    },
-    {
-     "code": "v = var(___, 'omitnan')",
-     "en": "Ignores `NaN` values.",
-     "pt": "Ignora valores `NaN`."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "A",
-     "en": "Numeric or logical vector, matrix or N-D array.",
-     "pt": "Vetor, matriz ou array N-D numérico ou lógico."
-    },
-    {
-     "name": "w",
-     "en": "`0` for the sample variance (default), `1` for the population variance, or a vector of weights.",
-     "pt": "`0` para a variância amostral (padrão), `1` para a variância populacional, ou um vetor de pesos."
-    },
-    {
-     "name": "dim",
-     "en": "Dimension to operate along.",
-     "pt": "Dimensão ao longo da qual operar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "v",
-     "en": "Variance, with the operating dimension reduced to size 1.",
-     "pt": "Variância, com a dimensão de operação reduzida a tamanho 1."
-    }
-   ],
-   "description": {
-    "en": "The variance is the mean squared distance from the mean. With the default `w = 0` the sum is divided by `N-1`, which gives an unbiased estimate when the data are a sample; `w = 1` divides by `N`, the right choice when the data are the whole population.\n\nA scalar has variance `0`. For a matrix, `var(A)` returns a row with the variance of each column. The standard deviation is `sqrt(var(A))`, which is `std`.",
-    "pt": "A variância é a média das distâncias quadradas até a média. Com o padrão `w = 0` a soma é dividida por `N-1`, o que dá uma estimativa não viesada quando os dados são uma amostra; `w = 1` divide por `N`, a escolha correta quando os dados são toda a população.\n\nUm escalar tem variância `0`. Para uma matriz, `var(A)` retorna uma linha com a variância de cada coluna. O desvio padrão é `sqrt(var(A))`, que é `std`."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Sample, population and per column",
-      "pt": "Amostral, populacional e por coluna"
-     },
-     "code": "x = [2 4 4 4 5 5 7 9];\nvar(x)\nvar(x, 1)\nvar([1 2; 3 8])"
-    }
-   ],
-   "see": [
-    "std",
-    "mean",
-    "median",
-    "cov",
-    "mode"
-   ]
-  },
-  "varfun": {
-   "summary": {
-    "en": "Applies a function to the variables of a table.",
-    "pt": "Aplica uma função às variáveis de uma tabela."
-   },
-   "syntax": [
-    {
-     "code": "B = varfun(func, A)",
-     "en": "Applies `func` to each variable of `A` and returns the results as a table.",
-     "pt": "Aplica `func` a cada variável de `A` e retorna os resultados como tabela."
-    },
-    {
-     "code": "B = varfun(func, A, 'InputVariables', vars)",
-     "en": "Applies `func` only to the chosen variables.",
-     "pt": "Aplica `func` apenas às variáveis escolhidas."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "func",
-     "en": "Function handle that takes a column and returns a value.",
-     "pt": "Handle de função que recebe uma coluna e retorna um valor."
-    },
-    {
-     "name": "A",
-     "en": "Table or timetable.",
-     "pt": "Tabela ou timetable."
-    },
-    {
-     "name": "'InputVariables'",
-     "en": "Names or positions of the variables to use.",
-     "pt": "Nomes ou posições das variáveis a usar."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "B",
-     "en": "Table with one variable per input variable, named like `sum_a` after the function and the variable.",
-     "pt": "Tabela com uma variável por variável de entrada, nomeada como `sum_a`, a partir da função e da variável."
-    }
-   ],
-   "description": {
-    "en": "`varfun` computes a summary of every column at once: totals, means, minima. With a function that returns a column of the same height, the result has the same number of rows as `A`, as with `varfun(@(x) x*2, A)`, whose variables are named `Fun_a`, `Fun_b` when the function is anonymous.",
-    "pt": "`varfun` calcula um resumo de todas as colunas de uma vez: totais, médias, mínimos. Com uma função que retorna uma coluna da mesma altura, o resultado tem o mesmo número de linhas de `A`, como em `varfun(@(x) x*2, A)`, cujas variáveis se chamam `Fun_a`, `Fun_b` quando a função é anônima."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Column summaries",
-      "pt": "Resumos por coluna"
-     },
-     "code": "T = table([1;2;3], [4;5;6], 'VariableNames', {'a','b'});\nvarfun(@sum, T)\nvarfun(@mean, T, 'InputVariables', 'b')"
-    }
-   ],
-   "see": [
-    "rowfun",
-    "groupsummary",
-    "splitapply",
-    "cellfun",
-    "table"
-   ]
-  },
-  "vartype": {
-   "summary": {
-    "en": "Selects table variables by data type, for use as a subscript.",
-    "pt": "Seleciona variáveis de uma tabela pelo tipo de dado, para usar como subscrito."
-   },
-   "syntax": [
-    {
-     "code": "S = vartype(type)",
-     "en": "Creates a subscript that selects variables of the given type.",
-     "pt": "Cria um subscrito que seleciona as variáveis do tipo dado."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "type",
-     "en": "`'numeric'`, `'categorical'`, `'datetime'`, `'duration'`, `'logical'`, `'cellstr'`, `'string'`, `'char'`, or a class name.",
-     "pt": "`'numeric'`, `'categorical'`, `'datetime'`, `'duration'`, `'logical'`, `'cellstr'`, `'string'`, `'char'`, ou um nome de classe."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "S",
-     "en": "Subscript object, used as `T(:, vartype('numeric'))`.",
-     "pt": "Objeto de subscrito, usado como `T(:, vartype('numeric'))`."
-    }
-   ],
-   "description": {
-    "en": "`vartype` is a convenient way to apply an operation to one kind of column without naming them. For example `T(:, vartype('numeric'))` keeps only the numeric columns, and `varfun(@mean, T, 'InputVariables', vartype('numeric'))` averages only those.",
-    "pt": "`vartype` é uma forma prática de aplicar uma operação a um tipo de coluna sem citá-las pelo nome. Por exemplo, `T(:, vartype('numeric'))` mantém só as colunas numéricas, e `varfun(@mean, T, 'InputVariables', vartype('numeric'))` calcula a média apenas delas."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Keep numeric columns",
-      "pt": "Manter as colunas numéricas"
-     },
-     "code": "T = table([1;2], {'a';'b'}, 'VariableNames', {'n','s'});\nT(:, vartype('numeric'))"
-    }
-   ],
-   "see": [
-    "varfun",
-    "table",
-    "splitvars",
-    "convertvars",
-    "isnumeric"
-   ]
-  },
-  "week": {
-   "summary": {
-    "en": "Week of the year for each datetime.",
-    "pt": "Semana do ano de cada datetime."
-   },
-   "syntax": [
-    {
-     "code": "w = week(d)",
-     "en": "Returns the week of the year of each date.",
-     "pt": "Retorna a semana do ano de cada data."
-    }
-   ],
-   "inputs": [
-    {
-     "name": "d",
-     "en": "datetime array.",
-     "pt": "Array de datetime."
-    }
-   ],
-   "outputs": [
-    {
-     "name": "w",
-     "en": "Double array with the week number, 1 to 53.",
-     "pt": "Array double com o número da semana, de 1 a 53."
-    }
-   ],
-   "description": {
-    "en": "The year starts in week 1, which contains January 1. Weeks start on Sunday, so the last days of December can belong to week 53. For example, March 5, 2024 is in week 10.\n\nUse `day`, `month` and `year` for other calendar parts.",
-    "pt": "O ano começa na semana 1, que contém 1º de janeiro. As semanas começam no domingo, então os últimos dias de dezembro podem pertencer à semana 53. Por exemplo, 5 de março de 2024 está na semana 10.\n\nUse `day`, `month` e `year` para outras partes do calendário."
-   },
-   "examples": [
-    {
-     "title": {
-      "en": "Week numbers",
-      "pt": "Números de semana"
-     },
-     "code": "week(datetime(2024,3,5))\nweek(datetime(2024,1,1))"
-    }
-   ],
-   "see": [
-    "day",
-    "month",
-    "year",
-    "datetime",
-    "weekday"
-   ]
   }
- }
 }

@@ -1,0 +1,185 @@
+{
+  "functions": {
+    "savefig": {
+      "summary": {
+        "en": "Saves a figure, with all of its graphics objects, to a .fig file.",
+        "pt": "Salva uma figura, com todos os seus objetos gráficos, em um arquivo .fig."
+      },
+      "syntax": [
+        {
+          "code": "savefig(filename)",
+          "en": "Saves the current figure to `filename`.",
+          "pt": "Salva a figura atual em `filename`."
+        },
+        {
+          "code": "savefig(h, filename)",
+          "en": "Saves the figure with handle `h`.",
+          "pt": "Salva a figura de handle `h`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Handle of the figure to save. When omitted, the current figure is used.",
+          "pt": "Handle da figura a salvar. Se omitido, usa-se a figura atual."
+        },
+        {
+          "name": "filename",
+          "en": "File name as text. The `.fig` extension is added when the name has none.",
+          "pt": "Nome do arquivo, como texto. A extensão `.fig` é acrescentada quando o nome não tem extensão."
+        }
+      ],
+      "outputs": [],
+      "description": {
+        "en": "A `.fig` file keeps a figure as a set of objects (axes, lines, bars, labels and their properties) instead of as a picture, so the figure can be opened again with `openfig` and edited, rather than just viewed.\n\nUse it to hand someone a plot they can still change, or to store a figure and reload it in a later session. To get an image for a document, use `exportgraphics` or `saveas` instead.",
+        "pt": "Um arquivo `.fig` guarda a figura como um conjunto de objetos (eixos, linhas, barras, rótulos e suas propriedades), e não como uma imagem. Assim, a figura pode ser aberta de novo com `openfig` e editada, em vez de apenas vista.\n\nUse-o para entregar a alguém um gráfico que ainda pode ser alterado, ou para guardar uma figura e recarregá-la em outra sessão. Para obter uma imagem para um documento, use `exportgraphics` ou `saveas`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Save a plot and open it again",
+            "pt": "Salvar um gráfico e abri-lo de novo"
+          },
+          "code": "f = figure('Visible', 'off');\nplot(1:4, (1:4).^2);\nsavefig(f, 'squares');\nclose(f);\ng = openfig('squares', 'invisible');\nl = findobj(g, 'Type', 'line');\ndisp(get(l, 'YData'))",
+          "silent": false
+        }
+      ],
+      "see": ["openfig", "hgsave", "hgload", "saveas", "exportgraphics"]
+    },
+    "openfig": {
+      "summary": {
+        "en": "Opens a figure that was saved in a .fig file.",
+        "pt": "Abre uma figura salva em um arquivo .fig."
+      },
+      "syntax": [
+        {
+          "code": "fig = openfig(filename)",
+          "en": "Opens the figure stored in `filename` and returns its handle.",
+          "pt": "Abre a figura guardada em `filename` e retorna o seu handle."
+        },
+        {
+          "code": "fig = openfig(filename, visibility)",
+          "en": "Opens the figure with the given visibility, such as `'invisible'`.",
+          "pt": "Abre a figura com a visibilidade indicada, como `'invisible'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "filename",
+          "en": "Name of the `.fig` file, as text. The extension may be left out.",
+          "pt": "Nome do arquivo `.fig`, como texto. A extensão pode ser omitida."
+        },
+        {
+          "name": "visibility",
+          "en": "`'visible'` or `'invisible'`. Use `'invisible'` to load a figure without showing a window.",
+          "pt": "`'visible'` ou `'invisible'`. Use `'invisible'` para carregar uma figura sem mostrar uma janela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "fig",
+          "en": "Handle of the restored figure.",
+          "pt": "Handle da figura restaurada."
+        }
+      ],
+      "description": {
+        "en": "`openfig` rebuilds a figure from a `.fig` file written by `savefig`. All the objects come back with their properties, so they can be found with `findobj` and changed like those of any other figure.\n\nIf the file does not exist, an error reports that the file or folder could not be found.",
+        "pt": "`openfig` reconstrói uma figura a partir de um arquivo `.fig` escrito por `savefig`. Todos os objetos voltam com suas propriedades, então podem ser encontrados com `findobj` e alterados como os de qualquer outra figura.\n\nSe o arquivo não existir, ocorre um erro informando que o arquivo ou a pasta não foi encontrado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover the data of a saved figure",
+            "pt": "Recuperar os dados de uma figura salva"
+          },
+          "code": "f = figure('Visible', 'off');\nplot([3 1 2]);\nsavefig(f, 'demo');\ng = openfig('demo', 'invisible');\nl = findobj(g, 'Type', 'line');\ndisp(get(l, 'YData'))",
+          "silent": false
+        }
+      ],
+      "see": ["savefig", "hgload", "findobj", "figure"]
+    },
+    "hgsave": {
+      "summary": {
+        "en": "Saves a graphics object hierarchy, usually a figure, to a .fig file.",
+        "pt": "Salva uma hierarquia de objetos gráficos, em geral uma figura, em um arquivo .fig."
+      },
+      "syntax": [
+        {
+          "code": "hgsave(h, filename)",
+          "en": "Saves the object `h` and its children to `filename`.",
+          "pt": "Salva o objeto `h` e seus filhos em `filename`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Handle of the figure, or other graphics object, to save.",
+          "pt": "Handle da figura, ou de outro objeto gráfico, a salvar."
+        },
+        {
+          "name": "filename",
+          "en": "Name of the file, as text. The `.fig` extension is added when it is missing.",
+          "pt": "Nome do arquivo, como texto. A extensão `.fig` é acrescentada quando falta."
+        }
+      ],
+      "outputs": [],
+      "description": {
+        "en": "`hgsave` is the older counterpart of `savefig`: it writes the objects under `h` to a `.fig` file, which `hgload` or `openfig` can read back. For new code, `savefig` is the usual choice.",
+        "pt": "`hgsave` é o equivalente mais antigo de `savefig`: grava em um arquivo `.fig` os objetos sob `h`, que `hgload` ou `openfig` podem ler de volta. Em código novo, `savefig` costuma ser a escolha."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Save and reload a bar chart",
+            "pt": "Salvar e recarregar um gráfico de barras"
+          },
+          "code": "h = figure('Visible', 'off');\nbar([4 8 15]);\nhgsave(h, 'bars');\nk = hgload('bars');\ndisp(class(k))",
+          "silent": false
+        }
+      ],
+      "see": ["hgload", "savefig", "openfig"]
+    },
+    "hgload": {
+      "summary": {
+        "en": "Loads a graphics object hierarchy saved in a .fig file.",
+        "pt": "Carrega uma hierarquia de objetos gráficos salva em um arquivo .fig."
+      },
+      "syntax": [
+        {
+          "code": "h = hgload(filename)",
+          "en": "Loads the objects stored in `filename` and returns the handle of the figure.",
+          "pt": "Carrega os objetos guardados em `filename` e retorna o handle da figura."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "filename",
+          "en": "Name of the `.fig` file, as text.",
+          "pt": "Nome do arquivo `.fig`, como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Handle of the loaded figure.",
+          "pt": "Handle da figura carregada."
+        }
+      ],
+      "description": {
+        "en": "`hgload` reads a file written by `hgsave` or `savefig` and recreates its objects. It is the older counterpart of `openfig`. If the file cannot be found, an error is raised.",
+        "pt": "`hgload` lê um arquivo escrito por `hgsave` ou `savefig` e recria seus objetos. É o equivalente mais antigo de `openfig`. Se o arquivo não for encontrado, ocorre um erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Read back a saved figure",
+            "pt": "Ler de volta uma figura salva"
+          },
+          "code": "h = figure('Visible', 'off');\nplot(1:3);\nhgsave(h, 'line');\nk = hgload('line');\nl = findobj(k, 'Type', 'line');\ndisp(get(l, 'YData'))",
+          "silent": false
+        }
+      ],
+      "see": ["hgsave", "openfig", "savefig", "findobj"]
+    }
+  }
+}

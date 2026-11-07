@@ -1,537 +1,1368 @@
 {
   "functions": {
     "~=": {
-      "summary": {"en": "Not-equal operator: tests element by element whether two values differ.", "pt": "Operador de diferença: testa elemento a elemento se dois valores são diferentes."},
+      "summary": {
+        "en": "Not-equal operator: tests element by element whether two values differ.",
+        "pt": "Operador de diferença: testa elemento a elemento se dois valores são diferentes."
+      },
       "syntax": [
-        {"code": "A ~= B", "en": "Returns a logical array that is `true` where `A` and `B` differ. Same as `ne(A, B)`.", "pt": "Retorna um array lógico que vale `true` onde `A` e `B` diferem. Equivale a `ne(A, B)`."}
+        {
+          "code": "A ~= B",
+          "en": "Returns a logical array that is `true` where `A` and `B` differ. Same as `ne(A, B)`.",
+          "pt": "Retorna um array lógico que vale `true` onde `A` e `B` diferem. Equivale a `ne(A, B)`."
+        }
       ],
       "inputs": [
-        {"name": "A, B", "en": "Numeric, logical or character arrays, strings, or other comparable values. Sizes must be compatible, with implicit expansion of singleton dimensions.", "pt": "Arrays numéricos, lógicos ou de caracteres, strings, ou outros valores comparáveis. Os tamanhos devem ser compatíveis, com expansão implícita de dimensões singleton."}
+        {
+          "name": "A, B",
+          "en": "Numeric, logical or character arrays, strings, or other comparable values. Sizes must be compatible, with implicit expansion of singleton dimensions.",
+          "pt": "Arrays numéricos, lógicos ou de caracteres, strings, ou outros valores comparáveis. Os tamanhos devem ser compatíveis, com expansão implícita de dimensões singleton."
+        }
       ],
       "outputs": [
-        {"name": "TF", "en": "Logical array with the size of the expanded inputs.", "pt": "Array lógico com o tamanho das entradas expandidas."}
+        {
+          "name": "TF",
+          "en": "Logical array with the size of the expanded inputs.",
+          "pt": "Array lógico com o tamanho das entradas expandidas."
+        }
       ],
       "description": {
         "en": "The comparison is made element by element, so `[1 2 3] ~= [1 5 3]` gives `0 1 0`. A scalar is compared with every element of an array. Character arrays are compared by character code, and a string scalar is compared with another string as a whole.\n\n`NaN ~= NaN` is `true`, since NaN is never equal to anything. For complex numbers both the real and the imaginary parts are compared. To test whether two whole arrays differ, use `~isequal(A, B)` instead, which returns one scalar.",
         "pt": "A comparação é feita elemento a elemento, então `[1 2 3] ~= [1 5 3]` resulta em `0 1 0`. Um escalar é comparado com todos os elementos de um array. Arrays de caracteres são comparados pelo código do caractere, e um string escalar é comparado com outro string como um todo.\n\n`NaN ~= NaN` é `true`, pois NaN nunca é igual a nada. Para números complexos, as partes real e imaginária são comparadas. Para saber se dois arrays inteiros diferem, use `~isequal(A, B)`, que retorna um único escalar."
       },
       "examples": [
-        {"title": {"en": "Element-wise inequality", "pt": "Desigualdade elemento a elemento"}, "code": "[1 2 3] ~= [1 5 3]\nx = 3;\nx ~= [1 3 5]\nNaN ~= NaN\n\"cat\" ~= \"car\""}
+        {
+          "title": {
+            "en": "Element-wise inequality",
+            "pt": "Desigualdade elemento a elemento"
+          },
+          "code": "[1 2 3] ~= [1 5 3]\nx = 3;\nx ~= [1 3 5]\nNaN ~= NaN\n\"cat\" ~= \"car\""
+        }
       ],
-      "see": ["eq", "ne", "isequal", "lt", "gt"]
+      "see": [
+        "eq",
+        "ne",
+        "isequal",
+        "lt",
+        "gt"
+      ]
     },
     "addboundary": {
-      "summary": {"en": "Adds a new polygonal boundary to a polyshape and returns the combined shape.", "pt": "Adiciona um novo contorno poligonal a um polyshape e retorna a forma combinada."},
+      "summary": {
+        "en": "Adds a new polygonal boundary to a polyshape and returns the combined shape.",
+        "pt": "Adiciona um novo contorno poligonal a um polyshape e retorna a forma combinada."
+      },
       "syntax": [
-        {"code": "pshape = addboundary(pshape, x, y)", "en": "Adds the polygon with vertices `(x, y)` as a new boundary of `pshape`.", "pt": "Adiciona o polígono de vértices `(x, y)` como um novo contorno de `pshape`."}
+        {
+          "code": "pshape = addboundary(pshape, x, y)",
+          "en": "Adds the polygon with vertices `(x, y)` as a new boundary of `pshape`.",
+          "pt": "Adiciona o polígono de vértices `(x, y)` como um novo contorno de `pshape`."
+        }
       ],
       "inputs": [
-        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
-        {"name": "x, y", "en": "Vectors with the x and y coordinates of the new boundary's vertices, in order around the polygon.", "pt": "Vetores com as coordenadas x e y dos vértices do novo contorno, em ordem ao redor do polígono."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` object.",
+          "pt": "Um objeto `polyshape`."
+        },
+        {
+          "name": "x, y",
+          "en": "Vectors with the x and y coordinates of the new boundary's vertices, in order around the polygon.",
+          "pt": "Vetores com as coordenadas x e y dos vértices do novo contorno, em ordem ao redor do polígono."
+        }
       ],
       "outputs": [
-        {"name": "pshape", "en": "A `polyshape` with the original boundaries plus the new one.", "pt": "Um `polyshape` com os contornos originais mais o novo."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` with the original boundaries plus the new one.",
+          "pt": "Um `polyshape` com os contornos originais mais o novo."
+        }
       ],
       "description": {
         "en": "`addboundary` is the way to put a second polygon, such as a separate island, into an existing polyshape without taking a union. The result is normalized: a new boundary lying inside an existing one becomes a hole, while a separate one becomes another region.\n\nThe original object is not changed; the function returns a new `polyshape`.",
         "pt": "`addboundary` é a forma de colocar um segundo polígono, como uma ilha separada, em um polyshape existente sem fazer uma união. O resultado é normalizado: um novo contorno dentro de um existente vira um furo, enquanto um contorno separado vira outra região.\n\nO objeto original não é alterado; a função retorna um novo `polyshape`."
       },
       "examples": [
-        {"title": {"en": "Two separate squares", "pt": "Dois quadrados separados"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nB = addboundary(P, [5 6 6 5], [0 0 1 1]);\ndisp(B.NumRegions)\ndisp(area(B))"}
+        {
+          "title": {
+            "en": "Two separate squares",
+            "pt": "Dois quadrados separados"
+          },
+          "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nB = addboundary(P, [5 6 6 5], [0 0 1 1]);\ndisp(B.NumRegions)\ndisp(area(B))"
+        }
       ],
-      "see": ["polyshape", "rmboundary", "regions", "numboundaries"]
+      "see": [
+        "polyshape",
+        "rmboundary",
+        "regions",
+        "numboundaries"
+      ]
     },
     "alphaShape": {
-      "summary": {"en": "Creates a bounding region around a set of 2-D or 3-D points, controlled by a radius alpha.", "pt": "Cria uma região que envolve um conjunto de pontos 2-D ou 3-D, controlada por um raio alpha."},
+      "summary": {
+        "en": "Creates a bounding region around a set of 2-D or 3-D points, controlled by a radius alpha.",
+        "pt": "Cria uma região que envolve um conjunto de pontos 2-D ou 3-D, controlada por um raio alpha."
+      },
       "syntax": [
-        {"code": "shp = alphaShape(x, y)", "en": "Builds a 2-D alpha shape from column vectors of coordinates, using the default alpha.", "pt": "Cria uma alpha shape 2-D a partir de vetores coluna de coordenadas, usando o alpha padrão."},
-        {"code": "shp = alphaShape(x, y, z)", "en": "Builds a 3-D alpha shape.", "pt": "Cria uma alpha shape 3-D."},
-        {"code": "shp = alphaShape(P)", "en": "Takes the points as the rows of the matrix `P` (two or three columns).", "pt": "Recebe os pontos como linhas da matriz `P` (duas ou três colunas)."},
-        {"code": "shp = alphaShape(___, alpha)", "en": "Sets the alpha radius explicitly.", "pt": "Define o raio alpha explicitamente."}
+        {
+          "code": "shp = alphaShape(x, y)",
+          "en": "Builds a 2-D alpha shape from column vectors of coordinates, using the default alpha.",
+          "pt": "Cria uma alpha shape 2-D a partir de vetores coluna de coordenadas, usando o alpha padrão."
+        },
+        {
+          "code": "shp = alphaShape(x, y, z)",
+          "en": "Builds a 3-D alpha shape.",
+          "pt": "Cria uma alpha shape 3-D."
+        },
+        {
+          "code": "shp = alphaShape(P)",
+          "en": "Takes the points as the rows of the matrix `P` (two or three columns).",
+          "pt": "Recebe os pontos como linhas da matriz `P` (duas ou três colunas)."
+        },
+        {
+          "code": "shp = alphaShape(___, alpha)",
+          "en": "Sets the alpha radius explicitly.",
+          "pt": "Define o raio alpha explicitamente."
+        }
       ],
       "inputs": [
-        {"name": "x, y, z", "en": "Coordinates of the points, as column vectors of equal length.", "pt": "Coordenadas dos pontos, como vetores coluna de mesmo comprimento."},
-        {"name": "P", "en": "Matrix with one point per row.", "pt": "Matriz com um ponto por linha."},
-        {"name": "alpha", "en": "Non-negative scalar radius. Small values give a tight, possibly fragmented shape; very large values give the convex hull.", "pt": "Raio escalar não negativo. Valores pequenos dão uma forma justa, possivelmente fragmentada; valores muito grandes dão o fecho convexo."}
+        {
+          "name": "x, y, z",
+          "en": "Coordinates of the points, as column vectors of equal length.",
+          "pt": "Coordenadas dos pontos, como vetores coluna de mesmo comprimento."
+        },
+        {
+          "name": "P",
+          "en": "Matrix with one point per row.",
+          "pt": "Matriz com um ponto por linha."
+        },
+        {
+          "name": "alpha",
+          "en": "Non-negative scalar radius. Small values give a tight, possibly fragmented shape; very large values give the convex hull.",
+          "pt": "Raio escalar não negativo. Valores pequenos dão uma forma justa, possivelmente fragmentada; valores muito grandes dão o fecho convexo."
+        }
       ],
       "outputs": [
-        {"name": "shp", "en": "An `alphaShape` object with properties `Points`, `Alpha`, `HoleThreshold` and `RegionThreshold`.", "pt": "Um objeto `alphaShape` com as propriedades `Points`, `Alpha`, `HoleThreshold` e `RegionThreshold`."}
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object with properties `Points`, `Alpha`, `HoleThreshold` and `RegionThreshold`.",
+          "pt": "Um objeto `alphaShape` com as propriedades `Points`, `Alpha`, `HoleThreshold` e `RegionThreshold`."
+        }
       ],
       "description": {
         "en": "An alpha shape generalizes the convex hull. A disc (or ball) of radius alpha is imagined rolling around the point set, and the shape is what the points enclose without the disc fitting through gaps. With a large alpha the result is the convex hull; reducing alpha lets the boundary cut into concave parts and even split into several regions.\n\nThe object can be queried with functions such as `area`, `perimeter`, `inShape`, `numRegions`, `criticalAlpha` and `boundaryFacets`. The `Alpha` property can be reassigned to change the shape afterwards.",
         "pt": "Uma alpha shape generaliza o fecho convexo. Imagina-se um disco (ou esfera) de raio alpha rolando em volta do conjunto de pontos, e a forma é o que os pontos delimitam sem que o disco passe pelos vãos. Com alpha grande, o resultado é o fecho convexo; diminuir alpha permite que o contorno entre nas partes côncavas e até se divida em várias regiões.\n\nO objeto pode ser consultado com funções como `area`, `perimeter`, `inShape`, `numRegions`, `criticalAlpha` e `boundaryFacets`. A propriedade `Alpha` pode ser reatribuída para mudar a forma depois."
       },
       "examples": [
-        {"title": {"en": "Alpha shape of a square with a center point", "pt": "Alpha shape de um quadrado com ponto central"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\ndisp(area(shp))\ndisp(perimeter(shp))\ndisp(numRegions(shp))"}
+        {
+          "title": {
+            "en": "Alpha shape of a square with a center point",
+            "pt": "Alpha shape de um quadrado com ponto central"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\ndisp(area(shp))\ndisp(perimeter(shp))\ndisp(numRegions(shp))"
+        }
       ],
-      "see": ["boundary", "convhull", "criticalAlpha", "inShape", "delaunayTriangulation"]
+      "see": [
+        "boundary",
+        "convhull",
+        "criticalAlpha",
+        "inShape",
+        "delaunayTriangulation"
+      ]
     },
     "alphaSpectrum": {
-      "summary": {"en": "Alpha values at which the alpha shape changes its set of triangles or tetrahedra.", "pt": "Valores de alpha em que a alpha shape muda seu conjunto de triângulos ou tetraedros."},
+      "summary": {
+        "en": "Alpha values at which the alpha shape changes its set of triangles or tetrahedra.",
+        "pt": "Valores de alpha em que a alpha shape muda seu conjunto de triângulos ou tetraedros."
+      },
       "syntax": [
-        {"code": "spec = alphaSpectrum(shp)", "en": "Returns the alpha values that change the shape, in ascending order.", "pt": "Retorna os valores de alpha que alteram a forma, em ordem crescente."}
+        {
+          "code": "spec = alphaSpectrum(shp)",
+          "en": "Returns the alpha values that change the shape, in ascending order.",
+          "pt": "Retorna os valores de alpha que alteram a forma, em ordem crescente."
+        }
       ],
       "inputs": [
-        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."}
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object.",
+          "pt": "Um objeto `alphaShape`."
+        }
       ],
       "outputs": [
-        {"name": "spec", "en": "Column vector of alpha values. Setting `shp.Alpha` between two consecutive entries gives the same shape.", "pt": "Vetor coluna de valores de alpha. Definir `shp.Alpha` entre duas entradas consecutivas dá a mesma forma."}
+        {
+          "name": "spec",
+          "en": "Column vector of alpha values. Setting `shp.Alpha` between two consecutive entries gives the same shape.",
+          "pt": "Vetor coluna de valores de alpha. Definir `shp.Alpha` entre duas entradas consecutivas dá a mesma forma."
+        }
       ],
       "description": {
         "en": "Each simplex of the Delaunay triangulation of the points has a circumradius. The alpha shape includes a simplex when alpha is at least that radius, so the sorted radii mark every alpha at which the shape actually changes. Values outside the spectrum only repeat a neighbouring shape.\n\nThis is useful to pick an alpha systematically, for instance by plotting area against the spectrum.",
         "pt": "Cada simplex da triangulação de Delaunay dos pontos tem um circunraio. A alpha shape inclui um simplex quando alpha é pelo menos esse raio, de modo que os raios ordenados marcam cada alpha em que a forma realmente muda. Valores fora do espectro apenas repetem uma forma vizinha.\n\nIsso ajuda a escolher alpha de forma sistemática, por exemplo traçando a área contra o espectro."
       },
       "examples": [
-        {"title": {"en": "Spectrum of a small point set", "pt": "Espectro de um conjunto pequeno de pontos"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y);\nspec = alphaSpectrum(shp)"}
+        {
+          "title": {
+            "en": "Spectrum of a small point set",
+            "pt": "Espectro de um conjunto pequeno de pontos"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y);\nspec = alphaSpectrum(shp)"
+        }
       ],
-      "see": ["alphaShape", "criticalAlpha", "alphaTriangulation"]
+      "see": [
+        "alphaShape",
+        "criticalAlpha",
+        "alphaTriangulation"
+      ]
     },
     "alphaTriangulation": {
-      "summary": {"en": "Triangles or tetrahedra that make up an alpha shape, with the point coordinates.", "pt": "Triângulos ou tetraedros que formam uma alpha shape, com as coordenadas dos pontos."},
+      "summary": {
+        "en": "Triangles or tetrahedra that make up an alpha shape, with the point coordinates.",
+        "pt": "Triângulos ou tetraedros que formam uma alpha shape, com as coordenadas dos pontos."
+      },
       "syntax": [
-        {"code": "tri = alphaTriangulation(shp)", "en": "Returns the connectivity list of the simplices inside the shape.", "pt": "Retorna a lista de conectividade dos simplexes dentro da forma."},
-        {"code": "[tri, xyz] = alphaTriangulation(shp)", "en": "Also returns the coordinates of the points.", "pt": "Também retorna as coordenadas dos pontos."}
+        {
+          "code": "tri = alphaTriangulation(shp)",
+          "en": "Returns the connectivity list of the simplices inside the shape.",
+          "pt": "Retorna a lista de conectividade dos simplexes dentro da forma."
+        },
+        {
+          "code": "[tri, xyz] = alphaTriangulation(shp)",
+          "en": "Also returns the coordinates of the points.",
+          "pt": "Também retorna as coordenadas dos pontos."
+        }
       ],
       "inputs": [
-        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."}
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object.",
+          "pt": "Um objeto `alphaShape`."
+        }
       ],
       "outputs": [
-        {"name": "tri", "en": "Matrix of point indices: three columns per triangle for a 2-D shape, four per tetrahedron for a 3-D one.", "pt": "Matriz de índices de pontos: três colunas por triângulo em uma forma 2-D, quatro por tetraedro em uma 3-D."},
-        {"name": "xyz", "en": "The point coordinates, one row per point.", "pt": "As coordenadas dos pontos, uma linha por ponto."}
+        {
+          "name": "tri",
+          "en": "Matrix of point indices: three columns per triangle for a 2-D shape, four per tetrahedron for a 3-D one.",
+          "pt": "Matriz de índices de pontos: três colunas por triângulo em uma forma 2-D, quatro por tetraedro em uma 3-D."
+        },
+        {
+          "name": "xyz",
+          "en": "The point coordinates, one row per point.",
+          "pt": "As coordenadas dos pontos, uma linha por ponto."
+        }
       ],
       "description": {
         "en": "The result is the part of the Delaunay triangulation of the points that is kept for the current `Alpha`. Raising alpha adds simplices; lowering it removes them. The rows of `tri` index into the rows of `xyz`, so the pair can be passed directly to a plotting call such as `trisurf` or `triplot`.",
         "pt": "O resultado é a parte da triangulação de Delaunay dos pontos que é mantida para o `Alpha` atual. Aumentar alpha adiciona simplexes; diminuir remove. As linhas de `tri` indexam as linhas de `xyz`, então o par pode ser passado direto a um comando de gráfico como `trisurf` ou `triplot`."
       },
       "examples": [
-        {"title": {"en": "Triangles of a 2-D alpha shape", "pt": "Triângulos de uma alpha shape 2-D"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\n[tri, xyz] = alphaTriangulation(shp)"}
+        {
+          "title": {
+            "en": "Triangles of a 2-D alpha shape",
+            "pt": "Triângulos de uma alpha shape 2-D"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\n[tri, xyz] = alphaTriangulation(shp)"
+        }
       ],
-      "see": ["alphaShape", "boundaryFacets", "delaunayTriangulation", "triplot"]
+      "see": [
+        "alphaShape",
+        "boundaryFacets",
+        "delaunayTriangulation",
+        "triplot"
+      ]
     },
     "area": {
-      "summary": {"en": "Area of a polyshape or a 2-D alpha shape (a 3-D alpha shape has volume instead).", "pt": "Área de um polyshape ou de uma alpha shape 2-D (uma alpha shape 3-D tem volume)."},
+      "summary": {
+        "en": "Area of a polyshape or a 2-D alpha shape (a 3-D alpha shape has volume instead).",
+        "pt": "Área de um polyshape ou de uma alpha shape 2-D (uma alpha shape 3-D tem volume)."
+      },
       "syntax": [
-        {"code": "A = area(pshape)", "en": "Area of the polygon, with holes subtracted.", "pt": "Área do polígono, com os furos descontados."},
-        {"code": "A = area(pshape, I)", "en": "Area of only the boundaries or regions selected by the index `I`.", "pt": "Área apenas dos contornos ou regiões selecionados pelo índice `I`."},
-        {"code": "A = area(shp)", "en": "Area enclosed by a 2-D `alphaShape`.", "pt": "Área delimitada por uma `alphaShape` 2-D."}
+        {
+          "code": "A = area(pshape)",
+          "en": "Area of the polygon, with holes subtracted.",
+          "pt": "Área do polígono, com os furos descontados."
+        },
+        {
+          "code": "A = area(pshape, I)",
+          "en": "Area of only the boundaries or regions selected by the index `I`.",
+          "pt": "Área apenas dos contornos ou regiões selecionados pelo índice `I`."
+        },
+        {
+          "code": "A = area(shp)",
+          "en": "Area enclosed by a 2-D `alphaShape`.",
+          "pt": "Área delimitada por uma `alphaShape` 2-D."
+        }
       ],
       "inputs": [
-        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."},
-        {"name": "shp", "en": "A 2-D `alphaShape`. For a 3-D one `area` raises an error and `volume` should be used.", "pt": "Uma `alphaShape` 2-D. Para uma 3-D, `area` gera erro e deve-se usar `volume`."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` object.",
+          "pt": "Um objeto `polyshape`."
+        },
+        {
+          "name": "shp",
+          "en": "A 2-D `alphaShape`. For a 3-D one `area` raises an error and `volume` should be used.",
+          "pt": "Uma `alphaShape` 2-D. Para uma 3-D, `area` gera erro e deve-se usar `volume`."
+        }
       ],
       "outputs": [
-        {"name": "A", "en": "Scalar area, in squared units of the coordinates. An empty polyshape has area `0`.", "pt": "Área escalar, nas unidades das coordenadas ao quadrado. Um polyshape vazio tem área `0`."}
+        {
+          "name": "A",
+          "en": "Scalar area, in squared units of the coordinates. An empty polyshape has area `0`.",
+          "pt": "Área escalar, nas unidades das coordenadas ao quadrado. Um polyshape vazio tem área `0`."
+        }
       ],
       "description": {
         "en": "The area is computed from the polygon's boundaries: outer boundaries add and hole boundaries subtract, so a square with a square hole reports the difference. The sign of the vertex order does not matter.\n\nThe name `area` is also used for filled area plots; called with plain numeric vectors it draws one. With a `polyshape` or `alphaShape` argument it is a geometric measurement.",
         "pt": "A área é calculada a partir dos contornos do polígono: contornos externos somam e contornos de furos subtraem, então um quadrado com um furo quadrado informa a diferença. O sentido da ordem dos vértices não importa.\n\nO nome `area` também serve para gráficos de área preenchida; chamado com vetores numéricos comuns, ele desenha um. Com um argumento `polyshape` ou `alphaShape`, é uma medida geométrica."
       },
       "examples": [
-        {"title": {"en": "Rectangle with a square hole", "pt": "Retângulo com furo quadrado"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\narea(P)\narea(D)"}
+        {
+          "title": {
+            "en": "Rectangle with a square hole",
+            "pt": "Retângulo com furo quadrado"
+          },
+          "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\nH = polyshape([1 2 2 1], [1 1 2 2]);\nD = subtract(P, H);\narea(P)\narea(D)"
+        }
       ],
-      "see": ["perimeter", "polyarea", "centroid", "polyshape", "volume"]
+      "see": [
+        "perimeter",
+        "polyarea",
+        "centroid",
+        "polyshape",
+        "volume"
+      ]
     },
     "barycentricToCartesian": {
-      "summary": {"en": "Converts barycentric coordinates in given triangles or tetrahedra to Cartesian coordinates.", "pt": "Converte coordenadas baricêntricas em triângulos ou tetraedros dados para coordenadas cartesianas."},
+      "summary": {
+        "en": "Converts barycentric coordinates in given triangles or tetrahedra to Cartesian coordinates.",
+        "pt": "Converte coordenadas baricêntricas em triângulos ou tetraedros dados para coordenadas cartesianas."
+      },
       "syntax": [
-        {"code": "C = barycentricToCartesian(TR, T, B)", "en": "Maps the barycentric rows of `B`, each relative to the simplex listed in `T`, to points in space.", "pt": "Mapeia as linhas baricêntricas de `B`, cada uma relativa ao simplex listado em `T`, para pontos no espaço."}
+        {
+          "code": "C = barycentricToCartesian(TR, T, B)",
+          "en": "Maps the barycentric rows of `B`, each relative to the simplex listed in `T`, to points in space.",
+          "pt": "Mapeia as linhas baricêntricas de `B`, cada uma relativa ao simplex listado em `T`, para pontos no espaço."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A `triangulation` or `delaunayTriangulation` object (2-D, or 3-D tetrahedral).", "pt": "Um objeto `triangulation` ou `delaunayTriangulation` (2-D, ou 3-D tetraédrico)."},
-        {"name": "T", "en": "Column vector of simplex (row) indices of `TR.ConnectivityList`.", "pt": "Vetor coluna de índices de simplexes (linhas) de `TR.ConnectivityList`."},
-        {"name": "B", "en": "Barycentric coordinates, one row per entry in `T`, with 3 columns for triangles and 4 for tetrahedra. Each row should sum to 1.", "pt": "Coordenadas baricêntricas, uma linha por entrada de `T`, com 3 colunas para triângulos e 4 para tetraedros. Cada linha deve somar 1."}
+        {
+          "name": "TR",
+          "en": "A `triangulation` or `delaunayTriangulation` object (2-D, or 3-D tetrahedral).",
+          "pt": "Um objeto `triangulation` ou `delaunayTriangulation` (2-D, ou 3-D tetraédrico)."
+        },
+        {
+          "name": "T",
+          "en": "Column vector of simplex (row) indices of `TR.ConnectivityList`.",
+          "pt": "Vetor coluna de índices de simplexes (linhas) de `TR.ConnectivityList`."
+        },
+        {
+          "name": "B",
+          "en": "Barycentric coordinates, one row per entry in `T`, with 3 columns for triangles and 4 for tetrahedra. Each row should sum to 1.",
+          "pt": "Coordenadas baricêntricas, uma linha por entrada de `T`, com 3 colunas para triângulos e 4 para tetraedros. Cada linha deve somar 1."
+        }
       ],
       "outputs": [
-        {"name": "C", "en": "Cartesian coordinates, one row per row of `B`.", "pt": "Coordenadas cartesianas, uma linha por linha de `B`."}
+        {
+          "name": "C",
+          "en": "Cartesian coordinates, one row per row of `B`.",
+          "pt": "Coordenadas cartesianas, uma linha por linha de `B`."
+        }
       ],
       "description": {
         "en": "A point with barycentric coordinates `(b1, b2, b3)` in a triangle is the weighted sum `b1*P1 + b2*P2 + b3*P3` of the triangle's vertices. This function does that weighted sum for each requested simplex, using the vertices stored in the triangulation.\n\nWeights inside `[0, 1]` give points inside the simplex; negative weights give points outside it. It is the inverse of `cartesianToBarycentric`.",
         "pt": "Um ponto de coordenadas baricêntricas `(b1, b2, b3)` em um triângulo é a soma ponderada `b1*P1 + b2*P2 + b3*P3` dos vértices do triângulo. Esta função faz essa soma ponderada para cada simplex pedido, usando os vértices armazenados na triangulação.\n\nPesos em `[0, 1]` dão pontos dentro do simplex; pesos negativos dão pontos fora dele. É a inversa de `cartesianToBarycentric`."
       },
       "examples": [
-        {"title": {"en": "Point inside the first triangle", "pt": "Ponto dentro do primeiro triângulo"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nC = barycentricToCartesian(DT, 1, [0.2 0.3 0.5])"}
+        {
+          "title": {
+            "en": "Point inside the first triangle",
+            "pt": "Ponto dentro do primeiro triângulo"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nC = barycentricToCartesian(DT, 1, [0.2 0.3 0.5])"
+        }
       ],
-      "see": ["cartesianToBarycentric", "pointLocation", "delaunayTriangulation", "triangulation"]
+      "see": [
+        "cartesianToBarycentric",
+        "pointLocation",
+        "delaunayTriangulation",
+        "triangulation"
+      ]
     },
     "baryToCart": {
-      "summary": {"en": "Legacy form of barycentricToCartesian for TriRep and DelaunayTri objects.", "pt": "Forma antiga de barycentricToCartesian para objetos TriRep e DelaunayTri."},
+      "summary": {
+        "en": "Legacy form of barycentricToCartesian for TriRep and DelaunayTri objects.",
+        "pt": "Forma antiga de barycentricToCartesian para objetos TriRep e DelaunayTri."
+      },
       "syntax": [
-        {"code": "C = baryToCart(TR, T, B)", "en": "Converts barycentric coordinates `B` in the simplices `T` to Cartesian points.", "pt": "Converte as coordenadas baricêntricas `B` nos simplexes `T` em pontos cartesianos."}
+        {
+          "code": "C = baryToCart(TR, T, B)",
+          "en": "Converts barycentric coordinates `B` in the simplices `T` to Cartesian points.",
+          "pt": "Converte as coordenadas baricêntricas `B` nos simplexes `T` em pontos cartesianos."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `DelaunayTri` ou `TriRep`."},
-        {"name": "T", "en": "Column vector of simplex indices.", "pt": "Vetor coluna de índices de simplexes."},
-        {"name": "B", "en": "Barycentric coordinates, one row per simplex in `T`.", "pt": "Coordenadas baricêntricas, uma linha por simplex em `T`."}
+        {
+          "name": "TR",
+          "en": "A `DelaunayTri` or `TriRep` object.",
+          "pt": "Um objeto `DelaunayTri` ou `TriRep`."
+        },
+        {
+          "name": "T",
+          "en": "Column vector of simplex indices.",
+          "pt": "Vetor coluna de índices de simplexes."
+        },
+        {
+          "name": "B",
+          "en": "Barycentric coordinates, one row per simplex in `T`.",
+          "pt": "Coordenadas baricêntricas, uma linha por simplex em `T`."
+        }
       ],
       "outputs": [
-        {"name": "C", "en": "Cartesian coordinates, one row per row of `B`.", "pt": "Coordenadas cartesianas, uma linha por linha de `B`."}
+        {
+          "name": "C",
+          "en": "Cartesian coordinates, one row per row of `B`.",
+          "pt": "Coordenadas cartesianas, uma linha por linha de `B`."
+        }
       ],
       "description": {
         "en": "`baryToCart` does the weighted sum of the simplex vertices that defines barycentric coordinates, exactly as `barycentricToCartesian` does for the newer classes. It is kept for code written against the older `TriRep` and `DelaunayTri` API.\n\nNew code should use `delaunayTriangulation` and `barycentricToCartesian`.",
         "pt": "`baryToCart` faz a soma ponderada dos vértices do simplex que define as coordenadas baricêntricas, exatamente como `barycentricToCartesian` faz para as classes novas. Foi mantida para código escrito para a API antiga `TriRep` e `DelaunayTri`.\n\nCódigo novo deve usar `delaunayTriangulation` e `barycentricToCartesian`."
       },
       "examples": [
-        {"title": {"en": "Barycentric point to Cartesian", "pt": "Ponto baricêntrico para cartesiano"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nc = baryToCart(DL, 1, [0.2 0.3 0.5])"}
+        {
+          "title": {
+            "en": "Barycentric point to Cartesian",
+            "pt": "Ponto baricêntrico para cartesiano"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nc = baryToCart(DL, 1, [0.2 0.3 0.5])"
+        }
       ],
-      "see": ["barycentricToCartesian", "cartToBary", "DelaunayTri"]
+      "see": [
+        "barycentricToCartesian",
+        "cartToBary",
+        "DelaunayTri"
+      ]
     },
     "boundary": {
-      "summary": {"en": "Boundary of a set of 2-D or 3-D points, between the convex hull and a tight outline.", "pt": "Contorno de um conjunto de pontos 2-D ou 3-D, entre o fecho convexo e um contorno justo."},
+      "summary": {
+        "en": "Boundary of a set of 2-D or 3-D points, between the convex hull and a tight outline.",
+        "pt": "Contorno de um conjunto de pontos 2-D ou 3-D, entre o fecho convexo e um contorno justo."
+      },
       "syntax": [
-        {"code": "k = boundary(x, y)", "en": "Indices of the points on the boundary of 2-D points, with the default shrink factor `0.5`.", "pt": "Índices dos pontos no contorno de pontos 2-D, com o fator de encolhimento padrão `0.5`."},
-        {"code": "k = boundary(x, y, s)", "en": "Uses the shrink factor `s` between 0 and 1.", "pt": "Usa o fator de encolhimento `s` entre 0 e 1."},
-        {"code": "k = boundary(P)", "en": "Points given as the rows of a matrix with two or three columns.", "pt": "Pontos dados como linhas de uma matriz com duas ou três colunas."},
-        {"code": "[k, v] = boundary(___)", "en": "Also returns the area (2-D) or volume (3-D) enclosed.", "pt": "Também retorna a área (2-D) ou o volume (3-D) delimitados."}
+        {
+          "code": "k = boundary(x, y)",
+          "en": "Indices of the points on the boundary of 2-D points, with the default shrink factor `0.5`.",
+          "pt": "Índices dos pontos no contorno de pontos 2-D, com o fator de encolhimento padrão `0.5`."
+        },
+        {
+          "code": "k = boundary(x, y, s)",
+          "en": "Uses the shrink factor `s` between 0 and 1.",
+          "pt": "Usa o fator de encolhimento `s` entre 0 e 1."
+        },
+        {
+          "code": "k = boundary(P)",
+          "en": "Points given as the rows of a matrix with two or three columns.",
+          "pt": "Pontos dados como linhas de uma matriz com duas ou três colunas."
+        },
+        {
+          "code": "[k, v] = boundary(___)",
+          "en": "Also returns the area (2-D) or volume (3-D) enclosed.",
+          "pt": "Também retorna a área (2-D) ou o volume (3-D) delimitados."
+        }
       ],
       "inputs": [
-        {"name": "x, y", "en": "Column vectors of point coordinates.", "pt": "Vetores coluna com as coordenadas dos pontos."},
-        {"name": "s", "en": "Shrink factor. `0` gives the convex hull and `1` the most compact boundary.", "pt": "Fator de encolhimento. `0` dá o fecho convexo e `1` o contorno mais compacto."}
+        {
+          "name": "x, y",
+          "en": "Column vectors of point coordinates.",
+          "pt": "Vetores coluna com as coordenadas dos pontos."
+        },
+        {
+          "name": "s",
+          "en": "Shrink factor. `0` gives the convex hull and `1` the most compact boundary.",
+          "pt": "Fator de encolhimento. `0` dá o fecho convexo e `1` o contorno mais compacto."
+        }
       ],
       "outputs": [
-        {"name": "k", "en": "Column vector of point indices. In 2-D it traces the polygon and the first index is repeated at the end.", "pt": "Vetor coluna de índices de pontos. Em 2-D percorre o polígono e o primeiro índice é repetido no fim."},
-        {"name": "v", "en": "Area or volume of the region.", "pt": "Área ou volume da região."}
+        {
+          "name": "k",
+          "en": "Column vector of point indices. In 2-D it traces the polygon and the first index is repeated at the end.",
+          "pt": "Vetor coluna de índices de pontos. Em 2-D percorre o polígono e o primeiro índice é repetido no fim."
+        },
+        {
+          "name": "v",
+          "en": "Area or volume of the region.",
+          "pt": "Área ou volume da região."
+        }
       ],
       "description": {
         "en": "`boundary` returns a polygon around the points that can be concave, unlike `convhull`. The shrink factor decides how closely the outline follows the points: with `0` the result equals the convex hull, and larger values let it enter concave notches.\n\nThe points are returned as indices into the input rather than coordinates, so `[x(k) y(k)]` gives the outline's vertices.",
         "pt": "`boundary` retorna um polígono em volta dos pontos que pode ser côncavo, ao contrário de `convhull`. O fator de encolhimento decide o quanto o contorno acompanha os pontos: com `0` o resultado é igual ao fecho convexo, e valores maiores permitem que ele entre em reentrâncias.\n\nOs pontos são retornados como índices da entrada, e não coordenadas, então `[x(k) y(k)]` dá os vértices do contorno."
       },
       "examples": [
-        {"title": {"en": "Concave outline versus convex hull", "pt": "Contorno côncavo versus fecho convexo"}, "code": "x = [0 2 2 1 1 0 0.5 1.5 0.5 0.5]';\ny = [0 0 1 1 2 2 0.5 0.5 1.5 1.0]';\nk0 = boundary(x, y, 0)'\n[k1, v] = boundary(x, y, 1);\nk1'\nv"}
+        {
+          "title": {
+            "en": "Concave outline versus convex hull",
+            "pt": "Contorno côncavo versus fecho convexo"
+          },
+          "code": "x = [0 2 2 1 1 0 0.5 1.5 0.5 0.5]';\ny = [0 0 1 1 2 2 0.5 0.5 1.5 1.0]';\nk0 = boundary(x, y, 0)'\n[k1, v] = boundary(x, y, 1);\nk1'\nv"
+        }
       ],
-      "see": ["convhull", "alphaShape", "polyshape", "inpolygon"]
+      "see": [
+        "convhull",
+        "alphaShape",
+        "polyshape",
+        "inpolygon"
+      ]
     },
     "boundaryFacets": {
-      "summary": {"en": "Boundary edges (2-D) or faces (3-D) of an alpha shape.", "pt": "Arestas (2-D) ou faces (3-D) do contorno de uma alpha shape."},
+      "summary": {
+        "en": "Boundary edges (2-D) or faces (3-D) of an alpha shape.",
+        "pt": "Arestas (2-D) ou faces (3-D) do contorno de uma alpha shape."
+      },
       "syntax": [
-        {"code": "bf = boundaryFacets(shp)", "en": "Returns the boundary facets as rows of point indices.", "pt": "Retorna as facetas do contorno como linhas de índices de pontos."},
-        {"code": "[bf, P] = boundaryFacets(shp)", "en": "Also returns the point coordinates the indices refer to.", "pt": "Também retorna as coordenadas dos pontos a que os índices se referem."}
+        {
+          "code": "bf = boundaryFacets(shp)",
+          "en": "Returns the boundary facets as rows of point indices.",
+          "pt": "Retorna as facetas do contorno como linhas de índices de pontos."
+        },
+        {
+          "code": "[bf, P] = boundaryFacets(shp)",
+          "en": "Also returns the point coordinates the indices refer to.",
+          "pt": "Também retorna as coordenadas dos pontos a que os índices se referem."
+        }
       ],
       "inputs": [
-        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."}
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object.",
+          "pt": "Um objeto `alphaShape`."
+        }
       ],
       "outputs": [
-        {"name": "bf", "en": "Two columns per edge for a 2-D shape, three per triangular face for a 3-D shape.", "pt": "Duas colunas por aresta em uma forma 2-D, três por face triangular em uma 3-D."},
-        {"name": "P", "en": "The points of the shape, one per row.", "pt": "Os pontos da forma, um por linha."}
+        {
+          "name": "bf",
+          "en": "Two columns per edge for a 2-D shape, three per triangular face for a 3-D shape.",
+          "pt": "Duas colunas por aresta em uma forma 2-D, três por face triangular em uma 3-D."
+        },
+        {
+          "name": "P",
+          "en": "The points of the shape, one per row.",
+          "pt": "Os pontos da forma, um por linha."
+        }
       ],
       "description": {
         "en": "A facet is on the boundary when it belongs to only one simplex of the alpha triangulation. The function lists those facets for the current `Alpha`, which is what is needed to draw the outline or to build a mesh of the surface.\n\nFor 2-D shapes the edges can be chained to recover the polygon.",
         "pt": "Uma faceta está no contorno quando pertence a apenas um simplex da triangulação alpha. A função lista essas facetas para o `Alpha` atual, o que é necessário para desenhar o contorno ou montar uma malha da superfície.\n\nEm formas 2-D as arestas podem ser encadeadas para recuperar o polígono."
       },
       "examples": [
-        {"title": {"en": "Outline edges of a square", "pt": "Arestas do contorno de um quadrado"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\n[bf, P] = boundaryFacets(shp)"}
+        {
+          "title": {
+            "en": "Outline edges of a square",
+            "pt": "Arestas do contorno de um quadrado"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y, 1);\n[bf, P] = boundaryFacets(shp)"
+        }
       ],
-      "see": ["alphaShape", "alphaTriangulation", "freeBoundary", "boundary"]
+      "see": [
+        "alphaShape",
+        "alphaTriangulation",
+        "freeBoundary",
+        "boundary"
+      ]
     },
     "boundaryshape": {
-      "summary": {"en": "Converts the boundary of a 2-D triangulation into a polyshape.", "pt": "Converte o contorno de uma triangulação 2-D em um polyshape."},
+      "summary": {
+        "en": "Converts the boundary of a 2-D triangulation into a polyshape.",
+        "pt": "Converte o contorno de uma triangulação 2-D em um polyshape."
+      },
       "syntax": [
-        {"code": "pshape = boundaryshape(TR)", "en": "Returns a `polyshape` that covers the area of the 2-D triangulation `TR`.", "pt": "Retorna um `polyshape` que cobre a área da triangulação 2-D `TR`."}
+        {
+          "code": "pshape = boundaryshape(TR)",
+          "en": "Returns a `polyshape` that covers the area of the 2-D triangulation `TR`.",
+          "pt": "Retorna um `polyshape` que cobre a área da triangulação 2-D `TR`."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A 2-D `triangulation` (or `delaunayTriangulation`) object.", "pt": "Um objeto `triangulation` (ou `delaunayTriangulation`) 2-D."}
+        {
+          "name": "TR",
+          "en": "A 2-D `triangulation` (or `delaunayTriangulation`) object.",
+          "pt": "Um objeto `triangulation` (ou `delaunayTriangulation`) 2-D."
+        }
       ],
       "outputs": [
-        {"name": "pshape", "en": "A `polyshape` whose outer boundary follows the triangulation's free edges.", "pt": "Um `polyshape` cujo contorno externo segue as arestas livres da triangulação."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` whose outer boundary follows the triangulation's free edges.",
+          "pt": "Um `polyshape` cujo contorno externo segue as arestas livres da triangulação."
+        }
       ],
       "description": {
         "en": "The edges that belong to exactly one triangle form the outline of the mesh. `boundaryshape` links them into closed loops and builds a polyshape, so area, perimeter, point-in-polygon tests and Boolean operations become available for a mesh.\n\nA triangulation that is not two-dimensional is rejected with an error.",
         "pt": "As arestas que pertencem a exatamente um triângulo formam o contorno da malha. `boundaryshape` as liga em laços fechados e constrói um polyshape, tornando disponíveis área, perímetro, testes de ponto em polígono e operações booleanas para uma malha.\n\nUma triangulação que não seja bidimensional é rejeitada com um erro."
       },
       "examples": [
-        {"title": {"en": "Polyshape from a triangle mesh", "pt": "Polyshape a partir de uma malha de triângulos"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\ntr = triangulation([1 2 5; 2 3 5; 3 4 5; 4 1 5], [x y]);\nps = boundaryshape(tr);\ndisp(area(ps))\ndisp(ps.NumRegions)"}
+        {
+          "title": {
+            "en": "Polyshape from a triangle mesh",
+            "pt": "Polyshape a partir de uma malha de triângulos"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\ntr = triangulation([1 2 5; 2 3 5; 3 4 5; 4 1 5], [x y]);\nps = boundaryshape(tr);\ndisp(area(ps))\ndisp(ps.NumRegions)"
+        }
       ],
-      "see": ["polyshape", "triangulation", "freeBoundary", "boundary"]
+      "see": [
+        "polyshape",
+        "triangulation",
+        "freeBoundary",
+        "boundary"
+      ]
     },
     "boundingbox": {
-      "summary": {"en": "Smallest axis-aligned rectangle that contains a polyshape.", "pt": "Menor retângulo alinhado aos eixos que contém um polyshape."},
+      "summary": {
+        "en": "Smallest axis-aligned rectangle that contains a polyshape.",
+        "pt": "Menor retângulo alinhado aos eixos que contém um polyshape."
+      },
       "syntax": [
-        {"code": "[xlim, ylim] = boundingbox(pshape)", "en": "Returns the x and y limits of the bounding box.", "pt": "Retorna os limites x e y da caixa delimitadora."}
+        {
+          "code": "[xlim, ylim] = boundingbox(pshape)",
+          "en": "Returns the x and y limits of the bounding box.",
+          "pt": "Retorna os limites x e y da caixa delimitadora."
+        }
       ],
       "inputs": [
-        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` object.",
+          "pt": "Um objeto `polyshape`."
+        }
       ],
       "outputs": [
-        {"name": "xlim", "en": "Two-element row `[xmin xmax]`.", "pt": "Linha de dois elementos `[xmin xmax]`."},
-        {"name": "ylim", "en": "Two-element row `[ymin ymax]`.", "pt": "Linha de dois elementos `[ymin ymax]`."}
+        {
+          "name": "xlim",
+          "en": "Two-element row `[xmin xmax]`.",
+          "pt": "Linha de dois elementos `[xmin xmax]`."
+        },
+        {
+          "name": "ylim",
+          "en": "Two-element row `[ymin ymax]`.",
+          "pt": "Linha de dois elementos `[ymin ymax]`."
+        }
       ],
       "description": {
         "en": "The limits are the minimum and maximum vertex coordinates over all boundaries. They are handy for setting axes limits, for a quick overlap rejection test, or for sizing a grid of query points around the shape.\n\nFor an empty polyshape, the limits are empty or `NaN`.",
         "pt": "Os limites são as coordenadas mínima e máxima dos vértices em todos os contornos. São úteis para definir limites de eixos, para um teste rápido de rejeição de sobreposição, ou para dimensionar uma grade de pontos de consulta em volta da forma.\n\nPara um polyshape vazio, os limites são vazios ou `NaN`."
       },
       "examples": [
-        {"title": {"en": "Limits of a triangle", "pt": "Limites de um triângulo"}, "code": "P = polyshape([1 5 3], [2 2 6]);\n[xl, yl] = boundingbox(P)"}
+        {
+          "title": {
+            "en": "Limits of a triangle",
+            "pt": "Limites de um triângulo"
+          },
+          "code": "P = polyshape([1 5 3], [2 2 6]);\n[xl, yl] = boundingbox(P)"
+        }
       ],
-      "notes": {"en": "Use the two-output form. Call with a single output only if you are sure how your MATLAB version packs the result.", "pt": "Use a forma com duas saídas. Chame com uma única saída apenas se souber como sua versão do MATLAB empacota o resultado."},
-      "see": ["polyshape", "overlaps", "rectint", "centroid"]
+      "notes": {
+        "en": "Use the two-output form. Call with a single output only if you are sure how your MATLAB version packs the result.",
+        "pt": "Use a forma com duas saídas. Chame com uma única saída apenas se souber como sua versão do MATLAB empacota o resultado."
+      },
+      "see": [
+        "polyshape",
+        "overlaps",
+        "rectint",
+        "centroid"
+      ]
     },
     "cartesianToBarycentric": {
-      "summary": {"en": "Converts Cartesian points to barycentric coordinates relative to given triangles or tetrahedra.", "pt": "Converte pontos cartesianos em coordenadas baricêntricas relativas a triângulos ou tetraedros dados."},
+      "summary": {
+        "en": "Converts Cartesian points to barycentric coordinates relative to given triangles or tetrahedra.",
+        "pt": "Converte pontos cartesianos em coordenadas baricêntricas relativas a triângulos ou tetraedros dados."
+      },
       "syntax": [
-        {"code": "B = cartesianToBarycentric(TR, T, X)", "en": "Returns the barycentric coordinates of each row of `X` with respect to the simplex listed in `T`.", "pt": "Retorna as coordenadas baricêntricas de cada linha de `X` em relação ao simplex listado em `T`."}
+        {
+          "code": "B = cartesianToBarycentric(TR, T, X)",
+          "en": "Returns the barycentric coordinates of each row of `X` with respect to the simplex listed in `T`.",
+          "pt": "Retorna as coordenadas baricêntricas de cada linha de `X` em relação ao simplex listado em `T`."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A `triangulation` or `delaunayTriangulation` (2-D or 3-D tetrahedral).", "pt": "Uma `triangulation` ou `delaunayTriangulation` (2-D ou 3-D tetraédrica)."},
-        {"name": "T", "en": "Column vector of simplex indices, one per query point.", "pt": "Vetor coluna de índices de simplexes, um por ponto de consulta."},
-        {"name": "X", "en": "Query points, one per row.", "pt": "Pontos de consulta, um por linha."}
+        {
+          "name": "TR",
+          "en": "A `triangulation` or `delaunayTriangulation` (2-D, 3-D tetrahedral or 3-D surface triangles).",
+          "pt": "Uma `triangulation` ou `delaunayTriangulation` (2-D, tetraédrica 3-D ou triângulos de superfície 3-D)."
+        },
+        {
+          "name": "T",
+          "en": "Column vector of simplex indices, one per query point.",
+          "pt": "Vetor coluna de índices de simplexes, um por ponto de consulta."
+        },
+        {
+          "name": "X",
+          "en": "Query points, one per row.",
+          "pt": "Pontos de consulta, um por linha."
+        }
       ],
       "outputs": [
-        {"name": "B", "en": "Barycentric coordinates, one row per query point. Rows sum to 1; a negative entry means the point lies outside that simplex.", "pt": "Coordenadas baricêntricas, uma linha por ponto de consulta. As linhas somam 1; uma entrada negativa significa que o ponto está fora desse simplex."}
+        {
+          "name": "B",
+          "en": "Barycentric coordinates, one row per query point. Rows sum to 1; a negative entry means the point lies outside that simplex.",
+          "pt": "Coordenadas baricêntricas, uma linha por ponto de consulta. As linhas somam 1; uma entrada negativa significa que o ponto está fora desse simplex."
+        }
       ],
       "description": {
         "en": "Barycentric coordinates express a point as weights on the vertices of a simplex. To find them, the function solves a small linear system built from the simplex's vertices. The coordinates are all in `[0, 1]` exactly when the point lies inside the simplex, which makes this a convenient inside test and the base of linear interpolation over a mesh.\n\nThe query points do not have to lie inside the chosen simplex; they are then extrapolated.",
         "pt": "Coordenadas baricêntricas expressam um ponto como pesos nos vértices de um simplex. Para obtê-las, a função resolve um pequeno sistema linear montado com os vértices do simplex. Todas ficam em `[0, 1]` exatamente quando o ponto está dentro do simplex, o que serve como teste de pertinência e como base da interpolação linear sobre uma malha.\n\nOs pontos de consulta não precisam estar dentro do simplex escolhido; nesse caso são extrapolados."
       },
       "examples": [
-        {"title": {"en": "Point outside the chosen triangle", "pt": "Ponto fora do triângulo escolhido"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nB = cartesianToBarycentric(DT, 1, [0.1 0.2])"},
-        {"title": {"en": "Tetrahedron", "pt": "Tetraedro"}, "code": "tet = delaunayTriangulation([0 0 0; 1 0 0; 0 1 0; 0 0 1]);\nB = cartesianToBarycentric(tet, 1, [0.1 0.1 0.1])"}
+        {
+          "title": {
+            "en": "Point outside the chosen triangle",
+            "pt": "Ponto fora do triângulo escolhido"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\nB = cartesianToBarycentric(DT, 1, [0.1 0.2])"
+        },
+        {
+          "title": {
+            "en": "Tetrahedron",
+            "pt": "Tetraedro"
+          },
+          "code": "tet = delaunayTriangulation([0 0 0; 1 0 0; 0 1 0; 0 0 1]);\nB = cartesianToBarycentric(tet, 1, [0.1 0.1 0.1])"
+        }
       ],
-      "see": ["barycentricToCartesian", "pointLocation", "delaunayTriangulation"]
+      "see": [
+        "barycentricToCartesian",
+        "pointLocation",
+        "delaunayTriangulation"
+      ]
     },
     "cartToBary": {
-      "summary": {"en": "Legacy form of cartesianToBarycentric for TriRep and DelaunayTri objects.", "pt": "Forma antiga de cartesianToBarycentric para objetos TriRep e DelaunayTri."},
+      "summary": {
+        "en": "Legacy form of cartesianToBarycentric for TriRep and DelaunayTri objects.",
+        "pt": "Forma antiga de cartesianToBarycentric para objetos TriRep e DelaunayTri."
+      },
       "syntax": [
-        {"code": "B = cartToBary(TR, T, X)", "en": "Barycentric coordinates of the rows of `X` relative to the simplices `T`.", "pt": "Coordenadas baricêntricas das linhas de `X` relativas aos simplexes `T`."}
+        {
+          "code": "B = cartToBary(TR, T, X)",
+          "en": "Barycentric coordinates of the rows of `X` relative to the simplices `T`.",
+          "pt": "Coordenadas baricêntricas das linhas de `X` relativas aos simplexes `T`."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `DelaunayTri` ou `TriRep`."},
-        {"name": "T", "en": "Column vector of simplex indices.", "pt": "Vetor coluna de índices de simplexes."},
-        {"name": "X", "en": "Cartesian query points, one per row.", "pt": "Pontos cartesianos de consulta, um por linha."}
+        {
+          "name": "TR",
+          "en": "A `DelaunayTri` or `TriRep` object.",
+          "pt": "Um objeto `DelaunayTri` ou `TriRep`."
+        },
+        {
+          "name": "T",
+          "en": "Column vector of simplex indices.",
+          "pt": "Vetor coluna de índices de simplexes."
+        },
+        {
+          "name": "X",
+          "en": "Cartesian query points, one per row.",
+          "pt": "Pontos cartesianos de consulta, um por linha."
+        }
       ],
       "outputs": [
-        {"name": "B", "en": "Barycentric coordinates, one row per query point.", "pt": "Coordenadas baricêntricas, uma linha por ponto de consulta."}
+        {
+          "name": "B",
+          "en": "Barycentric coordinates, one row per query point.",
+          "pt": "Coordenadas baricêntricas, uma linha por ponto de consulta."
+        }
       ],
       "description": {
         "en": "`cartToBary` is the older name for `cartesianToBarycentric` and gives the same numbers. Barycentric coordinates are weights on the simplex vertices that add up to 1; negative weights indicate that the point is outside the simplex.\n\nIt is retained for scripts that use the `DelaunayTri` and `TriRep` classes.",
         "pt": "`cartToBary` é o nome antigo de `cartesianToBarycentric` e dá os mesmos números. Coordenadas baricêntricas são pesos nos vértices do simplex que somam 1; pesos negativos indicam que o ponto está fora do simplex.\n\nÉ mantida para scripts que usam as classes `DelaunayTri` e `TriRep`."
       },
       "examples": [
-        {"title": {"en": "Barycentric coordinates of a point", "pt": "Coordenadas baricêntricas de um ponto"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nb = cartToBary(DL, 1, [0.9 0.6])"}
+        {
+          "title": {
+            "en": "Barycentric coordinates of a point",
+            "pt": "Coordenadas baricêntricas de um ponto"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nb = cartToBary(DL, 1, [0.9 0.6])"
+        }
       ],
-      "see": ["cartesianToBarycentric", "baryToCart", "DelaunayTri"]
+      "see": [
+        "cartesianToBarycentric",
+        "baryToCart",
+        "DelaunayTri"
+      ]
     },
     "centroid": {
-      "summary": {"en": "Center of mass of a polyshape, treated as a uniform plate.", "pt": "Centro de massa de um polyshape, tratado como uma placa uniforme."},
+      "summary": {
+        "en": "Center of mass of a polyshape, treated as a uniform plate.",
+        "pt": "Centro de massa de um polyshape, tratado como uma placa uniforme."
+      },
       "syntax": [
-        {"code": "[cx, cy] = centroid(pshape)", "en": "Returns the centroid coordinates of the whole shape.", "pt": "Retorna as coordenadas do centroide da forma inteira."},
-        {"code": "[cx, cy] = centroid(pshape, I)", "en": "Centroid of only the regions selected by the index `I`.", "pt": "Centroide apenas das regiões selecionadas pelo índice `I`."}
+        {
+          "code": "[cx, cy] = centroid(pshape)",
+          "en": "Returns the centroid coordinates of the whole shape.",
+          "pt": "Retorna as coordenadas do centroide da forma inteira."
+        },
+        {
+          "code": "[cx, cy] = centroid(pshape, I)",
+          "en": "Centroid of only the regions selected by the index `I`.",
+          "pt": "Centroide apenas das regiões selecionadas pelo índice `I`."
+        }
       ],
       "inputs": [
-        {"name": "pshape", "en": "A `polyshape` object.", "pt": "Um objeto `polyshape`."}
+        {
+          "name": "pshape",
+          "en": "A `polyshape` object.",
+          "pt": "Um objeto `polyshape`."
+        }
       ],
       "outputs": [
-        {"name": "cx, cy", "en": "x and y coordinates of the centroid. For an empty polyshape both are `NaN`.", "pt": "Coordenadas x e y do centroide. Para um polyshape vazio ambas são `NaN`."}
+        {
+          "name": "cx, cy",
+          "en": "x and y coordinates of the centroid. For an empty polyshape both are `NaN`.",
+          "pt": "Coordenadas x e y do centroide. Para um polyshape vazio ambas são `NaN`."
+        }
       ],
       "description": {
         "en": "The centroid is the area-weighted average position of the shape. Holes count as missing material, so a hole shifts the centroid away from itself. The centroid of a non-convex shape can fall outside the shape.\n\nIt is computed exactly from the polygon boundaries, not from a sampled grid.",
         "pt": "O centroide é a posição média da forma ponderada pela área. Furos contam como material ausente, então um furo desloca o centroide para longe dele. O centroide de uma forma não convexa pode cair fora dela.\n\nÉ calculado exatamente a partir dos contornos do polígono, não de uma grade amostrada."
       },
       "examples": [
-        {"title": {"en": "Centroid of a rectangle", "pt": "Centroide de um retângulo"}, "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\n[cx, cy] = centroid(P)"}
+        {
+          "title": {
+            "en": "Centroid of a rectangle",
+            "pt": "Centroide de um retângulo"
+          },
+          "code": "P = polyshape([0 4 4 0], [0 0 3 3]);\n[cx, cy] = centroid(P)"
+        }
       ],
-      "see": ["polyshape", "area", "boundingbox", "polyarea"]
+      "see": [
+        "polyshape",
+        "area",
+        "boundingbox",
+        "polyarea"
+      ]
     },
     "circumcenter": {
-      "summary": {"en": "Circumcenters (and circumradii) of the triangles or tetrahedra in a triangulation.", "pt": "Circuncentros (e circunraios) dos triângulos ou tetraedros de uma triangulação."},
+      "summary": {
+        "en": "Circumcenters (and circumradii) of the triangles or tetrahedra in a triangulation.",
+        "pt": "Circuncentros (e circunraios) dos triângulos ou tetraedros de uma triangulação."
+      },
       "syntax": [
-        {"code": "C = circumcenter(TR)", "en": "Circumcenter of every simplex, one row each.", "pt": "Circuncentro de cada simplex, uma linha por simplex."},
-        {"code": "C = circumcenter(TR, T)", "en": "Only for the simplices whose indices are in `T`.", "pt": "Apenas para os simplexes cujos índices estão em `T`."},
-        {"code": "[C, r] = circumcenter(___)", "en": "Also returns the circumradii.", "pt": "Também retorna os circunraios."}
+        {
+          "code": "C = circumcenter(TR)",
+          "en": "Circumcenter of every simplex, one row each.",
+          "pt": "Circuncentro de cada simplex, uma linha por simplex."
+        },
+        {
+          "code": "C = circumcenter(TR, T)",
+          "en": "Only for the simplices whose indices are in `T`.",
+          "pt": "Apenas para os simplexes cujos índices estão em `T`."
+        },
+        {
+          "code": "[C, r] = circumcenter(___)",
+          "en": "Also returns the circumradii.",
+          "pt": "Também retorna os circunraios."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A 2-D `triangulation` or `delaunayTriangulation`, or a 3-D tetrahedral one.", "pt": "Uma `triangulation` ou `delaunayTriangulation` 2-D, ou uma 3-D tetraédrica."},
-        {"name": "T", "en": "Optional column vector of simplex indices.", "pt": "Vetor coluna opcional de índices de simplexes."}
+        {
+          "name": "TR",
+          "en": "A `triangulation` or `delaunayTriangulation`: 2-D, 3-D tetrahedral or a 3-D surface of triangles.",
+          "pt": "Uma `triangulation` ou `delaunayTriangulation`: 2-D, tetraédrica 3-D ou uma superfície 3-D de triângulos."
+        },
+        {
+          "name": "T",
+          "en": "Optional column vector of simplex indices.",
+          "pt": "Vetor coluna opcional de índices de simplexes."
+        }
       ],
       "outputs": [
-        {"name": "C", "en": "Circumcenter coordinates, one row per simplex.", "pt": "Coordenadas dos circuncentros, uma linha por simplex."},
-        {"name": "r", "en": "Column vector of circumradii.", "pt": "Vetor coluna dos circunraios."}
+        {
+          "name": "C",
+          "en": "Circumcenter coordinates, one row per simplex.",
+          "pt": "Coordenadas dos circuncentros, uma linha por simplex."
+        },
+        {
+          "name": "r",
+          "en": "Column vector of circumradii.",
+          "pt": "Vetor coluna dos circunraios."
+        }
       ],
       "description": {
         "en": "The circumcenter is the point equidistant from all vertices of a simplex; the common distance is the circumradius. In a Delaunay triangulation the circumcircle of each triangle contains no other point, which is the defining property of that triangulation. The circumcenters are also the vertices of the Voronoi diagram.",
         "pt": "O circuncentro é o ponto equidistante de todos os vértices de um simplex; a distância comum é o circunraio. Em uma triangulação de Delaunay, o círculo circunscrito a cada triângulo não contém outros pontos, que é a propriedade que define essa triangulação. Os circuncentros também são os vértices do diagrama de Voronoi."
       },
       "examples": [
-        {"title": {"en": "Circumcenters of a square mesh", "pt": "Circuncentros de uma malha quadrada"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\n[C, r] = circumcenter(DT)"}
+        {
+          "title": {
+            "en": "Circumcenters of a square mesh",
+            "pt": "Circuncentros de uma malha quadrada"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDT = delaunayTriangulation(x, y);\n[C, r] = circumcenter(DT)"
+        }
       ],
-      "notes": {"en": "In MatLivre `circumcenter` fails on a 3-D triangulation of surface triangles; use 2-D triangulations or tetrahedral ones.", "pt": "No MatLivre, `circumcenter` falha em uma triangulação 3-D de triângulos de superfície; use triangulações 2-D ou tetraédricas."},
-      "see": ["incenter", "delaunayTriangulation", "circumcenters", "triangulation"]
+      "see": [
+        "incenter",
+        "delaunayTriangulation",
+        "circumcenters",
+        "triangulation"
+      ]
     },
     "circumcenters": {
-      "summary": {"en": "Legacy form of circumcenter for TriRep and DelaunayTri objects.", "pt": "Forma antiga de circumcenter para objetos TriRep e DelaunayTri."},
+      "summary": {
+        "en": "Legacy form of circumcenter for TriRep and DelaunayTri objects.",
+        "pt": "Forma antiga de circumcenter para objetos TriRep e DelaunayTri."
+      },
       "syntax": [
-        {"code": "C = circumcenters(TR)", "en": "Circumcenters of all simplices.", "pt": "Circuncentros de todos os simplexes."},
-        {"code": "C = circumcenters(TR, T)", "en": "Only for the simplices in `T`.", "pt": "Apenas para os simplexes em `T`."},
-        {"code": "[C, r] = circumcenters(___)", "en": "Also returns the circumradii.", "pt": "Também retorna os circunraios."}
+        {
+          "code": "C = circumcenters(TR)",
+          "en": "Circumcenters of all simplices.",
+          "pt": "Circuncentros de todos os simplexes."
+        },
+        {
+          "code": "C = circumcenters(TR, T)",
+          "en": "Only for the simplices in `T`.",
+          "pt": "Apenas para os simplexes em `T`."
+        },
+        {
+          "code": "[C, r] = circumcenters(___)",
+          "en": "Also returns the circumradii.",
+          "pt": "Também retorna os circunraios."
+        }
       ],
       "inputs": [
-        {"name": "TR", "en": "A `DelaunayTri` or `TriRep` object.", "pt": "Um objeto `DelaunayTri` ou `TriRep`."},
-        {"name": "T", "en": "Optional simplex indices.", "pt": "Índices de simplexes opcionais."}
+        {
+          "name": "TR",
+          "en": "A `DelaunayTri` or `TriRep` object.",
+          "pt": "Um objeto `DelaunayTri` ou `TriRep`."
+        },
+        {
+          "name": "T",
+          "en": "Optional simplex indices.",
+          "pt": "Índices de simplexes opcionais."
+        }
       ],
       "outputs": [
-        {"name": "C", "en": "Circumcenter coordinates, one row per simplex.", "pt": "Coordenadas dos circuncentros, uma linha por simplex."},
-        {"name": "r", "en": "Circumradii.", "pt": "Circunraios."}
+        {
+          "name": "C",
+          "en": "Circumcenter coordinates, one row per simplex.",
+          "pt": "Coordenadas dos circuncentros, uma linha por simplex."
+        },
+        {
+          "name": "r",
+          "en": "Circumradii.",
+          "pt": "Circunraios."
+        }
       ],
       "description": {
         "en": "`circumcenters` is the plural, older name of `circumcenter` used by the `TriRep` and `DelaunayTri` classes. It returns the point equidistant from the vertices of each triangle or tetrahedron, plus the radius of the circle or sphere through them.\n\nNew code should use `delaunayTriangulation` with `circumcenter`.",
         "pt": "`circumcenters` é o nome antigo, no plural, de `circumcenter`, usado pelas classes `TriRep` e `DelaunayTri`. Retorna o ponto equidistante dos vértices de cada triângulo ou tetraedro, além do raio do círculo ou da esfera que os contém.\n\nCódigo novo deve usar `delaunayTriangulation` com `circumcenter`."
       },
       "examples": [
-        {"title": {"en": "Circumcenters with DelaunayTri", "pt": "Circuncentros com DelaunayTri"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nC = circumcenters(DL)"}
+        {
+          "title": {
+            "en": "Circumcenters with DelaunayTri",
+            "pt": "Circuncentros com DelaunayTri"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nC = circumcenters(DL)"
+        }
       ],
-      "see": ["circumcenter", "incenters", "DelaunayTri"]
+      "see": [
+        "circumcenter",
+        "incenters",
+        "DelaunayTri"
+      ]
     },
     "convexHull": {
-      "summary": {"en": "Convex hull of the points of a Delaunay triangulation, as point indices.", "pt": "Fecho convexo dos pontos de uma triangulação de Delaunay, como índices de pontos."},
+      "summary": {
+        "en": "Convex hull of the points of a Delaunay triangulation, as point indices.",
+        "pt": "Fecho convexo dos pontos de uma triangulação de Delaunay, como índices de pontos."
+      },
       "syntax": [
-        {"code": "K = convexHull(DT)", "en": "Returns the hull of the triangulation `DT`.", "pt": "Retorna o fecho da triangulação `DT`."}
+        {
+          "code": "K = convexHull(DT)",
+          "en": "Returns the hull of the triangulation `DT`.",
+          "pt": "Retorna o fecho da triangulação `DT`."
+        }
       ],
       "inputs": [
-        {"name": "DT", "en": "A `delaunayTriangulation` object (or a legacy `DelaunayTri`).", "pt": "Um objeto `delaunayTriangulation` (ou um `DelaunayTri` antigo)."}
+        {
+          "name": "DT",
+          "en": "A `delaunayTriangulation` object (or a legacy `DelaunayTri`).",
+          "pt": "Um objeto `delaunayTriangulation` (ou um `DelaunayTri` antigo)."
+        }
       ],
       "outputs": [
-        {"name": "K", "en": "In 2-D, a column of point indices that goes around the hull and repeats the first index at the end. In 3-D, a three-column matrix of triangular faces.", "pt": "Em 2-D, uma coluna de índices de pontos que contorna o fecho e repete o primeiro índice no fim. Em 3-D, uma matriz de três colunas de faces triangulares."}
+        {
+          "name": "K",
+          "en": "In 2-D, a column of point indices that goes around the hull and repeats the first index at the end. In 3-D, a three-column matrix of triangular faces.",
+          "pt": "Em 2-D, uma coluna de índices de pontos que contorna o fecho e repete o primeiro índice no fim. Em 3-D, uma matriz de três colunas de faces triangulares."
+        }
       ],
       "description": {
         "en": "The convex hull is the smallest convex region that contains all the points. Because the triangulation already knows its outer edges, `convexHull` simply reads them off. The indices refer to rows of `DT.Points`.\n\nFor points that are not already triangulated, `convhull` computes the hull directly.",
         "pt": "O fecho convexo é a menor região convexa que contém todos os pontos. Como a triangulação já conhece suas arestas externas, `convexHull` apenas as lê. Os índices se referem às linhas de `DT.Points`.\n\nPara pontos que ainda não foram triangulados, `convhull` calcula o fecho diretamente."
       },
       "examples": [
-        {"title": {"en": "Hull of a tetrahedron", "pt": "Fecho de um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nDT = delaunayTriangulation(P);\nK = convexHull(DT)"}
+        {
+          "title": {
+            "en": "Hull of a tetrahedron",
+            "pt": "Fecho de um tetraedro"
+          },
+          "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nDT = delaunayTriangulation(P);\nK = convexHull(DT)"
+        }
       ],
-      "see": ["convhull", "convhulln", "delaunayTriangulation", "boundary"]
+      "see": [
+        "convhull",
+        "convhulln",
+        "delaunayTriangulation",
+        "boundary"
+      ]
     },
     "convhull": {
-      "summary": {"en": "Convex hull of a set of 2-D or 3-D points.", "pt": "Fecho convexo de um conjunto de pontos 2-D ou 3-D."},
+      "summary": {
+        "en": "Convex hull of a set of 2-D or 3-D points.",
+        "pt": "Fecho convexo de um conjunto de pontos 2-D ou 3-D."
+      },
       "syntax": [
-        {"code": "k = convhull(x, y)", "en": "Indices of the points on the 2-D hull, in counterclockwise order.", "pt": "Índices dos pontos do fecho 2-D, em sentido anti-horário."},
-        {"code": "k = convhull(P)", "en": "Points given as the rows of a two- or three-column matrix.", "pt": "Pontos dados como linhas de uma matriz de duas ou três colunas."},
-        {"code": "[k, av] = convhull(___)", "en": "Also returns the area (2-D) or volume (3-D) of the hull.", "pt": "Também retorna a área (2-D) ou o volume (3-D) do fecho."}
+        {
+          "code": "k = convhull(x, y)",
+          "en": "Indices of the points on the 2-D hull, in counterclockwise order.",
+          "pt": "Índices dos pontos do fecho 2-D, em sentido anti-horário."
+        },
+        {
+          "code": "k = convhull(P)",
+          "en": "Points given as the rows of a two- or three-column matrix.",
+          "pt": "Pontos dados como linhas de uma matriz de duas ou três colunas."
+        },
+        {
+          "code": "[k, av] = convhull(___)",
+          "en": "Also returns the area (2-D) or volume (3-D) of the hull.",
+          "pt": "Também retorna a área (2-D) ou o volume (3-D) do fecho."
+        }
       ],
       "inputs": [
-        {"name": "x, y", "en": "Column vectors of coordinates.", "pt": "Vetores coluna de coordenadas."},
-        {"name": "P", "en": "Matrix with one point per row.", "pt": "Matriz com um ponto por linha."}
+        {
+          "name": "x, y",
+          "en": "Column vectors of coordinates.",
+          "pt": "Vetores coluna de coordenadas."
+        },
+        {
+          "name": "P",
+          "en": "Matrix with one point per row.",
+          "pt": "Matriz com um ponto por linha."
+        }
       ],
       "outputs": [
-        {"name": "k", "en": "In 2-D, a column of indices where the first and last entries are the same. In 3-D, a three-column matrix of triangular faces.", "pt": "Em 2-D, uma coluna de índices em que a primeira e a última entradas são iguais. Em 3-D, uma matriz de três colunas de faces triangulares."},
-        {"name": "av", "en": "Area or volume enclosed by the hull.", "pt": "Área ou volume delimitado pelo fecho."}
+        {
+          "name": "k",
+          "en": "In 2-D, a column of indices where the first and last entries are the same. In 3-D, a three-column matrix of triangular faces.",
+          "pt": "Em 2-D, uma coluna de índices em que a primeira e a última entradas são iguais. Em 3-D, uma matriz de três colunas de faces triangulares."
+        },
+        {
+          "name": "av",
+          "en": "Area or volume enclosed by the hull.",
+          "pt": "Área ou volume delimitado pelo fecho."
+        }
       ],
       "description": {
         "en": "The hull is the polygon (or polyhedron) you get by stretching a rubber band around all points. Points in the interior and points lying on a hull edge between two corners are left out of `k`. The result gives indices, so `plot(x(k), y(k))` draws the hull.\n\nFor a concave outline that follows the point cloud more closely, use `boundary`.",
         "pt": "O fecho é o polígono (ou poliedro) obtido ao esticar um elástico em volta de todos os pontos. Pontos interiores e pontos sobre uma aresta do fecho entre dois cantos ficam fora de `k`. O resultado fornece índices, então `plot(x(k), y(k))` desenha o fecho.\n\nPara um contorno côncavo que acompanha mais de perto a nuvem de pontos, use `boundary`."
       },
       "examples": [
-        {"title": {"en": "Hull of an L-shaped cloud", "pt": "Fecho de uma nuvem em forma de L"}, "code": "x = [0 2 2 1 1 0 0.5 1.5 0.5 0.5]';\ny = [0 0 1 1 2 2 0.5 0.5 1.5 1.0]';\n[k, a] = convhull(x, y);\nk'\na"}
+        {
+          "title": {
+            "en": "Hull of an L-shaped cloud",
+            "pt": "Fecho de uma nuvem em forma de L"
+          },
+          "code": "x = [0 2 2 1 1 0 0.5 1.5 0.5 0.5]';\ny = [0 0 1 1 2 2 0.5 0.5 1.5 1.0]';\n[k, a] = convhull(x, y);\nk'\na"
+        }
       ],
-      "see": ["convhulln", "boundary", "delaunay", "inpolygon", "polyarea"]
+      "see": [
+        "convhulln",
+        "boundary",
+        "delaunay",
+        "inpolygon",
+        "polyarea"
+      ]
     },
     "convhulln": {
-      "summary": {"en": "Convex hull of points in n dimensions, as facets of point indices.", "pt": "Fecho convexo de pontos em n dimensões, como facetas de índices de pontos."},
+      "summary": {
+        "en": "Convex hull of points in n dimensions, as facets of point indices.",
+        "pt": "Fecho convexo de pontos em n dimensões, como facetas de índices de pontos."
+      },
       "syntax": [
-        {"code": "H = convhulln(P)", "en": "Returns the facets of the hull of the points in the rows of `P`.", "pt": "Retorna as facetas do fecho dos pontos nas linhas de `P`."},
-        {"code": "[H, V] = convhulln(P)", "en": "Also returns the volume enclosed by the hull.", "pt": "Também retorna o volume delimitado pelo fecho."}
+        {
+          "code": "H = convhulln(P)",
+          "en": "Returns the facets of the hull of the points in the rows of `P`.",
+          "pt": "Retorna as facetas do fecho dos pontos nas linhas de `P`."
+        },
+        {
+          "code": "[H, V] = convhulln(P)",
+          "en": "Also returns the volume enclosed by the hull.",
+          "pt": "Também retorna o volume delimitado pelo fecho."
+        }
       ],
       "inputs": [
-        {"name": "P", "en": "Matrix with one point per row and one column per dimension.", "pt": "Matriz com um ponto por linha e uma coluna por dimensão."}
+        {
+          "name": "P",
+          "en": "Matrix with one point per row and one column per dimension.",
+          "pt": "Matriz com um ponto por linha e uma coluna por dimensão."
+        }
       ],
       "outputs": [
-        {"name": "H", "en": "One row per facet, listing the indices of the points on it: 2 columns in 2-D, 3 in 3-D.", "pt": "Uma linha por faceta, com os índices dos pontos nela: 2 colunas em 2-D, 3 em 3-D."},
-        {"name": "V", "en": "Volume of the hull (area in 2-D).", "pt": "Volume do fecho (área em 2-D)."}
+        {
+          "name": "H",
+          "en": "One row per facet, listing the indices of the points on it: 2 columns in 2-D, 3 in 3-D.",
+          "pt": "Uma linha por faceta, com os índices dos pontos nela: 2 colunas em 2-D, 3 em 3-D."
+        },
+        {
+          "name": "V",
+          "en": "Volume of the hull (area in 2-D).",
+          "pt": "Volume do fecho (área em 2-D)."
+        }
       ],
       "description": {
         "en": "Unlike `convhull`, which returns an ordered boundary loop in 2-D, `convhulln` returns an unordered list of facets, one per row. This general form is the same in any dimension. The point set must span the full dimension: coplanar points in 3-D, for instance, have no volume and raise an error.",
         "pt": "Ao contrário de `convhull`, que retorna um laço de contorno ordenado em 2-D, `convhulln` retorna uma lista não ordenada de facetas, uma por linha. Essa forma geral é a mesma em qualquer dimensão. O conjunto de pontos precisa abranger a dimensão completa: pontos coplanares em 3-D, por exemplo, não têm volume e geram erro."
       },
       "examples": [
-        {"title": {"en": "Faces and volume of a tetrahedron", "pt": "Faces e volume de um tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\n[H, V] = convhulln(P)"}
+        {
+          "title": {
+            "en": "Faces and volume of a tetrahedron",
+            "pt": "Faces e volume de um tetraedro"
+          },
+          "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\n[H, V] = convhulln(P)"
+        }
       ],
-      "see": ["convhull", "delaunayn", "convexHull", "dsearchn"]
+      "see": [
+        "convhull",
+        "delaunayn",
+        "convexHull",
+        "dsearchn"
+      ]
     },
     "criticalAlpha": {
-      "summary": {"en": "Smallest alpha at which an alpha shape meets a connectivity criterion.", "pt": "Menor alpha com que uma alpha shape atende a um critério de conectividade."},
+      "summary": {
+        "en": "Smallest alpha at which an alpha shape meets a connectivity criterion.",
+        "pt": "Menor alpha com que uma alpha shape atende a um critério de conectividade."
+      },
       "syntax": [
-        {"code": "a = criticalAlpha(shp, type)", "en": "Returns the critical alpha for the criterion `type`.", "pt": "Retorna o alpha crítico para o critério `type`."}
+        {
+          "code": "a = criticalAlpha(shp, type)",
+          "en": "Returns the critical alpha for the criterion `type`.",
+          "pt": "Retorna o alpha crítico para o critério `type`."
+        }
       ],
       "inputs": [
-        {"name": "shp", "en": "An `alphaShape` object.", "pt": "Um objeto `alphaShape`."},
-        {"name": "type", "en": "`'all-points'` (every point is part of the shape) or `'one-region'` (the shape is a single region).", "pt": "`'all-points'` (todo ponto faz parte da forma) ou `'one-region'` (a forma é uma única região)."}
+        {
+          "name": "shp",
+          "en": "An `alphaShape` object.",
+          "pt": "Um objeto `alphaShape`."
+        },
+        {
+          "name": "type",
+          "en": "`'all-points'` (every point is part of the shape) or `'one-region'` (the shape is a single region).",
+          "pt": "`'all-points'` (todo ponto faz parte da forma) ou `'one-region'` (a forma é uma única região)."
+        }
       ],
       "outputs": [
-        {"name": "a", "en": "Scalar alpha value.", "pt": "Valor escalar de alpha."}
+        {
+          "name": "a",
+          "en": "Scalar alpha value.",
+          "pt": "Valor escalar de alpha."
+        }
       ],
       "description": {
         "en": "Alpha shapes with tiny alpha fall apart and drop points; with a large alpha they become the convex hull. The critical alpha is the threshold between those, found among the values of `alphaSpectrum`. A common use is to set `shp.Alpha = criticalAlpha(shp, 'one-region')` to get the tightest shape that stays in one piece.",
         "pt": "Alpha shapes com alpha minúsculo se desfazem e perdem pontos; com alpha grande viram o fecho convexo. O alpha crítico é o limiar entre esses casos, encontrado entre os valores de `alphaSpectrum`. Um uso comum é fazer `shp.Alpha = criticalAlpha(shp, 'one-region')` para obter a forma mais justa que continua em uma só peça."
       },
       "examples": [
-        {"title": {"en": "Tightest one-piece shape", "pt": "Forma mais justa em uma só peça"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y);\na = criticalAlpha(shp, 'one-region')\nshp.Alpha = a;\ndisp(numRegions(shp))"}
+        {
+          "title": {
+            "en": "Tightest one-piece shape",
+            "pt": "Forma mais justa em uma só peça"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nshp = alphaShape(x, y);\na = criticalAlpha(shp, 'one-region')\nshp.Alpha = a;\ndisp(numRegions(shp))"
+        }
       ],
-      "see": ["alphaShape", "alphaSpectrum", "numRegions", "inShape"]
+      "see": [
+        "alphaShape",
+        "alphaSpectrum",
+        "numRegions",
+        "inShape"
+      ]
     },
     "delaunay": {
-      "summary": {"en": "Delaunay triangulation of 2-D or 3-D points, as a matrix of triangle or tetrahedron indices.", "pt": "Triangulação de Delaunay de pontos 2-D ou 3-D, como matriz de índices de triângulos ou tetraedros."},
+      "summary": {
+        "en": "Delaunay triangulation of 2-D or 3-D points, as a matrix of triangle or tetrahedron indices.",
+        "pt": "Triangulação de Delaunay de pontos 2-D ou 3-D, como matriz de índices de triângulos ou tetraedros."
+      },
       "syntax": [
-        {"code": "T = delaunay(x, y)", "en": "Triangulates 2-D points given as column vectors.", "pt": "Triangula pontos 2-D dados como vetores coluna."},
-        {"code": "T = delaunay(x, y, z)", "en": "Tetrahedral triangulation of 3-D points.", "pt": "Triangulação tetraédrica de pontos 3-D."},
-        {"code": "T = delaunay(P)", "en": "Points given as rows of a matrix with two or three columns.", "pt": "Pontos dados como linhas de uma matriz com duas ou três colunas."}
+        {
+          "code": "T = delaunay(x, y)",
+          "en": "Triangulates 2-D points given as column vectors.",
+          "pt": "Triangula pontos 2-D dados como vetores coluna."
+        },
+        {
+          "code": "T = delaunay(x, y, z)",
+          "en": "Tetrahedral triangulation of 3-D points.",
+          "pt": "Triangulação tetraédrica de pontos 3-D."
+        },
+        {
+          "code": "T = delaunay(P)",
+          "en": "Points given as rows of a matrix with two or three columns.",
+          "pt": "Pontos dados como linhas de uma matriz com duas ou três colunas."
+        }
       ],
       "inputs": [
-        {"name": "x, y, z", "en": "Coordinates of the points, as column vectors.", "pt": "Coordenadas dos pontos, como vetores coluna."},
-        {"name": "P", "en": "Matrix with one point per row.", "pt": "Matriz com um ponto por linha."}
+        {
+          "name": "x, y, z",
+          "en": "Coordinates of the points, as column vectors.",
+          "pt": "Coordenadas dos pontos, como vetores coluna."
+        },
+        {
+          "name": "P",
+          "en": "Matrix with one point per row.",
+          "pt": "Matriz com um ponto por linha."
+        }
       ],
       "outputs": [
-        {"name": "T", "en": "Connectivity matrix: each row lists the point indices of one triangle (3 columns) or tetrahedron (4 columns).", "pt": "Matriz de conectividade: cada linha lista os índices dos pontos de um triângulo (3 colunas) ou tetraedro (4 colunas)."}
+        {
+          "name": "T",
+          "en": "Connectivity matrix: each row lists the point indices of one triangle (3 columns) or tetrahedron (4 columns).",
+          "pt": "Matriz de conectividade: cada linha lista os índices dos pontos de um triângulo (3 colunas) ou tetraedro (4 colunas)."
+        }
       ],
       "description": {
         "en": "A Delaunay triangulation connects the points so that no point lies inside the circumcircle (circumsphere) of any triangle (tetrahedron). This avoids long thin triangles when possible and makes it a standard base for meshing and scattered-data interpolation.\n\nThe result is not unique for degenerate inputs, such as four points exactly on one circle. The order of rows and the starting vertex of each triangle can differ from MATLAB.",
         "pt": "Uma triangulação de Delaunay conecta os pontos de modo que nenhum ponto fique dentro do círculo (esfera) circunscrito de qualquer triângulo (tetraedro). Isso evita triângulos longos e finos sempre que possível e faz dela uma base padrão para geração de malhas e interpolação de dados espalhados.\n\nO resultado não é único em entradas degeneradas, como quatro pontos exatamente sobre um círculo. A ordem das linhas e o vértice inicial de cada triângulo podem diferir do MATLAB."
       },
       "examples": [
-        {"title": {"en": "Triangulate a square with a center point", "pt": "Triangular um quadrado com ponto central"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nT = delaunay(x, y)\nsize(T)"}
+        {
+          "title": {
+            "en": "Triangulate a square with a center point",
+            "pt": "Triangular um quadrado com ponto central"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nT = delaunay(x, y)\nsize(T)"
+        }
       ],
-      "see": ["delaunayn", "delaunayTriangulation", "convhull", "dsearchn", "triplot"]
+      "see": [
+        "delaunayn",
+        "delaunayTriangulation",
+        "convhull",
+        "dsearchn",
+        "triplot"
+      ]
     },
     "delaunayn": {
-      "summary": {"en": "Delaunay triangulation of points in n dimensions.", "pt": "Triangulação de Delaunay de pontos em n dimensões."},
+      "summary": {
+        "en": "Delaunay triangulation of points in n dimensions.",
+        "pt": "Triangulação de Delaunay de pontos em n dimensões."
+      },
       "syntax": [
-        {"code": "T = delaunayn(P)", "en": "Returns the simplices of the triangulation of the points in the rows of `P`.", "pt": "Retorna os simplexes da triangulação dos pontos nas linhas de `P`."}
+        {
+          "code": "T = delaunayn(P)",
+          "en": "Returns the simplices of the triangulation of the points in the rows of `P`.",
+          "pt": "Retorna os simplexes da triangulação dos pontos nas linhas de `P`."
+        }
       ],
       "inputs": [
-        {"name": "P", "en": "Matrix with one point per row and one column per dimension.", "pt": "Matriz com um ponto por linha e uma coluna por dimensão."}
+        {
+          "name": "P",
+          "en": "Matrix with one point per row and one column per dimension.",
+          "pt": "Matriz com um ponto por linha e uma coluna por dimensão."
+        }
       ],
       "outputs": [
-        {"name": "T", "en": "One row per simplex, with `n + 1` point indices each: triangles in 2-D, tetrahedra in 3-D.", "pt": "Uma linha por simplex, com `n + 1` índices de pontos cada: triângulos em 2-D, tetraedros em 3-D."}
+        {
+          "name": "T",
+          "en": "One row per simplex, with `n + 1` point indices each: triangles in 2-D, tetrahedra in 3-D.",
+          "pt": "Uma linha por simplex, com `n + 1` índices de pontos cada: triângulos em 2-D, tetraedros em 3-D."
+        }
       ],
       "description": {
         "en": "`delaunayn` is the dimension-independent counterpart of `delaunay`. In 3-D it returns tetrahedra; the same code path serves any dimension, whereas `delaunay` is limited to two or three.\n\nFour points that are the corners of a tetrahedron, for instance, give a single row with the four indices.",
         "pt": "`delaunayn` é a versão independente de dimensão de `delaunay`. Em 3-D retorna tetraedros; o mesmo caminho de código serve para qualquer dimensão, enquanto `delaunay` se limita a duas ou três.\n\nQuatro pontos que são os vértices de um tetraedro, por exemplo, dão uma única linha com os quatro índices."
       },
       "examples": [
-        {"title": {"en": "A single tetrahedron", "pt": "Um único tetraedro"}, "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = delaunayn(P)"}
+        {
+          "title": {
+            "en": "A single tetrahedron",
+            "pt": "Um único tetraedro"
+          },
+          "code": "P = [0 0 0; 1 0 0; 0 1 0; 0 0 1];\nT = delaunayn(P)"
+        }
       ],
-      "see": ["delaunay", "convhulln", "delaunayTriangulation", "dsearchn"]
+      "see": [
+        "delaunay",
+        "convhulln",
+        "delaunayTriangulation",
+        "dsearchn"
+      ]
     },
     "DelaunayTri": {
-      "summary": {"en": "Legacy class that builds and stores the Delaunay triangulation of a point set.", "pt": "Classe antiga que constrói e guarda a triangulação de Delaunay de um conjunto de pontos."},
+      "summary": {
+        "en": "Legacy class that builds and stores the Delaunay triangulation of a point set.",
+        "pt": "Classe antiga que constrói e guarda a triangulação de Delaunay de um conjunto de pontos."
+      },
       "syntax": [
-        {"code": "DT = DelaunayTri(x, y)", "en": "Triangulation of 2-D points.", "pt": "Triangulação de pontos 2-D."},
-        {"code": "DT = DelaunayTri(x, y, z)", "en": "Triangulation of 3-D points.", "pt": "Triangulação de pontos 3-D."},
-        {"code": "DT = DelaunayTri(P)", "en": "Points as the rows of a matrix.", "pt": "Pontos como linhas de uma matriz."}
+        {
+          "code": "DT = DelaunayTri(x, y)",
+          "en": "Triangulation of 2-D points.",
+          "pt": "Triangulação de pontos 2-D."
+        },
+        {
+          "code": "DT = DelaunayTri(x, y, z)",
+          "en": "Triangulation of 3-D points.",
+          "pt": "Triangulação de pontos 3-D."
+        },
+        {
+          "code": "DT = DelaunayTri(P)",
+          "en": "Points as the rows of a matrix.",
+          "pt": "Pontos como linhas de uma matriz."
+        }
       ],
       "inputs": [
-        {"name": "x, y, z", "en": "Coordinates of the points, as column vectors.", "pt": "Coordenadas dos pontos, como vetores coluna."},
-        {"name": "P", "en": "Matrix with one point per row.", "pt": "Matriz com um ponto por linha."}
+        {
+          "name": "x, y, z",
+          "en": "Coordinates of the points, as column vectors.",
+          "pt": "Coordenadas dos pontos, como vetores coluna."
+        },
+        {
+          "name": "P",
+          "en": "Matrix with one point per row.",
+          "pt": "Matriz com um ponto por linha."
+        }
       ],
       "outputs": [
-        {"name": "DT", "en": "A `DelaunayTri` object with properties `X` (the points), `Triangulation` (the connectivity) and `Constraints`.", "pt": "Um objeto `DelaunayTri` com as propriedades `X` (os pontos), `Triangulation` (a conectividade) e `Constraints`."}
+        {
+          "name": "DT",
+          "en": "A `DelaunayTri` object with properties `X` (the points), `Triangulation` (the connectivity) and `Constraints`.",
+          "pt": "Um objeto `DelaunayTri` com as propriedades `X` (os pontos), `Triangulation` (a conectividade) e `Constraints`."
+        }
       ],
       "description": {
         "en": "`DelaunayTri` is the older interface to Delaunay triangulation, superseded by `delaunayTriangulation`. Its methods have plural or abbreviated names such as `circumcenters`, `incenters`, `faceNormals`, `cartToBary`, `baryToCart`, `isEdge`, `inOutStatus`, `nearestNeighbor` and `pointLocation`.\n\nUse it when maintaining older code; otherwise choose `delaunayTriangulation`.",
         "pt": "`DelaunayTri` é a interface antiga para a triangulação de Delaunay, substituída por `delaunayTriangulation`. Seus métodos têm nomes no plural ou abreviados, como `circumcenters`, `incenters`, `faceNormals`, `cartToBary`, `baryToCart`, `isEdge`, `inOutStatus`, `nearestNeighbor` e `pointLocation`.\n\nUse-a para manter código antigo; caso contrário, prefira `delaunayTriangulation`."
       },
       "examples": [
-        {"title": {"en": "Create and inspect", "pt": "Criar e inspecionar"}, "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nDL.Triangulation\nisEdge(DL, [1 2], [2 3])"}
+        {
+          "title": {
+            "en": "Create and inspect",
+            "pt": "Criar e inspecionar"
+          },
+          "code": "x = [0 1 1 0 0.5]';\ny = [0 0 1 1 0.5]';\nDL = DelaunayTri(x, y);\nDL.Triangulation\nisEdge(DL, [1 2], [2 3])"
+        }
       ],
-      "notes": {"en": "Constrained triangulations (the `Constraints` input) are not supported in MatLivre.", "pt": "Triangulações com restrições (a entrada `Constraints`) não são suportadas no MatLivre."},
-      "see": ["delaunayTriangulation", "delaunay", "triangulation", "pointLocation"]
+      "notes": {
+        "en": "Constrained triangulations (the `Constraints` input) are not supported in MatLivre.",
+        "pt": "Triangulações com restrições (a entrada `Constraints`) não são suportadas no MatLivre."
+      },
+      "see": [
+        "delaunayTriangulation",
+        "delaunay",
+        "triangulation",
+        "pointLocation"
+      ]
     }
   }
 }

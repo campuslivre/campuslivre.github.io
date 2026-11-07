@@ -134,24 +134,27 @@
         if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(location.href).then(done, function () {});
       });
     } else {
-      // macOS / Linux: no installer yet, so point at building from source.
+      // Linux: an AppImage when the release has one; otherwise (and on macOS) build from source.
       btn.setAttribute("href", sourceHref);
       setIcon(btn, os === "linux" ? "linux" : "download");
       setLabel(btn, bi("Build from source", "Compilar do código-fonte"));
-      setNote(btn, bi("The installer is for Windows 10 and 11. Linux and macOS are not tested yet, but you can build from source. " +
+      setNote(btn, bi("The installers are for Windows 10 and 11 and Linux (AppImage). macOS is not available yet, but you can build from source. " +
                       '<a href="' + LATEST_PAGE + '">Get the Windows installer</a> for another computer.',
-                      "O instalador é para Windows 10 e 11. Linux e macOS ainda não foram testados, mas você pode compilar do código-fonte. " +
+                      "Os instaladores são para Windows 10 e 11 e Linux (AppImage). O macOS ainda não está disponível, mas você pode compilar do código-fonte. " +
                       '<a href="' + LATEST_PAGE + '">Baixe o instalador do Windows</a> para outro computador.'));
       if (os === "linux") {
-        // As soon as a release ships an AppImage, Linux visitors get a real Install button.
         getRelease().then(function (rel) {
           if (!rel.linux) return;
+          var guide = btn.getAttribute("data-linux-href") || "#linux";
           btn.setAttribute("href", rel.linux.url);
           btn.setAttribute("download", "");
           setLabel(btn, bi("Install for Linux", "Instalar no Linux") +
             (short ? "" : ' <small style="opacity:.8;font-weight:500">' + rel.version + "</small>"));
           var meta = rel.version + " · " + rel.linux.file + " · " + bytes(rel.linux.size);
-          setNote(btn, bi(meta + ". Free, no account.", meta + ". Gratuito, sem conta."));
+          setNote(btn, bi(meta + " · AppImage, no root needed. Free, no account. Tested on Ubuntu 24.04. " +
+                          '<a href="' + guide + '">How to run it</a> · <a href="' + rel.page + '">Release notes</a>',
+                          meta + " · AppImage, sem precisar de root. Gratuito, sem conta. Testado no Ubuntu 24.04. " +
+                          '<a href="' + guide + '">Como executar</a> · <a href="' + rel.page + '">Notas da versão</a>'));
         }).catch(function () {});
       }
     }
