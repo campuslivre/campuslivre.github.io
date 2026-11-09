@@ -40,6 +40,7 @@
   var ICONS = {
     windows: '<path d="M2 3.6 8.6 2.7v6.5H2zM9.5 2.6 18 1.4v7.8H9.5zM2 10.1h6.6v6.5L2 15.7zM9.5 10.1H18v8.5l-8.5-1.2z"/>',
     linux: '<path fill-rule="evenodd" d="M10 1.2c-2.5 0-3.9 2-3.9 4.3 0 1.1-.5 2-1.2 3.2C4 10.2 3.2 12 3.6 14.2c.2 1 .7 1.7 1.4 2.1-.3.6-.1 1.4.7 1.6.9.2 2.1 0 3-.3.4.1.9.2 1.3.2s.9-.1 1.3-.2c.9.3 2.1.5 3 .3.8-.2 1-1 .7-1.6.7-.4 1.2-1.1 1.4-2.1.4-2.2-.4-4-1.3-5.5-.7-1.2-1.2-2.1-1.2-3.2C13.9 3.2 12.5 1.2 10 1.2ZM8.4 4.6a.9 1 0 1 1 0 2 .9 1 0 0 1 0-2Zm3.2 0a.9 1 0 1 1 0 2 .9 1 0 0 1 0-2ZM10 8.6c-1.6 0-2.8 1.8-2.8 4 0 1.9 1.1 3.1 2.8 3.1s2.8-1.2 2.8-3.1c0-2.2-1.2-4-2.8-4Z"/>',
+    apple: '<path d="M13.3 10.6c0-2 1.6-2.9 1.7-3-.9-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7s-1.6-.7-2.6-.7c-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.4 2 2.5 2s1.4-.6 2.6-.6 1.5.6 2.6.6 1.8-1 2.4-1.9c.8-1.1 1.1-2.2 1.1-2.3-.1 0-2.1-.8-2.1-3.2ZM11.4 4.6c.6-.7 1-1.7.9-2.6-.8 0-1.8.5-2.4 1.2-.5.6-1 1.6-.9 2.5.9.1 1.8-.4 2.4-1.1Z"/>',
     download: '<path d="M10 3v10M5.5 9 10 13.5 14.5 9M4 17h12" fill="none" stroke="currentColor" stroke-width="2"/>'
   };
   function setIcon(btn, name) {
@@ -75,12 +76,14 @@
         // Same rule as the Modding Tool site: the installer first, then any .exe/.msi.
         var win = find(/-Setup\.exe$/i) || find(/\.(exe|msi)$/i);
         var linux = find(/\.AppImage$/i);
+        var mac = find(/\.dmg$/i);
         var value = {
           version: "v" + String(data.tag_name || "").replace(/^[vV]/, ""),
           date: String(data.published_at || "").slice(0, 10),
           page: data.html_url || LATEST_PAGE,
           windows: win ? { url: win.browser_download_url, file: win.name, size: win.size } : null,
-          linux: linux ? { url: linux.browser_download_url, file: linux.name, size: linux.size } : null
+          linux: linux ? { url: linux.browser_download_url, file: linux.name, size: linux.size } : null,
+          mac: mac ? { url: mac.browser_download_url, file: mac.name, size: mac.size } : null
         };
         try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), v: value })); } catch (e) {}
         return value;
@@ -126,22 +129,38 @@
       btn.setAttribute("href", location.href);
       setIcon(btn, "download");
       setLabel(btn, bi("Copy link to install on your PC", "Copiar link para instalar no seu PC"));
-      setNote(btn, bi("MatLivre is a Windows desktop app. Open this page on your Windows PC to install it.",
-                      "O MatLivre é um app de desktop para Windows. Abra esta página no seu PC com Windows para instalar."));
+      setNote(btn, bi("MatLivre is a desktop app for Windows, macOS and Linux. Open this page on your computer to install it.",
+                      "O MatLivre é um app de desktop para Windows, macOS e Linux. Abra esta página no seu computador para instalar."));
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         var done = function () { setLabel(btn, bi("Link copied", "Link copiado")); };
         if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(location.href).then(done, function () {});
       });
     } else {
-      // Linux: an AppImage when the release has one; otherwise (and on macOS) build from source.
+      // Linux: an AppImage, macOS: a .dmg, when the release has one; otherwise build from source.
       btn.setAttribute("href", sourceHref);
       setIcon(btn, os === "linux" ? "linux" : "download");
       setLabel(btn, bi("Build from source", "Compilar do código-fonte"));
-      setNote(btn, bi("The installers are for Windows 10 and 11 and Linux (AppImage). macOS is not available yet, but you can build from source. " +
-                      '<a href="' + LATEST_PAGE + '">Get the Windows installer</a> for another computer.',
-                      "Os instaladores são para Windows 10 e 11 e Linux (AppImage). O macOS ainda não está disponível, mas você pode compilar do código-fonte. " +
-                      '<a href="' + LATEST_PAGE + '">Baixe o instalador do Windows</a> para outro computador.'));
+      setNote(btn, bi("The installers are for Windows 10 and 11, macOS and Linux (AppImage), but this release has none for your system, so build from source. " +
+                      '<a href="' + LATEST_PAGE + '">See the release</a>.',
+                      "Os instaladores são para Windows 10 e 11, macOS e Linux (AppImage), mas esta versão não tem um para o seu sistema, então compile do código-fonte. " +
+                      '<a href="' + LATEST_PAGE + '">Veja a versão</a>.'));
+      if (os === "mac") {
+        getRelease().then(function (rel) {
+          if (!rel.mac) return;
+          var guide = btn.getAttribute("data-mac-href") || "#macos";
+          btn.setAttribute("href", rel.mac.url);
+          btn.setAttribute("download", "");
+          setIcon(btn, "apple");
+          setLabel(btn, bi("Install for macOS", "Instalar no macOS") +
+            (short ? "" : ' <small style="opacity:.8;font-weight:500">' + rel.version + "</small>"));
+          var meta = rel.version + " · " + rel.mac.file + " · " + bytes(rel.mac.size);
+          setNote(btn, bi(meta + " · Apple Silicon and Intel. Free, no account. New and lightly tested. " +
+                          'macOS warns about apps Apple has not signed: <a href="' + guide + '">how to open it anyway</a> · <a href="' + rel.page + '">Release notes</a>',
+                          meta + " · Apple Silicon e Intel. Gratuito, sem conta. Novo e pouco testado. " +
+                          'O macOS avisa sobre apps não assinados pela Apple: <a href="' + guide + '">como abrir mesmo assim</a> · <a href="' + rel.page + '">Notas da versão</a>'));
+        }).catch(function () {});
+      }
       if (os === "linux") {
         getRelease().then(function (rel) {
           if (!rel.linux) return;
