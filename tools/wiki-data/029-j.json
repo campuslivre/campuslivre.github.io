@@ -1,0 +1,1085 @@
+{
+  "functions": {
+    "barthannwin": {
+      "summary": {
+        "en": "Returns a modified Bartlett-Hann window of length L, a low-sidelobe taper with zero endpoints.",
+        "pt": "Retorna uma janela de Bartlett-Hann modificada de comprimento L, um afunilamento de lóbulos laterais baixos com extremos nulos."
+      },
+      "syntax": [
+        {
+          "code": "w = barthannwin(L)",
+          "en": "Window of `L` points.",
+          "pt": "Janela de `L` pontos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The modified Bartlett-Hann window is a weighted sum of a triangle and a cosine. It starts and ends at zero and has a main lobe a bit wider than the rectangular window, in exchange for lower sidelobes.\n\nMultiply a signal segment by `w` before an FFT to reduce spectral leakage.",
+        "pt": "A janela de Bartlett-Hann modificada é uma soma ponderada de um triângulo e um cosseno. Ela começa e termina em zero e tem um lóbulo principal um pouco mais largo que o da janela retangular, em troca de lóbulos laterais menores.\n\nMultiplique um trecho do sinal por `w` antes da FFT para reduzir o vazamento espectral."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = barthannwin(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bartlett",
+        "hann",
+        "hamming",
+        "window",
+        "blackman"
+      ]
+    },
+    "bartlett": {
+      "summary": {
+        "en": "Returns a Bartlett (triangular) window of length L whose first and last points are zero.",
+        "pt": "Retorna uma janela de Bartlett (triangular) de comprimento L cujo primeiro e último pontos são zero."
+      },
+      "syntax": [
+        {
+          "code": "w = bartlett(L)",
+          "en": "Window of `L` points.",
+          "pt": "Janela de `L` pontos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Bartlett window rises linearly from zero to one at the center and falls back to zero. It is the triangular window with zero endpoints; `triang` has the same shape but nonzero endpoints.\n\nIt is a simple taper to reduce spectral leakage, with sidelobes that fall faster than those of the rectangular window.",
+        "pt": "A janela de Bartlett sobe linearmente de zero até um no centro e volta a zero. É a janela triangular com extremos nulos; `triang` tem a mesma forma, mas com extremos diferentes de zero.\n\nÉ um afunilamento simples para reduzir o vazamento espectral, com lóbulos laterais que decaem mais rápido que os da janela retangular."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = bartlett(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "triang",
+        "hann",
+        "rectwin",
+        "window",
+        "barthannwin"
+      ]
+    },
+    "blackman": {
+      "summary": {
+        "en": "Returns a Blackman window of length L, a three-term cosine window with low sidelobes.",
+        "pt": "Retorna uma janela de Blackman de comprimento L, uma janela de cosseno com três termos e lóbulos laterais baixos."
+      },
+      "syntax": [
+        {
+          "code": "w = blackman(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = blackman(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Blackman window is a sum of three cosines. Its sidelobes are lower than those of `hamming` and `hann`, and its main lobe is wider.\n\nUse the `'periodic'` form when the window is applied to FFT frames, and the default symmetric form for filter design.",
+        "pt": "A janela de Blackman é uma soma de três cossenos. Seus lóbulos laterais são menores que os de `hamming` e `hann`, e o lóbulo principal é mais largo.\n\nUse a forma `'periodic'` ao aplicar a janela a quadros de FFT, e a forma simétrica padrão no projeto de filtros."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Symmetric and periodic",
+            "pt": "Simétrica e periódica"
+          },
+          "code": "a = blackman(5);\nb = blackman(4, 'periodic');\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "blackmanharris",
+        "hamming",
+        "hann",
+        "window",
+        "nuttallwin"
+      ]
+    },
+    "blackmanharris": {
+      "summary": {
+        "en": "Returns a minimum four-term Blackman-Harris window of length L, with very low sidelobes.",
+        "pt": "Retorna uma janela de Blackman-Harris de quatro termos e comprimento L, com lóbulos laterais muito baixos."
+      },
+      "syntax": [
+        {
+          "code": "w = blackmanharris(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = blackmanharris(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Blackman-Harris window is a sum of four cosines. It trades a wide main lobe for sidelobes far below those of `blackman`, which helps when a weak tone sits next to a strong one.\n\nThe endpoints are small but not exactly zero.",
+        "pt": "A janela de Blackman-Harris é uma soma de quatro cossenos. Ela troca um lóbulo principal largo por lóbulos laterais bem abaixo dos de `blackman`, o que ajuda quando um tom fraco fica ao lado de um forte.\n\nOs extremos são pequenos, mas não exatamente zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = blackmanharris(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "blackman",
+        "nuttallwin",
+        "flattopwin",
+        "window",
+        "hann"
+      ]
+    },
+    "bohmanwin": {
+      "summary": {
+        "en": "Returns a Bohman window of length L, the product of a cosine lobe and a triangle, with zero endpoints.",
+        "pt": "Retorna uma janela de Bohman de comprimento L, o produto de um lóbulo de cosseno por um triângulo, com extremos nulos."
+      },
+      "syntax": [
+        {
+          "code": "w = bohmanwin(L)",
+          "en": "Window of `L` points.",
+          "pt": "Janela de `L` pontos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Bohman window is smooth at its edges: it and its first derivative go to zero at both ends, so its sidelobes fall off quickly.\n\nUse it as a taper before an FFT when you want fast sidelobe decay.",
+        "pt": "A janela de Bohman é suave nas bordas: ela e sua primeira derivada vão a zero nas duas pontas, então os lóbulos laterais decaem rapidamente.\n\nUse-a como afunilamento antes de uma FFT quando quiser decaimento rápido dos lóbulos laterais."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = bohmanwin(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "parzenwin",
+        "hann",
+        "barthannwin",
+        "window",
+        "blackman"
+      ]
+    },
+    "chebwin": {
+      "summary": {
+        "en": "Returns a Dolph-Chebyshev window of length L whose sidelobes all sit r dB below the main lobe.",
+        "pt": "Retorna uma janela de Dolph-Chebyshev de comprimento L cujos lóbulos laterais ficam todos r dB abaixo do lóbulo principal."
+      },
+      "syntax": [
+        {
+          "code": "w = chebwin(L)",
+          "en": "Window with 100 dB sidelobe attenuation.",
+          "pt": "Janela com atenuação de 100 dB nos lóbulos laterais."
+        },
+        {
+          "code": "w = chebwin(L, r)",
+          "en": "Window with `r` dB sidelobe attenuation.",
+          "pt": "Janela com atenuação de `r` dB nos lóbulos laterais."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "r",
+          "en": "Sidelobe attenuation in dB, a nonnegative number. Default `100`.",
+          "pt": "Atenuação dos lóbulos laterais em dB, um número não negativo. Padrão `100`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Chebyshev window has equal-height sidelobes, set by `r`. For a given sidelobe level it has the narrowest possible main lobe. A larger `r` lowers the sidelobes and widens the main lobe.\n\nThe window is scaled to a peak of 1.",
+        "pt": "A janela de Chebyshev tem lóbulos laterais de mesma altura, definidos por `r`. Para um dado nível de lóbulos laterais, ela tem o menor lóbulo principal possível. Um `r` maior reduz os lóbulos laterais e alarga o lóbulo principal.\n\nA janela é normalizada para pico 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five points, 40 dB sidelobes",
+            "pt": "Cinco pontos, lóbulos laterais de 40 dB"
+          },
+          "code": "w = chebwin(5, 40);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kaiser",
+        "taylorwin",
+        "gausswin",
+        "window",
+        "hann"
+      ]
+    },
+    "flattopwin": {
+      "summary": {
+        "en": "Returns a flat top window of length L, whose flat main lobe gives accurate amplitude readings.",
+        "pt": "Retorna uma janela flat top de comprimento L, cujo lóbulo principal plano dá leituras de amplitude precisas."
+      },
+      "syntax": [
+        {
+          "code": "w = flattopwin(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = flattopwin(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The flat top window has a very wide, flat main lobe, so a sinusoid shows nearly the same peak amplitude whatever its frequency relative to the FFT bins. The cost is poor frequency resolution.\n\nThe window has small negative values near its edges.",
+        "pt": "A janela flat top tem um lóbulo principal muito largo e plano, de modo que uma senoide mostra quase a mesma amplitude de pico qualquer que seja sua frequência em relação aos bins da FFT. O custo é uma resolução em frequência ruim.\n\nA janela tem pequenos valores negativos perto das bordas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = flattopwin(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "blackmanharris",
+        "hann",
+        "kaiser",
+        "window",
+        "nuttallwin"
+      ]
+    },
+    "gausswin": {
+      "summary": {
+        "en": "Returns a Gaussian window of length L; a larger alpha gives a narrower window in time.",
+        "pt": "Retorna uma janela gaussiana de comprimento L; um alpha maior dá uma janela mais estreita no tempo."
+      },
+      "syntax": [
+        {
+          "code": "w = gausswin(L)",
+          "en": "Window with `alpha = 2.5`.",
+          "pt": "Janela com `alpha = 2.5`."
+        },
+        {
+          "code": "w = gausswin(L, alpha)",
+          "en": "Window with the given `alpha`.",
+          "pt": "Janela com o `alpha` dado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "alpha",
+          "en": "Width parameter, a nonnegative number. Default `2.5`. The window edge lies `alpha` standard deviations from the center, so larger values taper more and narrow the window.",
+          "pt": "Parâmetro de largura, um número não negativo. Padrão `2.5`. A borda da janela fica a `alpha` desvios padrão do centro, então valores maiores afunilam mais e estreitam a janela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Gaussian window has no sidelobe ripple of its own: its spectrum is also Gaussian. Larger `alpha` gives lower sidelobes and a wider main lobe in frequency.\n\nThe edge values are not zero, so the window does not reach zero at its ends.",
+        "pt": "A janela gaussiana não tem ondulação própria nos lóbulos laterais: seu espectro também é gaussiano. Um `alpha` maior dá lóbulos laterais menores e um lóbulo principal mais largo em frequência.\n\nOs valores das bordas não são zero, então a janela não chega a zero nas pontas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Default and narrower window",
+            "pt": "Janela padrão e mais estreita"
+          },
+          "code": "a = gausswin(5);\nb = gausswin(5, 4);\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kaiser",
+        "chebwin",
+        "tukeywin",
+        "window",
+        "hann"
+      ]
+    },
+    "hamming": {
+      "summary": {
+        "en": "Returns a Hamming window of length L, a raised cosine whose endpoints are 0.08 instead of zero.",
+        "pt": "Retorna uma janela de Hamming de comprimento L, um cosseno elevado cujos extremos valem 0,08 em vez de zero."
+      },
+      "syntax": [
+        {
+          "code": "w = hamming(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = hamming(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Hamming window is `0.54 - 0.46*cos(2*pi*n/(L-1))`. It lowers the nearest sidelobes more than `hann` does, but its far sidelobes fall off more slowly.\n\nIt is a common default for short-time spectral analysis and for window-method FIR filter design.",
+        "pt": "A janela de Hamming é `0.54 - 0.46*cos(2*pi*n/(L-1))`. Ela reduz mais os lóbulos laterais mais próximos do que `hann`, mas seus lóbulos distantes decaem mais devagar.\n\nÉ uma escolha comum para análise espectral de curta duração e para projeto de filtros FIR pelo método da janela."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Windowing a tone",
+            "pt": "Aplicando a janela a um tom"
+          },
+          "code": "n = (0:7)';\nx = cos(2*pi*0.2*n);\nw = hamming(8);\nfprintf('%.4f\\n', sum(x.*w))\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hann",
+        "blackman",
+        "bartlett",
+        "window",
+        "kaiser"
+      ]
+    },
+    "hann": {
+      "summary": {
+        "en": "Returns a Hann window of length L, a raised cosine that starts and ends at zero.",
+        "pt": "Retorna uma janela de Hann de comprimento L, um cosseno elevado que começa e termina em zero."
+      },
+      "syntax": [
+        {
+          "code": "w = hann(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = hann(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Hann window is `0.5 - 0.5*cos(2*pi*n/(L-1))`. Its sidelobes fall off quickly, which makes it a good general-purpose taper before an FFT.\n\nWith `'periodic'` the window is built for `L+1` points and the last one dropped, so overlapped Hann frames add up to a constant.",
+        "pt": "A janela de Hann é `0.5 - 0.5*cos(2*pi*n/(L-1))`. Seus lóbulos laterais decaem rápido, o que a torna um bom afunilamento de uso geral antes de uma FFT.\n\nCom `'periodic'` a janela é construída para `L+1` pontos e o último é descartado, de modo que quadros de Hann sobrepostos somam uma constante."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Symmetric and periodic",
+            "pt": "Simétrica e periódica"
+          },
+          "code": "a = hann(5);\nb = hann(4, 'periodic');\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hamming",
+        "blackman",
+        "bartlett",
+        "window",
+        "tukeywin"
+      ]
+    },
+    "kaiser": {
+      "summary": {
+        "en": "Returns a Kaiser window of length L; the parameter beta trades main-lobe width against sidelobe level.",
+        "pt": "Retorna uma janela de Kaiser de comprimento L; o parâmetro beta troca largura do lóbulo principal por nível dos lóbulos laterais."
+      },
+      "syntax": [
+        {
+          "code": "w = kaiser(L)",
+          "en": "Window with `beta = 0.5`.",
+          "pt": "Janela com `beta = 0.5`."
+        },
+        {
+          "code": "w = kaiser(L, beta)",
+          "en": "Window with the given `beta`.",
+          "pt": "Janela com o `beta` dado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "beta",
+          "en": "Shape parameter, a real number. Default `0.5`. Larger values lower the sidelobes and narrow the window in time. `0` gives a rectangular window.",
+          "pt": "Parâmetro de forma, um número real. Padrão `0.5`. Valores maiores reduzem os lóbulos laterais e estreitam a janela no tempo. `0` dá uma janela retangular."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Kaiser window is built from a Bessel function and gives one knob, `beta`, to choose the tradeoff between resolution and leakage. It is widely used to design FIR filters by the window method.\n\nThe window is scaled so its center value is 1.",
+        "pt": "A janela de Kaiser é construída a partir de uma função de Bessel e oferece um único ajuste, `beta`, para escolher o compromisso entre resolução e vazamento. É muito usada no projeto de filtros FIR pelo método da janela.\n\nA janela é normalizada para que o valor central seja 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Effect of beta",
+            "pt": "Efeito de beta"
+          },
+          "code": "a = kaiser(5, 0);\nb = kaiser(5, 5);\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kaiserord",
+        "chebwin",
+        "gausswin",
+        "window",
+        "fir1"
+      ]
+    },
+    "nuttallwin": {
+      "summary": {
+        "en": "Returns a Nuttall four-term window of length L, a minimum-sidelobe cosine window.",
+        "pt": "Retorna uma janela de Nuttall de quatro termos e comprimento L, uma janela de cosseno de lóbulos laterais mínimos."
+      },
+      "syntax": [
+        {
+          "code": "w = nuttallwin(L)",
+          "en": "Symmetric window of `L` points.",
+          "pt": "Janela simétrica de `L` pontos."
+        },
+        {
+          "code": "w = nuttallwin(L, sflag)",
+          "en": "Symmetric or periodic window.",
+          "pt": "Janela simétrica ou periódica."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "sflag",
+          "en": "`'symmetric'` (default) or `'periodic'`. The periodic window is the symmetric window of length `L+1` without its last point, which suits spectral analysis with the FFT.",
+          "pt": "`'symmetric'` (padrão) ou `'periodic'`. A janela periódica é a janela simétrica de comprimento `L+1` sem o último ponto, adequada para análise espectral com a FFT."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Nuttall window is a sum of four cosines with coefficients chosen for low sidelobes. It is close to `blackmanharris` and is zero at both ends.\n\nIt suits spectra where a weak component must be seen next to a strong one.",
+        "pt": "A janela de Nuttall é uma soma de quatro cossenos com coeficientes escolhidos para lóbulos laterais baixos. É próxima de `blackmanharris` e vale zero nas duas pontas.\n\nServe para espectros em que um componente fraco precisa ser visto ao lado de um forte."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = nuttallwin(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "blackmanharris",
+        "blackman",
+        "flattopwin",
+        "window",
+        "hann"
+      ]
+    },
+    "parzenwin": {
+      "summary": {
+        "en": "Returns a Parzen (de la Vallee Poussin) window of length L, a smooth piecewise cubic taper.",
+        "pt": "Retorna uma janela de Parzen (de la Vallée Poussin) de comprimento L, um afunilamento suave formado por trechos cúbicos."
+      },
+      "syntax": [
+        {
+          "code": "w = parzenwin(L)",
+          "en": "Window of `L` points.",
+          "pt": "Janela de `L` pontos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Parzen window is made of two cubic pieces and is never negative. Its spectrum has no negative lobes, and its sidelobes fall off fast.\n\nIt is wider in frequency than `hann` for the same length.",
+        "pt": "A janela de Parzen é feita de dois trechos cúbicos e nunca é negativa. Seu espectro não tem lóbulos negativos, e seus lóbulos laterais decaem rápido.\n\nPara o mesmo comprimento, ela é mais larga em frequência que `hann`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Five-point window",
+            "pt": "Janela de cinco pontos"
+          },
+          "code": "w = parzenwin(5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bohmanwin",
+        "hann",
+        "bartlett",
+        "window",
+        "triang"
+      ]
+    },
+    "rectwin": {
+      "summary": {
+        "en": "Returns a rectangular window of length L, all ones, which leaves the signal unchanged.",
+        "pt": "Retorna uma janela retangular de comprimento L, toda de uns, que deixa o sinal inalterado."
+      },
+      "syntax": [
+        {
+          "code": "w = rectwin(L)",
+          "en": "Window of `L` ones.",
+          "pt": "Janela com `L` uns."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The rectangular window has the narrowest main lobe of all windows but the highest sidelobes. It is the same as not windowing at all.\n\nIt exists so that code that takes a window function as an argument can also be given a rectangular one.",
+        "pt": "A janela retangular tem o menor lóbulo principal de todas as janelas, mas os maiores lóbulos laterais. Equivale a não aplicar janela.\n\nEla existe para que um código que recebe uma função de janela como argumento também possa receber uma retangular."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Length 5",
+            "pt": "Comprimento 5"
+          },
+          "code": "w = rectwin(5);\ndisp(w')\ndisp(size(w))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hann",
+        "bartlett",
+        "triang",
+        "window",
+        "tukeywin"
+      ]
+    },
+    "taylorwin": {
+      "summary": {
+        "en": "Returns a Taylor window of length n with nearly constant-level sidelobes at a chosen level.",
+        "pt": "Retorna uma janela de Taylor de comprimento n com lóbulos laterais de nível quase constante em um nível escolhido."
+      },
+      "syntax": [
+        {
+          "code": "w = taylorwin(n)",
+          "en": "Window with `nbar = 4` and `sll = -30`.",
+          "pt": "Janela com `nbar = 4` e `sll = -30`."
+        },
+        {
+          "code": "w = taylorwin(n, nbar)",
+          "en": "Window with `nbar` near-constant sidelobes.",
+          "pt": "Janela com `nbar` lóbulos laterais quase constantes."
+        },
+        {
+          "code": "w = taylorwin(n, nbar, sll)",
+          "en": "Window with sidelobe level `sll` in dB.",
+          "pt": "Janela com nível de lóbulos laterais `sll` em dB."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of points, a nonnegative integer.",
+          "pt": "Número de pontos, um inteiro não negativo."
+        },
+        {
+          "name": "nbar",
+          "en": "Number of nearly constant-level sidelobes next to the main lobe, a positive integer. Default `4`.",
+          "pt": "Número de lóbulos laterais de nível quase constante junto ao lóbulo principal, um inteiro positivo. Padrão `4`."
+        },
+        {
+          "name": "sll",
+          "en": "Maximum sidelobe level in dB relative to the main lobe, a negative number. Default `-30`.",
+          "pt": "Nível máximo dos lóbulos laterais em dB relativo ao lóbulo principal, um número negativo. Padrão `-30`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `n` window values.",
+          "pt": "Vetor coluna com os `n` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Taylor window is a compromise between the Chebyshev window (all sidelobes equal) and a window whose sidelobes decay. The first `nbar` sidelobes stay near the level `sll` and the rest fall off.\n\nIt is common in radar and antenna work. A more negative `sll` lowers the sidelobes and widens the main lobe.",
+        "pt": "A janela de Taylor é um meio-termo entre a janela de Chebyshev (todos os lóbulos laterais iguais) e uma janela cujos lóbulos laterais decaem. Os primeiros `nbar` lóbulos laterais ficam perto do nível `sll` e os demais decaem.\n\nÉ comum em radar e em antenas. Um `sll` mais negativo reduz os lóbulos laterais e alarga o lóbulo principal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Eight points, -35 dB",
+            "pt": "Oito pontos, -35 dB"
+          },
+          "code": "w = taylorwin(8, 4, -35);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chebwin",
+        "kaiser",
+        "hann",
+        "window",
+        "blackmanharris"
+      ]
+    },
+    "triang": {
+      "summary": {
+        "en": "Returns a triangular window of length L whose endpoints are not zero.",
+        "pt": "Retorna uma janela triangular de comprimento L cujos extremos não são zero."
+      },
+      "syntax": [
+        {
+          "code": "w = triang(L)",
+          "en": "Window of `L` points.",
+          "pt": "Janela de `L` pontos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The triangular window rises linearly to a peak at the center and falls back. Unlike `bartlett`, its endpoints are not zero: for odd `L` the first value is `2/(L+1)`, and the peak is 1.\n\nFor even `L` the window has two equal center values below 1.",
+        "pt": "A janela triangular sobe linearmente até um pico no centro e desce de novo. Diferente de `bartlett`, seus extremos não são zero: para `L` ímpar o primeiro valor é `2/(L+1)`, e o pico vale 1.\n\nPara `L` par a janela tem dois valores centrais iguais, menores que 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Odd and even length",
+            "pt": "Comprimento ímpar e par"
+          },
+          "code": "a = triang(5);\nb = triang(4);\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bartlett",
+        "hann",
+        "parzenwin",
+        "window",
+        "rectwin"
+      ]
+    },
+    "tukeywin": {
+      "summary": {
+        "en": "Returns a Tukey (tapered cosine) window of length L: flat in the middle with cosine tapers at the edges.",
+        "pt": "Retorna uma janela de Tukey (cosseno afunilado) de comprimento L: plana no meio, com afunilamentos de cosseno nas bordas."
+      },
+      "syntax": [
+        {
+          "code": "w = tukeywin(L)",
+          "en": "Window with `r = 0.5`.",
+          "pt": "Janela com `r = 0.5`."
+        },
+        {
+          "code": "w = tukeywin(L, r)",
+          "en": "Window where a fraction `r` of the points is tapered.",
+          "pt": "Janela em que uma fração `r` dos pontos é afunilada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "L",
+          "en": "Number of points in the window, a nonnegative integer. Non-integer values are rounded with a warning. `0` gives an empty window and `1` gives `1`.",
+          "pt": "Número de pontos da janela, um inteiro não negativo. Valores não inteiros são arredondados com um aviso. `0` dá uma janela vazia e `1` dá `1`."
+        },
+        {
+          "name": "r",
+          "en": "Fraction of the window inside the cosine tapers, from 0 to 1. Default `0.5`. `r <= 0` gives a rectangular window and `r >= 1` gives a Hann window.",
+          "pt": "Fração da janela ocupada pelos afunilamentos de cosseno, de 0 a 1. Padrão `0.5`. `r <= 0` dá uma janela retangular e `r >= 1` dá uma janela de Hann."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Column vector of `L` window values.",
+          "pt": "Vetor coluna com os `L` valores da janela."
+        }
+      ],
+      "description": {
+        "en": "The Tukey window keeps most of the signal at full weight and only fades the ends, so it distorts amplitudes less than `hann` while still avoiding sharp edges.\n\nUse it to taper the ends of a record before an FFT when the middle of the record matters most.",
+        "pt": "A janela de Tukey mantém a maior parte do sinal com peso total e só atenua as pontas, distorcendo menos as amplitudes que `hann` e ainda evitando bordas abruptas.\n\nUse-a para afunilar as pontas de um registro antes da FFT quando o meio do registro é o mais importante."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Half-tapered window",
+            "pt": "Janela com metade afunilada"
+          },
+          "code": "w = tukeywin(8, 0.5);\ndisp(round(w'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hann",
+        "rectwin",
+        "kaiser",
+        "window",
+        "bartlett"
+      ]
+    },
+    "window": {
+      "summary": {
+        "en": "Calls a window function by name or handle and returns the window it makes.",
+        "pt": "Chama uma função de janela pelo nome ou por um handle e retorna a janela que ela gera."
+      },
+      "syntax": [
+        {
+          "code": "w = window(fname, L)",
+          "en": "Window of length `L` from the function `fname`.",
+          "pt": "Janela de comprimento `L` da função `fname`."
+        },
+        {
+          "code": "w = window(fname, L, opt)",
+          "en": "Passes extra arguments (such as a flag or a shape parameter) on to `fname`.",
+          "pt": "Repassa argumentos extras (como um flag ou um parâmetro de forma) a `fname`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "fname",
+          "en": "Name of a window function as text, or a function handle such as `@hann`.",
+          "pt": "Nome de uma função de janela como texto, ou um handle de função como `@hann`."
+        },
+        {
+          "name": "L",
+          "en": "Window length, passed to `fname`.",
+          "pt": "Comprimento da janela, repassado a `fname`."
+        },
+        {
+          "name": "opt",
+          "en": "Further arguments passed unchanged to `fname`, for example `'periodic'` or a `beta` value.",
+          "pt": "Outros argumentos repassados sem alteração a `fname`, por exemplo `'periodic'` ou um valor de `beta`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Window returned by `fname`.",
+          "pt": "Janela retornada por `fname`."
+        }
+      ],
+      "description": {
+        "en": "`window` is a thin wrapper: it forwards its arguments to the window function you name and returns the result. It is useful when the window type is chosen at run time, for example from a menu or a configuration variable.\n\nThe result is whatever `fname` returns, normally a column vector.",
+        "pt": "`window` é um invólucro simples: ele repassa seus argumentos à função de janela indicada e devolve o resultado. É útil quando o tipo de janela é escolhido em tempo de execução, por exemplo a partir de um menu ou de uma variável de configuração.\n\nO resultado é o que `fname` devolver, normalmente um vetor coluna."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Name or handle",
+            "pt": "Nome ou handle"
+          },
+          "code": "a = window(@hamming, 5);\nb = window('kaiser', 5, 5);\ndisp(round(a'*1000)/1000)\ndisp(round(b'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hann",
+        "hamming",
+        "kaiser",
+        "tukeywin",
+        "chebwin"
+      ]
+    },
+    "dpss": {
+      "summary": {
+        "en": "Computes discrete prolate spheroidal (Slepian) sequences, the tapers used by the multitaper spectral method.",
+        "pt": "Calcula sequências esferoidais prolatas discretas (de Slepian), as janelas usadas pelo método espectral multitaper."
+      },
+      "syntax": [
+        {
+          "code": "e = dpss(N, NW)",
+          "en": "The first `round(2*NW)` sequences, at least one.",
+          "pt": "As primeiras `round(2*NW)` sequências, no mínimo uma."
+        },
+        {
+          "code": "e = dpss(N, NW, K)",
+          "en": "The first `K` sequences.",
+          "pt": "As primeiras `K` sequências."
+        },
+        {
+          "code": "e = dpss(N, NW, [k1 k2])",
+          "en": "Sequences `k1` through `k2`.",
+          "pt": "As sequências de `k1` a `k2`."
+        },
+        {
+          "code": "[e, v] = dpss(N, NW, ...)",
+          "en": "Also returns the concentration ratios.",
+          "pt": "Retorna também as razões de concentração."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "N",
+          "en": "Length of each sequence, a positive integer.",
+          "pt": "Comprimento de cada sequência, um inteiro positivo."
+        },
+        {
+          "name": "NW",
+          "en": "Time-half-bandwidth product, a nonnegative number smaller than `N/2`. Typical values are 2 to 4.",
+          "pt": "Produto tempo-meia-largura de banda, um número não negativo menor que `N/2`. Valores típicos vão de 2 a 4."
+        },
+        {
+          "name": "K",
+          "en": "Number of sequences, or a two-element range `[k1 k2]`. Default: `round(2*NW)`, at least 1.",
+          "pt": "Número de sequências, ou uma faixa `[k1 k2]` de dois elementos. Padrão: `round(2*NW)`, no mínimo 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "e",
+          "en": "`N`-by-`K` matrix whose columns are the sequences, each with unit energy.",
+          "pt": "Matriz `N` por `K` cujas colunas são as sequências, cada uma com energia unitária."
+        },
+        {
+          "name": "v",
+          "en": "Concentration ratio of each sequence, one value per column of `e`.",
+          "pt": "Razão de concentração de cada sequência, um valor por coluna de `e`."
+        }
+      ],
+      "description": {
+        "en": "The Slepian sequences are the length-`N` windows whose energy is most concentrated in the frequency band `[-W, W]`, with `W = NW/N` in cycles per sample. They are orthonormal, and the first few are used as tapers in the multitaper method (`pmtm`).\n\nThe second output gives, for each sequence, the fraction of its energy that lies inside the band. The first values are close to 1, and later ones drop off.",
+        "pt": "As sequências de Slepian são as janelas de comprimento `N` cuja energia está mais concentrada na faixa de frequência `[-W, W]`, com `W = NW/N` em ciclos por amostra. Elas são ortonormais, e as primeiras são usadas como janelas no método multitaper (`pmtm`).\n\nA segunda saída dá, para cada sequência, a fração de sua energia que fica dentro da faixa. Os primeiros valores ficam perto de 1, e os seguintes caem."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two sequences and their concentration",
+            "pt": "Duas sequências e sua concentração"
+          },
+          "code": "[e, v] = dpss(8, 2, 2);\ndisp(size(e))\ndisp(round(v'*10000)/10000)\ndisp(round(abs(e(:,1))'*1000)/1000)\ndisp(round(e'*e*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pmtm",
+        "kaiser",
+        "chebwin",
+        "hann",
+        "window"
+      ],
+      "notes": {
+        "en": "Two things differ from MATLAB. The overall sign of an odd-order sequence (the second, fourth and so on) is not guaranteed to match MATLAB, which picks it from rounding in its inverse iteration; the shape is the same. The `'spline'` and `'linear'` interpolation methods are not available: they fail with `There is no DPSS with time-bandwidth product NW = ... in database`. Only the default direct computation (`'calc'`) works.",
+        "pt": "Duas coisas diferem do MATLAB. O sinal global de uma sequência de ordem ímpar (a segunda, a quarta e assim por diante) pode não coincidir com o do MATLAB, que o escolhe por arredondamento em sua iteração inversa; o formato é o mesmo. Os métodos de interpolação `'spline'` e `'linear'` não estão disponíveis: eles falham com `There is no DPSS with time-bandwidth product NW = ... in database`. Só o cálculo direto padrão (`'calc'`) funciona."
+      }
+    }
+  }
+}

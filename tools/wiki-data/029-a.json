@@ -1,0 +1,1754 @@
+{
+  "functions": {
+    "chirp": {
+      "summary": {
+        "en": "Generates a swept-frequency cosine whose frequency moves from f0 to f1 over a given time, with a linear, quadratic or logarithmic sweep.",
+        "pt": "Gera um cosseno com frequência varrida, que vai de f0 a f1 em um tempo dado, com varredura linear, quadrática ou logarítmica."
+      },
+      "syntax": [
+        {
+          "code": "y = chirp(t, f0, t1, f1)",
+          "en": "Linear sweep: the instantaneous frequency is `f0` at `t = 0` and `f1` at `t = t1`.",
+          "pt": "Varredura linear: a frequência instantânea é `f0` em `t = 0` e `f1` em `t = t1`."
+        },
+        {
+          "code": "y = chirp(t, f0, t1, f1, method)",
+          "en": "Chooses the sweep with `method`: `'linear'`, `'quadratic'` or `'logarithmic'`.",
+          "pt": "Escolhe a varredura com `method`: `'linear'`, `'quadratic'` ou `'logarithmic'`."
+        },
+        {
+          "code": "y = chirp(t, f0, t1, f1, method, phi)",
+          "en": "Adds an initial phase `phi`, in degrees.",
+          "pt": "Acrescenta uma fase inicial `phi`, em graus."
+        },
+        {
+          "code": "y = chirp(t, f0, t1, f1, method, phi, 'complex')",
+          "en": "Returns the complex exponential instead of the cosine.",
+          "pt": "Retorna a exponencial complexa em vez do cosseno."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants at which to evaluate the signal, in seconds.",
+          "pt": "Instantes, em segundos, nos quais o sinal é calculado."
+        },
+        {
+          "name": "f0",
+          "en": "Frequency at time 0, in hertz. Default 0 (1e-6 for the logarithmic sweep).",
+          "pt": "Frequência no instante 0, em hertz. O padrão é 0 (1e-6 na varredura logarítmica)."
+        },
+        {
+          "name": "t1",
+          "en": "Time at which the frequency reaches `f1`, in seconds. Default 1.",
+          "pt": "Instante em que a frequência chega a `f1`, em segundos. O padrão é 1."
+        },
+        {
+          "name": "f1",
+          "en": "Frequency at time `t1`, in hertz. Default 100.",
+          "pt": "Frequência no instante `t1`, em hertz. O padrão é 100."
+        },
+        {
+          "name": "method",
+          "en": "Sweep law. A shorter prefix such as `'lin'` is accepted. Default `'linear'`.",
+          "pt": "Lei de varredura. Um prefixo menor, como `'lin'`, é aceito. O padrão é `'linear'`."
+        },
+        {
+          "name": "phi",
+          "en": "Initial phase in degrees. Default 0.",
+          "pt": "Fase inicial em graus. O padrão é 0."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Signal with the same size as `t`.",
+          "pt": "Sinal com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "A chirp is a tone whose frequency changes steadily with time. `chirp` evaluates it at the instants you give, so you choose the sampling yourself: for `t = (0:N-1)/fs` the signal is valid as long as `f0` and `f1` stay below `fs/2`.\n\nA linear sweep changes the frequency by a constant amount per second. A quadratic sweep changes it with the square of time, and `'concave'` or `'convex'` (after `phi`) picks which way the parabola bends. A logarithmic sweep changes it by a constant factor per second, so `f0` must be positive.",
+        "pt": "Um chirp é um tom cuja frequência muda de forma contínua com o tempo. `chirp` o avalia nos instantes informados, então a taxa de amostragem fica por sua conta: com `t = (0:N-1)/fs`, o sinal é válido enquanto `f0` e `f1` ficarem abaixo de `fs/2`.\n\nNa varredura linear, a frequência muda por uma quantidade constante a cada segundo. Na quadrática, ela varia com o quadrado do tempo, e `'concave'` ou `'convex'` (depois de `phi`) escolhe para que lado a parábola se curva. Na logarítmica, a frequência muda por um fator constante a cada segundo, então `f0` precisa ser positivo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Linear sweep from 0 to 10 Hz",
+            "pt": "Varredura linear de 0 a 10 Hz"
+          },
+          "code": "t = 0:0.1:0.5;\ny = chirp(t, 0, 0.5, 10);\ndisp(round(y*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Starting phase of 90 degrees",
+            "pt": "Fase inicial de 90 graus"
+          },
+          "code": "t = 0:0.1:0.5;\ny = chirp(t, 0, 0.5, 10, 'linear', 90);\ndisp(round(y*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sin",
+        "vco",
+        "sawtooth",
+        "spectrogram",
+        "pulstran"
+      ]
+    },
+    "diric": {
+      "summary": {
+        "en": "Evaluates the Dirichlet function, the periodic sinc that appears as the frequency response of a length-n moving sum.",
+        "pt": "Calcula a função de Dirichlet, a sinc periódica que aparece como resposta em frequência de uma soma móvel de comprimento n."
+      },
+      "syntax": [
+        {
+          "code": "y = diric(x, n)",
+          "en": "Evaluates the Dirichlet function of order `n` at each element of `x`.",
+          "pt": "Calcula a função de Dirichlet de ordem `n` em cada elemento de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, in radians. Any size.",
+          "pt": "Pontos de avaliação, em radianos. Qualquer tamanho."
+        },
+        {
+          "name": "n",
+          "en": "Positive integer order.",
+          "pt": "Ordem, um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Values `sin(n*x/2) ./ (n*sin(x/2))`, with the same size as `x`; the limit value is used where the denominator is zero.",
+          "pt": "Valores de `sin(n*x/2) ./ (n*sin(x/2))`, com o mesmo tamanho de `x`; onde o denominador se anula, usa-se o valor limite."
+        }
+      ],
+      "description": {
+        "en": "`diric(x, n)` is `sin(n*x/2) ./ (n*sin(x/2))`. It equals 1 at `x = 0` and never exceeds 1 in magnitude. For odd `n` the period is `2*pi`; for even `n` the function changes sign from one `2*pi` period to the next, so the period is `4*pi`.\n\nIt is the shape of the magnitude response of an `n`-point moving sum, which is why it shows up in window and filter design.",
+        "pt": "`diric(x, n)` é `sin(n*x/2) ./ (n*sin(x/2))`. Vale 1 em `x = 0` e nunca passa de 1 em módulo. Para `n` ímpar o período é `2*pi`; para `n` par a função troca de sinal de um período de `2*pi` para o seguinte, então o período é `4*pi`.\n\nÉ a forma da resposta em módulo de uma soma móvel de `n` pontos, e por isso aparece no projeto de janelas e filtros."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Odd order",
+            "pt": "Ordem ímpar"
+          },
+          "code": "x = [0 pi/2 pi];\ndisp(round(diric(x, 5)*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Even order flips sign every 2*pi",
+            "pt": "Ordem par troca de sinal a cada 2*pi"
+          },
+          "code": "disp(diric([0 2*pi 4*pi], 4))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sinc",
+        "chirp",
+        "rectpuls",
+        "freqz"
+      ]
+    },
+    "gauspuls": {
+      "summary": {
+        "en": "Generates a Gaussian-modulated sinusoidal pulse, and can return its quadrature part, its envelope or the time at which it falls below a level.",
+        "pt": "Gera um pulso senoidal modulado por uma gaussiana e pode retornar sua parte em quadratura, seu envelope ou o instante em que ele cai abaixo de um nível."
+      },
+      "syntax": [
+        {
+          "code": "yi = gauspuls(t, fc, bw)",
+          "en": "Pulse with center frequency `fc` (Hz) and fractional bandwidth `bw`, evaluated at `t`.",
+          "pt": "Pulso com frequência central `fc` (Hz) e largura de banda fracionária `bw`, avaliado em `t`."
+        },
+        {
+          "code": "yi = gauspuls(t, fc, bw, bwr)",
+          "en": "Also sets the level `bwr` (dB) at which the bandwidth is measured.",
+          "pt": "Define também o nível `bwr` (dB) em que a largura de banda é medida."
+        },
+        {
+          "code": "[yi, yq, ye] = gauspuls(___)",
+          "en": "Also returns the quadrature component and the envelope.",
+          "pt": "Retorna também a componente em quadratura e o envelope."
+        },
+        {
+          "code": "tc = gauspuls('cutoff', fc, bw, bwr, tpe)",
+          "en": "Returns the cutoff time at which the trailing pulse envelope falls `tpe` dB below the peak.",
+          "pt": "Retorna o instante de corte em que a cauda do envelope cai `tpe` dB abaixo do pico."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants in seconds.",
+          "pt": "Instantes em segundos."
+        },
+        {
+          "name": "fc",
+          "en": "Center frequency in hertz. Default 1000.",
+          "pt": "Frequência central em hertz. O padrão é 1000."
+        },
+        {
+          "name": "bw",
+          "en": "Fractional bandwidth, a positive number. Default 0.5.",
+          "pt": "Largura de banda fracionária, um número positivo. O padrão é 0,5."
+        },
+        {
+          "name": "bwr",
+          "en": "Reference level for `bw`, in dB, negative. Default -6.",
+          "pt": "Nível de referência de `bw`, em dB, negativo. O padrão é -6."
+        },
+        {
+          "name": "tpe",
+          "en": "Trailing pulse envelope level in dB, negative, used by the `'cutoff'` form. Default -60.",
+          "pt": "Nível do envelope da cauda em dB, negativo, usado na forma `'cutoff'`. O padrão é -60."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "yi",
+          "en": "In-phase (cosine) part of the pulse, same size as `t`.",
+          "pt": "Parte em fase (cosseno) do pulso, com o mesmo tamanho de `t`."
+        },
+        {
+          "name": "yq",
+          "en": "Quadrature (sine) part of the pulse.",
+          "pt": "Parte em quadratura (seno) do pulso."
+        },
+        {
+          "name": "ye",
+          "en": "Envelope of the pulse: the Gaussian that multiplies the carrier.",
+          "pt": "Envelope do pulso: a gaussiana que multiplica a portadora."
+        },
+        {
+          "name": "tc",
+          "en": "Cutoff time in seconds, returned by the `'cutoff'` form.",
+          "pt": "Instante de corte, em segundos, retornado pela forma `'cutoff'`."
+        }
+      ],
+      "description": {
+        "en": "The pulse is a cosine at `fc` multiplied by a Gaussian envelope centered at `t = 0`. The bandwidth `bw` is the fraction of `fc` that the pulse spectrum occupies, measured where its magnitude has dropped to `bwr` dB.\n\nUse the `'cutoff'` form to decide how long a time vector to build: it gives the time after which the envelope is below `tpe` dB, so the pulse is negligible beyond `[-tc, tc]`.",
+        "pt": "O pulso é um cosseno em `fc` multiplicado por um envelope gaussiano centrado em `t = 0`. A largura de banda `bw` é a fração de `fc` ocupada pelo espectro do pulso, medida onde seu módulo caiu para `bwr` dB.\n\nUse a forma `'cutoff'` para decidir o tamanho do vetor de tempo: ela dá o instante a partir do qual o envelope está abaixo de `tpe` dB, e o pulso é desprezível fora de `[-tc, tc]`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Pulse and envelope samples",
+            "pt": "Amostras do pulso e do envelope"
+          },
+          "code": "t = -0.002:0.001:0.002;\n[yi, yq, ye] = gauspuls(t, 1000, 0.5);\ndisp(round(yi*1000)/1000)\ndisp(round(ye*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Cutoff time",
+            "pt": "Instante de corte"
+          },
+          "code": "tc = gauspuls('cutoff', 1000, 0.5, -6, -40);\nfprintf('%.6f\\n', tc)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gmonopuls",
+        "pulstran",
+        "rectpuls",
+        "chirp"
+      ],
+      "notes": {
+        "en": "A complex time input is rejected with an error. MATLAB returns Inf in that case.",
+        "pt": "Uma entrada de tempo complexa é rejeitada com erro. O MATLAB retorna Inf nesse caso."
+      }
+    },
+    "gmonopuls": {
+      "summary": {
+        "en": "Generates a Gaussian monocycle, a single-cycle pulse shaped like the first derivative of a Gaussian, with unit peak amplitude.",
+        "pt": "Gera um monociclo gaussiano, um pulso de um ciclo com a forma da primeira derivada de uma gaussiana, com amplitude de pico unitária."
+      },
+      "syntax": [
+        {
+          "code": "y = gmonopuls(t)",
+          "en": "Monocycle with center frequency 1000 Hz evaluated at `t`.",
+          "pt": "Monociclo com frequência central de 1000 Hz avaliado em `t`."
+        },
+        {
+          "code": "y = gmonopuls(t, fc)",
+          "en": "Monocycle with center frequency `fc`.",
+          "pt": "Monociclo com frequência central `fc`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants in seconds.",
+          "pt": "Instantes em segundos."
+        },
+        {
+          "name": "fc",
+          "en": "Center frequency in hertz. Default 1000.",
+          "pt": "Frequência central em hertz. O padrão é 1000."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Pulse values, same size as `t`.",
+          "pt": "Valores do pulso, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "The monocycle is odd in time: it is zero at `t = 0`, reaches a peak of 1 at `t = 1/(2*pi*fc)` and mirrors itself as a negative lobe at negative times. Its spectrum has no DC component, which makes it a common model for ultra-wideband radar and radio pulses.\n\nPass a time vector that covers a few multiples of `1/fc` on each side of zero, sampled well above `fc`.",
+        "pt": "O monociclo é ímpar no tempo: vale zero em `t = 0`, chega a um pico de 1 em `t = 1/(2*pi*fc)` e se repete espelhado como um lóbulo negativo nos tempos negativos. Seu espectro não tem componente DC, e por isso ele é um modelo comum para pulsos de radar e rádio de banda ultralarga.\n\nUse um vetor de tempo que cubra alguns múltiplos de `1/fc` de cada lado do zero, amostrado bem acima de `fc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Peak values at plus and minus 1/(2*pi*fc)",
+            "pt": "Valores de pico em mais e menos 1/(2*pi*fc)"
+          },
+          "code": "fc = 1000;\nt = [-1 0 1] / (2*pi*fc);\ndisp(round(gmonopuls(t, fc)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gauspuls",
+        "pulstran",
+        "rectpuls",
+        "tripuls"
+      ]
+    },
+    "pulstran": {
+      "summary": {
+        "en": "Builds a pulse train by summing delayed (and optionally scaled) copies of a pulse function or of a sampled prototype pulse.",
+        "pt": "Monta um trem de pulsos somando cópias atrasadas (e opcionalmente escalonadas) de uma função de pulso ou de um pulso protótipo amostrado."
+      },
+      "syntax": [
+        {
+          "code": "y = pulstran(t, d, func)",
+          "en": "Sums `func(t - d(k))` over all delays; `func` is a function name or handle.",
+          "pt": "Soma `func(t - d(k))` sobre todos os atrasos; `func` é um nome de função ou um handle."
+        },
+        {
+          "code": "y = pulstran(t, d, func, p1, p2, ...)",
+          "en": "Passes the extra arguments `p1, p2, ...` on to `func`.",
+          "pt": "Repassa os argumentos extras `p1, p2, ...` para `func`."
+        },
+        {
+          "code": "y = pulstran(t, d, p, fs)",
+          "en": "Uses the sampled pulse `p`, taken at rate `fs`, as the prototype.",
+          "pt": "Usa o pulso amostrado `p`, com taxa `fs`, como protótipo."
+        },
+        {
+          "code": "y = pulstran(t, d, p, fs, method)",
+          "en": "Chooses the interpolation of the prototype.",
+          "pt": "Escolhe a interpolação do protótipo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants at which to evaluate the train, in seconds.",
+          "pt": "Instantes em que o trem é avaliado, em segundos."
+        },
+        {
+          "name": "d",
+          "en": "Delays of the pulses. A vector of delays, or a two-column matrix whose second column holds a gain for each pulse.",
+          "pt": "Atrasos dos pulsos. Um vetor de atrasos, ou uma matriz de duas colunas cuja segunda coluna traz o ganho de cada pulso."
+        },
+        {
+          "name": "func",
+          "en": "Pulse function such as `'rectpuls'`, `'tripuls'`, `'gauspuls'` or a handle like `@(t) exp(-t.^2)`.",
+          "pt": "Função de pulso como `'rectpuls'`, `'tripuls'`, `'gauspuls'` ou um handle como `@(t) exp(-t.^2)`."
+        },
+        {
+          "name": "p",
+          "en": "Prototype pulse as a vector of samples.",
+          "pt": "Pulso protótipo, como vetor de amostras."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate of the prototype `p`, in hertz.",
+          "pt": "Taxa de amostragem do protótipo `p`, em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Pulse train, same size as `t`.",
+          "pt": "Trem de pulsos, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "Each row of `d` places one copy of the pulse: the function is evaluated at `t - d(k)`, so a pulse function centered at zero (like `rectpuls`) ends up centered on its delay. With a two-column `d`, the copy is multiplied by the second column.\n\nWith a sampled prototype and `fs`, the first sample of `p` falls at each delay and the values in between are interpolated.",
+        "pt": "Cada linha de `d` posiciona uma cópia do pulso: a função é avaliada em `t - d(k)`, então uma função de pulso centrada em zero (como `rectpuls`) fica centrada no seu atraso. Com `d` de duas colunas, a cópia é multiplicada pela segunda coluna.\n\nCom um protótipo amostrado e `fs`, a primeira amostra de `p` cai em cada atraso e os valores intermediários são interpolados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Rectangular pulses with different gains",
+            "pt": "Pulsos retangulares com ganhos diferentes"
+          },
+          "code": "t = (0:0.005:0.1)';\nd = [0.02 1; 0.07 0.5];\ny = pulstran(t, d, 'rectpuls', 0.02);\nfprintf('%g ', y); fprintf('\\n')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "A sampled prototype",
+            "pt": "Um protótipo amostrado"
+          },
+          "code": "t = (0:0.01:0.19)';\np = [1 2 3 2 1];\ny = pulstran(t, [0.05 0.12], p, 100);\ndisp(round(y'*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rectpuls",
+        "tripuls",
+        "gauspuls",
+        "upsample"
+      ],
+      "notes": {
+        "en": "Differences from MATLAB: with `'spline'` interpolation the padded prototype is extrapolated differently. A prototype given without a sampling rate (a vector or a scalar) is not extrapolated linearly as MATLAB does. A column-vector prototype with `fs` is placed half a sample earlier than in MATLAB.",
+        "pt": "Diferenças em relação ao MATLAB: com a interpolação `'spline'`, o protótipo estendido é extrapolado de outra forma. Um protótipo dado sem taxa de amostragem (vetor ou escalar) não é extrapolado linearmente como no MATLAB. Um protótipo em vetor coluna com `fs` é posicionado meia amostra mais cedo do que no MATLAB."
+      }
+    },
+    "rectpuls": {
+      "summary": {
+        "en": "Generates a sampled rectangular pulse of a given width, centered at time zero.",
+        "pt": "Gera um pulso retangular amostrado, com largura dada, centrado no instante zero."
+      },
+      "syntax": [
+        {
+          "code": "y = rectpuls(t)",
+          "en": "Pulse of width 1.",
+          "pt": "Pulso de largura 1."
+        },
+        {
+          "code": "y = rectpuls(t, w)",
+          "en": "Pulse of width `w`.",
+          "pt": "Pulso de largura `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants at which to evaluate the pulse.",
+          "pt": "Instantes em que o pulso é avaliado."
+        },
+        {
+          "name": "w",
+          "en": "Pulse width, in the same units as `t`. Default 1.",
+          "pt": "Largura do pulso, na mesma unidade de `t`. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "1 where `-w/2 <= t < w/2` and 0 elsewhere, same size as `t`.",
+          "pt": "1 onde `-w/2 <= t < w/2` e 0 no resto, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "The pulse includes its left edge and excludes its right edge, so adjacent pulses of the same width tile the time axis without overlapping.\n\nUse it directly as a window or gate, or as the pulse function of `pulstran` to build a train of pulses.",
+        "pt": "O pulso inclui a borda esquerda e exclui a direita, então pulsos vizinhos de mesma largura cobrem o eixo do tempo sem se sobrepor.\n\nUse-o diretamente como janela ou porta, ou como função de pulso em `pulstran` para montar um trem de pulsos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Widths 1 and 2",
+            "pt": "Larguras 1 e 2"
+          },
+          "code": "t = -1:0.5:1;\ndisp(rectpuls(t, 1))\ndisp(rectpuls(t, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tripuls",
+        "pulstran",
+        "gauspuls",
+        "square"
+      ]
+    },
+    "sawtooth": {
+      "summary": {
+        "en": "Generates a sawtooth or triangle wave with period 2*pi, with values between -1 and 1.",
+        "pt": "Gera uma onda dente de serra ou triangular com período 2*pi, com valores entre -1 e 1."
+      },
+      "syntax": [
+        {
+          "code": "x = sawtooth(t)",
+          "en": "Sawtooth wave: rises from -1 to 1 over each period.",
+          "pt": "Onda dente de serra: sobe de -1 a 1 em cada período."
+        },
+        {
+          "code": "x = sawtooth(t, width)",
+          "en": "Sets the fraction of the period at which the maximum occurs.",
+          "pt": "Define a fração do período em que ocorre o máximo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Phase in radians; the wave repeats every `2*pi`. For a frequency `f`, use `t = 2*pi*f*time`.",
+          "pt": "Fase em radianos; a onda se repete a cada `2*pi`. Para uma frequência `f`, use `t = 2*pi*f*tempo`."
+        },
+        {
+          "name": "width",
+          "en": "Number between 0 and 1. The wave rises from -1 to 1 over the first `width` of each period, then falls back. Default 1.",
+          "pt": "Número entre 0 e 1. A onda sobe de -1 a 1 durante a primeira fração `width` de cada período e depois desce. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Wave values, same size as `t`.",
+          "pt": "Valores da onda, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "With `width = 1` (the default) the wave ramps up and drops back at the end of each period. With `width = 0.5` it is a symmetric triangle wave, and with `width = 0` it is a falling ramp.\n\nBecause the argument is a phase, a signal of `f` hertz sampled at `fs` is `sawtooth(2*pi*f*(0:N-1)/fs)`.",
+        "pt": "Com `width = 1` (o padrão), a onda sobe em rampa e cai no fim de cada período. Com `width = 0.5` é uma onda triangular simétrica, e com `width = 0` é uma rampa descendente.\n\nComo o argumento é uma fase, um sinal de `f` hertz amostrado a `fs` é `sawtooth(2*pi*f*(0:N-1)/fs)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sawtooth and triangle",
+            "pt": "Dente de serra e triangular"
+          },
+          "code": "ph = 2*pi*(0:0.125:0.5);\ndisp(sawtooth(ph))\ndisp(sawtooth(ph, 0.5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "square",
+        "tripuls",
+        "chirp",
+        "sin"
+      ]
+    },
+    "square": {
+      "summary": {
+        "en": "Generates a square wave with period 2*pi, alternating between 1 and -1, with an adjustable duty cycle.",
+        "pt": "Gera uma onda quadrada com período 2*pi, alternando entre 1 e -1, com ciclo de trabalho ajustável."
+      },
+      "syntax": [
+        {
+          "code": "x = square(t)",
+          "en": "Square wave with a 50 percent duty cycle.",
+          "pt": "Onda quadrada com ciclo de trabalho de 50 por cento."
+        },
+        {
+          "code": "x = square(t, duty)",
+          "en": "Square wave that is high for `duty` percent of each period.",
+          "pt": "Onda quadrada que fica em nível alto por `duty` por cento de cada período."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Phase in radians; the wave repeats every `2*pi`.",
+          "pt": "Fase em radianos; a onda se repete a cada `2*pi`."
+        },
+        {
+          "name": "duty",
+          "en": "Duty cycle in percent, between 0 and 100. Default 50.",
+          "pt": "Ciclo de trabalho em por cento, entre 0 e 100. O padrão é 50."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Wave values, 1 or -1, same size as `t`.",
+          "pt": "Valores da onda, 1 ou -1, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "The wave is +1 from the start of each period for `duty` percent of its length, then -1 for the rest. The argument is a phase, so a signal of `f` hertz is `square(2*pi*f*time)`.\n\nIt is useful as a test input for filters and as a clock or switching signal in simulations.",
+        "pt": "A onda vale +1 do início de cada período durante `duty` por cento de sua duração, e depois -1 no restante. O argumento é uma fase, então um sinal de `f` hertz é `square(2*pi*f*tempo)`.\n\nÉ útil como entrada de teste para filtros e como sinal de clock ou de chaveamento em simulações."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "50 and 25 percent duty cycle",
+            "pt": "Ciclo de trabalho de 50 e 25 por cento"
+          },
+          "code": "ph = 2*pi*(0:0.125:0.875);\ndisp(square(ph))\ndisp(square(ph, 25))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sawtooth",
+        "rectpuls",
+        "pulstran",
+        "sign"
+      ]
+    },
+    "tripuls": {
+      "summary": {
+        "en": "Generates a sampled triangular pulse of a given width, centered at time zero, with an adjustable skew.",
+        "pt": "Gera um pulso triangular amostrado, com largura dada, centrado no instante zero, com assimetria ajustável."
+      },
+      "syntax": [
+        {
+          "code": "y = tripuls(t)",
+          "en": "Symmetric triangle of width 1.",
+          "pt": "Triângulo simétrico de largura 1."
+        },
+        {
+          "code": "y = tripuls(t, w)",
+          "en": "Symmetric triangle of width `w`.",
+          "pt": "Triângulo simétrico de largura `w`."
+        },
+        {
+          "code": "y = tripuls(t, w, s)",
+          "en": "Triangle whose peak is moved by the skew `s`.",
+          "pt": "Triângulo cujo pico é deslocado pela assimetria `s`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "t",
+          "en": "Time instants at which to evaluate the pulse.",
+          "pt": "Instantes em que o pulso é avaliado."
+        },
+        {
+          "name": "w",
+          "en": "Total base width, in the units of `t`. Default 1.",
+          "pt": "Largura total da base, na unidade de `t`. O padrão é 1."
+        },
+        {
+          "name": "s",
+          "en": "Skew between -1 and 1. The peak of height 1 is at `s*w/2`. Default 0.",
+          "pt": "Assimetria entre -1 e 1. O pico de altura 1 fica em `s*w/2`. O padrão é 0."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Pulse values between 0 and 1, same size as `t`.",
+          "pt": "Valores do pulso entre 0 e 1, com o mesmo tamanho de `t`."
+        }
+      ],
+      "description": {
+        "en": "The pulse is zero outside the interval of length `w` centered at zero, rises linearly to 1 at `s*w/2` and falls linearly back to zero. With `s = 0` it is a symmetric triangle.\n\nIt works as a smooth window or as the pulse function of `pulstran`.",
+        "pt": "O pulso é zero fora do intervalo de comprimento `w` centrado em zero, sobe linearmente até 1 em `s*w/2` e volta linearmente a zero. Com `s = 0` é um triângulo simétrico.\n\nServe como janela suave ou como função de pulso em `pulstran`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Symmetric and skewed triangle",
+            "pt": "Triângulo simétrico e assimétrico"
+          },
+          "code": "t = -1:0.5:1;\ndisp(tripuls(t, 2))\ndisp(tripuls(t, 2, 0.5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rectpuls",
+        "pulstran",
+        "gauspuls",
+        "sawtooth"
+      ]
+    },
+    "vco": {
+      "summary": {
+        "en": "Simulates a voltage-controlled oscillator: a cosine whose instantaneous frequency follows the input signal.",
+        "pt": "Simula um oscilador controlado por tensão: um cosseno cuja frequência instantânea acompanha o sinal de entrada."
+      },
+      "syntax": [
+        {
+          "code": "y = vco(x, fc, fs)",
+          "en": "Oscillator with carrier `fc`; the input range -1 to 1 spans frequencies 0 to `2*fc`.",
+          "pt": "Oscilador com portadora `fc`; a faixa de entrada de -1 a 1 cobre as frequências de 0 a `2*fc`."
+        },
+        {
+          "code": "y = vco(x, [fmin fmax], fs)",
+          "en": "The input range -1 to 1 spans `fmin` to `fmax`.",
+          "pt": "A faixa de entrada de -1 a 1 cobre de `fmin` a `fmax`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Control signal with values in [-1, 1]. A row or column vector, or a matrix whose columns are channels.",
+          "pt": "Sinal de controle com valores em [-1, 1]. Vetor linha ou coluna, ou matriz cujas colunas são canais."
+        },
+        {
+          "name": "fc",
+          "en": "Carrier frequency (scalar) or the pair `[fmin fmax]`, in hertz.",
+          "pt": "Frequência da portadora (escalar) ou o par `[fmin fmax]`, em hertz."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Default 1.",
+          "pt": "Taxa de amostragem em hertz. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Oscillator output, same size as `x`, with unit amplitude.",
+          "pt": "Saída do oscilador, com o mesmo tamanho de `x` e amplitude unitária."
+        }
+      ],
+      "description": {
+        "en": "The output is the cosine of the running sum of the instantaneous frequency, so a constant input gives a constant tone and a changing input gives a frequency-modulated signal. An input of 0 corresponds to the middle of the frequency range.\n\nThe highest frequency must stay below `fs/2`, otherwise an error is raised.",
+        "pt": "A saída é o cosseno da soma acumulada da frequência instantânea, então uma entrada constante dá um tom constante e uma entrada variável dá um sinal modulado em frequência. Uma entrada 0 corresponde ao meio da faixa de frequências.\n\nA maior frequência precisa ficar abaixo de `fs/2`; caso contrário ocorre um erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Constant input gives a constant tone",
+            "pt": "Entrada constante dá um tom constante"
+          },
+          "code": "y = vco(zeros(6,1), 100, 1000);\nfprintf('%.4f ', y); fprintf('\\n')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Frequency range from 100 to 200 Hz",
+            "pt": "Faixa de frequências de 100 a 200 Hz"
+          },
+          "code": "x = [-1 -0.5 0 0.5 1]';\ny = vco(x, [100 200], 1000);\nfprintf('%.4f ', y); fprintf('\\n')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chirp",
+        "modulate",
+        "demod",
+        "cumsum"
+      ],
+      "notes": {
+        "en": "A carrier given as a vector of three or more elements is not implemented, and neither is a complex input `x`.",
+        "pt": "Uma portadora dada como vetor de três ou mais elementos não está implementada, e uma entrada `x` complexa também não."
+      }
+    },
+    "buffer": {
+      "summary": {
+        "en": "Splits a signal into frames of a given length, optionally overlapping or with gaps, and returns them as the columns of a matrix.",
+        "pt": "Divide um sinal em quadros de comprimento dado, com sobreposição ou intervalos opcionais, e os retorna como colunas de uma matriz."
+      },
+      "syntax": [
+        {
+          "code": "y = buffer(x, n)",
+          "en": "Non-overlapping frames of `n` samples; the last one is padded with zeros.",
+          "pt": "Quadros de `n` amostras sem sobreposição; o último é completado com zeros."
+        },
+        {
+          "code": "y = buffer(x, n, p)",
+          "en": "Frames overlap by `p` samples (or skip `-p` samples when `p` is negative).",
+          "pt": "Os quadros se sobrepõem em `p` amostras (ou pulam `-p` amostras quando `p` é negativo)."
+        },
+        {
+          "code": "[y, z] = buffer(x, n, p)",
+          "en": "Also returns the leftover samples that did not fill a frame; no padded frame is made.",
+          "pt": "Retorna também as amostras restantes que não completaram um quadro; nenhum quadro com zeros é criado."
+        },
+        {
+          "code": "y = buffer(x, n, p, opt)",
+          "en": "`opt` is a vector of initial conditions, or `'nodelay'` to start with the first full frame.",
+          "pt": "`opt` é um vetor de condições iniciais, ou `'nodelay'` para começar pelo primeiro quadro completo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a vector.",
+          "pt": "Sinal, como vetor."
+        },
+        {
+          "name": "n",
+          "en": "Frame length in samples.",
+          "pt": "Comprimento do quadro, em amostras."
+        },
+        {
+          "name": "p",
+          "en": "Overlap in samples, less than `n`; negative values skip samples between frames. Default 0.",
+          "pt": "Sobreposição em amostras, menor que `n`; valores negativos pulam amostras entre quadros. O padrão é 0."
+        },
+        {
+          "name": "opt",
+          "en": "Initial conditions (a vector of `p` samples placed before the signal) or `'nodelay'`.",
+          "pt": "Condições iniciais (um vetor de `p` amostras colocado antes do sinal) ou `'nodelay'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Matrix with `n` rows; each column is one frame.",
+          "pt": "Matriz com `n` linhas; cada coluna é um quadro."
+        },
+        {
+          "name": "z",
+          "en": "Samples left over after the last full frame.",
+          "pt": "Amostras que sobraram depois do último quadro completo."
+        }
+      ],
+      "description": {
+        "en": "`buffer` is the usual first step of short-time analysis: each column of `y` can be windowed and transformed independently. With an overlap `p`, consecutive frames share `p` samples and advance by `n - p`.\n\nBy default the overlapping form starts with `p` zeros in the first frame, as if the signal had been running before it began. Use `'nodelay'` to skip that and start with the first real samples.",
+        "pt": "`buffer` é em geral o primeiro passo da análise de curta duração: cada coluna de `y` pode ser janelada e transformada de forma independente. Com sobreposição `p`, quadros consecutivos compartilham `p` amostras e avançam `n - p`.\n\nPor padrão, a forma com sobreposição começa com `p` zeros no primeiro quadro, como se o sinal já estivesse em andamento antes de começar. Use `'nodelay'` para evitar isso e começar com as primeiras amostras reais."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Frames with and without overlap",
+            "pt": "Quadros com e sem sobreposição"
+          },
+          "code": "x = (1:10)';\ndisp(buffer(x, 4))\ndisp(buffer(x, 4, 2, 'nodelay'))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Leftover samples",
+            "pt": "Amostras restantes"
+          },
+          "code": "x = (1:10)';\n[y, z] = buffer(x, 4, 0);\ndisp(y)\ndisp(z')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stft",
+        "spectrogram",
+        "hann",
+        "cumsum"
+      ]
+    },
+    "demod": {
+      "summary": {
+        "en": "Recovers the message signal from a modulated carrier, for the amplitude, frequency, phase and quadrature schemes of modulate.",
+        "pt": "Recupera o sinal de mensagem a partir de uma portadora modulada, nos esquemas de amplitude, frequência, fase e quadratura de modulate."
+      },
+      "syntax": [
+        {
+          "code": "x = demod(y, fc, fs)",
+          "en": "Demodulates with the default amplitude method.",
+          "pt": "Demodula com o método de amplitude padrão."
+        },
+        {
+          "code": "x = demod(y, fc, fs, method)",
+          "en": "Chooses the scheme: `'am'`, `'amdsb-sc'`, `'amdsb-tc'`, `'amssb'`, `'fm'`, `'pm'` or `'qam'`.",
+          "pt": "Escolhe o esquema: `'am'`, `'amdsb-sc'`, `'amdsb-tc'`, `'amssb'`, `'fm'`, `'pm'` ou `'qam'`."
+        },
+        {
+          "code": "x = demod(y, fc, fs, method, opt)",
+          "en": "Passes the method parameter (for example the deviation constant of `'fm'` and `'pm'`).",
+          "pt": "Passa o parâmetro do método (por exemplo a constante de desvio de `'fm'` e `'pm'`)."
+        },
+        {
+          "code": "[x1, x2] = demod(y, fc, fs, 'qam')",
+          "en": "For `'qam'`, returns the two quadrature messages.",
+          "pt": "Em `'qam'`, retorna as duas mensagens em quadratura."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Modulated signal, a vector or a matrix whose columns are channels.",
+          "pt": "Sinal modulado, vetor ou matriz cujas colunas são canais."
+        },
+        {
+          "name": "fc",
+          "en": "Carrier frequency in hertz, less than `fs/2`.",
+          "pt": "Frequência da portadora em hertz, menor que `fs/2`."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "method",
+          "en": "Modulation scheme. Default `'am'`.",
+          "pt": "Esquema de modulação. O padrão é `'am'`."
+        },
+        {
+          "name": "opt",
+          "en": "Method parameter, which must match the one used to modulate.",
+          "pt": "Parâmetro do método, que deve ser igual ao usado na modulação."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Recovered message, same size as `y`.",
+          "pt": "Mensagem recuperada, com o mesmo tamanho de `y`."
+        },
+        {
+          "name": "x2",
+          "en": "Second recovered message, for `'qam'` only.",
+          "pt": "Segunda mensagem recuperada, somente para `'qam'`."
+        }
+      ],
+      "description": {
+        "en": "`demod` is the counterpart of `modulate`: call it with the same `fc`, `fs`, method and parameter. For `'fm'` and `'pm'` the message comes back with the same shape and amplitude as the original, as the examples show.\n\nThe amplitude methods involve a lowpass filter, so the first samples are a start-up transient and the overall gain may differ from the original. Ignore the first and last few samples when you compare a result with the original message.",
+        "pt": "`demod` é a contrapartida de `modulate`: chame-a com os mesmos `fc`, `fs`, método e parâmetro. Em `'fm'` e `'pm'` a mensagem volta com a mesma forma e amplitude da original, como mostram os exemplos.\n\nOs métodos de amplitude envolvem um filtro passa-baixas, então as primeiras amostras são um transitório inicial e o ganho geral pode diferir do original. Ignore as primeiras e as últimas amostras ao comparar um resultado com a mensagem original."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip through FM",
+            "pt": "Ida e volta por FM"
+          },
+          "code": "fs = 1000; t = (0:399)'/fs;\nm = sin(2*pi*10*t);\ny = modulate(m, 200, fs, 'fm', 0.1);\nr = demod(y, 200, fs, 'fm', 0.1);\ndisp(round([m(150:153) r(150:153)]'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Round trip through PM",
+            "pt": "Ida e volta por PM"
+          },
+          "code": "fs = 1000; t = (0:399)'/fs;\nm = sin(2*pi*10*t);\ny = modulate(m, 200, fs, 'pm', 1);\nr = demod(y, 200, fs, 'pm', 1);\ndisp(round([m(150:153) r(150:153)]'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "modulate",
+        "vco",
+        "hilbert",
+        "envelope"
+      ],
+      "notes": {
+        "en": "The `'pwm'` and `'ppm'` demodulators are not implemented.",
+        "pt": "Os demoduladores `'pwm'` e `'ppm'` não estão implementados."
+      }
+    },
+    "marcumq": {
+      "summary": {
+        "en": "Evaluates the generalized Marcum Q function, the tail probability of a noncentral chi distribution used in radar detection and fading models.",
+        "pt": "Calcula a função Q de Marcum generalizada, a probabilidade de cauda da distribuição qui não central, usada em detecção por radar e em modelos de desvanecimento."
+      },
+      "syntax": [
+        {
+          "code": "Q = marcumq(a, b)",
+          "en": "First-order Marcum Q function.",
+          "pt": "Função Q de Marcum de primeira ordem."
+        },
+        {
+          "code": "Q = marcumq(a, b, m)",
+          "en": "Marcum Q function of order `m`.",
+          "pt": "Função Q de Marcum de ordem `m`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Noncentrality parameter, nonnegative.",
+          "pt": "Parâmetro de não centralidade, não negativo."
+        },
+        {
+          "name": "b",
+          "en": "Threshold, nonnegative.",
+          "pt": "Limiar, não negativo."
+        },
+        {
+          "name": "m",
+          "en": "Order, a positive integer. Default 1.",
+          "pt": "Ordem, um inteiro positivo. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Q",
+          "en": "Function values, between 0 and 1. Array arguments of the same size are evaluated elementwise.",
+          "pt": "Valores da função, entre 0 e 1. Argumentos matriciais de mesmo tamanho são avaliados elemento a elemento."
+        }
+      ],
+      "description": {
+        "en": "`marcumq(a, b)` is the probability that the magnitude of a unit-variance complex Gaussian with mean magnitude `a` exceeds `b`. It grows with `a` and falls with `b`. For `a = 0` it reduces to `exp(-b^2/2)`.\n\nIn radar, it gives the probability of detecting a target of strength `a` with threshold `b`.",
+        "pt": "`marcumq(a, b)` é a probabilidade de que o módulo de uma gaussiana complexa de variância unitária, com módulo médio `a`, ultrapasse `b`. Cresce com `a` e diminui com `b`. Para `a = 0` reduz-se a `exp(-b^2/2)`.\n\nEm radar, dá a probabilidade de detectar um alvo de intensidade `a` com limiar `b`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Detection probability and the a = 0 case",
+            "pt": "Probabilidade de detecção e o caso a = 0"
+          },
+          "code": "fprintf('%.4f\\n', marcumq(1, 2))\nfprintf('%.4f\\n', marcumq(0, 1))\nfprintf('%.4f\\n', exp(-1/2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "erfc",
+        "normcdf",
+        "modulate",
+        "gauspuls"
+      ]
+    },
+    "modulate": {
+      "summary": {
+        "en": "Modulates a message signal onto a carrier using amplitude, frequency, phase or quadrature schemes.",
+        "pt": "Modula um sinal de mensagem sobre uma portadora, nos esquemas de amplitude, frequência, fase ou quadratura."
+      },
+      "syntax": [
+        {
+          "code": "y = modulate(x, fc, fs)",
+          "en": "Amplitude modulation: `x` multiplied by a cosine carrier of frequency `fc`.",
+          "pt": "Modulação em amplitude: `x` multiplicado por uma portadora cossenoidal de frequência `fc`."
+        },
+        {
+          "code": "y = modulate(x, fc, fs, method)",
+          "en": "Chooses the scheme: `'am'`, `'amdsb-sc'`, `'amdsb-tc'`, `'amssb'`, `'fm'`, `'pm'`, `'pwm'`, `'ppm'` or `'qam'`.",
+          "pt": "Escolhe o esquema: `'am'`, `'amdsb-sc'`, `'amdsb-tc'`, `'amssb'`, `'fm'`, `'pm'`, `'pwm'`, `'ppm'` ou `'qam'`."
+        },
+        {
+          "code": "y = modulate(x, fc, fs, method, opt)",
+          "en": "Adds the method parameter, such as the deviation constant for `'fm'` and `'pm'`.",
+          "pt": "Acrescenta o parâmetro do método, como a constante de desvio em `'fm'` e `'pm'`."
+        },
+        {
+          "code": "[y, t] = modulate(___)",
+          "en": "Also returns the time vector.",
+          "pt": "Retorna também o vetor de tempo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Message signal, a vector or a matrix whose columns are channels.",
+          "pt": "Sinal de mensagem, vetor ou matriz cujas colunas são canais."
+        },
+        {
+          "name": "fc",
+          "en": "Carrier frequency in hertz, less than `fs/2`.",
+          "pt": "Frequência da portadora em hertz, menor que `fs/2`."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "method",
+          "en": "Modulation scheme. Default `'am'`, which is the same as `'amdsb-sc'`.",
+          "pt": "Esquema de modulação. O padrão é `'am'`, igual a `'amdsb-sc'`."
+        },
+        {
+          "name": "opt",
+          "en": "Method parameter (for `'qam'`, the second message signal).",
+          "pt": "Parâmetro do método (em `'qam'`, o segundo sinal de mensagem)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Modulated signal, same size as `x`.",
+          "pt": "Sinal modulado, com o mesmo tamanho de `x`."
+        },
+        {
+          "name": "t",
+          "en": "Time instants of the samples, in seconds, starting at 0.",
+          "pt": "Instantes das amostras, em segundos, começando em 0."
+        }
+      ],
+      "description": {
+        "en": "The time axis is `(0:N-1)/fs`, with `N` the length of the message. Choose `fc` well above the highest frequency in `x` so the sidebands do not overlap.\n\nUse `demod` to recover the message. For `'fm'` and `'pm'`, pass the same `opt` to both functions.",
+        "pt": "O eixo de tempo é `(0:N-1)/fs`, com `N` o comprimento da mensagem. Escolha `fc` bem acima da maior frequência de `x` para que as bandas laterais não se sobreponham.\n\nUse `demod` para recuperar a mensagem. Em `'fm'` e `'pm'`, passe o mesmo `opt` às duas funções."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "AM and FM of a 10 Hz tone",
+            "pt": "AM e FM de um tom de 10 Hz"
+          },
+          "code": "fs = 1000; t = (0:9)'/fs;\nx = sin(2*pi*10*t);\n[y, tt] = modulate(x, 100, fs);\ndisp(round(y'*1000)/1000)\ndisp(tt(1:3)')\ny = modulate(x, 100, fs, 'fm');\ndisp(round(y'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "demod",
+        "vco",
+        "hilbert",
+        "chirp"
+      ],
+      "notes": {
+        "en": "Complex input is not implemented. In single precision the results agree with MATLAB only to about 1e-7.",
+        "pt": "Entrada complexa não está implementada. Em precisão simples, os resultados concordam com o MATLAB apenas até cerca de 1e-7."
+      }
+    },
+    "shiftdata": {
+      "summary": {
+        "en": "Shifts the dimension you want to process to the first dimension, so a function written for columns can handle any orientation.",
+        "pt": "Desloca a dimensão a processar para a primeira dimensão, de modo que uma função escrita para colunas funcione em qualquer orientação."
+      },
+      "syntax": [
+        {
+          "code": "[y, perm, nshifts] = shiftdata(x, dim)",
+          "en": "Moves dimension `dim` of `x` to the first dimension.",
+          "pt": "Move a dimensão `dim` de `x` para a primeira dimensão."
+        },
+        {
+          "code": "[y, perm, nshifts] = shiftdata(x)",
+          "en": "Uses the first non-singleton dimension of `x`.",
+          "pt": "Usa a primeira dimensão não singleton de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Array to reorient.",
+          "pt": "Arranjo a reorientar."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to bring first. Default: the first non-singleton one.",
+          "pt": "Dimensão a trazer para a frente. O padrão é a primeira não singleton."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Reoriented array.",
+          "pt": "Arranjo reorientado."
+        },
+        {
+          "name": "perm",
+          "en": "Permutation applied, or empty when a circular shift was used.",
+          "pt": "Permutação aplicada, ou vazia quando se usou um deslocamento circular."
+        },
+        {
+          "name": "nshifts",
+          "en": "Number of circular shifts applied, or empty when a permutation was used.",
+          "pt": "Número de deslocamentos circulares aplicados, ou vazio quando se usou uma permutação."
+        }
+      ],
+      "description": {
+        "en": "Many filtering routines work along columns. `shiftdata` rearranges the input so that the chosen dimension is first, and returns what is needed to undo it. Process `y`, then call `unshiftdata` with `perm` and `nshifts` to restore the original orientation.\n\nA row vector with no `dim` is turned into a column and reported through `nshifts`; an array with an explicit `dim` is permuted and reported through `perm`.",
+        "pt": "Muitas rotinas de filtragem trabalham ao longo das colunas. `shiftdata` reorganiza a entrada para que a dimensão escolhida fique na frente, e retorna o necessário para desfazer a operação. Processe `y` e depois chame `unshiftdata` com `perm` e `nshifts` para restaurar a orientação original.\n\nUm vetor linha sem `dim` vira coluna e é reportado em `nshifts`; um arranjo com `dim` explícito é permutado e reportado em `perm`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Process along the second dimension",
+            "pt": "Processar ao longo da segunda dimensão"
+          },
+          "code": "A = reshape(1:6, 2, 3);\n[y, perm, n] = shiftdata(A, 2);\ndisp(y)\ndisp(perm)\ndisp(isequal(unshiftdata(y, perm, n), A))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unshiftdata",
+        "permute",
+        "circshift",
+        "buffer"
+      ]
+    },
+    "unshiftdata": {
+      "summary": {
+        "en": "Restores the orientation of data that was reoriented with shiftdata.",
+        "pt": "Restaura a orientação de dados que foram reorientados com shiftdata."
+      },
+      "syntax": [
+        {
+          "code": "x = unshiftdata(y, perm, nshifts)",
+          "en": "Undoes the permutation or circular shift reported by `shiftdata`.",
+          "pt": "Desfaz a permutação ou o deslocamento circular informado por `shiftdata`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Processed array whose first dimension is the one that was shifted.",
+          "pt": "Arranjo processado, cuja primeira dimensão é a que foi deslocada."
+        },
+        {
+          "name": "perm",
+          "en": "Permutation returned by `shiftdata`, or empty.",
+          "pt": "Permutação retornada por `shiftdata`, ou vazia."
+        },
+        {
+          "name": "nshifts",
+          "en": "Number of shifts returned by `shiftdata`, or empty.",
+          "pt": "Número de deslocamentos retornado por `shiftdata`, ou vazio."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Array with the orientation of the original input.",
+          "pt": "Arranjo com a orientação da entrada original."
+        }
+      ],
+      "description": {
+        "en": "It is the second half of the `shiftdata` pattern: shift, run column-oriented code on `y`, then shift back.",
+        "pt": "É a segunda metade do padrão de `shiftdata`: desloca, executa o código orientado a colunas em `y` e desloca de volta."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A row vector processed as a column",
+            "pt": "Um vetor linha processado como coluna"
+          },
+          "code": "x = 1:6;\n[y, perm, n] = shiftdata(x);\ndisp(size(y))\ny = cumsum(y);\ndisp(unshiftdata(y, perm, n))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "shiftdata",
+        "permute",
+        "circshift",
+        "cumsum"
+      ]
+    },
+    "uencode": {
+      "summary": {
+        "en": "Quantizes a signal to 2^n uniform levels and returns the result as unsigned or signed integer codes.",
+        "pt": "Quantiza um sinal em 2^n níveis uniformes e retorna o resultado como códigos inteiros sem sinal ou com sinal."
+      },
+      "syntax": [
+        {
+          "code": "y = uencode(u, n)",
+          "en": "Quantizes `u` in the range [-1, 1] to `n` bits, unsigned codes.",
+          "pt": "Quantiza `u` na faixa [-1, 1] com `n` bits, códigos sem sinal."
+        },
+        {
+          "code": "y = uencode(u, n, v)",
+          "en": "Uses the peak amplitude `v`: the range is [-v, v].",
+          "pt": "Usa a amplitude de pico `v`: a faixa é [-v, v]."
+        },
+        {
+          "code": "y = uencode(u, n, v, 'signed')",
+          "en": "Returns signed codes instead of unsigned ones.",
+          "pt": "Retorna códigos com sinal em vez de sem sinal."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "u",
+          "en": "Real input signal.",
+          "pt": "Sinal de entrada real."
+        },
+        {
+          "name": "n",
+          "en": "Number of bits.",
+          "pt": "Número de bits."
+        },
+        {
+          "name": "v",
+          "en": "Peak input amplitude. Values beyond `[-v, v]` are saturated. Default 1.",
+          "pt": "Amplitude de pico da entrada. Valores fora de `[-v, v]` são saturados. O padrão é 1."
+        },
+        {
+          "name": "'signed'",
+          "en": "Option for signed codes; `'unsigned'` is the default.",
+          "pt": "Opção para códigos com sinal; `'unsigned'` é o padrão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Integer codes. The class is `uint8` for up to 8 bits and `uint16` for up to 16 (signed codes use `int8`, `int16`, and so on).",
+          "pt": "Códigos inteiros. A classe é `uint8` até 8 bits e `uint16` até 16 (códigos com sinal usam `int8`, `int16` e assim por diante)."
+        }
+      ],
+      "description": {
+        "en": "With `n` bits there are `2^n` codes. In unsigned form the input range maps to `0 ... 2^n - 1`, with `-v` at 0. In signed form the codes run from `-2^(n-1)` to `2^(n-1) - 1`. Inputs outside the range clip to the first or last code.\n\n`udecode` maps the codes back to amplitudes.",
+        "pt": "Com `n` bits há `2^n` códigos. Na forma sem sinal, a faixa de entrada vai para `0 ... 2^n - 1`, com `-v` em 0. Na forma com sinal, os códigos vão de `-2^(n-1)` a `2^(n-1) - 1`. Entradas fora da faixa são limitadas ao primeiro ou ao último código.\n\n`udecode` leva os códigos de volta às amplitudes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "3-bit codes, unsigned and signed",
+            "pt": "Códigos de 3 bits, sem sinal e com sinal"
+          },
+          "code": "u = [-1 -0.5 0 0.5 1];\ndisp(uencode(u, 3))\ndisp(uencode(u, 3, 1, 'signed'))\ndisp(class(uencode(u, 3)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "udecode",
+        "round",
+        "fix",
+        "double"
+      ],
+      "notes": {
+        "en": "Complex input (which would give complex integer output) is not implemented.",
+        "pt": "Entrada complexa (que daria saída inteira complexa) não está implementada."
+      }
+    },
+    "udecode": {
+      "summary": {
+        "en": "Converts integer codes produced by uencode back to amplitudes in the range [-v, v).",
+        "pt": "Converte códigos inteiros produzidos por uencode de volta para amplitudes na faixa [-v, v)."
+      },
+      "syntax": [
+        {
+          "code": "y = udecode(u, n)",
+          "en": "Decodes `n`-bit codes to the range [-1, 1).",
+          "pt": "Decodifica códigos de `n` bits para a faixa [-1, 1)."
+        },
+        {
+          "code": "y = udecode(u, n, v)",
+          "en": "Uses the peak amplitude `v`.",
+          "pt": "Usa a amplitude de pico `v`."
+        },
+        {
+          "code": "y = udecode(u, n, v, 'wrap')",
+          "en": "Chooses how out-of-range codes are handled: `'saturate'` (default) or `'wrap'`.",
+          "pt": "Escolhe como tratar códigos fora da faixa: `'saturate'` (padrão) ou `'wrap'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "u",
+          "en": "Integer codes, of an integer class such as `uint8` or `int8`.",
+          "pt": "Códigos inteiros, de uma classe inteira como `uint8` ou `int8`."
+        },
+        {
+          "name": "n",
+          "en": "Number of bits.",
+          "pt": "Número de bits."
+        },
+        {
+          "name": "v",
+          "en": "Peak amplitude. Default 1.",
+          "pt": "Amplitude de pico. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Amplitudes, as double, with the size of `u`.",
+          "pt": "Amplitudes, em double, com o tamanho de `u`."
+        }
+      ],
+      "description": {
+        "en": "Each code is mapped to a level spaced `2*v/2^n` apart, with the lowest code at `-v`; the top level is `v - 2*v/2^n`, so `+v` itself is never produced. Codes beyond the `n`-bit range are clipped to the nearest valid code with `'saturate'`, or wrapped around with `'wrap'`.\n\nThe input must be an integer class. A double array raises an error.",
+        "pt": "Cada código é levado a um nível, com espaçamento `2*v/2^n`, e o menor código fica em `-v`; o nível mais alto é `v - 2*v/2^n`, então o próprio `+v` nunca é produzido. Códigos além da faixa de `n` bits são limitados ao código válido mais próximo com `'saturate'`, ou dão a volta com `'wrap'`.\n\nA entrada precisa ser de classe inteira. Um arranjo double causa erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Decode all 3-bit codes",
+            "pt": "Decodificar todos os códigos de 3 bits"
+          },
+          "code": "u = uint8(0:7);\ndisp(udecode(u, 3))\ndisp(udecode(u, 3, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Saturate or wrap out-of-range codes",
+            "pt": "Saturar ou dar a volta em códigos fora da faixa"
+          },
+          "code": "u = uint8([0 3 7 9]);\ndisp(udecode(u, 3, 1, 'saturate'))\ndisp(udecode(u, 3, 1, 'wrap'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "uencode",
+        "double",
+        "round",
+        "fix"
+      ]
+    },
+    "strips": {
+      "summary": {
+        "en": "Plots a long signal in horizontal strips, one strip per row, with the first strip on top.",
+        "pt": "Desenha um sinal longo em faixas horizontais, uma faixa por linha, com a primeira faixa no alto."
+      },
+      "syntax": [
+        {
+          "code": "strips(x)",
+          "en": "Strips of 250 samples.",
+          "pt": "Faixas de 250 amostras."
+        },
+        {
+          "code": "strips(x, n)",
+          "en": "Strips of `n` samples.",
+          "pt": "Faixas de `n` amostras."
+        },
+        {
+          "code": "strips(x, sd, fs)",
+          "en": "Strips of `sd` seconds for sampling rate `fs`.",
+          "pt": "Faixas de `sd` segundos para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "strips(x, sd, fs, scale)",
+          "en": "Also scales the signal vertically by `scale`.",
+          "pt": "Também escala o sinal na vertical por `scale`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, as a vector or a matrix whose columns are channels drawn over each other.",
+          "pt": "Sinal real, como vetor ou matriz cujas colunas são canais desenhados sobrepostos."
+        },
+        {
+          "name": "n",
+          "en": "Samples per strip. Default 250.",
+          "pt": "Amostras por faixa. O padrão é 250."
+        },
+        {
+          "name": "sd",
+          "en": "Duration of each strip in seconds.",
+          "pt": "Duração de cada faixa, em segundos."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "scale",
+          "en": "Vertical scale factor. Default 1.",
+          "pt": "Fator de escala vertical. O padrão é 1."
+        }
+      ],
+      "outputs": [],
+      "description": {
+        "en": "Long recordings are hard to read in a single plot, because the detail is squeezed. `strips` cuts the signal into equal strips and stacks them like lines of text, so you can follow the whole recording at full resolution.\n\nThe tick labels on the vertical axis show the start of each strip, in samples, or in seconds when you give `sd` and `fs`. The last strip is padded with gaps when the signal does not divide evenly.",
+        "pt": "Gravações longas são difíceis de ler em um único gráfico, porque o detalhe fica espremido. `strips` corta o sinal em faixas iguais e as empilha como linhas de texto, de modo que se acompanha a gravação inteira em resolução total.\n\nOs rótulos do eixo vertical mostram o início de cada faixa, em amostras, ou em segundos quando se informam `sd` e `fs`. A última faixa é completada com lacunas quando o sinal não se divide exatamente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A tone drawn in four strips",
+            "pt": "Um tom desenhado em quatro faixas"
+          },
+          "code": "x = sin(2*pi*(0:99)/10);\nstrips(x, 25);",
+          "silent": true
+        }
+      ],
+      "see": [
+        "plot",
+        "buffer",
+        "spectrogram",
+        "sgolayfilt"
+      ]
+    },
+    "hampel": {
+      "summary": {
+        "en": "Finds and replaces outliers using a Hampel identifier, which compares each sample with the median of a sliding window.",
+        "pt": "Encontra e substitui valores atípicos com um identificador de Hampel, que compara cada amostra com a mediana de uma janela deslizante."
+      },
+      "syntax": [
+        {
+          "code": "y = hampel(x)",
+          "en": "Replaces outliers using a window of 7 samples.",
+          "pt": "Substitui valores atípicos usando uma janela de 7 amostras."
+        },
+        {
+          "code": "y = hampel(x, k, nsigma)",
+          "en": "Window of `2*k+1` samples and threshold `nsigma` standard deviations.",
+          "pt": "Janela de `2*k+1` amostras e limiar de `nsigma` desvios padrão."
+        },
+        {
+          "code": "[y, i, xmedian, xsigma] = hampel(___)",
+          "en": "Also returns the outlier flags and the local median and deviation.",
+          "pt": "Retorna também os indicadores de valores atípicos e a mediana e o desvio locais."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a vector.",
+          "pt": "Sinal, como vetor."
+        },
+        {
+          "name": "k",
+          "en": "Half window length: each window has `2*k+1` samples. Default 3.",
+          "pt": "Meio comprimento da janela: cada janela tem `2*k+1` amostras. O padrão é 3."
+        },
+        {
+          "name": "nsigma",
+          "en": "Number of local standard deviations a sample may stray from the local median. Default 3.",
+          "pt": "Número de desvios padrão locais que uma amostra pode se afastar da mediana local. O padrão é 3."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Signal with the outliers replaced by the local median.",
+          "pt": "Sinal com os valores atípicos trocados pela mediana local."
+        },
+        {
+          "name": "i",
+          "en": "Logical vector, true where a sample was replaced.",
+          "pt": "Vetor lógico, verdadeiro onde uma amostra foi substituída."
+        },
+        {
+          "name": "xmedian",
+          "en": "Local median at each sample.",
+          "pt": "Mediana local em cada amostra."
+        },
+        {
+          "name": "xsigma",
+          "en": "Local standard deviation estimate at each sample, from the median absolute deviation.",
+          "pt": "Estimativa do desvio padrão local em cada amostra, a partir do desvio absoluto mediano."
+        }
+      ],
+      "description": {
+        "en": "For each sample the function takes the window around it, computes the median and a robust standard deviation from the median absolute deviation, and flags the sample if it is more than `nsigma` deviations from the median. Flagged samples are replaced by that median.\n\nBecause the median is not pulled by isolated spikes, this removes spikes while leaving the rest of the signal untouched. Raise `nsigma` to flag fewer samples.",
+        "pt": "Para cada amostra, a função toma a janela ao redor dela, calcula a mediana e um desvio padrão robusto a partir do desvio absoluto mediano, e marca a amostra se ela estiver a mais de `nsigma` desvios da mediana. As amostras marcadas são trocadas por essa mediana.\n\nComo a mediana não é puxada por picos isolados, isso remove os picos e deixa o resto do sinal intacto. Aumente `nsigma` para marcar menos amostras."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Remove a spike",
+            "pt": "Remover um pico"
+          },
+          "code": "x = [1 2 3 100 5 6 7 8 9 10 11 12];\n[y, i] = hampel(x);\ndisp(y)\ndisp(find(i))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "medfilt1",
+        "isoutlier",
+        "filloutliers",
+        "movmedian"
+      ]
+    },
+    "medfilt1": {
+      "summary": {
+        "en": "Applies a one-dimensional median filter, which replaces each sample by the median of its neighborhood.",
+        "pt": "Aplica um filtro de mediana unidimensional, que substitui cada amostra pela mediana de sua vizinhança."
+      },
+      "syntax": [
+        {
+          "code": "y = medfilt1(x)",
+          "en": "Median filter of order 3 along the first non-singleton dimension.",
+          "pt": "Filtro de mediana de ordem 3 ao longo da primeira dimensão não singleton."
+        },
+        {
+          "code": "y = medfilt1(x, n)",
+          "en": "Median filter of order `n`.",
+          "pt": "Filtro de mediana de ordem `n`."
+        },
+        {
+          "code": "y = medfilt1(x, n, [], dim)",
+          "en": "Filters along dimension `dim`.",
+          "pt": "Filtra ao longo da dimensão `dim`."
+        },
+        {
+          "code": "y = medfilt1(___, nanflag, padding)",
+          "en": "`nanflag` is `'includenan'` or `'omitnan'`; `padding` is `'zeropad'` or `'truncate'`.",
+          "pt": "`nanflag` é `'includenan'` ou `'omitnan'`; `padding` é `'zeropad'` ou `'truncate'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, as a vector or a matrix whose columns are filtered independently.",
+          "pt": "Sinal, como vetor ou matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "n",
+          "en": "Filter order, the number of samples in each neighborhood. Default 3.",
+          "pt": "Ordem do filtro, o número de amostras em cada vizinhança. O padrão é 3."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to filter along.",
+          "pt": "Dimensão ao longo da qual filtrar."
+        },
+        {
+          "name": "nanflag",
+          "en": "`'includenan'` (default) gives NaN whenever the window has a NaN; `'omitnan'` ignores NaNs.",
+          "pt": "`'includenan'` (padrão) dá NaN sempre que a janela tem um NaN; `'omitnan'` ignora os NaN."
+        },
+        {
+          "name": "padding",
+          "en": "`'zeropad'` (default) pretends the signal is zero beyond its ends; `'truncate'` uses a smaller window at the ends.",
+          "pt": "`'zeropad'` (padrão) supõe o sinal igual a zero além das pontas; `'truncate'` usa uma janela menor nas pontas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, same size as `x`.",
+          "pt": "Sinal filtrado, com o mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "A median filter removes isolated spikes without blurring steps, which a moving average would do. Each output sample is the median of `n` input samples centered on it.\n\nThe default zero padding pulls the first and last samples toward zero. Use `'truncate'` when the signal does not start and end near zero.",
+        "pt": "Um filtro de mediana remove picos isolados sem borrar degraus, o que uma média móvel faria. Cada amostra de saída é a mediana de `n` amostras de entrada centradas nela.\n\nO preenchimento com zeros, que é o padrão, puxa a primeira e a última amostra para zero. Use `'truncate'` quando o sinal não começar e terminar perto de zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spike removal and edge handling",
+            "pt": "Remoção de pico e tratamento das pontas"
+          },
+          "code": "x = [4 5 6 40 8 9];\ndisp(medfilt1(x, 3))\ndisp(medfilt1(x, 3, 'truncate'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hampel",
+        "movmedian",
+        "median",
+        "sgolayfilt"
+      ]
+    },
+    "sgolay": {
+      "summary": {
+        "en": "Designs Savitzky-Golay filters: the matrix of smoothing filters, and optionally the differentiation filters, for a polynomial order and frame length.",
+        "pt": "Projeta filtros de Savitzky-Golay: a matriz de filtros de suavização e, opcionalmente, os filtros de derivação, para uma ordem polinomial e um comprimento de quadro."
+      },
+      "syntax": [
+        {
+          "code": "b = sgolay(k, f)",
+          "en": "Returns the `f`-by-`f` matrix of smoothing filters for polynomial order `k` and odd frame length `f`.",
+          "pt": "Retorna a matriz `f` por `f` de filtros de suavização para ordem polinomial `k` e comprimento de quadro ímpar `f`."
+        },
+        {
+          "code": "b = sgolay(k, f, w)",
+          "en": "Uses the weight vector `w` (length `f`) in the least-squares fit.",
+          "pt": "Usa o vetor de pesos `w` (comprimento `f`) no ajuste de mínimos quadrados."
+        },
+        {
+          "code": "[b, g] = sgolay(___)",
+          "en": "Also returns the differentiation filters.",
+          "pt": "Retorna também os filtros de derivação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Polynomial order, less than `f`.",
+          "pt": "Ordem polinomial, menor que `f`."
+        },
+        {
+          "name": "f",
+          "en": "Frame length, an odd positive integer.",
+          "pt": "Comprimento do quadro, um inteiro positivo ímpar."
+        },
+        {
+          "name": "w",
+          "en": "Optional weights, a vector of `f` positive values.",
+          "pt": "Pesos opcionais, um vetor de `f` valores positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Matrix of smoothing filters. The middle row is the filter for interior samples; the other rows handle the edges.",
+          "pt": "Matriz de filtros de suavização. A linha do meio é o filtro das amostras do interior; as demais tratam as bordas."
+        },
+        {
+          "name": "g",
+          "en": "`f`-by-`(k+1)` matrix of differentiation filters. Column `p+1` is the filter for the `p`-th derivative; scale it by `factorial(p)` and divide by the sampling interval to the power `p` to get the derivative in signal units.",
+          "pt": "Matriz `f` por `(k+1)` de filtros de derivação. A coluna `p+1` é o filtro da `p`-ésima derivada; multiplique-a por `factorial(p)` e divida pelo intervalo de amostragem elevado a `p` para obter a derivada nas unidades do sinal."
+        }
+      ],
+      "description": {
+        "en": "A Savitzky-Golay filter fits a polynomial of order `k` to each window of `f` samples by least squares and takes the fitted value at the center. Each row of `b` is the set of weights for one position in the window, so row `(f+1)/2` is the symmetric filter for interior samples, and the first and last rows give the fitted values at the window edges.\n\nThe filters keep polynomials of order up to `k` unchanged, which preserves peaks better than a moving average of the same length. `sgolayfilt` applies them to a signal.",
+        "pt": "Um filtro de Savitzky-Golay ajusta, por mínimos quadrados, um polinômio de ordem `k` a cada janela de `f` amostras e toma o valor ajustado no centro. Cada linha de `b` traz os pesos para uma posição da janela, de modo que a linha `(f+1)/2` é o filtro simétrico das amostras do interior, e a primeira e a última linha dão os valores ajustados nas bordas da janela.\n\nOs filtros mantêm inalterados os polinômios de ordem até `k`, o que preserva picos melhor que uma média móvel de mesmo comprimento. `sgolayfilt` os aplica a um sinal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Smoothing filter of order 2 and length 5",
+            "pt": "Filtro de suavização de ordem 2 e comprimento 5"
+          },
+          "code": "b = sgolay(2, 5);\ndisp(round(b(3,:)*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Slope from the derivative filter",
+            "pt": "Inclinação a partir do filtro de derivação"
+          },
+          "code": "[b, g] = sgolay(2, 5);\nx = (1:5).^2;\ndisp(g(:,2)' * x')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sgolayfilt",
+        "medfilt1",
+        "movmean",
+        "smoothdata"
+      ]
+    },
+    "sgolayfilt": {
+      "summary": {
+        "en": "Smooths a signal with a Savitzky-Golay filter, a polynomial-fitting filter that preserves peaks and trends.",
+        "pt": "Suaviza um sinal com um filtro de Savitzky-Golay, um filtro de ajuste polinomial que preserva picos e tendências."
+      },
+      "syntax": [
+        {
+          "code": "y = sgolayfilt(x, k, f)",
+          "en": "Filters `x` with polynomial order `k` and odd frame length `f`.",
+          "pt": "Filtra `x` com ordem polinomial `k` e comprimento de quadro ímpar `f`."
+        },
+        {
+          "code": "y = sgolayfilt(x, k, f, w)",
+          "en": "Uses the weight vector `w` in the fit.",
+          "pt": "Usa o vetor de pesos `w` no ajuste."
+        },
+        {
+          "code": "y = sgolayfilt(x, k, f, w, dim)",
+          "en": "Filters along dimension `dim`.",
+          "pt": "Filtra ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector or a matrix whose columns are filtered independently.",
+          "pt": "Sinal, vetor ou matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "k",
+          "en": "Polynomial order, less than `f`.",
+          "pt": "Ordem polinomial, menor que `f`."
+        },
+        {
+          "name": "f",
+          "en": "Frame length, an odd integer greater than `k`.",
+          "pt": "Comprimento do quadro, um inteiro ímpar maior que `k`."
+        },
+        {
+          "name": "w",
+          "en": "Optional weights, a vector of `f` values; pass `[]` for none.",
+          "pt": "Pesos opcionais, um vetor de `f` valores; passe `[]` para não usar."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to filter along.",
+          "pt": "Dimensão ao longo da qual filtrar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Smoothed signal, same size as `x`.",
+          "pt": "Sinal suavizado, com o mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "Each output sample is the value at the center of a least-squares polynomial of order `k` fitted to `f` neighboring samples. A larger `f` smooths more; a larger `k` follows the signal more closely.\n\nSignals that are polynomials of order up to `k` pass through unchanged, including at the ends, where the filter uses the polynomial fitted to the first or last `f` samples.",
+        "pt": "Cada amostra de saída é o valor, no centro, de um polinômio de ordem `k` ajustado por mínimos quadrados a `f` amostras vizinhas. Um `f` maior suaviza mais; um `k` maior acompanha melhor o sinal.\n\nSinais que são polinômios de ordem até `k` passam sem alteração, inclusive nas pontas, onde o filtro usa o polinômio ajustado às primeiras ou últimas `f` amostras."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A quadratic passes through unchanged",
+            "pt": "Uma parábola passa sem alteração"
+          },
+          "code": "x = (1:8).^2;\ndisp(sgolayfilt(x, 2, 5))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Smoothing a spiky signal",
+            "pt": "Suavização de um sinal com picos"
+          },
+          "code": "x = [1 2 1 8 1 2 1];\ndisp(round(sgolayfilt(x, 1, 3)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sgolay",
+        "medfilt1",
+        "movmean",
+        "smoothdata"
+      ]
+    }
+  }
+}

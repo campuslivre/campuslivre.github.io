@@ -1,0 +1,2079 @@
+{
+  "functions": {
+    "filternorm": {
+      "summary": {
+        "en": "Computes the 2-norm or the infinity-norm of a digital filter, from its impulse response or frequency response.",
+        "pt": "Calcula a norma 2 ou a norma infinito de um filtro digital, a partir de sua resposta ao impulso ou em frequência."
+      },
+      "syntax": [
+        {
+          "code": "n = filternorm(b, a)",
+          "en": "Returns the 2-norm of the filter `b/a`.",
+          "pt": "Retorna a norma 2 do filtro `b/a`."
+        },
+        {
+          "code": "n = filternorm(b, a, pnorm)",
+          "en": "Returns the 2-norm (`pnorm = 2`) or the infinity-norm (`pnorm = inf`).",
+          "pt": "Retorna a norma 2 (`pnorm = 2`) ou a norma infinito (`pnorm = inf`)."
+        },
+        {
+          "code": "n = filternorm(sos, pnorm)",
+          "en": "Same, for a filter given as second-order sections.",
+          "pt": "O mesmo, para um filtro dado em seções de segunda ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "sos",
+          "en": "Second-order-section matrix with 6 columns and at least two rows.",
+          "pt": "Matriz de seções de segunda ordem, com 6 colunas e pelo menos duas linhas."
+        },
+        {
+          "name": "pnorm",
+          "en": "`2` (default) for the 2-norm, `inf` for the infinity-norm.",
+          "pt": "`2` (padrão) para a norma 2, `inf` para a norma infinito."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "The requested norm, a nonnegative scalar.",
+          "pt": "A norma pedida, um escalar não negativo."
+        }
+      ],
+      "description": {
+        "en": "The 2-norm is the square root of the sum of the squared impulse-response samples, so it measures how much a filter amplifies white noise. The infinity-norm is the peak of the magnitude of the frequency response, so it measures the largest gain the filter applies to any single sinusoid.\n\nUse it to scale coefficients so that a filter has a known gain, or to compare how much two filters amplify a signal. For an FIR filter the 2-norm is just the Euclidean norm of `b`.",
+        "pt": "A norma 2 é a raiz quadrada da soma dos quadrados das amostras da resposta ao impulso, e por isso mede quanto o filtro amplifica ruído branco. A norma infinito é o pico do módulo da resposta em frequência, e mede o maior ganho que o filtro aplica a uma senoide.\n\nUse-a para escalar coeficientes de modo que o filtro tenha um ganho conhecido, ou para comparar o quanto dois filtros amplificam um sinal. Em um filtro FIR, a norma 2 é simplesmente a norma euclidiana de `b`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "2-norm and infinity-norm of an IIR filter",
+            "pt": "Norma 2 e norma infinito de um filtro IIR"
+          },
+          "code": "b = [1 -0.5];\na = [1 0.5];\nfprintf('2-norm: %.4f\\n', filternorm(b, a, 2));\nfprintf('inf-norm: %.4f\\n', filternorm(b, a, inf));\nfprintf('FIR 2-norm: %.4f\\n', filternorm([1 2 1], 1));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "freqz",
+        "impz",
+        "norm",
+        "isstable"
+      ],
+      "notes": {
+        "en": "With a matrix as numerator and `pnorm = inf`, MATLAB returns the same value as the 2-norm. MatLivre instead treats the matrix as one long coefficient vector.",
+        "pt": "Com uma matriz como numerador e `pnorm = inf`, o MATLAB retorna o mesmo valor da norma 2. O MatLivre trata a matriz como um único vetor longo de coeficientes."
+      }
+    },
+    "filtord": {
+      "summary": {
+        "en": "Returns the order of a digital filter, the larger of the numerator and denominator degrees.",
+        "pt": "Retorna a ordem de um filtro digital, o maior entre os graus do numerador e do denominador."
+      },
+      "syntax": [
+        {
+          "code": "n = filtord(b)",
+          "en": "Order of an FIR filter with coefficients `b`.",
+          "pt": "Ordem de um filtro FIR com coeficientes `b`."
+        },
+        {
+          "code": "n = filtord(b, a)",
+          "en": "Order of the transfer function `b/a`.",
+          "pt": "Ordem da função de transferência `b/a`."
+        },
+        {
+          "code": "n = filtord(sos)",
+          "en": "Order of a filter given as second-order sections.",
+          "pt": "Ordem de um filtro dado em seções de segunda ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Omit for an FIR filter.",
+          "pt": "Coeficientes do denominador. Omita para um filtro FIR."
+        },
+        {
+          "name": "sos",
+          "en": "Second-order-section matrix with 6 columns and at least two rows.",
+          "pt": "Matriz de seções de segunda ordem, com 6 colunas e pelo menos duas linhas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a nonnegative integer.",
+          "pt": "Ordem do filtro, um inteiro não negativo."
+        }
+      ],
+      "description": {
+        "en": "The order is the length of the longer coefficient vector minus one. For an FIR filter it equals the number of delays in the filter, which is one less than the number of coefficients.\n\nThis is handy when you design a filter with a function that picks the order for you and you want to know what it chose.",
+        "pt": "A ordem é o comprimento do maior vetor de coeficientes menos um. Em um filtro FIR, é o número de atrasos do filtro, ou seja, o número de coeficientes menos um.\n\nÉ útil quando você projeta um filtro com uma função que escolhe a ordem sozinha e quer saber qual foi escolhida."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order of an FIR and an IIR filter",
+            "pt": "Ordem de um filtro FIR e de um IIR"
+          },
+          "code": "disp(filtord([1 2 3 2 1]))\ndisp(filtord([1 0.5], [1 -0.2 0.1]))\n[b, a] = butter(4, 0.2);\ndisp(filtord(b, a))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firtype",
+        "filternorm",
+        "impzlength",
+        "butter"
+      ]
+    },
+    "firtype": {
+      "summary": {
+        "en": "Classifies a linear-phase FIR filter as type 1, 2, 3 or 4.",
+        "pt": "Classifica um filtro FIR de fase linear como tipo 1, 2, 3 ou 4."
+      },
+      "syntax": [
+        {
+          "code": "t = firtype(b)",
+          "en": "Returns the type of the linear-phase FIR filter with coefficients `b`.",
+          "pt": "Retorna o tipo do filtro FIR de fase linear com coeficientes `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "FIR coefficients, a vector with symmetric or antisymmetric values.",
+          "pt": "Coeficientes FIR, um vetor com valores simétricos ou antissimétricos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Integer from 1 to 4.",
+          "pt": "Inteiro de 1 a 4."
+        }
+      ],
+      "description": {
+        "en": "The type depends on two things: whether the coefficients are symmetric or antisymmetric, and whether their count is odd or even. Type 1 is symmetric with odd length, type 2 symmetric with even length, type 3 antisymmetric with odd length, and type 4 antisymmetric with even length.\n\nThe type tells you what the filter can do. For example, a type 2 filter always has a zero at the Nyquist frequency, so it cannot be a highpass filter, and types 3 and 4 always have a zero at DC.",
+        "pt": "O tipo depende de duas coisas: se os coeficientes são simétricos ou antissimétricos, e se o número deles é ímpar ou par. O tipo 1 é simétrico com comprimento ímpar, o tipo 2 simétrico com comprimento par, o tipo 3 antissimétrico com comprimento ímpar e o tipo 4 antissimétrico com comprimento par.\n\nO tipo indica o que o filtro pode fazer. Por exemplo, um filtro do tipo 2 sempre tem um zero na frequência de Nyquist, então não serve como filtro passa-altas, e os tipos 3 e 4 sempre têm um zero em DC."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "The four types",
+            "pt": "Os quatro tipos"
+          },
+          "code": "filters = {[1 2 1], [1 2 2 1], [1 0 -1], [1 2 -2 -1]};\nfor k = 1:numel(filters)\n  fprintf('%s is type %d\\n', mat2str(filters{k}), firtype(filters{k}));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "islinphase",
+        "filtord",
+        "freqz",
+        "zerophase"
+      ]
+    },
+    "freqz": {
+      "summary": {
+        "en": "Computes the frequency response of a digital filter.",
+        "pt": "Calcula a resposta em frequência de um filtro digital."
+      },
+      "syntax": [
+        {
+          "code": "[h, w] = freqz(b, a, n)",
+          "en": "Response at `n` points from 0 to pi, with `w` in radians per sample.",
+          "pt": "Resposta em `n` pontos de 0 a pi, com `w` em radianos por amostra."
+        },
+        {
+          "code": "[h, f] = freqz(b, a, n, fs)",
+          "en": "Same, with the frequency `f` in hertz for sample rate `fs`.",
+          "pt": "O mesmo, com a frequência `f` em hertz para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "[h, w] = freqz(b, a, n, 'whole')",
+          "en": "Response around the whole unit circle, 0 to 2*pi.",
+          "pt": "Resposta em toda a circunferência unitária, de 0 a 2*pi."
+        },
+        {
+          "code": "h = freqz(b, a, w)",
+          "en": "Response at the frequencies in the vector `w`, in radians per sample.",
+          "pt": "Resposta nas frequências do vetor `w`, em radianos por amostra."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points. Default 512.",
+          "pt": "Número de pontos de frequência. Padrão 512."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "w",
+          "en": "Vector of frequencies in radians per sample at which to evaluate the response.",
+          "pt": "Vetor de frequências em radianos por amostra nas quais calcular a resposta."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Complex frequency response, a column vector with one value per frequency.",
+          "pt": "Resposta em frequência complexa, um vetor coluna com um valor por frequência."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies as a column vector, in radians per sample or hertz.",
+          "pt": "Frequências em um vetor coluna, em radianos por amostra ou em hertz."
+        }
+      ],
+      "description": {
+        "en": "`freqz` evaluates the transfer function of the filter on the unit circle. Take `abs(h)` for the gain at each frequency and `angle(h)` for the phase. With `n` points and no `'whole'` option, the frequencies are evenly spaced from 0 up to, but not including, the Nyquist frequency.\n\nIt is the usual way to check a filter after designing it: the magnitude shows where the passband and stopband are, and the shape of the curve shows the ripple and the width of the transition.",
+        "pt": "`freqz` calcula a função de transferência do filtro sobre a circunferência unitária. Use `abs(h)` para obter o ganho em cada frequência e `angle(h)` para a fase. Com `n` pontos e sem a opção `'whole'`, as frequências são igualmente espaçadas de 0 até a frequência de Nyquist, sem incluí-la.\n\nÉ a forma usual de conferir um filtro depois de projetá-lo: o módulo mostra onde ficam a banda de passagem e a de rejeição, e o formato da curva mostra a ondulação e a largura da transição."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Moving-average filter",
+            "pt": "Filtro de média móvel"
+          },
+          "code": "b = [1 1 1 1]/4;\n[h, w] = freqz(b, 1, 5);\nfprintf('%.3f ', w); fprintf('\\n');\nfprintf('%.3f ', abs(h)); fprintf('\\n');",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Frequency in hertz",
+            "pt": "Frequência em hertz"
+          },
+          "code": "[h, f] = freqz([1 1]/2, 1, 4, 100);\ndisp(f.')\ndisp(round(abs(h).' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "grpdelay",
+        "phasez",
+        "zerophase",
+        "impz",
+        "zplane"
+      ],
+      "notes": {
+        "en": "A zero denominator, as in `freqz(1, 0)`, is a known difference from MATLAB. MatLivre returns `Inf + NaNi` at every frequency.",
+        "pt": "Um denominador igual a zero, como em `freqz(1, 0)`, é uma diferença conhecida em relação ao MATLAB. O MatLivre retorna `Inf + NaNi` em todas as frequências."
+      }
+    },
+    "grpdelay": {
+      "summary": {
+        "en": "Computes the group delay of a digital filter, in samples, at each frequency.",
+        "pt": "Calcula o atraso de grupo de um filtro digital, em amostras, em cada frequência."
+      },
+      "syntax": [
+        {
+          "code": "[gd, w] = grpdelay(b, a, n)",
+          "en": "Group delay at `n` points from 0 to pi.",
+          "pt": "Atraso de grupo em `n` pontos de 0 a pi."
+        },
+        {
+          "code": "[gd, f] = grpdelay(b, a, n, fs)",
+          "en": "Same, with the frequency in hertz.",
+          "pt": "O mesmo, com a frequência em hertz."
+        },
+        {
+          "code": "gd = grpdelay(b, a, w)",
+          "en": "Group delay at the frequencies in the vector `w`.",
+          "pt": "Atraso de grupo nas frequências do vetor `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points. Default 512.",
+          "pt": "Número de pontos de frequência. Padrão 512."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "w",
+          "en": "Vector of frequencies in radians per sample.",
+          "pt": "Vetor de frequências em radianos por amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "gd",
+          "en": "Group delay in samples, a column vector.",
+          "pt": "Atraso de grupo em amostras, um vetor coluna."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies as a column vector, in radians per sample or hertz.",
+          "pt": "Frequências em um vetor coluna, em radianos por amostra ou em hertz."
+        }
+      ],
+      "description": {
+        "en": "The group delay is the negative slope of the phase response: it tells how many samples a narrow group of frequencies near `w` is delayed when it passes through the filter. A constant group delay means the filter does not distort the shape of the signal.\n\nA linear-phase FIR filter with `N` coefficients has a constant group delay of `(N-1)/2` samples. IIR filters have a delay that changes with frequency.",
+        "pt": "O atraso de grupo é a inclinação negativa da resposta de fase: indica quantas amostras um grupo estreito de frequências próximo de `w` é atrasado ao atravessar o filtro. Um atraso de grupo constante significa que o filtro não distorce o formato do sinal.\n\nUm filtro FIR de fase linear com `N` coeficientes tem atraso de grupo constante de `(N-1)/2` amostras. Os filtros IIR têm um atraso que varia com a frequência."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Linear-phase FIR filter",
+            "pt": "Filtro FIR de fase linear"
+          },
+          "code": "gd = grpdelay([1 2 3 2 1], 1, 4);\ndisp(gd.')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "IIR filter",
+            "pt": "Filtro IIR"
+          },
+          "code": "[gd, w] = grpdelay([1 -0.5], [1 0.3], 4);\ndisp(round(gd.' * 1000) / 1000)\ndisp(round(w.' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "phasez",
+        "phasedelay",
+        "freqz",
+        "zerophase"
+      ],
+      "notes": {
+        "en": "Two small differences are known. Near zeros at the Nyquist frequency MATLAB loses accuracy (about 3e-7) while MatLivre stays within 1e-8 of the exact value. For a `designfilt` bandpass filter, the value at `w = 0` differs from MATLAB in the 4th digit.",
+        "pt": "Há duas pequenas diferenças conhecidas. Perto de zeros na frequência de Nyquist o MATLAB perde precisão (cerca de 3e-7), enquanto o MatLivre fica a menos de 1e-8 do valor exato. Em um filtro passa-faixa criado com `designfilt`, o valor em `w = 0` difere do MATLAB no 4º dígito."
+      }
+    },
+    "impz": {
+      "summary": {
+        "en": "Computes the impulse response of a digital filter.",
+        "pt": "Calcula a resposta ao impulso de um filtro digital."
+      },
+      "syntax": [
+        {
+          "code": "[h, t] = impz(b, a)",
+          "en": "Impulse response with an automatically chosen length.",
+          "pt": "Resposta ao impulso com comprimento escolhido automaticamente."
+        },
+        {
+          "code": "[h, t] = impz(b, a, n)",
+          "en": "Impulse response with `n` samples.",
+          "pt": "Resposta ao impulso com `n` amostras."
+        },
+        {
+          "code": "[h, t] = impz(b, a, n, fs)",
+          "en": "Same, with the time vector `t` in seconds for sample rate `fs`.",
+          "pt": "O mesmo, com o vetor de tempo `t` em segundos para a taxa de amostragem `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Omit or use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Omita ou use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of samples. When omitted it is chosen from the poles (see `impzlength`).",
+          "pt": "Número de amostras. Quando omitido, é escolhido a partir dos polos (veja `impzlength`)."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Impulse response, a column vector.",
+          "pt": "Resposta ao impulso, um vetor coluna."
+        },
+        {
+          "name": "t",
+          "en": "Sample times as a column vector: `0:n-1`, or seconds when `fs` is given.",
+          "pt": "Instantes das amostras em um vetor coluna: `0:n-1`, ou segundos quando `fs` é dado."
+        }
+      ],
+      "description": {
+        "en": "The impulse response is the output of the filter when the input is a single 1 followed by zeros. For an FIR filter it is just the coefficients. For an IIR filter it goes on forever, so `impz` stops after enough samples for it to decay, or after `n` samples if you give `n`.\n\nIt is the most direct way to see how long a filter rings and whether it is stable: the response of a stable filter decays to zero.",
+        "pt": "A resposta ao impulso é a saída do filtro quando a entrada é um único 1 seguido de zeros. Em um filtro FIR, ela é simplesmente o vetor de coeficientes. Em um filtro IIR ela nunca termina, então `impz` para depois de amostras suficientes para a resposta decair, ou após `n` amostras se você informar `n`.\n\nÉ o jeito mais direto de ver por quanto tempo um filtro oscila e se ele é estável: a resposta de um filtro estável decai a zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One-pole filter",
+            "pt": "Filtro de um polo"
+          },
+          "code": "[h, t] = impz(1, [1 -0.5], 6);\ndisp(h.')\ndisp(t.')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Time in seconds",
+            "pt": "Tempo em segundos"
+          },
+          "code": "[h, t] = impz(1, [1 -0.9], 4, 100);\ndisp(h.')\ndisp(t.')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stepz",
+        "impzlength",
+        "freqz",
+        "filter",
+        "isstable"
+      ]
+    },
+    "impzlength": {
+      "summary": {
+        "en": "Returns the number of samples needed to show the impulse response of a digital filter.",
+        "pt": "Retorna o número de amostras necessário para mostrar a resposta ao impulso de um filtro digital."
+      },
+      "syntax": [
+        {
+          "code": "len = impzlength(b)",
+          "en": "Length for an FIR filter, equal to the number of coefficients.",
+          "pt": "Comprimento para um filtro FIR, igual ao número de coeficientes."
+        },
+        {
+          "code": "len = impzlength(b, a)",
+          "en": "Length for the IIR filter `b/a`.",
+          "pt": "Comprimento para o filtro IIR `b/a`."
+        },
+        {
+          "code": "len = impzlength(b, a, tol)",
+          "en": "Same, with a custom decay tolerance.",
+          "pt": "O mesmo, com uma tolerância de decaimento personalizada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Omit or use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Omita ou use `1` para um filtro FIR."
+        },
+        {
+          "name": "tol",
+          "en": "How far the response must decay, relative to its start. Default `5e-5`. A larger value gives a shorter length.",
+          "pt": "Quanto a resposta deve decair, em relação ao início. Padrão `5e-5`. Um valor maior dá um comprimento menor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "len",
+          "en": "Number of samples, a positive integer.",
+          "pt": "Número de amostras, um inteiro positivo."
+        }
+      ],
+      "description": {
+        "en": "For an FIR filter the answer is the number of coefficients. For an IIR filter, `impzlength` looks at the poles and returns a length after which the response has decayed to roughly `tol` of its starting size. Poles on the unit circle never decay, so for them it returns a length that covers a few periods of the oscillation.\n\nThis is the same length `impz` uses when you do not pass `n`.",
+        "pt": "Em um filtro FIR, a resposta é o número de coeficientes. Em um filtro IIR, `impzlength` examina os polos e retorna um comprimento após o qual a resposta decaiu a cerca de `tol` do seu tamanho inicial. Polos sobre a circunferência unitária nunca decaem, então para eles o resultado cobre alguns períodos da oscilação.\n\nÉ o mesmo comprimento que `impz` usa quando você não informa `n`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "FIR and IIR filters",
+            "pt": "Filtros FIR e IIR"
+          },
+          "code": "disp(impzlength([1 2 3]))\ndisp(impzlength(1, [1 -0.5]))\ndisp(impzlength(1, [1 -0.5], 1e-2))\ndisp(numel(impz(1, [1 -0.5])))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "impz",
+        "stepz",
+        "isstable",
+        "filtord"
+      ]
+    },
+    "isallpass": {
+      "summary": {
+        "en": "Tests whether a digital filter is allpass, meaning its magnitude response is constant.",
+        "pt": "Testa se um filtro digital é passa-tudo, isto é, se a sua resposta em módulo é constante."
+      },
+      "syntax": [
+        {
+          "code": "tf = isallpass(b, a)",
+          "en": "Returns `true` if the filter `b/a` is allpass.",
+          "pt": "Retorna `true` se o filtro `b/a` é passa-tudo."
+        },
+        {
+          "code": "tf = isallpass(b)",
+          "en": "Tests an FIR filter with coefficients `b`.",
+          "pt": "Testa um filtro FIR com coeficientes `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`1` (true) if the filter is allpass, `0` otherwise.",
+          "pt": "`1` (verdadeiro) se o filtro é passa-tudo, `0` caso contrário."
+        }
+      ],
+      "description": {
+        "en": "An allpass filter passes every frequency with the same gain and only changes the phase. In a real filter this happens when the denominator is the numerator with its coefficients in reverse order, up to a constant factor.\n\nAllpass sections are used for phase equalization and as building blocks of other filters.",
+        "pt": "Um filtro passa-tudo deixa passar todas as frequências com o mesmo ganho e muda apenas a fase. Em um filtro real, isso acontece quando o denominador é o numerador com os coeficientes em ordem inversa, a menos de um fator constante.\n\nSeções passa-tudo são usadas para equalização de fase e como blocos de construção de outros filtros."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Allpass and non-allpass filters",
+            "pt": "Filtros passa-tudo e não passa-tudo"
+          },
+          "code": "disp(isallpass([0.5 1], [1 0.5]))\ndisp(isallpass([1 0.5], [1 0.5]))\ndisp(isallpass([1 2 3]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "isstable",
+        "isminphase",
+        "ismaxphase",
+        "freqz",
+        "grpdelay"
+      ]
+    },
+    "islinphase": {
+      "summary": {
+        "en": "Tests whether a digital filter has linear phase.",
+        "pt": "Testa se um filtro digital tem fase linear."
+      },
+      "syntax": [
+        {
+          "code": "tf = islinphase(b)",
+          "en": "Tests the FIR filter with coefficients `b`.",
+          "pt": "Testa o filtro FIR com coeficientes `b`."
+        },
+        {
+          "code": "tf = islinphase(b, a)",
+          "en": "Tests the filter `b/a`.",
+          "pt": "Testa o filtro `b/a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`1` (true) if the phase is linear, `0` otherwise.",
+          "pt": "`1` (verdadeiro) se a fase é linear, `0` caso contrário."
+        }
+      ],
+      "description": {
+        "en": "A filter has linear phase when its phase response is a straight line in frequency, which means every frequency is delayed by the same amount of time and the waveform shape is kept. A real FIR filter has linear phase when its coefficients are symmetric or antisymmetric.\n\nUse it to confirm a property of a design, or to decide whether `filtfilt` is needed to get zero phase.",
+        "pt": "Um filtro tem fase linear quando a resposta de fase é uma reta em função da frequência, o que significa que todas as frequências sofrem o mesmo atraso no tempo e o formato da onda é preservado. Um filtro FIR real tem fase linear quando os coeficientes são simétricos ou antissimétricos.\n\nUse para confirmar uma propriedade de um projeto, ou para decidir se `filtfilt` é necessário para obter fase zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Symmetric and non-symmetric coefficients",
+            "pt": "Coeficientes simétricos e não simétricos"
+          },
+          "code": "disp(islinphase([1 2 3 2 1]))\ndisp(islinphase([1 2 2 1]))\ndisp(islinphase([1 2 3]))\n[b, a] = butter(2, 0.3);\ndisp(islinphase(b, a))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firtype",
+        "grpdelay",
+        "phasez",
+        "filtfilt"
+      ]
+    },
+    "ismaxphase": {
+      "summary": {
+        "en": "Tests whether a digital filter is maximum phase.",
+        "pt": "Testa se um filtro digital é de fase máxima."
+      },
+      "syntax": [
+        {
+          "code": "tf = ismaxphase(b)",
+          "en": "Tests the FIR filter with coefficients `b`.",
+          "pt": "Testa o filtro FIR com coeficientes `b`."
+        },
+        {
+          "code": "tf = ismaxphase(b, a)",
+          "en": "Tests the filter `b/a`.",
+          "pt": "Testa o filtro `b/a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`1` (true) if the filter is maximum phase, `0` otherwise.",
+          "pt": "`1` (verdadeiro) se o filtro é de fase máxima, `0` caso contrário."
+        }
+      ],
+      "description": {
+        "en": "A maximum-phase filter has all of its zeros outside the unit circle. Among filters with the same magnitude response it is the one with the largest phase lag.\n\nReversing the coefficients of a minimum-phase filter gives a maximum-phase filter with the same magnitude response.",
+        "pt": "Um filtro de fase máxima tem todos os zeros fora da circunferência unitária. Entre os filtros com a mesma resposta em módulo, é o de maior atraso de fase.\n\nInverter a ordem dos coeficientes de um filtro de fase mínima dá um filtro de fase máxima com a mesma resposta em módulo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reversing coefficients",
+            "pt": "Invertendo os coeficientes"
+          },
+          "code": "b = [1 0.5];\ndisp(ismaxphase(b))\ndisp(ismaxphase(fliplr(b)))\ndisp(ismaxphase([1 2 1.5]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "isminphase",
+        "islinphase",
+        "isstable",
+        "roots"
+      ]
+    },
+    "isminphase": {
+      "summary": {
+        "en": "Tests whether a digital filter is minimum phase.",
+        "pt": "Testa se um filtro digital é de fase mínima."
+      },
+      "syntax": [
+        {
+          "code": "tf = isminphase(b)",
+          "en": "Tests the FIR filter with coefficients `b`.",
+          "pt": "Testa o filtro FIR com coeficientes `b`."
+        },
+        {
+          "code": "tf = isminphase(b, a)",
+          "en": "Tests the filter `b/a`.",
+          "pt": "Testa o filtro `b/a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`1` (true) if the filter is minimum phase, `0` otherwise.",
+          "pt": "`1` (verdadeiro) se o filtro é de fase mínima, `0` caso contrário."
+        }
+      ],
+      "description": {
+        "en": "A minimum-phase filter has all of its zeros, and for an IIR filter all of its poles, inside the unit circle. Among filters with the same magnitude response it has the smallest delay, and its inverse is also stable.\n\nMinimum phase matters when you want to invert a filter, for example in equalization.",
+        "pt": "Um filtro de fase mínima tem todos os zeros, e em um filtro IIR todos os polos, dentro da circunferência unitária. Entre os filtros com a mesma resposta em módulo, é o de menor atraso, e o seu inverso também é estável.\n\nA fase mínima importa quando se quer inverter um filtro, por exemplo em equalização."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zero inside and outside the unit circle",
+            "pt": "Zero dentro e fora da circunferência unitária"
+          },
+          "code": "disp(isminphase([1 0.5]))\ndisp(isminphase([1 2]))\ndisp(isminphase([1 0.5], [1 -0.3]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ismaxphase",
+        "isstable",
+        "islinphase",
+        "roots"
+      ]
+    },
+    "isstable": {
+      "summary": {
+        "en": "Tests whether a digital filter is stable.",
+        "pt": "Testa se um filtro digital é estável."
+      },
+      "syntax": [
+        {
+          "code": "tf = isstable(b, a)",
+          "en": "Tests the filter `b/a`.",
+          "pt": "Testa o filtro `b/a`."
+        },
+        {
+          "code": "tf = isstable(sos)",
+          "en": "Tests a filter given as second-order sections.",
+          "pt": "Testa um filtro dado em seções de segunda ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        },
+        {
+          "name": "sos",
+          "en": "Second-order-section matrix with 6 columns and at least two rows.",
+          "pt": "Matriz de seções de segunda ordem, com 6 colunas e pelo menos duas linhas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`1` (true) if all poles are inside the unit circle, `0` otherwise.",
+          "pt": "`1` (verdadeiro) se todos os polos estão dentro da circunferência unitária, `0` caso contrário."
+        }
+      ],
+      "description": {
+        "en": "A digital filter is stable when all of its poles lie strictly inside the unit circle. Then the impulse response decays to zero and a bounded input always gives a bounded output. An FIR filter has no poles except at the origin, so it is always stable.\n\nCheck it after designing an IIR filter, and especially after converting between forms or quantizing coefficients.",
+        "pt": "Um filtro digital é estável quando todos os seus polos estão estritamente dentro da circunferência unitária. Nesse caso a resposta ao impulso decai a zero e uma entrada limitada sempre gera uma saída limitada. Um filtro FIR só tem polos na origem, por isso é sempre estável.\n\nConfira depois de projetar um filtro IIR, e principalmente depois de converter entre formas ou de quantizar os coeficientes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Pole inside and outside the unit circle",
+            "pt": "Polo dentro e fora da circunferência unitária"
+          },
+          "code": "disp(isstable(1, [1 -0.5]))\ndisp(isstable(1, [1 -1.5]))\n[b, a] = butter(4, 0.2);\ndisp(isstable(b, a))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "isminphase",
+        "impz",
+        "zplane",
+        "roots",
+        "isallpass"
+      ]
+    },
+    "phasedelay": {
+      "summary": {
+        "en": "Computes the phase delay of a digital filter, in samples, at each frequency.",
+        "pt": "Calcula o atraso de fase de um filtro digital, em amostras, em cada frequência."
+      },
+      "syntax": [
+        {
+          "code": "[phi, w] = phasedelay(b, a, n)",
+          "en": "Phase delay at `n` points from 0 to pi.",
+          "pt": "Atraso de fase em `n` pontos de 0 a pi."
+        },
+        {
+          "code": "[phi, f] = phasedelay(b, a, n, fs)",
+          "en": "Same, with the frequency in hertz.",
+          "pt": "O mesmo, com a frequência em hertz."
+        },
+        {
+          "code": "phi = phasedelay(b, a, w)",
+          "en": "Phase delay at the frequencies in the vector `w`.",
+          "pt": "Atraso de fase nas frequências do vetor `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points. Default 512.",
+          "pt": "Número de pontos de frequência. Padrão 512."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "w",
+          "en": "Vector of frequencies in radians per sample.",
+          "pt": "Vetor de frequências em radianos por amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phi",
+          "en": "Phase delay in samples, a column vector.",
+          "pt": "Atraso de fase em amostras, um vetor coluna."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies as a column vector, in radians per sample or hertz.",
+          "pt": "Frequências em um vetor coluna, em radianos por amostra ou em hertz."
+        }
+      ],
+      "description": {
+        "en": "The phase delay is the negative of the phase divided by the frequency. It tells by how many samples a sinusoid at frequency `w` is delayed by the filter, while the group delay does the same for the envelope of a narrow band of frequencies.\n\nFor a linear-phase FIR filter with `N` coefficients the phase delay is `(N-1)/2` at every frequency. At `w = 0` the phase is divided by zero, so the first value of the default grid comes back as `NaN`.",
+        "pt": "O atraso de fase é o negativo da fase dividido pela frequência. Ele indica quantas amostras uma senoide de frequência `w` é atrasada pelo filtro, enquanto o atraso de grupo faz o mesmo para o envelope de uma faixa estreita de frequências.\n\nEm um filtro FIR de fase linear com `N` coeficientes, o atraso de fase é `(N-1)/2` em todas as frequências. Em `w = 0` a fase é dividida por zero, então o primeiro valor da grade padrão volta como `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two-tap averager at chosen frequencies",
+            "pt": "Média de dois coeficientes em frequências escolhidas"
+          },
+          "code": "phi = phasedelay([1 1]/2, 1, [0.5 1 2]);\ndisp(phi.')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "IIR filter",
+            "pt": "Filtro IIR"
+          },
+          "code": "[phi, w] = phasedelay([1 -0.5], [1 0.3], 3);\ndisp(round(phi(2:3).' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "grpdelay",
+        "phasez",
+        "freqz",
+        "zerophase"
+      ],
+      "notes": {
+        "en": "For FIR `designfilt` objects, `phasedelay` differs from MATLAB at one point near the ends of the frequency grid, because of how the phase is rounded in the first bins.",
+        "pt": "Para objetos FIR criados com `designfilt`, `phasedelay` difere do MATLAB em um ponto perto das extremidades da grade de frequências, por causa do arredondamento da fase nos primeiros pontos."
+      }
+    },
+    "phasez": {
+      "summary": {
+        "en": "Computes the phase response of a digital filter.",
+        "pt": "Calcula a resposta de fase de um filtro digital."
+      },
+      "syntax": [
+        {
+          "code": "[phi, w] = phasez(b, a, n)",
+          "en": "Phase at `n` points from 0 to pi.",
+          "pt": "Fase em `n` pontos de 0 a pi."
+        },
+        {
+          "code": "[phi, f] = phasez(b, a, n, fs)",
+          "en": "Same, with the frequency in hertz.",
+          "pt": "O mesmo, com a frequência em hertz."
+        },
+        {
+          "code": "phi = phasez(b, a, w)",
+          "en": "Phase at the frequencies in the vector `w`.",
+          "pt": "Fase nas frequências do vetor `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points. Default 512.",
+          "pt": "Número de pontos de frequência. Padrão 512."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "w",
+          "en": "Vector of frequencies in radians per sample.",
+          "pt": "Vetor de frequências em radianos por amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phi",
+          "en": "Unwrapped phase in radians, a column vector.",
+          "pt": "Fase desenrolada em radianos, um vetor coluna."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies as a column vector, in radians per sample or hertz.",
+          "pt": "Frequências em um vetor coluna, em radianos por amostra ou em hertz."
+        }
+      ],
+      "description": {
+        "en": "`phasez` returns the phase of the frequency response with the jumps of 2*pi removed, so the curve is continuous. It is the quantity that `angle(freqz(b, a, n))` gives, but unwrapped.\n\nA straight line means linear phase. Where the response is exactly zero the phase is not defined and the value comes back as `NaN`.",
+        "pt": "`phasez` retorna a fase da resposta em frequência com os saltos de 2*pi removidos, de modo que a curva é contínua. É a mesma grandeza que `angle(freqz(b, a, n))` fornece, mas desenrolada.\n\nUma reta indica fase linear. Onde a resposta é exatamente zero a fase não é definida e o valor volta como `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Phase of a one-zero filter",
+            "pt": "Fase de um filtro com um zero"
+          },
+          "code": "[phi, w] = phasez([1 -0.5], 1, 4);\ndisp(round(phi.' * 1000) / 1000)\ndisp(round(w.' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "freqz",
+        "grpdelay",
+        "phasedelay",
+        "zerophase",
+        "unwrap"
+      ]
+    },
+    "stepz": {
+      "summary": {
+        "en": "Computes the step response of a digital filter.",
+        "pt": "Calcula a resposta ao degrau de um filtro digital."
+      },
+      "syntax": [
+        {
+          "code": "[s, t] = stepz(b, a)",
+          "en": "Step response with an automatically chosen length.",
+          "pt": "Resposta ao degrau com comprimento escolhido automaticamente."
+        },
+        {
+          "code": "[s, t] = stepz(b, a, n)",
+          "en": "Step response with `n` samples.",
+          "pt": "Resposta ao degrau com `n` amostras."
+        },
+        {
+          "code": "[s, t] = stepz(b, a, n, fs)",
+          "en": "Same, with the time vector in seconds.",
+          "pt": "O mesmo, com o vetor de tempo em segundos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Omit or use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Omita ou use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of samples. When omitted it is chosen from the poles.",
+          "pt": "Número de amostras. Quando omitido, é escolhido a partir dos polos."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Step response, a column vector.",
+          "pt": "Resposta ao degrau, um vetor coluna."
+        },
+        {
+          "name": "t",
+          "en": "Sample times as a column vector.",
+          "pt": "Instantes das amostras em um vetor coluna."
+        }
+      ],
+      "description": {
+        "en": "The step response is the output of the filter when the input switches from 0 to 1 and stays there. It is the running sum of the impulse response, and its final value is the gain of the filter at DC.\n\nIt shows how fast the filter settles, and whether it overshoots or rings.",
+        "pt": "A resposta ao degrau é a saída do filtro quando a entrada passa de 0 para 1 e permanece em 1. É a soma acumulada da resposta ao impulso, e o seu valor final é o ganho do filtro em DC.\n\nMostra a rapidez com que o filtro se acomoda, e se há sobressinal ou oscilação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One-pole filter",
+            "pt": "Filtro de um polo"
+          },
+          "code": "[s, t] = stepz(1, [1 -0.5], 5);\ndisp(s.')\ndisp(t.')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Running sum of the impulse response",
+            "pt": "Soma acumulada da resposta ao impulso"
+          },
+          "code": "h = impz(1, [1 -0.5], 5);\ns = stepz(1, [1 -0.5], 5);\ndisp(max(abs(cumsum(h) - s)) < 1e-12)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "impz",
+        "impzlength",
+        "freqz",
+        "filter"
+      ]
+    },
+    "zerophase": {
+      "summary": {
+        "en": "Computes the zero-phase response of a filter, a real function that carries the gain and its sign changes.",
+        "pt": "Calcula a resposta de fase zero de um filtro, uma função real que carrega o ganho e suas mudanças de sinal."
+      },
+      "syntax": [
+        {
+          "code": "[hr, w] = zerophase(b, a, n)",
+          "en": "Zero-phase response at `n` points from 0 to pi.",
+          "pt": "Resposta de fase zero em `n` pontos de 0 a pi."
+        },
+        {
+          "code": "[hr, w, phi] = zerophase(b, a, n)",
+          "en": "Also returns the continuous phase component.",
+          "pt": "Retorna também o componente de fase contínuo."
+        },
+        {
+          "code": "[hr, f] = zerophase(b, a, n, fs)",
+          "en": "Same, with the frequency in hertz.",
+          "pt": "O mesmo, com a frequência em hertz."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points. Default 512.",
+          "pt": "Número de pontos de frequência. Padrão 512."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hr",
+          "en": "Zero-phase (amplitude) response, real, as a column vector. It can be negative.",
+          "pt": "Resposta de fase zero (de amplitude), real, em um vetor coluna. Pode ser negativa."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies as a column vector, in radians per sample or hertz.",
+          "pt": "Frequências em um vetor coluna, em radianos por amostra ou em hertz."
+        },
+        {
+          "name": "phi",
+          "en": "Continuous phase component in radians, such that `H = hr .* exp(1j*phi)`.",
+          "pt": "Componente de fase contínuo em radianos, tal que `H = hr .* exp(1j*phi)`."
+        }
+      ],
+      "description": {
+        "en": "The frequency response of a filter is complex. `zerophase` splits it into a real amplitude `hr` and a smooth phase `phi`, and lets `hr` go negative where the response crosses zero. This gives a plot that is easier to read than the magnitude, because passbands and stopbands keep their sign.\n\nIt is most useful for linear-phase FIR filters, where `phi` is a straight line and `hr` shows the whole shape of the response.",
+        "pt": "A resposta em frequência de um filtro é complexa. `zerophase` a divide em uma amplitude real `hr` e uma fase suave `phi`, e deixa `hr` ficar negativa onde a resposta cruza o zero. O gráfico fica mais fácil de ler que o do módulo, porque as bandas de passagem e de rejeição mantêm o sinal.\n\nÉ mais útil em filtros FIR de fase linear, nos quais `phi` é uma reta e `hr` mostra todo o formato da resposta."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three-tap filter",
+            "pt": "Filtro de três coeficientes"
+          },
+          "code": "[hr, w, phi] = zerophase([1 2 1], 1, 3);\ndisp(round(hr.' * 1000) / 1000)\ndisp(round(phi.' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "freqz",
+        "phasez",
+        "grpdelay",
+        "firtype"
+      ]
+    },
+    "zplane": {
+      "summary": {
+        "en": "Plots the zeros and poles of a digital filter on the z-plane, together with the unit circle.",
+        "pt": "Desenha no plano z os zeros e os polos de um filtro digital, junto com a circunferência unitária."
+      },
+      "syntax": [
+        {
+          "code": "zplane(b, a)",
+          "en": "Plots the zeros and poles of `b/a`, given as row vectors of coefficients.",
+          "pt": "Desenha os zeros e os polos de `b/a`, dados como vetores linha de coeficientes."
+        },
+        {
+          "code": "zplane(z, p)",
+          "en": "Plots zeros `z` and poles `p`, given as column vectors.",
+          "pt": "Desenha os zeros `z` e os polos `p`, dados como vetores coluna."
+        },
+        {
+          "code": "zplane(sos)",
+          "en": "Plots a filter given as second-order sections.",
+          "pt": "Desenha um filtro dado em seções de segunda ordem."
+        },
+        {
+          "code": "[hz, hp, ht] = zplane(___)",
+          "en": "Also returns the graphics handles of the zeros, poles and axes lines.",
+          "pt": "Retorna também os handles gráficos dos zeros, dos polos e das linhas dos eixos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, a row vector.",
+          "pt": "Coeficientes do numerador, um vetor linha."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, a row vector.",
+          "pt": "Coeficientes do denominador, um vetor linha."
+        },
+        {
+          "name": "z",
+          "en": "Zeros, a column vector.",
+          "pt": "Zeros, um vetor coluna."
+        },
+        {
+          "name": "p",
+          "en": "Poles, a column vector.",
+          "pt": "Polos, um vetor coluna."
+        },
+        {
+          "name": "sos",
+          "en": "Second-order-section matrix with 6 columns and at least two rows.",
+          "pt": "Matriz de seções de segunda ordem, com 6 colunas e pelo menos duas linhas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "hz",
+          "en": "Line object for the zeros, drawn as circles.",
+          "pt": "Objeto de linha dos zeros, desenhados como círculos."
+        },
+        {
+          "name": "hp",
+          "en": "Line object for the poles, drawn as crosses.",
+          "pt": "Objeto de linha dos polos, desenhados como cruzes."
+        },
+        {
+          "name": "ht",
+          "en": "Line objects for the unit circle and the axes.",
+          "pt": "Objetos de linha da circunferência unitária e dos eixos."
+        }
+      ],
+      "description": {
+        "en": "The plot shows where the zeros (o) and poles (x) of the transfer function lie relative to the unit circle. A filter is stable when all poles are inside the circle, and a zero near the circle at some angle gives a notch in the frequency response at that frequency.\n\nWhen you pass row vectors, `zplane` treats them as coefficient vectors and finds the roots. When you pass column vectors, it takes them as the zeros and poles directly.",
+        "pt": "O gráfico mostra onde ficam os zeros (o) e os polos (x) da função de transferência em relação à circunferência unitária. Um filtro é estável quando todos os polos estão dentro da circunferência, e um zero próximo da circunferência em certo ângulo produz um vale na resposta em frequência naquela frequência.\n\nQuando você passa vetores linha, `zplane` os trata como coeficientes e calcula as raízes. Quando passa vetores coluna, usa-os diretamente como zeros e polos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Poles and zeros of a filter",
+            "pt": "Polos e zeros de um filtro"
+          },
+          "code": "figure('Visible', 'off');\n[hz, hp] = zplane([1 0 -1], [1 -1.6 0.64]);\ndisp(hz.XData)\ndisp(hp.XData)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "roots",
+        "freqz",
+        "isstable",
+        "isminphase",
+        "tf2zp"
+      ],
+      "notes": {
+        "en": "A few small plotting differences remain. With `hold on`, a second `zplane` call keeps the axis limits of its own call, while MATLAB's limits also include the first plot's axes lines. Axes created by `subplot` use the default axes box shape to set the limits. For single-precision input, the line objects store doubles.",
+        "pt": "Restam algumas pequenas diferenças no desenho. Com `hold on`, uma segunda chamada de `zplane` mantém os limites dos eixos da própria chamada, enquanto no MATLAB os limites também incluem as linhas dos eixos do primeiro gráfico. Eixos criados por `subplot` usam o formato padrão da caixa dos eixos para definir os limites. Com entrada em precisão simples, os objetos de linha guardam valores em precisão dupla."
+      }
+    },
+    "bandpass": {
+      "summary": {
+        "en": "Filters a signal to keep only the frequencies between two passband edges, using a zero-phase filter designed for you.",
+        "pt": "Filtra um sinal mantendo só as frequências entre duas bordas de banda de passagem, com um filtro de fase zero projetado automaticamente."
+      },
+      "syntax": [
+        {
+          "code": "y = bandpass(x, wpass)",
+          "en": "Passband edges `wpass = [w1 w2]` in normalized frequency (1 is the Nyquist frequency).",
+          "pt": "Bordas da banda de passagem `wpass = [w1 w2]` em frequência normalizada (1 é a frequência de Nyquist)."
+        },
+        {
+          "code": "y = bandpass(x, fpass, fs)",
+          "en": "Passband edges in hertz for sample rate `fs`.",
+          "pt": "Bordas da banda de passagem em hertz para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "y = bandpass(___, Name, Value)",
+          "en": "Options `'Steepness'`, `'StopbandAttenuation'` and `'ImpulseResponse'` (`'auto'`, `'fir'` or `'iir'`).",
+          "pt": "Opções `'Steepness'`, `'StopbandAttenuation'` e `'ImpulseResponse'` (`'auto'`, `'fir'` ou `'iir'`)."
+        },
+        {
+          "code": "[y, d] = bandpass(___)",
+          "en": "Also returns the filter that was used, as a `digitalFilter` object.",
+          "pt": "Retorna também o filtro usado, como um objeto `digitalFilter`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal. A vector, or a matrix whose columns are filtered independently.",
+          "pt": "Sinal real. Um vetor, ou uma matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "fpass",
+          "en": "Two-element increasing vector with the passband edges.",
+          "pt": "Vetor crescente de dois elementos com as bordas da banda de passagem."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "Steepness",
+          "en": "Transition steepness, from 0.5 to below 1. Default 0.85. Higher values give a sharper and longer filter.",
+          "pt": "Inclinação da transição, de 0,5 até abaixo de 1. Padrão 0,85. Valores maiores dão um filtro mais abrupto e mais longo."
+        },
+        {
+          "name": "StopbandAttenuation",
+          "en": "Minimum attenuation in the stopbands, in dB, at least 10. Default 60.",
+          "pt": "Atenuação mínima nas bandas de rejeição, em dB, no mínimo 10. Padrão 60."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        },
+        {
+          "name": "d",
+          "en": "The `digitalFilter` object used.",
+          "pt": "O objeto `digitalFilter` usado."
+        }
+      ],
+      "description": {
+        "en": "`bandpass` designs a minimum-order filter from the passband edges and the steepness, then applies it forward and backward so the output has no phase shift. You do not choose the order or the window yourself.\n\nUse it for a quick bandpass step on data. When you need control over the exact design, build the filter with `designfilt` or `fir1` and apply it with `filtfilt`.",
+        "pt": "`bandpass` projeta um filtro de ordem mínima a partir das bordas da banda de passagem e da inclinação, e o aplica nos dois sentidos, de modo que a saída não tem deslocamento de fase. Você não escolhe a ordem nem a janela.\n\nUse para uma filtragem passa-faixa rápida nos dados. Quando precisar controlar o projeto, crie o filtro com `designfilt` ou `fir1` e aplique-o com `filtfilt`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Keep a 60 Hz tone, drop a 5 Hz tone",
+            "pt": "Manter um tom de 60 Hz e eliminar um de 5 Hz"
+          },
+          "code": "t = (0:199)' / 200;\nx = sin(2*pi*5*t) + sin(2*pi*60*t);\ny = bandpass(x, [40 80], 200);\nfprintf('RMS before: %.2f\\n', sqrt(mean(x.^2)));\nfprintf('RMS after: %.2f\\n', sqrt(mean(y.^2)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bandstop",
+        "lowpass",
+        "highpass",
+        "designfilt",
+        "filtfilt"
+      ],
+      "notes": {
+        "en": "The automatic minimum-order FIR search accepts 2 taps fewer in MATLAB, so the filter length can differ by 2. With `'ImpulseResponse', 'iir'`, MATLAB pairs the zeros of each section with the poles in a different way, so the samples at the edges of the output differ.",
+        "pt": "A busca automática da ordem mínima do filtro FIR aceita 2 coeficientes a menos no MATLAB, então o comprimento do filtro pode diferir em 2. Com `'ImpulseResponse', 'iir'`, o MATLAB associa os zeros de cada seção aos polos de outra maneira, e por isso as amostras das extremidades da saída diferem."
+      }
+    },
+    "bandstop": {
+      "summary": {
+        "en": "Filters a signal to remove the frequencies between two edges, using a zero-phase filter designed for you.",
+        "pt": "Filtra um sinal removendo as frequências entre duas bordas, com um filtro de fase zero projetado automaticamente."
+      },
+      "syntax": [
+        {
+          "code": "y = bandstop(x, wpass)",
+          "en": "Edges `wpass = [w1 w2]` in normalized frequency; what lies between them is removed.",
+          "pt": "Bordas `wpass = [w1 w2]` em frequência normalizada; o que fica entre elas é removido."
+        },
+        {
+          "code": "y = bandstop(x, fpass, fs)",
+          "en": "Edges in hertz for sample rate `fs`.",
+          "pt": "Bordas em hertz para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "y = bandstop(___, Name, Value)",
+          "en": "Options `'Steepness'`, `'StopbandAttenuation'` and `'ImpulseResponse'` (`'auto'`, `'fir'` or `'iir'`).",
+          "pt": "Opções `'Steepness'`, `'StopbandAttenuation'` e `'ImpulseResponse'` (`'auto'`, `'fir'` ou `'iir'`)."
+        },
+        {
+          "code": "[y, d] = bandstop(___)",
+          "en": "Also returns the filter used, as a `digitalFilter` object.",
+          "pt": "Retorna também o filtro usado, como um objeto `digitalFilter`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal. A vector, or a matrix whose columns are filtered independently.",
+          "pt": "Sinal real. Um vetor, ou uma matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "fpass",
+          "en": "Two-element increasing vector with the edges of the two passbands, one below and one above the rejected band.",
+          "pt": "Vetor crescente de dois elementos com as bordas das duas bandas de passagem, uma abaixo e outra acima da banda rejeitada."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "Steepness",
+          "en": "Transition steepness, from 0.5 to below 1. Default 0.85. Higher values give a sharper and longer filter.",
+          "pt": "Inclinação da transição, de 0,5 até abaixo de 1. Padrão 0,85. Valores maiores dão um filtro mais abrupto e mais longo."
+        },
+        {
+          "name": "StopbandAttenuation",
+          "en": "Minimum attenuation in the rejected band, in dB, at least 10. Default 60.",
+          "pt": "Atenuação mínima na banda rejeitada, em dB, no mínimo 10. Padrão 60."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        },
+        {
+          "name": "d",
+          "en": "The `digitalFilter` object used.",
+          "pt": "O objeto `digitalFilter` usado."
+        }
+      ],
+      "description": {
+        "en": "`bandstop` is the opposite of `bandpass`: it removes a band of frequencies and keeps the rest. The two numbers in `fpass` are the edges of the passbands on each side of the band you want to remove.\n\nA typical use is to take out a narrow interference, such as mains hum, while leaving the rest of the spectrum alone. The output has no phase shift.",
+        "pt": "`bandstop` é o oposto de `bandpass`: remove uma faixa de frequências e mantém o resto. Os dois números de `fpass` são as bordas das bandas de passagem dos dois lados da faixa que se quer remover.\n\nUm uso típico é retirar uma interferência estreita, como o ruído da rede elétrica, sem mexer no resto do espectro. A saída não tem deslocamento de fase."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Remove a 60 Hz tone, keep a 5 Hz tone",
+            "pt": "Remover um tom de 60 Hz e manter um de 5 Hz"
+          },
+          "code": "t = (0:199)' / 200;\nx = sin(2*pi*5*t) + sin(2*pi*60*t);\ny = bandstop(x, [40 80], 200);\nfprintf('RMS before: %.2f\\n', sqrt(mean(x.^2)));\nfprintf('RMS after: %.2f\\n', sqrt(mean(y.^2)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bandpass",
+        "lowpass",
+        "highpass",
+        "designfilt",
+        "filtfilt"
+      ],
+      "notes": {
+        "en": "In the IIR design (`'ImpulseResponse', 'iir'`), the zeros are assigned to the poles of each section pair in a different order than in MATLAB, which changes the samples at the edges of the output (MATLAB's first sample is -371 in one test case).",
+        "pt": "No projeto IIR (`'ImpulseResponse', 'iir'`), os zeros são associados aos polos de cada par de seções em uma ordem diferente da do MATLAB, o que muda as amostras das extremidades da saída (a primeira amostra do MATLAB é -371 em um dos casos de teste)."
+      }
+    },
+    "lowpass": {
+      "summary": {
+        "en": "Filters a signal to keep the frequencies below a passband edge, using a zero-phase filter designed for you.",
+        "pt": "Filtra um sinal mantendo as frequências abaixo de uma borda da banda de passagem, com um filtro de fase zero projetado automaticamente."
+      },
+      "syntax": [
+        {
+          "code": "y = lowpass(x, wpass)",
+          "en": "Passband edge `wpass` in normalized frequency (1 is the Nyquist frequency).",
+          "pt": "Borda da banda de passagem `wpass` em frequência normalizada (1 é a frequência de Nyquist)."
+        },
+        {
+          "code": "y = lowpass(x, fpass, fs)",
+          "en": "Passband edge in hertz for sample rate `fs`.",
+          "pt": "Borda da banda de passagem em hertz para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "y = lowpass(___, Name, Value)",
+          "en": "Options `'Steepness'`, `'StopbandAttenuation'` and `'ImpulseResponse'` (`'auto'`, `'fir'` or `'iir'`).",
+          "pt": "Opções `'Steepness'`, `'StopbandAttenuation'` e `'ImpulseResponse'` (`'auto'`, `'fir'` ou `'iir'`)."
+        },
+        {
+          "code": "[y, d] = lowpass(___)",
+          "en": "Also returns the filter used, as a `digitalFilter` object.",
+          "pt": "Retorna também o filtro usado, como um objeto `digitalFilter`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal. A vector, or a matrix whose columns are filtered independently.",
+          "pt": "Sinal real. Um vetor, ou uma matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "fpass",
+          "en": "Passband edge, a positive scalar below half the sample rate.",
+          "pt": "Borda da banda de passagem, um escalar positivo abaixo da metade da taxa de amostragem."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "Steepness",
+          "en": "Transition steepness, from 0.5 to below 1. Default 0.85. Higher values give a sharper and longer filter.",
+          "pt": "Inclinação da transição, de 0,5 até abaixo de 1. Padrão 0,85. Valores maiores dão um filtro mais abrupto e mais longo."
+        },
+        {
+          "name": "StopbandAttenuation",
+          "en": "Minimum attenuation in the stopband, in dB, at least 10. Default 60.",
+          "pt": "Atenuação mínima na banda de rejeição, em dB, no mínimo 10. Padrão 60."
+        },
+        {
+          "name": "ImpulseResponse",
+          "en": "`'auto'` (default), `'fir'` or `'iir'`.",
+          "pt": "`'auto'` (padrão), `'fir'` ou `'iir'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        },
+        {
+          "name": "d",
+          "en": "The `digitalFilter` object used.",
+          "pt": "O objeto `digitalFilter` usado."
+        }
+      ],
+      "description": {
+        "en": "`lowpass` designs a minimum-order filter from the passband edge and the steepness, then applies it forward and backward so the output has no phase shift. You do not have to choose the order or the window.\n\nUse it to remove high-frequency noise or to isolate a slow trend. When you need control over the exact design, build the filter with `designfilt` or `fir1` and apply it with `filtfilt`.",
+        "pt": "`lowpass` projeta um filtro de ordem mínima a partir da borda da banda de passagem e da inclinação, e o aplica nos dois sentidos, de modo que a saída não tem deslocamento de fase. Você não precisa escolher a ordem nem a janela.\n\nUse para remover ruído de alta frequência ou isolar uma tendência lenta. Quando precisar controlar o projeto, crie o filtro com `designfilt` ou `fir1` e aplique-o com `filtfilt`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Keep a 5 Hz tone, drop a 60 Hz tone",
+            "pt": "Manter um tom de 5 Hz e eliminar um de 60 Hz"
+          },
+          "code": "t = (0:199)' / 200;\nx = sin(2*pi*5*t) + sin(2*pi*60*t);\n[y, d] = lowpass(x, 20, 200);\nfprintf('RMS before: %.2f\\n', sqrt(mean(x.^2)));\nfprintf('RMS after: %.2f\\n', sqrt(mean(y.^2)));\nfprintf('Filter length: %d\\n', numel(d.Coefficients));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "highpass",
+        "bandpass",
+        "bandstop",
+        "designfilt",
+        "filtfilt"
+      ],
+      "notes": {
+        "en": "With `'ImpulseResponse', 'iir'` the section gains are distributed differently from MATLAB. In one test the last output sample differs by about 4e-9, from rounding in the ill-conditioned cascade.",
+        "pt": "Com `'ImpulseResponse', 'iir'`, os ganhos das seções são distribuídos de modo diferente do MATLAB. Em um teste, a última amostra da saída difere em cerca de 4e-9, por arredondamento na cascata mal condicionada."
+      }
+    },
+    "highpass": {
+      "summary": {
+        "en": "Filters a signal to keep the frequencies above a passband edge, using a zero-phase filter designed for you.",
+        "pt": "Filtra um sinal mantendo as frequências acima de uma borda da banda de passagem, com um filtro de fase zero projetado automaticamente."
+      },
+      "syntax": [
+        {
+          "code": "y = highpass(x, wpass)",
+          "en": "Passband edge `wpass` in normalized frequency (1 is the Nyquist frequency).",
+          "pt": "Borda da banda de passagem `wpass` em frequência normalizada (1 é a frequência de Nyquist)."
+        },
+        {
+          "code": "y = highpass(x, fpass, fs)",
+          "en": "Passband edge in hertz for sample rate `fs`.",
+          "pt": "Borda da banda de passagem em hertz para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "y = highpass(___, Name, Value)",
+          "en": "Options `'Steepness'`, `'StopbandAttenuation'` and `'ImpulseResponse'` (`'auto'`, `'fir'` or `'iir'`).",
+          "pt": "Opções `'Steepness'`, `'StopbandAttenuation'` e `'ImpulseResponse'` (`'auto'`, `'fir'` ou `'iir'`)."
+        },
+        {
+          "code": "[y, d] = highpass(___)",
+          "en": "Also returns the filter used, as a `digitalFilter` object.",
+          "pt": "Retorna também o filtro usado, como um objeto `digitalFilter`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal. A vector, or a matrix whose columns are filtered independently.",
+          "pt": "Sinal real. Um vetor, ou uma matriz cujas colunas são filtradas de forma independente."
+        },
+        {
+          "name": "fpass",
+          "en": "Passband edge, a positive scalar below half the sample rate.",
+          "pt": "Borda da banda de passagem, um escalar positivo abaixo da metade da taxa de amostragem."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "Steepness",
+          "en": "Transition steepness, from 0.5 to below 1. Default 0.85. Higher values give a sharper and longer filter.",
+          "pt": "Inclinação da transição, de 0,5 até abaixo de 1. Padrão 0,85. Valores maiores dão um filtro mais abrupto e mais longo."
+        },
+        {
+          "name": "StopbandAttenuation",
+          "en": "Minimum attenuation in the stopband, in dB, at least 10. Default 60.",
+          "pt": "Atenuação mínima na banda de rejeição, em dB, no mínimo 10. Padrão 60."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        },
+        {
+          "name": "d",
+          "en": "The `digitalFilter` object used.",
+          "pt": "O objeto `digitalFilter` usado."
+        }
+      ],
+      "description": {
+        "en": "`highpass` designs a minimum-order filter from the passband edge and the steepness, then applies it forward and backward so the output has no phase shift. It removes slow drift and offset and keeps the fast part of the signal.\n\nA common use is to take out a baseline wander before looking at the rest of the signal.",
+        "pt": "`highpass` projeta um filtro de ordem mínima a partir da borda da banda de passagem e da inclinação, e o aplica nos dois sentidos, de modo que a saída não tem deslocamento de fase. Remove deriva lenta e nível médio, e mantém a parte rápida do sinal.\n\nUm uso comum é retirar a oscilação da linha de base antes de olhar o restante do sinal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Remove a slow tone and an offset",
+            "pt": "Remover um tom lento e um nível médio"
+          },
+          "code": "t = (0:199)' / 200;\nx = 3 + sin(2*pi*1*t) + sin(2*pi*60*t);\ny = highpass(x, 20, 200);\nfprintf('mean before: %.2f\\n', mean(x));\nfprintf('mean after: %.2f\\n', mean(y));\nfprintf('RMS after: %.2f\\n', sqrt(mean(y.^2)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lowpass",
+        "bandpass",
+        "bandstop",
+        "designfilt",
+        "filtfilt"
+      ]
+    },
+    "fftfilt": {
+      "summary": {
+        "en": "Filters a signal with an FIR filter, using the FFT.",
+        "pt": "Filtra um sinal com um filtro FIR, usando a FFT."
+      },
+      "syntax": [
+        {
+          "code": "y = fftfilt(b, x)",
+          "en": "Filters `x` with the FIR filter `b`.",
+          "pt": "Filtra `x` com o filtro FIR `b`."
+        },
+        {
+          "code": "y = fftfilt(b, x, n)",
+          "en": "Same, with FFT blocks of length `n`.",
+          "pt": "O mesmo, com blocos de FFT de comprimento `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "FIR coefficients, a vector.",
+          "pt": "Coeficientes FIR, um vetor."
+        },
+        {
+          "name": "x",
+          "en": "Real input signal. A vector, or a matrix whose columns are filtered separately.",
+          "pt": "Sinal de entrada real. Um vetor, ou uma matriz cujas colunas são filtradas separadamente."
+        },
+        {
+          "name": "n",
+          "en": "FFT length for the block processing. It does not change the result.",
+          "pt": "Comprimento da FFT no processamento em blocos. Não altera o resultado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "`fftfilt` gives the same result as `filter(b, 1, x)`, but it is meant for long FIR filters, where multiplying in the frequency domain is faster than summing the products directly. The output is cut to the length of `x`.\n\nIt only handles FIR filters. For a filter with feedback coefficients, use `filter`.",
+        "pt": "`fftfilt` dá o mesmo resultado de `filter(b, 1, x)`, mas foi pensada para filtros FIR longos, nos quais multiplicar no domínio da frequência é mais rápido que somar os produtos diretamente. A saída é cortada no comprimento de `x`.\n\nServe apenas para filtros FIR. Para um filtro com coeficientes de realimentação, use `filter`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Same result as filter",
+            "pt": "Mesmo resultado que filter"
+          },
+          "code": "x = [1 2 3 4 5 6 7 8];\nb = [1 2 1] / 4;\ny = fftfilt(b, x);\ndisp(y)\ndisp(max(abs(y - filter(b, 1, x))) < 1e-12)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "filter",
+        "conv",
+        "filtfilt",
+        "upfirdn"
+      ]
+    },
+    "filtfilt": {
+      "summary": {
+        "en": "Filters a signal forward and then backward, so the output has zero phase distortion.",
+        "pt": "Filtra um sinal para frente e depois para trás, de modo que a saída não tem distorção de fase."
+      },
+      "syntax": [
+        {
+          "code": "y = filtfilt(b, a, x)",
+          "en": "Filters `x` with the filter `b/a` in both directions.",
+          "pt": "Filtra `x` com o filtro `b/a` nos dois sentidos."
+        },
+        {
+          "code": "y = filtfilt(d, x)",
+          "en": "Filters `x` with a `digitalFilter` object `d`.",
+          "pt": "Filtra `x` com um objeto `digitalFilter` `d`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "d",
+          "en": "A `digitalFilter` object, for example from `designfilt`.",
+          "pt": "Um objeto `digitalFilter`, por exemplo vindo de `designfilt`."
+        },
+        {
+          "name": "x",
+          "en": "Input signal. A vector, or a matrix whose columns are filtered independently. It must be longer than three times the filter order.",
+          "pt": "Sinal de entrada. Um vetor, ou uma matriz cujas colunas são filtradas de forma independente. Deve ser mais longo que três vezes a ordem do filtro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "`filtfilt` runs the filter along the signal, reverses the result, and runs the filter again. The phase shifts of the two passes cancel, so features such as peaks stay at the same position in time. The magnitude response is squared, so the effective filter is sharper than the one you gave.\n\nThis only works offline, because it needs the whole signal. Use `filter` when you need to process samples as they arrive.",
+        "pt": "`filtfilt` aplica o filtro ao longo do sinal, inverte o resultado e aplica o filtro de novo. Os deslocamentos de fase das duas passagens se cancelam, e por isso características como picos permanecem na mesma posição no tempo. A resposta em módulo fica elevada ao quadrado, então o filtro efetivo é mais seletivo que o filtro dado.\n\nSó funciona off-line, porque precisa do sinal inteiro. Use `filter` quando for preciso processar as amostras à medida que chegam."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Peak position with filter and filtfilt",
+            "pt": "Posição do pico com filter e com filtfilt"
+          },
+          "code": "x = zeros(1, 41);\nx(21) = 1;\n[b, a] = butter(2, 0.3);\n[~, i1] = max(filter(b, a, x));\n[~, i2] = max(filtfilt(b, a, x));\nfprintf('input peak at %d\\n', 21);\nfprintf('filter peak at %d\\n', i1);\nfprintf('filtfilt peak at %d\\n', i2);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "filter",
+        "fftfilt",
+        "filtic",
+        "designfilt",
+        "lowpass"
+      ]
+    },
+    "filtic": {
+      "summary": {
+        "en": "Finds the initial conditions that make `filter` continue as if it had already processed some past samples.",
+        "pt": "Calcula as condições iniciais que fazem `filter` continuar como se já tivesse processado algumas amostras passadas."
+      },
+      "syntax": [
+        {
+          "code": "zi = filtic(b, a, y, x)",
+          "en": "State for past outputs `y` and past inputs `x`.",
+          "pt": "Estado para saídas passadas `y` e entradas passadas `x`."
+        },
+        {
+          "code": "zi = filtic(b, a, y)",
+          "en": "Same, with all past inputs equal to zero.",
+          "pt": "O mesmo, com todas as entradas passadas iguais a zero."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the filter, as a vector.",
+          "pt": "Coeficientes do numerador do filtro, em um vetor."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients. Use `1` for an FIR filter.",
+          "pt": "Coeficientes do denominador. Use `1` para um filtro FIR."
+        },
+        {
+          "name": "y",
+          "en": "Past outputs, most recent first: `[y(-1) y(-2) ...]`.",
+          "pt": "Saídas passadas, a mais recente primeiro: `[y(-1) y(-2) ...]`."
+        },
+        {
+          "name": "x",
+          "en": "Past inputs, most recent first: `[x(-1) x(-2) ...]`. Default zeros.",
+          "pt": "Entradas passadas, a mais recente primeiro: `[x(-1) x(-2) ...]`. Padrão zeros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "zi",
+          "en": "Initial state vector to pass as the fifth argument of `filter`.",
+          "pt": "Vetor de estado inicial para passar como quinto argumento de `filter`."
+        }
+      ],
+      "description": {
+        "en": "`filter(b, a, x, zi)` starts from a state `zi` instead of from rest. `filtic` computes that state from the last few outputs and inputs you know, newest first.\n\nA typical use is to process a signal in blocks: run the first block, take its last output and input, and build `zi` for the second block. The blocks then join with no jump.",
+        "pt": "`filter(b, a, x, zi)` parte de um estado `zi` em vez de partir do repouso. `filtic` calcula esse estado a partir das últimas saídas e entradas conhecidas, da mais nova para a mais antiga.\n\nUm uso típico é processar um sinal em blocos: filtra-se o primeiro bloco, pega-se a última saída e a última entrada, e monta-se `zi` para o segundo bloco. Assim os blocos se emendam sem salto."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Process a signal in two blocks",
+            "pt": "Processar um sinal em dois blocos"
+          },
+          "code": "b = [1 1];\na = [1 -0.5];\nx = [1 2 3 4 5 6];\nyfull = filter(b, a, x);\ny1 = filter(b, a, x(1:3));\nzi = filtic(b, a, y1(3), x(3));\ny2 = filter(b, a, x(4:6), zi);\ndisp([y1 y2])\ndisp(max(abs([y1 y2] - yfull)) < 1e-12)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "filter",
+        "filtfilt",
+        "latcfilt",
+        "sosfilt"
+      ],
+      "notes": {
+        "en": "A zero first denominator coefficient, as in `filtic(1, [0 1], 1)`, is a known difference from MATLAB. MatLivre returns `NaN`.",
+        "pt": "Um primeiro coeficiente do denominador igual a zero, como em `filtic(1, [0 1], 1)`, é uma diferença conhecida em relação ao MATLAB. O MatLivre retorna `NaN`."
+      }
+    },
+    "latcfilt": {
+      "summary": {
+        "en": "Filters a signal with a lattice or lattice-ladder filter structure.",
+        "pt": "Filtra um sinal com uma estrutura de filtro em treliça (lattice) ou treliça-escada (lattice-ladder)."
+      },
+      "syntax": [
+        {
+          "code": "[f, g] = latcfilt(k, x)",
+          "en": "FIR lattice filter with reflection coefficients `k`; `f` is the forward and `g` the backward output.",
+          "pt": "Filtro FIR em treliça com coeficientes de reflexão `k`; `f` é a saída direta e `g` a saída reversa."
+        },
+        {
+          "code": "[y, g] = latcfilt(k, v, x)",
+          "en": "Lattice-ladder filter with ladder coefficients `v`. With `v = 1` the filter is all-pole.",
+          "pt": "Filtro treliça-escada com coeficientes de escada `v`. Com `v = 1`, o filtro é só de polos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Reflection coefficients of the lattice, a vector.",
+          "pt": "Coeficientes de reflexão da treliça, um vetor."
+        },
+        {
+          "name": "v",
+          "en": "Ladder coefficients. Its length can be at most `length(k) + 1`.",
+          "pt": "Coeficientes da escada. O comprimento pode ser no máximo `length(k) + 1`."
+        },
+        {
+          "name": "x",
+          "en": "Input signal.",
+          "pt": "Sinal de entrada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "Forward output (the filtered signal), the same size as `x`.",
+          "pt": "Saída direta (o sinal filtrado), do mesmo tamanho de `x`."
+        },
+        {
+          "name": "g",
+          "en": "Backward output, the same size as `x`.",
+          "pt": "Saída reversa, do mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "A lattice filter is built from reflection coefficients instead of direct-form coefficients. These are the coefficients that `aryule` and `arburg` can return, so `latcfilt` lets you run a filter described that way without converting it first.\n\nWith only `k`, the forward output equals filtering with the polynomial given by `latc2tf(k)`. With a ladder vector `v` you get an IIR filter, and `v = 1` gives `1/A(z)`.",
+        "pt": "Um filtro em treliça é construído com coeficientes de reflexão em vez de coeficientes da forma direta. São coeficientes que `aryule` e `arburg` podem retornar, então `latcfilt` permite rodar um filtro descrito assim sem convertê-lo antes.\n\nApenas com `k`, a saída direta é igual à filtragem com o polinômio dado por `latc2tf(k)`. Com um vetor de escada `v`, o filtro é IIR, e `v = 1` resulta em `1/A(z)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Impulse response of FIR and all-pole lattices",
+            "pt": "Resposta ao impulso de treliças FIR e só de polos"
+          },
+          "code": "k = [0.5 0.3];\nx = [1 0 0 0 0];\nf = latcfilt(k, x);\ny = latcfilt(k, 1, x);\ndisp(f)\ndisp(y)\ndisp(latc2tf(k))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "latc2tf",
+        "tf2latc",
+        "filter",
+        "aryule",
+        "arburg"
+      ],
+      "notes": {
+        "en": "MATLAB also accepts a third output with the final conditions, as in `[a, b, c] = latcfilt(k, x)`. MatLivre returns two outputs only.",
+        "pt": "O MATLAB também aceita uma terceira saída com as condições finais, como em `[a, b, c] = latcfilt(k, x)`. O MatLivre retorna apenas duas saídas."
+      }
+    },
+    "residuez": {
+      "summary": {
+        "en": "Converts between a ratio of polynomials in z^-1 and its partial-fraction form, with residues, poles and direct terms.",
+        "pt": "Converte entre uma razão de polinômios em z^-1 e a sua forma em frações parciais, com resíduos, polos e termos diretos."
+      },
+      "syntax": [
+        {
+          "code": "[r, p, k] = residuez(b, a)",
+          "en": "Partial-fraction expansion of `b(z)/a(z)`.",
+          "pt": "Expansão em frações parciais de `b(z)/a(z)`."
+        },
+        {
+          "code": "[b, a] = residuez(r, p, k)",
+          "en": "Rebuilds the polynomial coefficients from residues, poles and direct terms.",
+          "pt": "Reconstrói os coeficientes dos polinômios a partir de resíduos, polos e termos diretos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, in increasing powers of z^-1.",
+          "pt": "Coeficientes do numerador, em potências crescentes de z^-1."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, in increasing powers of z^-1. The first one must not be zero.",
+          "pt": "Coeficientes do denominador, em potências crescentes de z^-1. O primeiro não pode ser zero."
+        },
+        {
+          "name": "r",
+          "en": "Residues, a vector.",
+          "pt": "Resíduos, um vetor."
+        },
+        {
+          "name": "p",
+          "en": "Poles, a vector with the same length as `r`.",
+          "pt": "Polos, um vetor com o mesmo comprimento de `r`."
+        },
+        {
+          "name": "k",
+          "en": "Direct terms, empty when the numerator is shorter than the denominator.",
+          "pt": "Termos diretos, vazio quando o numerador é mais curto que o denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Residues, a column vector.",
+          "pt": "Resíduos, um vetor coluna."
+        },
+        {
+          "name": "p",
+          "en": "Poles, a column vector.",
+          "pt": "Polos, um vetor coluna."
+        },
+        {
+          "name": "k",
+          "en": "Direct terms, the polynomial part, empty when `length(b) < length(a)`.",
+          "pt": "Termos diretos, a parte polinomial, vazio quando `length(b) < length(a)`."
+        },
+        {
+          "name": "b, a",
+          "en": "Rebuilt numerator and denominator coefficients.",
+          "pt": "Coeficientes reconstruídos do numerador e do denominador."
+        }
+      ],
+      "description": {
+        "en": "The result has the form `b(z)/a(z) = r(1)/(1 - p(1) z^-1) + ... + r(n)/(1 - p(n) z^-1) + k(1) + k(2) z^-1 + ...`. Each pole `p(i)` contributes a term `r(i) * p(i)^n` to the impulse response, so the expansion shows directly how the response of the filter is made.\n\nThis is the same idea as `residue`, but for polynomials in z^-1, which is the usual form of digital filters. Called with three inputs, it goes the other way.",
+        "pt": "O resultado tem a forma `b(z)/a(z) = r(1)/(1 - p(1) z^-1) + ... + r(n)/(1 - p(n) z^-1) + k(1) + k(2) z^-1 + ...`. Cada polo `p(i)` contribui com um termo `r(i) * p(i)^n` na resposta ao impulso, de modo que a expansão mostra diretamente como a resposta do filtro é formada.\n\nA ideia é a mesma de `residue`, mas para polinômios em z^-1, que é a forma usual dos filtros digitais. Chamada com três entradas, faz o caminho inverso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Expand and rebuild",
+            "pt": "Expandir e reconstruir"
+          },
+          "code": "b = [1 2];\na = [1 -0.5 -0.06];\n[r, p, k] = residuez(b, a);\ndisp(round(r.' * 1e4) / 1e4)\ndisp(round(p.' * 1e4) / 1e4)\ndisp(isempty(k))\n[b2, a2] = residuez(r, p, k);\ndisp(round(b2 * 1e4) / 1e4)\ndisp(round(a2 * 1e4) / 1e4)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "With a direct term",
+            "pt": "Com termo direto"
+          },
+          "code": "[r, p, k] = residuez([1 0 0 1], [1 -0.5]);\ndisp(r.')\ndisp(p.')\ndisp(k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "residue",
+        "roots",
+        "poly",
+        "tf2zp",
+        "impz"
+      ],
+      "notes": {
+        "en": "Poles of equal size (a real one and a complex pair) are ordered by rounding noise in the eigenvalues, so their order can differ from MATLAB. For a triple pole, MATLAB finds it only to about 1e-5, while MatLivre refines it to the exact value.",
+        "pt": "Polos de mesmo módulo (um real e um par complexo) são ordenados pelo ruído de arredondamento dos autovalores, então a ordem pode diferir da do MATLAB. Para um polo triplo, o MATLAB o encontra só com cerca de 1e-5 de precisão, enquanto o MatLivre o refina até o valor exato."
+      }
+    },
+    "sosfilt": {
+      "summary": {
+        "en": "Filters a signal with a filter given as second-order sections.",
+        "pt": "Filtra um sinal com um filtro dado em seções de segunda ordem."
+      },
+      "syntax": [
+        {
+          "code": "y = sosfilt(sos, x)",
+          "en": "Runs `x` through each section in turn.",
+          "pt": "Passa `x` por cada seção em sequência."
+        },
+        {
+          "code": "y = sosfilt(sos, x, dim)",
+          "en": "Filters along dimension `dim`.",
+          "pt": "Filtra ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sos",
+          "en": "Matrix with one row per section and 6 columns `[b0 b1 b2 a0 a1 a2]`, with `a0 = 1`.",
+          "pt": "Matriz com uma linha por seção e 6 colunas `[b0 b1 b2 a0 a1 a2]`, com `a0 = 1`."
+        },
+        {
+          "name": "x",
+          "en": "Input signal. A vector or a matrix.",
+          "pt": "Sinal de entrada. Um vetor ou uma matriz."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to filter along. By default, the first dimension of size other than 1.",
+          "pt": "Dimensão ao longo da qual filtrar. Por padrão, a primeira dimensão com tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Filtered signal, the same size as `x`.",
+          "pt": "Sinal filtrado, do mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "A high-order IIR filter written as one polynomial ratio can lose accuracy, because its coefficients are very sensitive. Splitting it into cascaded second-order sections avoids that, and `sosfilt` applies such a cascade directly.\n\nGet the matrix `sos` from `tf2sos`, `zp2sos` or from a design function that returns it. The result matches `filter(b, a, x)` for the equivalent single filter.",
+        "pt": "Um filtro IIR de ordem alta escrito como uma única razão de polinômios pode perder precisão, porque os coeficientes são muito sensíveis. Dividi-lo em seções de segunda ordem em cascata evita o problema, e `sosfilt` aplica essa cascata diretamente.\n\nObtenha a matriz `sos` com `tf2sos`, `zp2sos` ou com uma função de projeto que a retorne. O resultado coincide com `filter(b, a, x)` para o filtro único equivalente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Compare with filter",
+            "pt": "Comparar com filter"
+          },
+          "code": "[b, a] = butter(4, 0.2);\nsos = tf2sos(b, a);\nx = [1 zeros(1, 5)];\ny = sosfilt(sos, x);\ndisp(round(y * 1e4) / 1e4)\ndisp(max(abs(y - filter(b, a, x))) < 1e-10)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2sos",
+        "zp2sos",
+        "sos2tf",
+        "filter",
+        "filtfilt"
+      ]
+    }
+  }
+}

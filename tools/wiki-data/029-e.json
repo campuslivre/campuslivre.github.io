@@ -1,0 +1,1909 @@
+{
+  "functions": {
+    "cfirpm": {
+      "summary": {
+        "en": "Designs an equiripple FIR filter with real or complex coefficients, minimizing the largest weighted error, with band edges that may be negative.",
+        "pt": "Projeta um filtro FIR equiripple de coeficientes reais ou complexos, minimizando o maior erro ponderado, com bordas de banda que podem ser negativas."
+      },
+      "syntax": [
+        {
+          "code": "b = cfirpm(n,f,a)",
+          "en": "Order `n` filter whose response follows amplitude `a` on the bands given by `f`.",
+          "pt": "Filtro de ordem `n` cuja resposta segue a amplitude `a` nas bandas dadas por `f`."
+        },
+        {
+          "code": "b = cfirpm(n,f,a,w)",
+          "en": "Adds a weight `w` for each band.",
+          "pt": "Acrescenta um peso `w` para cada banda."
+        },
+        {
+          "code": "[b,d] = cfirpm(___)",
+          "en": "Also returns the ripple `d` of the design.",
+          "pt": "Retorna também a ondulação `d` do projeto."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "f",
+          "en": "Band edges, in pairs, increasing, from -1 to 1 (1 is half the sampling rate). Edges at negative frequencies give a filter with complex coefficients.",
+          "pt": "Bordas das bandas, em pares, crescentes, de -1 a 1 (1 é metade da taxa de amostragem). Bordas em frequências negativas geram um filtro com coeficientes complexos."
+        },
+        {
+          "name": "a",
+          "en": "Desired amplitude at each band edge, one value per entry of `f`.",
+          "pt": "Amplitude desejada em cada borda de banda, um valor para cada elemento de `f`."
+        },
+        {
+          "name": "w",
+          "en": "Optional positive weight for each band, one per band.",
+          "pt": "Peso positivo opcional para cada banda, um por banda."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients, complex when the design is not symmetric about zero frequency.",
+          "pt": "Vetor linha com `n+1` coeficientes, complexo quando o projeto não é simétrico em torno da frequência zero."
+        },
+        {
+          "name": "d",
+          "en": "Ripple of the design: the peak weighted error between the filter and the desired response on the bands.",
+          "pt": "Ondulação do projeto: o erro ponderado máximo entre o filtro e a resposta desejada nas bandas."
+        }
+      ],
+      "description": {
+        "en": "`cfirpm` is the complex version of `firpm`. It uses an exchange algorithm that spreads the error evenly (equiripple) over the bands you specify, and leaves the gaps between bands unconstrained.\n\nWhen the bands cover only positive frequencies the result is a real, symmetric filter. When some bands lie at negative frequencies the response need not be symmetric and the coefficients become complex. That lets you build, for example, a filter that passes a single band around a nonzero frequency.",
+        "pt": "`cfirpm` é a versão complexa de `firpm`. Ela usa um algoritmo de troca que distribui o erro de modo uniforme (equiripple) nas bandas especificadas, e deixa livres os intervalos entre elas.\n\nQuando as bandas cobrem só frequências positivas, o resultado é um filtro real e simétrico. Quando há bandas em frequências negativas, a resposta não precisa ser simétrica e os coeficientes ficam complexos. Isso permite, por exemplo, criar um filtro que passa uma única banda em torno de uma frequência diferente de zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Complex filter with a passband across negative and positive frequencies",
+            "pt": "Filtro complexo com banda de passagem em frequências negativas e positivas"
+          },
+          "code": "b = cfirpm(20,[-1 -0.5 -0.4 0.3 0.4 1],[0 0 1 1 0 0]);\nw = [-0.8 -0.2 0 0.2 0.9]*pi;\nh = freqz(b,1,w);\nfprintf('%d coefficients\\n', numel(b));\ndisp(round(abs(h)*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firpm",
+        "firls",
+        "fir2",
+        "freqz"
+      ],
+      "notes": {
+        "en": "Known differences from MATLAB: the group-delay offset form (such as `{@lowpass,0.5}`) and the `@allpass` response are not implemented and raise an error. Negative band weights and complex amplitude values with even symmetry do not match MATLAB. Designs with positive frequencies only and complex taps (symmetry `'none'`) are not unique, so the coefficients can differ from MATLAB's. For designs with complex taps, MATLAB stops at a ripple tolerance of about 1e-6, so its coefficients can differ from MatLivre's by 1e-6 to 1e-4.",
+        "pt": "Diferenças conhecidas em relação ao MATLAB: a forma com deslocamento de atraso de grupo (como `{@lowpass,0.5}`) e a resposta `@allpass` não estão implementadas e geram erro. Pesos de banda negativos e valores de amplitude complexos com simetria par não coincidem com o MATLAB. Projetos só com frequências positivas e coeficientes complexos (simetria `'none'`) não têm solução única, então os coeficientes podem diferir dos do MATLAB. Em projetos com coeficientes complexos, o MATLAB para com tolerância de ondulação de cerca de 1e-6, então seus coeficientes podem diferir dos do MatLivre em 1e-6 a 1e-4."
+      }
+    },
+    "designfilt": {
+      "summary": {
+        "en": "Designs a digital filter from a response type and name-value specifications, and returns a digitalFilter object you can apply with filter.",
+        "pt": "Projeta um filtro digital a partir do tipo de resposta e de especificações em pares nome-valor, e devolve um objeto digitalFilter que pode ser aplicado com filter."
+      },
+      "syntax": [
+        {
+          "code": "d = designfilt(resp,Name,Value)",
+          "en": "Designs a filter of type `resp` (for example `'lowpassfir'` or `'lowpassiir'`) from the specifications given as name-value pairs.",
+          "pt": "Projeta um filtro do tipo `resp` (por exemplo `'lowpassfir'` ou `'lowpassiir'`) a partir das especificações dadas em pares nome-valor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "resp",
+          "en": "Response and implementation: `'lowpassfir'`, `'highpassfir'`, `'bandpassfir'`, `'bandstopfir'`, `'lowpassiir'`, `'highpassiir'`, `'bandpassiir'` or `'bandstopiir'`.",
+          "pt": "Resposta e implementação: `'lowpassfir'`, `'highpassfir'`, `'bandpassfir'`, `'bandstopfir'`, `'lowpassiir'`, `'highpassiir'`, `'bandpassiir'` ou `'bandstopiir'`."
+        },
+        {
+          "name": "Name,Value",
+          "en": "Specifications such as `'FilterOrder'`, `'CutoffFrequency'`, `'HalfPowerFrequency'`, `'PassbandFrequency'`, `'StopbandFrequency'`, `'PassbandRipple'`, `'StopbandAttenuation'`, `'SampleRate'` and `'DesignMethod'`. Which sets are valid depends on `resp`; an incomplete or excess set raises an error that lists valid sets.",
+          "pt": "Especificações como `'FilterOrder'`, `'CutoffFrequency'`, `'HalfPowerFrequency'`, `'PassbandFrequency'`, `'StopbandFrequency'`, `'PassbandRipple'`, `'StopbandAttenuation'`, `'SampleRate'` e `'DesignMethod'`. Os conjuntos válidos dependem de `resp`; um conjunto incompleto ou com excesso gera um erro que lista os conjuntos válidos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "A digitalFilter object. `d.Coefficients` holds the numerator for FIR designs and an L-by-6 second-order-section matrix for IIR designs. Its other properties repeat the specifications.",
+          "pt": "Um objeto digitalFilter. `d.Coefficients` guarda o numerador nos projetos FIR e uma matriz L por 6 de seções de segunda ordem nos projetos IIR. As demais propriedades repetem as especificações."
+        }
+      ],
+      "description": {
+        "en": "`designfilt` is a single entry point for the usual filter designs. Instead of choosing between `fir1`, `firpm`, `butter` and the others, you state the response and the specifications, and it picks the method: a window design when you give a cutoff, equiripple when you give passband and stopband edges, and Butterworth, Chebyshev or elliptic for IIR depending on which ripple and attenuation values you set.\n\nFrequencies are normalized (the sampling rate is 2, so 1 is the Nyquist frequency) unless you set `'SampleRate'`. Apply the result with `filter(d,x)`.",
+        "pt": "`designfilt` é uma porta de entrada única para os projetos de filtro mais comuns. Em vez de escolher entre `fir1`, `firpm`, `butter` e as demais, você informa a resposta e as especificações, e a função escolhe o método: janela quando se dá uma frequência de corte, equiripple quando se dão as bordas de passagem e de rejeição, e Butterworth, Chebyshev ou elíptico no caso IIR, conforme os valores de ondulação e atenuação indicados.\n\nAs frequências são normalizadas (a taxa de amostragem vale 2, então 1 é a frequência de Nyquist), a menos que se use `'SampleRate'`. Aplique o resultado com `filter(d,x)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "FIR lowpass by the window method",
+            "pt": "FIR passa-baixas pelo método da janela"
+          },
+          "code": "d = designfilt('lowpassfir','FilterOrder',20,'CutoffFrequency',0.3,'DesignMethod','window');\ndisp(size(d.Coefficients))\ndisp(round(d.Coefficients(9:13)*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "IIR Butterworth lowpass applied to an impulse",
+            "pt": "IIR passa-baixas Butterworth aplicado a um impulso"
+          },
+          "code": "d = designfilt('lowpassiir','FilterOrder',4,'HalfPowerFrequency',0.3);\ndisp(size(d.Coefficients))\ny = filter(d,[1 zeros(1,5)]);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fir1",
+        "firpm",
+        "butter",
+        "filter",
+        "freqz"
+      ],
+      "notes": {
+        "en": "Not implemented, and they raise an error: the responses `'differentiatorfir'`, `'hilbertfir'`, `'arbmagfir'`, `'notchiir'` and `'peakiir'`, FIR designs with `'HalfPowerFrequency'` (maxflat), the Kaiser-window minimum-order design, and editing an existing digitalFilter object. For IIR filters the transfer function agrees with MATLAB, but the way the total gain is split among the numerators of the sections in `d.Coefficients` differs.",
+        "pt": "Não implementados, e geram erro: as respostas `'differentiatorfir'`, `'hilbertfir'`, `'arbmagfir'`, `'notchiir'` e `'peakiir'`, os projetos FIR com `'HalfPowerFrequency'` (maxflat), o projeto de ordem mínima com janela de Kaiser e a edição de um objeto digitalFilter existente. Nos filtros IIR, a função de transferência coincide com a do MATLAB, mas a forma de distribuir o ganho total entre os numeradores das seções em `d.Coefficients` é diferente."
+      }
+    },
+    "fir1": {
+      "summary": {
+        "en": "Designs a linear-phase FIR filter by the window method: lowpass, highpass, bandpass, bandstop or multiband.",
+        "pt": "Projeta um filtro FIR de fase linear pelo método da janela: passa-baixas, passa-altas, passa-banda, rejeita-banda ou multibanda."
+      },
+      "syntax": [
+        {
+          "code": "b = fir1(n,Wn)",
+          "en": "Lowpass for one cutoff, bandpass for two, with a Hamming window.",
+          "pt": "Passa-baixas com uma frequência de corte, passa-banda com duas, com janela de Hamming."
+        },
+        {
+          "code": "b = fir1(n,Wn,ftype)",
+          "en": "Selects `'low'`, `'high'`, `'bandpass'`, `'stop'`, or `'DC-0'`, `'DC-1'` for multiband.",
+          "pt": "Seleciona `'low'`, `'high'`, `'bandpass'`, `'stop'`, ou `'DC-0'`, `'DC-1'` para multibanda."
+        },
+        {
+          "code": "b = fir1(n,Wn,ftype,window)",
+          "en": "Uses a window vector of length `n+1`.",
+          "pt": "Usa um vetor de janela de comprimento `n+1`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "Wn",
+          "en": "Cutoff frequency, or a vector of edges, normalized so that 1 is half the sampling rate. The cutoff is the point where the gain is about 0.5 (-6 dB).",
+          "pt": "Frequência de corte, ou vetor de bordas, normalizada de modo que 1 é a metade da taxa de amostragem. O corte é o ponto onde o ganho é cerca de 0,5 (-6 dB)."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type, as text.",
+          "pt": "Tipo do filtro, como texto."
+        },
+        {
+          "name": "window",
+          "en": "Window vector of length `n+1`. The default is a Hamming window.",
+          "pt": "Vetor de janela de comprimento `n+1`. O padrão é a janela de Hamming."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients, scaled so the gain is 1 at the center of the first passband.",
+          "pt": "Vetor linha com `n+1` coeficientes, escalados para que o ganho seja 1 no centro da primeira banda de passagem."
+        }
+      ],
+      "description": {
+        "en": "`fir1` multiplies the ideal impulse response of the chosen filter by a window, which trades transition width against ripple. It is the quickest way to get a usable linear-phase filter when you know only the cutoff and the order.\n\nThe coefficients are symmetric, so the delay is `n/2` samples. A highpass or bandstop filter needs an even order, because an odd order would force a zero at the Nyquist frequency.",
+        "pt": "`fir1` multiplica a resposta ao impulso ideal do filtro escolhido por uma janela, o que troca largura de transição por ondulação. É o jeito mais rápido de obter um filtro de fase linear útil quando se conhecem apenas o corte e a ordem.\n\nOs coeficientes são simétricos, então o atraso é de `n/2` amostras. Um filtro passa-altas ou rejeita-banda precisa de ordem par, porque uma ordem ímpar forçaria um zero na frequência de Nyquist."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass and highpass filters of order 10",
+            "pt": "Filtros passa-baixas e passa-altas de ordem 10"
+          },
+          "code": "b = fir1(10,0.4);\ndisp(round(b*10000)/10000)\nbh = fir1(10,0.4,'high');\ndisp(round(bh*10000)/10000)\nh = freqz(b,1,[0 pi]);\ndisp(round(abs(h)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fir2",
+        "firls",
+        "firpm",
+        "kaiserord",
+        "designfilt"
+      ]
+    },
+    "fir2": {
+      "summary": {
+        "en": "Designs a linear-phase FIR filter with an arbitrary piecewise-linear magnitude response, by frequency sampling and a window.",
+        "pt": "Projeta um filtro FIR de fase linear com resposta em módulo qualquer, linear por partes, por amostragem em frequência e janela."
+      },
+      "syntax": [
+        {
+          "code": "b = fir2(n,f,m)",
+          "en": "Order `n` filter whose gain follows the points `(f,m)`.",
+          "pt": "Filtro de ordem `n` cujo ganho segue os pontos `(f,m)`."
+        },
+        {
+          "code": "b = fir2(n,f,m,npt)",
+          "en": "Sets the number of points `npt` of the frequency grid.",
+          "pt": "Define o número de pontos `npt` da grade de frequência."
+        },
+        {
+          "code": "b = fir2(n,f,m,npt,lap)",
+          "en": "Also sets the size `lap` of the region used around repeated frequencies.",
+          "pt": "Define também o tamanho `lap` da região usada em torno de frequências repetidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "f",
+          "en": "Frequency points, increasing, from 0 to 1 (1 is half the sampling rate). A frequency may be repeated to make a jump.",
+          "pt": "Pontos de frequência, crescentes, de 0 a 1 (1 é metade da taxa de amostragem). Uma frequência pode ser repetida para criar um salto."
+        },
+        {
+          "name": "m",
+          "en": "Desired gain at each point of `f`.",
+          "pt": "Ganho desejado em cada ponto de `f`."
+        },
+        {
+          "name": "npt",
+          "en": "Number of points of the interpolation grid.",
+          "pt": "Número de pontos da grade de interpolação."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients.",
+          "pt": "Vetor linha com `n+1` coeficientes."
+        }
+      ],
+      "description": {
+        "en": "`fir2` interpolates the desired magnitude on a dense frequency grid, takes the inverse transform and applies a window. Unlike `fir1`, the target can have any shape, so you can build several bands with different gains or a smooth slope.\n\nThe result has linear phase. A sharp edge in `m` is smoothed by the window, so the transition is never as steep as the specification.",
+        "pt": "`fir2` interpola o módulo desejado em uma grade densa de frequências, calcula a transformada inversa e aplica uma janela. Ao contrário de `fir1`, o alvo pode ter qualquer forma, então dá para criar várias bandas com ganhos diferentes ou uma rampa suave.\n\nO resultado tem fase linear. Uma borda abrupta em `m` é suavizada pela janela, então a transição nunca é tão íngreme quanto a especificação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass with a gradual transition",
+            "pt": "Passa-baixas com transição gradual"
+          },
+          "code": "b = fir2(20,[0 0.3 0.5 1],[1 1 0 0]);\ndisp(round(b*10000)/10000)\nh = freqz(b,1,[0.1 0.9]*pi);\ndisp(round(abs(h)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fir1",
+        "firls",
+        "firpm",
+        "freqz"
+      ],
+      "notes": {
+        "en": "Some designs with a repeated frequency (a jump) do not match MATLAB, for example `fir2(40,[0 0.3 0.3 1],[1 1 0 0],256,1)`: the way the transition region is placed around the repeated frequency is not reproduced for every combination of `lap` and neighbouring ramps.",
+        "pt": "Alguns projetos com frequência repetida (um salto) não coincidem com o MATLAB, por exemplo `fir2(40,[0 0.3 0.3 1],[1 1 0 0],256,1)`: a posição da região de transição em torno da frequência repetida não é reproduzida para todas as combinações de `lap` e rampas vizinhas."
+      }
+    },
+    "fircls": {
+      "summary": {
+        "en": "Designs a multiband linear-phase FIR filter by constrained least squares, with an upper and a lower bound on the response in each band.",
+        "pt": "Projeta um filtro FIR multibanda de fase linear por mínimos quadrados com restrições, com um limite superior e um inferior para a resposta em cada banda."
+      },
+      "syntax": [
+        {
+          "code": "b = fircls(n,f,amp,up,lo)",
+          "en": "Order `n` filter whose gain stays between `lo` and `up` in each band while the squared error is minimized.",
+          "pt": "Filtro de ordem `n` cujo ganho fica entre `lo` e `up` em cada banda, enquanto o erro quadrático é minimizado."
+        },
+        {
+          "code": "b = fircls(n,f,amp,up,lo,'trace')",
+          "en": "Also prints progress text while it iterates.",
+          "pt": "Também imprime texto de progresso durante as iterações."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "f",
+          "en": "Band edges from 0 to 1 (1 is half the sampling rate), starting at 0 and ending at 1.",
+          "pt": "Bordas das bandas de 0 a 1 (1 é metade da taxa de amostragem), começando em 0 e terminando em 1."
+        },
+        {
+          "name": "amp",
+          "en": "Desired constant amplitude in each band, one value per band.",
+          "pt": "Amplitude constante desejada em cada banda, um valor por banda."
+        },
+        {
+          "name": "up",
+          "en": "Upper bound of the response in each band.",
+          "pt": "Limite superior da resposta em cada banda."
+        },
+        {
+          "name": "lo",
+          "en": "Lower bound of the response in each band.",
+          "pt": "Limite inferior da resposta em cada banda."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients.",
+          "pt": "Vetor linha com `n+1` coeficientes."
+        }
+      ],
+      "description": {
+        "en": "Where `firls` minimizes the error and lets the ripple fall where it may, `fircls` lets you set the largest response allowed in each band as a hard bound and minimizes the error inside it. This suits specifications written as a tolerance, for example 2 percent in the passband and 1 percent in the stopband.\n\nThe bounds must be reachable with the chosen filter length. If they are too tight for the order, the design cannot satisfy them.",
+        "pt": "Enquanto `firls` minimiza o erro e deixa a ondulação cair onde puder, `fircls` permite fixar como limite rígido a maior resposta aceita em cada banda e minimiza o erro dentro dele. Isso serve para especificações escritas como tolerância, por exemplo 2 por cento na banda de passagem e 1 por cento na de rejeição.\n\nOs limites precisam ser alcançáveis com o comprimento de filtro escolhido. Se forem apertados demais para a ordem, o projeto não consegue satisfazê-los."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass with bounded ripple",
+            "pt": "Passa-baixas com ondulação limitada"
+          },
+          "code": "b = fircls(30,[0 0.5 1],[1 0],[1.02 0.01],[0.98 -0.01]);\n[h,w] = freqz(b,1,512);\npb = abs(h(w<0.4*pi));\nsb = abs(h(w>0.6*pi));\nfprintf('passband %.3f to %.3f, stopband max %.3f\\n', min(pb), max(pb), max(sb));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fircls1",
+        "firls",
+        "firpm",
+        "fir2"
+      ],
+      "notes": {
+        "en": "MatLivre returns the exact constrained optimum, while MATLAB stops once the bounds are violated by less than about 5e-9, so the coefficients differ from MATLAB's by 1e-7 to 2e-6. Lower bounds of exactly zero (a minimum-phase design) are not implemented and raise an error.",
+        "pt": "O MatLivre devolve o ótimo exato com restrições, enquanto o MATLAB para quando os limites são violados por menos de cerca de 5e-9, então os coeficientes diferem dos do MATLAB em 1e-7 a 2e-6. Limites inferiores iguais a zero (projeto de fase mínima) não estão implementados e geram erro."
+      }
+    },
+    "fircls1": {
+      "summary": {
+        "en": "Designs a lowpass or highpass linear-phase FIR filter by constrained least squares, with the passband and stopband ripples as bounds.",
+        "pt": "Projeta um filtro FIR passa-baixas ou passa-altas de fase linear por mínimos quadrados, com limites para as ondulações de passagem e de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "b = fircls1(n,wo,dp,ds)",
+          "en": "Lowpass of order `n`, cutoff `wo`, passband ripple `dp` and stopband ripple `ds`.",
+          "pt": "Passa-baixas de ordem `n`, corte `wo`, ondulação de passagem `dp` e ondulação de rejeição `ds`."
+        },
+        {
+          "code": "b = fircls1(n,wo,dp,ds,'high')",
+          "en": "Designs a highpass filter instead.",
+          "pt": "Projeta um filtro passa-altas."
+        },
+        {
+          "code": "b = fircls1(n,wo,dp,ds,'trace')",
+          "en": "Also prints progress text.",
+          "pt": "Também imprime texto de progresso."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "wo",
+          "en": "Cutoff frequency from 0 to 1 (1 is half the sampling rate), between the passband and the stopband.",
+          "pt": "Frequência de corte de 0 a 1 (1 é metade da taxa de amostragem), entre a banda de passagem e a de rejeição."
+        },
+        {
+          "name": "dp",
+          "en": "Largest allowed deviation of the gain from 1 in the passband.",
+          "pt": "Maior desvio permitido do ganho em relação a 1 na banda de passagem."
+        },
+        {
+          "name": "ds",
+          "en": "Largest allowed gain in the stopband.",
+          "pt": "Maior ganho permitido na banda de rejeição."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients.",
+          "pt": "Vetor linha com `n+1` coeficientes."
+        }
+      ],
+      "description": {
+        "en": "`fircls1` is the two-band special case of `fircls`: it minimizes the squared error of a lowpass (or highpass) filter subject to ripple bounds that you set directly. The optimization places the transition around `wo`; its width is not fixed in advance.\n\nUse it when what you know is the allowed ripple rather than the transition width.",
+        "pt": "`fircls1` é o caso particular de duas bandas de `fircls`: minimiza o erro quadrático de um filtro passa-baixas (ou passa-altas) sujeito a limites de ondulação que você define diretamente. A otimização posiciona a transição em torno de `wo`; sua largura não é fixada de antemão.\n\nUse-a quando o que você conhece é a ondulação permitida, e não a largura da transição."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass with 2% and 1% ripple bounds",
+            "pt": "Passa-baixas com limites de ondulação de 2% e 1%"
+          },
+          "code": "b = fircls1(30,0.4,0.02,0.01);\n[h,w] = freqz(b,1,512);\npb = abs(h(w<0.3*pi));\nsb = abs(h(w>0.5*pi));\nfprintf('%d coefficients\\n', numel(b));\nfprintf('passband %.3f to %.3f, stopband max %.3f\\n', min(pb), max(pb), max(sb));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fircls",
+        "firls",
+        "firpm",
+        "fir1"
+      ],
+      "notes": {
+        "en": "MatLivre returns the exact constrained optimum, while MATLAB stops once the bounds are violated by less than about 5e-9, so the coefficients differ from MATLAB's by 1e-7 to 2e-6. The extra constraint edge and the weighted design (`wp`, `ws`, `k`) are not implemented and raise an error.",
+        "pt": "O MatLivre devolve o ótimo exato com restrições, enquanto o MATLAB para quando os limites são violados por menos de cerca de 5e-9, então os coeficientes diferem dos do MATLAB em 1e-7 a 2e-6. A borda de restrição extra e o projeto ponderado (`wp`, `ws`, `k`) não estão implementados e geram erro."
+      }
+    },
+    "firls": {
+      "summary": {
+        "en": "Designs a linear-phase FIR filter by least squares: it minimizes the squared error between the filter and the desired response over the bands.",
+        "pt": "Projeta um filtro FIR de fase linear por mínimos quadrados: minimiza o erro quadrático entre o filtro e a resposta desejada nas bandas."
+      },
+      "syntax": [
+        {
+          "code": "b = firls(n,f,a)",
+          "en": "Order `n` filter that fits amplitude `a` at the band edges `f`.",
+          "pt": "Filtro de ordem `n` que ajusta a amplitude `a` nas bordas de banda `f`."
+        },
+        {
+          "code": "b = firls(n,f,a,w)",
+          "en": "Adds a weight `w` per band.",
+          "pt": "Acrescenta um peso `w` por banda."
+        },
+        {
+          "code": "b = firls(n,f,a,'hilbert')",
+          "en": "Designs a Hilbert transformer (or `'differentiator'`).",
+          "pt": "Projeta um transformador de Hilbert (ou `'differentiator'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "f",
+          "en": "Band edges in pairs, increasing, from 0 to 1 (1 is half the sampling rate). The gaps between bands are not constrained.",
+          "pt": "Bordas de banda em pares, crescentes, de 0 a 1 (1 é metade da taxa de amostragem). Os intervalos entre bandas não têm restrição."
+        },
+        {
+          "name": "a",
+          "en": "Desired amplitude at each band edge. The target is a straight line between the two edges of a band.",
+          "pt": "Amplitude desejada em cada borda de banda. O alvo é uma reta entre as duas bordas de uma banda."
+        },
+        {
+          "name": "w",
+          "en": "Optional weight per band. A larger weight lowers the error in that band.",
+          "pt": "Peso opcional por banda. Um peso maior reduz o erro nessa banda."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients.",
+          "pt": "Vetor linha com `n+1` coeficientes."
+        }
+      ],
+      "description": {
+        "en": "A least-squares fit keeps the total energy of the error small. It gives a smooth fit with a lower average error than `firpm`, but a larger worst-case ripple, mostly near the band edges. Leave a gap between the passband and stopband edges for a transition band, which improves the fit a great deal.\n\nWith `'hilbert'` or `'differentiator'` the filter has odd symmetry, for the 90-degree phase shift.",
+        "pt": "O ajuste por mínimos quadrados mantém pequena a energia total do erro. Ele dá um ajuste suave, com erro médio menor que o de `firpm`, mas com ondulação máxima maior, principalmente perto das bordas das bandas. Deixe um intervalo entre as bordas das bandas de passagem e de rejeição para formar uma banda de transição, o que melhora bastante o ajuste.\n\nCom `'hilbert'` ou `'differentiator'` o filtro tem simetria ímpar, para o deslocamento de fase de 90 graus."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass and a Hilbert transformer",
+            "pt": "Passa-baixas e transformador de Hilbert"
+          },
+          "code": "b = firls(20,[0 0.3 0.4 1],[1 1 0 0]);\ndisp(round(b*10000)/10000)\nbh = firls(15,[0 1],[0 1],'hilbert');\ndisp(round(bh*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firpm",
+        "fir1",
+        "fir2",
+        "fircls"
+      ],
+      "notes": {
+        "en": "Fits that are nearly singular can differ from MATLAB: bands that leave most of the response unconstrained (for example `firls(20,[0 0.5],[0 1])`) and differentiator fits with a band that starts at zero with nonzero amplitude or no stopband (for example `firls(30,[0 0.5],[0 1],'differentiator')`). The solution then depends on rounding.",
+        "pt": "Ajustes quase singulares podem diferir do MATLAB: bandas que deixam quase toda a resposta sem restrição (por exemplo `firls(20,[0 0.5],[0 1])`) e ajustes de diferenciador com uma banda que começa em zero com amplitude diferente de zero ou sem banda de rejeição (por exemplo `firls(30,[0 0.5],[0 1],'differentiator')`). A solução passa a depender dos arredondamentos."
+      }
+    },
+    "firpm": {
+      "summary": {
+        "en": "Designs an equiripple linear-phase FIR filter with the Parks-McClellan algorithm, minimizing the largest weighted error.",
+        "pt": "Projeta um filtro FIR equiripple de fase linear com o algoritmo de Parks-McClellan, minimizando o maior erro ponderado."
+      },
+      "syntax": [
+        {
+          "code": "b = firpm(n,f,a)",
+          "en": "Order `n` filter that fits amplitude `a` at the band edges `f`.",
+          "pt": "Filtro de ordem `n` que ajusta a amplitude `a` nas bordas de banda `f`."
+        },
+        {
+          "code": "b = firpm(n,f,a,w)",
+          "en": "Adds a weight `w` per band.",
+          "pt": "Acrescenta um peso `w` por banda."
+        },
+        {
+          "code": "[b,err] = firpm(___)",
+          "en": "Also returns the peak weighted error.",
+          "pt": "Retorna também o erro ponderado máximo."
+        },
+        {
+          "code": "b = firpm(n,f,a,'hilbert')",
+          "en": "Designs a Hilbert transformer (or `'differentiator'`).",
+          "pt": "Projeta um transformador de Hilbert (ou `'differentiator'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order. The result has `n+1` coefficients.",
+          "pt": "Ordem do filtro. O resultado tem `n+1` coeficientes."
+        },
+        {
+          "name": "f",
+          "en": "Band edges in pairs, increasing, from 0 to 1 (1 is half the sampling rate).",
+          "pt": "Bordas de banda em pares, crescentes, de 0 a 1 (1 é metade da taxa de amostragem)."
+        },
+        {
+          "name": "a",
+          "en": "Desired amplitude at each band edge.",
+          "pt": "Amplitude desejada em cada borda de banda."
+        },
+        {
+          "name": "w",
+          "en": "Optional weight per band. A larger weight gives a smaller ripple in that band.",
+          "pt": "Peso opcional por banda. Um peso maior dá menor ondulação nessa banda."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `n+1` coefficients.",
+          "pt": "Vetor linha com `n+1` coeficientes."
+        },
+        {
+          "name": "err",
+          "en": "Peak weighted error of the design (the height of the equal ripples).",
+          "pt": "Erro ponderado máximo do projeto (a altura das ondulações iguais)."
+        }
+      ],
+      "description": {
+        "en": "`firpm` gives the filter of a given order with the smallest possible worst-case error, spread evenly as ripples of equal height in every band. For a fixed order it is the best choice when the limit is the peak deviation. To estimate the order from a specification, use `firpmord`.\n\nThe weights set how the error is shared: with weights `[1 5]` the second band gets a fifth of the error of the first.",
+        "pt": "`firpm` produz o filtro de uma dada ordem com o menor erro de pior caso possível, distribuído como ondulações de mesma altura em todas as bandas. Para uma ordem fixa, é a melhor escolha quando o limite é o desvio máximo. Para estimar a ordem a partir de uma especificação, use `firpmord`.\n\nOs pesos definem como o erro é repartido: com pesos `[1 5]`, a segunda banda recebe um quinto do erro da primeira."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass, then with a heavier stopband weight",
+            "pt": "Passa-baixas, depois com peso maior na banda de rejeição"
+          },
+          "code": "b = firpm(20,[0 0.3 0.4 1],[1 1 0 0]);\ndisp(round(b*10000)/10000)\n[b,err] = firpm(20,[0 0.3 0.4 1],[1 1 0 0],[1 5]);\nfprintf('%.4f\\n', err)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firpmord",
+        "firls",
+        "cfirpm",
+        "fir1"
+      ],
+      "notes": {
+        "en": "Fits with no stopband, such as `firpm(20,[0 0.5],[0 1])`, are nearly singular: the coefficients (up to 1400) depend on where the exchange stops, and they differ from MATLAB's in about the sixth digit.",
+        "pt": "Ajustes sem banda de rejeição, como `firpm(20,[0 0.5],[0 1])`, são quase singulares: os coeficientes (de até 1400) dependem de onde a troca termina, e diferem dos do MATLAB por volta do sexto dígito."
+      }
+    },
+    "firpmord": {
+      "summary": {
+        "en": "Estimates the order, band edges, amplitudes and weights to pass to firpm for a given set of tolerances.",
+        "pt": "Estima a ordem, as bordas de banda, as amplitudes e os pesos a passar para firpm a partir de um conjunto de tolerâncias."
+      },
+      "syntax": [
+        {
+          "code": "[n,fo,ao,w] = firpmord(f,a,dev)",
+          "en": "Estimates the parameters for normalized frequencies.",
+          "pt": "Estima os parâmetros para frequências normalizadas."
+        },
+        {
+          "code": "[n,fo,ao,w] = firpmord(f,a,dev,fs)",
+          "en": "Takes the frequencies in hertz for sampling rate `fs`.",
+          "pt": "Recebe as frequências em hertz para a taxa de amostragem `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "f",
+          "en": "Band edges: the adjacent edges of each pair of neighbouring bands, without 0 and the Nyquist frequency.",
+          "pt": "Bordas de banda: as bordas vizinhas de cada par de bandas adjacentes, sem incluir 0 e a frequência de Nyquist."
+        },
+        {
+          "name": "a",
+          "en": "Desired amplitude in each band, one value per band (for example `[1 0]` for a lowpass).",
+          "pt": "Amplitude desejada em cada banda, um valor por banda (por exemplo `[1 0]` para um passa-baixas)."
+        },
+        {
+          "name": "dev",
+          "en": "Largest allowed deviation in each band, as a linear value.",
+          "pt": "Maior desvio permitido em cada banda, como valor linear."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Default 2, so that `f` is normalized.",
+          "pt": "Taxa de amostragem. Padrão: 2, de modo que `f` fica normalizada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Estimated filter order.",
+          "pt": "Ordem estimada do filtro."
+        },
+        {
+          "name": "fo",
+          "en": "Normalized band edges, including 0 and 1, to pass to `firpm`.",
+          "pt": "Bordas de banda normalizadas, incluindo 0 e 1, para passar a `firpm`."
+        },
+        {
+          "name": "ao",
+          "en": "Amplitudes at the edges `fo`, to pass to `firpm`.",
+          "pt": "Amplitudes nas bordas `fo`, para passar a `firpm`."
+        },
+        {
+          "name": "w",
+          "en": "Weight of each band, to pass to `firpm`.",
+          "pt": "Peso de cada banda, para passar a `firpm`."
+        }
+      ],
+      "description": {
+        "en": "`firpmord` turns a specification (edges and tolerances) into the arguments of `firpm`. The order is an estimate, so check the response of the filter you get: if it misses the tolerance, increase `n` by one or two and design again.\n\nThe returned weights are inversely proportional to the tolerances, so a tighter tolerance gets a larger weight.",
+        "pt": "`firpmord` transforma uma especificação (bordas e tolerâncias) nos argumentos de `firpm`. A ordem é uma estimativa, então verifique a resposta do filtro obtido: se ele não cumprir a tolerância, aumente `n` em um ou dois e projete de novo.\n\nOs pesos devolvidos são inversamente proporcionais às tolerâncias, então uma tolerância menor recebe um peso maior."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass for 8 kHz sampling",
+            "pt": "Passa-baixas para taxa de 8 kHz"
+          },
+          "code": "[n,fo,ao,w] = firpmord([1500 2000],[1 0],[0.01 0.001],8000);\nfprintf('order %d\\n', n);\ndisp(fo.')\ndisp(ao.')\ndisp(round(w.'*1000)/1000)\nb = firpm(n,fo,ao,w);\nfprintf('%d coefficients\\n', numel(b));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "firpm",
+        "kaiserord",
+        "cfirpm",
+        "firls"
+      ]
+    },
+    "gaussdesign": {
+      "summary": {
+        "en": "Designs a Gaussian FIR pulse-shaping filter, as used in GMSK and GFSK modulation.",
+        "pt": "Projeta um filtro FIR gaussiano de formatação de pulso, como o usado em modulação GMSK e GFSK."
+      },
+      "syntax": [
+        {
+          "code": "h = gaussdesign(bt,span,sps)",
+          "en": "Gaussian filter with bandwidth-time product `bt`, covering `span` symbols, with `sps` samples per symbol.",
+          "pt": "Filtro gaussiano com produto banda-tempo `bt`, que cobre `span` símbolos, com `sps` amostras por símbolo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "bt",
+          "en": "Bandwidth-time product (the 3-dB bandwidth times the symbol period). A smaller value gives a narrower filter in frequency and a wider pulse in time.",
+          "pt": "Produto banda-tempo (a largura de banda de 3 dB vezes o período do símbolo). Um valor menor dá um filtro mais estreito em frequência e um pulso mais largo no tempo."
+        },
+        {
+          "name": "span",
+          "en": "Number of symbol periods the filter covers.",
+          "pt": "Número de períodos de símbolo cobertos pelo filtro."
+        },
+        {
+          "name": "sps",
+          "en": "Samples per symbol.",
+          "pt": "Amostras por símbolo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Row vector of `span*sps+1` symmetric coefficients with unit sum (unit gain at 0 Hz).",
+          "pt": "Vetor linha com `span*sps+1` coeficientes simétricos, de soma 1 (ganho unitário em 0 Hz)."
+        }
+      ],
+      "description": {
+        "en": "The Gaussian pulse has no overshoot and a smooth spectrum, which makes it a common choice for narrowband digital modulation, at the cost of intersymbol interference when `bt` is small. To use it, upsample the symbol stream to `sps` samples per symbol and filter it with `h`.",
+        "pt": "O pulso gaussiano não tem overshoot e tem espectro suave, o que o torna uma escolha comum em modulação digital de banda estreita, ao custo de interferência entre símbolos quando `bt` é pequeno. Para usá-lo, superamostre o fluxo de símbolos para `sps` amostras por símbolo e filtre-o com `h`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Gaussian filter with BT = 0.3",
+            "pt": "Filtro gaussiano com BT = 0,3"
+          },
+          "code": "h = gaussdesign(0.3,3,2);\ndisp(length(h))\ndisp(round(h*10000)/10000)\nfprintf('%.4f\\n', sum(h))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rcosdesign",
+        "fir1",
+        "upfirdn",
+        "filter"
+      ]
+    },
+    "intfilt": {
+      "summary": {
+        "en": "Designs a bandlimited interpolation FIR filter for raising the sampling rate by an integer factor.",
+        "pt": "Projeta um filtro FIR de interpolação de banda limitada para aumentar a taxa de amostragem por um fator inteiro."
+      },
+      "syntax": [
+        {
+          "code": "b = intfilt(l,n,alpha)",
+          "en": "Interpolation filter for factor `l` that uses `n` original samples on each side, for signals that occupy the fraction `alpha` of the band.",
+          "pt": "Filtro de interpolação para o fator `l` que usa `n` amostras originais de cada lado, para sinais que ocupam a fração `alpha` da banda."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "l",
+          "en": "Interpolation factor, a positive integer.",
+          "pt": "Fator de interpolação, inteiro positivo."
+        },
+        {
+          "name": "n",
+          "en": "Number of original samples used on each side of an interpolated point, a positive integer.",
+          "pt": "Número de amostras originais usadas de cada lado de um ponto interpolado, inteiro positivo."
+        },
+        {
+          "name": "alpha",
+          "en": "Fraction of the Nyquist band occupied by the signal, between 0 and 1.",
+          "pt": "Fração da banda de Nyquist ocupada pelo sinal, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Row vector of `2*l*n-1` coefficients. Apply it to the signal after inserting `l-1` zeros between samples.",
+          "pt": "Vetor linha com `2*l*n-1` coeficientes. Aplique-o ao sinal depois de inserir `l-1` zeros entre as amostras."
+        }
+      ],
+      "description": {
+        "en": "The filter leaves the original samples unchanged and computes the new ones in between from their neighbours, so it is an interpolator and not a general lowpass. Its input is the signal with `l-1` zeros inserted between samples, for example with `upsample`. The filter delay is `l*n-1` samples.\n\nA smaller `alpha` assumes a more strongly bandlimited signal, which allows a better estimate of the points in between.",
+        "pt": "O filtro mantém inalteradas as amostras originais e calcula as novas, entre elas, a partir das vizinhas, então é um interpolador e não um passa-baixas genérico. Sua entrada é o sinal com `l-1` zeros inseridos entre as amostras, por exemplo com `upsample`. O atraso do filtro é de `l*n-1` amostras.\n\nUm `alpha` menor supõe um sinal de banda mais limitada, o que permite estimar melhor os pontos intermediários."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Interpolate a sine by 2",
+            "pt": "Interpolar uma senoide por 2"
+          },
+          "code": "b = intfilt(2,3,0.9);\ndisp(round(b*10000)/10000)\nx = sin(2*pi*0.05*(0:19));\nxu = upsample(x,2);\ny = filter(b,1,[xu zeros(1,5)]);\ny = y(6:end);\nt = sin(2*pi*0.05*(0:0.5:19.5));\nk = 11:30;\nfprintf('error at the new points: %.4f\\n', max(abs(y(k)-t(k))))\nfprintf('error at the original points: %.4f\\n', max(abs(y(1:2:end)-t(1:2:end))))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "interp",
+        "upsample",
+        "resample",
+        "decimate"
+      ],
+      "notes": {
+        "en": "The `'lagrange'` form is not supported (`intfilt(2,3,'lagrange')` raises an error); only the numeric `alpha` form is.",
+        "pt": "A forma com `'lagrange'` não é suportada (`intfilt(2,3,'lagrange')` gera erro); só a forma com `alpha` numérico é."
+      }
+    },
+    "kaiserord": {
+      "summary": {
+        "en": "Estimates the order and Kaiser-window parameter needed for an FIR filter that meets given band edges and ripples.",
+        "pt": "Estima a ordem e o parâmetro da janela de Kaiser necessários para um filtro FIR que cumpra bordas de banda e ondulações dadas."
+      },
+      "syntax": [
+        {
+          "code": "[n,Wn,beta,ftype] = kaiserord(f,a,dev)",
+          "en": "Estimates the parameters for normalized frequencies.",
+          "pt": "Estima os parâmetros para frequências normalizadas."
+        },
+        {
+          "code": "[n,Wn,beta,ftype] = kaiserord(f,a,dev,fs)",
+          "en": "Takes the frequencies in hertz for sampling rate `fs`.",
+          "pt": "Recebe as frequências em hertz para a taxa de amostragem `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "f",
+          "en": "Band edges: the adjacent edges of each pair of neighbouring bands, without 0 and the Nyquist frequency.",
+          "pt": "Bordas de banda: as bordas vizinhas de cada par de bandas adjacentes, sem incluir 0 e a frequência de Nyquist."
+        },
+        {
+          "name": "a",
+          "en": "Desired amplitude in each band (for example `[1 0]` for a lowpass).",
+          "pt": "Amplitude desejada em cada banda (por exemplo `[1 0]` para um passa-baixas)."
+        },
+        {
+          "name": "dev",
+          "en": "Largest allowed deviation in each band, as a linear value. The smallest one sets the design.",
+          "pt": "Maior desvio permitido em cada banda, como valor linear. O menor deles define o projeto."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Default 2, so that `f` is normalized.",
+          "pt": "Taxa de amostragem. Padrão: 2, de modo que `f` fica normalizada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Estimated filter order.",
+          "pt": "Ordem estimada do filtro."
+        },
+        {
+          "name": "Wn",
+          "en": "Cutoff frequency or frequencies, normalized, to pass to `fir1`.",
+          "pt": "Frequência(s) de corte, normalizada(s), para passar a `fir1`."
+        },
+        {
+          "name": "beta",
+          "en": "Shape parameter of the Kaiser window (`kaiser(n+1,beta)`).",
+          "pt": "Parâmetro de forma da janela de Kaiser (`kaiser(n+1,beta)`)."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type as text (such as `'low'`), to pass to `fir1`.",
+          "pt": "Tipo do filtro, como texto (por exemplo `'low'`), para passar a `fir1`."
+        }
+      ],
+      "description": {
+        "en": "`kaiserord` gives the inputs for a window-method design with `fir1`: the order, the cutoffs, the window parameter and the filter type. The order is an estimate, so check the response of the result and raise `n` a little if the tolerance is missed.\n\nThe same deviation must hold in all bands, so the smallest value in `dev` is used for the whole design.",
+        "pt": "`kaiserord` fornece as entradas para um projeto pelo método da janela com `fir1`: a ordem, os cortes, o parâmetro da janela e o tipo de filtro. A ordem é uma estimativa, então verifique a resposta do resultado e aumente `n` um pouco se a tolerância não for cumprida.\n\nO mesmo desvio vale em todas as bandas, então o menor valor de `dev` é usado em todo o projeto."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass for 8 kHz sampling",
+            "pt": "Passa-baixas para taxa de 8 kHz"
+          },
+          "code": "[n,Wn,beta,ftype] = kaiserord([1500 1600],[1 0],[0.01 0.01],8000);\nfprintf('order %d, Wn %.4f, beta %.4f, type %s\\n', n, Wn, beta, ftype);\nb = fir1(n,Wn,ftype,kaiser(n+1,beta),'noscale');\nfprintf('%d coefficients\\n', numel(b));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fir1",
+        "firpmord",
+        "kaiser",
+        "firpm"
+      ]
+    },
+    "maxflat": {
+      "summary": {
+        "en": "Designs a generalized digital Butterworth filter with as flat a response as possible at zero and at the Nyquist frequency.",
+        "pt": "Projeta um filtro Butterworth digital generalizado com resposta o mais plana possível em zero e na frequência de Nyquist."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = maxflat(nb,na,Wn)",
+          "en": "Lowpass with numerator order `nb`, denominator order `na` and half-gain frequency `Wn`.",
+          "pt": "Passa-baixas com numerador de ordem `nb`, denominador de ordem `na` e frequência de meio ganho `Wn`."
+        },
+        {
+          "code": "b = maxflat(n,'sym',Wn)",
+          "en": "Symmetric FIR filter of order `n` (numerator only).",
+          "pt": "Filtro FIR simétrico de ordem `n` (só numerador)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nb",
+          "en": "Order of the numerator.",
+          "pt": "Ordem do numerador."
+        },
+        {
+          "name": "na",
+          "en": "Order of the denominator. With `na = 0` the filter is FIR.",
+          "pt": "Ordem do denominador. Com `na = 0` o filtro é FIR."
+        },
+        {
+          "name": "n",
+          "en": "Order of the symmetric FIR filter, with `'sym'`.",
+          "pt": "Ordem do filtro FIR simétrico, com `'sym'`."
+        },
+        {
+          "name": "Wn",
+          "en": "Frequency, between 0 and 1 (1 is half the sampling rate), where the gain is about 0.707 (-3 dB).",
+          "pt": "Frequência, entre 0 e 1 (1 é metade da taxa de amostragem), onde o ganho é cerca de 0,707 (-3 dB)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients.",
+          "pt": "Coeficientes do numerador."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "description": {
+        "en": "The Butterworth design of `butter` ties the number of zeros to the number of poles. `maxflat` lets you choose them independently, so you can trade a flat passband against the steepness of the transition, or get a purely FIR filter with a maximally flat response.\n\nUse the `[b,a]` form for an IIR design and the `'sym'` form when you need a linear-phase FIR.",
+        "pt": "O projeto Butterworth de `butter` liga o número de zeros ao de polos. `maxflat` permite escolhê-los de forma independente, de modo que é possível trocar planicidade da banda de passagem por inclinação da transição, ou obter um filtro puramente FIR com resposta maximamente plana.\n\nUse a forma `[b,a]` para um projeto IIR e a forma `'sym'` quando precisar de um FIR de fase linear."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "IIR design and its gain at 0 and Wn",
+            "pt": "Projeto IIR e seu ganho em 0 e em Wn"
+          },
+          "code": "[b,a] = maxflat(4,2,0.3);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\nh = freqz(b,a,[0 0.3*pi]);\ndisp(round(abs(h)*1000)/1000)\nbs = maxflat(6,'sym',0.4);\ndisp(round(bs*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "butter",
+        "fir1",
+        "firls",
+        "freqz"
+      ],
+      "notes": {
+        "en": "Order-30 designs are ill-conditioned: the coefficients agree with MATLAB to about 1e-6 relative. The degenerate case `Wn = 0.5` (for example `maxflat(3,2,0.5)`) differs from MATLAB by rounding noise of about 1e-8. The second-order-section outputs are not implemented and raise an error.",
+        "pt": "Projetos de ordem 30 são mal condicionados: os coeficientes concordam com os do MATLAB até cerca de 1e-6 em valor relativo. O caso degenerado `Wn = 0.5` (por exemplo `maxflat(3,2,0.5)`) difere do MATLAB por ruído de arredondamento de cerca de 1e-8. As saídas em seções de segunda ordem não estão implementadas e geram erro."
+      }
+    },
+    "rcosdesign": {
+      "summary": {
+        "en": "Designs a raised-cosine FIR filter, normal or square-root, for pulse shaping in digital communications.",
+        "pt": "Projeta um filtro FIR cosseno levantado, normal ou raiz quadrada, para formatação de pulso em comunicações digitais."
+      },
+      "syntax": [
+        {
+          "code": "h = rcosdesign(beta,span,sps)",
+          "en": "Square-root raised-cosine filter (the default).",
+          "pt": "Filtro cosseno levantado em raiz quadrada (o padrão)."
+        },
+        {
+          "code": "h = rcosdesign(beta,span,sps,shape)",
+          "en": "Chooses `'sqrt'` or `'normal'`.",
+          "pt": "Escolhe `'sqrt'` ou `'normal'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "beta",
+          "en": "Roll-off factor, between 0 and 1. Larger values use more bandwidth and give faster decaying tails.",
+          "pt": "Fator de roll-off, entre 0 e 1. Valores maiores usam mais banda e dão caudas que decaem mais rápido no tempo."
+        },
+        {
+          "name": "span",
+          "en": "Number of symbol periods the filter covers.",
+          "pt": "Número de períodos de símbolo cobertos pelo filtro."
+        },
+        {
+          "name": "sps",
+          "en": "Samples per symbol.",
+          "pt": "Amostras por símbolo."
+        },
+        {
+          "name": "shape",
+          "en": "`'sqrt'` (default) or `'normal'`.",
+          "pt": "`'sqrt'` (padrão) ou `'normal'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Row vector of `span*sps+1` symmetric coefficients. For `'sqrt'` the energy `sum(h.^2)` is 1.",
+          "pt": "Vetor linha com `span*sps+1` coeficientes simétricos. Para `'sqrt'` a energia `sum(h.^2)` vale 1."
+        }
+      ],
+      "description": {
+        "en": "Two square-root raised-cosine filters in a row (one at the transmitter, one at the receiver) give a raised-cosine response with no intersymbol interference at the symbol instants. That is why the square-root shape is the default.\n\nThe filter is truncated to `span` symbols, so a longer `span` gives a response closer to the ideal one.",
+        "pt": "Dois filtros cosseno levantado em raiz quadrada em sequência (um no transmissor, outro no receptor) resultam em uma resposta cosseno levantado sem interferência entre símbolos nos instantes de amostragem. É por isso que a forma em raiz quadrada é o padrão.\n\nO filtro é truncado em `span` símbolos, então um `span` maior dá uma resposta mais próxima da ideal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Square-root raised cosine with roll-off 0.25",
+            "pt": "Cosseno levantado em raiz quadrada com roll-off 0,25"
+          },
+          "code": "h = rcosdesign(0.25,4,3);\ndisp(length(h))\ndisp(round(h*10000)/10000)\nfprintf('%.4f\\n', sum(h.^2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gaussdesign",
+        "fir1",
+        "upfirdn",
+        "filter"
+      ]
+    },
+    "butter": {
+      "summary": {
+        "en": "Designs a Butterworth filter, with a maximally flat passband, as a digital or analog lowpass, highpass, bandpass or bandstop.",
+        "pt": "Projeta um filtro Butterworth, com banda de passagem maximamente plana, digital ou analógico, passa-baixas, passa-altas, passa-banda ou rejeita-banda."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = butter(n,Wn)",
+          "en": "Lowpass of order `n` (bandpass of order `2n` if `Wn` has two elements), as numerator `b` and denominator `a`.",
+          "pt": "Passa-baixas de ordem `n` (passa-banda de ordem `2n` se `Wn` tiver dois elementos), com numerador `b` e denominador `a`."
+        },
+        {
+          "code": "[b,a] = butter(n,Wn,ftype)",
+          "en": "Selects `'low'`, `'high'`, `'bandpass'` or `'stop'`.",
+          "pt": "Seleciona `'low'`, `'high'`, `'bandpass'` ou `'stop'`."
+        },
+        {
+          "code": "[z,p,k] = butter(___)",
+          "en": "Returns zeros, poles and gain.",
+          "pt": "Retorna zeros, polos e ganho."
+        },
+        {
+          "code": "[b,a] = butter(n,Wn,'s')",
+          "en": "Designs an analog filter, with `Wn` in radians per second.",
+          "pt": "Projeta um filtro analógico, com `Wn` em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order.",
+          "pt": "Ordem do filtro."
+        },
+        {
+          "name": "Wn",
+          "en": "Cutoff frequency (-3 dB point). For a digital filter it is normalized, with 1 equal to half the sampling rate. Two elements give the band edges of a bandpass or bandstop filter.",
+          "pt": "Frequência de corte (ponto de -3 dB). Em um filtro digital é normalizada, com 1 igual à metade da taxa de amostragem. Dois elementos dão as bordas de um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type as text.",
+          "pt": "Tipo do filtro, como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b, a",
+          "en": "Numerator and denominator coefficients, as row vectors. Use them with `filter` and `freqz`.",
+          "pt": "Coeficientes do numerador e do denominador, como vetores linha. Use-os com `filter` e `freqz`."
+        },
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the filter.",
+          "pt": "Zeros, polos e ganho do filtro."
+        }
+      ],
+      "description": {
+        "en": "A Butterworth filter has no ripple in the passband or stopband, and the gain falls by 3 dB at the cutoff for any order. A higher order makes the transition steeper. It is the usual first choice when the shape of the passband matters more than the sharpness of the cutoff.\n\nFor high orders the `[b,a]` form can lose accuracy. Prefer the zero-pole-gain form and convert with `zp2sos` for high orders.",
+        "pt": "Um filtro Butterworth não tem ondulação nas bandas de passagem e de rejeição, e o ganho cai 3 dB no corte, qualquer que seja a ordem. Uma ordem maior torna a transição mais íngreme. É a primeira escolha habitual quando o formato da banda de passagem importa mais que a abruptidão do corte.\n\nEm ordens altas a forma `[b,a]` pode perder precisão. Prefira a forma zeros-polos-ganho e converta com `zp2sos` em ordens altas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass and bandstop filters",
+            "pt": "Filtros passa-baixas e rejeita-banda"
+          },
+          "code": "[b,a] = butter(3,0.4);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\n[b,a] = butter(2,[0.2 0.5],'stop');\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Zeros, poles and gain of a highpass filter",
+            "pt": "Zeros, polos e ganho de um passa-altas"
+          },
+          "code": "[z,p,k] = butter(2,0.4,'high');\ndisp(round(z.'*1000)/1000)\ndisp(round(p.'*10000)/10000)\nfprintf('%.4f\\n', k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "buttord",
+        "cheby1",
+        "ellip",
+        "zp2sos",
+        "freqz"
+      ]
+    },
+    "buttord": {
+      "summary": {
+        "en": "Finds the lowest Butterworth order, and the cutoff to use with butter, that meets passband and stopband specifications.",
+        "pt": "Encontra a menor ordem Butterworth, e a frequência de corte a usar com butter, que cumpre especificações de banda de passagem e de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[n,Wn] = buttord(Wp,Ws,Rp,Rs)",
+          "en": "Order and cutoff for a digital filter.",
+          "pt": "Ordem e corte para um filtro digital."
+        },
+        {
+          "code": "[n,Wn] = buttord(Wp,Ws,Rp,Rs,'s')",
+          "en": "Same for an analog filter, with frequencies in radians per second.",
+          "pt": "O mesmo para um filtro analógico, com frequências em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Wp",
+          "en": "Passband edge. Normalized (1 is half the sampling rate) for a digital filter. A two-element vector gives a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Normalizada (1 é metade da taxa de amostragem) em um filtro digital. Um vetor de dois elementos indica um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge, in the same units. Larger than `Wp` for a lowpass, smaller for a highpass.",
+          "pt": "Borda da banda de rejeição, nas mesmas unidades. Maior que `Wp` em um passa-baixas, menor em um passa-altas."
+        },
+        {
+          "name": "Rp",
+          "en": "Largest passband loss, in dB.",
+          "pt": "Maior perda na banda de passagem, em dB."
+        },
+        {
+          "name": "Rs",
+          "en": "Smallest stopband attenuation, in dB.",
+          "pt": "Menor atenuação na banda de rejeição, em dB."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Smallest integer order that meets the specification.",
+          "pt": "Menor ordem inteira que cumpre a especificação."
+        },
+        {
+          "name": "Wn",
+          "en": "Cutoff frequency (or two for band filters) to pass to `butter`.",
+          "pt": "Frequência de corte (ou duas, em filtros de banda) para passar a `butter`."
+        }
+      ],
+      "description": {
+        "en": "Give the edges and the allowed loss and attenuation, and `buttord` returns the order and the cutoff that you pass straight to `butter`. Because the order is rounded up, the filter usually does a little better than required in one of the bands; the cutoff is chosen so the stopband specification is met exactly.\n\nThe type of filter follows from `Wp` and `Ws`: a lowpass if `Wp < Ws`, a highpass if `Wp > Ws`, and a bandpass or bandstop for two-element vectors.",
+        "pt": "Informe as bordas e a perda e a atenuação permitidas, e `buttord` devolve a ordem e a frequência de corte para passar diretamente a `butter`. Como a ordem é arredondada para cima, o filtro costuma ficar um pouco melhor que o exigido em uma das bandas; o corte é escolhido de modo que a especificação da banda de rejeição seja cumprida exatamente.\n\nO tipo de filtro vem de `Wp` e `Ws`: passa-baixas se `Wp < Ws`, passa-altas se `Wp > Ws`, e passa-banda ou rejeita-banda com vetores de dois elementos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass: 1 dB at 0.2, 40 dB at 0.3",
+            "pt": "Passa-baixas: 1 dB em 0,2, 40 dB em 0,3"
+          },
+          "code": "[n,Wn] = buttord(0.2,0.3,1,40);\nfprintf('order %d, Wn %.4f\\n', n, Wn);\n[b,a] = butter(n,Wn);\nh = freqz(b,a,[0.2 0.3]*pi);\ndisp(round(20*log10(abs(h))*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "butter",
+        "cheb1ord",
+        "cheb2ord",
+        "ellipord"
+      ],
+      "notes": {
+        "en": "For band-stop specifications MATLAB finds the passband edge by a numerical search accurate to about 1e-4, while MatLivre uses the closed form, so `Wn` can differ in the fourth decimal. When the passband loss `Rp` is larger than the stopband attenuation `Rs`, MATLAB's `Wn` differs from MatLivre's (MATLAB's formula is not documented).",
+        "pt": "Em especificações rejeita-banda, o MATLAB encontra a borda de passagem por uma busca numérica com precisão de cerca de 1e-4, enquanto o MatLivre usa a forma fechada, então `Wn` pode diferir na quarta casa decimal. Quando a perda `Rp` é maior que a atenuação `Rs`, o `Wn` do MATLAB difere do MatLivre (a fórmula do MATLAB não é documentada)."
+      }
+    },
+    "cheb1ord": {
+      "summary": {
+        "en": "Finds the lowest Chebyshev type I order, and the passband edge to use with cheby1, that meets passband and stopband specifications.",
+        "pt": "Encontra a menor ordem Chebyshev tipo I, e a borda de passagem a usar com cheby1, que cumpre especificações de banda de passagem e de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[n,Wp] = cheb1ord(Wp,Ws,Rp,Rs)",
+          "en": "Order and passband edge for a digital filter.",
+          "pt": "Ordem e borda de passagem para um filtro digital."
+        },
+        {
+          "code": "[n,Wp] = cheb1ord(Wp,Ws,Rp,Rs,'s')",
+          "en": "Same for an analog filter, with frequencies in radians per second.",
+          "pt": "O mesmo para um filtro analógico, com frequências em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Wp",
+          "en": "Passband edge. Normalized (1 is half the sampling rate) for a digital filter. A two-element vector gives a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Normalizada (1 é metade da taxa de amostragem) em um filtro digital. Um vetor de dois elementos indica um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge, in the same units.",
+          "pt": "Borda da banda de rejeição, nas mesmas unidades."
+        },
+        {
+          "name": "Rp",
+          "en": "Largest passband ripple, in dB.",
+          "pt": "Maior ondulação na banda de passagem, em dB."
+        },
+        {
+          "name": "Rs",
+          "en": "Smallest stopband attenuation, in dB.",
+          "pt": "Menor atenuação na banda de rejeição, em dB."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Smallest integer order that meets the specification.",
+          "pt": "Menor ordem inteira que cumpre a especificação."
+        },
+        {
+          "name": "Wp",
+          "en": "Passband edge to pass to `cheby1` (the same as the input one).",
+          "pt": "Borda de passagem para passar a `cheby1` (igual à de entrada)."
+        }
+      ],
+      "description": {
+        "en": "A Chebyshev type I filter allows ripple in the passband in exchange for a steeper transition than a Butterworth filter of the same order, so it usually needs a lower order. `cheb1ord` returns the smallest order that meets the specification; pass it with `Rp` and the returned edge to `cheby1`.\n\nThe filter type follows from the edges, as in `buttord`.",
+        "pt": "Um filtro Chebyshev tipo I admite ondulação na banda de passagem em troca de uma transição mais íngreme que a de um Butterworth da mesma ordem, então costuma precisar de ordem menor. `cheb1ord` devolve a menor ordem que cumpre a especificação; passe-a, com `Rp` e a borda devolvida, a `cheby1`.\n\nO tipo de filtro vem das bordas, como em `buttord`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass and bandpass specifications",
+            "pt": "Especificações passa-baixas e passa-banda"
+          },
+          "code": "[n,Wp] = cheb1ord(0.2,0.3,1,40);\nfprintf('order %d, Wp %.4f\\n', n, Wp);\n[n,Wp] = cheb1ord([0.2 0.5],[0.1 0.6],1,40);\nfprintf('order %d, Wp %.4f %.4f\\n', n, Wp);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheby1",
+        "buttord",
+        "cheb2ord",
+        "ellipord"
+      ],
+      "notes": {
+        "en": "For analog band-stop specifications, MATLAB finds the passband edge by a numerical search accurate to about 1e-4, while MatLivre uses the closed form, so the returned edge can differ in the fourth decimal.",
+        "pt": "Em especificações analógicas rejeita-banda, o MATLAB encontra a borda de passagem por uma busca numérica com precisão de cerca de 1e-4, enquanto o MatLivre usa a forma fechada, então a borda devolvida pode diferir na quarta casa decimal."
+      }
+    },
+    "cheb2ord": {
+      "summary": {
+        "en": "Finds the lowest Chebyshev type II order, and the stopband edge to use with cheby2, that meets passband and stopband specifications.",
+        "pt": "Encontra a menor ordem Chebyshev tipo II, e a borda de rejeição a usar com cheby2, que cumpre especificações de banda de passagem e de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[n,Ws] = cheb2ord(Wp,Ws,Rp,Rs)",
+          "en": "Order and stopband edge for a digital filter.",
+          "pt": "Ordem e borda de rejeição para um filtro digital."
+        },
+        {
+          "code": "[n,Ws] = cheb2ord(Wp,Ws,Rp,Rs,'s')",
+          "en": "Same for an analog filter, with frequencies in radians per second.",
+          "pt": "O mesmo para um filtro analógico, com frequências em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Wp",
+          "en": "Passband edge. Normalized (1 is half the sampling rate) for a digital filter. A two-element vector gives a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Normalizada (1 é metade da taxa de amostragem) em um filtro digital. Um vetor de dois elementos indica um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge, in the same units.",
+          "pt": "Borda da banda de rejeição, nas mesmas unidades."
+        },
+        {
+          "name": "Rp",
+          "en": "Largest passband loss, in dB.",
+          "pt": "Maior perda na banda de passagem, em dB."
+        },
+        {
+          "name": "Rs",
+          "en": "Smallest stopband attenuation, in dB.",
+          "pt": "Menor atenuação na banda de rejeição, em dB."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Smallest integer order that meets the specification.",
+          "pt": "Menor ordem inteira que cumpre a especificação."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge to pass to `cheby2`.",
+          "pt": "Borda de rejeição para passar a `cheby2`."
+        }
+      ],
+      "description": {
+        "en": "A Chebyshev type II filter is flat in the passband and has ripple in the stopband. `cheb2ord` returns the smallest order that meets the specification and the stopband edge to use with `cheby2`, together with `Rs`.\n\nCheck the result with `freqz`: the gain at `Wp` should lose at most `Rp` dB, and the gain from `Ws` on should be at least `Rs` dB down.",
+        "pt": "Um filtro Chebyshev tipo II é plano na banda de passagem e tem ondulação na banda de rejeição. `cheb2ord` devolve a menor ordem que cumpre a especificação e a borda de rejeição a usar com `cheby2`, junto com `Rs`.\n\nVerifique o resultado com `freqz`: o ganho em `Wp` deve perder no máximo `Rp` dB, e o ganho de `Ws` em diante deve estar pelo menos `Rs` dB abaixo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass: 1 dB at 0.2, 40 dB at 0.3",
+            "pt": "Passa-baixas: 1 dB em 0,2, 40 dB em 0,3"
+          },
+          "code": "[n,Ws] = cheb2ord(0.2,0.3,1,40);\nfprintf('order %d, Ws %.4f\\n', n, Ws);\n[b,a] = cheby2(n,40,Ws);\nh = freqz(b,a,[0.2 0.3]*pi);\ndisp(round(20*log10(abs(h))*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheby2",
+        "buttord",
+        "cheb1ord",
+        "ellipord"
+      ],
+      "notes": {
+        "en": "For analog band-stop specifications, MATLAB finds the passband edge by a numerical search accurate to about 1e-4, while MatLivre uses the closed form, so the result can differ in the fourth decimal.",
+        "pt": "Em especificações analógicas rejeita-banda, o MATLAB encontra a borda de passagem por uma busca numérica com precisão de cerca de 1e-4, enquanto o MatLivre usa a forma fechada, então o resultado pode diferir na quarta casa decimal."
+      }
+    },
+    "cheby1": {
+      "summary": {
+        "en": "Designs a Chebyshev type I filter, with equal ripple in the passband and a monotonic stopband.",
+        "pt": "Projeta um filtro Chebyshev tipo I, com ondulação igual na banda de passagem e banda de rejeição monotônica."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = cheby1(n,Rp,Wp)",
+          "en": "Lowpass of order `n` with passband ripple `Rp` dB and passband edge `Wp`.",
+          "pt": "Passa-baixas de ordem `n` com ondulação de passagem `Rp` dB e borda de passagem `Wp`."
+        },
+        {
+          "code": "[b,a] = cheby1(n,Rp,Wp,ftype)",
+          "en": "Selects `'low'`, `'high'`, `'bandpass'` or `'stop'`.",
+          "pt": "Seleciona `'low'`, `'high'`, `'bandpass'` ou `'stop'`."
+        },
+        {
+          "code": "[z,p,k] = cheby1(___)",
+          "en": "Returns zeros, poles and gain.",
+          "pt": "Retorna zeros, polos e ganho."
+        },
+        {
+          "code": "[b,a] = cheby1(n,Rp,Wp,'s')",
+          "en": "Designs an analog filter, with `Wp` in radians per second.",
+          "pt": "Projeta um filtro analógico, com `Wp` em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order.",
+          "pt": "Ordem do filtro."
+        },
+        {
+          "name": "Rp",
+          "en": "Peak-to-peak passband ripple, in dB.",
+          "pt": "Ondulação pico a pico na banda de passagem, em dB."
+        },
+        {
+          "name": "Wp",
+          "en": "Passband edge. For a digital filter it is normalized, with 1 equal to half the sampling rate. Two elements give a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Em um filtro digital é normalizada, com 1 igual à metade da taxa de amostragem. Dois elementos dão um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type as text.",
+          "pt": "Tipo do filtro, como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b, a",
+          "en": "Numerator and denominator coefficients, as row vectors.",
+          "pt": "Coeficientes do numerador e do denominador, como vetores linha."
+        },
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the filter.",
+          "pt": "Zeros, polos e ganho do filtro."
+        }
+      ],
+      "description": {
+        "en": "The gain stays within `Rp` dB of the maximum across the passband and then falls off faster than a Butterworth filter of the same order, at the price of that ripple. The gain at `Wp` is exactly `Rp` dB below the passband maximum. For an odd order the gain at zero frequency is 1 and for an even order it is `Rp` dB lower.\n\nSmaller `Rp` gives a flatter passband but a slower transition. `cheb1ord` finds the order from a specification.",
+        "pt": "O ganho fica dentro de `Rp` dB do máximo em toda a banda de passagem e depois cai mais depressa que o de um Butterworth da mesma ordem, ao preço dessa ondulação. O ganho em `Wp` está exatamente `Rp` dB abaixo do máximo da banda de passagem. Em ordem ímpar o ganho em frequência zero é 1, e em ordem par é `Rp` dB menor.\n\nUm `Rp` menor dá banda de passagem mais plana, mas transição mais lenta. `cheb1ord` encontra a ordem a partir de uma especificação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order 3 with 1 dB ripple",
+            "pt": "Ordem 3 com 1 dB de ondulação"
+          },
+          "code": "[b,a] = cheby1(3,1,0.4);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\nh = freqz(b,a,[0 0.4*pi]);\ndisp(round(20*log10(abs(h))*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb1ord",
+        "butter",
+        "cheby2",
+        "ellip"
+      ],
+      "notes": {
+        "en": "With `Rp = 0` the design degenerates: MATLAB returns the FIR filter `(1+z^-1)^3/8` for `cheby1(3,0,0.4)`, while MatLivre returns NaN coefficients.",
+        "pt": "Com `Rp = 0` o projeto degenera: o MATLAB devolve o filtro FIR `(1+z^-1)^3/8` para `cheby1(3,0,0.4)`, enquanto o MatLivre devolve coeficientes NaN."
+      }
+    },
+    "cheby2": {
+      "summary": {
+        "en": "Designs a Chebyshev type II filter, with a flat passband and equal ripple in the stopband.",
+        "pt": "Projeta um filtro Chebyshev tipo II, com banda de passagem plana e ondulação igual na banda de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = cheby2(n,Rs,Ws)",
+          "en": "Lowpass of order `n` with stopband attenuation `Rs` dB starting at `Ws`.",
+          "pt": "Passa-baixas de ordem `n` com atenuação de rejeição `Rs` dB a partir de `Ws`."
+        },
+        {
+          "code": "[b,a] = cheby2(n,Rs,Ws,ftype)",
+          "en": "Selects `'low'`, `'high'`, `'bandpass'` or `'stop'`.",
+          "pt": "Seleciona `'low'`, `'high'`, `'bandpass'` ou `'stop'`."
+        },
+        {
+          "code": "[z,p,k] = cheby2(___)",
+          "en": "Returns zeros, poles and gain.",
+          "pt": "Retorna zeros, polos e ganho."
+        },
+        {
+          "code": "[b,a] = cheby2(n,Rs,Ws,'s')",
+          "en": "Designs an analog filter, with `Ws` in radians per second.",
+          "pt": "Projeta um filtro analógico, com `Ws` em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order.",
+          "pt": "Ordem do filtro."
+        },
+        {
+          "name": "Rs",
+          "en": "Stopband attenuation, in dB below the passband peak.",
+          "pt": "Atenuação na banda de rejeição, em dB abaixo do pico da banda de passagem."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge, the frequency where the gain first reaches `-Rs` dB. For a digital filter it is normalized, with 1 equal to half the sampling rate. Two elements give a bandpass or bandstop filter.",
+          "pt": "Borda da banda de rejeição, a frequência em que o ganho chega a `-Rs` dB. Em um filtro digital é normalizada, com 1 igual à metade da taxa de amostragem. Dois elementos dão um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type as text.",
+          "pt": "Tipo do filtro, como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b, a",
+          "en": "Numerator and denominator coefficients, as row vectors.",
+          "pt": "Coeficientes do numerador e do denominador, como vetores linha."
+        },
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the filter.",
+          "pt": "Zeros, polos e ganho do filtro."
+        }
+      ],
+      "description": {
+        "en": "The passband is flat, like a Butterworth filter, and the gain stays below `-Rs` dB from `Ws` on, with ripple in that region. The filter has finite zeros on the unit circle, which produce the stopband ripple and make the transition steeper than a Butterworth filter of the same order.\n\nUse `cheb2ord` to find the order from a specification.",
+        "pt": "A banda de passagem é plana, como em um Butterworth, e o ganho fica abaixo de `-Rs` dB de `Ws` em diante, com ondulação nessa região. O filtro tem zeros finitos sobre o círculo unitário, que produzem a ondulação na rejeição e tornam a transição mais íngreme que a de um Butterworth da mesma ordem.\n\nUse `cheb2ord` para encontrar a ordem a partir de uma especificação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order 3 with 30 dB attenuation",
+            "pt": "Ordem 3 com atenuação de 30 dB"
+          },
+          "code": "[b,a] = cheby2(3,30,0.5);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\nh = freqz(b,a,[0 0.5*pi 0.9*pi]);\ndisp(round(20*log10(abs(h))*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb2ord",
+        "butter",
+        "cheby1",
+        "ellip"
+      ],
+      "notes": {
+        "en": "With `Rs = 0` the design degenerates in MATLAB, and MatLivre's result for `cheby2(3,0,0.4)` does not match it. For some orders the order of the zeros (and in one analog case the poles) in `[z,p,k]` differs from MATLAB's, which follows rounding errors of its state matrix; the values are the same.",
+        "pt": "Com `Rs = 0` o projeto degenera no MATLAB, e o resultado do MatLivre para `cheby2(3,0,0.4)` não coincide com ele. Em algumas ordens, a ordem dos zeros (e, em um caso analógico, dos polos) em `[z,p,k]` difere da do MATLAB, que segue erros de arredondamento da sua matriz de estados; os valores são os mesmos."
+      }
+    },
+    "ellip": {
+      "summary": {
+        "en": "Designs an elliptic (Cauer) filter, with equal ripple in both passband and stopband and the steepest transition for a given order.",
+        "pt": "Projeta um filtro elíptico (Cauer), com ondulação igual nas bandas de passagem e de rejeição e a transição mais íngreme para uma dada ordem."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = ellip(n,Rp,Rs,Wp)",
+          "en": "Lowpass of order `n` with passband ripple `Rp` dB, stopband attenuation `Rs` dB and passband edge `Wp`.",
+          "pt": "Passa-baixas de ordem `n` com ondulação de passagem `Rp` dB, atenuação de rejeição `Rs` dB e borda de passagem `Wp`."
+        },
+        {
+          "code": "[b,a] = ellip(n,Rp,Rs,Wp,ftype)",
+          "en": "Selects `'low'`, `'high'`, `'bandpass'` or `'stop'`.",
+          "pt": "Seleciona `'low'`, `'high'`, `'bandpass'` ou `'stop'`."
+        },
+        {
+          "code": "[z,p,k] = ellip(___)",
+          "en": "Returns zeros, poles and gain.",
+          "pt": "Retorna zeros, polos e ganho."
+        },
+        {
+          "code": "[b,a] = ellip(n,Rp,Rs,Wp,'s')",
+          "en": "Designs an analog filter, with `Wp` in radians per second.",
+          "pt": "Projeta um filtro analógico, com `Wp` em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order.",
+          "pt": "Ordem do filtro."
+        },
+        {
+          "name": "Rp",
+          "en": "Peak-to-peak passband ripple, in dB.",
+          "pt": "Ondulação pico a pico na banda de passagem, em dB."
+        },
+        {
+          "name": "Rs",
+          "en": "Stopband attenuation, in dB below the passband peak.",
+          "pt": "Atenuação na banda de rejeição, em dB abaixo do pico da banda de passagem."
+        },
+        {
+          "name": "Wp",
+          "en": "Passband edge. For a digital filter it is normalized, with 1 equal to half the sampling rate. Two elements give a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Em um filtro digital é normalizada, com 1 igual à metade da taxa de amostragem. Dois elementos dão um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type as text.",
+          "pt": "Tipo do filtro, como texto."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b, a",
+          "en": "Numerator and denominator coefficients, as row vectors.",
+          "pt": "Coeficientes do numerador e do denominador, como vetores linha."
+        },
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the filter.",
+          "pt": "Zeros, polos e ganho do filtro."
+        }
+      ],
+      "description": {
+        "en": "For a given order, an elliptic filter has the narrowest transition between passband and stopband of the classic IIR designs, because it spreads ripple over both bands.\n\nUse `ellipord` to find the order from a specification.",
+        "pt": "Para uma dada ordem, um filtro elíptico tem a transição mais estreita entre as bandas de passagem e de rejeição entre os projetos IIR clássicos, porque distribui ondulação nas duas bandas.\n\nUse `ellipord` para encontrar a ordem a partir de uma especificação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order 3, 1 dB ripple, 40 dB attenuation",
+            "pt": "Ordem 3, ondulação de 1 dB, atenuação de 40 dB"
+          },
+          "code": "[b,a] = ellip(3,1,40,0.4);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\nh = freqz(b,a,[0 0.4*pi 0.6*pi]);\ndisp(round(20*log10(abs(h))*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ellipord",
+        "butter",
+        "cheby1",
+        "cheby2"
+      ],
+      "notes": {
+        "en": "In an order-6 design, the order of two zero pairs in `[z,p,k]` can differ from MATLAB's. For analog band filters, MATLAB's results carry rounding noise (1e-15 to 1e-8) where the exact value is zero, while MatLivre returns exact zeros.",
+        "pt": "Em um projeto de ordem 6, a ordem de dois pares de zeros em `[z,p,k]` pode diferir da do MATLAB. Em filtros analógicos de banda, os resultados do MATLAB trazem ruído de arredondamento (1e-15 a 1e-8) onde o valor exato é zero, enquanto o MatLivre devolve zeros exatos."
+      }
+    },
+    "ellipord": {
+      "summary": {
+        "en": "Finds the lowest elliptic filter order, and the passband edge to use with ellip, that meets passband and stopband specifications.",
+        "pt": "Encontra a menor ordem de filtro elíptico, e a borda de passagem a usar com ellip, que cumpre especificações de banda de passagem e de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[n,Wp] = ellipord(Wp,Ws,Rp,Rs)",
+          "en": "Order and passband edge for a digital filter.",
+          "pt": "Ordem e borda de passagem para um filtro digital."
+        },
+        {
+          "code": "[n,Wp] = ellipord(Wp,Ws,Rp,Rs,'s')",
+          "en": "Same for an analog filter, with frequencies in radians per second.",
+          "pt": "O mesmo para um filtro analógico, com frequências em radianos por segundo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Wp",
+          "en": "Passband edge. Normalized (1 is half the sampling rate) for a digital filter. A two-element vector gives a bandpass or bandstop filter.",
+          "pt": "Borda da banda de passagem. Normalizada (1 é metade da taxa de amostragem) em um filtro digital. Um vetor de dois elementos indica um filtro passa-banda ou rejeita-banda."
+        },
+        {
+          "name": "Ws",
+          "en": "Stopband edge, in the same units.",
+          "pt": "Borda da banda de rejeição, nas mesmas unidades."
+        },
+        {
+          "name": "Rp",
+          "en": "Largest passband ripple, in dB.",
+          "pt": "Maior ondulação na banda de passagem, em dB."
+        },
+        {
+          "name": "Rs",
+          "en": "Smallest stopband attenuation, in dB.",
+          "pt": "Menor atenuação na banda de rejeição, em dB."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "n",
+          "en": "Smallest integer order that meets the specification.",
+          "pt": "Menor ordem inteira que cumpre a especificação."
+        },
+        {
+          "name": "Wp",
+          "en": "Passband edge to pass to `ellip` (the same as the input one).",
+          "pt": "Borda de passagem para passar a `ellip` (igual à de entrada)."
+        }
+      ],
+      "description": {
+        "en": "Elliptic filters need a lower order than Butterworth or Chebyshev filters for the same specification. `ellipord` returns that order; pass it, with `Rp`, `Rs` and the returned edge, to `ellip`.\n\nThe order is rounded up, so the attenuation you get is usually a little better than `Rs`.",
+        "pt": "Filtros elípticos precisam de ordem menor que a de Butterworth ou Chebyshev para a mesma especificação. `ellipord` devolve essa ordem; passe-a, com `Rp`, `Rs` e a borda devolvida, a `ellip`.\n\nA ordem é arredondada para cima, então a atenuação obtida costuma ser um pouco melhor que `Rs`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass: 1 dB at 0.2, 40 dB at 0.3",
+            "pt": "Passa-baixas: 1 dB em 0,2, 40 dB em 0,3"
+          },
+          "code": "[n,Wp] = ellipord(0.2,0.3,1,40);\nfprintf('order %d, Wp %.4f\\n', n, Wp);\n[b,a] = ellip(n,1,40,Wp);\nh = freqz(b,a,[0.2 0.3]*pi);\ndisp(round(20*log10(abs(h))*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ellip",
+        "buttord",
+        "cheb1ord",
+        "cheb2ord"
+      ]
+    },
+    "yulewalk": {
+      "summary": {
+        "en": "Designs a recursive IIR filter whose magnitude response approximates a desired piecewise-linear shape, by the Yule-Walker method.",
+        "pt": "Projeta um filtro IIR recursivo cuja resposta em módulo aproxima um formato linear por partes desejado, pelo método de Yule-Walker."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = yulewalk(n,f,m)",
+          "en": "Order `n` filter whose gain follows the points `(f,m)`.",
+          "pt": "Filtro de ordem `n` cujo ganho segue os pontos `(f,m)`."
+        },
+        {
+          "code": "[b,a] = yulewalk(n,f,m,npt,lap)",
+          "en": "Also sets the size `npt` of the frequency grid and the size `lap` of the region around repeated frequencies.",
+          "pt": "Define também o tamanho `npt` da grade de frequência e o tamanho `lap` da região em torno de frequências repetidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, for both numerator and denominator.",
+          "pt": "Ordem do filtro, para numerador e denominador."
+        },
+        {
+          "name": "f",
+          "en": "Frequency points, increasing, from 0 to 1 (1 is half the sampling rate), starting at 0 and ending at 1.",
+          "pt": "Pontos de frequência, crescentes, de 0 a 1 (1 é metade da taxa de amostragem), começando em 0 e terminando em 1."
+        },
+        {
+          "name": "m",
+          "en": "Desired gain at each point of `f`.",
+          "pt": "Ganho desejado em cada ponto de `f`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients.",
+          "pt": "Coeficientes do numerador."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients.",
+          "pt": "Coeficientes do denominador."
+        }
+      ],
+      "description": {
+        "en": "`yulewalk` fits only the magnitude, so the result does not have a controlled phase. It is a quick way to get an IIR filter for an arbitrary shape (several bands, or a slope), where `butter` and the other classic designs offer only lowpass, highpass, bandpass and bandstop.\n\nCheck that the poles are inside the unit circle with `roots(a)` before you use the filter.",
+        "pt": "`yulewalk` ajusta apenas o módulo, então o resultado não tem fase controlada. É um jeito rápido de obter um filtro IIR para um formato arbitrário (várias bandas, ou uma rampa), enquanto `butter` e os demais projetos clássicos oferecem só passa-baixas, passa-altas, passa-banda e rejeita-banda.\n\nVerifique com `roots(a)` se os polos estão dentro do círculo unitário antes de usar o filtro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lowpass shape of order 6",
+            "pt": "Formato passa-baixas de ordem 6"
+          },
+          "code": "[b,a] = yulewalk(6,[0 0.3 0.4 1],[1 1 0 0]);\ndisp(round(b*10000)/10000)\ndisp(round(a*10000)/10000)\nh = freqz(b,a,[0.1 0.8]*pi);\ndisp(round(abs(h)*100)/100)\ndisp(all(abs(roots(a)) < 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fir2",
+        "butter",
+        "invfreqz",
+        "freqz"
+      ],
+      "notes": {
+        "en": "High orders are ill-conditioned (from about order 12): the coefficients match MATLAB to about 1e-8 relative for order 12, and for a sharp edge at order 16 the numerator can differ by about 1e-2. The method itself is the same.",
+        "pt": "Ordens altas são mal condicionadas (a partir de cerca da ordem 12): os coeficientes coincidem com os do MATLAB até cerca de 1e-8 em valor relativo na ordem 12, e com uma borda abrupta na ordem 16 o numerador pode diferir em cerca de 1e-2. O método em si é o mesmo."
+      }
+    },
+    "polyscale": {
+      "summary": {
+        "en": "Scales the roots of a polynomial by a factor, returning the coefficients of the new polynomial.",
+        "pt": "Multiplica as raízes de um polinômio por um fator, devolvendo os coeficientes do novo polinômio."
+      },
+      "syntax": [
+        {
+          "code": "b = polyscale(a,alpha)",
+          "en": "Returns the polynomial whose roots are `alpha` times the roots of `a`.",
+          "pt": "Devolve o polinômio cujas raízes são `alpha` vezes as raízes de `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Polynomial coefficients, in descending powers.",
+          "pt": "Coeficientes do polinômio, em potências decrescentes."
+        },
+        {
+          "name": "alpha",
+          "en": "Scale factor, a scalar.",
+          "pt": "Fator de escala, um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Coefficients of the scaled polynomial, with `b(k) = a(k)*alpha^(k-1)`.",
+          "pt": "Coeficientes do polinômio escalado, com `b(k) = a(k)*alpha^(k-1)`."
+        }
+      ],
+      "description": {
+        "en": "Multiplying each root by `alpha` moves the roots of a filter denominator toward or away from the origin of the z-plane. With `alpha` below 1 in magnitude the poles move inward, which damps the filter.\n\nThe leading coefficient is unchanged.",
+        "pt": "Multiplicar cada raiz por `alpha` aproxima ou afasta da origem do plano z as raízes do denominador de um filtro. Com `alpha` de módulo menor que 1, os polos se movem para dentro, o que amortece o filtro.\n\nO coeficiente de maior grau não muda."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Scaling the roots by 2",
+            "pt": "Multiplicando as raízes por 2"
+          },
+          "code": "a = poly([0.5 0.4]);\nb = polyscale(a,2);\ndisp(round(b*10000)/10000)\ndisp(roots(b).')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "polystab",
+        "poly",
+        "roots",
+        "zp2tf"
+      ]
+    },
+    "polystab": {
+      "summary": {
+        "en": "Makes a polynomial stable by reflecting its roots outside the unit circle to the inside, keeping the shape of its magnitude response.",
+        "pt": "Estabiliza um polinômio refletindo para dentro as raízes fora do círculo unitário, mantendo o formato da sua resposta em módulo."
+      },
+      "syntax": [
+        {
+          "code": "b = polystab(a)",
+          "en": "Returns a polynomial with the same leading coefficient whose roots are all inside or on the unit circle.",
+          "pt": "Devolve um polinômio, com o mesmo coeficiente de maior grau, cujas raízes estão todas dentro ou sobre o círculo unitário."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Polynomial coefficients, in descending powers. Typically the denominator of a filter.",
+          "pt": "Coeficientes do polinômio, em potências decrescentes. Em geral o denominador de um filtro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Coefficients of the stabilized polynomial.",
+          "pt": "Coeficientes do polinômio estabilizado."
+        }
+      ],
+      "description": {
+        "en": "Each root outside the unit circle at `r` is replaced by `1/conj(r)`, inside it. On the unit circle, the magnitude response of the new polynomial differs from the old one only by a constant factor, so the filter keeps the shape of its response while becoming stable.\n\nRoots on the unit circle stay where they are.",
+        "pt": "Cada raiz fora do círculo unitário, em `r`, é trocada por `1/conj(r)`, dentro dele. Sobre o círculo unitário, a resposta em módulo do novo polinômio difere da antiga apenas por um fator constante, então o filtro mantém o formato da resposta e passa a ser estável.\n\nRaízes sobre o círculo unitário permanecem onde estão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reflect a root at 2 to 0.5",
+            "pt": "Refletir uma raiz em 2 para 0,5"
+          },
+          "code": "a = [1 -2.5 1];\nb = polystab(a);\ndisp(round(b*10000)/10000)\ndisp(abs(roots(b)).')\nh1 = freqz(1,a,4);\nh2 = freqz(1,b,4);\ndisp(round(abs(h1./h2)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "polyscale",
+        "roots",
+        "isstable",
+        "freqz"
+      ]
+    },
+    "scaleFilterSections": {
+      "summary": {
+        "en": "Scales the numerators of the second-order sections of a cascaded filter, by one factor per section and an overall gain.",
+        "pt": "Multiplica os numeradores das seções de segunda ordem de um filtro em cascata, com um fator por seção e um ganho global."
+      },
+      "syntax": [
+        {
+          "code": "s = scaleFilterSections(num,g)",
+          "en": "Scales the rows of `num` by the scale values `g`.",
+          "pt": "Multiplica as linhas de `num` pelos valores de escala `g`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "num",
+          "en": "Matrix with one row of numerator coefficients per section (L rows).",
+          "pt": "Matriz com uma linha de coeficientes do numerador por seção (L linhas)."
+        },
+        {
+          "name": "g",
+          "en": "A scalar, or a vector of `L+1` values. With a scalar, the gain is spread evenly over the sections (each row is multiplied by `g^(1/L)`). With a vector, the first `L` values scale the sections and the last one is spread evenly over all of them.",
+          "pt": "Um escalar, ou um vetor de `L+1` valores. Com um escalar, o ganho é distribuído por igual entre as seções (cada linha é multiplicada por `g^(1/L)`). Com um vetor, os primeiros `L` valores escalam as seções e o último é distribuído por igual entre todas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Matrix of the same size as `num`, with the scaled numerators.",
+          "pt": "Matriz do mesmo tamanho que `num`, com os numeradores escalados."
+        }
+      ],
+      "description": {
+        "en": "A cascade of second-order sections is easier to scale than a single high-order polynomial: you can keep the signal level inside each section in range, and still set the gain of the whole cascade. Distributing the total gain evenly keeps each section's gain moderate.\n\nThe overall gain of the cascade is the product of all the factors.",
+        "pt": "Uma cascata de seções de segunda ordem é mais fácil de escalar que um único polinômio de ordem alta: dá para manter em faixa o nível do sinal dentro de cada seção e, ainda assim, definir o ganho da cascata inteira. Distribuir o ganho total por igual mantém moderado o ganho de cada seção.\n\nO ganho global da cascata é o produto de todos os fatores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Scale two sections",
+            "pt": "Escalar duas seções"
+          },
+          "code": "num = [1 2 1; 1 1 0];\ns = scaleFilterSections(num,4);\ndisp(s)\ns = scaleFilterSections(num,[2 1 4]);\ndisp(s)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sos2tf",
+        "tf2sos",
+        "zp2sos",
+        "designfilt"
+      ]
+    }
+  }
+}

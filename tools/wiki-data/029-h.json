@@ -1,0 +1,906 @@
+{
+  "functions": {
+    "besselap": {
+      "summary": {
+        "en": "Returns the zeros, poles and gain of an analog Bessel lowpass prototype of order N.",
+        "pt": "Retorna zeros, polos e ganho do protótipo analógico passa-baixas de Bessel de ordem N."
+      },
+      "syntax": [
+        {
+          "code": "[z,p,k] = besselap(n)",
+          "en": "Returns the prototype as zeros `z`, poles `p` and gain `k`.",
+          "pt": "Retorna o protótipo como zeros `z`, polos `p` e ganho `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer.",
+          "pt": "Ordem do filtro, um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros. Always empty, because the Bessel prototype has no finite zeros.",
+          "pt": "Zeros. Sempre vazio, pois o protótipo de Bessel não tem zeros finitos."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the `n` poles, all in the left half of the s-plane.",
+          "pt": "Vetor coluna com os `n` polos, todos no semiplano esquerdo do plano s."
+        },
+        {
+          "name": "k",
+          "en": "Gain, chosen so that the DC gain is 1.",
+          "pt": "Ganho, escolhido para que o ganho em DC seja 1."
+        }
+      ],
+      "description": {
+        "en": "A Bessel filter is designed for a maximally flat group delay, so it keeps the shape of a signal in the passband better than Butterworth or Chebyshev filters, at the price of a slower roll-off. `besselap` gives the starting point of that design: an all-pole lowpass filter normalized to unit delay at DC.\n\nUse it with `lp2lp`, `lp2hp`, `lp2bp` or `lp2bs` to move the prototype to the frequency you need. For a complete design in one call, use `besself`.",
+        "pt": "Um filtro de Bessel é projetado para ter atraso de grupo maximamente plano, e por isso preserva melhor a forma do sinal na banda de passagem do que os filtros Butterworth ou Chebyshev, ao custo de uma queda mais lenta. `besselap` fornece o ponto de partida desse projeto: um filtro passa-baixas só de polos, normalizado para atraso unitário em DC.\n\nUse-o com `lp2lp`, `lp2hp`, `lp2bp` ou `lp2bs` para levar o protótipo à frequência desejada. Para um projeto completo em uma chamada, use `besself`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Poles of a third-order Bessel prototype",
+            "pt": "Polos de um protótipo de Bessel de terceira ordem"
+          },
+          "code": "[z,p,k] = besselap(3);\ndisp(size(z))\ndisp(round(p*1e4)/1e4)\nfprintf('%.4f\\n', k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "besself",
+        "buttap",
+        "lp2lp",
+        "freqs"
+      ]
+    },
+    "besself": {
+      "summary": {
+        "en": "Designs an analog Bessel filter (lowpass, highpass, bandpass or bandstop) with maximally flat group delay.",
+        "pt": "Projeta um filtro de Bessel analógico (passa-baixas, passa-altas, passa-faixa ou rejeita-faixa) com atraso de grupo maximamente plano."
+      },
+      "syntax": [
+        {
+          "code": "[b,a] = besself(n,wo)",
+          "en": "Lowpass filter of order `n` as numerator `b` and denominator `a`.",
+          "pt": "Filtro passa-baixas de ordem `n`, com numerador `b` e denominador `a`."
+        },
+        {
+          "code": "[b,a] = besself(n,wo,ftype)",
+          "en": "Chooses the type: `'low'`, `'high'`, `'bandpass'` or `'stop'`.",
+          "pt": "Escolhe o tipo: `'low'`, `'high'`, `'bandpass'` ou `'stop'`."
+        },
+        {
+          "code": "[z,p,k] = besself(___)",
+          "en": "Returns zeros, poles and gain instead of polynomials.",
+          "pt": "Retorna zeros, polos e ganho em vez de polinômios."
+        },
+        {
+          "code": "[A,B,C,D] = besself(___)",
+          "en": "Returns the state-space matrices.",
+          "pt": "Retorna as matrizes do espaço de estados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer. Bandpass and bandstop filters have order `2*n`.",
+          "pt": "Ordem do filtro, um inteiro positivo. Filtros passa-faixa e rejeita-faixa têm ordem `2*n`."
+        },
+        {
+          "name": "wo",
+          "en": "Frequency in rad/s. A scalar for lowpass and highpass, a two-element vector `[w1 w2]` for bandpass and bandstop.",
+          "pt": "Frequência em rad/s. Um escalar para passa-baixas e passa-altas, um vetor `[w1 w2]` para passa-faixa e rejeita-faixa."
+        },
+        {
+          "name": "ftype",
+          "en": "Filter type: `'low'`, `'high'`, `'bandpass'` or `'stop'`. A scalar `wo` defaults to `'low'`, a two-element `wo` to `'bandpass'`.",
+          "pt": "Tipo do filtro: `'low'`, `'high'`, `'bandpass'` ou `'stop'`. Com `wo` escalar o padrão é `'low'`, com `wo` de dois elementos é `'bandpass'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b, a",
+          "en": "Numerator and denominator polynomial coefficients, in descending powers of `s`.",
+          "pt": "Coeficientes dos polinômios do numerador e do denominador, em potências decrescentes de `s`."
+        },
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the filter.",
+          "pt": "Zeros, polos e ganho do filtro."
+        },
+        {
+          "name": "A, B, C, D",
+          "en": "State-space matrices of the filter.",
+          "pt": "Matrizes de espaço de estados do filtro."
+        }
+      ],
+      "description": {
+        "en": "`besself` builds the Bessel prototype with `besselap` and moves it to the requested band. The result is an analog filter, so `wo` is in rad/s and the response is evaluated on the imaginary axis, for example with `freqs`.\n\nThe filter trades sharpness for waveform fidelity: the group delay is nearly constant in the passband, but the transition is gentle. The frequency `wo` is where the delay-normalized prototype is scaled to, not a 3 dB point, so the magnitude at `wo` is below 0.707. To get a digital filter, pass the result through `bilinear` or `impinvar`.",
+        "pt": "`besself` monta o protótipo de Bessel com `besselap` e o leva à banda pedida. O resultado é um filtro analógico: `wo` está em rad/s e a resposta é avaliada no eixo imaginário, por exemplo com `freqs`.\n\nO filtro troca seletividade por fidelidade de forma de onda: o atraso de grupo é quase constante na banda de passagem, mas a transição é suave. A frequência `wo` é onde o protótipo normalizado pelo atraso é escalado, e não um ponto de 3 dB, então o módulo em `wo` fica abaixo de 0,707. Para obter um filtro digital, passe o resultado por `bilinear` ou `impinvar`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fourth-order lowpass at 1000 rad/s",
+            "pt": "Passa-baixas de quarta ordem em 1000 rad/s"
+          },
+          "code": "[b,a] = besself(4,1000);\nfprintf('%.4g ', a); fprintf('\\n');\n[h,w] = freqs(b,a,[100 1000 5000]);\nfprintf('%.4f\\n', abs(h))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "besselap",
+        "freqs",
+        "bilinear",
+        "butter",
+        "lp2lp"
+      ],
+      "notes": {
+        "en": "For the `'high'`, `'bandpass'` and `'stop'` designs, MATLAB's result carries rounding noise (1e-15 to 1e-8) where the exact value is zero. MatLivre returns exact zeros there.",
+        "pt": "Nos projetos `'high'`, `'bandpass'` e `'stop'`, o resultado do MATLAB traz ruído de arredondamento (1e-15 a 1e-8) onde o valor exato é zero. O MatLivre retorna zeros exatos nesses pontos."
+      }
+    },
+    "bilinear": {
+      "summary": {
+        "en": "Converts an analog filter to a digital one with the bilinear transform, optionally matching one chosen frequency.",
+        "pt": "Converte um filtro analógico em digital pela transformação bilinear, opcionalmente casando uma frequência escolhida."
+      },
+      "syntax": [
+        {
+          "code": "[zd,pd,kd] = bilinear(z,p,k,fs)",
+          "en": "Zero-pole-gain form, with sample rate `fs`.",
+          "pt": "Forma zeros, polos e ganho, com taxa de amostragem `fs`."
+        },
+        {
+          "code": "[numd,dend] = bilinear(num,den,fs)",
+          "en": "Transfer function form.",
+          "pt": "Forma de função de transferência."
+        },
+        {
+          "code": "[___] = bilinear(___,fs,fp)",
+          "en": "Also matches the analog and digital responses at the frequency `fp` (prewarping).",
+          "pt": "Também casa as respostas analógica e digital na frequência `fp` (pré-distorção)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "z, p, k",
+          "en": "Zeros, poles and gain of the analog filter. Ask for three outputs to select this form.",
+          "pt": "Zeros, polos e ganho do filtro analógico. Peça três saídas para escolher esta forma."
+        },
+        {
+          "name": "num, den",
+          "en": "Numerator and denominator of the analog filter, in descending powers of `s`. The numerator order must not exceed the denominator order.",
+          "pt": "Numerador e denominador do filtro analógico, em potências decrescentes de `s`. A ordem do numerador não pode exceder a do denominador."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate of the digital filter, in Hz. Must be positive.",
+          "pt": "Taxa de amostragem do filtro digital, em Hz. Deve ser positiva."
+        },
+        {
+          "name": "fp",
+          "en": "Optional match frequency in Hz, greater than 0 and less than `fs/2`. The digital filter has the same response there as the analog one.",
+          "pt": "Frequência de casamento opcional em Hz, maior que 0 e menor que `fs/2`. O filtro digital tem aí a mesma resposta do analógico."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "zd, pd, kd",
+          "en": "Zeros, poles and gain of the digital filter.",
+          "pt": "Zeros, polos e ganho do filtro digital."
+        },
+        {
+          "name": "numd, dend",
+          "en": "Numerator and denominator of the digital filter, in descending powers of `z`.",
+          "pt": "Numerador e denominador do filtro digital, em potências decrescentes de `z`."
+        }
+      ],
+      "description": {
+        "en": "The bilinear transform replaces `s` by `2*fs*(z-1)/(z+1)`. It maps the whole left half of the s-plane inside the unit circle, so a stable analog filter always gives a stable digital filter, with no aliasing.\n\nThe price is a warping of the frequency axis: analog frequency `w` lands at digital frequency `2*atan(w/(2*fs))`. Pass `fp` to make one frequency, such as a cutoff, come out exactly where you want it. The form is chosen by the number of outputs and arguments: three outputs mean zero-pole-gain, two mean polynomials.",
+        "pt": "A transformação bilinear substitui `s` por `2*fs*(z-1)/(z+1)`. Ela leva todo o semiplano esquerdo do plano s para dentro do círculo unitário, então um filtro analógico estável sempre resulta em um filtro digital estável, sem aliasing.\n\nO preço é uma distorção do eixo de frequência: a frequência analógica `w` cai na frequência digital `2*atan(w/(2*fs))`. Passe `fp` para que uma frequência, como a de corte, saia exatamente onde você quer. A forma é escolhida pelo número de saídas e de argumentos: três saídas indicam zeros, polos e ganho, duas indicam polinômios."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "First-order lowpass, with and without prewarping",
+            "pt": "Passa-baixas de primeira ordem, com e sem pré-distorção"
+          },
+          "code": "[bz,az] = bilinear(1,[1 1],1);\nfprintf('%.4f ', bz, az); fprintf('\\n');\n[bz,az] = bilinear(1,[1 1],1,0.1);\nfprintf('%.4f ', bz, az); fprintf('\\n');",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Analog Butterworth to digital, cutoff 100 Hz at 1 kHz",
+            "pt": "Butterworth analógico para digital, corte de 100 Hz a 1 kHz"
+          },
+          "code": "[z,p,k] = buttap(2);\n[b,a] = zp2tf(z,p,k);\nfs = 1000; wc = 2*fs*tan(pi*100/fs);\n[bs,as] = lp2lp(b,a,wc);\n[bz,az] = bilinear(bs,as,fs);\nfprintf('%.4f ', bz); fprintf('\\n');\nfprintf('%.4f ', az); fprintf('\\n');",
+          "silent": false
+        }
+      ],
+      "see": [
+        "impinvar",
+        "lp2lp",
+        "buttap",
+        "freqs",
+        "butter"
+      ]
+    },
+    "buttap": {
+      "summary": {
+        "en": "Returns the zeros, poles and gain of an analog Butterworth lowpass prototype of order N with a 1 rad/s cutoff.",
+        "pt": "Retorna zeros, polos e ganho do protótipo analógico passa-baixas Butterworth de ordem N, com corte em 1 rad/s."
+      },
+      "syntax": [
+        {
+          "code": "[z,p,k] = buttap(n)",
+          "en": "Returns the prototype as zeros `z`, poles `p` and gain `k`.",
+          "pt": "Retorna o protótipo como zeros `z`, polos `p` e ganho `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer.",
+          "pt": "Ordem do filtro, um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros. Always empty: the Butterworth lowpass has none.",
+          "pt": "Zeros. Sempre vazio: o passa-baixas Butterworth não tem zeros."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the `n` poles, equally spaced on the left half of the unit circle.",
+          "pt": "Vetor coluna com os `n` polos, igualmente espaçados na metade esquerda do círculo unitário."
+        },
+        {
+          "name": "k",
+          "en": "Gain, equal to 1.",
+          "pt": "Ganho, igual a 1."
+        }
+      ],
+      "description": {
+        "en": "The Butterworth response is maximally flat in the passband. Its prototype has a 3 dB point at 1 rad/s and all its poles on the unit circle, which makes it easy to scale.\n\nUse `buttap` as the first step of a hand-built analog design: convert with `zp2tf`, then move the cutoff with `lp2lp`, `lp2hp`, `lp2bp` or `lp2bs`. `butter` does all of this in one call.",
+        "pt": "A resposta Butterworth é maximamente plana na banda de passagem. O protótipo tem o ponto de 3 dB em 1 rad/s e todos os polos no círculo unitário, o que facilita o escalonamento.\n\nUse `buttap` como primeiro passo de um projeto analógico feito à mão: converta com `zp2tf` e depois mova o corte com `lp2lp`, `lp2hp`, `lp2bp` ou `lp2bs`. A função `butter` faz tudo isso em uma chamada."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Poles of a fourth-order prototype",
+            "pt": "Polos de um protótipo de quarta ordem"
+          },
+          "code": "[z,p,k] = buttap(4);\ndisp(isempty(z))\ndisp(round(abs(p)*1e4)/1e4)\ndisp(round(p*1e4)/1e4)\ndisp(k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb1ap",
+        "cheb2ap",
+        "ellipap",
+        "lp2lp",
+        "butter"
+      ]
+    },
+    "cheb1ap": {
+      "summary": {
+        "en": "Returns the zeros, poles and gain of an analog Chebyshev type I lowpass prototype with ripple Rp dB in the passband.",
+        "pt": "Retorna zeros, polos e ganho do protótipo analógico passa-baixas Chebyshev tipo I, com ondulação de Rp dB na banda de passagem."
+      },
+      "syntax": [
+        {
+          "code": "[z,p,k] = cheb1ap(n,rp)",
+          "en": "Returns the prototype as zeros `z`, poles `p` and gain `k`.",
+          "pt": "Retorna o protótipo como zeros `z`, polos `p` e ganho `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer.",
+          "pt": "Ordem do filtro, um inteiro positivo."
+        },
+        {
+          "name": "rp",
+          "en": "Peak-to-peak passband ripple in dB, nonnegative.",
+          "pt": "Ondulação pico a pico na banda de passagem, em dB, não negativa."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros. Always empty.",
+          "pt": "Zeros. Sempre vazio."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the `n` poles.",
+          "pt": "Vetor coluna com os `n` polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain, so that the DC gain is 1 for odd `n` and `10^(-rp/20)` for even `n`.",
+          "pt": "Ganho, de modo que o ganho em DC é 1 para `n` ímpar e `10^(-rp/20)` para `n` par."
+        }
+      ],
+      "description": {
+        "en": "Chebyshev type I filters accept ripple in the passband in exchange for a steeper transition than Butterworth filters of the same order. The passband edge of the prototype is 1 rad/s, where the magnitude falls to `rp` dB below the peak.\n\nUse `cheb1ap` with `zp2tf` and the `lp2*` functions to build a custom analog filter, or call `cheby1` for the full design.",
+        "pt": "Os filtros Chebyshev tipo I aceitam ondulação na banda de passagem em troca de uma transição mais íngreme que a de um Butterworth de mesma ordem. A borda da banda de passagem do protótipo é 1 rad/s, onde o módulo cai `rp` dB abaixo do pico.\n\nUse `cheb1ap` com `zp2tf` e as funções `lp2*` para montar um filtro analógico sob medida, ou chame `cheby1` para o projeto completo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Third-order prototype with 1 dB ripple",
+            "pt": "Protótipo de terceira ordem com 1 dB de ondulação"
+          },
+          "code": "[z,p,k] = cheb1ap(3,1);\ndisp(round(p*1e4)/1e4)\nfprintf('%.4f\\n', k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb2ap",
+        "buttap",
+        "ellipap",
+        "lp2lp",
+        "cheby1"
+      ]
+    },
+    "cheb2ap": {
+      "summary": {
+        "en": "Returns the zeros, poles and gain of an analog Chebyshev type II lowpass prototype with Rs dB of stopband attenuation.",
+        "pt": "Retorna zeros, polos e ganho do protótipo analógico passa-baixas Chebyshev tipo II, com Rs dB de atenuação na banda de rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[z,p,k] = cheb2ap(n,rs)",
+          "en": "Returns the prototype as zeros `z`, poles `p` and gain `k`.",
+          "pt": "Retorna o protótipo como zeros `z`, polos `p` e ganho `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer.",
+          "pt": "Ordem do filtro, um inteiro positivo."
+        },
+        {
+          "name": "rs",
+          "en": "Stopband attenuation in dB below the peak, nonnegative.",
+          "pt": "Atenuação na banda de rejeição, em dB abaixo do pico, não negativa."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros on the imaginary axis, in conjugate pairs. These are the frequencies the filter rejects completely.",
+          "pt": "Zeros no eixo imaginário, em pares conjugados. São as frequências que o filtro rejeita por completo."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the `n` poles.",
+          "pt": "Vetor coluna com os `n` polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain.",
+          "pt": "Ganho."
+        }
+      ],
+      "description": {
+        "en": "Chebyshev type II filters are flat in the passband and have ripple in the stopband. The prototype's stopband starts at 1 rad/s, where the response is `rs` dB below the peak.\n\nBecause the filter has finite zeros, it needs both `z` and `p`. Convert them with `zp2tf` for a transfer function, then scale with the `lp2*` functions, or call `cheby2` for the full design.",
+        "pt": "Os filtros Chebyshev tipo II são planos na banda de passagem e têm ondulação na banda de rejeição. A banda de rejeição do protótipo começa em 1 rad/s, onde a resposta está `rs` dB abaixo do pico.\n\nComo o filtro tem zeros finitos, são necessários `z` e `p`. Converta-os com `zp2tf` para obter uma função de transferência e depois escale com as funções `lp2*`, ou chame `cheby2` para o projeto completo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fourth-order prototype with 40 dB attenuation",
+            "pt": "Protótipo de quarta ordem com 40 dB de atenuação"
+          },
+          "code": "[z,p,k] = cheb2ap(4,40);\ndisp(round(z*1e4)/1e4)\ndisp(round(p*1e4)/1e4)\nfprintf('%.4f\\n', k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb1ap",
+        "buttap",
+        "ellipap",
+        "lp2lp",
+        "cheby2"
+      ]
+    },
+    "ellipap": {
+      "summary": {
+        "en": "Returns the zeros, poles and gain of an analog elliptic lowpass prototype with ripple Rp dB and stopband attenuation Rs dB.",
+        "pt": "Retorna zeros, polos e ganho do protótipo analógico passa-baixas elíptico, com ondulação de Rp dB e atenuação de Rs dB na rejeição."
+      },
+      "syntax": [
+        {
+          "code": "[z,p,k] = ellipap(n,rp,rs)",
+          "en": "Returns the prototype as zeros `z`, poles `p` and gain `k`.",
+          "pt": "Retorna o protótipo como zeros `z`, polos `p` e ganho `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Filter order, a positive integer.",
+          "pt": "Ordem do filtro, um inteiro positivo."
+        },
+        {
+          "name": "rp",
+          "en": "Passband ripple in dB. Must be greater than 0.",
+          "pt": "Ondulação na banda de passagem, em dB. Deve ser maior que 0."
+        },
+        {
+          "name": "rs",
+          "en": "Stopband attenuation in dB. Must be greater than `rp`.",
+          "pt": "Atenuação na banda de rejeição, em dB. Deve ser maior que `rp`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros on the imaginary axis, in conjugate pairs.",
+          "pt": "Zeros no eixo imaginário, em pares conjugados."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the `n` poles.",
+          "pt": "Vetor coluna com os `n` polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain.",
+          "pt": "Ganho."
+        }
+      ],
+      "description": {
+        "en": "Elliptic filters have ripple in both the passband and the stopband, and for a given order they have the narrowest transition band of all the classic designs. The passband edge of the prototype is 1 rad/s.\n\nUse `ellipap` for a hand-built analog design together with `zp2tf` and the `lp2*` functions. For a ready filter, call `ellip`; to find the order from a specification, use `ellipord`.",
+        "pt": "Os filtros elípticos têm ondulação tanto na banda de passagem quanto na de rejeição e, para uma dada ordem, apresentam a menor banda de transição entre os projetos clássicos. A borda da banda de passagem do protótipo é 1 rad/s.\n\nUse `ellipap` para um projeto analógico feito à mão, junto com `zp2tf` e as funções `lp2*`. Para um filtro pronto, chame `ellip`; para achar a ordem a partir de uma especificação, use `ellipord`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Third-order prototype, 1 dB ripple, 40 dB attenuation",
+            "pt": "Protótipo de terceira ordem, ondulação de 1 dB, atenuação de 40 dB"
+          },
+          "code": "[z,p,k] = ellipap(3,1,40);\ndisp(round(z*1e4)/1e4)\ndisp(round(p*1e4)/1e4)\nfprintf('%.4f\\n', k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cheb1ap",
+        "cheb2ap",
+        "buttap",
+        "ellip",
+        "ellipord"
+      ]
+    },
+    "freqs": {
+      "summary": {
+        "en": "Computes the frequency response of an analog filter given as numerator and denominator polynomials in s.",
+        "pt": "Calcula a resposta em frequência de um filtro analógico dado por polinômios do numerador e do denominador em s."
+      },
+      "syntax": [
+        {
+          "code": "[h,w] = freqs(b,a)",
+          "en": "Response at 200 frequencies chosen automatically.",
+          "pt": "Resposta em 200 frequências escolhidas automaticamente."
+        },
+        {
+          "code": "[h,w] = freqs(b,a,n)",
+          "en": "Response at `n` automatically chosen frequencies.",
+          "pt": "Resposta em `n` frequências escolhidas automaticamente."
+        },
+        {
+          "code": "h = freqs(b,a,w)",
+          "en": "Response at the frequencies in the vector `w`, in rad/s.",
+          "pt": "Resposta nas frequências do vetor `w`, em rad/s."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, in descending powers of `s`.",
+          "pt": "Coeficientes do numerador, em potências decrescentes de `s`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, in descending powers of `s`.",
+          "pt": "Coeficientes do denominador, em potências decrescentes de `s`."
+        },
+        {
+          "name": "n",
+          "en": "Number of frequency points, a positive integer.",
+          "pt": "Número de pontos de frequência, um inteiro positivo."
+        },
+        {
+          "name": "w",
+          "en": "Vector of frequencies in rad/s at which to evaluate the response.",
+          "pt": "Vetor de frequências em rad/s em que a resposta é avaliada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "Complex frequency response `H(jw)`. Same length as `w`.",
+          "pt": "Resposta em frequência complexa `H(jw)`. Mesmo comprimento de `w`."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies in rad/s, log-spaced when chosen automatically.",
+          "pt": "Frequências em rad/s, com espaçamento logarítmico quando escolhidas automaticamente."
+        }
+      ],
+      "description": {
+        "en": "`freqs` evaluates `b(s)/a(s)` along the imaginary axis, `s = jw`. Take `abs(h)` for the magnitude and `angle(h)` for the phase, in radians. Frequencies are in rad/s, not Hz: divide by `2*pi` to convert.\n\nWith automatic frequencies, the grid is log-spaced and covers the roots of the numerator and denominator, from two decades below the smallest to one decade above the largest. This is the analog counterpart of `freqz`.",
+        "pt": "`freqs` avalia `b(s)/a(s)` ao longo do eixo imaginário, `s = jw`. Use `abs(h)` para o módulo e `angle(h)` para a fase, em radianos. As frequências estão em rad/s, não em Hz: divida por `2*pi` para converter.\n\nCom frequências automáticas, a grade tem espaçamento logarítmico e cobre as raízes do numerador e do denominador, de duas décadas abaixo da menor até uma década acima da maior. É o equivalente analógico de `freqz`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Magnitude of a second-order Butterworth filter",
+            "pt": "Módulo de um filtro Butterworth de segunda ordem"
+          },
+          "code": "b = 1; a = [1 sqrt(2) 1];\n[h,w] = freqs(b,a,[0.1 1 10]);\nfprintf('%.4f %.4f\\n', [w(:) abs(h(:))]');",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Automatic frequency grid",
+            "pt": "Grade de frequências automática"
+          },
+          "code": "b = 1; a = [1 sqrt(2) 1];\n[h,w] = freqs(b,a,5);\ndisp(size(h))\nfprintf('%.4g\\n', w([1 end]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "freqz",
+        "besself",
+        "bilinear",
+        "butter",
+        "impinvar"
+      ],
+      "notes": {
+        "en": "With automatic frequencies, MATLAB refines the grid around resonances (uneven log spacing), while MatLivre spaces it evenly on a log scale. Pass your own `w` when you need identical points.",
+        "pt": "Com frequências automáticas, o MATLAB refina a grade em torno de ressonâncias (espaçamento logarítmico desigual), enquanto o MatLivre a espaça uniformemente em escala logarítmica. Passe o seu próprio `w` quando precisar de pontos idênticos."
+      }
+    },
+    "impinvar": {
+      "summary": {
+        "en": "Converts an analog filter to a digital one by the impulse invariance method.",
+        "pt": "Converte um filtro analógico em digital pelo método da invariância ao impulso."
+      },
+      "syntax": [
+        {
+          "code": "[bz,az] = impinvar(b,a)",
+          "en": "Digital filter for a sample rate of 1 Hz.",
+          "pt": "Filtro digital para taxa de amostragem de 1 Hz."
+        },
+        {
+          "code": "[bz,az] = impinvar(b,a,fs)",
+          "en": "Digital filter for sample rate `fs`.",
+          "pt": "Filtro digital para a taxa de amostragem `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator of the analog filter, in descending powers of `s`. Its degree cannot exceed that of `a`.",
+          "pt": "Numerador do filtro analógico, em potências decrescentes de `s`. Seu grau não pode exceder o de `a`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator of the analog filter, in descending powers of `s`.",
+          "pt": "Denominador do filtro analógico, em potências decrescentes de `s`."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in Hz. The default is 1.",
+          "pt": "Taxa de amostragem em Hz. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bz",
+          "en": "Numerator of the digital filter, in descending powers of `z`.",
+          "pt": "Numerador do filtro digital, em potências decrescentes de `z`."
+        },
+        {
+          "name": "az",
+          "en": "Denominator of the digital filter, in descending powers of `z`.",
+          "pt": "Denominador do filtro digital, em potências decrescentes de `z`."
+        }
+      ],
+      "description": {
+        "en": "Impulse invariance makes the digital filter's impulse response equal to samples of the analog one, taken `1/fs` seconds apart. Each analog pole `p` becomes a digital pole `exp(p/fs)`, so stability is kept.\n\nThe method matches the time-domain shape well, but it aliases: it works for lowpass and bandpass filters whose response is small near `fs/2`, and it is a poor choice for highpass or bandstop filters. For those, use `bilinear`.",
+        "pt": "A invariância ao impulso faz a resposta ao impulso do filtro digital igual a amostras da resposta do analógico, tomadas a cada `1/fs` segundos. Cada polo analógico `p` vira um polo digital `exp(p/fs)`, então a estabilidade é mantida.\n\nO método reproduz bem a forma no domínio do tempo, mas sofre aliasing: serve para filtros passa-baixas e passa-faixa cuja resposta é pequena perto de `fs/2`, e é uma má escolha para passa-altas ou rejeita-faixa. Nesses casos, use `bilinear`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Second-order analog filter at 10 Hz",
+            "pt": "Filtro analógico de segunda ordem a 10 Hz"
+          },
+          "code": "[bz,az] = impinvar(1,[1 3 2],10);\nfprintf('%.5f ', bz); fprintf('\\n');\nfprintf('%.5f ', az); fprintf('\\n');",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bilinear",
+        "freqs",
+        "residue",
+        "freqz",
+        "lp2lp"
+      ]
+    },
+    "lp2lp": {
+      "summary": {
+        "en": "Transforms an analog lowpass prototype into a lowpass filter with a different cutoff frequency.",
+        "pt": "Transforma um protótipo analógico passa-baixas em um passa-baixas com outra frequência de corte."
+      },
+      "syntax": [
+        {
+          "code": "[bt,at] = lp2lp(b,a,wo)",
+          "en": "Transforms the prototype given by `b` and `a`.",
+          "pt": "Transforma o protótipo dado por `b` e `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Numerador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Denominador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "wo",
+          "en": "Cutoff frequency in rad/s, positive.",
+          "pt": "Frequência de corte em rad/s, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bt",
+          "en": "Numerator of the transformed filter, in descending powers of `s`.",
+          "pt": "Numerador do filtro transformado, em potências decrescentes de `s`."
+        },
+        {
+          "name": "at",
+          "en": "Denominator of the transformed filter, in descending powers of `s`.",
+          "pt": "Denominador do filtro transformado, em potências decrescentes de `s`."
+        }
+      ],
+      "description": {
+        "en": "The transform substitutes `s/wo` for `s`. The shape of the response is kept and only the frequency axis is scaled, so the 1 rad/s edge of a prototype ends up at `wo`.\n\nStart from `buttap`, `cheb1ap`, `cheb2ap`, `ellipap` or `besselap`, convert to polynomials with `zp2tf`, and apply `lp2lp` to set the cutoff. The numerator degree cannot exceed the denominator degree.",
+        "pt": "A transformação substitui `s` por `s/wo`. A forma da resposta é mantida e apenas o eixo de frequência é escalado, de modo que a borda de 1 rad/s do protótipo vai para `wo`.\n\nParta de `buttap`, `cheb1ap`, `cheb2ap`, `ellipap` ou `besselap`, converta para polinômios com `zp2tf` e aplique `lp2lp` para definir o corte. O grau do numerador não pode exceder o do denominador."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Move the cutoff from 1 to 10 rad/s",
+            "pt": "Mover o corte de 1 para 10 rad/s"
+          },
+          "code": "[bt,at] = lp2lp(1,[1 1],10);\ndisp(bt)\ndisp(at)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lp2hp",
+        "lp2bp",
+        "lp2bs",
+        "buttap",
+        "bilinear"
+      ]
+    },
+    "lp2hp": {
+      "summary": {
+        "en": "Transforms an analog lowpass prototype into a highpass filter with cutoff `wo`.",
+        "pt": "Transforma um protótipo analógico passa-baixas em um passa-altas com corte em `wo`."
+      },
+      "syntax": [
+        {
+          "code": "[bt,at] = lp2hp(b,a,wo)",
+          "en": "Transforms the prototype given by `b` and `a`.",
+          "pt": "Transforma o protótipo dado por `b` e `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Numerador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Denominador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "wo",
+          "en": "Cutoff frequency in rad/s, positive.",
+          "pt": "Frequência de corte em rad/s, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bt",
+          "en": "Numerator of the transformed filter, in descending powers of `s`.",
+          "pt": "Numerador do filtro transformado, em potências decrescentes de `s`."
+        },
+        {
+          "name": "at",
+          "en": "Denominator of the transformed filter, in descending powers of `s`.",
+          "pt": "Denominador do filtro transformado, em potências decrescentes de `s`."
+        }
+      ],
+      "description": {
+        "en": "The transform substitutes `wo/s` for `s`, which swaps low and high frequencies. The 1 rad/s edge of the prototype ends up at `wo`, and the passband moves above it.\n\nIn the example, the lowpass `1/(s+1)` becomes `s/(s+10)`: it blocks DC and passes frequencies well above 10 rad/s.",
+        "pt": "A transformação substitui `s` por `wo/s`, o que troca baixas e altas frequências. A borda de 1 rad/s do protótipo vai para `wo`, e a banda de passagem passa a ficar acima dela.\n\nNo exemplo, o passa-baixas `1/(s+1)` vira `s/(s+10)`: ele bloqueia DC e deixa passar frequências bem acima de 10 rad/s."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Highpass at 10 rad/s from a first-order lowpass",
+            "pt": "Passa-altas em 10 rad/s a partir de um passa-baixas de primeira ordem"
+          },
+          "code": "[bt,at] = lp2hp(1,[1 1],10);\ndisp(bt)\ndisp(at)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lp2lp",
+        "lp2bp",
+        "lp2bs",
+        "buttap",
+        "bilinear"
+      ]
+    },
+    "lp2bp": {
+      "summary": {
+        "en": "Transforms an analog lowpass prototype into a bandpass filter centered at `wo` with bandwidth `bw`.",
+        "pt": "Transforma um protótipo analógico passa-baixas em um passa-faixa centrado em `wo`, com largura de banda `bw`."
+      },
+      "syntax": [
+        {
+          "code": "[bt,at] = lp2bp(b,a,wo,bw)",
+          "en": "Transforms the prototype given by `b` and `a`.",
+          "pt": "Transforma o protótipo dado por `b` e `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Numerador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Denominador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "wo",
+          "en": "Center frequency in rad/s, positive.",
+          "pt": "Frequência central em rad/s, positiva."
+        },
+        {
+          "name": "bw",
+          "en": "Bandwidth in rad/s, positive.",
+          "pt": "Largura de banda em rad/s, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bt",
+          "en": "Numerator of the transformed filter, in descending powers of `s`.",
+          "pt": "Numerador do filtro transformado, em potências decrescentes de `s`."
+        },
+        {
+          "name": "at",
+          "en": "Denominator of the transformed filter, in descending powers of `s`.",
+          "pt": "Denominador do filtro transformado, em potências decrescentes de `s`."
+        }
+      ],
+      "description": {
+        "en": "The transform substitutes `(s^2 + wo^2)/(bw*s)` for `s`. The passband of the prototype is stretched to a width `bw` centered on `wo`, and the filter order doubles. The center frequency `wo` is the geometric mean of the band edges.\n\nThe example turns a Butterworth lowpass into a bandpass at 100 rad/s with 20 rad/s of bandwidth and checks the magnitude below, at and above the center.",
+        "pt": "A transformação substitui `s` por `(s^2 + wo^2)/(bw*s)`. A banda de passagem do protótipo é esticada para uma largura `bw` centrada em `wo`, e a ordem do filtro dobra. A frequência central `wo` é a média geométrica das bordas da banda.\n\nO exemplo transforma um passa-baixas Butterworth em um passa-faixa em 100 rad/s com 20 rad/s de largura de banda e confere o módulo abaixo, no centro e acima."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bandpass at 100 rad/s from a Butterworth lowpass",
+            "pt": "Passa-faixa em 100 rad/s a partir de um passa-baixas Butterworth"
+          },
+          "code": "[b,a] = butter(2,1,'s');\n[bt,at] = lp2bp(b,a,100,20);\nw = [90 100 110];\nh = polyval(bt,1j*w)./polyval(at,1j*w);\nfprintf('%.4f\\n', abs(h));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lp2bs",
+        "lp2lp",
+        "lp2hp",
+        "buttap",
+        "freqs"
+      ]
+    },
+    "lp2bs": {
+      "summary": {
+        "en": "Transforms an analog lowpass prototype into a bandstop filter centered at `wo` with bandwidth `bw`.",
+        "pt": "Transforma um protótipo analógico passa-baixas em um rejeita-faixa centrado em `wo`, com largura de banda `bw`."
+      },
+      "syntax": [
+        {
+          "code": "[bt,at] = lp2bs(b,a,wo,bw)",
+          "en": "Transforms the prototype given by `b` and `a`.",
+          "pt": "Transforma o protótipo dado por `b` e `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Numerador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator of the lowpass prototype, in descending powers of `s`.",
+          "pt": "Denominador do protótipo passa-baixas, em potências decrescentes de `s`."
+        },
+        {
+          "name": "wo",
+          "en": "Center frequency in rad/s, positive.",
+          "pt": "Frequência central em rad/s, positiva."
+        },
+        {
+          "name": "bw",
+          "en": "Bandwidth in rad/s, positive.",
+          "pt": "Largura de banda em rad/s, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bt",
+          "en": "Numerator of the transformed filter, in descending powers of `s`.",
+          "pt": "Numerador do filtro transformado, em potências decrescentes de `s`."
+        },
+        {
+          "name": "at",
+          "en": "Denominator of the transformed filter, in descending powers of `s`.",
+          "pt": "Denominador do filtro transformado, em potências decrescentes de `s`."
+        }
+      ],
+      "description": {
+        "en": "The transform substitutes `bw*s/(s^2 + wo^2)` for `s`. The passband of the prototype becomes a notch of width `bw` centered on `wo`, and the filter order doubles. The filter passes everything outside the band.\n\nIn the example, the first-order lowpass `1/(s+1)` becomes a second-order filter whose numerator `s^2 + 10000` is zero at `s = j100`, so the center frequency is rejected completely.",
+        "pt": "A transformação substitui `s` por `bw*s/(s^2 + wo^2)`. A banda de passagem do protótipo vira um entalhe de largura `bw` centrado em `wo`, e a ordem do filtro dobra. O filtro deixa passar tudo fora da banda.\n\nNo exemplo, o passa-baixas de primeira ordem `1/(s+1)` vira um filtro de segunda ordem cujo numerador `s^2 + 10000` se anula em `s = j100`, de modo que a frequência central é rejeitada por completo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Notch at 100 rad/s from a first-order lowpass",
+            "pt": "Entalhe em 100 rad/s a partir de um passa-baixas de primeira ordem"
+          },
+          "code": "[bt,at] = lp2bs(1,[1 1],100,20);\ndisp(bt)\ndisp(at)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lp2bp",
+        "lp2lp",
+        "lp2hp",
+        "buttap",
+        "freqs"
+      ]
+    }
+  }
+}

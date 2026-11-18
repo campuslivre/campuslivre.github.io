@@ -1,0 +1,2012 @@
+{
+  "functions": {
+    "ifsst": {
+      "summary": {
+        "en": "Rebuilds a signal from a Fourier synchrosqueezed transform, from all of it, a frequency band or only the ridges you pick.",
+        "pt": "Reconstrói um sinal a partir de uma transformada sincro-comprimida de Fourier, usando tudo, uma faixa de frequências ou só as cristas escolhidas."
+      },
+      "syntax": [
+        {
+          "code": "xrec = ifsst(sst)",
+          "en": "Inverts the whole matrix using the default window `kaiser(256,10)`.",
+          "pt": "Inverte a matriz inteira usando a janela padrão `kaiser(256,10)`."
+        },
+        {
+          "code": "xrec = ifsst(sst, win)",
+          "en": "Inverts the whole matrix; `win` is the window length or the window itself.",
+          "pt": "Inverte a matriz inteira; `win` é o comprimento da janela ou a própria janela."
+        },
+        {
+          "code": "xrec = ifsst(sst, win, iridge, 'NumFrequencyBins', nb)",
+          "en": "Keeps only the rows around each ridge index.",
+          "pt": "Mantém só as linhas em torno de cada índice de crista."
+        },
+        {
+          "code": "xrec = ifsst(sst, win, f, freqrange)",
+          "en": "Keeps only the rows whose frequencies fall in `freqrange`.",
+          "pt": "Mantém só as linhas cujas frequências estão em `freqrange`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sst",
+          "en": "Synchrosqueezed transform: a matrix with one column per time instant. It has `floor(L/2)+1` rows (one-sided, for a real signal) or `L` rows (two-sided), where `L` is the window length.",
+          "pt": "Transformada sincro-comprimida: uma matriz com uma coluna por instante de tempo. Tem `floor(L/2)+1` linhas (unilateral, para sinal real) ou `L` linhas (bilateral), em que `L` é o comprimento da janela."
+        },
+        {
+          "name": "win",
+          "en": "Window length, or the window vector used when the transform was computed. Its length must agree with the number of rows of `sst`. Default `kaiser(256,10)`.",
+          "pt": "Comprimento da janela, ou o vetor da janela usada no cálculo da transformada. O comprimento deve ser compatível com o número de linhas de `sst`. Padrão: `kaiser(256,10)`."
+        },
+        {
+          "name": "iridge",
+          "en": "Row indices of one or more ridges, one value per column of `sst`. A matrix with several columns gives one reconstruction per column.",
+          "pt": "Índices de linha de uma ou mais cristas, um valor por coluna de `sst`. Uma matriz com várias colunas gera uma reconstrução por coluna."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector, one value per row of `sst`.",
+          "pt": "Vetor de frequências, um valor por linha de `sst`."
+        },
+        {
+          "name": "freqrange",
+          "en": "Two increasing values inside the range of `f`. The rows from the first `f` at or above the lower value through the first `f` at or above the upper value are summed.",
+          "pt": "Dois valores crescentes dentro da faixa de `f`. Somam-se as linhas desde a primeira frequência maior ou igual ao valor inferior até a primeira maior ou igual ao valor superior."
+        },
+        {
+          "name": "nb",
+          "en": "`'NumFrequencyBins'`: number of rows kept on each side of a ridge. Default 4.",
+          "pt": "`'NumFrequencyBins'`: número de linhas mantidas de cada lado da crista. Padrão: 4."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "xrec",
+          "en": "Reconstructed signal as a column with one sample per column of `sst`. It is real for a one-sided `sst` and complex for a two-sided one. With a matrix `iridge` it has one column per ridge.",
+          "pt": "Sinal reconstruído, em coluna, com uma amostra por coluna de `sst`. É real para um `sst` unilateral e complexo para um bilateral. Com `iridge` em forma de matriz, tem uma coluna por crista."
+        }
+      ],
+      "description": {
+        "en": "A synchrosqueezed transform concentrates the energy of a time-frequency map along thin ridges. `ifsst` goes the other way: it adds up the rows of the matrix at each time instant and scales the result by the window, so you get a signal back.\n\nUse it to isolate one component of a signal. Find a ridge with `tfridge`, then pass its indices as `iridge` to rebuild just that component, or give `freqrange` to keep a band.\n\nThe matrix is taken as given. The window must have the length that matches its number of rows, and the transform itself has to come from somewhere else, since `fsst` is not available in MatLivre.",
+        "pt": "Uma transformada sincro-comprimida concentra a energia do mapa tempo-frequência em cristas finas. `ifsst` faz o caminho inverso: soma as linhas da matriz em cada instante e escala o resultado pela janela, devolvendo um sinal.\n\nUse-a para isolar um componente do sinal. Encontre uma crista com `tfridge` e passe seus índices como `iridge` para reconstruir só aquele componente, ou informe `freqrange` para manter uma faixa.\n\nA matriz é usada como foi dada. A janela precisa ter o comprimento compatível com o número de linhas, e a transformada em si deve vir de outro lugar, pois `fsst` não está disponível no MatLivre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Invert a matrix that has energy in a single row",
+            "pt": "Inverter uma matriz com energia em uma única linha"
+          },
+          "code": "L = 64;\ng = kaiser(L, 10);\nS = zeros(L/2+1, 5);\nS(9, :) = 1;\nx = ifsst(S, g);\nfprintf('%.5f\\n', x(1:3));\nfprintf('%.5f\\n', 2/(L*g(L/2+1)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tfridge",
+        "istft",
+        "stft",
+        "spectrogram"
+      ],
+      "notes": {
+        "en": "`fsst`, the forward transform that produces the input of `ifsst`, is not implemented in MatLivre, so the matrix has to be supplied by you.",
+        "pt": "`fsst`, a transformada direta que gera a entrada de `ifsst`, não está implementada no MatLivre, então a matriz precisa ser fornecida por você."
+      }
+    },
+    "iscola": {
+      "summary": {
+        "en": "Checks whether a window and an overlap length satisfy the constant overlap-add condition, so that overlapped frames add up to a constant.",
+        "pt": "Verifica se uma janela e um comprimento de sobreposição satisfazem a condição de soma por sobreposição constante (COLA)."
+      },
+      "syntax": [
+        {
+          "code": "tf = iscola(win, noverlap)",
+          "en": "Tests the weighted overlap-add (`'wola'`) condition.",
+          "pt": "Testa a condição de soma por sobreposição ponderada (`'wola'`)."
+        },
+        {
+          "code": "tf = iscola(win, noverlap, method)",
+          "en": "Tests the `'ola'` or the `'wola'` condition.",
+          "pt": "Testa a condição `'ola'` ou `'wola'`."
+        },
+        {
+          "code": "[tf, cst, dev] = iscola(win, noverlap, method)",
+          "en": "Also returns the constant and the largest deviation from it.",
+          "pt": "Retorna também a constante e o maior desvio em relação a ela."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "win",
+          "en": "Window as a real vector.",
+          "pt": "Janela, como vetor real."
+        },
+        {
+          "name": "noverlap",
+          "en": "Number of samples shared by consecutive frames, a nonnegative integer smaller than the window length. The hop size is `numel(win) - noverlap`.",
+          "pt": "Número de amostras compartilhadas por quadros consecutivos, um inteiro não negativo menor que o comprimento da janela. O passo é `numel(win) - noverlap`."
+        },
+        {
+          "name": "method",
+          "en": "`'wola'` (default) sums the squared window, as used when the frames are windowed again before overlap-adding. `'ola'` sums the window itself.",
+          "pt": "`'wola'` (padrão) soma o quadrado da janela, como ocorre quando os quadros são janelados de novo antes da soma. `'ola'` soma a própria janela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "tf",
+          "en": "`true` when the overlapped sum is constant to within rounding, `false` otherwise.",
+          "pt": "`true` quando a soma sobreposta é constante, a menos de arredondamento, e `false` caso contrário."
+        },
+        {
+          "name": "cst",
+          "en": "The typical value (the median) of the overlapped sum.",
+          "pt": "O valor típico (a mediana) da soma sobreposta."
+        },
+        {
+          "name": "dev",
+          "en": "The largest distance between the overlapped sum and `cst`.",
+          "pt": "A maior distância entre a soma sobreposta e `cst`."
+        }
+      ],
+      "description": {
+        "en": "When a signal is cut into overlapping frames, windowed and later put back together by adding the frames, the result is the original signal (up to a constant) only if the shifted copies of the window add up to a constant. `iscola` tests exactly that for a given window and overlap.\n\nUse it before choosing the window and overlap of `stft` and `istft`. Note the default method is `'wola'`: a periodic Hann window with 50 percent overlap passes `'ola'` but fails `'wola'`, because its square does not add up to a constant.",
+        "pt": "Quando um sinal é cortado em quadros sobrepostos, janelado e depois recomposto somando os quadros, o resultado é o sinal original (a menos de uma constante) apenas se as cópias deslocadas da janela somarem uma constante. `iscola` testa exatamente isso para uma janela e uma sobreposição dadas.\n\nUse-a antes de escolher a janela e a sobreposição de `stft` e `istft`. Note que o método padrão é `'wola'`: uma janela de Hann periódica com 50 por cento de sobreposição passa em `'ola'`, mas falha em `'wola'`, porque o seu quadrado não soma uma constante."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Hann window with 50 percent overlap",
+            "pt": "Janela de Hann com 50 por cento de sobreposição"
+          },
+          "code": "w = hann(64, 'periodic');\ndisp(iscola(w, 32, 'ola'))\ndisp(iscola(w, 32, 'wola'))\n[tf, cst, dev] = iscola(w, 32, 'ola');\nfprintf('constant %.4f, within rounding: %d\\n', cst, dev < 1e-12);\ndisp(iscola(w, 48))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stft",
+        "istft",
+        "stftmag2sig",
+        "hann"
+      ]
+    },
+    "istft": {
+      "summary": {
+        "en": "Inverts a short-time Fourier transform by overlap-adding the inverse FFT of each column, returning the signal and its time vector.",
+        "pt": "Inverte uma transformada de Fourier de curta duração somando, com sobreposição, a FFT inversa de cada coluna, e retorna o sinal e o vetor de tempo."
+      },
+      "syntax": [
+        {
+          "code": "x = istft(s)",
+          "en": "Rebuilds the signal from `s`, using the default window and overlap.",
+          "pt": "Reconstrói o sinal a partir de `s`, com a janela e a sobreposição padrão."
+        },
+        {
+          "code": "x = istft(s, fs)",
+          "en": "Same, with the sample rate `fs` used for the time vector.",
+          "pt": "Igual, com a taxa de amostragem `fs` usada no vetor de tempo."
+        },
+        {
+          "code": "x = istft(___, Name, Value)",
+          "en": "Sets the window, overlap, FFT length and other options.",
+          "pt": "Define a janela, a sobreposição, o comprimento da FFT e outras opções."
+        },
+        {
+          "code": "[x, t] = istft(___)",
+          "en": "Also returns the time of each sample.",
+          "pt": "Retorna também o instante de cada amostra."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Short-time Fourier transform, with frequency along the rows and time along the columns (the output of `stft`).",
+          "pt": "Transformada de Fourier de curta duração, com a frequência nas linhas e o tempo nas colunas (a saída de `stft`)."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz, or a sample time as a duration. Only the time output `t` depends on it.",
+          "pt": "Taxa de amostragem em hertz, ou um tempo de amostragem como duração. Só a saída de tempo `t` depende dele."
+        },
+        {
+          "name": "'Window'",
+          "en": "Window vector; it must be the one used by `stft`. Default is a 128-sample periodic Hann window.",
+          "pt": "Vetor da janela; deve ser o mesmo usado em `stft`. O padrão é uma janela de Hann periódica de 128 amostras."
+        },
+        {
+          "name": "'OverlapLength'",
+          "en": "Samples shared by consecutive frames. Default is `floor(0.75*numel(window))`.",
+          "pt": "Amostras compartilhadas por quadros consecutivos. O padrão é `floor(0.75*numel(window))`."
+        },
+        {
+          "name": "'FFTLength'",
+          "en": "Number of FFT points used by `stft`. It must be at least the window length.",
+          "pt": "Número de pontos da FFT usado em `stft`. Deve ser pelo menos o comprimento da janela."
+        },
+        {
+          "name": "'FrequencyRange'",
+          "en": "`'centered'` (default), `'twosided'` or `'onesided'`: how the rows of `s` are arranged.",
+          "pt": "`'centered'` (padrão), `'twosided'` ou `'onesided'`: como as linhas de `s` estão organizadas."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'wola'` (default) or `'ola'`: whether frames are windowed again before overlap-adding.",
+          "pt": "`'wola'` (padrão) ou `'ola'`: se os quadros são janelados de novo antes da soma com sobreposição."
+        },
+        {
+          "name": "'ConjugateSymmetric'",
+          "en": "When true, each column is treated as the spectrum of a real frame, so the result is real.",
+          "pt": "Quando verdadeiro, cada coluna é tratada como o espectro de um quadro real, e o resultado é real."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Reconstructed signal, a column. For a `stft` made without padding it has the number of samples covered by the frames.",
+          "pt": "Sinal reconstruído, em coluna. Para uma `stft` feita sem preenchimento, tem o número de amostras cobertas pelos quadros."
+        },
+        {
+          "name": "t",
+          "en": "Time of each sample of `x`, starting at 0. In seconds when `fs` is given, in samples otherwise.",
+          "pt": "Instante de cada amostra de `x`, começando em 0. Em segundos quando `fs` é dado, em amostras caso contrário."
+        }
+      ],
+      "description": {
+        "en": "`istft` undoes `stft`. It takes the inverse FFT of every column, multiplies by the window if the method is `'wola'`, adds the overlapping pieces and divides by the summed window, so a window and overlap that satisfy the overlap-add condition give back the original signal.\n\nPass the same `'Window'`, `'OverlapLength'`, `'FFTLength'` and `'FrequencyRange'` that you gave to `stft`. You can check a window with `iscola`.",
+        "pt": "`istft` desfaz `stft`. Calcula a FFT inversa de cada coluna, multiplica pela janela se o método for `'wola'`, soma as partes sobrepostas e divide pela janela somada. Assim, uma janela e uma sobreposição que satisfazem a condição de soma por sobreposição devolvem o sinal original.\n\nInforme os mesmos `'Window'`, `'OverlapLength'`, `'FFTLength'` e `'FrequencyRange'` usados em `stft`. Você pode verificar uma janela com `iscola`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Go through stft and back",
+            "pt": "Ir e voltar com stft"
+          },
+          "code": "fs = 1000; n = (0:255)';\nx = sin(2*pi*100*n/fs) + 0.5*sin(2*pi*250*n/fs);\nw = hann(64, 'periodic');\ns = stft(x, fs, 'Window', w, 'OverlapLength', 48, 'FFTLength', 64);\n[y, t] = istft(s, fs, 'Window', w, 'OverlapLength', 48, 'FFTLength', 64, 'ConjugateSymmetric', true);\nfprintf('%d samples, t ends at %.3f s\\n', numel(y), t(end));\nfprintf('max error below 1e-10: %d\\n', max(abs(y - x(1:numel(y)))) < 1e-10);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stft",
+        "iscola",
+        "stftmag2sig",
+        "spectrogram"
+      ],
+      "notes": {
+        "en": "With single-precision input the result agrees with MATLAB only to about 1e-5, because MatLivre computes in double precision and rounds.",
+        "pt": "Com entrada em precisão simples, o resultado concorda com o do MATLAB apenas até cerca de 1e-5, porque o MatLivre calcula em precisão dupla e arredonda."
+      }
+    },
+    "spectrogram": {
+      "summary": {
+        "en": "Computes the short-time Fourier transform of a signal and returns it with the frequencies, the times and the power spectral density of each segment.",
+        "pt": "Calcula a transformada de Fourier de curta duração de um sinal e a retorna com as frequências, os tempos e a densidade espectral de potência de cada segmento."
+      },
+      "syntax": [
+        {
+          "code": "s = spectrogram(x)",
+          "en": "Uses eight segments with 50 percent overlap and a Hamming window.",
+          "pt": "Usa oito segmentos com 50 por cento de sobreposição e janela de Hamming."
+        },
+        {
+          "code": "s = spectrogram(x, window, noverlap, nfft)",
+          "en": "Sets the window, the overlap and the number of FFT points.",
+          "pt": "Define a janela, a sobreposição e o número de pontos da FFT."
+        },
+        {
+          "code": "[s, f, t, p] = spectrogram(x, window, noverlap, nfft, fs)",
+          "en": "Uses the sample rate `fs` (hertz) for `f` and `t`; `p` is the power spectral density.",
+          "pt": "Usa a taxa de amostragem `fs` (hertz) em `f` e `t`; `p` é a densidade espectral de potência."
+        },
+        {
+          "code": "[s, f, t, p] = spectrogram(___, freqrange, spectrumtype)",
+          "en": "Chooses the frequency range and `'psd'` or `'power'`.",
+          "pt": "Escolhe a faixa de frequências e `'psd'` ou `'power'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a real or complex vector.",
+          "pt": "Sinal, um vetor real ou complexo."
+        },
+        {
+          "name": "window",
+          "en": "Window vector, or a length (then a Hamming window of that length is used). The default makes eight segments.",
+          "pt": "Vetor da janela, ou um comprimento (usa-se então uma janela de Hamming com esse comprimento). O padrão gera oito segmentos."
+        },
+        {
+          "name": "noverlap",
+          "en": "Samples shared by consecutive segments. Default is 50 percent of the window length.",
+          "pt": "Amostras compartilhadas por segmentos consecutivos. O padrão é 50 por cento do comprimento da janela."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of FFT points, a scalar. Default is the larger of 256 and the window length rounded up to a power of two.",
+          "pt": "Número de pontos da FFT, um escalar. O padrão é o maior entre 256 e o comprimento da janela arredondado para cima a uma potência de dois."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz. Without it, `f` is in radians per sample and `t` in samples.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, `f` fica em radianos por amostra e `t` em amostras."
+        },
+        {
+          "name": "freqrange",
+          "en": "`'onesided'` (default for real `x`), `'twosided'` or `'centered'`. `'yaxis'` is accepted and does not change the numbers.",
+          "pt": "`'onesided'` (padrão para `x` real), `'twosided'` ou `'centered'`. `'yaxis'` é aceito e não altera os números."
+        },
+        {
+          "name": "spectrumtype",
+          "en": "`'psd'` (default) or `'power'`.",
+          "pt": "`'psd'` (padrão) ou `'power'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Complex short-time Fourier transform: one row per frequency, one column per segment.",
+          "pt": "Transformada de Fourier de curta duração, complexa: uma linha por frequência e uma coluna por segmento."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row of `s`.",
+          "pt": "Frequência de cada linha de `s`."
+        },
+        {
+          "name": "t",
+          "en": "Time at the middle of each segment, in seconds when `fs` is given.",
+          "pt": "Instante do meio de cada segmento, em segundos quando `fs` é dado."
+        },
+        {
+          "name": "p",
+          "en": "Power spectral density (or power, for `'power'`) of each segment, same size as `s`.",
+          "pt": "Densidade espectral de potência (ou potência, para `'power'`) de cada segmento, do mesmo tamanho que `s`."
+        }
+      ],
+      "description": {
+        "en": "The signal is split into segments of the window length that overlap by `noverlap` samples. Each segment is multiplied by the window and transformed with an FFT of `nfft` points. The columns of `s` therefore show how the spectrum changes with time.\n\nA longer window separates close frequencies better but smears events in time; a shorter one does the opposite. For a real signal, `s` has `nfft/2+1` rows. Use `abs(s).^2` or `p` to see where the energy is.",
+        "pt": "O sinal é dividido em segmentos do comprimento da janela, que se sobrepõem em `noverlap` amostras. Cada segmento é multiplicado pela janela e transformado por uma FFT de `nfft` pontos. As colunas de `s` mostram, assim, como o espectro muda com o tempo.\n\nUma janela longa separa melhor frequências próximas, mas borra eventos no tempo; uma curta faz o contrário. Para um sinal real, `s` tem `nfft/2+1` linhas. Use `abs(s).^2` ou `p` para ver onde está a energia."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two tones in a signal",
+            "pt": "Dois tons em um sinal"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\nx = sin(2*pi*100*t) + 0.5*sin(2*pi*250*t);\n[s, f, tt, p] = spectrogram(x, hann(64), 32, 64, fs);\ndisp(size(s))\ndisp(tt')\n[~, i] = max(p(:, 3));\nfprintf('strongest bin in segment 3: %.2f Hz\\n', f(i));",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Density versus power for a single tone",
+            "pt": "Densidade versus potência para um único tom"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\nx = sin(2*pi*100*t);\n[~, ~, ~, p1] = spectrogram(x, hann(64), 32, 64, fs);\n[~, ~, ~, p2] = spectrogram(x, hann(64), 32, 64, fs, 'power');\nfprintf('psd peak %.4f, power peak %.4f\\n', max(p1(:, 3)), max(p2(:, 3)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stft",
+        "xspectrogram",
+        "pspectrum",
+        "tfridge",
+        "istft"
+      ],
+      "notes": {
+        "en": "Not implemented: the centroid outputs `fc` and `tc`, a frequency vector in place of `nfft`, the `'reassigned'` option, and plotting when called without output arguments (an error is raised, so always request outputs).",
+        "pt": "Não implementados: as saídas de centroide `fc` e `tc`, um vetor de frequências no lugar de `nfft`, a opção `'reassigned'` e o gráfico quando chamada sem argumentos de saída (ocorre um erro, então peça sempre as saídas)."
+      }
+    },
+    "stft": {
+      "summary": {
+        "en": "Computes the short-time Fourier transform of a signal, with the frequency and time vectors, over a window you choose.",
+        "pt": "Calcula a transformada de Fourier de curta duração de um sinal, com os vetores de frequência e de tempo, usando uma janela que você escolhe."
+      },
+      "syntax": [
+        {
+          "code": "s = stft(x)",
+          "en": "Uses the default 128-sample periodic Hann window and an overlap of 96 samples.",
+          "pt": "Usa a janela de Hann periódica de 128 amostras e sobreposição de 96 amostras."
+        },
+        {
+          "code": "s = stft(x, fs)",
+          "en": "Takes the sample rate `fs` in hertz for the outputs `f` and `t`.",
+          "pt": "Usa a taxa de amostragem `fs`, em hertz, para as saídas `f` e `t`."
+        },
+        {
+          "code": "[s, f, t] = stft(___, Name, Value)",
+          "en": "Sets the window, overlap, FFT length and frequency range.",
+          "pt": "Define a janela, a sobreposição, o comprimento da FFT e a faixa de frequências."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector (or a matrix with one signal per column).",
+          "pt": "Sinal, um vetor (ou uma matriz com um sinal por coluna)."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz. Without it, `f` is in radians per sample and `t` in samples.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, `f` fica em radianos por amostra e `t` em amostras."
+        },
+        {
+          "name": "'Window'",
+          "en": "Window vector. It must not be longer than the signal.",
+          "pt": "Vetor da janela. Não pode ser mais longo que o sinal."
+        },
+        {
+          "name": "'OverlapLength'",
+          "en": "Samples shared by consecutive segments. Default is `floor(0.75*numel(window))`.",
+          "pt": "Amostras compartilhadas por segmentos consecutivos. O padrão é `floor(0.75*numel(window))`."
+        },
+        {
+          "name": "'FFTLength'",
+          "en": "FFT size, at least the window length. Default is the window length.",
+          "pt": "Tamanho da FFT, no mínimo o comprimento da janela. O padrão é o comprimento da janela."
+        },
+        {
+          "name": "'FrequencyRange'",
+          "en": "`'centered'` (default, frequencies from negative to positive), `'twosided'` (0 up to just below `fs`) or `'onesided'` (0 up to `fs/2`, real input only).",
+          "pt": "`'centered'` (padrão, das frequências negativas às positivas), `'twosided'` (de 0 até logo abaixo de `fs`) ou `'onesided'` (de 0 a `fs/2`, apenas entrada real)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Transform, frequency along the rows and time along the columns.",
+          "pt": "Transformada, com a frequência nas linhas e o tempo nas colunas."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row, in hertz when `fs` is given.",
+          "pt": "Frequência de cada linha, em hertz quando `fs` é dado."
+        },
+        {
+          "name": "t",
+          "en": "Time at the middle of each window, in seconds when `fs` is given.",
+          "pt": "Instante do meio de cada janela, em segundos quando `fs` é dado."
+        }
+      ],
+      "description": {
+        "en": "`stft` slides a window along the signal, takes the FFT of each windowed piece and stacks the results as columns. With the default `'centered'` range the zero frequency sits in the middle of the rows, so a real signal shows two mirror-image halves; use `'FrequencyRange','onesided'` to keep only the non-negative frequencies.\n\nUnlike `spectrogram`, the output is the plain transform with no scaling. `istft` inverts it when the window and overlap pass `iscola`.",
+        "pt": "`stft` desliza uma janela ao longo do sinal, calcula a FFT de cada pedaço janelado e empilha os resultados em colunas. Com a faixa `'centered'` padrão, a frequência zero fica no meio das linhas, então um sinal real mostra duas metades espelhadas; use `'FrequencyRange','onesided'` para manter só as frequências não negativas.\n\nAo contrário de `spectrogram`, a saída é a transformada pura, sem escala. `istft` a inverte quando a janela e a sobreposição passam em `iscola`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One-sided transform of a 100 Hz tone",
+            "pt": "Transformada unilateral de um tom de 100 Hz"
+          },
+          "code": "fs = 1000; n = (0:255)';\nx = sin(2*pi*100*n/fs);\n[s, f, t] = stft(x, fs, 'Window', hann(64, 'periodic'), 'OverlapLength', 32, 'FFTLength', 64, 'FrequencyRange', 'onesided');\ndisp(size(s))\ndisp(f(1:3)')\ndisp(t(1:3)')\n[~, i] = max(abs(s(:, 3)));\nfprintf('peak at %.2f Hz\\n', f(i));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "istft",
+        "spectrogram",
+        "iscola",
+        "stftmag2sig",
+        "ifsst"
+      ]
+    },
+    "stftmag2sig": {
+      "summary": {
+        "en": "Estimates a signal from the magnitude of its short-time Fourier transform with the Griffin-Lim iteration, when the phase is not available.",
+        "pt": "Estima um sinal a partir do módulo da sua transformada de Fourier de curta duração com a iteração de Griffin-Lim, quando a fase não está disponível."
+      },
+      "syntax": [
+        {
+          "code": "x = stftmag2sig(s, nfft)",
+          "en": "Rebuilds a signal from the magnitude `s`, assuming `nfft` FFT points.",
+          "pt": "Reconstrói um sinal a partir do módulo `s`, supondo `nfft` pontos de FFT."
+        },
+        {
+          "code": "x = stftmag2sig(s, nfft, fs)",
+          "en": "Also takes the sample rate for the time output.",
+          "pt": "Aceita também a taxa de amostragem, para a saída de tempo."
+        },
+        {
+          "code": "[x, t, info] = stftmag2sig(___, Name, Value)",
+          "en": "Sets the window, overlap, frequency range and the iteration limits; `info` describes the run.",
+          "pt": "Define a janela, a sobreposição, a faixa de frequências e os limites da iteração; `info` descreve a execução."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Nonnegative magnitude of an STFT, frequency along the rows and time along the columns.",
+          "pt": "Módulo (não negativo) de uma STFT, com a frequência nas linhas e o tempo nas colunas."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length used to produce `s`.",
+          "pt": "Comprimento da FFT usada para produzir `s`."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz, used only for `t`.",
+          "pt": "Taxa de amostragem em hertz, usada apenas em `t`."
+        },
+        {
+          "name": "'Window'",
+          "en": "Window used to produce `s`. Default is `hann(128,'periodic')`.",
+          "pt": "Janela usada para produzir `s`. O padrão é `hann(128,'periodic')`."
+        },
+        {
+          "name": "'OverlapLength'",
+          "en": "Overlap used to produce `s`. Default is `floor(0.75*numel(window))`.",
+          "pt": "Sobreposição usada para produzir `s`. O padrão é `floor(0.75*numel(window))`."
+        },
+        {
+          "name": "'FrequencyRange'",
+          "en": "`'centered'`, `'onesided'` or `'twosided'`, matching how `s` was made.",
+          "pt": "`'centered'`, `'onesided'` ou `'twosided'`, de acordo com a forma como `s` foi gerado."
+        },
+        {
+          "name": "'MaxIterations'",
+          "en": "Maximum number of iterations. Default 100.",
+          "pt": "Número máximo de iterações. Padrão: 100."
+        },
+        {
+          "name": "'InconsistencyTolerance'",
+          "en": "Stops when the relative difference between the magnitude of the estimate and `s` falls below this value. Default 1e-4.",
+          "pt": "Interrompe quando a diferença relativa entre o módulo da estimativa e `s` fica abaixo deste valor. Padrão: 1e-4."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Estimated signal, a column.",
+          "pt": "Sinal estimado, em coluna."
+        },
+        {
+          "name": "t",
+          "en": "Time of each sample, starting at 0 (seconds when `fs` is given).",
+          "pt": "Instante de cada amostra, começando em 0 (segundos quando `fs` é dado)."
+        },
+        {
+          "name": "info",
+          "en": "Structure with `ExitFlag` (1 when the tolerance was met, 0 otherwise), `NumIterations`, `Inconsistency` (the last relative difference), `ReconstructedSTFT` and `ReconstructedPhase`.",
+          "pt": "Estrutura com `ExitFlag` (1 quando a tolerância foi atingida, 0 caso contrário), `NumIterations`, `Inconsistency` (a última diferença relativa), `ReconstructedSTFT` e `ReconstructedPhase`."
+        }
+      ],
+      "description": {
+        "en": "A magnitude spectrogram does not say what the phase is, and without phase the signal cannot be rebuilt directly. The Griffin-Lim method starts from zero phase and repeats: invert, transform again, keep the new phase and put back the given magnitude. Each pass makes the spectrogram of the estimate closer to `s`.\n\nThe result is one signal that has nearly that magnitude, not necessarily the original one. Read `info.Inconsistency` to see how close it got and raise `'MaxIterations'` if it is still large.",
+        "pt": "Um espectrograma de módulo não informa a fase, e sem fase o sinal não pode ser reconstruído diretamente. O método de Griffin-Lim parte de fase zero e repete: inverte, transforma de novo, guarda a nova fase e recoloca o módulo dado. Cada passada aproxima o espectrograma da estimativa de `s`.\n\nO resultado é um sinal com módulo quase igual ao dado, não necessariamente o original. Leia `info.Inconsistency` para ver o quão perto chegou e aumente `'MaxIterations'` se ainda estiver grande."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover a signal from its magnitude",
+            "pt": "Recuperar um sinal a partir do seu módulo"
+          },
+          "code": "fs = 1000; n = (0:255)';\nx = sin(2*pi*100*n/fs) + 0.5*sin(2*pi*250*n/fs);\nw = hann(64, 'periodic');\ns = stft(x, fs, 'Window', w, 'OverlapLength', 48, 'FFTLength', 64, 'FrequencyRange', 'onesided');\n[y, t, info] = stftmag2sig(abs(s), 64, fs, 'Window', w, 'OverlapLength', 48, 'FrequencyRange', 'onesided', 'MaxIterations', 50);\nfprintf('%d samples, %d iterations, exit flag %d\\n', numel(y), info.NumIterations, info.ExitFlag);\ns2 = stft(y, fs, 'Window', w, 'OverlapLength', 48, 'FFTLength', 64, 'FrequencyRange', 'onesided');\nfprintf('relative magnitude error %.2f\\n', norm(abs(s2) - abs(s), 'fro')/norm(abs(s), 'fro'));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stft",
+        "istft",
+        "iscola",
+        "spectrogram"
+      ],
+      "notes": {
+        "en": "Only the default `'gla'` method is implemented. `'fgla'` and `'legla'` give an error, `'gd'` fails because it needs the Deep Learning Toolbox, and random initial phases are not available. A constant `'InitialPhase'` offset has no effect here, and single-precision input is iterated in double precision, so it differs from MATLAB at about 1e-5.",
+        "pt": "Só o método `'gla'` padrão está implementado. `'fgla'` e `'legla'` geram erro, `'gd'` falha porque exige o Deep Learning Toolbox, e fases iniciais aleatórias não estão disponíveis. Um deslocamento constante em `'InitialPhase'` não tem efeito aqui, e entradas em precisão simples são iteradas em precisão dupla, diferindo do MATLAB em cerca de 1e-5."
+      }
+    },
+    "tfridge": {
+      "summary": {
+        "en": "Finds the ridges of a time-frequency map, the curves of highest energy over time, with an optional penalty on frequency jumps.",
+        "pt": "Encontra as cristas de um mapa tempo-frequência, as curvas de maior energia ao longo do tempo, com uma penalidade opcional para saltos de frequência."
+      },
+      "syntax": [
+        {
+          "code": "[fridge, iridge] = tfridge(tfm, f)",
+          "en": "Finds the strongest ridge.",
+          "pt": "Encontra a crista mais forte."
+        },
+        {
+          "code": "[fridge, iridge] = tfridge(tfm, f, penalty)",
+          "en": "Penalizes jumps in frequency between neighbouring columns.",
+          "pt": "Penaliza saltos de frequência entre colunas vizinhas."
+        },
+        {
+          "code": "[fridge, iridge, lridge] = tfridge(___, 'NumRidges', nr)",
+          "en": "Finds `nr` ridges; `lridge` holds their linear indices.",
+          "pt": "Encontra `nr` cristas; `lridge` guarda os índices lineares delas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "tfm",
+          "en": "Time-frequency map, a real matrix with frequency along the rows and time along the columns, for example `abs(s)` from `spectrogram` or `stft`. The ridge follows its maximum, so larger means more energy.",
+          "pt": "Mapa tempo-frequência, uma matriz real com a frequência nas linhas e o tempo nas colunas, por exemplo `abs(s)` de `spectrogram` ou `stft`. A crista segue o máximo, então maior significa mais energia."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row of `tfm`.",
+          "pt": "Frequência de cada linha de `tfm`."
+        },
+        {
+          "name": "penalty",
+          "en": "Nonnegative scalar. Each jump of `d` rows between neighbouring columns costs `penalty*d^2`. Default 0, which just picks the largest value in each column.",
+          "pt": "Escalar não negativo. Cada salto de `d` linhas entre colunas vizinhas custa `penalty*d^2`. Padrão: 0, que apenas escolhe o maior valor de cada coluna."
+        },
+        {
+          "name": "'NumRidges'",
+          "en": "Number of ridges to extract. After each one, the rows within `'NumFrequencyBins'` of it are cleared. Default 1.",
+          "pt": "Número de cristas a extrair. Depois de cada uma, as linhas a até `'NumFrequencyBins'` dela são zeradas. Padrão: 1."
+        },
+        {
+          "name": "'NumFrequencyBins'",
+          "en": "Rows cleared on each side of an extracted ridge before the next search. Default 4.",
+          "pt": "Linhas zeradas de cada lado de uma crista extraída antes da busca seguinte. Padrão: 4."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "fridge",
+          "en": "Ridge frequencies, one row per time column of `tfm` and one column per ridge.",
+          "pt": "Frequências das cristas, uma linha por coluna de tempo de `tfm` e uma coluna por crista."
+        },
+        {
+          "name": "iridge",
+          "en": "Row index of the ridge in each column, same size as `fridge`.",
+          "pt": "Índice de linha da crista em cada coluna, com o mesmo tamanho de `fridge`."
+        },
+        {
+          "name": "lridge",
+          "en": "Linear index of each ridge point in `tfm`.",
+          "pt": "Índice linear de cada ponto da crista em `tfm`."
+        }
+      ],
+      "description": {
+        "en": "A ridge is the path of a component whose frequency changes with time, such as a chirp or a rotating machine's harmonic. `tfridge` finds it by dynamic programming: it picks, column by column, the path that gets the most energy while paying a price for large jumps in frequency.\n\nA penalty of 0 simply takes the maximum of every column, which can jump around in noise. Raising the penalty makes the path smoother. Combine `iridge` with `ifsst` to extract the component as a signal.",
+        "pt": "Uma crista é o caminho de um componente cuja frequência varia com o tempo, como um chirp ou o harmônico de uma máquina rotativa. `tfridge` a encontra por programação dinâmica: escolhe, coluna a coluna, o caminho que reúne mais energia pagando um preço por grandes saltos de frequência.\n\nUma penalidade 0 apenas toma o máximo de cada coluna, o que pode saltar no ruído. Aumentar a penalidade deixa o caminho mais suave. Combine `iridge` com `ifsst` para extrair o componente como sinal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Follow a chirp in a spectrogram",
+            "pt": "Seguir um chirp em um espectrograma"
+          },
+          "code": "fs = 1000; t = (0:511)'/fs;\nx = cos(2*pi*(50*t + 100*t.^2));\n[s, f, tt] = spectrogram(x, hann(64), 48, 64, fs);\n[fr, ir] = tfridge(abs(s), f);\ndisp(size(fr))\ndisp(round(fr(1:4:end)'))\ndisp(round(50 + 200*tt(1:4:end)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ifsst",
+        "spectrogram",
+        "stft",
+        "instfreq"
+      ]
+    },
+    "vmd": {
+      "summary": {
+        "en": "Splits a signal into a chosen number of narrow-band modes (intrinsic mode functions) with variational mode decomposition.",
+        "pt": "Separa um sinal em um número escolhido de modos de banda estreita (funções de modo intrínseco) por decomposição variacional de modos."
+      },
+      "syntax": [
+        {
+          "code": "imf = vmd(x)",
+          "en": "Decomposes `x` into 5 modes by default.",
+          "pt": "Decompõe `x` em 5 modos por padrão."
+        },
+        {
+          "code": "imf = vmd(x, 'NumIMFs', k)",
+          "en": "Asks for `k` modes.",
+          "pt": "Pede `k` modos."
+        },
+        {
+          "code": "[imf, res, info] = vmd(___)",
+          "en": "Also returns the residual and a structure describing the run.",
+          "pt": "Retorna também o resíduo e uma estrutura que descreve a execução."
+        },
+        {
+          "code": "[imf, res, info] = vmd(x, 'NumIMFs', k, 'CentralFrequencies', fc)",
+          "en": "Starts the modes at given normalized frequencies.",
+          "pt": "Inicia os modos em frequências normalizadas dadas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, a vector with at least two samples.",
+          "pt": "Sinal real, um vetor com pelo menos duas amostras."
+        },
+        {
+          "name": "'NumIMFs'",
+          "en": "Number of modes to extract, a positive integer. Default 5.",
+          "pt": "Número de modos a extrair, um inteiro positivo. Padrão: 5."
+        },
+        {
+          "name": "'CentralFrequencies'",
+          "en": "Starting center frequency of each mode, in cycles per sample (between 0 and 0.5). One value per mode.",
+          "pt": "Frequência central inicial de cada modo, em ciclos por amostra (entre 0 e 0,5). Um valor por modo."
+        },
+        {
+          "name": "'PenaltyFactor'",
+          "en": "Weight of the bandwidth penalty. A larger value gives narrower modes. Default 1000.",
+          "pt": "Peso da penalidade de largura de banda. Um valor maior gera modos mais estreitos. Padrão: 1000."
+        },
+        {
+          "name": "'MaxIterations'",
+          "en": "Maximum number of iterations. Default 500.",
+          "pt": "Número máximo de iterações. Padrão: 500."
+        },
+        {
+          "name": "'AbsoluteTolerance', 'RelativeTolerance'",
+          "en": "Convergence tolerances on the change between iterations.",
+          "pt": "Tolerâncias de convergência sobre a variação entre iterações."
+        },
+        {
+          "name": "'InitializeMethod'",
+          "en": "`'peaks'`, `'grid'` or `'random'`: how the starting frequencies are chosen when `'CentralFrequencies'` is not given.",
+          "pt": "`'peaks'`, `'grid'` ou `'random'`: como as frequências iniciais são escolhidas quando `'CentralFrequencies'` não é dado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "imf",
+          "en": "Modes, one per column, each as long as `x`.",
+          "pt": "Modos, um por coluna, cada um com o comprimento de `x`."
+        },
+        {
+          "name": "res",
+          "en": "Residual: what is left of `x` after the modes are removed.",
+          "pt": "Resíduo: o que sobra de `x` depois de remover os modos."
+        },
+        {
+          "name": "info",
+          "en": "Structure with `ExitFlag`, `NumIterations`, `CentralFrequencies` (the final center frequency of each mode, in the order of the columns of `imf`), `AbsoluteImprovement`, `RelativeImprovement` and `LagrangeMultiplier`.",
+          "pt": "Estrutura com `ExitFlag`, `NumIterations`, `CentralFrequencies` (a frequência central final de cada modo, na ordem das colunas de `imf`), `AbsoluteImprovement`, `RelativeImprovement` e `LagrangeMultiplier`."
+        }
+      ],
+      "description": {
+        "en": "Variational mode decomposition looks for modes that each live around one center frequency, so that together they add up to the signal. It adjusts the modes and their center frequencies alternately until the changes become small. Use it for signals made of a few components with different frequencies, such as a sum of tones or an amplitude-modulated carrier.\n\nThe number of modes is a choice you make; too few merges components and too many splits them. The columns of `imf` are not necessarily in the order of the starting frequencies, so read `info.CentralFrequencies` to see which mode is which.",
+        "pt": "A decomposição variacional de modos procura modos que vivem, cada um, em torno de uma frequência central, de modo que somados reconstruam o sinal. Ela ajusta alternadamente os modos e suas frequências centrais até que as mudanças fiquem pequenas. Use-a para sinais formados por poucos componentes de frequências diferentes, como soma de tons ou uma portadora modulada em amplitude.\n\nO número de modos é uma escolha sua; poucos modos fundem componentes e muitos os dividem. As colunas de `imf` não estão necessariamente na ordem das frequências iniciais, então consulte `info.CentralFrequencies` para saber qual modo é qual."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Separate two tones",
+            "pt": "Separar dois tons"
+          },
+          "code": "n = (0:255)';\nx = cos(2*pi*0.05*n) + 0.5*cos(2*pi*0.2*n);\n[imf, res, info] = vmd(x, 'NumIMFs', 2, 'CentralFrequencies', [0.04 0.18]);\ndisp(size(imf))\ndisp(round(info.CentralFrequencies'*100)/100)\nfprintf('exit flag %d\\n', info.ExitFlag);\nfprintf('modes + residual rebuild x: %d\\n', max(abs(sum(imf, 2) + res - x)) < 1e-10);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tfridge",
+        "envspectrum",
+        "spectrogram",
+        "instfreq"
+      ],
+      "notes": {
+        "en": "Starting frequencies given in ascending order through `'CentralFrequencies'` reproduce MATLAB exactly. The default `'peaks'`, `'grid'` and `'random'` initializations are not reproduced, so results can differ at about 1e-4, and a signal with fewer spectral peaks than modes (for example a three-sample signal) raises an error. Modes are updated in the order given, so descending starts, or four modes starting near the Nyquist frequency, can differ from MATLAB. Single-precision input is iterated in double precision.",
+        "pt": "Frequências iniciais em ordem crescente, passadas em `'CentralFrequencies'`, reproduzem o MATLAB exatamente. As inicializações padrão `'peaks'`, `'grid'` e `'random'` não são reproduzidas, então os resultados podem diferir em cerca de 1e-4, e um sinal com menos picos espectrais que modos (por exemplo, de três amostras) gera erro. Os modos são atualizados na ordem dada, de modo que inícios em ordem decrescente, ou quatro modos começando perto da frequência de Nyquist, podem diferir do MATLAB. Entradas em precisão simples são iteradas em precisão dupla."
+      }
+    },
+    "wvd": {
+      "summary": {
+        "en": "Computes the Wigner-Ville distribution of a signal, a time-frequency map with high resolution that is not limited by a window.",
+        "pt": "Calcula a distribuição de Wigner-Ville de um sinal, um mapa tempo-frequência de alta resolução que não é limitado por uma janela."
+      },
+      "syntax": [
+        {
+          "code": "[d, f, t] = wvd(x)",
+          "en": "Distribution with normalized frequencies and times in samples.",
+          "pt": "Distribuição com frequências normalizadas e tempos em amostras."
+        },
+        {
+          "code": "[d, f, t] = wvd(x, fs)",
+          "en": "Uses the sample rate `fs` (hertz) for `f` and `t`.",
+          "pt": "Usa a taxa de amostragem `fs` (hertz) em `f` e `t`."
+        },
+        {
+          "code": "[d, f, t] = wvd(___, 'MinThreshold', thr)",
+          "en": "Sets distribution values below `thr` to zero.",
+          "pt": "Zera os valores da distribuição abaixo de `thr`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a real or complex vector. A real signal is converted to its analytic version first.",
+          "pt": "Sinal, um vetor real ou complexo. Um sinal real é primeiro convertido na sua versão analítica."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "'MinThreshold'",
+          "en": "Threshold in the units of the distribution; values below it are set to zero.",
+          "pt": "Limiar, nas unidades da distribuição; os valores abaixo dele são zerados."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Distribution: one row per frequency and two columns per input sample (the time axis is sampled at half-sample steps). The values can be negative.",
+          "pt": "Distribuição: uma linha por frequência e duas colunas por amostra de entrada (o eixo do tempo é amostrado em meios passos). Os valores podem ser negativos."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies of the rows. From 0 to `fs/2` for real `x` with `fs`; from 0 to 1 without `fs`.",
+          "pt": "Frequências das linhas. De 0 a `fs/2` para `x` real com `fs`; de 0 a 1 sem `fs`."
+        },
+        {
+          "name": "t",
+          "en": "Times of the columns, in seconds with `fs`, in samples otherwise.",
+          "pt": "Instantes das colunas, em segundos com `fs`, em amostras caso contrário."
+        }
+      ],
+      "description": {
+        "en": "The Wigner-Ville distribution multiplies the signal by a reversed, shifted copy of itself and takes a Fourier transform over the lag. It needs no window, so a single chirp appears as a thin line. The price is cross terms: when the signal has more than one component, extra oscillating terms show up between them.\n\nUse it to see the instantaneous frequency of a single, well-behaved component. For signals with several components, a spectrogram or `tfridge` on a smoothed map is usually easier to read.",
+        "pt": "A distribuição de Wigner-Ville multiplica o sinal por uma cópia invertida e deslocada de si mesmo e calcula a transformada de Fourier em relação ao atraso. Não precisa de janela, e por isso um único chirp aparece como uma linha fina. O preço são os termos cruzados: quando o sinal tem mais de um componente, surgem termos oscilantes extras entre eles.\n\nUse-a para ver a frequência instantânea de um componente único e bem comportado. Para sinais com vários componentes, um espectrograma ou `tfridge` sobre um mapa suavizado costuma ser mais fácil de ler."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Follow a linear chirp",
+            "pt": "Seguir um chirp linear"
+          },
+          "code": "fs = 100; n = (0:31)';\ny = exp(1j*2*pi*(5*n/fs + 20*(n/fs).^2));\n[d, f, t] = wvd(y, fs);\ndisp(size(d))\nfor c = [8 32 56]\n  [~, i] = max(d(:, c));\n  fprintf('t = %.3f s: %.0f Hz (expected %.0f)\\n', t(c), f(i), 5 + 40*t(c));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "xwvd",
+        "spectrogram",
+        "stft",
+        "instfreq"
+      ],
+      "notes": {
+        "en": "The `'smoothedPseudo'` form is not implemented and raises an error. Single-precision input is computed in double precision, so values differ from MATLAB at about 1e-7.",
+        "pt": "A forma `'smoothedPseudo'` não está implementada e gera um erro. Entradas em precisão simples são calculadas em precisão dupla, então os valores diferem do MATLAB em cerca de 1e-7."
+      }
+    },
+    "xspectrogram": {
+      "summary": {
+        "en": "Computes the cross-spectrogram of two signals: the cross power spectral density of their short-time Fourier transforms.",
+        "pt": "Calcula o espectrograma cruzado de dois sinais: a densidade espectral de potência cruzada de suas transformadas de Fourier de curta duração."
+      },
+      "syntax": [
+        {
+          "code": "s = xspectrogram(x, y)",
+          "en": "Uses a Hamming window with 50 percent overlap.",
+          "pt": "Usa janela de Hamming com 50 por cento de sobreposição."
+        },
+        {
+          "code": "s = xspectrogram(x, y, window, noverlap, nfft)",
+          "en": "Sets the window, the overlap and the FFT length.",
+          "pt": "Define a janela, a sobreposição e o comprimento da FFT."
+        },
+        {
+          "code": "[s, f, t, cs] = xspectrogram(x, y, window, noverlap, nfft, fs)",
+          "en": "Takes the sample rate `fs` and also returns the complex cross-spectrogram `cs`.",
+          "pt": "Usa a taxa de amostragem `fs` e retorna também o espectrograma cruzado complexo `cs`."
+        },
+        {
+          "code": "[___] = xspectrogram(___, spectrumtype, 'MinThreshold', thr)",
+          "en": "Chooses `'psd'` or `'power'` and zeroes values below `thr` decibels.",
+          "pt": "Escolhe `'psd'` ou `'power'` e zera os valores abaixo de `thr` decibéis."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Two vectors of the same length.",
+          "pt": "Dois vetores do mesmo comprimento."
+        },
+        {
+          "name": "window, noverlap, nfft",
+          "en": "Window (vector or length), overlap in samples and FFT length, as in `spectrogram`.",
+          "pt": "Janela (vetor ou comprimento), sobreposição em amostras e comprimento da FFT, como em `spectrogram`."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "spectrumtype",
+          "en": "`'psd'` (default) or `'power'`.",
+          "pt": "`'psd'` (padrão) ou `'power'`."
+        },
+        {
+          "name": "'MinThreshold'",
+          "en": "Level in decibels; cells whose magnitude is at or below it are set to zero.",
+          "pt": "Nível em decibéis; as células cujo módulo é igual ou menor que ele são zeradas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Magnitude of the cross-spectrogram, a real matrix with one row per frequency and one column per segment.",
+          "pt": "Módulo do espectrograma cruzado, uma matriz real com uma linha por frequência e uma coluna por segmento."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row.",
+          "pt": "Frequência de cada linha."
+        },
+        {
+          "name": "t",
+          "en": "Time at the middle of each segment.",
+          "pt": "Instante do meio de cada segmento."
+        },
+        {
+          "name": "cs",
+          "en": "Complex cross-spectrogram. Its phase is the phase of the segment of `x` minus the phase of the segment of `y`.",
+          "pt": "Espectrograma cruzado complexo. A fase dele é a fase do segmento de `x` menos a fase do segmento de `y`."
+        }
+      ],
+      "description": {
+        "en": "Where `spectrogram` shows the energy of one signal over time and frequency, `xspectrogram` shows what two signals share. A large magnitude at a frequency means both signals have energy there, and the phase of `cs` tells how far one is ahead of the other.\n\nIt is useful for seeing, over time, at which frequencies two measurements are related and with what delay.",
+        "pt": "Enquanto `spectrogram` mostra a energia de um sinal no tempo e na frequência, `xspectrogram` mostra o que dois sinais têm em comum. Um módulo grande em uma frequência significa que os dois sinais têm energia ali, e a fase de `cs` indica o quanto um está adiantado em relação ao outro.\n\nÉ útil para ver, ao longo do tempo, em quais frequências duas medições estão relacionadas e com que atraso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two tones with different amplitude and phase",
+            "pt": "Dois tons com amplitude e fase diferentes"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\nx = sin(2*pi*100*t);\ny = 2*sin(2*pi*100*t + 0.5);\n[s, f, tt, cs] = xspectrogram(x, y, hann(64), 32, 64, fs);\ndisp(size(s))\n[m, i] = max(s(:, 3));\nfprintf('%.2f Hz, magnitude %.4f, phase %.3f rad\\n', f(i), m, angle(cs(i, 3)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "spectrogram",
+        "stft",
+        "mscohere",
+        "cpsd"
+      ]
+    },
+    "xwvd": {
+      "summary": {
+        "en": "Computes the cross Wigner-Ville distribution of two signals. This function is registered in MatLivre but not implemented yet.",
+        "pt": "Calcula a distribuição de Wigner-Ville cruzada de dois sinais. Esta função está registrada no MatLivre, mas ainda não foi implementada."
+      },
+      "syntax": [
+        {
+          "code": "[d, f, t] = xwvd(x, y)",
+          "en": "Cross distribution of `x` and `y`.",
+          "pt": "Distribuição cruzada de `x` e `y`."
+        },
+        {
+          "code": "[d, f, t] = xwvd(x, y, fs)",
+          "en": "Uses the sample rate `fs` (hertz) for `f` and `t`.",
+          "pt": "Usa a taxa de amostragem `fs` (hertz) em `f` e `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Two signals of the same length.",
+          "pt": "Dois sinais de mesmo comprimento."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Cross distribution, one row per frequency.",
+          "pt": "Distribuição cruzada, uma linha por frequência."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies of the rows.",
+          "pt": "Frequências das linhas."
+        },
+        {
+          "name": "t",
+          "en": "Times of the columns.",
+          "pt": "Instantes das colunas."
+        }
+      ],
+      "description": {
+        "en": "The cross Wigner-Ville distribution is the two-signal version of `wvd`: it multiplies `x` by a reversed, shifted copy of the conjugate of `y` and transforms over the lag. It shows where two signals share time-frequency content.\n\nIn MatLivre the call currently stops with an error, so the example below catches it and prints the message. Use `wvd` for a single signal, or `xspectrogram` for a cross map of two.",
+        "pt": "A distribuição de Wigner-Ville cruzada é a versão de `wvd` para dois sinais: multiplica `x` por uma cópia invertida e deslocada do conjugado de `y` e transforma em relação ao atraso. Ela mostra onde dois sinais compartilham conteúdo tempo-frequência.\n\nNo MatLivre a chamada hoje termina com um erro, então o exemplo abaixo captura o erro e imprime a mensagem. Use `wvd` para um sinal ou `xspectrogram` para um mapa cruzado de dois."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Catch the current limitation",
+            "pt": "Capturar a limitação atual"
+          },
+          "code": "x = cos(2*pi*0.1*(0:15)');\ntry\n  [d, f, t] = xwvd(x, x);\n  disp(size(d))\ncatch err\n  disp(err.message)\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wvd",
+        "xspectrogram",
+        "spectrogram"
+      ],
+      "notes": {
+        "en": "Not implemented: calling `xwvd` raises an error, because the rule MATLAB uses for the cross distribution was not recovered.",
+        "pt": "Não implementada: chamar `xwvd` gera um erro, porque a regra que o MATLAB usa para a distribuição cruzada não foi recuperada."
+      }
+    },
+    "envspectrum": {
+      "summary": {
+        "en": "Computes the envelope spectrum of a signal, which shows the rates at which its amplitude is modulated, as used in bearing and gear diagnosis.",
+        "pt": "Calcula o espectro de envelope de um sinal, que mostra as taxas de modulação da sua amplitude, usado no diagnóstico de rolamentos e engrenagens."
+      },
+      "syntax": [
+        {
+          "code": "[es, f] = envspectrum(x, fs)",
+          "en": "Envelope spectrum in the default band, from `fs/4` to `3*fs/8`.",
+          "pt": "Espectro de envelope na faixa padrão, de `fs/4` a `3*fs/8`."
+        },
+        {
+          "code": "[es, f] = envspectrum(x, fs, 'Band', [f1 f2])",
+          "en": "Uses the band from `f1` to `f2`.",
+          "pt": "Usa a faixa de `f1` a `f2`."
+        },
+        {
+          "code": "[es, f, env, t] = envspectrum(___, Name, Value)",
+          "en": "Also returns the envelope and its time vector; options select the method and filter order.",
+          "pt": "Retorna também o envelope e o vetor de tempo; as opções escolhem o método e a ordem do filtro."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal: a vector, or a matrix with one signal per column. At least 4 samples.",
+          "pt": "Sinal real: um vetor, ou uma matriz com um sinal por coluna. No mínimo 4 amostras."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "'Band'",
+          "en": "Two increasing frequencies in hertz, below `fs/2`, that delimit the band whose envelope is analyzed. Default `[fs/4 3*fs/8]`.",
+          "pt": "Duas frequências crescentes, em hertz, abaixo de `fs/2`, que delimitam a faixa cujo envelope é analisado. Padrão: `[fs/4 3*fs/8]`."
+        },
+        {
+          "name": "'FilterOrder'",
+          "en": "Order of the FIR filter that isolates the band. Default 50.",
+          "pt": "Ordem do filtro FIR que isola a faixa. Padrão: 50."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'demod'` (default) shifts the band to zero frequency and low-pass filters it; `'hilbert'` band-pass filters and takes the magnitude of the analytic signal.",
+          "pt": "`'demod'` (padrão) desloca a faixa para a frequência zero e aplica um filtro passa-baixas; `'hilbert'` aplica um filtro passa-faixa e toma o módulo do sinal analítico."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "es",
+          "en": "Amplitude spectrum of the envelope, with the mean removed. It has `floor(n/2)+1` rows for `n` samples.",
+          "pt": "Espectro de amplitude do envelope, com a média removida. Tem `floor(n/2)+1` linhas para `n` amostras."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row of `es`, in hertz.",
+          "pt": "Frequência de cada linha de `es`, em hertz."
+        },
+        {
+          "name": "env",
+          "en": "The envelope itself, with its mean removed, one column per signal.",
+          "pt": "O próprio envelope, com a média removida, uma coluna por sinal."
+        },
+        {
+          "name": "t",
+          "en": "Time of each sample, in seconds.",
+          "pt": "Instante de cada amostra, em segundos."
+        }
+      ],
+      "description": {
+        "en": "A damaged bearing or gear tooth excites a resonance each time it is hit, so the signal in a high frequency band is a carrier whose amplitude rises and falls at the fault rate. `envspectrum` isolates that band, extracts the envelope and takes its spectrum, so the fault rate shows up as a peak at a low frequency, even when the raw spectrum is dominated by other things.\n\nChoose `'Band'` around the resonance. The peaks of `es` are at the modulation frequencies and their multiples.",
+        "pt": "Um rolamento ou um dente de engrenagem danificado excita uma ressonância a cada impacto, então o sinal em uma faixa de frequências altas é uma portadora cuja amplitude sobe e desce na taxa da falha. `envspectrum` isola essa faixa, extrai o envelope e calcula seu espectro, de modo que a taxa da falha aparece como um pico em baixa frequência, mesmo quando o espectro bruto é dominado por outras coisas.\n\nEscolha `'Band'` em torno da ressonância. Os picos de `es` estão nas frequências de modulação e em seus múltiplos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Find a 7 Hz modulation of a 300 Hz carrier",
+            "pt": "Encontrar uma modulação de 7 Hz de uma portadora de 300 Hz"
+          },
+          "code": "fs = 1000; n = (0:299)';\nx = (1 + 0.5*cos(2*pi*7*n/fs)) .* sin(2*pi*300*n/fs);\n[es, f] = envspectrum(x, fs);\ndisp(size(es))\nk = f > 2;\nfk = f(k); ek = es(k);\n[~, i] = max(ek);\nfprintf('peak at %.2f Hz (frequency step %.2f Hz)\\n', fk(i), f(2));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "envelope",
+        "hilbert",
+        "rainflow",
+        "tsa",
+        "vmd"
+      ],
+      "notes": {
+        "en": "Single-precision input is processed in double precision, so values differ from MATLAB at about 1e-5, and the DC bin is rounding noise.",
+        "pt": "Entradas em precisão simples são processadas em precisão dupla, então os valores diferem do MATLAB em cerca de 1e-5, e o bin de DC é apenas ruído de arredondamento."
+      }
+    },
+    "modalfit": {
+      "summary": {
+        "en": "Identifies natural frequencies, damping ratios and mode shapes from a frequency response function using the least-squares complex exponential method.",
+        "pt": "Identifica frequências naturais, razões de amortecimento e formas modais a partir de uma função de resposta em frequência pelo método LSCE."
+      },
+      "syntax": [
+        {
+          "code": "[fn, dr] = modalfit(frf, f, fs, mnum)",
+          "en": "Natural frequencies and damping ratios of `mnum` modes.",
+          "pt": "Frequências naturais e razões de amortecimento de `mnum` modos."
+        },
+        {
+          "code": "[fn, dr, ms] = modalfit(frf, f, fs, mnum)",
+          "en": "Also returns the mode shapes.",
+          "pt": "Retorna também as formas modais."
+        },
+        {
+          "code": "[fn, dr, ms, ofrf] = modalfit(frf, f, fs, mnum)",
+          "en": "Also returns the FRF rebuilt from the identified modes.",
+          "pt": "Retorna também a FRF reconstruída a partir dos modos identificados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "frf",
+          "en": "Frequency response function, a complex column vector with one value per frequency (from 0 up to `fs/2`), as produced by `modalfrf`.",
+          "pt": "Função de resposta em frequência, um vetor coluna complexo com um valor por frequência (de 0 até `fs/2`), como o produzido por `modalfrf`."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies of `frf` in hertz, evenly spaced from 0.",
+          "pt": "Frequências de `frf` em hertz, igualmente espaçadas a partir de 0."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "mnum",
+          "en": "Number of modes to fit, a positive integer.",
+          "pt": "Número de modos a ajustar, um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "fn",
+          "en": "Natural frequencies in hertz, a column with `mnum` entries. Entries that are not found are `NaN`.",
+          "pt": "Frequências naturais em hertz, uma coluna com `mnum` entradas. Entradas não encontradas são `NaN`."
+        },
+        {
+          "name": "dr",
+          "en": "Damping ratios, same size as `fn`.",
+          "pt": "Razões de amortecimento, do mesmo tamanho de `fn`."
+        },
+        {
+          "name": "ms",
+          "en": "Mode shapes, one row for the single FRF and one column per mode.",
+          "pt": "Formas modais, uma linha para a FRF única e uma coluna por modo."
+        },
+        {
+          "name": "ofrf",
+          "en": "FRF synthesized from the identified modes, same size as `frf`. Compare it with `frf` to judge the fit.",
+          "pt": "FRF sintetizada a partir dos modos identificados, com o mesmo tamanho de `frf`. Compare-a com `frf` para avaliar o ajuste."
+        }
+      ],
+      "description": {
+        "en": "The FRF is turned into an impulse response with an inverse FFT, a linear-prediction (Prony) model is fitted to its first samples, and the poles of that model give the natural frequencies and damping ratios. The residues are then found by least squares against the FRF.\n\nThe fit can be poor when `mnum` is too small for the data: in the example, two modes need `mnum = 3` to be found well, and the extra entry is `NaN`. Always compare `ofrf` with `frf`, or try a larger `mnum`.",
+        "pt": "A FRF é convertida em resposta ao impulso por uma FFT inversa, um modelo de predição linear (Prony) é ajustado às primeiras amostras, e os polos desse modelo fornecem as frequências naturais e as razões de amortecimento. Os resíduos são então obtidos por mínimos quadrados contra a FRF.\n\nO ajuste pode ser ruim quando `mnum` é pequeno demais para os dados: no exemplo, dois modos precisam de `mnum = 3` para serem bem encontrados, e a entrada extra é `NaN`. Compare sempre `ofrf` com `frf`, ou tente um `mnum` maior."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two modes at 50 Hz and 120 Hz",
+            "pt": "Dois modos em 50 Hz e 120 Hz"
+          },
+          "code": "fs = 1000; N = 512; f = (0:N/2)'*fs/N; w = 2*pi*f;\nH = zeros(size(f));\nw1 = 2*pi*50;  H = H + 1  ./(w1^2 - w.^2 + 2i*0.02*w1*w);\nw2 = 2*pi*120; H = H + 0.5./(w2^2 - w.^2 + 2i*0.03*w2*w);\n[fn, dr, ms, ofrf] = modalfit(H, f, fs, 3);\ndisp(round(fn'*10)/10)\ndisp(round(dr'*100)/100)\nfprintf('relative fit error %.2f\\n', max(abs(ofrf - H))/max(abs(H)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "modalfrf",
+        "modalsd",
+        "tfestimate",
+        "cpsd"
+      ],
+      "notes": {
+        "en": "Only the LSCE method on a single FRF is implemented: `'FitMethod'` `'lsrf'` and `'pp'`, `'FreqRange'` and several FRFs at once give an error. The mode shapes `ms` agree with MATLAB to about 1e-5 when the fit is good and can differ when it is poor, and with `'PhysFreq'` MATLAB refits the shapes for the selected modes, which is not done here. Single-precision input is solved in double precision (differences near 1e-5).",
+        "pt": "Só o método LSCE sobre uma única FRF está implementado: `'FitMethod'` `'lsrf'` e `'pp'`, `'FreqRange'` e várias FRFs ao mesmo tempo geram erro. As formas modais `ms` concordam com o MATLAB até cerca de 1e-5 quando o ajuste é bom e podem diferir quando é ruim, e com `'PhysFreq'` o MATLAB reajusta as formas para os modos selecionados, o que não é feito aqui. Entradas em precisão simples são resolvidas em precisão dupla (diferenças próximas de 1e-5)."
+      }
+    },
+    "modalfrf": {
+      "summary": {
+        "en": "Estimates the frequency response function between measured input and output signals with the H1, H2 or Hv estimator, plus the coherence.",
+        "pt": "Estima a função de resposta em frequência entre sinais medidos de entrada e saída pelos estimadores H1, H2 ou Hv, e também a coerência."
+      },
+      "syntax": [
+        {
+          "code": "[frf, f] = modalfrf(x, y, fs, window)",
+          "en": "FRF with the H1 estimator, non-overlapping segments of the window length.",
+          "pt": "FRF com o estimador H1, em segmentos sem sobreposição do comprimento da janela."
+        },
+        {
+          "code": "[frf, f, coh] = modalfrf(x, y, fs, window, noverlap)",
+          "en": "Overlapping segments, plus the coherence.",
+          "pt": "Segmentos sobrepostos e também a coerência."
+        },
+        {
+          "code": "[___] = modalfrf(___, 'Estimator', est, 'Sensor', sensor)",
+          "en": "Selects the estimator and the sensor type.",
+          "pt": "Seleciona o estimador e o tipo de sensor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Measured input (excitation): a vector, or one column per input.",
+          "pt": "Entrada medida (excitação): um vetor, ou uma coluna por entrada."
+        },
+        {
+          "name": "y",
+          "en": "Measured output (response): a vector, or one column per output.",
+          "pt": "Saída medida (resposta): um vetor, ou uma coluna por saída."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "window",
+          "en": "Window length (a rectangular window is used) or a window vector. It must be an integer length of at least 2 and not larger than the signals.",
+          "pt": "Comprimento da janela (usa-se janela retangular) ou um vetor de janela. Deve ser um comprimento inteiro de pelo menos 2 e não maior que os sinais."
+        },
+        {
+          "name": "noverlap",
+          "en": "Samples shared by consecutive segments, an integer smaller than the window length. Default 0.",
+          "pt": "Amostras compartilhadas por segmentos consecutivos, um inteiro menor que o comprimento da janela. Padrão: 0."
+        },
+        {
+          "name": "'Estimator'",
+          "en": "`'h1'` (default), `'h2'` or `'hv'`.",
+          "pt": "`'h1'` (padrão), `'h2'` ou `'hv'`."
+        },
+        {
+          "name": "'Sensor'",
+          "en": "`'acc'` (default), `'vel'` or `'dis'`. With `'acc'` or `'vel'` the estimate is converted to displacement over force by dividing by `-(2*pi*f)^2` or by `1i*2*pi*f`. Use `'dis'` for the plain estimate.",
+          "pt": "`'acc'` (padrão), `'vel'` ou `'dis'`. Com `'acc'` ou `'vel'` a estimativa é convertida em deslocamento sobre força, dividindo por `-(2*pi*f)^2` ou por `1i*2*pi*f`. Use `'dis'` para a estimativa pura."
+        },
+        {
+          "name": "'Measurement'",
+          "en": "`'fixed'` (default), `'rovinginput'` or `'rovingoutput'`: how the columns of `x` and `y` are paired.",
+          "pt": "`'fixed'` (padrão), `'rovinginput'` ou `'rovingoutput'`: como as colunas de `x` e `y` são pareadas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "frf",
+          "en": "Complex frequency response function: one row per frequency, from 0 to `fs/2`.",
+          "pt": "Função de resposta em frequência, complexa: uma linha por frequência, de 0 a `fs/2`."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies in hertz.",
+          "pt": "Frequências em hertz."
+        },
+        {
+          "name": "coh",
+          "en": "Magnitude-squared coherence, between 0 and 1, same size as `frf`. It is `NaN` when there are fewer than two segments.",
+          "pt": "Coerência ao quadrado, entre 0 e 1, do mesmo tamanho de `frf`. É `NaN` quando há menos de dois segmentos."
+        }
+      ],
+      "description": {
+        "en": "The signals are cut into segments, and the averaged cross and auto spectra give the FRF. H1 assumes noise on the output and is the usual choice, H2 assumes noise on the input, and Hv is a compromise for noise on both. The coherence tells how much of the output is explained by the input at each frequency: values near 1 mean a reliable estimate.\n\nThe result is the input for `modalfit`. Remember that the default `'Sensor'` is `'acc'`, which changes the scale of the FRF; pass `'Sensor','dis'` to get the raw ratio.",
+        "pt": "Os sinais são cortados em segmentos, e os espectros cruzado e próprio, promediados, dão a FRF. O H1 supõe ruído na saída e é a escolha usual, o H2 supõe ruído na entrada, e o Hv é um meio-termo para ruído nos dois lados. A coerência indica quanto da saída é explicado pela entrada em cada frequência: valores próximos de 1 indicam uma estimativa confiável.\n\nO resultado é a entrada de `modalfit`. Lembre que o `'Sensor'` padrão é `'acc'`, que muda a escala da FRF; passe `'Sensor','dis'` para obter a razão pura."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Find a resonance at 100 Hz",
+            "pt": "Encontrar uma ressonância em 100 Hz"
+          },
+          "code": "fs = 1000; n = (0:2047)';\nx = zeros(size(n));\nfor k = 1:40\n  x = x + sin(2*pi*(7.3*k)*n/fs + k^2);\nend\nr = 0.95; th = 2*pi*100/fs;\ny = filter(1, [1 -2*r*cos(th) r^2], x);\n[frf, f, coh] = modalfrf(x, y, fs, 256, 128, 'Sensor', 'dis');\ndisp(size(frf))\n[~, i] = max(abs(frf));\nfprintf('peak at %.1f Hz, coherence there %.2f\\n', f(i), coh(i));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "modalfit",
+        "modalsd",
+        "tfestimate",
+        "mscohere",
+        "cpsd"
+      ],
+      "notes": {
+        "en": "Not implemented: the `'subspace'` estimator, several fixed inputs at once (MIMO), and non-integer window lengths or overlaps. The `'hv'` estimator uses a total-least-squares form that differs from MATLAB in the fourth digit. Single-precision input is computed in double precision.",
+        "pt": "Não implementados: o estimador `'subspace'`, várias entradas fixas ao mesmo tempo (MIMO) e comprimentos de janela ou sobreposições não inteiros. O estimador `'hv'` usa uma forma de mínimos quadrados totais que difere do MATLAB no quarto dígito. Entradas em precisão simples são calculadas em precisão dupla."
+      }
+    },
+    "modalsd": {
+      "summary": {
+        "en": "Builds a stabilization table: the poles of fits of increasing order that stay stable, to help choose how many modes a frequency response function holds.",
+        "pt": "Monta uma tabela de estabilização: os polos de ajustes de ordem crescente que se mantêm estáveis, para ajudar a escolher o número de modos de uma FRF."
+      },
+      "syntax": [
+        {
+          "code": "fn = modalsd(frf, f, fs)",
+          "en": "Table for the default maximum number of modes.",
+          "pt": "Tabela para o número máximo de modos padrão."
+        },
+        {
+          "code": "fn = modalsd(frf, f, fs, 'MaxModes', m)",
+          "en": "Fits up to `m` modes.",
+          "pt": "Ajusta até `m` modos."
+        },
+        {
+          "code": "fn = modalsd(___, 'SCriteria', [tf td])",
+          "en": "Sets the frequency and damping stability tolerances.",
+          "pt": "Define as tolerâncias de estabilidade da frequência e do amortecimento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "frf",
+          "en": "Frequency response function, a complex column vector (from `modalfrf`).",
+          "pt": "Função de resposta em frequência, um vetor coluna complexo (de `modalfrf`)."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies of `frf` in hertz.",
+          "pt": "Frequências de `frf` em hertz."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "'MaxModes'",
+          "en": "Highest model order to try. It is limited to `floor(2*(p-1)/22)` for `p` frequency points, with a warning.",
+          "pt": "Maior ordem de modelo a testar. É limitada a `floor(2*(p-1)/22)` para `p` pontos de frequência, com um aviso."
+        },
+        {
+          "name": "'SCriteria'",
+          "en": "Two values: the largest relative change in frequency and the largest absolute change in damping ratio for a pole to be called stable.",
+          "pt": "Dois valores: a maior variação relativa de frequência e a maior variação absoluta da razão de amortecimento para que um polo seja considerado estável."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "fn",
+          "en": "Square matrix of side `MaxModes`. Row `i` holds the natural frequencies in hertz of the order-`i` fit that are stable against the order-`i+1` fit, `NaN` where a pole is not stable, and 0 above the diagonal.",
+          "pt": "Matriz quadrada de lado `MaxModes`. A linha `i` guarda as frequências naturais, em hertz, do ajuste de ordem `i` que são estáveis em relação ao de ordem `i+1`, `NaN` onde o polo não é estável e 0 acima da diagonal."
+        }
+      ],
+      "description": {
+        "en": "Real structures rarely say how many modes they have. `modalsd` fits models with 1, 2, 3, ... modes and keeps a pole when the next, larger model finds almost the same frequency and damping. Frequencies that keep appearing row after row are real modes; the ones that come and go are numerical artifacts.\n\nRead the matrix by columns: a frequency that is the same down a column of stable entries is a physical mode.",
+        "pt": "Estruturas reais raramente informam quantos modos têm. `modalsd` ajusta modelos com 1, 2, 3, ... modos e mantém um polo quando o modelo seguinte, maior, encontra quase a mesma frequência e o mesmo amortecimento. Frequências que continuam aparecendo linha após linha são modos reais; as que vão e vêm são artefatos numéricos.\n\nLeia a matriz por colunas: uma frequência que se repete ao longo de uma coluna de entradas estáveis é um modo físico."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Stable poles of a two-mode FRF",
+            "pt": "Polos estáveis de uma FRF de dois modos"
+          },
+          "code": "fs = 1000; N = 512; f = (0:N/2)'*fs/N; w = 2*pi*f;\nH = zeros(size(f));\nw1 = 2*pi*50;  H = H + 1  ./(w1^2 - w.^2 + 2i*0.02*w1*w);\nw2 = 2*pi*120; H = H + 0.5./(w2^2 - w.^2 + 2i*0.03*w2*w);\nS = modalsd(H, f, fs, 'MaxModes', 4);\ndisp(round(S*10)/10)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "modalfit",
+        "modalfrf",
+        "tfestimate"
+      ],
+      "notes": {
+        "en": "Does not draw the stabilization diagram: with an output it only returns the matrix. `'FreqRange'` and `'FitMethod','lsrf'` are not implemented. For ill-conditioned high-order fits of a few-mode FRF the extra poles differ from MATLAB at about 1e-8 relative, and single-precision input differs near 1e-5 because it is solved in double precision.",
+        "pt": "Não desenha o diagrama de estabilização: com uma saída, apenas retorna a matriz. `'FreqRange'` e `'FitMethod','lsrf'` não estão implementados. Em ajustes de ordem alta mal condicionados de uma FRF com poucos modos, os polos extras diferem do MATLAB em cerca de 1e-8 relativo, e entradas em precisão simples diferem perto de 1e-5, pois são resolvidas em precisão dupla."
+      }
+    },
+    "orderspectrum": {
+      "summary": {
+        "en": "Computes the average order spectrum of a signal from a rotating machine: how much of the vibration occurs at each multiple of the shaft speed.",
+        "pt": "Calcula o espectro de ordens médio de um sinal de uma máquina rotativa: quanto da vibração ocorre em cada múltiplo da velocidade do eixo."
+      },
+      "syntax": [
+        {
+          "code": "[spec, order] = orderspectrum(x, fs, rpm)",
+          "en": "Order spectrum of a signal and its speed profile.",
+          "pt": "Espectro de ordens de um sinal e do seu perfil de velocidade."
+        },
+        {
+          "code": "[spec, order] = orderspectrum(map, order)",
+          "en": "Averages an order-RPM map from `rpmordermap`.",
+          "pt": "Faz a média de um mapa ordem-RPM de `rpmordermap`."
+        },
+        {
+          "code": "[spec, order] = orderspectrum(map, order, 'Amplitude', amp)",
+          "en": "Chooses `'rms'`, `'peak'` or `'power'` for the map form.",
+          "pt": "Escolhe `'rms'`, `'peak'` ou `'power'` na forma com mapa."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vibration signal, a vector.",
+          "pt": "Sinal de vibração, um vetor."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "rpm",
+          "en": "Shaft speed in revolutions per minute, one positive value per sample of `x`.",
+          "pt": "Velocidade do eixo em rotações por minuto, um valor positivo por amostra de `x`."
+        },
+        {
+          "name": "map",
+          "en": "Order-RPM map from `rpmordermap`: one row per order, one column per time segment.",
+          "pt": "Mapa ordem-RPM de `rpmordermap`: uma linha por ordem e uma coluna por segmento de tempo."
+        },
+        {
+          "name": "order",
+          "en": "Order of each row of `map`.",
+          "pt": "Ordem de cada linha de `map`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "spec",
+          "en": "Order spectrum, a column: the root mean square over time of the map in each order row (the mean for the `'power'` form).",
+          "pt": "Espectro de ordens, uma coluna: o valor eficaz no tempo do mapa em cada linha de ordem (a média, na forma `'power'`)."
+        },
+        {
+          "name": "order",
+          "en": "Order of each row of `spec`.",
+          "pt": "Ordem de cada linha de `spec`."
+        }
+      ],
+      "description": {
+        "en": "An order is a multiple of the rotation frequency: order 1 is once per revolution, order 2 twice, and so on. Because the rpm changes, a plain spectrum smears each harmonic, but the order axis follows the speed, so the harmonics stay sharp.\n\n`orderspectrum` builds the order-RPM map with `rpmordermap` and averages it over time. Peaks show which orders (imbalance, misalignment, gear meshing) carry the vibration, whatever the speed.",
+        "pt": "Uma ordem é um múltiplo da frequência de rotação: a ordem 1 ocorre uma vez por rotação, a ordem 2 duas vezes, e assim por diante. Como a rpm muda, um espectro comum borra cada harmônico, mas o eixo de ordens acompanha a velocidade, e os harmônicos permanecem nítidos.\n\n`orderspectrum` monta o mapa ordem-RPM com `rpmordermap` e faz a média no tempo. Os picos mostram quais ordens (desbalanceamento, desalinhamento, engrenamento) concentram a vibração, seja qual for a velocidade."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Orders 1 and 3 of a speeding-up shaft",
+            "pt": "Ordens 1 e 3 de um eixo que acelera"
+          },
+          "code": "fs = 1000; n = 1024; t = (0:n-1)'/fs;\nrpm = 600 + 300*t;\nph = 2*pi*cumtrapz(t, rpm/60);\nx = cos(ph) + 0.6*cos(3*ph);\n[sp, o] = orderspectrum(x, fs, rpm);\ndisp(size(sp))\n[pk, li] = findpeaks(sp, 'SortStr', 'descend', 'NPeaks', 2);\nfprintf('peak near order %.2f, level %.2f\\n', o(li(1)), pk(1));\nfprintf('peak near order %.2f, level %.2f\\n', o(li(2)), pk(2));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rpmordermap",
+        "rpmfreqmap",
+        "tachorpm",
+        "tsa"
+      ],
+      "notes": {
+        "en": "Single-precision input is processed in double precision, so values differ from MATLAB at about 1e-5.",
+        "pt": "Entradas em precisão simples são processadas em precisão dupla, então os valores diferem do MATLAB em cerca de 1e-5."
+      }
+    },
+    "rainflow": {
+      "summary": {
+        "en": "Counts the load cycles in a signal with the rainflow method and returns their ranges, means and counts, as used in fatigue analysis.",
+        "pt": "Conta os ciclos de carga de um sinal pelo método rainflow e retorna seus intervalos, médias e contagens, como se usa na análise de fadiga."
+      },
+      "syntax": [
+        {
+          "code": "c = rainflow(x)",
+          "en": "Cycle table of the signal `x`.",
+          "pt": "Tabela de ciclos do sinal `x`."
+        },
+        {
+          "code": "c = rainflow(x, fs)",
+          "en": "The start and end columns of `c` are in seconds.",
+          "pt": "As colunas de início e fim de `c` ficam em segundos."
+        },
+        {
+          "code": "c = rainflow(x, t)",
+          "en": "Uses the sample times in `t`.",
+          "pt": "Usa os instantes de amostragem em `t`."
+        },
+        {
+          "code": "[c, rm, rmr, rmm, ix] = rainflow(___, 'ext')",
+          "en": "Treats `x` as a list of reversals; also returns the rainflow matrix, its bin edges and the reversal indices.",
+          "pt": "Trata `x` como uma lista de reversões; retorna também a matriz rainflow, suas bordas de classe e os índices das reversões."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a real vector of at least 3 samples.",
+          "pt": "Sinal, um vetor real com pelo menos 3 amostras."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate as a scalar. Without `fs` or `t`, the times are the sample numbers 1, 2, 3, ...",
+          "pt": "Taxa de amostragem, como escalar. Sem `fs` ou `t`, os instantes são os números das amostras 1, 2, 3, ..."
+        },
+        {
+          "name": "t",
+          "en": "Increasing vector of sample times, same length as `x`.",
+          "pt": "Vetor crescente de instantes de amostragem, com o mesmo comprimento de `x`."
+        },
+        {
+          "name": "'ext'",
+          "en": "Tells the function that `x` already contains only the peaks and valleys (reversals).",
+          "pt": "Informa que `x` já contém apenas os picos e vales (reversões)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Cycle table with one row per cycle and five columns: count (1 for a full cycle, 0.5 for a half cycle), range, mean, start time, end time.",
+          "pt": "Tabela de ciclos com uma linha por ciclo e cinco colunas: contagem (1 para ciclo completo, 0,5 para meio ciclo), intervalo, média, instante de início e de fim."
+        },
+        {
+          "name": "rm",
+          "en": "Rainflow matrix: sum of the counts in bins of range (rows) and mean (columns).",
+          "pt": "Matriz rainflow: soma das contagens em classes de intervalo (linhas) e de média (colunas)."
+        },
+        {
+          "name": "rmr, rmm",
+          "en": "Bin edges of the range and mean classes of `rm`.",
+          "pt": "Bordas das classes de intervalo e de média de `rm`."
+        },
+        {
+          "name": "ix",
+          "en": "Indices in `x` of the reversals that were used.",
+          "pt": "Índices, em `x`, das reversões que foram usadas."
+        }
+      ],
+      "description": {
+        "en": "Fatigue damage depends on how many load cycles occur and how large each is. `rainflow` reduces the signal to its reversals (peaks and valleys) and pairs them into closed cycles following the ASTM E1049 counting rule. What is left unpaired at the end becomes half cycles.\n\nMultiply each cycle's count by a damage value for its range (for example from an S-N curve) and add them to estimate the total damage. The sum of the first column is the equivalent number of full cycles.",
+        "pt": "O dano por fadiga depende de quantos ciclos de carga ocorrem e do tamanho de cada um. `rainflow` reduz o sinal às suas reversões (picos e vales) e as agrupa em ciclos fechados segundo a regra de contagem da norma ASTM E1049. O que sobra sem par no final vira meio ciclo.\n\nMultiplique a contagem de cada ciclo por um valor de dano para o seu intervalo (por exemplo, de uma curva S-N) e some para estimar o dano total. A soma da primeira coluna é o número equivalente de ciclos completos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Count the cycles of a short load history",
+            "pt": "Contar os ciclos de um histórico de carga curto"
+          },
+          "code": "x = [-2 1 -3 5 -1 3 -4 4 -2]';\nc = rainflow(x);\ndisp(c)\nfprintf('equivalent full cycles: %g\\n', sum(c(:, 1)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "findpeaks",
+        "envspectrum",
+        "tsa",
+        "cumsum"
+      ]
+    },
+    "rpmfreqmap": {
+      "summary": {
+        "en": "Computes a frequency-RPM map: the spectrum of a vibration signal versus the shaft speed, to see which frequencies follow the rotation.",
+        "pt": "Calcula um mapa frequência-RPM: o espectro de um sinal de vibração em função da velocidade do eixo, para ver quais frequências acompanham a rotação."
+      },
+      "syntax": [
+        {
+          "code": "map = rpmfreqmap(x, fs, rpm)",
+          "en": "Map with the default frequency resolution of `fs/128`.",
+          "pt": "Mapa com a resolução em frequência padrão de `fs/128`."
+        },
+        {
+          "code": "[map, f, r, t] = rpmfreqmap(x, fs, rpm, res)",
+          "en": "Targets the frequency resolution `res`, in hertz.",
+          "pt": "Busca a resolução em frequência `res`, em hertz."
+        },
+        {
+          "code": "[map, f, r, t] = rpmfreqmap(___, Name, Value)",
+          "en": "Sets the amplitude type, scale, overlap or window.",
+          "pt": "Define o tipo de amplitude, a escala, a sobreposição ou a janela."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vibration signal, a vector.",
+          "pt": "Sinal de vibração, um vetor."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "rpm",
+          "en": "Shaft speed in revolutions per minute, one positive value per sample of `x`.",
+          "pt": "Velocidade do eixo em rotações por minuto, um valor positivo por amostra de `x`."
+        },
+        {
+          "name": "res",
+          "en": "Wanted frequency resolution in hertz. A smaller value gives a longer window. Default `fs/128`.",
+          "pt": "Resolução em frequência desejada, em hertz. Um valor menor gera uma janela mais longa. Padrão: `fs/128`."
+        },
+        {
+          "name": "'Amplitude'",
+          "en": "`'rms'` (default), `'peak'` or `'power'`.",
+          "pt": "`'rms'` (padrão), `'peak'` ou `'power'`."
+        },
+        {
+          "name": "'Scale'",
+          "en": "`'linear'` (default) or `'dB'`.",
+          "pt": "`'linear'` (padrão) ou `'dB'`."
+        },
+        {
+          "name": "'OverlapPercent'",
+          "en": "Overlap between segments, from 0 to 100. Default 50.",
+          "pt": "Sobreposição entre segmentos, de 0 a 100. Padrão: 50."
+        },
+        {
+          "name": "'Window'",
+          "en": "`'flattopwin'` (default), `'hann'`, `'hamming'`, `'kaiser'`, `'rectwin'` or `'chebwin'`.",
+          "pt": "`'flattopwin'` (padrão), `'hann'`, `'hamming'`, `'kaiser'`, `'rectwin'` ou `'chebwin'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "map",
+          "en": "Map with one row per frequency and one column per time segment.",
+          "pt": "Mapa com uma linha por frequência e uma coluna por segmento de tempo."
+        },
+        {
+          "name": "f",
+          "en": "Frequency of each row, in hertz, from 0 to `fs/2`.",
+          "pt": "Frequência de cada linha, em hertz, de 0 a `fs/2`."
+        },
+        {
+          "name": "r",
+          "en": "Shaft speed of each column, in rpm (the speed at the center of the segment).",
+          "pt": "Velocidade do eixo em cada coluna, em rpm (a velocidade no centro do segmento)."
+        },
+        {
+          "name": "t",
+          "en": "Time of each column, in seconds.",
+          "pt": "Instante de cada coluna, em segundos."
+        }
+      ],
+      "description": {
+        "en": "The signal is cut into segments, and each one is tagged with the shaft speed at its center. Components tied to the rotation, such as the harmonics of the shaft frequency, appear as lines that slope upward as the speed rises, while resonances stay at a fixed frequency.\n\nUse it to tell the two apart before looking at orders with `rpmordermap`.",
+        "pt": "O sinal é cortado em segmentos, e cada um recebe a velocidade do eixo no seu centro. Componentes ligados à rotação, como os harmônicos da frequência do eixo, aparecem como linhas que sobem à medida que a velocidade aumenta, enquanto as ressonâncias ficam em uma frequência fixa.\n\nUse-o para distinguir os dois casos antes de olhar as ordens com `rpmordermap`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A harmonic that follows the speed",
+            "pt": "Um harmônico que acompanha a velocidade"
+          },
+          "code": "fs = 1000; n = 1024; t = (0:n-1)'/fs;\nrpm = 600 + 300*t;\nph = 2*pi*cumtrapz(t, rpm/60);\nx = cos(ph) + 0.6*cos(3*ph);\n[map, f, r, tt] = rpmfreqmap(x, fs, rpm, 10);\ndisp(size(map))\nfor c = [1 size(map, 2)]\n  [~, i] = max(map(:, c));\n  fprintf('%.0f rpm (%.1f Hz): strongest at %.1f Hz\\n', r(c), r(c)/60, f(i));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rpmordermap",
+        "orderspectrum",
+        "tachorpm",
+        "spectrogram"
+      ]
+    },
+    "rpmordermap": {
+      "summary": {
+        "en": "Computes an order-RPM map: the spectrum of a vibration signal versus the shaft speed, with the frequency axis expressed in orders of rotation.",
+        "pt": "Calcula um mapa ordem-RPM: o espectro de um sinal de vibração em função da velocidade do eixo, com o eixo de frequência expresso em ordens de rotação."
+      },
+      "syntax": [
+        {
+          "code": "map = rpmordermap(x, fs, rpm)",
+          "en": "Map with the default order resolution.",
+          "pt": "Mapa com a resolução em ordens padrão."
+        },
+        {
+          "code": "[map, order, r, t] = rpmordermap(x, fs, rpm, res)",
+          "en": "Targets the order resolution `res`.",
+          "pt": "Busca a resolução em ordens `res`."
+        },
+        {
+          "code": "[map, order, r, t] = rpmordermap(___, Name, Value)",
+          "en": "Sets the amplitude type, scale, overlap or window.",
+          "pt": "Define o tipo de amplitude, a escala, a sobreposição ou a janela."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vibration signal, a vector.",
+          "pt": "Sinal de vibração, um vetor."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "rpm",
+          "en": "Shaft speed in revolutions per minute, one positive value per sample of `x`.",
+          "pt": "Velocidade do eixo em rotações por minuto, um valor positivo por amostra de `x`."
+        },
+        {
+          "name": "res",
+          "en": "Wanted order resolution. Smaller values need longer windows.",
+          "pt": "Resolução em ordens desejada. Valores menores exigem janelas mais longas."
+        },
+        {
+          "name": "'Amplitude'",
+          "en": "`'rms'` (default), `'peak'` or `'power'`.",
+          "pt": "`'rms'` (padrão), `'peak'` ou `'power'`."
+        },
+        {
+          "name": "'Scale'",
+          "en": "`'linear'` (default) or `'dB'`.",
+          "pt": "`'linear'` (padrão) ou `'dB'`."
+        },
+        {
+          "name": "'OverlapPercent'",
+          "en": "Overlap between segments, 0 to 100. Default 50.",
+          "pt": "Sobreposição entre segmentos, de 0 a 100. Padrão: 50."
+        },
+        {
+          "name": "'Window'",
+          "en": "`'flattopwin'` (default), `'hann'`, `'hamming'`, `'kaiser'`, `'rectwin'` or `'chebwin'`.",
+          "pt": "`'flattopwin'` (padrão), `'hann'`, `'hamming'`, `'kaiser'`, `'rectwin'` ou `'chebwin'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "map",
+          "en": "Map with one row per order and one column per time segment.",
+          "pt": "Mapa com uma linha por ordem e uma coluna por segmento de tempo."
+        },
+        {
+          "name": "order",
+          "en": "Order of each row.",
+          "pt": "Ordem de cada linha."
+        },
+        {
+          "name": "r",
+          "en": "Shaft speed of each column, in rpm.",
+          "pt": "Velocidade do eixo em cada coluna, em rpm."
+        },
+        {
+          "name": "t",
+          "en": "Time of each column, in seconds.",
+          "pt": "Instante de cada coluna, em segundos."
+        }
+      ],
+      "description": {
+        "en": "The signal is first resampled so that equal steps are equal angles of the shaft, not equal times. Then the spectrum is taken over angle, so a component tied to the rotation always falls on the same order, however fast the shaft turns.\n\nThis is the standard view for machines that run up or down: orders 1, 2, 3, ... appear as horizontal lines. Average the map over time with `orderspectrum`.",
+        "pt": "O sinal é primeiro reamostrado de modo que passos iguais correspondam a ângulos iguais do eixo, e não a tempos iguais. O espectro é então calculado sobre o ângulo, e assim um componente ligado à rotação cai sempre na mesma ordem, por mais rápido que o eixo gire.\n\nEsta é a visão padrão para máquinas que aceleram ou desaceleram: as ordens 1, 2, 3, ... aparecem como linhas horizontais. Faça a média do mapa no tempo com `orderspectrum`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Order map of a run-up",
+            "pt": "Mapa de ordens de uma partida"
+          },
+          "code": "fs = 1000; n = 1024; t = (0:n-1)'/fs;\nrpm = 600 + 300*t;\nph = 2*pi*cumtrapz(t, rpm/60);\nx = cos(ph) + 0.6*cos(3*ph);\n[map, o, r, tt] = rpmordermap(x, fs, rpm);\ndisp(size(map))\ndisp(round(r'))\n[~, i] = max(map(:, 3));\nfprintf('strongest order in column 3: %.2f\\n', o(i));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "orderspectrum",
+        "rpmfreqmap",
+        "tachorpm",
+        "tsa"
+      ],
+      "notes": {
+        "en": "Single-precision input is processed in double precision, so values differ from MATLAB at about 1e-6.",
+        "pt": "Entradas em precisão simples são processadas em precisão dupla, então os valores diferem do MATLAB em cerca de 1e-6."
+      }
+    },
+    "tachorpm": {
+      "summary": {
+        "en": "Estimates the rotation speed in rpm over time from a tachometer pulse signal.",
+        "pt": "Estima a velocidade de rotação, em rpm, ao longo do tempo a partir de um sinal de pulsos de tacômetro."
+      },
+      "syntax": [
+        {
+          "code": "rpm = tachorpm(x, fs, 'FitType', 'linear')",
+          "en": "Speed at every sample of the pulse signal.",
+          "pt": "Velocidade em cada amostra do sinal de pulsos."
+        },
+        {
+          "code": "[rpm, t, tp] = tachorpm(x, fs, 'FitType', 'linear')",
+          "en": "Also returns the time vector and the pulse times.",
+          "pt": "Retorna também o vetor de tempo e os instantes dos pulsos."
+        },
+        {
+          "code": "[___] = tachorpm(___, 'PulsesPerRev', n, 'OutputFs', ofs, 'StateLevels', sl)",
+          "en": "Pulses per revolution, output sample rate and the two levels of the pulse train.",
+          "pt": "Pulsos por rotação, taxa de amostragem da saída e os dois níveis do trem de pulsos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Tachometer signal: a train of pulses switching between a low and a high level.",
+          "pt": "Sinal do tacômetro: um trem de pulsos que alterna entre um nível baixo e um alto."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate of `x` in hertz.",
+          "pt": "Taxa de amostragem de `x` em hertz."
+        },
+        {
+          "name": "'FitType'",
+          "en": "Use `'linear'`: the speed measured between pulses is joined by straight lines. The default `'smooth'` is not available (see the notes).",
+          "pt": "Use `'linear'`: a velocidade medida entre pulsos é unida por retas. O padrão `'smooth'` não está disponível (veja as notas)."
+        },
+        {
+          "name": "'PulsesPerRev'",
+          "en": "Number of pulses per revolution. Default 1.",
+          "pt": "Número de pulsos por rotação. Padrão: 1."
+        },
+        {
+          "name": "'OutputFs'",
+          "en": "Sample rate of the output. Default is `fs`.",
+          "pt": "Taxa de amostragem da saída. O padrão é `fs`."
+        },
+        {
+          "name": "'StateLevels'",
+          "en": "`[low high]` levels of the pulse train. If left out, they are estimated from `x`.",
+          "pt": "Níveis `[baixo alto]` do trem de pulsos. Se omitido, são estimados a partir de `x`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rpm",
+          "en": "Rotation speed in rpm, a column with `floor(numel(x)*OutputFs/fs)` samples.",
+          "pt": "Velocidade de rotação em rpm, uma coluna com `floor(numel(x)*OutputFs/fs)` amostras."
+        },
+        {
+          "name": "t",
+          "en": "Time of each sample of `rpm`, in seconds, starting at 0.",
+          "pt": "Instante de cada amostra de `rpm`, em segundos, começando em 0."
+        },
+        {
+          "name": "tp",
+          "en": "Times of the detected pulses, in seconds. Each is the middle between the rising and the falling edge.",
+          "pt": "Instantes dos pulsos detectados, em segundos. Cada um é o ponto médio entre a borda de subida e a de descida."
+        }
+      ],
+      "description": {
+        "en": "A tachometer gives one (or a few) pulses per revolution. The function finds the pulse times from the rising and falling edges, computes the speed between each pair of pulses as `60/(interval*PulsesPerRev)` and interpolates it onto the output time grid.\n\nThe result feeds `rpmfreqmap`, `rpmordermap` and `orderspectrum`. At least three pulses are needed. If no pulse is found, adjust `'StateLevels'`.",
+        "pt": "Um tacômetro fornece um (ou alguns) pulsos por rotação. A função localiza os instantes dos pulsos pelas bordas de subida e de descida, calcula a velocidade entre cada par de pulsos como `60/(intervalo*PulsesPerRev)` e a interpola na grade de tempo de saída.\n\nO resultado alimenta `rpmfreqmap`, `rpmordermap` e `orderspectrum`. São necessários pelo menos três pulsos. Se nenhum pulso for encontrado, ajuste `'StateLevels'`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A steady 5 revolutions per second",
+            "pt": "Cinco rotações por segundo, constantes"
+          },
+          "code": "fs = 1000; t = (0:2999)'/fs;\nx = double(mod(5*t, 1) < 0.4);\n[rpm, tt, tp] = tachorpm(x, fs, 'FitType', 'linear');\ndisp(size(rpm))\ndisp(round(rpm([1 1500 end])'))\ndisp(tp(1:3)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rpmfreqmap",
+        "rpmordermap",
+        "orderspectrum",
+        "tsa",
+        "risetime"
+      ],
+      "notes": {
+        "en": "Only `'FitType','linear'` is implemented. The default `'smooth'` fit (a least-squares spline through the speeds) raises an error, so always pass `'FitType','linear'`.",
+        "pt": "Só `'FitType','linear'` está implementado. O ajuste padrão `'smooth'` (uma spline de mínimos quadrados pelas velocidades) gera erro, então passe sempre `'FitType','linear'`."
+      }
+    },
+    "tsa": {
+      "summary": {
+        "en": "Computes the time-synchronous average of a signal: it cuts the signal at tachometer pulses and averages the rotations to keep what repeats with the shaft.",
+        "pt": "Calcula a média síncrona no tempo de um sinal: corta o sinal nos pulsos do tacômetro e faz a média das rotações para manter o que se repete com o eixo."
+      },
+      "syntax": [
+        {
+          "code": "y = tsa(x, fs, tp)",
+          "en": "Average over all rotations delimited by the pulse times `tp`.",
+          "pt": "Média sobre todas as rotações delimitadas pelos instantes de pulso `tp`."
+        },
+        {
+          "code": "y = tsa(x, t, tp)",
+          "en": "Uses the sample times `t` instead of the rate.",
+          "pt": "Usa os instantes de amostragem `t` no lugar da taxa."
+        },
+        {
+          "code": "[y, tt, p, rpm] = tsa(___, Name, Value)",
+          "en": "Also returns the time and rotation axes and the mean speed.",
+          "pt": "Retorna também os eixos de tempo e de rotação e a velocidade média."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a real vector.",
+          "pt": "Sinal, um vetor real."
+        },
+        {
+          "name": "fs",
+          "en": "Sample rate in hertz (a scalar), or `t`: the vector of sample times.",
+          "pt": "Taxa de amostragem em hertz (um escalar), ou `t`: o vetor dos instantes de amostragem."
+        },
+        {
+          "name": "tp",
+          "en": "Times of the tachometer pulses, in seconds, increasing. A scalar is taken as a constant interval.",
+          "pt": "Instantes dos pulsos do tacômetro, em segundos, crescentes. Um escalar é tomado como intervalo constante."
+        },
+        {
+          "name": "'NumRotations'",
+          "en": "Number of rotations in each averaged block. Default 1.",
+          "pt": "Número de rotações em cada bloco promediado. Padrão: 1."
+        },
+        {
+          "name": "'PulsesPerRotation'",
+          "en": "Pulses per rotation in `tp`. Default 1.",
+          "pt": "Pulsos por rotação em `tp`. Padrão: 1."
+        },
+        {
+          "name": "'ResampleFactor'",
+          "en": "Integer factor that upsamples the signal by Fourier interpolation before averaging. Default 1.",
+          "pt": "Fator inteiro que aumenta a taxa do sinal por interpolação de Fourier antes da média. Padrão: 1."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'linear'` (default), `'spline'`, `'pchip'` or `'fft'`: how each rotation is resampled onto the common grid.",
+          "pt": "`'linear'` (padrão), `'spline'`, `'pchip'` ou `'fft'`: como cada rotação é reamostrada na grade comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The averaged signal over one block of rotations, a column.",
+          "pt": "O sinal médio sobre um bloco de rotações, em coluna."
+        },
+        {
+          "name": "tt",
+          "en": "Time of each sample of `y`, in seconds, starting at 0.",
+          "pt": "Instante de cada amostra de `y`, em segundos, começando em 0."
+        },
+        {
+          "name": "p",
+          "en": "Position of each sample of `y` in rotations, from 0 up to just below `NumRotations`.",
+          "pt": "Posição de cada amostra de `y` em rotações, de 0 até logo abaixo de `NumRotations`."
+        },
+        {
+          "name": "rpm",
+          "en": "Mean rotation speed, in rpm, from the shortest rotation.",
+          "pt": "Velocidade média de rotação, em rpm, a partir da menor rotação."
+        }
+      ],
+      "description": {
+        "en": "The signal is split at the pulses into rotations, each rotation is resampled to the same number of points, and the rotations are averaged point by point. Whatever repeats at every turn (gear meshing, a shaft's own vibration) adds up, while noise and components that are not synchronous with the shaft average toward zero.\n\nThe pulses may be unevenly spaced, so the average also works with a slowly varying speed.",
+        "pt": "O sinal é dividido nos pulsos em rotações, cada rotação é reamostrada para o mesmo número de pontos, e as rotações são promediadas ponto a ponto. O que se repete a cada volta (engrenamento, a vibração própria do eixo) se soma, enquanto o ruído e os componentes não síncronos com o eixo tendem a zero na média.\n\nOs pulsos podem ter espaçamento irregular, então a média funciona também com velocidade que varia lentamente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Remove a component that is not synchronous",
+            "pt": "Remover um componente que não é síncrono"
+          },
+          "code": "fs = 100; t = (0:499)'/fs;\ntp = (0:0.5:4.5)';\nclean = sin(2*pi*2*t);\nx = clean + 0.5*sin(2*pi*3.3*t);\n[y, tt, p, rpm] = tsa(x, fs, tp);\ndisp(size(y))\nfprintf('speed %g rpm, one rotation lasts %.2f s\\n', rpm, tt(end) + 1/fs);\nfprintf('error before %.3f, after %.3f\\n', max(abs(x(1:50) - clean(1:50))), max(abs(y - clean(1:50))));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tachorpm",
+        "envspectrum",
+        "rpmordermap",
+        "interp1"
+      ],
+      "notes": {
+        "en": "Single-precision input is interpolated in double precision, so values differ from MATLAB at about 1e-6.",
+        "pt": "Entradas em precisão simples são interpoladas em precisão dupla, então os valores diferem do MATLAB em cerca de 1e-6."
+      }
+    }
+  }
+}

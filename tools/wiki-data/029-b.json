@@ -1,0 +1,2232 @@
+{
+  "functions": {
+    "envelope": {
+      "summary": {
+        "en": "Returns the upper and lower envelopes of a signal, from its analytic signal or from rms or peak smoothing.",
+        "pt": "Retorna os envelopes superior e inferior de um sinal, a partir do sinal analítico ou de uma suavização rms ou de picos."
+      },
+      "syntax": [
+        {
+          "code": "[up, lo] = envelope(x)",
+          "en": "Analytic envelope: upper and lower curves that follow the signal amplitude.",
+          "pt": "Envelope analítico: curvas superior e inferior que acompanham a amplitude do sinal."
+        },
+        {
+          "code": "[up, lo] = envelope(x, n, 'rms')",
+          "en": "Envelope from a moving rms of length `n`.",
+          "pt": "Envelope a partir de um valor rms móvel de comprimento `n`."
+        },
+        {
+          "code": "[up, lo] = envelope(x, n, 'peak')",
+          "en": "Envelope that joins the local peaks, with peaks at least `n` samples apart.",
+          "pt": "Envelope que une os picos locais, com picos separados por pelo menos `n` amostras."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector or matrix. Each column of a matrix is a channel.",
+          "pt": "Vetor ou matriz real. Cada coluna de uma matriz é um canal."
+        },
+        {
+          "name": "n",
+          "en": "Positive integer. Window length for `'rms'`, or minimum peak separation in samples for `'peak'`.",
+          "pt": "Inteiro positivo. Comprimento da janela em `'rms'`, ou separação mínima entre picos, em amostras, em `'peak'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "up",
+          "en": "Upper envelope, same size as `x`.",
+          "pt": "Envelope superior, com o mesmo tamanho de `x`."
+        },
+        {
+          "name": "lo",
+          "en": "Lower envelope, same size as `x`.",
+          "pt": "Envelope inferior, com o mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "With no extra arguments the envelope is the magnitude of the analytic signal built with the Hilbert transform, added to and subtracted from the mean of the signal. It works well for a narrowband signal such as an amplitude-modulated tone.\n\nThe `'rms'` option follows the local energy, and `'peak'` interpolates through the local maxima and minima. Use `'peak'` when the signal is not narrowband.",
+        "pt": "Sem argumentos extras, o envelope é o módulo do sinal analítico, construído com a transformada de Hilbert, somado e subtraído da média do sinal. Funciona bem para um sinal de banda estreita, como um tom modulado em amplitude.\n\nA opção `'rms'` acompanha a energia local, e `'peak'` interpola pelos máximos e mínimos locais. Use `'peak'` quando o sinal não é de banda estreita."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Envelope of an amplitude-modulated tone",
+            "pt": "Envelope de um tom modulado em amplitude"
+          },
+          "code": "n = (0:31)';\nx = (1 + 0.5*cos(2*pi*n/32)) .* cos(2*pi*n*0.25);\n[up, lo] = envelope(x);\ndisp(round(up(1:6)' * 100) / 100)\ndisp(round(lo(1:6)' * 100) / 100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hilbert",
+        "findpeaks",
+        "rssq",
+        "peak2peak"
+      ],
+      "notes": {
+        "en": "The form with an `n`-tap Hilbert filter, `envelope(x, n, 'analytic')`, is not implemented and gives an error. The default analytic form uses the FFT-based Hilbert transform.",
+        "pt": "A forma com filtro de Hilbert de `n` coeficientes, `envelope(x, n, 'analytic')`, não está implementada e gera um erro. A forma analítica padrão usa a transformada de Hilbert calculada por FFT."
+      }
+    },
+    "meanfreq": {
+      "summary": {
+        "en": "Estimates the mean frequency of a signal, the power-weighted average of its spectrum.",
+        "pt": "Estima a frequência média de um sinal, a média do espectro ponderada pela potência."
+      },
+      "syntax": [
+        {
+          "code": "mf = meanfreq(x, fs)",
+          "en": "Mean frequency of a time signal sampled at `fs`.",
+          "pt": "Frequência média de um sinal no tempo amostrado a `fs`."
+        },
+        {
+          "code": "mf = meanfreq(x, fs, range)",
+          "en": "Restricts the average to the band `range = [f1 f2]`.",
+          "pt": "Restringe a média à faixa `range = [f1 f2]`."
+        },
+        {
+          "code": "mf = meanfreq(pxx, f)",
+          "en": "Mean frequency of a power spectrum `pxx` given at frequencies `f`.",
+          "pt": "Frequência média de um espectro de potência `pxx` dado nas frequências `f`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a vector, or a matrix with one channel per column.",
+          "pt": "Sinal como vetor, ou matriz com um canal por coluna."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. If omitted, the result is in rad/sample.",
+          "pt": "Taxa de amostragem em Hz. Se omitida, o resultado vem em rad/amostra."
+        },
+        {
+          "name": "range",
+          "en": "Two-element vector `[f1 f2]` that limits the band used.",
+          "pt": "Vetor de dois elementos `[f1 f2]` que limita a faixa usada."
+        },
+        {
+          "name": "pxx",
+          "en": "Power spectral density or power spectrum values.",
+          "pt": "Valores da densidade espectral de potência ou do espectro de potência."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies that go with `pxx`.",
+          "pt": "Frequências correspondentes a `pxx`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mf",
+          "en": "Mean frequency, one value per channel (Hz when `fs` is given).",
+          "pt": "Frequência média, um valor por canal (Hz quando `fs` é fornecido)."
+        }
+      ],
+      "description": {
+        "en": "The mean frequency is the center of mass of the power spectrum: each frequency is weighted by its power. A single tone gives its own frequency, and two equal tones give the point halfway between them.\n\nIt is a quick single-number summary of where the energy of a signal sits, useful for tracking a drift in frequency content. For a robust alternative that ignores a few strong outliers, see `medfreq`.",
+        "pt": "A frequência média é o centro de massa do espectro de potência: cada frequência é ponderada pela sua potência. Um único tom dá a própria frequência, e dois tons iguais dão o ponto no meio entre eles.\n\nÉ um resumo rápido, em um único número, de onde está a energia do sinal, útil para acompanhar a variação do conteúdo em frequência. Para uma alternativa menos sensível a picos fortes isolados, veja `medfreq`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean frequency of two tones",
+            "pt": "Frequência média de dois tons"
+          },
+          "code": "fs = 1000;\nt = (0:fs-1)'/fs;\nx = sin(2*pi*100*t) + sin(2*pi*200*t);\nfprintf('%.1f\\n', meanfreq(x, fs));\nfprintf('%.1f\\n', meanfreq(x, fs, [50 150]));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "medfreq",
+        "bandpower",
+        "periodogram",
+        "pwelch"
+      ]
+    },
+    "medfreq": {
+      "summary": {
+        "en": "Estimates the median frequency of a signal, the frequency that splits its spectral power in two equal halves.",
+        "pt": "Estima a frequência mediana de um sinal, a frequência que divide a potência espectral em duas metades iguais."
+      },
+      "syntax": [
+        {
+          "code": "mf = medfreq(x, fs)",
+          "en": "Median frequency of a time signal sampled at `fs`.",
+          "pt": "Frequência mediana de um sinal no tempo amostrado a `fs`."
+        },
+        {
+          "code": "mf = medfreq(x, fs, range)",
+          "en": "Restricts the computation to the band `range = [f1 f2]`.",
+          "pt": "Restringe o cálculo à faixa `range = [f1 f2]`."
+        },
+        {
+          "code": "mf = medfreq(pxx, f)",
+          "en": "Median frequency of a power spectrum `pxx` given at frequencies `f`.",
+          "pt": "Frequência mediana de um espectro de potência `pxx` dado nas frequências `f`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a vector, or a matrix with one channel per column.",
+          "pt": "Sinal como vetor, ou matriz com um canal por coluna."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. If omitted, the result is in rad/sample.",
+          "pt": "Taxa de amostragem em Hz. Se omitida, o resultado vem em rad/amostra."
+        },
+        {
+          "name": "range",
+          "en": "Two-element vector `[f1 f2]` that limits the band used.",
+          "pt": "Vetor de dois elementos `[f1 f2]` que limita a faixa usada."
+        },
+        {
+          "name": "pxx",
+          "en": "Power spectral density or power spectrum values.",
+          "pt": "Valores da densidade espectral de potência ou do espectro de potência."
+        },
+        {
+          "name": "f",
+          "en": "Frequencies that go with `pxx`.",
+          "pt": "Frequências correspondentes a `pxx`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mf",
+          "en": "Median frequency, one value per channel (Hz when `fs` is given).",
+          "pt": "Frequência mediana, um valor por canal (Hz quando `fs` é fornecido)."
+        }
+      ],
+      "description": {
+        "en": "Half of the total power lies below the median frequency and half above it. Unlike `meanfreq`, it does not move much when one strong, isolated component appears far from the bulk of the energy.\n\nIt is often used to follow the shift of a spectrum over time, for example in vibration or biomedical signals.",
+        "pt": "Metade da potência total fica abaixo da frequência mediana e metade acima. Diferente de `meanfreq`, ela quase não se move quando surge um componente forte e isolado longe da maior parte da energia.\n\nÉ muito usada para acompanhar o deslocamento de um espectro ao longo do tempo, por exemplo em sinais de vibração ou biomédicos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median frequency of two tones",
+            "pt": "Frequência mediana de dois tons"
+          },
+          "code": "fs = 1000;\nt = (0:fs-1)'/fs;\nx = sin(2*pi*100*t) + sin(2*pi*200*t);\nfprintf('%.1f\\n', medfreq(x, fs));\n[p, f] = periodogram(x, [], [], fs);\nfprintf('%.1f\\n', medfreq(p, f, [150 300]));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "meanfreq",
+        "bandpower",
+        "periodogram",
+        "pwelch"
+      ]
+    },
+    "peak2peak": {
+      "summary": {
+        "en": "Returns the difference between the maximum and the minimum of the data.",
+        "pt": "Retorna a diferença entre o máximo e o mínimo dos dados."
+      },
+      "syntax": [
+        {
+          "code": "y = peak2peak(x)",
+          "en": "Peak-to-peak value of each column, or of the vector.",
+          "pt": "Valor pico a pico de cada coluna, ou do vetor."
+        },
+        {
+          "code": "y = peak2peak(x, dim)",
+          "en": "Works along dimension `dim`.",
+          "pt": "Opera ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real array.",
+          "pt": "Arranjo real."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along, or a vector of dimensions such as `[1 2]`.",
+          "pt": "Dimensão ao longo da qual operar, ou um vetor de dimensões como `[1 2]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Maximum minus minimum.",
+          "pt": "Máximo menos mínimo."
+        }
+      ],
+      "description": {
+        "en": "It measures the full swing of a waveform, for example the amplitude of an oscillation including any offset. For a sine wave of amplitude `A` the result is `2*A`.\n\nBy default it works on the first non-singleton dimension, so a matrix gives one value per column.",
+        "pt": "Mede a excursão total de uma forma de onda, por exemplo a amplitude de uma oscilação incluindo qualquer deslocamento. Para uma senoide de amplitude `A` o resultado é `2*A`.\n\nPor padrão opera na primeira dimensão não singleton, de modo que uma matriz dá um valor por coluna."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Swing of each column and each row",
+            "pt": "Excursão de cada coluna e de cada linha"
+          },
+          "code": "x = [3 -1; 1 5; -2 2];\ndisp(peak2peak(x))\ndisp(peak2peak(x, 2)')\ndisp(peak2peak(x, [1 2]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "peak2rms",
+        "rssq",
+        "range",
+        "max"
+      ]
+    },
+    "peak2rms": {
+      "summary": {
+        "en": "Returns the ratio of the largest absolute value to the root-mean-square value, also called the crest factor.",
+        "pt": "Retorna a razão entre o maior valor absoluto e o valor rms, também chamada de fator de crista."
+      },
+      "syntax": [
+        {
+          "code": "y = peak2rms(x)",
+          "en": "Peak-to-rms ratio of each column, or of the vector.",
+          "pt": "Razão pico/rms de cada coluna, ou do vetor."
+        },
+        {
+          "code": "y = peak2rms(x, dim)",
+          "en": "Works along dimension `dim`.",
+          "pt": "Opera ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real array.",
+          "pt": "Arranjo real."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along.",
+          "pt": "Dimensão ao longo da qual operar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Largest absolute value divided by the rms value. It is always at least 1.",
+          "pt": "Maior valor absoluto dividido pelo valor rms. É sempre pelo menos 1."
+        }
+      ],
+      "description": {
+        "en": "The crest factor tells how spiky a signal is compared with its average power. A constant signal gives 1, a sine wave gives about `sqrt(2)`, and signals with rare large spikes give much higher values.\n\nIt is used to check headroom in audio and to size amplifiers and converters.",
+        "pt": "O fator de crista indica o quanto um sinal é \"pontudo\" em comparação com a sua potência média. Um sinal constante dá 1, uma senoide dá cerca de `sqrt(2)`, e sinais com picos grandes e raros dão valores bem maiores.\n\nÉ usado para verificar a folga (headroom) em áudio e para dimensionar amplificadores e conversores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Crest factor of a sine and of a spike",
+            "pt": "Fator de crista de uma senoide e de um pulso isolado"
+          },
+          "code": "n = (0:99)';\nx = sin(2*pi*n/20);\nfprintf('%.4f\\n', peak2rms(x));\ny = [zeros(99,1); 10];\nfprintf('%.4f\\n', peak2rms(y));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rssq",
+        "peak2peak",
+        "rms",
+        "snr"
+      ]
+    },
+    "rssq": {
+      "summary": {
+        "en": "Returns the root-sum-of-squares of the data, the square root of the sum of squared values.",
+        "pt": "Retorna a raiz da soma dos quadrados dos dados, isto é, a raiz quadrada da soma dos valores ao quadrado."
+      },
+      "syntax": [
+        {
+          "code": "y = rssq(x)",
+          "en": "Root-sum-of-squares of each column, or of the vector.",
+          "pt": "Raiz da soma dos quadrados de cada coluna, ou do vetor."
+        },
+        {
+          "code": "y = rssq(x, dim)",
+          "en": "Works along dimension `dim`.",
+          "pt": "Opera ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real array.",
+          "pt": "Arranjo real."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along.",
+          "pt": "Dimensão ao longo da qual operar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Square root of the sum of the squares of the elements.",
+          "pt": "Raiz quadrada da soma dos quadrados dos elementos."
+        }
+      ],
+      "description": {
+        "en": "This is the Euclidean norm of a vector. Unlike `rms`, it is not divided by the number of samples, so it grows with the length of the signal and measures total energy rather than average level.\n\nFor a matrix, use `dim` to pick whether columns or rows are combined, for example to get the magnitude of a 3-axis sensor reading at each sample.",
+        "pt": "É a norma euclidiana de um vetor. Diferente de `rms`, não é dividida pelo número de amostras, por isso cresce com o comprimento do sinal e mede a energia total, e não o nível médio.\n\nPara uma matriz, use `dim` para escolher se colunas ou linhas são combinadas, por exemplo para obter o módulo da leitura de um sensor de 3 eixos em cada amostra."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Magnitude of a vector and of matrix rows",
+            "pt": "Módulo de um vetor e de linhas de uma matriz"
+          },
+          "code": "disp(rssq([3 4]))\nx = [3 -1; 1 5; -2 2];\ndisp(round(rssq(x, 2)' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rms",
+        "norm",
+        "peak2rms",
+        "peak2peak"
+      ]
+    },
+    "seqperiod": {
+      "summary": {
+        "en": "Finds the smallest period of a repeating sequence and how many times it repeats.",
+        "pt": "Encontra o menor período de uma sequência que se repete e quantas vezes ela se repete."
+      },
+      "syntax": [
+        {
+          "code": "p = seqperiod(x)",
+          "en": "Smallest period of `x`.",
+          "pt": "Menor período de `x`."
+        },
+        {
+          "code": "[p, num] = seqperiod(x)",
+          "en": "Also returns the number of periods in the sequence.",
+          "pt": "Retorna também o número de períodos na sequência."
+        },
+        {
+          "code": "[p, num] = seqperiod(x, tol)",
+          "en": "Treats samples that differ by at most `tol` as equal.",
+          "pt": "Trata como iguais as amostras que diferem em no máximo `tol`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real double vector, or matrix whose columns are sequences.",
+          "pt": "Vetor real em precisão dupla, ou matriz cujas colunas são sequências."
+        },
+        {
+          "name": "tol",
+          "en": "Nonnegative tolerance for comparing samples. Default 0.",
+          "pt": "Tolerância não negativa para comparar amostras. Padrão 0."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Smallest period, in samples. A sequence with no repetition has period `numel(x)`.",
+          "pt": "Menor período, em amostras. Uma sequência sem repetição tem período `numel(x)`."
+        },
+        {
+          "name": "num",
+          "en": "Number of periods, equal to `numel(x) / p`.",
+          "pt": "Número de períodos, igual a `numel(x) / p`."
+        }
+      ],
+      "description": {
+        "en": "The function looks for the smallest shift `p` such that the sequence matches itself shifted by `p` samples. The sequence does not have to contain a whole number of periods: the last period may be cut short, and then `num` is not an integer.\n\nA tolerance lets it find the period of measured data where repeats are close but not identical.",
+        "pt": "A função procura o menor deslocamento `p` para o qual a sequência coincide com ela mesma deslocada de `p` amostras. A sequência não precisa conter um número inteiro de períodos: o último período pode estar incompleto, e então `num` não é inteiro.\n\nUma tolerância permite achar o período de dados medidos, em que as repetições são próximas, mas não idênticas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Period of a repeating pattern",
+            "pt": "Período de um padrão que se repete"
+          },
+          "code": "[p, num] = seqperiod([2 5 7 2 5 7 2 5 7 2 5 7]);\nfprintf('%d %d\\n', p, num);\np = seqperiod([1 2 3 1 2.01 3 1 2 3.01], 0.05);\nfprintf('%d\\n', p);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "xcorr",
+        "findpeaks",
+        "autocorr",
+        "finddelay"
+      ]
+    },
+    "alignsignals": {
+      "summary": {
+        "en": "Aligns two signals in time by estimating their delay and padding one of them with zeros.",
+        "pt": "Alinha dois sinais no tempo estimando o atraso entre eles e completando um deles com zeros."
+      },
+      "syntax": [
+        {
+          "code": "[xa, ya] = alignsignals(x, y)",
+          "en": "Returns both signals aligned.",
+          "pt": "Retorna os dois sinais alinhados."
+        },
+        {
+          "code": "[xa, ya, d] = alignsignals(x, y)",
+          "en": "Also returns the estimated delay in samples.",
+          "pt": "Retorna também o atraso estimado, em amostras."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "First signal, a vector.",
+          "pt": "Primeiro sinal, um vetor."
+        },
+        {
+          "name": "y",
+          "en": "Second signal, a vector.",
+          "pt": "Segundo sinal, um vetor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "xa",
+          "en": "First signal after alignment, with zeros added where needed.",
+          "pt": "Primeiro sinal após o alinhamento, com zeros acrescentados onde necessário."
+        },
+        {
+          "name": "ya",
+          "en": "Second signal after alignment.",
+          "pt": "Segundo sinal após o alinhamento."
+        },
+        {
+          "name": "d",
+          "en": "Delay of `y` relative to `x`, in samples. Positive when `y` is delayed with respect to `x`, negative when it leads.",
+          "pt": "Atraso de `y` em relação a `x`, em amostras. Positivo quando `y` está atrasado em relação a `x`, negativo quando está adiantado."
+        }
+      ],
+      "description": {
+        "en": "The delay is found from the cross-correlation of the two signals, and the earlier signal is shifted by prepending zeros so that matching features line up.\n\nUse it before comparing, subtracting or averaging two recordings of the same event that started at different instants. If you only need the delay, use `finddelay`.",
+        "pt": "O atraso é obtido da correlação cruzada dos dois sinais, e o sinal que vem antes é deslocado com zeros colocados no início, de modo que as características correspondentes fiquem alinhadas.\n\nUse antes de comparar, subtrair ou promediar dois registros do mesmo evento que começaram em instantes diferentes. Se você só precisa do atraso, use `finddelay`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Align a delayed pulse",
+            "pt": "Alinhar um pulso atrasado"
+          },
+          "code": "a = [0 0 1 3 5 3 1 0 0 0 0 0];\nb = [0 0 0 0 0 1 3 5 3 1 0 0];\n[xa, ya, d] = alignsignals(a, b);\nfprintf('delay %d\\n', d);\ndisp(xa)\ndisp(ya)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "finddelay",
+        "xcorr",
+        "dtw",
+        "findsignal"
+      ]
+    },
+    "cusum": {
+      "summary": {
+        "en": "Detects small, sustained shifts in the mean of a signal with a cumulative sum control chart.",
+        "pt": "Detecta mudanças pequenas e persistentes na média de um sinal com uma carta de controle de soma acumulada."
+      },
+      "syntax": [
+        {
+          "code": "[iup, ilo] = cusum(x)",
+          "en": "Indices where an upward or downward shift is detected.",
+          "pt": "Índices em que uma mudança para cima ou para baixo é detectada."
+        },
+        {
+          "code": "[iup, ilo, up, lo] = cusum(x, climit, mshift)",
+          "en": "Sets the decision threshold and the shift size, and returns the cumulative sums.",
+          "pt": "Define o limiar de decisão e o tamanho da mudança, e retorna as somas acumuladas."
+        },
+        {
+          "code": "[iup, ilo] = cusum(x, climit, mshift, tmean, tdev)",
+          "en": "Gives the target mean and standard deviation instead of estimating them.",
+          "pt": "Informa a média e o desvio padrão alvo em vez de estimá-los."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector of measurements.",
+          "pt": "Vetor real de medidas."
+        },
+        {
+          "name": "climit",
+          "en": "Control limit, in standard deviations. Default 5.",
+          "pt": "Limite de controle, em desvios padrão. Padrão 5."
+        },
+        {
+          "name": "mshift",
+          "en": "Size of the shift to detect, in standard deviations. Default 1.",
+          "pt": "Tamanho da mudança a detectar, em desvios padrão. Padrão 1."
+        },
+        {
+          "name": "tmean",
+          "en": "Target mean. Default: mean of the first 25 samples.",
+          "pt": "Média alvo. Padrão: média das 25 primeiras amostras."
+        },
+        {
+          "name": "tdev",
+          "en": "Target standard deviation. Default: standard deviation of the first 25 samples.",
+          "pt": "Desvio padrão alvo. Padrão: desvio padrão das 25 primeiras amostras."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "iup",
+          "en": "Indices where the upper cumulative sum crosses the limit.",
+          "pt": "Índices em que a soma acumulada superior ultrapassa o limite."
+        },
+        {
+          "name": "ilo",
+          "en": "Indices where the lower cumulative sum crosses the limit.",
+          "pt": "Índices em que a soma acumulada inferior ultrapassa o limite."
+        },
+        {
+          "name": "up, lo",
+          "en": "Upper and lower cumulative sums, same length as `x`.",
+          "pt": "Somas acumuladas superior e inferior, com o mesmo comprimento de `x`."
+        }
+      ],
+      "description": {
+        "en": "The method keeps two running sums of the deviation from the target mean, one that grows when the data drift up and one that grows when they drift down. When a sum passes `climit` standard deviations, a shift is reported at that sample.\n\nBecause only the first 25 samples are used by default to estimate the mean and spread, the start of `x` should be in the normal operating state. Pass `'all'` as an extra argument to also get every later sample over the limit, restarting the sum after each one.",
+        "pt": "O método mantém duas somas correntes do desvio em relação à média alvo, uma que cresce quando os dados derivam para cima e outra quando derivam para baixo. Quando uma soma passa de `climit` desvios padrão, uma mudança é indicada naquela amostra.\n\nComo por padrão só as 25 primeiras amostras são usadas para estimar a média e a dispersão, o início de `x` deve estar no estado normal de operação. Passe `'all'` como argumento extra para obter também todas as amostras seguintes acima do limite, reiniciando a soma após cada uma."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Detect an upward jump in the mean",
+            "pt": "Detectar um salto para cima na média"
+          },
+          "code": "x = [0.1*sin(1:40)'; 3 + 0.1*sin(1:20)'];\n[iup, ilo] = cusum(x);\ndisp(iup)\ndisp(isempty(ilo))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "findchangepts",
+        "movmean",
+        "ischange",
+        "dtw"
+      ]
+    },
+    "dtw": {
+      "summary": {
+        "en": "Measures the distance between two sequences after stretching them in time with dynamic time warping.",
+        "pt": "Mede a distância entre duas sequências depois de esticá-las no tempo com dynamic time warping (DTW)."
+      },
+      "syntax": [
+        {
+          "code": "d = dtw(x, y)",
+          "en": "Distance between `x` and `y` after the best time alignment.",
+          "pt": "Distância entre `x` e `y` após o melhor alinhamento no tempo."
+        },
+        {
+          "code": "[d, ix, iy] = dtw(x, y)",
+          "en": "Also returns the warping paths.",
+          "pt": "Retorna também os caminhos de deformação."
+        },
+        {
+          "code": "d = dtw(x, y, metric)",
+          "en": "Chooses the point distance: `'euclidean'`, `'absolute'`, `'squared'` or `'symmkl'`.",
+          "pt": "Escolhe a distância entre pontos: `'euclidean'`, `'absolute'`, `'squared'` ou `'symmkl'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "First sequence, a vector.",
+          "pt": "Primeira sequência, um vetor."
+        },
+        {
+          "name": "y",
+          "en": "Second sequence, a vector. It may have a different length.",
+          "pt": "Segunda sequência, um vetor. Pode ter outro comprimento."
+        },
+        {
+          "name": "metric",
+          "en": "Distance between two samples. Default `'euclidean'`.",
+          "pt": "Distância entre duas amostras. Padrão `'euclidean'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Sum of the point distances along the best warping path. 0 means the sequences match after warping.",
+          "pt": "Soma das distâncias entre pontos ao longo do melhor caminho de deformação. 0 indica que as sequências coincidem após a deformação."
+        },
+        {
+          "name": "ix, iy",
+          "en": "Indices into `x` and `y` that line up, one pair per step of the path.",
+          "pt": "Índices de `x` e `y` que se correspondem, um par por passo do caminho."
+        }
+      ],
+      "description": {
+        "en": "A sample of `x` can be matched to several samples of `y` and the reverse, so two shapes that are the same but stretched or shifted in time have a small distance, while a plain point-by-point comparison would call them different.\n\nUse `ix` and `iy` to see which samples were paired, for example to align two utterances or two heartbeats.",
+        "pt": "Uma amostra de `x` pode ser associada a várias de `y`, e vice-versa. Assim, duas formas iguais, mas esticadas ou deslocadas no tempo, têm distância pequena, enquanto uma comparação ponto a ponto as consideraria diferentes.\n\nUse `ix` e `iy` para ver quais amostras foram pareadas, por exemplo para alinhar duas falas ou dois batimentos cardíacos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Distance and path between two similar shapes",
+            "pt": "Distância e caminho entre duas formas parecidas"
+          },
+          "code": "x = [1 2 3 4 3 2 1];\ny = [1 3 4 4 3 2 1 1];\n[d, ix, iy] = dtw(x, y);\nfprintf('%g\\n', d);\ndisp(ix')\ndisp(iy')\nfprintf('%g\\n', dtw(x, y, 'squared'));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "edr",
+        "findsignal",
+        "alignsignals",
+        "xcorr"
+      ]
+    },
+    "edr": {
+      "summary": {
+        "en": "Measures the edit distance on real sequences, which counts the samples that differ by more than a tolerance.",
+        "pt": "Mede a distância de edição em sequências reais, que conta as amostras que diferem por mais do que uma tolerância."
+      },
+      "syntax": [
+        {
+          "code": "d = edr(x, y, tol)",
+          "en": "Edit distance between `x` and `y`.",
+          "pt": "Distância de edição entre `x` e `y`."
+        },
+        {
+          "code": "[d, ix, iy] = edr(x, y, tol)",
+          "en": "Also returns the matched sample indices.",
+          "pt": "Retorna também os índices das amostras pareadas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "First sequence, a vector.",
+          "pt": "Primeira sequência, um vetor."
+        },
+        {
+          "name": "y",
+          "en": "Second sequence, a vector. It may have a different length.",
+          "pt": "Segunda sequência, um vetor. Pode ter outro comprimento."
+        },
+        {
+          "name": "tol",
+          "en": "Positive tolerance. Two samples closer than this count as a match.",
+          "pt": "Tolerância positiva. Duas amostras mais próximas que isso contam como correspondentes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Number of edits (mismatches, insertions and deletions) needed to turn one sequence into the other. 0 means they match within `tol`.",
+          "pt": "Número de edições (diferenças, inserções e remoções) necessárias para transformar uma sequência na outra. 0 indica que coincidem dentro de `tol`."
+        },
+        {
+          "name": "ix, iy",
+          "en": "Indices into `x` and `y` that were paired.",
+          "pt": "Índices de `x` e `y` que foram pareados."
+        }
+      ],
+      "description": {
+        "en": "Where `dtw` adds up how far apart the samples are, `edr` only asks whether each pair is close enough. A single bad sample, such as a spike, therefore adds at most one edit and does not dominate the result.\n\nThe tolerance sets what counts as the same value, so choose it from the noise level of your data.",
+        "pt": "Enquanto `dtw` soma o quanto as amostras estão distantes, `edr` só pergunta se cada par está próximo o bastante. Assim, uma única amostra ruim, como um pico, soma no máximo uma edição e não domina o resultado.\n\nA tolerância define o que conta como o mesmo valor, então escolha-a a partir do nível de ruído dos dados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spike versus small offset",
+            "pt": "Pico isolado versus pequeno deslocamento"
+          },
+          "code": "a = [1 2 3 4 5 6];\nfprintf('%d\\n', edr(a, a + 0.2, 0.5));\nfprintf('%d\\n', edr(a, [1 2 3 9 5 6] + 0.2, 0.5));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "dtw",
+        "findsignal",
+        "alignsignals",
+        "xcorr"
+      ]
+    },
+    "findchangepts": {
+      "summary": {
+        "en": "Finds the points where a signal changes abruptly in mean, rms, standard deviation or linear trend.",
+        "pt": "Encontra os pontos em que um sinal muda de forma abrupta na média, no valor rms, no desvio padrão ou na tendência linear."
+      },
+      "syntax": [
+        {
+          "code": "ipt = findchangepts(x)",
+          "en": "Change points in the mean of `x`.",
+          "pt": "Pontos de mudança na média de `x`."
+        },
+        {
+          "code": "ipt = findchangepts(x, 'Statistic', s)",
+          "en": "Changes in `'mean'`, `'rms'`, `'std'` or `'linear'`.",
+          "pt": "Mudanças em `'mean'`, `'rms'`, `'std'` ou `'linear'`."
+        },
+        {
+          "code": "ipt = findchangepts(x, 'MaxNumChanges', n)",
+          "en": "Returns at most the best `n` changes.",
+          "pt": "Retorna no máximo as `n` melhores mudanças."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector, or a matrix whose columns are channels.",
+          "pt": "Vetor real, ou matriz cujas colunas são canais."
+        },
+        {
+          "name": "'Statistic'",
+          "en": "What changes: `'mean'` (default), `'rms'`, `'std'` or `'linear'`.",
+          "pt": "O que muda: `'mean'` (padrão), `'rms'`, `'std'` ou `'linear'`."
+        },
+        {
+          "name": "'MaxNumChanges'",
+          "en": "Maximum number of change points to return.",
+          "pt": "Número máximo de pontos de mudança a retornar."
+        },
+        {
+          "name": "'MinDistance'",
+          "en": "Minimum number of samples between change points.",
+          "pt": "Número mínimo de amostras entre pontos de mudança."
+        },
+        {
+          "name": "'MinThreshold'",
+          "en": "Minimum improvement a change must bring to be kept.",
+          "pt": "Melhoria mínima que uma mudança precisa trazer para ser mantida."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ipt",
+          "en": "Index of the first sample of each new segment, in increasing order.",
+          "pt": "Índice da primeira amostra de cada novo segmento, em ordem crescente."
+        }
+      ],
+      "description": {
+        "en": "The signal is split into segments so that each segment is well described by one value of the chosen statistic. The function returns the boundaries that give the best split.\n\nWhen `'MaxNumChanges'` is not given, the number of changes is chosen by a penalty on the cost, so very small changes are ignored. Use it to find jumps in level, changes in the variance of a noisy signal, or the corners of a piecewise-linear trend.",
+        "pt": "O sinal é dividido em segmentos de modo que cada segmento seja bem descrito por um valor da estatística escolhida. A função retorna as fronteiras que dão a melhor divisão.\n\nQuando `'MaxNumChanges'` não é informado, o número de mudanças é escolhido por uma penalidade sobre o custo, e mudanças muito pequenas são ignoradas. Use para achar saltos de nível, mudanças na variância de um sinal ruidoso, ou os cantos de uma tendência linear por partes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Jump in the mean and in the variance",
+            "pt": "Salto na média e mudança na variância"
+          },
+          "code": "x = [zeros(1,8) 2*ones(1,8) + 0.1*(-1).^(1:8)];\ndisp(findchangepts(x, 'Statistic', 'mean'))\ny = [0.1*sin(1:30) 2*sin(1:30)];\ndisp(findchangepts(y, 'Statistic', 'std', 'MaxNumChanges', 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cusum",
+        "ischange",
+        "findpeaks",
+        "dtw"
+      ]
+    },
+    "finddelay": {
+      "summary": {
+        "en": "Estimates the delay between two signals from the peak of their cross-correlation.",
+        "pt": "Estima o atraso entre dois sinais a partir do pico da correlação cruzada."
+      },
+      "syntax": [
+        {
+          "code": "d = finddelay(x, y)",
+          "en": "Delay of `y` relative to `x`, in samples.",
+          "pt": "Atraso de `y` em relação a `x`, em amostras."
+        },
+        {
+          "code": "d = finddelay(x, y, maxlag)",
+          "en": "Searches only lags with absolute value up to `maxlag`.",
+          "pt": "Procura apenas atrasos com valor absoluto de até `maxlag`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Reference signal.",
+          "pt": "Sinal de referência."
+        },
+        {
+          "name": "y",
+          "en": "Signal whose delay with respect to `x` is wanted.",
+          "pt": "Sinal cujo atraso em relação a `x` se deseja."
+        },
+        {
+          "name": "maxlag",
+          "en": "Largest lag magnitude to consider.",
+          "pt": "Maior módulo de atraso a considerar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Delay in samples. Positive when `y` is a delayed copy of `x`, negative when `y` leads.",
+          "pt": "Atraso em amostras. Positivo quando `y` é uma cópia atrasada de `x`, negativo quando `y` está adiantado."
+        }
+      ],
+      "description": {
+        "en": "The delay is the lag at which the cross-correlation of the two signals is largest, so it works when `y` is a shifted, possibly noisy, copy of `x`.\n\nThe result is an integer number of samples. Use `alignsignals` to also shift the data, or `xcorr` to inspect the whole correlation.",
+        "pt": "O atraso é o deslocamento em que a correlação cruzada dos dois sinais é máxima, e por isso funciona quando `y` é uma cópia deslocada, talvez ruidosa, de `x`.\n\nO resultado é um número inteiro de amostras. Use `alignsignals` para também deslocar os dados, ou `xcorr` para examinar toda a correlação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Delay in both directions",
+            "pt": "Atraso nos dois sentidos"
+          },
+          "code": "a = [0 0 1 3 5 3 1 0 0 0 0 0];\nb = [0 0 0 0 0 1 3 5 3 1 0 0];\nfprintf('%d\\n', finddelay(a, b));\nfprintf('%d\\n', finddelay(b, a));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "alignsignals",
+        "xcorr",
+        "dtw",
+        "findsignal"
+      ]
+    },
+    "findpeaks": {
+      "summary": {
+        "en": "Finds local maxima in a vector and returns their heights, positions, widths and prominences.",
+        "pt": "Encontra os máximos locais de um vetor e retorna suas alturas, posições, larguras e proeminências."
+      },
+      "syntax": [
+        {
+          "code": "[pks, locs] = findpeaks(y)",
+          "en": "Peak values and the indices where they occur.",
+          "pt": "Valores dos picos e os índices em que ocorrem."
+        },
+        {
+          "code": "[pks, locs] = findpeaks(y, x)",
+          "en": "Positions are read from the vector `x`. A scalar is taken as a sampling rate.",
+          "pt": "As posições vêm do vetor `x`. Um escalar é interpretado como taxa de amostragem."
+        },
+        {
+          "code": "[pks, locs, w, p] = findpeaks(y, ...)",
+          "en": "Also returns peak widths and prominences.",
+          "pt": "Retorna também as larguras e as proeminências dos picos."
+        },
+        {
+          "code": "... = findpeaks(y, 'Name', value)",
+          "en": "Filters peaks with options such as `'MinPeakHeight'`.",
+          "pt": "Filtra os picos com opções como `'MinPeakHeight'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Real data vector with at least 3 samples.",
+          "pt": "Vetor de dados real com pelo menos 3 amostras."
+        },
+        {
+          "name": "x",
+          "en": "Increasing positions of the samples, or a sampling rate `fs` as a scalar.",
+          "pt": "Posições crescentes das amostras, ou uma taxa de amostragem `fs` escalar."
+        },
+        {
+          "name": "'MinPeakHeight'",
+          "en": "Keep only peaks at least this high.",
+          "pt": "Mantém só picos pelo menos tão altos."
+        },
+        {
+          "name": "'MinPeakProminence'",
+          "en": "Keep only peaks that stand out at least this much above their surroundings.",
+          "pt": "Mantém só picos que se destacam pelo menos isso em relação ao entorno."
+        },
+        {
+          "name": "'Threshold'",
+          "en": "Minimum height difference to the neighbouring samples.",
+          "pt": "Diferença mínima de altura para as amostras vizinhas."
+        },
+        {
+          "name": "'MinPeakDistance'",
+          "en": "Minimum separation between peaks. Smaller peaks near a larger one are dropped.",
+          "pt": "Separação mínima entre picos. Picos menores próximos a um maior são descartados."
+        },
+        {
+          "name": "'MinPeakWidth', 'MaxPeakWidth'",
+          "en": "Limits on the peak width.",
+          "pt": "Limites para a largura do pico."
+        },
+        {
+          "name": "'WidthReference'",
+          "en": "`'halfprom'` (default) or `'halfheight'`: level at which the width is measured.",
+          "pt": "`'halfprom'` (padrão) ou `'halfheight'`: nível em que a largura é medida."
+        },
+        {
+          "name": "'NPeaks'",
+          "en": "Maximum number of peaks to return.",
+          "pt": "Número máximo de picos a retornar."
+        },
+        {
+          "name": "'SortStr'",
+          "en": "`'none'` (default), `'ascend'` or `'descend'`: sort the peaks by height.",
+          "pt": "`'none'` (padrão), `'ascend'` ou `'descend'`: ordena os picos pela altura."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pks",
+          "en": "Heights of the peaks.",
+          "pt": "Alturas dos picos."
+        },
+        {
+          "name": "locs",
+          "en": "Positions of the peaks: sample indices, or values from `x` (or times when `fs` is given).",
+          "pt": "Posições dos picos: índices de amostra, ou valores de `x` (ou instantes, quando `fs` é dado)."
+        },
+        {
+          "name": "w",
+          "en": "Width of each peak.",
+          "pt": "Largura de cada pico."
+        },
+        {
+          "name": "p",
+          "en": "Prominence of each peak: how far it rises above the higher of its two bases.",
+          "pt": "Proeminência de cada pico: quanto ele se eleva acima da mais alta das suas duas bases."
+        }
+      ],
+      "description": {
+        "en": "A sample is a peak when it is larger than both neighbours. A flat top is reported once, at its first sample.\n\nOn real data, the raw list is usually full of tiny ripples, so use `'MinPeakHeight'`, `'MinPeakProminence'` or `'MinPeakDistance'` to keep only the peaks that matter. Prominence is the most reliable filter when the baseline drifts.",
+        "pt": "Uma amostra é um pico quando é maior que as duas vizinhas. Um topo plano é informado uma vez, na sua primeira amostra.\n\nEm dados reais, a lista bruta costuma ter muitas ondulações pequenas, então use `'MinPeakHeight'`, `'MinPeakProminence'` ou `'MinPeakDistance'` para manter só os picos relevantes. A proeminência é o filtro mais confiável quando a linha de base varia."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Peaks and filtering by height",
+            "pt": "Picos e filtragem por altura"
+          },
+          "code": "y = [0 2 0 1 0 5 1 4 0 3 0];\n[pks, locs] = findpeaks(y);\ndisp(pks)\ndisp(locs)\n[pks, locs] = findpeaks(y, 'MinPeakHeight', 2.5);\ndisp(pks)\ndisp(locs)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Prominence and widths",
+            "pt": "Proeminência e larguras"
+          },
+          "code": "y = [0 2 0 1 0 5 1 4 0 3 0];\n[pks, locs, w, p] = findpeaks(y, 'MinPeakProminence', 1.5);\ndisp(locs)\ndisp(w)\ndisp(p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "islocalmax",
+        "max",
+        "findsignal",
+        "envelope",
+        "zerocrossrate"
+      ]
+    },
+    "findsignal": {
+      "summary": {
+        "en": "Finds the segment of a longer signal that best matches a shorter reference signal.",
+        "pt": "Encontra o trecho de um sinal longo que melhor corresponde a um sinal de referência mais curto."
+      },
+      "syntax": [
+        {
+          "code": "[istart, istop, dist] = findsignal(data, sig)",
+          "en": "Location and distance of the best match.",
+          "pt": "Posição e distância da melhor correspondência."
+        },
+        {
+          "code": "[...] = findsignal(data, sig, 'MaxNumSegments', n)",
+          "en": "Returns up to `n` best, non-overlapping matches.",
+          "pt": "Retorna até `n` melhores correspondências, sem sobreposição."
+        },
+        {
+          "code": "[...] = findsignal(data, sig, 'Normalization', 'power')",
+          "en": "Normalizes both signals before comparing them.",
+          "pt": "Normaliza os dois sinais antes de compará-los."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Long signal in which to search, a vector or a matrix with channels in rows.",
+          "pt": "Sinal longo em que se procura, um vetor ou uma matriz com os canais nas linhas."
+        },
+        {
+          "name": "sig",
+          "en": "Short signal to look for.",
+          "pt": "Sinal curto a procurar."
+        },
+        {
+          "name": "'MaxNumSegments'",
+          "en": "Number of matches to return. Default 1.",
+          "pt": "Número de correspondências a retornar. Padrão 1."
+        },
+        {
+          "name": "'MaxDistance'",
+          "en": "Return every match whose distance is below this value.",
+          "pt": "Retorna toda correspondência cuja distância fica abaixo desse valor."
+        },
+        {
+          "name": "'Normalization'",
+          "en": "`'center'`, `'zscore'`, `'power'` or `'none'`.",
+          "pt": "`'center'`, `'zscore'`, `'power'` ou `'none'`."
+        },
+        {
+          "name": "'Metric'",
+          "en": "`'euclidean'` (default), `'absolute'`, `'squared'` or `'symmkl'`.",
+          "pt": "`'euclidean'` (padrão), `'absolute'`, `'squared'` ou `'symmkl'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "istart",
+          "en": "Index in `data` where each matching segment starts.",
+          "pt": "Índice em `data` em que cada trecho correspondente começa."
+        },
+        {
+          "name": "istop",
+          "en": "Index in `data` where each matching segment ends.",
+          "pt": "Índice em `data` em que cada trecho correspondente termina."
+        },
+        {
+          "name": "dist",
+          "en": "Distance between the segment and `sig`. Smaller is a better match.",
+          "pt": "Distância entre o trecho e `sig`. Menor significa melhor correspondência."
+        }
+      ],
+      "description": {
+        "en": "The reference is slid along `data` one sample at a time and the distance to each position is computed. The positions with the smallest distance are returned.\n\nWith a normalization such as `'power'` or `'zscore'` the search depends mostly on shape and not on amplitude. Use it to locate a known pulse, beat or pattern inside a long recording.",
+        "pt": "A referência é deslizada sobre `data` uma amostra por vez e calcula-se a distância para cada posição. As posições de menor distância são retornadas.\n\nCom uma normalização como `'power'` ou `'zscore'`, a busca depende mais da forma do que da amplitude. Use para localizar um pulso, batimento ou padrão conhecido dentro de um registro longo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Locate a pattern twice in a record",
+            "pt": "Localizar um padrão duas vezes em um registro"
+          },
+          "code": "d = [zeros(1,5) 1 2 3 2 1 zeros(1,5) 1.1 2.1 3 2 1 zeros(1,4)];\n[s, e, dist] = findsignal(d, [1 2 3 2 1], 'MaxNumSegments', 2, 'Normalization', 'none');\ndisp(s)\ndisp(e)\ndisp(round(dist * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "dtw",
+        "edr",
+        "finddelay",
+        "findpeaks",
+        "xcorr"
+      ],
+      "notes": {
+        "en": "Only the default time alignment (`'TimeAlignment'` set to `'fixed'`) is implemented, so a `'dtw'` or `'edr'` search gives an error. Windowed normalization with `'NormalizationLength'` is not implemented either and gives an error.",
+        "pt": "Só o alinhamento temporal padrão (`'TimeAlignment'` igual a `'fixed'`) está implementado, então uma busca com `'dtw'` ou `'edr'` gera um erro. A normalização por janela com `'NormalizationLength'` também não está implementada e gera um erro."
+      }
+    },
+    "zerocrossrate": {
+      "summary": {
+        "en": "Computes the rate at which a signal crosses zero, optionally in sliding windows.",
+        "pt": "Calcula a taxa com que um sinal cruza o zero, opcionalmente em janelas deslizantes."
+      },
+      "syntax": [
+        {
+          "code": "r = zerocrossrate(x)",
+          "en": "Zero-crossing rate of the whole signal.",
+          "pt": "Taxa de cruzamentos por zero do sinal inteiro."
+        },
+        {
+          "code": "[r, count, idx] = zerocrossrate(x)",
+          "en": "Also returns the crossing count and the crossing positions.",
+          "pt": "Retorna também a contagem e as posições dos cruzamentos."
+        },
+        {
+          "code": "r = zerocrossrate(x, 'WindowLength', w, 'OverlapLength', o)",
+          "en": "One rate per window.",
+          "pt": "Uma taxa por janela."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector or a matrix with one channel per column.",
+          "pt": "Sinal, um vetor ou uma matriz com um canal por coluna."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'difference'` (default) or `'comparison'`.",
+          "pt": "`'difference'` (padrão) ou `'comparison'`."
+        },
+        {
+          "name": "'Level'",
+          "en": "Value taken as the crossing level. Default 0.",
+          "pt": "Valor tomado como nível de cruzamento. Padrão 0."
+        },
+        {
+          "name": "'Threshold'",
+          "en": "Samples within this distance of the level count as being at the level.",
+          "pt": "Amostras a essa distância do nível contam como estando no nível."
+        },
+        {
+          "name": "'TransitionEdge'",
+          "en": "`'both'` (default), `'rising'` or `'falling'`.",
+          "pt": "`'both'` (padrão), `'rising'` ou `'falling'`."
+        },
+        {
+          "name": "'WindowLength', 'OverlapLength'",
+          "en": "Window size and overlap in samples. Default: one window over the whole signal.",
+          "pt": "Tamanho da janela e sobreposição em amostras. Padrão: uma única janela sobre todo o sinal."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Crossings per sample: count divided by window length.",
+          "pt": "Cruzamentos por amostra: contagem dividida pelo comprimento da janela."
+        },
+        {
+          "name": "count",
+          "en": "Number of crossings in each window.",
+          "pt": "Número de cruzamentos em cada janela."
+        },
+        {
+          "name": "idx",
+          "en": "Marks (nonzero) the samples where a crossing happens.",
+          "pt": "Marca (valor não nulo) as amostras em que ocorre um cruzamento."
+        }
+      ],
+      "description": {
+        "en": "The rate is a cheap measure of how fast a signal oscillates: a pure tone of frequency `f` crosses zero `2*f` times per second, and noisy or high-frequency signals cross often. It is widely used to tell voiced from unvoiced speech.\n\nWith `'Method'` set to `'difference'`, a move from a nonzero value to exactly zero counts as half a crossing, so counts can end in .5. With `'comparison'` only a sign change between nonzero samples counts.",
+        "pt": "A taxa é uma medida barata de quão rápido um sinal oscila: um tom puro de frequência `f` cruza o zero `2*f` vezes por segundo, e sinais ruidosos ou de alta frequência cruzam com frequência. É muito usada para distinguir fala sonora de fala surda.\n\nCom `'Method'` igual a `'difference'`, a passagem de um valor não nulo para exatamente zero conta como meio cruzamento, então a contagem pode terminar em .5. Com `'comparison'` só conta a troca de sinal entre amostras não nulas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Crossings of a sampled sine",
+            "pt": "Cruzamentos de uma senoide amostrada"
+          },
+          "code": "n = (0:99)';\nx = sin(2*pi*n/20 + 0.3);\n[r, c] = zerocrossrate(x, 'Method', 'comparison');\nfprintf('%.2f %d\\n', r, c);\nr = zerocrossrate(x, 'WindowLength', 50);\nfprintf('%.2f\\n', r);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "findpeaks",
+        "midcross",
+        "envelope",
+        "meanfreq"
+      ]
+    },
+    "dutycycle": {
+      "summary": {
+        "en": "Measures the duty cycle of a pulse train, the ratio of the pulse width to the pulse period.",
+        "pt": "Mede o ciclo de trabalho (duty cycle) de um trem de pulsos, a razão entre a largura do pulso e o período."
+      },
+      "syntax": [
+        {
+          "code": "d = dutycycle(x)",
+          "en": "Duty cycle of each cycle, as a number between 0 and 1.",
+          "pt": "Ciclo de trabalho de cada ciclo, como um número entre 0 e 1."
+        },
+        {
+          "code": "d = dutycycle(x, fs)",
+          "en": "Same, with sampling rate `fs` (the ratio does not depend on it).",
+          "pt": "O mesmo, com taxa de amostragem `fs` (a razão não depende dela)."
+        },
+        {
+          "code": "[d, initcross, finalcross, nextcross, midlev] = dutycycle(x, ...)",
+          "en": "Also returns the crossing times.",
+          "pt": "Retorna também os instantes de cruzamento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the bilevel waveform.",
+          "pt": "Vetor real com a forma de onda de dois níveis."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Polarity'",
+          "en": "`'positive'` (default) or `'negative'`.",
+          "pt": "`'positive'` (padrão) ou `'negative'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Pulse width divided by period, for each complete cycle.",
+          "pt": "Largura do pulso dividida pelo período, para cada ciclo completo."
+        },
+        {
+          "name": "initcross, finalcross, nextcross",
+          "en": "Crossing times that delimit each cycle.",
+          "pt": "Instantes de cruzamento que delimitam cada ciclo."
+        },
+        {
+          "name": "midlev",
+          "en": "Mid level used for the crossings.",
+          "pt": "Nível médio usado nos cruzamentos."
+        }
+      ],
+      "description": {
+        "en": "A duty cycle of 0.5 is a square wave. Values close to 0 mean short pulses in a long period, which is typical of PWM signals used for dimming or motor control.\n\nOnly complete cycles are reported, so a train of `k` pulses gives `k - 1` values.",
+        "pt": "Um ciclo de trabalho de 0,5 é uma onda quadrada. Valores próximos de 0 significam pulsos curtos em um período longo, típico de sinais PWM usados em controle de brilho ou de motores.\n\nSó ciclos completos são informados, então um trem de `k` pulsos dá `k - 1` valores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Duty cycle of a pulse train",
+            "pt": "Ciclo de trabalho de um trem de pulsos"
+          },
+          "code": "x = [zeros(1,5) ones(1,4) zeros(1,3) ones(1,4) zeros(1,3)];\nd = dutycycle(x);\nfprintf('%.4f\\n', d);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pulsewidth",
+        "pulseperiod",
+        "pulsesep",
+        "square"
+      ]
+    },
+    "falltime": {
+      "summary": {
+        "en": "Measures how long a falling transition takes to go from the upper to the lower reference level, usually 90% to 10%.",
+        "pt": "Mede quanto tempo uma transição de descida leva para ir do nível de referência superior ao inferior, normalmente de 90% a 10%."
+      },
+      "syntax": [
+        {
+          "code": "f = falltime(x)",
+          "en": "Fall time of each falling transition, in samples.",
+          "pt": "Tempo de descida de cada transição descendente, em amostras."
+        },
+        {
+          "code": "f = falltime(x, t)",
+          "en": "Fall time in the units of the time vector `t`.",
+          "pt": "Tempo de descida nas unidades do vetor de tempo `t`."
+        },
+        {
+          "code": "[f, lt, ut, ll, ul] = falltime(x, ...)",
+          "en": "Also returns the crossing times and the two reference levels.",
+          "pt": "Retorna também os instantes de cruzamento e os dois níveis de referência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'PercentReferenceLevels'",
+          "en": "Two-element vector in percent. Default `[10 90]`.",
+          "pt": "Vetor de dois elementos em percentual. Padrão `[10 90]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "Fall time of each falling transition.",
+          "pt": "Tempo de descida de cada transição descendente."
+        },
+        {
+          "name": "lt, ut",
+          "en": "Times at which the signal crosses the lower and upper reference level.",
+          "pt": "Instantes em que o sinal cruza o nível de referência inferior e o superior."
+        },
+        {
+          "name": "ll, ul",
+          "en": "Lower and upper reference levels, in signal units.",
+          "pt": "Níveis de referência inferior e superior, nas unidades do sinal."
+        }
+      ],
+      "description": {
+        "en": "This is the counterpart of `risetime` for downward transitions. The reference levels are placed between the two estimated state levels and the time between the two crossings is returned, found by linear interpolation.\n\nThe optional name-value pair `'PercentReferenceLevels'` (default `[10 90]`) sets the lower and upper reference levels as percentages of the distance between the two state levels, and `'Tolerance'` (default 2) and `'StateLevels'` work as in the pulse functions.",
+        "pt": "É o equivalente de `risetime` para transições descendentes. Os níveis de referência são colocados entre os dois níveis de estado estimados e retorna-se o tempo entre os dois cruzamentos, obtido por interpolação linear.\n\nO par nome-valor opcional `'PercentReferenceLevels'` (padrão `[10 90]`) define os níveis de referência inferior e superior como percentuais da distância entre os dois níveis de estado, e `'Tolerance'` (padrão 2) e `'StateLevels'` funcionam como nas funções de pulso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fall time of a decaying edge",
+            "pt": "Tempo de descida de uma borda que decai"
+          },
+          "code": "t = (0:0.01:1)';\ny = 1 - exp(-8*t);\ny = 1 - y;\nfprintf('%.4f\\n', falltime(y, t));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "risetime",
+        "slewrate",
+        "undershoot",
+        "settlingtime",
+        "statelevels"
+      ]
+    },
+    "midcross": {
+      "summary": {
+        "en": "Finds the times at which a signal crosses its mid reference level, usually 50% between the two state levels.",
+        "pt": "Encontra os instantes em que um sinal cruza o seu nível de referência médio, normalmente 50% entre os dois níveis de estado."
+      },
+      "syntax": [
+        {
+          "code": "mc = midcross(x)",
+          "en": "Mid-level crossing positions, in samples.",
+          "pt": "Posições dos cruzamentos pelo nível médio, em amostras."
+        },
+        {
+          "code": "mc = midcross(x, t)",
+          "en": "Crossing times in the units of the time vector `t`.",
+          "pt": "Instantes dos cruzamentos nas unidades do vetor de tempo `t`."
+        },
+        {
+          "code": "[mc, level] = midcross(x, ...)",
+          "en": "Also returns the mid level.",
+          "pt": "Retorna também o nível médio."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'MidPercentReferenceLevel'",
+          "en": "Percent between the state levels at which to cross. Default 50.",
+          "pt": "Percentual entre os níveis de estado em que se mede o cruzamento. Padrão 50."
+        },
+        {
+          "name": "'Tolerance'",
+          "en": "Percent tolerance for the state levels. Default 2.",
+          "pt": "Tolerância percentual para os níveis de estado. Padrão 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mc",
+          "en": "Crossing times, found by linear interpolation, so they can fall between samples.",
+          "pt": "Instantes dos cruzamentos, obtidos por interpolação linear, podendo cair entre amostras."
+        },
+        {
+          "name": "level",
+          "en": "Mid level value used.",
+          "pt": "Valor do nível médio usado."
+        }
+      ],
+      "description": {
+        "en": "The two state levels are estimated, the mid level is placed at the chosen percentage between them, and every crossing of that level by a transition, rising or falling, is returned.\n\nIt gives the timing reference used by the pulse width, period and duty cycle functions, and it is a good way to measure the delay of a step response.",
+        "pt": "Os dois níveis de estado são estimados, o nível médio é colocado no percentual escolhido entre eles, e retorna-se todo cruzamento desse nível por uma transição, de subida ou de descida.\n\nEle dá a referência de tempo usada pelas funções de largura de pulso, período e ciclo de trabalho, e é uma boa maneira de medir o atraso de uma resposta ao degrau."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Half-level crossing of a step response",
+            "pt": "Cruzamento pelo nível médio de uma resposta ao degrau"
+          },
+          "code": "t = (0:0.01:1)';\ny = 1 - exp(-8*t);\nfprintf('%.4f\\n', midcross(y, t));\nfprintf('%.4f\\n', midcross(y, t, 'MidPercentReferenceLevel', 25));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pulsewidth",
+        "risetime",
+        "falltime",
+        "statelevels",
+        "zerocrossrate"
+      ]
+    },
+    "overshoot": {
+      "summary": {
+        "en": "Measures how far each transition goes past its final state level, as a percentage of the transition amplitude.",
+        "pt": "Mede quanto cada transição ultrapassa o seu nível de estado final, como percentual da amplitude da transição."
+      },
+      "syntax": [
+        {
+          "code": "os = overshoot(x)",
+          "en": "Overshoot of each transition, in percent.",
+          "pt": "Overshoot de cada transição, em percentual."
+        },
+        {
+          "code": "[os, lev, inst] = overshoot(x, t)",
+          "en": "Also returns the overshoot value and the time at which it happens.",
+          "pt": "Retorna também o valor do overshoot e o instante em que ocorre."
+        },
+        {
+          "code": "os = overshoot(x, 'Region', 'Preshoot')",
+          "en": "Measures the swing before the transition instead.",
+          "pt": "Mede a oscilação anterior à transição."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Region'",
+          "en": "`'Postshoot'` (default) or `'Preshoot'`.",
+          "pt": "`'Postshoot'` (padrão) ou `'Preshoot'`."
+        },
+        {
+          "name": "'SeekFactor'",
+          "en": "How far to look after the transition, as a multiple of its duration. Default 3.",
+          "pt": "Até onde procurar depois da transição, como múltiplo da duração dela. Padrão 3."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "os",
+          "en": "Overshoot as a percentage of the difference between the state levels.",
+          "pt": "Overshoot como percentual da diferença entre os níveis de estado."
+        },
+        {
+          "name": "lev",
+          "en": "Signal value at the overshoot.",
+          "pt": "Valor do sinal no overshoot."
+        },
+        {
+          "name": "inst",
+          "en": "Time (or index) of the overshoot.",
+          "pt": "Instante (ou índice) do overshoot."
+        }
+      ],
+      "description": {
+        "en": "After a rising edge the signal often rings above its final level before settling. The overshoot is the largest excursion beyond the final state level, found in a window that follows the transition, divided by the span between the two state levels and multiplied by 100.\n\nThe optional name-value pair `'PercentReferenceLevels'` (default `[10 90]`) sets the lower and upper reference levels as percentages of the distance between the two state levels, and `'Tolerance'` (default 2) and `'StateLevels'` work as in the pulse functions.",
+        "pt": "Depois de uma borda de subida, o sinal costuma passar acima do seu nível final antes de se acomodar. O overshoot é a maior excursão além do nível de estado final, procurada em uma janela que segue a transição, dividida pelo intervalo entre os dois níveis de estado e multiplicada por 100.\n\nO par nome-valor opcional `'PercentReferenceLevels'` (padrão `[10 90]`) define os níveis de referência inferior e superior como percentuais da distância entre os dois níveis de estado, e `'Tolerance'` (padrão 2) e `'StateLevels'` funcionam como nas funções de pulso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Overshoot of an underdamped step",
+            "pt": "Overshoot de um degrau subamortecido"
+          },
+          "code": "z = [0 0 0 0 0 0.2 0.6 1.3 1.1 0.9 1.05 0.98 1.01 1 1 1 1 1 1 1];\n[os, lev, inst] = overshoot(z);\nfprintf('%.2f %.2f %d\\n', os, lev, inst);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "undershoot",
+        "risetime",
+        "settlingtime",
+        "slewrate",
+        "statelevels"
+      ]
+    },
+    "pulseperiod": {
+      "summary": {
+        "en": "Measures the period of a pulse train, the time between the starts of consecutive pulses.",
+        "pt": "Mede o período de um trem de pulsos, o tempo entre os inícios de pulsos consecutivos."
+      },
+      "syntax": [
+        {
+          "code": "p = pulseperiod(x)",
+          "en": "Period of each cycle, in samples.",
+          "pt": "Período de cada ciclo, em amostras."
+        },
+        {
+          "code": "p = pulseperiod(x, fs)",
+          "en": "Periods in seconds for sampling rate `fs`.",
+          "pt": "Períodos em segundos para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "[p, initcross, finalcross, nextcross, midlev] = pulseperiod(x, ...)",
+          "en": "Also returns the crossing times.",
+          "pt": "Retorna também os instantes de cruzamento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the bilevel waveform.",
+          "pt": "Vetor real com a forma de onda de dois níveis."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Polarity'",
+          "en": "`'positive'` (default) or `'negative'`.",
+          "pt": "`'positive'` (padrão) ou `'negative'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Period of each complete cycle.",
+          "pt": "Período de cada ciclo completo."
+        },
+        {
+          "name": "initcross",
+          "en": "Time of the rising mid-level crossing that starts each cycle.",
+          "pt": "Instante do cruzamento ascendente pelo nível médio que inicia cada ciclo."
+        },
+        {
+          "name": "finalcross",
+          "en": "Time of the falling mid-level crossing inside the cycle.",
+          "pt": "Instante do cruzamento descendente pelo nível médio dentro do ciclo."
+        },
+        {
+          "name": "nextcross",
+          "en": "Time of the crossing that starts the next cycle.",
+          "pt": "Instante do cruzamento que inicia o ciclo seguinte."
+        },
+        {
+          "name": "midlev",
+          "en": "Mid level used for the crossings.",
+          "pt": "Nível médio usado nos cruzamentos."
+        }
+      ],
+      "description": {
+        "en": "A cycle needs a following pulse to close it, so a train of `k` pulses gives `k - 1` periods. The period is measured between crossings of the mid level in the same direction.\n\nFor a clean periodic train the periods are all equal. Variation between them is a direct view of jitter.",
+        "pt": "Um ciclo precisa do pulso seguinte para ser fechado, então um trem de `k` pulsos dá `k - 1` períodos. O período é medido entre cruzamentos do nível médio no mesmo sentido.\n\nPara um trem periódico limpo, todos os períodos são iguais. A variação entre eles mostra diretamente o jitter."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Period of a pulse train",
+            "pt": "Período de um trem de pulsos"
+          },
+          "code": "x = [zeros(1,5) ones(1,4) zeros(1,3) ones(1,4) zeros(1,3)];\n[p, i1, f1, n1] = pulseperiod(x);\ndisp(p)\ndisp([i1 f1 n1])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pulsewidth",
+        "dutycycle",
+        "pulsesep",
+        "midcross"
+      ]
+    },
+    "pulsesep": {
+      "summary": {
+        "en": "Measures the separation between pulses, the time from the end of one pulse to the start of the next.",
+        "pt": "Mede a separação entre pulsos, o tempo do fim de um pulso até o início do seguinte."
+      },
+      "syntax": [
+        {
+          "code": "s = pulsesep(x)",
+          "en": "Separation of each pair of consecutive pulses, in samples.",
+          "pt": "Separação de cada par de pulsos consecutivos, em amostras."
+        },
+        {
+          "code": "s = pulsesep(x, fs)",
+          "en": "Separations in seconds for sampling rate `fs`.",
+          "pt": "Separações em segundos para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "[s, initcross, finalcross, nextcross, midlev] = pulsesep(x, ...)",
+          "en": "Also returns the crossing times.",
+          "pt": "Retorna também os instantes de cruzamento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the bilevel waveform.",
+          "pt": "Vetor real com a forma de onda de dois níveis."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Polarity'",
+          "en": "`'positive'` (default) or `'negative'`.",
+          "pt": "`'positive'` (padrão) ou `'negative'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Time between the falling mid-level crossing of a pulse and the rising crossing of the next one.",
+          "pt": "Tempo entre o cruzamento descendente de um pulso e o cruzamento ascendente do seguinte."
+        },
+        {
+          "name": "initcross, finalcross, nextcross",
+          "en": "Crossing times that delimit each cycle.",
+          "pt": "Instantes de cruzamento que delimitam cada ciclo."
+        },
+        {
+          "name": "midlev",
+          "en": "Mid level used for the crossings.",
+          "pt": "Nível médio usado nos cruzamentos."
+        }
+      ],
+      "description": {
+        "en": "The separation is the low time between two pulses, so for a cycle it equals the period minus the pulse width.\n\nUse it to check the dead time between pulses, for example between the gate drives of a half bridge.",
+        "pt": "A separação é o tempo em nível baixo entre dois pulsos, então, em um ciclo, é igual ao período menos a largura do pulso.\n\nUse para verificar o tempo morto entre pulsos, por exemplo entre os sinais de acionamento de uma meia ponte."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Separation between pulses",
+            "pt": "Separação entre pulsos"
+          },
+          "code": "x = [zeros(1,5) ones(1,4) zeros(1,3) ones(1,4) zeros(1,3)];\ns = pulsesep(x);\ndisp(s)\ns = pulsesep(x, 100);\ndisp(s)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pulsewidth",
+        "pulseperiod",
+        "dutycycle",
+        "midcross"
+      ]
+    },
+    "pulsewidth": {
+      "summary": {
+        "en": "Measures the width of each pulse in a bilevel waveform, between its two mid-level crossings.",
+        "pt": "Mede a largura de cada pulso de uma forma de onda de dois níveis, entre os seus dois cruzamentos pelo nível médio."
+      },
+      "syntax": [
+        {
+          "code": "w = pulsewidth(x)",
+          "en": "Width of each pulse, in samples.",
+          "pt": "Largura de cada pulso, em amostras."
+        },
+        {
+          "code": "w = pulsewidth(x, fs)",
+          "en": "Widths in seconds for sampling rate `fs`.",
+          "pt": "Larguras em segundos para a taxa de amostragem `fs`."
+        },
+        {
+          "code": "[w, initcross, finalcross, midlev] = pulsewidth(x, ...)",
+          "en": "Also returns the crossing times and the mid level.",
+          "pt": "Retorna também os instantes de cruzamento e o nível médio."
+        },
+        {
+          "code": "... = pulsewidth(x, 'Polarity', 'negative')",
+          "en": "Measures the low pulses instead of the high ones.",
+          "pt": "Mede os pulsos baixos em vez dos altos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the bilevel waveform.",
+          "pt": "Vetor real com a forma de onda de dois níveis."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Polarity'",
+          "en": "`'positive'` (default) or `'negative'`.",
+          "pt": "`'positive'` (padrão) ou `'negative'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Width of each pulse.",
+          "pt": "Largura de cada pulso."
+        },
+        {
+          "name": "initcross",
+          "en": "Time of the first mid-level crossing of each pulse.",
+          "pt": "Instante do primeiro cruzamento pelo nível médio de cada pulso."
+        },
+        {
+          "name": "finalcross",
+          "en": "Time of the second mid-level crossing of each pulse.",
+          "pt": "Instante do segundo cruzamento pelo nível médio de cada pulso."
+        },
+        {
+          "name": "midlev",
+          "en": "Mid level used for the crossings.",
+          "pt": "Nível médio usado nos cruzamentos."
+        }
+      ],
+      "description": {
+        "en": "The two state levels of the waveform are estimated from its histogram, the mid level is halfway between them, and the pulse width is the time between a crossing of that level in one direction and the next one in the other direction. Crossings are interpolated, so they can fall between samples.\n\nOptional name-value pairs `'Tolerance'` (percent, default 2), `'MidPercentReferenceLevel'` (default 50) and `'StateLevels'` (two-element `[low high]`) control how the two levels and the mid level are found.",
+        "pt": "Os dois níveis de estado da forma de onda são estimados pelo seu histograma, o nível médio fica na metade entre eles, e a largura do pulso é o tempo entre um cruzamento desse nível em um sentido e o seguinte no sentido oposto. Os cruzamentos são interpolados, então podem cair entre amostras.\n\nOs pares nome-valor opcionais `'Tolerance'` (percentual, padrão 2), `'MidPercentReferenceLevel'` (padrão 50) e `'StateLevels'` (vetor `[baixo alto]`) controlam como os dois níveis e o nível médio são determinados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Width of two pulses",
+            "pt": "Largura de dois pulsos"
+          },
+          "code": "x = [zeros(1,5) ones(1,4) zeros(1,3) ones(1,4) zeros(1,3)];\nw = pulsewidth(x);\ndisp(w)\nw = pulsewidth(x, 100);\ndisp(w)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pulseperiod",
+        "dutycycle",
+        "pulsesep",
+        "midcross",
+        "statelevels"
+      ]
+    },
+    "risetime": {
+      "summary": {
+        "en": "Measures how long a rising transition takes to go from the lower to the upper reference level, usually 10% to 90%.",
+        "pt": "Mede quanto tempo uma transição de subida leva para ir do nível de referência inferior ao superior, normalmente de 10% a 90%."
+      },
+      "syntax": [
+        {
+          "code": "r = risetime(x)",
+          "en": "Rise time of each rising transition, in samples.",
+          "pt": "Tempo de subida de cada transição ascendente, em amostras."
+        },
+        {
+          "code": "r = risetime(x, t)",
+          "en": "Rise time in the units of the time vector `t`.",
+          "pt": "Tempo de subida nas unidades do vetor de tempo `t`."
+        },
+        {
+          "code": "[r, lt, ut, ll, ul] = risetime(x, ...)",
+          "en": "Also returns the crossing times and the two reference levels.",
+          "pt": "Retorna também os instantes de cruzamento e os dois níveis de referência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'PercentReferenceLevels'",
+          "en": "Two-element vector in percent. Default `[10 90]`.",
+          "pt": "Vetor de dois elementos em percentual. Padrão `[10 90]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Rise time of each rising transition.",
+          "pt": "Tempo de subida de cada transição ascendente."
+        },
+        {
+          "name": "lt, ut",
+          "en": "Times at which the signal crosses the lower and upper reference level.",
+          "pt": "Instantes em que o sinal cruza o nível de referência inferior e o superior."
+        },
+        {
+          "name": "ll, ul",
+          "en": "Lower and upper reference levels, in signal units.",
+          "pt": "Níveis de referência inferior e superior, nas unidades do sinal."
+        }
+      ],
+      "description": {
+        "en": "The state levels are estimated first, then the lower and upper reference levels are placed at the chosen percentages of the span between them. The rise time is the time between the crossings of these two levels, found by linear interpolation.\n\nThe optional name-value pair `'PercentReferenceLevels'` (default `[10 90]`) sets the lower and upper reference levels as percentages of the distance between the two state levels, and `'Tolerance'` (default 2) and `'StateLevels'` work as in the pulse functions.",
+        "pt": "Primeiro os níveis de estado são estimados; depois os níveis de referência inferior e superior são colocados nos percentuais escolhidos do intervalo entre eles. O tempo de subida é o tempo entre os cruzamentos desses dois níveis, obtido por interpolação linear.\n\nO par nome-valor opcional `'PercentReferenceLevels'` (padrão `[10 90]`) define os níveis de referência inferior e superior como percentuais da distância entre os dois níveis de estado, e `'Tolerance'` (padrão 2) e `'StateLevels'` funcionam como nas funções de pulso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Rise time of a first-order step response",
+            "pt": "Tempo de subida da resposta ao degrau de um sistema de primeira ordem"
+          },
+          "code": "t = (0:0.01:1)';\ny = 1 - exp(-8*t);\n[r, lt, ut] = risetime(y, t);\nfprintf('%.4f %.4f %.4f\\n', r, lt, ut);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "falltime",
+        "slewrate",
+        "overshoot",
+        "settlingtime",
+        "statelevels"
+      ]
+    },
+    "settlingtime": {
+      "summary": {
+        "en": "Measures how long a transition takes to enter and stay inside a tolerance band around its final level.",
+        "pt": "Mede quanto tempo uma transição leva para entrar e permanecer dentro de uma faixa de tolerância em torno do seu nível final."
+      },
+      "syntax": [
+        {
+          "code": "[s, lev, inst] = settlingtime(x, d)",
+          "en": "Settling time for each transition, in samples.",
+          "pt": "Tempo de acomodação de cada transição, em amostras."
+        },
+        {
+          "code": "[s, lev, inst] = settlingtime(x, t, d)",
+          "en": "Settling time in the units of the time vector `t`.",
+          "pt": "Tempo de acomodação nas unidades do vetor de tempo `t`."
+        },
+        {
+          "code": "... = settlingtime(x, d, 'Tolerance', p)",
+          "en": "Sets the tolerance band, in percent of the level span.",
+          "pt": "Define a faixa de tolerância, em percentual do intervalo entre os níveis."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, or a sampling rate. Default: times are in samples.",
+          "pt": "Vetor de instantes das amostras, ou taxa de amostragem. Padrão: tempos em amostras."
+        },
+        {
+          "name": "d",
+          "en": "Positive scalar: how long after the mid-level crossing the signal is expected to be settled. A transition that has not settled by then gives NaN.",
+          "pt": "Escalar positivo: quanto tempo depois do cruzamento pelo nível médio se espera que o sinal já esteja acomodado. Uma transição que ainda não se acomodou até lá dá NaN."
+        },
+        {
+          "name": "'Tolerance'",
+          "en": "Half-width of the band, in percent of the span between the state levels. Default 2.",
+          "pt": "Meia largura da faixa, em percentual do intervalo entre os níveis de estado. Padrão 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Time from the mid-level crossing until the signal stays inside the band.",
+          "pt": "Tempo desde o cruzamento pelo nível médio até o sinal permanecer dentro da faixa."
+        },
+        {
+          "name": "lev",
+          "en": "Band limit that the signal crossed last.",
+          "pt": "Limite da faixa que o sinal cruzou por último."
+        },
+        {
+          "name": "inst",
+          "en": "Time at which the signal enters the band for good.",
+          "pt": "Instante em que o sinal entra definitivamente na faixa."
+        }
+      ],
+      "description": {
+        "en": "The final level is taken from the state levels. The settling instant is the last time the signal leaves the tolerance band around that level, and the settling time is measured from the mid-level crossing of the transition to that instant.\n\nThe delay `d` states how long a settled response should take. When the signal is still outside the band at that point, the entry is NaN instead of a time. Narrower tolerances give longer settling times.",
+        "pt": "O nível final vem dos níveis de estado. O instante de acomodação é a última vez em que o sinal sai da faixa de tolerância em torno desse nível, e o tempo de acomodação é medido do cruzamento da transição pelo nível médio até esse instante.\n\nO atraso `d` indica em quanto tempo uma resposta acomodada deveria estar pronta. Quando o sinal ainda está fora da faixa nesse ponto, a entrada é NaN em vez de um tempo. Tolerâncias menores dão tempos de acomodação maiores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Settling time of a step with ringing",
+            "pt": "Tempo de acomodação de um degrau com oscilação"
+          },
+          "code": "z = [0 0 0 0 0 0.2 0.6 1.3 1.1 0.9 1.05 0.98 1.01 1 1 1 1 1 1 1];\n[s, lev, inst] = settlingtime(z, 5);\nfprintf('%.3f %.3f %.3f\\n', s, lev, inst);\n[s, lev, inst] = settlingtime(z, 3);\ndisp(s)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "risetime",
+        "overshoot",
+        "undershoot",
+        "midcross",
+        "statelevels"
+      ]
+    },
+    "slewrate": {
+      "summary": {
+        "en": "Measures the slew rate of each transition, the average slope between the lower and upper reference levels.",
+        "pt": "Mede a taxa de variação (slew rate) de cada transição, a inclinação média entre os níveis de referência inferior e superior."
+      },
+      "syntax": [
+        {
+          "code": "s = slewrate(x)",
+          "en": "Slew rate of each transition, in signal units per sample.",
+          "pt": "Slew rate de cada transição, em unidades do sinal por amostra."
+        },
+        {
+          "code": "s = slewrate(x, t)",
+          "en": "Slew rate in signal units per unit of `t`.",
+          "pt": "Slew rate em unidades do sinal por unidade de `t`."
+        },
+        {
+          "code": "[s, lt, ut, ll, ul] = slewrate(x, ...)",
+          "en": "Also returns the crossing times and the reference levels.",
+          "pt": "Retorna também os instantes de cruzamento e os níveis de referência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'PercentReferenceLevels'",
+          "en": "Two-element vector in percent. Default `[10 90]`.",
+          "pt": "Vetor de dois elementos em percentual. Padrão `[10 90]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Slew rate of each transition. Negative for falling transitions.",
+          "pt": "Slew rate de cada transição. Negativo nas transições de descida."
+        },
+        {
+          "name": "lt, ut",
+          "en": "Times at which the signal crosses the lower and upper reference level.",
+          "pt": "Instantes em que o sinal cruza o nível de referência inferior e o superior."
+        },
+        {
+          "name": "ll, ul",
+          "en": "Lower and upper reference levels, in signal units.",
+          "pt": "Níveis de referência inferior e superior, nas unidades do sinal."
+        }
+      ],
+      "description": {
+        "en": "The slew rate is the distance between the upper and lower reference levels divided by the time the signal takes to travel between them. For a clean edge it is the same amplitude change as in `risetime`, expressed as a rate.\n\nIt is a common specification for amplifiers and drivers, given in V per microsecond.",
+        "pt": "O slew rate é a distância entre os níveis de referência superior e inferior dividida pelo tempo que o sinal leva para ir de um ao outro. Para uma borda limpa, é a mesma variação de amplitude de `risetime`, expressa como taxa.\n\nÉ uma especificação comum de amplificadores e drivers, dada em V por microssegundo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Slew rate of an exponential edge",
+            "pt": "Slew rate de uma borda exponencial"
+          },
+          "code": "t = (0:0.01:1)';\ny = 1 - exp(-8*t);\n[s, lt, ut] = slewrate(y, t);\nfprintf('%.4f %.4f %.4f\\n', s, lt, ut);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "risetime",
+        "falltime",
+        "overshoot",
+        "midcross",
+        "statelevels"
+      ]
+    },
+    "statelevels": {
+      "summary": {
+        "en": "Estimates the low and high state levels of a bilevel waveform from the histogram of its values.",
+        "pt": "Estima os níveis de estado baixo e alto de uma forma de onda de dois níveis a partir do histograma dos seus valores."
+      },
+      "syntax": [
+        {
+          "code": "lv = statelevels(x)",
+          "en": "Low and high levels of `x`.",
+          "pt": "Níveis baixo e alto de `x`."
+        },
+        {
+          "code": "lv = statelevels(x, n)",
+          "en": "Uses `n` histogram bins. Default 100.",
+          "pt": "Usa `n` caixas no histograma. Padrão 100."
+        },
+        {
+          "code": "[lv, hist, bins] = statelevels(x, ...)",
+          "en": "Also returns the histogram counts and the bin centers.",
+          "pt": "Retorna também as contagens do histograma e os centros das caixas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector.",
+          "pt": "Vetor real."
+        },
+        {
+          "name": "n",
+          "en": "Number of histogram bins.",
+          "pt": "Número de caixas do histograma."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lv",
+          "en": "Two-element vector `[low high]`.",
+          "pt": "Vetor de dois elementos `[baixo alto]`."
+        },
+        {
+          "name": "hist",
+          "en": "Histogram counts.",
+          "pt": "Contagens do histograma."
+        },
+        {
+          "name": "bins",
+          "en": "Centers of the histogram bins.",
+          "pt": "Centros das caixas do histograma."
+        }
+      ],
+      "description": {
+        "en": "A histogram of the values is built between their minimum and maximum, and the low and high levels are read from its two ends. The levels are therefore bin centers: with more bins they get closer to the true values.\n\nThese levels are the basis of rise time, overshoot and the other transition metrics, which find them the same way.",
+        "pt": "Constrói-se um histograma dos valores entre o mínimo e o máximo, e os níveis baixo e alto são lidos nas suas duas extremidades. Os níveis são portanto centros de caixas: com mais caixas ficam mais próximos dos valores reais.\n\nEsses níveis são a base do tempo de subida, do overshoot e das demais métricas de transição, que os encontram da mesma forma."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Levels of a pulse train",
+            "pt": "Níveis de um trem de pulsos"
+          },
+          "code": "x = [zeros(1,5) ones(1,4) zeros(1,3) ones(1,4) zeros(1,3)];\nlv = statelevels(x);\ndisp(lv)\nlv = statelevels(x, 20);\ndisp(lv)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "risetime",
+        "falltime",
+        "overshoot",
+        "midcross",
+        "histc"
+      ]
+    },
+    "undershoot": {
+      "summary": {
+        "en": "Measures how far each transition goes past its final state level in the opposite direction, as a percentage of the transition amplitude.",
+        "pt": "Mede quanto cada transição passa do seu nível de estado final no sentido oposto, como percentual da amplitude da transição."
+      },
+      "syntax": [
+        {
+          "code": "us = undershoot(x)",
+          "en": "Undershoot of each transition, in percent.",
+          "pt": "Undershoot de cada transição, em percentual."
+        },
+        {
+          "code": "[us, lev, inst] = undershoot(x, t)",
+          "en": "Also returns the undershoot value and the time at which it happens.",
+          "pt": "Retorna também o valor do undershoot e o instante em que ocorre."
+        },
+        {
+          "code": "us = undershoot(x, 'Region', 'Preshoot')",
+          "en": "Measures the swing before the transition instead.",
+          "pt": "Mede a oscilação anterior à transição."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector holding the waveform.",
+          "pt": "Vetor real com a forma de onda."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate. Times are then in seconds. Default: times are in samples.",
+          "pt": "Taxa de amostragem. Os tempos saem então em segundos. Padrão: tempos em amostras."
+        },
+        {
+          "name": "t",
+          "en": "Vector of sample times, instead of `fs`.",
+          "pt": "Vetor de instantes das amostras, no lugar de `fs`."
+        },
+        {
+          "name": "'Region'",
+          "en": "`'Postshoot'` (default) or `'Preshoot'`.",
+          "pt": "`'Postshoot'` (padrão) ou `'Preshoot'`."
+        },
+        {
+          "name": "'SeekFactor'",
+          "en": "How far to look after the transition, as a multiple of its duration. Default 3.",
+          "pt": "Até onde procurar depois da transição, como múltiplo da duração dela. Padrão 3."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "us",
+          "en": "Undershoot as a percentage of the difference between the state levels.",
+          "pt": "Undershoot como percentual da diferença entre os níveis de estado."
+        },
+        {
+          "name": "lev",
+          "en": "Signal value at the undershoot.",
+          "pt": "Valor do sinal no undershoot."
+        },
+        {
+          "name": "inst",
+          "en": "Time (or index) of the undershoot.",
+          "pt": "Instante (ou índice) do undershoot."
+        }
+      ],
+      "description": {
+        "en": "After a falling edge the signal can dip below its final low level. The undershoot is the largest such excursion past the final state level, found in a window that follows the transition, relative to the span between the two state levels, in percent.\n\nThe optional name-value pair `'PercentReferenceLevels'` (default `[10 90]`) sets the lower and upper reference levels as percentages of the distance between the two state levels, and `'Tolerance'` (default 2) and `'StateLevels'` work as in the pulse functions.",
+        "pt": "Depois de uma borda de descida, o sinal pode afundar abaixo do seu nível baixo final. O undershoot é a maior excursão desse tipo além do nível de estado final, procurada em uma janela que segue a transição, em relação ao intervalo entre os dois níveis de estado, em percentual.\n\nO par nome-valor opcional `'PercentReferenceLevels'` (padrão `[10 90]`) define os níveis de referência inferior e superior como percentuais da distância entre os dois níveis de estado, e `'Tolerance'` (padrão 2) e `'StateLevels'` funcionam como nas funções de pulso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Undershoot of a falling edge",
+            "pt": "Undershoot de uma borda de descida"
+          },
+          "code": "w = [1 1 1 1 1 0.8 0.3 -0.2 0.05 -0.03 0.02 0 0 0 0 0 0 0];\n[us, lev, inst] = undershoot(w);\nfprintf('%.2f %.2f %d\\n', us, lev, inst);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "overshoot",
+        "falltime",
+        "settlingtime",
+        "slewrate",
+        "statelevels"
+      ]
+    }
+  }
+}

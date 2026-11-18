@@ -1,0 +1,1657 @@
+{
+  "functions": {
+    "cpsd": {
+      "summary": {
+        "en": "Estimates the cross power spectral density of two signals with Welch's method.",
+        "pt": "Estima a densidade espectral de potência cruzada de dois sinais pelo método de Welch."
+      },
+      "syntax": [
+        {
+          "code": "[pxy, f] = cpsd(x, y)",
+          "en": "Cross spectrum with default window, overlap and FFT length.",
+          "pt": "Espectro cruzado com janela, sobreposição e comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxy, f] = cpsd(x, y, window, noverlap, nfft, fs)",
+          "en": "Sets the window, the overlap, the FFT length and the sampling rate.",
+          "pt": "Define a janela, a sobreposição, o comprimento da FFT e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Input signals of the same length.",
+          "pt": "Sinais de entrada, com o mesmo comprimento."
+        },
+        {
+          "name": "window",
+          "en": "Window vector, or a scalar giving the length of a Hamming window. Use `[]` for the default.",
+          "pt": "Vetor da janela, ou um escalar com o comprimento de uma janela de Hamming. Use `[]` para o padrão."
+        },
+        {
+          "name": "noverlap",
+          "en": "Number of samples shared by consecutive segments.",
+          "pt": "Número de amostras compartilhadas por segmentos consecutivos."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length, a scalar.",
+          "pt": "Comprimento da FFT, um escalar."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Without it, frequencies are in rad/sample.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, as frequências são em rad/amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxy",
+          "en": "Complex cross spectrum, one value per frequency.",
+          "pt": "Espectro cruzado complexo, um valor por frequência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxy`.",
+          "pt": "Vetor de frequências correspondente a `pxy`."
+        }
+      ],
+      "description": {
+        "en": "The signals are cut into overlapping segments, each segment is windowed and transformed, and the products of the two spectra are averaged. The magnitude of the result shows at which frequencies the two signals share power, and its angle shows the phase relation between them.\n\nFor real input the result covers frequencies from 0 to half the sampling rate. In the example below, `y` is `x` delayed by two samples, and the angle at 16 Hz comes out as the delay times the angular frequency.",
+        "pt": "Os sinais são divididos em segmentos sobrepostos, cada segmento é multiplicado pela janela e transformado, e os produtos dos dois espectros são promediados. O módulo do resultado mostra em quais frequências os dois sinais compartilham potência, e o ângulo mostra a relação de fase entre eles.\n\nPara entradas reais, o resultado cobre as frequências de 0 até metade da taxa de amostragem. No exemplo abaixo, `y` é `x` atrasado em duas amostras, e o ângulo em 16 Hz resulta no atraso multiplicado pela frequência angular."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Phase between a signal and a delayed copy",
+            "pt": "Fase entre um sinal e uma cópia atrasada"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\ny = [zeros(1,2) x(1:end-2)];\n[c, f] = cpsd(x, y, 64, 32, 128, fs);\nk = find(f == 16);\nfprintf('%d points\\n', numel(c));\nfprintf('angle at 16 Hz: %.4f rad\\n', angle(c(k)));\nfprintf('delay times frequency: %.4f rad\\n', 2*pi*16*2/fs);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pwelch",
+        "mscohere",
+        "tfestimate",
+        "xcorr",
+        "periodogram"
+      ],
+      "notes": {
+        "en": "The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Giving a vector of frequencies in place of the FFT length is not supported. Calling it with no output arguments, which would plot the result, is not supported: request the outputs.",
+        "pt": "A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Informar um vetor de frequências no lugar do comprimento da FFT não é suportado. Chamá-la sem argumentos de saída, o que plotaria o resultado, não é suportado: peça as saídas."
+      }
+    },
+    "mscohere": {
+      "summary": {
+        "en": "Estimates the magnitude-squared coherence between two signals, a value from 0 to 1 at each frequency.",
+        "pt": "Estima a coerência quadrática entre dois sinais, um valor de 0 a 1 em cada frequência."
+      },
+      "syntax": [
+        {
+          "code": "[cxy, f] = mscohere(x, y)",
+          "en": "Coherence with default window, overlap and FFT length.",
+          "pt": "Coerência com janela, sobreposição e comprimento da FFT padrão."
+        },
+        {
+          "code": "[cxy, f] = mscohere(x, y, window, noverlap, nfft, fs)",
+          "en": "Sets the Welch parameters and the sampling rate.",
+          "pt": "Define os parâmetros de Welch e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Input signals of the same length.",
+          "pt": "Sinais de entrada, com o mesmo comprimento."
+        },
+        {
+          "name": "window",
+          "en": "Window vector, or a scalar giving the length of a Hamming window. Use `[]` for the default.",
+          "pt": "Vetor da janela, ou um escalar com o comprimento de uma janela de Hamming. Use `[]` para o padrão."
+        },
+        {
+          "name": "noverlap",
+          "en": "Number of samples shared by consecutive segments.",
+          "pt": "Número de amostras compartilhadas por segmentos consecutivos."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length, a scalar.",
+          "pt": "Comprimento da FFT, um escalar."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "cxy",
+          "en": "Coherence, real values between 0 and 1.",
+          "pt": "Coerência, valores reais entre 0 e 1."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `cxy`.",
+          "pt": "Vetor de frequências correspondente a `cxy`."
+        }
+      ],
+      "description": {
+        "en": "Coherence is the squared magnitude of the cross spectrum divided by the product of the two power spectra. A value near 1 means that, at that frequency, `y` behaves like a linear function of `x`. A value near 0 means the two signals are unrelated there, for instance because of independent noise or a component that only one of them has.\n\nThe estimate uses averages over several segments, so use more than one segment. With a single segment the coherence is 1 at every frequency.",
+        "pt": "A coerência é o módulo ao quadrado do espectro cruzado dividido pelo produto dos dois espectros de potência. Um valor próximo de 1 indica que, naquela frequência, `y` se comporta como uma função linear de `x`. Um valor próximo de 0 indica que os sinais não têm relação ali, por exemplo por causa de ruído independente ou de uma componente que só um deles possui.\n\nA estimativa usa médias de vários segmentos, então use mais de um segmento. Com um único segmento a coerência vale 1 em todas as frequências."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Coherence at a shared and at an unshared frequency",
+            "pt": "Coerência em uma frequência comum e em uma não compartilhada"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\ny = filter([1 0.5], 1, x) + 0.3*sin(2*pi*28*t);\n[c, f] = mscohere(x, y, 64, 32, 128, fs);\nfprintf('coherence at 16 Hz: %.3f\\n', c(f == 16));\nfprintf('coherence at 28 Hz: %.3f\\n', c(f == 28));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cpsd",
+        "tfestimate",
+        "pwelch",
+        "xcorr"
+      ],
+      "notes": {
+        "en": "The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Giving a vector of frequencies in place of the FFT length is not supported. Calling it with no output arguments, which would plot the result, is not supported: request the outputs.",
+        "pt": "A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Informar um vetor de frequências no lugar do comprimento da FFT não é suportado. Chamá-la sem argumentos de saída, o que plotaria o resultado, não é suportado: peça as saídas."
+      }
+    },
+    "pburg": {
+      "summary": {
+        "en": "Estimates the power spectral density by fitting an autoregressive model with Burg's method.",
+        "pt": "Estima a densidade espectral de potência ajustando um modelo autorregressivo pelo método de Burg."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pburg(x, p)",
+          "en": "Spectrum of an order-`p` model with default FFT length.",
+          "pt": "Espectro de um modelo de ordem `p` com comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxx, f] = pburg(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal vector.",
+          "pt": "Vetor do sinal, com valores reais."
+        },
+        {
+          "name": "p",
+          "en": "Order of the autoregressive model: the number of poles. A real sinusoid needs 2.",
+          "pt": "Ordem do modelo autorregressivo: o número de polos. Uma senoide real precisa de 2."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density of the fitted model.",
+          "pt": "Densidade espectral de potência do modelo ajustado."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "Burg's method fits an all-pole model by minimizing forward and backward prediction errors, and the spectrum returned is that of the model. It gives sharp peaks even on short records and always produces a stable model.\n\nThe order `p` sets how many peaks the model can show: use 2 for each real sinusoid, plus a few for the shape of the background. A very high order relative to the record length can split peaks or add false ones.",
+        "pt": "O método de Burg ajusta um modelo só de polos minimizando os erros de predição direto e reverso, e o espectro retornado é o desse modelo. Dá picos nítidos mesmo em registros curtos e sempre produz um modelo estável.\n\nA ordem `p` define quantos picos o modelo consegue mostrar: use 2 para cada senoide real, mais alguns para a forma do fundo. Uma ordem muito alta em relação ao tamanho do registro pode dividir picos ou criar picos falsos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spectrum peak from an order-6 model",
+            "pt": "Pico do espectro de um modelo de ordem 6"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pburg(x, 6, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pyulear",
+        "pcov",
+        "pmcov",
+        "arburg",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Single-precision input is computed in double precision and rounded, so it differs from MATLAB's single-precision result by about 6e-6 relative. At a high order on short data (for example order 10 on 200 samples) the model is ill-conditioned: the coefficients differ from MATLAB's in the last digits, and the spectrum amplifies that difference.",
+        "pt": "Entradas complexas não são suportadas. A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Uma entrada em precisão simples é calculada em precisão dupla e arredondada, então difere do resultado em precisão simples do MATLAB em cerca de 6e-6 relativo. Em ordem alta com dados curtos (por exemplo ordem 10 com 200 amostras) o modelo fica mal condicionado: os coeficientes diferem dos do MATLAB nos últimos dígitos, e o espectro amplifica essa diferença."
+      }
+    },
+    "pcov": {
+      "summary": {
+        "en": "Estimates the power spectral density by fitting an autoregressive model with the covariance method.",
+        "pt": "Estima a densidade espectral de potência ajustando um modelo autorregressivo pelo método da covariância."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pcov(x, p)",
+          "en": "Spectrum of an order-`p` model with default FFT length.",
+          "pt": "Espectro de um modelo de ordem `p` com comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxx, f] = pcov(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal vector.",
+          "pt": "Vetor do sinal, com valores reais."
+        },
+        {
+          "name": "p",
+          "en": "Order of the autoregressive model: the number of poles. A real sinusoid needs 2.",
+          "pt": "Ordem do modelo autorregressivo: o número de polos. Uma senoide real precisa de 2."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density of the fitted model.",
+          "pt": "Densidade espectral de potência do modelo ajustado."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "The covariance method fits an all-pole model by least squares on the forward prediction error, using only samples whose full history lies inside the record, with no windowing at the edges. The function returns the spectrum of the fitted model.\n\nIt resolves close sinusoids well on short data, but, unlike `pyulear` and `pburg`, it does not guarantee a stable model. Peaks can be very tall for clean signals, so compare peak positions and relative heights, not absolute values.",
+        "pt": "O método da covariância ajusta um modelo só de polos por mínimos quadrados sobre o erro de predição direto, usando apenas amostras cujo histórico completo está dentro do registro, sem janelamento nas bordas. A função retorna o espectro do modelo ajustado.\n\nResolve bem senoides próximas em dados curtos, mas, ao contrário de `pyulear` e `pburg`, não garante um modelo estável. Os picos podem ser muito altos para sinais limpos, então compare as posições e as alturas relativas dos picos, não os valores absolutos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spectrum peak from an order-6 model",
+            "pt": "Pico do espectro de um modelo de ordem 6"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pcov(x, 6, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pmcov",
+        "pburg",
+        "pyulear",
+        "arcov",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Single-precision input is computed in double precision and rounded, so it differs from MATLAB's single-precision result by about 6e-6 relative. When the covariance system is rank deficient, MATLAB returns a huge finite value at DC where the model is singular, and MatLivre returns NaN there.",
+        "pt": "Entradas complexas não são suportadas. A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Uma entrada em precisão simples é calculada em precisão dupla e arredondada, então difere do resultado em precisão simples do MATLAB em cerca de 6e-6 relativo. Quando o sistema de covariância tem posto deficiente, o MATLAB retorna um valor finito enorme em DC, onde o modelo é singular, e o MatLivre retorna NaN ali."
+      }
+    },
+    "peig": {
+      "summary": {
+        "en": "Estimates the pseudospectrum of a signal with the eigenvector method, which locates sinusoid frequencies.",
+        "pt": "Estima o pseudoespectro de um sinal pelo método dos autovetores, que localiza as frequências das senoides."
+      },
+      "syntax": [
+        {
+          "code": "[s, f] = peig(x, p)",
+          "en": "Pseudospectrum for a signal subspace of dimension `p`.",
+          "pt": "Pseudoespectro para um subespaço de sinal de dimensão `p`."
+        },
+        {
+          "code": "[s, f] = peig(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        },
+        {
+          "code": "[s, f, v, e] = peig(x, p, nfft, fs, nwin)",
+          "en": "Also returns the noise eigenvectors and the eigenvalues, with an explicit correlation window length.",
+          "pt": "Retorna também os autovetores de ruído e os autovalores, com o comprimento da janela de correlação indicado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector, or a data matrix.",
+          "pt": "Vetor do sinal, ou uma matriz de dados."
+        },
+        {
+          "name": "p",
+          "en": "Dimension of the signal subspace. A real sinusoid counts as 2, a complex exponential as 1.",
+          "pt": "Dimensão do subespaço de sinal. Uma senoide real conta como 2, uma exponencial complexa como 1."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "nwin",
+          "en": "Optional length of the correlation window. A longer window gives a sharper spectrum.",
+          "pt": "Comprimento opcional da janela de correlação. Uma janela mais longa dá um espectro mais nítido."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Pseudospectrum. It shows where the sinusoids are, but its height is not a power.",
+          "pt": "Pseudoespectro. Mostra onde estão as senoides, mas sua altura não é uma potência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `s`.",
+          "pt": "Vetor de frequências correspondente a `s`."
+        },
+        {
+          "name": "v",
+          "en": "Optional. Eigenvectors of the noise subspace, one per column.",
+          "pt": "Opcional. Autovetores do subespaço de ruído, um por coluna."
+        },
+        {
+          "name": "e",
+          "en": "Optional. Eigenvalues of the correlation matrix.",
+          "pt": "Opcional. Autovalores da matriz de correlação."
+        }
+      ],
+      "description": {
+        "en": "The eigenvector method is a close relative of `pmusic`: it also splits the correlation matrix into signal and noise subspaces, but it weights each noise eigenvector by the inverse of its eigenvalue. The result is a pseudospectrum with peaks at the sinusoid frequencies.\n\nUse the peak positions to estimate frequencies. The heights are not powers. Choose `p` as twice the number of real sinusoids.",
+        "pt": "O método dos autovetores é parente próximo do `pmusic`: também separa a matriz de correlação em subespaços de sinal e de ruído, mas pondera cada autovetor de ruído pelo inverso de seu autovalor. O resultado é um pseudoespectro com picos nas frequências das senoides.\n\nUse as posições dos picos para estimar frequências. As alturas não são potências. Escolha `p` como o dobro do número de senoides reais."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Locate the strongest sinusoid",
+            "pt": "Localizar a senoide mais forte"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = peig(x, 4, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pmusic",
+        "rooteig",
+        "rootmusic",
+        "corrmtx",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "The noise eigenvectors `v` agree with MATLAB only up to the sign of each column (or, where noise eigenvalues are nearly equal, up to the basis of the subspace). The pseudospectrum, the frequencies and the eigenvalues agree.",
+        "pt": "Os autovetores de ruído `v` coincidem com os do MATLAB apenas a menos do sinal de cada coluna (ou, onde os autovalores de ruído são quase iguais, a menos da base do subespaço). O pseudoespectro, as frequências e os autovalores coincidem."
+      }
+    },
+    "periodogram": {
+      "summary": {
+        "en": "Estimates the power spectral density of a signal from the squared magnitude of its windowed Fourier transform.",
+        "pt": "Estima a densidade espectral de potência de um sinal a partir do módulo ao quadrado de sua transformada de Fourier janelada."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = periodogram(x)",
+          "en": "Rectangular window, FFT length at least the signal length.",
+          "pt": "Janela retangular, comprimento da FFT de pelo menos o comprimento do sinal."
+        },
+        {
+          "code": "[pxx, f] = periodogram(x, window, nfft, fs)",
+          "en": "Sets the window, the FFT length and the sampling rate.",
+          "pt": "Define a janela, o comprimento da FFT e a taxa de amostragem."
+        },
+        {
+          "code": "[pxx, f] = periodogram(x, window, nfft, fs, 'power')",
+          "en": "Returns the power spectrum, in which a sinusoid peak reads as its power.",
+          "pt": "Retorna o espectro de potência, em que o pico de uma senoide é lido como a sua potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector.",
+          "pt": "Vetor do sinal."
+        },
+        {
+          "name": "window",
+          "en": "Window vector with the length of `x`. Use `[]` for a rectangular window.",
+          "pt": "Vetor da janela, com o comprimento de `x`. Use `[]` para uma janela retangular."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length. Use `[]` for the default, or a larger value to zero-pad.",
+          "pt": "Comprimento da FFT. Use `[]` para o padrão, ou um valor maior para completar com zeros."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Without it, frequencies are in rad/sample.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, as frequências são em rad/amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density estimate (or power spectrum with `'power'`).",
+          "pt": "Estimativa da densidade espectral de potência (ou espectro de potência com `'power'`)."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "A periodogram is a single, unaveraged spectrum estimate of the whole record. It has the finest frequency resolution you can get from the data, but it is noisy: its variance does not shrink as the record gets longer. For a smoother estimate, use `pwelch` or `pmtm`.\n\nThe window controls spectral leakage. The default rectangular window has the narrowest peaks but the highest side lobes, while a window such as `hamming` lowers the side lobes and widens the peaks.",
+        "pt": "Um periodograma é uma única estimativa espectral, sem médias, de todo o registro. Tem a melhor resolução em frequência que os dados permitem, mas é ruidoso: sua variância não diminui quando o registro fica maior. Para uma estimativa mais suave, use `pwelch` ou `pmtm`.\n\nA janela controla o vazamento espectral. A janela retangular padrão dá os picos mais estreitos, porém com os lóbulos laterais mais altos, enquanto uma janela como `hamming` reduz os lóbulos laterais e alarga os picos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Periodogram of two sinusoids",
+            "pt": "Periodograma de duas senoides"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = periodogram(x, [], 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pwelch",
+        "pmtm",
+        "plomb",
+        "fft",
+        "pspectrum"
+      ],
+      "notes": {
+        "en": "The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Giving a vector of frequencies in place of the FFT length is not supported. Calling it with no output arguments, which would plot the result, is not supported: request the outputs.",
+        "pt": "A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Informar um vetor de frequências no lugar do comprimento da FFT não é suportado. Chamá-la sem argumentos de saída, o que plotaria o resultado, não é suportado: peça as saídas."
+      }
+    },
+    "plomb": {
+      "summary": {
+        "en": "Computes the Lomb-Scargle periodogram, a spectrum estimate for signals sampled at uneven times.",
+        "pt": "Calcula o periodograma de Lomb-Scargle, uma estimativa espectral para sinais amostrados em instantes irregulares."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = plomb(x, t)",
+          "en": "Spectrum of the samples `x` taken at times `t`, on an automatic frequency grid.",
+          "pt": "Espectro das amostras `x` tomadas nos instantes `t`, em uma grade de frequências automática."
+        },
+        {
+          "code": "[pxx, f] = plomb(x, t, fmax, ofac)",
+          "en": "Limits the highest frequency and sets the oversampling factor.",
+          "pt": "Limita a maior frequência e define o fator de sobreamostragem."
+        },
+        {
+          "code": "[pxx, f] = plomb(x, fs)",
+          "en": "Even sampling at rate `fs`.",
+          "pt": "Amostragem uniforme na taxa `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample values.",
+          "pt": "Valores das amostras."
+        },
+        {
+          "name": "t",
+          "en": "Sample times, in seconds, same length as `x`. They need not be evenly spaced.",
+          "pt": "Instantes das amostras, em segundos, com o mesmo comprimento de `x`. Não precisam ser igualmente espaçados."
+        },
+        {
+          "name": "fmax",
+          "en": "Highest frequency to evaluate. Use `[]` for the default.",
+          "pt": "Maior frequência a avaliar. Use `[]` para o padrão."
+        },
+        {
+          "name": "ofac",
+          "en": "Oversampling factor of the frequency grid (default 4).",
+          "pt": "Fator de sobreamostragem da grade de frequências (padrão 4)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Spectrum estimate, one value per frequency.",
+          "pt": "Estimativa do espectro, um valor por frequência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector, in hertz when `t` is in seconds.",
+          "pt": "Vetor de frequências, em hertz quando `t` está em segundos."
+        }
+      ],
+      "description": {
+        "en": "The ordinary FFT needs evenly spaced samples. When samples are missing or were taken at irregular times, the Lomb-Scargle periodogram fits sinusoids to the data directly at each frequency, so no resampling or interpolation is needed.\n\nThe frequency grid is spaced by the inverse of the record duration divided by the oversampling factor, and by default it extends up to half the average sampling rate. The options `'power'`, `'psd'` and `'normalized'` choose the scaling.",
+        "pt": "A FFT comum exige amostras igualmente espaçadas. Quando faltam amostras ou elas foram tomadas em instantes irregulares, o periodograma de Lomb-Scargle ajusta senoides diretamente aos dados em cada frequência, sem precisar reamostrar ou interpolar.\n\nA grade de frequências tem espaçamento igual ao inverso da duração do registro dividido pelo fator de sobreamostragem e, por padrão, vai até metade da taxa de amostragem média. As opções `'power'`, `'psd'` e `'normalized'` escolhem a escala."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Find a tone with missing samples",
+            "pt": "Encontrar um tom com amostras faltando"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.1*sin(1000*n.^2);\nkeep = mod(n, 5) ~= 3;\n[p, f] = plomb(x(keep), t(keep));\n[~, k] = max(p);\nfprintf('%d samples, peak at %.2f Hz\\n', nnz(keep), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "periodogram",
+        "pwelch",
+        "fillgaps",
+        "resample"
+      ],
+      "notes": {
+        "en": "In single precision the algorithm runs in double and is rounded, so values differ from MATLAB's at the 1e-7 level. With two to five samples the denominators are nearly singular and rounding differs between implementations: for two samples MATLAB returns a constant spectrum, where MatLivre gives NaN at some frequencies.",
+        "pt": "Em precisão simples o algoritmo roda em precisão dupla e é arredondado, então os valores diferem dos do MATLAB na ordem de 1e-7. Com duas a cinco amostras os denominadores são quase singulares e o arredondamento difere entre implementações: para duas amostras o MATLAB retorna um espectro constante, enquanto o MatLivre dá NaN em algumas frequências."
+      }
+    },
+    "pmcov": {
+      "summary": {
+        "en": "Estimates the power spectral density by fitting an autoregressive model with the modified covariance method.",
+        "pt": "Estima a densidade espectral de potência ajustando um modelo autorregressivo pelo método da covariância modificada."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pmcov(x, p)",
+          "en": "Spectrum of an order-`p` model with default FFT length.",
+          "pt": "Espectro de um modelo de ordem `p` com comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxx, f] = pmcov(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal vector.",
+          "pt": "Vetor do sinal, com valores reais."
+        },
+        {
+          "name": "p",
+          "en": "Order of the autoregressive model: the number of poles. A real sinusoid needs 2.",
+          "pt": "Ordem do modelo autorregressivo: o número de polos. Uma senoide real precisa de 2."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density of the fitted model.",
+          "pt": "Densidade espectral de potência do modelo ajustado."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "The modified covariance method fits an all-pole model by least squares on both the forward and the backward prediction errors, and returns the spectrum of that model. Using both directions makes the estimate less sensitive to the exact start of the record than `pcov`.\n\nIt is a good choice for short records with several sinusoids. As with `pcov`, the stability of the model is not guaranteed, and the height of a peak says little about its power: read peak positions, and compare heights only relatively.",
+        "pt": "O método da covariância modificada ajusta um modelo só de polos por mínimos quadrados sobre os erros de predição direto e reverso, e retorna o espectro desse modelo. Usar as duas direções torna a estimativa menos sensível ao ponto exato de início do registro do que o `pcov`.\n\nÉ uma boa escolha para registros curtos com várias senoides. Como no `pcov`, a estabilidade do modelo não é garantida, e a altura de um pico diz pouco sobre sua potência: leia as posições dos picos e compare as alturas apenas de forma relativa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spectrum peak from an order-6 model",
+            "pt": "Pico do espectro de um modelo de ordem 6"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pmcov(x, 6, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pcov",
+        "pburg",
+        "pyulear",
+        "armcov",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Single-precision input is computed in double precision and rounded, so it differs from MATLAB's single-precision result by about 6e-6 relative. When the covariance system is rank deficient, MATLAB returns a huge finite value at DC where the model is singular, and MatLivre returns NaN there.",
+        "pt": "Entradas complexas não são suportadas. A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Uma entrada em precisão simples é calculada em precisão dupla e arredondada, então difere do resultado em precisão simples do MATLAB em cerca de 6e-6 relativo. Quando o sistema de covariância tem posto deficiente, o MATLAB retorna um valor finito enorme em DC, onde o modelo é singular, e o MatLivre retorna NaN ali."
+      }
+    },
+    "pmtm": {
+      "summary": {
+        "en": "Estimates the power spectral density with the multitaper method, averaging spectra from several orthogonal tapers.",
+        "pt": "Estima a densidade espectral de potência pelo método multitaper, promediando espectros de várias janelas ortogonais."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pmtm(x, nw)",
+          "en": "Slepian tapers with time-halfbandwidth product `nw`.",
+          "pt": "Janelas de Slepian com produto tempo-meia-banda `nw`."
+        },
+        {
+          "code": "[pxx, f] = pmtm(x, nw, nfft, fs)",
+          "en": "Sets the FFT length and the sampling rate.",
+          "pt": "Define o comprimento da FFT e a taxa de amostragem."
+        },
+        {
+          "code": "[pxx, f] = pmtm(x, nw, nfft, fs, 'adapt')",
+          "en": "Combines the tapers with adaptive weights (other choices: `'eigen'`, `'unity'`).",
+          "pt": "Combina as janelas com pesos adaptativos (outras opções: `'eigen'`, `'unity'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector.",
+          "pt": "Vetor do sinal."
+        },
+        {
+          "name": "nw",
+          "en": "Time-halfbandwidth product, often 2, 2.5, 3, 3.5 or 4. Must be less than half the signal length.",
+          "pt": "Produto tempo-meia-banda, em geral 2, 2,5, 3, 3,5 ou 4. Deve ser menor que metade do comprimento do sinal."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length. Use `[]` for the default.",
+          "pt": "Comprimento da FFT. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density estimate.",
+          "pt": "Estimativa da densidade espectral de potência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "The multitaper method computes one periodogram per taper, where the tapers are a set of mutually orthogonal windows, and averages them. Because each taper sees the data differently, the average has lower variance than a single periodogram and little leakage, without cutting the record into segments the way `pwelch` does.\n\nA larger `nw` uses more tapers: the estimate gets smoother, and each peak gets wider.",
+        "pt": "O método multitaper calcula um periodograma por janela, sendo as janelas um conjunto de funções mutuamente ortogonais, e faz a média deles. Como cada janela enxerga os dados de um modo diferente, a média tem variância menor que a de um único periodograma e pouco vazamento, sem dividir o registro em segmentos como faz o `pwelch`.\n\nUm `nw` maior usa mais janelas: a estimativa fica mais suave, e cada pico fica mais largo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Multitaper estimate of two sinusoids",
+            "pt": "Estimativa multitaper de duas senoides"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pmtm(x, 3.5, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pwelch",
+        "periodogram",
+        "dpss",
+        "pspectrum"
+      ]
+    },
+    "pmusic": {
+      "summary": {
+        "en": "Estimates the pseudospectrum of a signal with the MUSIC algorithm, which gives sharp peaks at sinusoid frequencies.",
+        "pt": "Estima o pseudoespectro de um sinal com o algoritmo MUSIC, que dá picos nítidos nas frequências das senoides."
+      },
+      "syntax": [
+        {
+          "code": "[s, f] = pmusic(x, p)",
+          "en": "Pseudospectrum for a signal subspace of dimension `p`.",
+          "pt": "Pseudoespectro para um subespaço de sinal de dimensão `p`."
+        },
+        {
+          "code": "[s, f] = pmusic(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        },
+        {
+          "code": "[s, f, v, e] = pmusic(x, p, nfft, fs, nwin)",
+          "en": "Also returns the noise eigenvectors and the eigenvalues, with an explicit correlation window length.",
+          "pt": "Retorna também os autovetores de ruído e os autovalores, com o comprimento da janela de correlação indicado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector, or a data matrix.",
+          "pt": "Vetor do sinal, ou uma matriz de dados."
+        },
+        {
+          "name": "p",
+          "en": "Dimension of the signal subspace. A real sinusoid counts as 2, a complex exponential as 1.",
+          "pt": "Dimensão do subespaço de sinal. Uma senoide real conta como 2, uma exponencial complexa como 1."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "nwin",
+          "en": "Optional length of the correlation window. A longer window gives a sharper spectrum.",
+          "pt": "Comprimento opcional da janela de correlação. Uma janela mais longa dá um espectro mais nítido."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Pseudospectrum. It shows where the sinusoids are, but its height is not a power.",
+          "pt": "Pseudoespectro. Mostra onde estão as senoides, mas sua altura não é uma potência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `s`.",
+          "pt": "Vetor de frequências correspondente a `s`."
+        },
+        {
+          "name": "v",
+          "en": "Optional. Eigenvectors of the noise subspace, one per column.",
+          "pt": "Opcional. Autovetores do subespaço de ruído, um por coluna."
+        },
+        {
+          "name": "e",
+          "en": "Optional. Eigenvalues of the correlation matrix.",
+          "pt": "Opcional. Autovalores da matriz de correlação."
+        }
+      ],
+      "description": {
+        "en": "MUSIC splits the eigenvectors of the correlation matrix into a signal subspace and a noise subspace. A sinusoid at a frequency makes a vector that is almost orthogonal to the noise subspace, so the reciprocal of that projection shows a very sharp peak there. It works best for a few sinusoids in noise.\n\nThe heights of the peaks do not measure power, so use them only to locate frequencies. Choose `p` as twice the number of real sinusoids. The result can be very large near a peak when the data have almost no noise.",
+        "pt": "O MUSIC separa os autovetores da matriz de correlação em um subespaço de sinal e um subespaço de ruído. Uma senoide em uma dada frequência forma um vetor quase ortogonal ao subespaço de ruído, de modo que o inverso dessa projeção mostra um pico muito agudo ali. Funciona melhor para poucas senoides em ruído.\n\nAs alturas dos picos não medem potência, então use-as apenas para localizar frequências. Escolha `p` como o dobro do número de senoides reais. O resultado pode ficar muito grande perto de um pico quando os dados quase não têm ruído."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Locate the strongest sinusoid",
+            "pt": "Localizar a senoide mais forte"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pmusic(x, 4, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "peig",
+        "rootmusic",
+        "rooteig",
+        "corrmtx",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "In single precision the pseudospectrum is computed in double and rounded, so values differ from MATLAB's at the 1e-6 level. The noise eigenvectors `v` agree with MATLAB only up to the sign of each column (or, where noise eigenvalues are nearly equal, up to the basis of the subspace). Where the denominator is nearly zero, rounding differences are amplified in the pseudospectrum.",
+        "pt": "Em precisão simples o pseudoespectro é calculado em precisão dupla e arredondado, então os valores diferem dos do MATLAB na ordem de 1e-6. Os autovetores de ruído `v` coincidem com os do MATLAB apenas a menos do sinal de cada coluna (ou, onde os autovalores de ruído são quase iguais, a menos da base do subespaço). Onde o denominador é quase zero, as diferenças de arredondamento são amplificadas no pseudoespectro."
+      }
+    },
+    "poctave": {
+      "summary": {
+        "en": "Computes the signal power in octave bands, or in fractions of an octave, with a bank of filters.",
+        "pt": "Calcula a potência do sinal em bandas de oitava, ou de frações de oitava, com um banco de filtros."
+      },
+      "syntax": [
+        {
+          "code": "[p, cf] = poctave(x, fs)",
+          "en": "One-octave bands: band power and center frequencies.",
+          "pt": "Bandas de uma oitava: potência por banda e frequências centrais."
+        },
+        {
+          "code": "[p, cf] = poctave(x, fs, 'BandsPerOctave', n)",
+          "en": "Uses `n` bands per octave, for example 3 for third-octave bands.",
+          "pt": "Usa `n` bandas por oitava, por exemplo 3 para bandas de terço de oitava."
+        },
+        {
+          "code": "[p, cf] = poctave(x, fs, 'FrequencyLimits', [f1 f2])",
+          "en": "Restricts the analysis to a frequency range.",
+          "pt": "Restringe a análise a uma faixa de frequências."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector.",
+          "pt": "Vetor do sinal."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "'BandsPerOctave'",
+          "en": "Bands per octave, such as 1 or 3. The default is 1.",
+          "pt": "Bandas por oitava, como 1 ou 3. O padrão é 1."
+        },
+        {
+          "name": "'FrequencyLimits'",
+          "en": "Two-element range of frequencies, in hertz.",
+          "pt": "Faixa de frequências com dois elementos, em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Power in each band, a column vector (linear, not in decibels).",
+          "pt": "Potência em cada banda, um vetor coluna (linear, não em decibels)."
+        },
+        {
+          "name": "cf",
+          "en": "Center frequency of each band, in hertz.",
+          "pt": "Frequência central de cada banda, em hertz."
+        }
+      ],
+      "description": {
+        "en": "The signal is passed through a bank of bandpass filters whose bandwidths grow in proportion to their center frequencies, as in acoustic and vibration measurements, and the power in each band is returned. Octave-band spectra suit signals where you care about relative bandwidth, not fixed resolution in hertz.\n\nTo show the result in decibels, convert it with `pow2db`. In the example, most power appears in the 16 Hz band.",
+        "pt": "O sinal passa por um banco de filtros passa-faixa cujas larguras de banda crescem em proporção às frequências centrais, como em medições acústicas e de vibração, e a potência em cada banda é retornada. Espectros em bandas de oitava servem para sinais em que importa a largura de banda relativa, e não uma resolução fixa em hertz.\n\nPara mostrar o resultado em decibels, converta-o com `pow2db`. No exemplo, a maior parte da potência aparece na banda de 16 Hz."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Octave-band power in decibels",
+            "pt": "Potência por banda de oitava em decibels"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, cf] = poctave(x, fs);\ndisp(round(cf'*100)/100)\ndisp(round(10*log10(p')*10)/10)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pow2db",
+        "pwelch",
+        "pspectrum",
+        "bandpower",
+        "butter"
+      ],
+      "notes": {
+        "en": "The `'Weighting'` option and the spectrogram spectrum type are not implemented. The lowest bands (center frequency below about 1/250 of the sampling rate) differ from MATLAB's by 1e-7 to 1e-1 relative, while the higher bands agree closely; MatLivre uses the exact Butterworth bandpass filter of the chosen order.",
+        "pt": "A opção `'Weighting'` e o tipo de espectro spectrogram não estão implementados. As bandas mais baixas (frequência central abaixo de cerca de 1/250 da taxa de amostragem) diferem das do MATLAB entre 1e-7 e 1e-1 relativo, enquanto as bandas mais altas coincidem bem; o MatLivre usa o filtro passa-faixa de Butterworth exato da ordem escolhida."
+      }
+    },
+    "pspectrum": {
+      "summary": {
+        "en": "Computes the power spectrum of a signal with a Kaiser window, choosing the segmenting and resolution for you.",
+        "pt": "Calcula o espectro de potência de um sinal com janela de Kaiser, escolhendo por você a segmentação e a resolução."
+      },
+      "syntax": [
+        {
+          "code": "[p, f] = pspectrum(x, fs)",
+          "en": "Power spectrum of `x` sampled at `fs`.",
+          "pt": "Espectro de potência de `x` amostrado a `fs`."
+        },
+        {
+          "code": "[p, f] = pspectrum(x, fs, 'FrequencyResolution', rbw)",
+          "en": "Sets the target frequency resolution, in hertz.",
+          "pt": "Define a resolução em frequência desejada, em hertz."
+        },
+        {
+          "code": "[p, f] = pspectrum(x, fs, 'Leakage', lk)",
+          "en": "Sets the leakage of the window, from 0 to 1.",
+          "pt": "Define o vazamento da janela, de 0 a 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector.",
+          "pt": "Vetor do sinal."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        },
+        {
+          "name": "'FrequencyResolution'",
+          "en": "Desired resolution bandwidth, in hertz. A smaller value gives narrower peaks and a noisier estimate.",
+          "pt": "Largura de banda de resolução desejada, em hertz. Um valor menor dá picos mais estreitos e uma estimativa mais ruidosa."
+        },
+        {
+          "name": "'Leakage'",
+          "en": "Window leakage from 0 to 1. Lower values give lower side lobes and wider peaks.",
+          "pt": "Vazamento da janela, de 0 a 1. Valores menores dão lóbulos laterais menores e picos mais largos."
+        },
+        {
+          "name": "'FrequencyLimits'",
+          "en": "Two-element frequency range, in hertz.",
+          "pt": "Faixa de frequências com dois elementos, em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Power spectrum: the power in each frequency bin, in the units of `x` squared.",
+          "pt": "Espectro de potência: a potência em cada bin de frequência, nas unidades de `x` ao quadrado."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `p`, in hertz.",
+          "pt": "Vetor de frequências correspondente a `p`, em hertz."
+        }
+      ],
+      "description": {
+        "en": "`pspectrum` is a convenient front end for spectral estimates: it uses a Kaiser window, so you describe what you want (resolution and leakage) instead of the window and FFT length. Its output is a power spectrum, so a sinusoid of amplitude A appears with a peak of about A squared over 2.\n\nSetting `'FrequencyResolution'` to a coarser value (for example 8 Hz on the 128 Hz signal above) averages segments and returns fewer frequency points.",
+        "pt": "`pspectrum` é uma interface prática para estimativas espectrais: usa uma janela de Kaiser, de modo que você descreve o que quer (resolução e vazamento) em vez da janela e do comprimento da FFT. A saída é um espectro de potência, então uma senoide de amplitude A aparece com um pico de cerca de A ao quadrado sobre 2.\n\nDefinir `'FrequencyResolution'` com um valor mais grosso (por exemplo 8 Hz para o sinal de 128 Hz acima) promedia segmentos e retorna menos pontos de frequência."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spectrum peak of a two-tone signal",
+            "pt": "Pico do espectro de um sinal com dois tons"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pspectrum(x, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pwelch",
+        "periodogram",
+        "poctave",
+        "spectrogram",
+        "kaiser"
+      ],
+      "notes": {
+        "en": "With `'Leakage'` values such as 0.2, 0.7 or 0.85, MATLAB's window differs from `kaiser` at about the 1e-5 level, and the spectrum differs by that much. The Welch average with `'FrequencyResolution'` can differ from MATLAB's by about 3e-9 relative.",
+        "pt": "Com valores de `'Leakage'` como 0.2, 0.7 ou 0.85, a janela do MATLAB difere da `kaiser` na ordem de 1e-5, e o espectro difere nessa mesma ordem. A média de Welch com `'FrequencyResolution'` pode diferir da do MATLAB em cerca de 3e-9 relativo."
+      }
+    },
+    "pwelch": {
+      "summary": {
+        "en": "Estimates the power spectral density of a signal with Welch's averaged, windowed periodograms.",
+        "pt": "Estima a densidade espectral de potência de um sinal por periodogramas janelados e promediados, o método de Welch."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pwelch(x)",
+          "en": "Default window, overlap and FFT length.",
+          "pt": "Janela, sobreposição e comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxx, f] = pwelch(x, window, noverlap, nfft, fs)",
+          "en": "Sets the window, the overlap, the FFT length and the sampling rate.",
+          "pt": "Define a janela, a sobreposição, o comprimento da FFT e a taxa de amostragem."
+        },
+        {
+          "code": "[pxx, f] = pwelch(..., 'power')",
+          "en": "Returns the power spectrum, so that peak heights read as power, instead of the density.",
+          "pt": "Retorna o espectro de potência, em que a altura dos picos é lida como potência, em vez da densidade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector, or a matrix whose columns are signals.",
+          "pt": "Vetor do sinal, ou matriz cujas colunas são sinais."
+        },
+        {
+          "name": "window",
+          "en": "Window vector, or a scalar giving the length of a Hamming window. Use `[]` for the default.",
+          "pt": "Vetor da janela, ou um escalar com o comprimento de uma janela de Hamming. Use `[]` para o padrão."
+        },
+        {
+          "name": "noverlap",
+          "en": "Number of samples shared by consecutive segments. Use `[]` for the default.",
+          "pt": "Número de amostras compartilhadas por segmentos consecutivos. Use `[]` para o padrão."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length, a scalar.",
+          "pt": "Comprimento da FFT, um escalar."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Without it, frequencies are in rad/sample.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, as frequências são em rad/amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density estimate, one column per input column.",
+          "pt": "Estimativa da densidade espectral de potência, uma coluna por coluna de entrada."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "The signal is split into overlapping segments, each one is multiplied by the window, and the squared magnitudes of their transforms are averaged. Averaging lowers the variance of the estimate at the cost of frequency resolution: shorter segments give a smoother but blurrier spectrum.\n\nFor real input the result is one-sided, from 0 to `fs/2`. Add `'twosided'` or `'centered'` to get the full circle of frequencies.",
+        "pt": "O sinal é dividido em segmentos sobrepostos, cada um é multiplicado pela janela, e os módulos ao quadrado de suas transformadas são promediados. A média reduz a variância da estimativa ao custo de resolução em frequência: segmentos mais curtos dão um espectro mais suave, porém mais borrado.\n\nPara entradas reais o resultado é unilateral, de 0 a `fs/2`. Acrescente `'twosided'` ou `'centered'` para obter todo o círculo de frequências."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Find the strongest frequency",
+            "pt": "Encontrar a frequência mais forte"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pwelch(x, 64, 32, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "periodogram",
+        "cpsd",
+        "pmtm",
+        "pspectrum",
+        "spectrogram"
+      ],
+      "notes": {
+        "en": "A non-integer `noverlap` gives a result that differs from MATLAB's. The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Giving a vector of frequencies in place of the FFT length is not supported. Calling it with no output arguments, which would plot the result, is not supported: request the outputs.",
+        "pt": "Um `noverlap` não inteiro dá um resultado diferente do MATLAB. A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Informar um vetor de frequências no lugar do comprimento da FFT não é suportado. Chamá-la sem argumentos de saída, o que plotaria o resultado, não é suportado: peça as saídas."
+      }
+    },
+    "pyulear": {
+      "summary": {
+        "en": "Estimates the power spectral density by fitting an autoregressive model with the Yule-Walker method.",
+        "pt": "Estima a densidade espectral de potência ajustando um modelo autorregressivo pelo método de Yule-Walker."
+      },
+      "syntax": [
+        {
+          "code": "[pxx, f] = pyulear(x, p)",
+          "en": "Spectrum of an order-`p` model with default FFT length.",
+          "pt": "Espectro de um modelo de ordem `p` com comprimento da FFT padrão."
+        },
+        {
+          "code": "[pxx, f] = pyulear(x, p, nfft, fs)",
+          "en": "Sets the number of frequency points and the sampling rate.",
+          "pt": "Define o número de pontos de frequência e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal vector.",
+          "pt": "Vetor do sinal, com valores reais."
+        },
+        {
+          "name": "p",
+          "en": "Order of the autoregressive model: the number of poles. A real sinusoid needs 2.",
+          "pt": "Ordem do modelo autorregressivo: o número de polos. Uma senoide real precisa de 2."
+        },
+        {
+          "name": "nfft",
+          "en": "Number of frequency points. Use `[]` for the default.",
+          "pt": "Número de pontos de frequência. Use `[]` para o padrão."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pxx",
+          "en": "Power spectral density of the fitted model.",
+          "pt": "Densidade espectral de potência do modelo ajustado."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `pxx`.",
+          "pt": "Vetor de frequências correspondente a `pxx`."
+        }
+      ],
+      "description": {
+        "en": "Instead of transforming the data directly, the function fits an all-pole model to the signal's autocorrelation and returns the spectrum of that model. With a sensible order, the result is smooth, has sharp peaks at sinusoid frequencies, and works on short records where `periodogram` would be coarse.\n\nThe Yule-Walker method uses the biased autocorrelation estimate. It is stable, but tends to give broader peaks than `pburg` or `pcov` on short data. Choose the order `p` large enough to cover all peaks (2 per real sinusoid), and not much larger, to avoid spurious peaks.",
+        "pt": "Em vez de transformar os dados diretamente, a função ajusta um modelo só de polos à autocorrelação do sinal e retorna o espectro desse modelo. Com uma ordem adequada, o resultado é suave, tem picos nítidos nas frequências das senoides e funciona em registros curtos, onde o `periodogram` seria grosseiro.\n\nO método de Yule-Walker usa a estimativa enviesada da autocorrelação. É estável, mas tende a dar picos mais largos que `pburg` ou `pcov` em dados curtos. Escolha a ordem `p` grande o bastante para cobrir todos os picos (2 por senoide real), e não muito maior, para evitar picos espúrios."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spectrum peak from an order-6 model",
+            "pt": "Pico do espectro de um modelo de ordem 6"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[p, f] = pyulear(x, 6, 128, fs);\n[~, k] = max(p);\nfprintf('%d points, peak at %.2f Hz\\n', numel(p), f(k));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pburg",
+        "pcov",
+        "pmcov",
+        "aryule",
+        "pwelch"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Single-precision input is computed in double precision and rounded, so it differs from MATLAB's single-precision result by about 6e-6 relative.",
+        "pt": "Entradas complexas não são suportadas. A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Uma entrada em precisão simples é calculada em precisão dupla e arredondada, então difere do resultado em precisão simples do MATLAB em cerca de 6e-6 relativo."
+      }
+    },
+    "rooteig": {
+      "summary": {
+        "en": "Estimates sinusoid frequencies and powers with the eigenvector method, using polynomial roots instead of a spectrum.",
+        "pt": "Estima frequências e potências de senoides pelo método dos autovetores, usando raízes de um polinômio em vez de um espectro."
+      },
+      "syntax": [
+        {
+          "code": "w = rooteig(x, p)",
+          "en": "Frequencies of the sinusoids, in rad/sample.",
+          "pt": "Frequências das senoides, em rad/amostra."
+        },
+        {
+          "code": "[w, pow] = rooteig(x, p, fs)",
+          "en": "Frequencies in hertz and the power of each sinusoid.",
+          "pt": "Frequências em hertz e a potência de cada senoide."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector, or a data matrix.",
+          "pt": "Vetor do sinal, ou uma matriz de dados."
+        },
+        {
+          "name": "p",
+          "en": "Dimension of the signal subspace. A real sinusoid counts as 2.",
+          "pt": "Dimensão do subespaço de sinal. Uma senoide real conta como 2."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Without it, frequencies are in rad/sample.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, as frequências são em rad/amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Estimated frequencies. For a real signal they come in pairs, one positive and one negative per sinusoid.",
+          "pt": "Frequências estimadas. Para um sinal real vêm em pares, uma positiva e uma negativa por senoide."
+        },
+        {
+          "name": "pow",
+          "en": "Power of each sinusoid, one value per frequency pair for a real signal.",
+          "pt": "Potência de cada senoide, um valor por par de frequências em um sinal real."
+        }
+      ],
+      "description": {
+        "en": "This is the root-finding version of `peig`. Instead of evaluating a pseudospectrum on a grid and picking peaks, the function finds the roots of a polynomial built from the noise eigenvectors and keeps those closest to the unit circle. Their angles are the frequencies.\n\nResults are close to `rootmusic` for well separated sinusoids. In the example, the four frequencies are the two sinusoids at 16 and 40 Hz and their negative twins.",
+        "pt": "Esta é a versão com busca de raízes do `peig`. Em vez de avaliar um pseudoespectro em uma grade e detectar picos, a função encontra as raízes de um polinômio construído a partir dos autovetores de ruído e mantém as mais próximas do círculo unitário. Seus ângulos são as frequências.\n\nOs resultados são próximos aos do `rootmusic` para senoides bem separadas. No exemplo, as quatro frequências são as duas senoides em 16 e 40 Hz e suas gêmeas negativas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Frequencies and powers of two sinusoids",
+            "pt": "Frequências e potências de duas senoides"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[w, pw] = rooteig(x, 4, fs);\ndisp(round(w(w > 0)'*100)/100)\ndisp(round(pw'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rootmusic",
+        "peig",
+        "pmusic",
+        "corrmtx",
+        "roots"
+      ],
+      "notes": {
+        "en": "The frequencies agree with MATLAB to about 1e-12, but the powers agree only to about 1e-7 relative. For a real correlation matrix with a root at zero frequency, MATLAB returns two powers (zero for the zero-frequency root) and MatLivre returns one.",
+        "pt": "As frequências coincidem com as do MATLAB até cerca de 1e-12, mas as potências coincidem apenas até cerca de 1e-7 relativo. Para uma matriz de correlação real com uma raiz na frequência zero, o MATLAB retorna duas potências (zero para a raiz na frequência zero) e o MatLivre retorna uma."
+      }
+    },
+    "rootmusic": {
+      "summary": {
+        "en": "Estimates sinusoid frequencies and powers with the root MUSIC algorithm, using polynomial roots instead of a spectrum.",
+        "pt": "Estima frequências e potências de senoides com o algoritmo root MUSIC, usando raízes de um polinômio em vez de um espectro."
+      },
+      "syntax": [
+        {
+          "code": "w = rootmusic(x, p)",
+          "en": "Frequencies of the sinusoids, in rad/sample.",
+          "pt": "Frequências das senoides, em rad/amostra."
+        },
+        {
+          "code": "[w, pow] = rootmusic(x, p, fs)",
+          "en": "Frequencies in hertz and the power of each sinusoid.",
+          "pt": "Frequências em hertz e a potência de cada senoide."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal vector, or a data matrix.",
+          "pt": "Vetor do sinal, ou uma matriz de dados."
+        },
+        {
+          "name": "p",
+          "en": "Dimension of the signal subspace. A real sinusoid counts as 2.",
+          "pt": "Dimensão do subespaço de sinal. Uma senoide real conta como 2."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz. Without it, frequencies are in rad/sample.",
+          "pt": "Taxa de amostragem em hertz. Sem ela, as frequências são em rad/amostra."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "w",
+          "en": "Estimated frequencies. For a real signal they come in pairs, one positive and one negative per sinusoid.",
+          "pt": "Frequências estimadas. Para um sinal real vêm em pares, uma positiva e uma negativa por senoide."
+        },
+        {
+          "name": "pow",
+          "en": "Power of each sinusoid, one value per frequency pair for a real signal.",
+          "pt": "Potência de cada senoide, um valor por par de frequências em um sinal real."
+        }
+      ],
+      "description": {
+        "en": "Where `pmusic` searches a grid for peaks, `rootmusic` takes the same noise subspace and finds the sinusoid frequencies directly as the roots of a polynomial that lie closest to the unit circle. The frequencies are therefore not limited by a frequency grid, and no peak picking is needed.\n\nIn the example, two real sinusoids at 16 and 40 Hz are found with `p = 4`, and the result lists each frequency with its negative twin.",
+        "pt": "Enquanto o `pmusic` procura picos em uma grade, o `rootmusic` usa o mesmo subespaço de ruído e encontra as frequências diretamente como as raízes de um polinômio mais próximas do círculo unitário. As frequências, portanto, não ficam limitadas por uma grade e não é preciso detectar picos.\n\nNo exemplo, duas senoides reais em 16 e 40 Hz são encontradas com `p = 4`, e o resultado lista cada frequência junto com sua gêmea negativa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Frequencies and powers of two sinusoids",
+            "pt": "Frequências e potências de duas senoides"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\n[w, pw] = rootmusic(x, 4, fs);\ndisp(round(w(w > 0)'*100)/100)\ndisp(round(pw'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rooteig",
+        "pmusic",
+        "peig",
+        "corrmtx",
+        "roots"
+      ],
+      "notes": {
+        "en": "The frequencies agree with MATLAB to about 1e-12, but the powers agree only to about 1e-7 relative. For a real correlation matrix with a root at zero frequency, MATLAB returns two powers (zero for the zero-frequency root) and MatLivre returns one.",
+        "pt": "As frequências coincidem com as do MATLAB até cerca de 1e-12, mas as potências coincidem apenas até cerca de 1e-7 relativo. Para uma matriz de correlação real com uma raiz na frequência zero, o MATLAB retorna duas potências (zero para a raiz na frequência zero) e o MatLivre retorna uma."
+      }
+    },
+    "tfestimate": {
+      "summary": {
+        "en": "Estimates the transfer function from an input signal to an output signal using Welch's method.",
+        "pt": "Estima a função de transferência de um sinal de entrada para um sinal de saída pelo método de Welch."
+      },
+      "syntax": [
+        {
+          "code": "[txy, f] = tfestimate(x, y)",
+          "en": "Transfer function estimate with default parameters.",
+          "pt": "Estimativa da função de transferência com parâmetros padrão."
+        },
+        {
+          "code": "[txy, f] = tfestimate(x, y, window, noverlap, nfft, fs)",
+          "en": "Sets the Welch parameters and the sampling rate.",
+          "pt": "Define os parâmetros de Welch e a taxa de amostragem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Input signal of the system.",
+          "pt": "Sinal de entrada do sistema."
+        },
+        {
+          "name": "y",
+          "en": "Output signal, same length as `x`.",
+          "pt": "Sinal de saída, com o mesmo comprimento de `x`."
+        },
+        {
+          "name": "window",
+          "en": "Window vector, or a scalar giving the length of a Hamming window. Use `[]` for the default.",
+          "pt": "Vetor da janela, ou um escalar com o comprimento de uma janela de Hamming. Use `[]` para o padrão."
+        },
+        {
+          "name": "noverlap",
+          "en": "Number of samples shared by consecutive segments.",
+          "pt": "Número de amostras compartilhadas por segmentos consecutivos."
+        },
+        {
+          "name": "nfft",
+          "en": "FFT length, a scalar.",
+          "pt": "Comprimento da FFT, um escalar."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in hertz.",
+          "pt": "Taxa de amostragem em hertz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "txy",
+          "en": "Complex frequency response estimate, one value per frequency.",
+          "pt": "Estimativa complexa da resposta em frequência, um valor por frequência."
+        },
+        {
+          "name": "f",
+          "en": "Frequency vector matching `txy`.",
+          "pt": "Vetor de frequências correspondente a `txy`."
+        }
+      ],
+      "description": {
+        "en": "The estimate is the cross spectrum of input and output divided by the power spectrum of the input. It gives the gain (the magnitude) and the phase (the angle) with which the system turns `x` into `y`, at each frequency, without knowing the system itself.\n\nThe input needs power at the frequencies you care about. Where `x` has almost no power, the ratio is not reliable.",
+        "pt": "A estimativa é o espectro cruzado entre entrada e saída dividido pelo espectro de potência da entrada. Ela fornece o ganho (o módulo) e a fase (o ângulo) com que o sistema transforma `x` em `y`, em cada frequência, sem que se conheça o sistema em si.\n\nA entrada precisa ter potência nas frequências de interesse. Onde `x` tem quase nenhuma potência, a razão não é confiável."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover the gain of a known filter",
+            "pt": "Recuperar o ganho de um filtro conhecido"
+          },
+          "code": "fs = 128;\nn = 0:255;\nt = n/fs;\nx = sin(2*pi*16*t) + 0.5*sin(2*pi*40*t + 0.3) + 0.1*sin(1000*n.^2);\ny = filter([1 0.5], 1, x);\n[h, f] = tfestimate(x, y, 64, 32, 128, fs);\nk = find(f == 16);\nfprintf('estimated gain at 16 Hz: %.3f\\n', abs(h(k)));\nfprintf('true gain at 16 Hz:      %.3f\\n', abs(1 + 0.5*exp(-1i*2*pi*16/fs)));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mscohere",
+        "cpsd",
+        "freqz",
+        "pwelch",
+        "invfreqz"
+      ],
+      "notes": {
+        "en": "The `'ConfidenceLevel'` option and the confidence-interval output are not supported. Giving a vector of frequencies in place of the FFT length is not supported. A single-precision input is computed in double precision and rounded, so it can differ from MATLAB's single-precision result by about 1e-6 relative. Calling it with no output arguments, which would plot the result, is not supported: request the outputs.",
+        "pt": "A opção `'ConfidenceLevel'` e a saída com o intervalo de confiança não são suportadas. Informar um vetor de frequências no lugar do comprimento da FFT não é suportado. Uma entrada em precisão simples é calculada em precisão dupla e arredondada, então pode diferir do resultado em precisão simples do MATLAB em cerca de 1e-6 relativo. Chamá-la sem argumentos de saída, o que plotaria o resultado, não é suportado: peça as saídas."
+      }
+    },
+    "db": {
+      "summary": {
+        "en": "Converts a voltage or power value to decibels.",
+        "pt": "Converte um valor de tensão ou de potência para decibels."
+      },
+      "syntax": [
+        {
+          "code": "y = db(x)",
+          "en": "Treats `x` as a voltage (amplitude) and returns `20*log10(abs(x))`.",
+          "pt": "Trata `x` como tensão (amplitude) e retorna `20*log10(abs(x))`."
+        },
+        {
+          "code": "y = db(x, 'power')",
+          "en": "Treats `x` as power and returns `10*log10(x)`.",
+          "pt": "Trata `x` como potência e retorna `10*log10(x)`."
+        },
+        {
+          "code": "y = db(x, 'voltage', r)",
+          "en": "Voltage across a resistance `r`: `10*log10(abs(x).^2 ./ r)`.",
+          "pt": "Tensão sobre uma resistência `r`: `10*log10(abs(x).^2 ./ r)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values to convert, any size.",
+          "pt": "Valores a converter, de qualquer tamanho."
+        },
+        {
+          "name": "'voltage' or 'power'",
+          "en": "What `x` measures. The default is `'voltage'`. The name can be shortened, such as `'v'` or `'p'`.",
+          "pt": "O que `x` mede. O padrão é `'voltage'`. O nome pode ser abreviado, como `'v'` ou `'p'`."
+        },
+        {
+          "name": "r",
+          "en": "Reference resistance for the voltage case. The default is 1.",
+          "pt": "Resistência de referência no caso da tensão. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Value in decibels, same size as `x`.",
+          "pt": "Valor em decibels, com o mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "Decibels turn ratios into a logarithmic scale, which is how spectra and gains are usually plotted. An amplitude ratio of 10 is 20 dB, and a power ratio of 10 is 10 dB. The two conventions give the same dB value for the same physical quantity.\n\nA zero input gives `-Inf`. For a power input, a negative real value is an error. When you only need one of the conversions, `mag2db` and `pow2db` do the same job with fewer options.",
+        "pt": "Decibels transformam razões em uma escala logarítmica, que é como espectros e ganhos costumam ser plotados. Uma razão de amplitude de 10 vale 20 dB, e uma razão de potência de 10 vale 10 dB. As duas convenções dão o mesmo valor em dB para a mesma grandeza física.\n\nUma entrada igual a zero dá `-Inf`. Para entrada de potência, um valor real negativo é um erro. Quando só uma das conversões é necessária, `mag2db` e `pow2db` fazem o mesmo trabalho com menos opções."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Voltage, power and resistance forms",
+            "pt": "Formas de tensão, potência e resistência"
+          },
+          "code": "disp(db([1 10 100]))\ndisp(db([1 10 100], 'power'))\ndisp(round(db(10, 'voltage', 50)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mag2db",
+        "pow2db",
+        "db2mag",
+        "db2pow",
+        "log10"
+      ],
+      "notes": {
+        "en": "A single-precision input is computed in double precision and rounded. MATLAB's single-precision `log10` path is off by about 1e-6 relative from the correctly rounded value, so single-precision results can differ slightly; the double-precision results match.",
+        "pt": "Uma entrada em precisão simples é calculada em precisão dupla e arredondada. O caminho de `log10` em precisão simples do MATLAB tem erro de cerca de 1e-6 relativo em relação ao valor corretamente arredondado, então os resultados em precisão simples podem diferir um pouco; os resultados em precisão dupla coincidem."
+      }
+    },
+    "db2mag": {
+      "summary": {
+        "en": "Converts decibels to magnitude (amplitude).",
+        "pt": "Converte decibels para módulo (amplitude)."
+      },
+      "syntax": [
+        {
+          "code": "y = db2mag(ydb)",
+          "en": "Returns `10.^(ydb/20)`.",
+          "pt": "Retorna `10.^(ydb/20)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ydb",
+          "en": "Values in decibels, any size.",
+          "pt": "Valores em decibels, de qualquer tamanho."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Magnitudes, same size as `ydb`.",
+          "pt": "Módulos, com o mesmo tamanho de `ydb`."
+        }
+      ],
+      "description": {
+        "en": "Use it to turn a gain given in decibels into the factor that multiplies an amplitude. 0 dB is a factor of 1, 20 dB is a factor of 10, and a negative value gives a factor smaller than 1.\n\nIt is the inverse of `mag2db`. For power ratios, use `db2pow`.",
+        "pt": "Use para transformar um ganho dado em decibels no fator que multiplica uma amplitude. 0 dB é um fator 1, 20 dB é um fator 10, e um valor negativo dá um fator menor que 1.\n\nÉ a inversa de `mag2db`. Para razões de potência, use `db2pow`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "From decibels to amplitude factors",
+            "pt": "De decibels para fatores de amplitude"
+          },
+          "code": "disp(db2mag([0 6.0206 20 -20]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mag2db",
+        "db2pow",
+        "pow2db",
+        "db"
+      ]
+    },
+    "db2pow": {
+      "summary": {
+        "en": "Converts decibels to power.",
+        "pt": "Converte decibels para potência."
+      },
+      "syntax": [
+        {
+          "code": "y = db2pow(ydb)",
+          "en": "Returns `10.^(ydb/10)`.",
+          "pt": "Retorna `10.^(ydb/10)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "ydb",
+          "en": "Values in decibels, any size.",
+          "pt": "Valores em decibels, de qualquer tamanho."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Power ratios, same size as `ydb`.",
+          "pt": "Razões de potência, com o mesmo tamanho de `ydb`."
+        }
+      ],
+      "description": {
+        "en": "Use it to turn a level in decibels back into a linear power ratio. 0 dB is a ratio of 1, 10 dB is a ratio of 10, and about 3 dB is a ratio of 2.\n\nIt is the inverse of `pow2db`. For amplitude ratios, use `db2mag`.",
+        "pt": "Use para transformar um nível em decibels de volta em uma razão linear de potência. 0 dB é uma razão 1, 10 dB é uma razão 10, e cerca de 3 dB é uma razão 2.\n\nÉ a inversa de `pow2db`. Para razões de amplitude, use `db2mag`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "From decibels to power ratios",
+            "pt": "De decibels para razões de potência"
+          },
+          "code": "disp(db2pow([0 3.0103 10 -10]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pow2db",
+        "db2mag",
+        "mag2db",
+        "db"
+      ]
+    },
+    "mag2db": {
+      "summary": {
+        "en": "Converts magnitudes (amplitudes) to decibels.",
+        "pt": "Converte módulos (amplitudes) para decibels."
+      },
+      "syntax": [
+        {
+          "code": "ydb = mag2db(y)",
+          "en": "Returns `20*log10(y)`.",
+          "pt": "Retorna `20*log10(y)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Magnitudes, any size. Negative real values give NaN.",
+          "pt": "Módulos, de qualquer tamanho. Valores reais negativos dão NaN."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ydb",
+          "en": "Values in decibels, same size as `y`.",
+          "pt": "Valores em decibels, com o mesmo tamanho de `y`."
+        }
+      ],
+      "description": {
+        "en": "Use it for amplitude-like quantities such as voltage, pressure or the magnitude of a frequency response. A magnitude of 1 is 0 dB, and doubling the magnitude adds about 6 dB. A zero magnitude gives `-Inf`.\n\nFor power quantities such as a power spectral density, use `pow2db`, which uses a factor of 10 instead of 20. `db2mag` undoes this conversion.",
+        "pt": "Use para grandezas do tipo amplitude, como tensão, pressão ou o módulo de uma resposta em frequência. Um módulo igual a 1 vale 0 dB, e dobrar o módulo soma cerca de 6 dB. Um módulo igual a zero dá `-Inf`.\n\nPara grandezas de potência, como uma densidade espectral de potência, use `pow2db`, que usa o fator 10 em vez de 20. A função `db2mag` desfaz esta conversão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Gains in decibels",
+            "pt": "Ganhos em decibels"
+          },
+          "code": "disp(mag2db([1 2 10 0.1]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "db2mag",
+        "pow2db",
+        "db2pow",
+        "db"
+      ]
+    },
+    "pow2db": {
+      "summary": {
+        "en": "Converts power values to decibels.",
+        "pt": "Converte valores de potência para decibels."
+      },
+      "syntax": [
+        {
+          "code": "ydb = pow2db(y)",
+          "en": "Returns `10*log10(y)`.",
+          "pt": "Retorna `10*log10(y)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Power values, any size, not negative.",
+          "pt": "Valores de potência, de qualquer tamanho, não negativos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ydb",
+          "en": "Values in decibels, same size as `y`.",
+          "pt": "Valores em decibels, com o mesmo tamanho de `y`."
+        }
+      ],
+      "description": {
+        "en": "Use it for power quantities such as a power spectral density or the output of `poctave`. A power of 1 is 0 dB, and doubling the power adds about 3 dB. A zero power gives `-Inf`, and a negative real value is an error.\n\nFor amplitude quantities, use `mag2db`, which uses a factor of 20. `db2pow` undoes this conversion.",
+        "pt": "Use para grandezas de potência, como uma densidade espectral de potência ou a saída do `poctave`. Uma potência igual a 1 vale 0 dB, e dobrar a potência soma cerca de 3 dB. Uma potência igual a zero dá `-Inf`, e um valor real negativo é um erro.\n\nPara grandezas de amplitude, use `mag2db`, que usa o fator 20. A função `db2pow` desfaz esta conversão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Power ratios in decibels",
+            "pt": "Razões de potência em decibels"
+          },
+          "code": "disp(pow2db([1 2 10 0.1]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "db2pow",
+        "mag2db",
+        "db2mag",
+        "db",
+        "poctave"
+      ]
+    }
+  }
+}

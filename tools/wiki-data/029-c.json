@@ -1,0 +1,1954 @@
+{
+  "functions": {
+    "bandpower": {
+      "summary": {
+        "en": "Returns the average power of a signal, either overall or inside a frequency band.",
+        "pt": "Retorna a potência média de um sinal, no total ou dentro de uma faixa de frequência."
+      },
+      "syntax": [
+        {
+          "code": "p = bandpower(x)",
+          "en": "Mean-square power of `x` in the time domain.",
+          "pt": "Potência média quadrática de `x` no domínio do tempo."
+        },
+        {
+          "code": "p = bandpower(x, fs, freqrange)",
+          "en": "Power of `x` between the two frequencies in `freqrange`, estimated from a periodogram.",
+          "pt": "Potência de `x` entre as duas frequências de `freqrange`, estimada a partir de um periodograma."
+        },
+        {
+          "code": "p = bandpower(pxx, f, 'psd')",
+          "en": "Total power of a power spectral density `pxx` given at frequencies `f`.",
+          "pt": "Potência total de uma densidade espectral de potência `pxx` dada nas frequências `f`."
+        },
+        {
+          "code": "p = bandpower(pxx, f, freqrange, 'psd')",
+          "en": "Power of a PSD inside `freqrange`.",
+          "pt": "Potência de uma DEP dentro de `freqrange`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, a vector, or a matrix whose columns are channels.",
+          "pt": "Sinal real, um vetor, ou uma matriz cujas colunas são canais."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. It must be given together with `freqrange`.",
+          "pt": "Taxa de amostragem em Hz. Deve ser dada junto com `freqrange`."
+        },
+        {
+          "name": "freqrange",
+          "en": "Two-element vector `[f1 f2]` with the band edges, in Hz.",
+          "pt": "Vetor `[f1 f2]` com os limites da faixa, em Hz."
+        },
+        {
+          "name": "pxx, f",
+          "en": "Power spectral density and its frequency vector, for example from `periodogram` or `pwelch`.",
+          "pt": "Densidade espectral de potência e seu vetor de frequências, por exemplo de `periodogram` ou `pwelch`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Power, one value per column of the input.",
+          "pt": "Potência, um valor por coluna da entrada."
+        }
+      ],
+      "description": {
+        "en": "With a single argument, `bandpower` returns the mean of `x.^2`, which is the power of the whole signal. With `fs` and `freqrange` it computes a periodogram of the signal and adds up the power in the bins that fall in the band, so you can ask how much of the power sits around a given frequency.\n\nIf you already have a spectrum, pass it with the `'psd'` flag instead of the signal. The band power is then the sum of `pxx` over the band times the frequency spacing.",
+        "pt": "Com um só argumento, `bandpower` retorna a média de `x.^2`, que é a potência do sinal inteiro. Com `fs` e `freqrange` ela calcula um periodograma do sinal e soma a potência dos coeficientes que caem na faixa, o que permite saber quanta potência há em torno de uma dada frequência.\n\nSe você já tem um espectro, passe-o com a opção `'psd'` no lugar do sinal. A potência da faixa é então a soma de `pxx` na faixa vezes o espaçamento de frequência."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Power in two frequency bands",
+            "pt": "Potência em duas faixas de frequência"
+          },
+          "code": "fs = 1000; t = (0:999)'/fs;\nx = sin(2*pi*100*t) + 0.5*sin(2*pi*200*t);\nfprintf('total: %.4f\\n', bandpower(x));\nfprintf('50 to 150 Hz: %.4f\\n', bandpower(x, fs, [50 150]));\nfprintf('150 to 250 Hz: %.4f\\n', bandpower(x, fs, [150 250]));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "periodogram",
+        "pwelch",
+        "obw",
+        "powerbw",
+        "rms"
+      ],
+      "notes": {
+        "en": "Complex input (a two-sided spectrum) is not supported and gives an error.",
+        "pt": "Entrada complexa (espectro bilateral) não é suportada e gera um erro."
+      }
+    },
+    "enbw": {
+      "summary": {
+        "en": "Returns the equivalent noise bandwidth of a window.",
+        "pt": "Retorna a largura de banda equivalente de ruído de uma janela."
+      },
+      "syntax": [
+        {
+          "code": "bw = enbw(w)",
+          "en": "Noise bandwidth of window `w`, in frequency bins.",
+          "pt": "Largura de banda de ruído da janela `w`, em coeficientes de frequência."
+        },
+        {
+          "code": "bw = enbw(w, fs)",
+          "en": "Noise bandwidth in Hz for sampling rate `fs`.",
+          "pt": "Largura de banda de ruído em Hz para a taxa de amostragem `fs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "w",
+          "en": "Window, a vector (for example from `hamming` or `kaiser`).",
+          "pt": "Janela, um vetor (por exemplo de `hamming` ou `kaiser`)."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. When omitted the result is in bins.",
+          "pt": "Taxa de amostragem em Hz. Se omitido, o resultado é em coeficientes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bw",
+          "en": "Equivalent noise bandwidth, a scalar.",
+          "pt": "Largura de banda equivalente de ruído, um escalar."
+        }
+      ],
+      "description": {
+        "en": "The equivalent noise bandwidth is the width of an ideal rectangular filter that lets through the same amount of white noise as the window does. It is computed as `fs*sum(w.^2)/sum(w)^2`, and with no `fs` it uses `fs = length(w)`, so the answer is in bins.\n\nA rectangular window gives 1 bin. Windows with lower sidelobes have a wider main lobe and so a larger value. You need this number to turn a power spectrum into a power spectral density, or to compare spectra taken with different windows.",
+        "pt": "A largura de banda equivalente de ruído é a largura de um filtro retangular ideal que deixa passar a mesma quantidade de ruído branco que a janela. Ela é calculada como `fs*sum(w.^2)/sum(w)^2` e, sem `fs`, usa-se `fs = length(w)`, de modo que a resposta é em coeficientes.\n\nA janela retangular dá 1 coeficiente. Janelas com lóbulos laterais menores têm lóbulo principal mais largo e, portanto, valor maior. Esse número é necessário para converter um espectro de potência em densidade espectral de potência, ou para comparar espectros obtidos com janelas diferentes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Noise bandwidth of two windows",
+            "pt": "Largura de banda equivalente de ruído de duas janelas"
+          },
+          "code": "fprintf('rectangular: %.4f bins\\n', enbw(rectwin(64)));\nfprintf('hamming:     %.4f bins\\n', enbw(hamming(64)));\nfprintf('hamming at fs = 1000: %.4f Hz\\n', enbw(hamming(64), 1000));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "periodogram",
+        "pwelch",
+        "hamming",
+        "kaiser",
+        "bandpower"
+      ]
+    },
+    "instbw": {
+      "summary": {
+        "en": "Estimates the instantaneous bandwidth of a signal over time.",
+        "pt": "Estima a largura de banda instantânea de um sinal ao longo do tempo."
+      },
+      "syntax": [
+        {
+          "code": "bw = instbw(x, fs)",
+          "en": "Instantaneous bandwidth of `x`, sampled at `fs` Hz.",
+          "pt": "Largura de banda instantânea de `x`, amostrado a `fs` Hz."
+        },
+        {
+          "code": "[bw, t] = instbw(x, fs)",
+          "en": "Also returns the time of each estimate.",
+          "pt": "Retorna também o instante de cada estimativa."
+        },
+        {
+          "code": "bw = instbw(x, ___, 'FrequencyLimits', [f1 f2])",
+          "en": "Restricts the calculation to a frequency band.",
+          "pt": "Restringe o cálculo a uma faixa de frequência."
+        },
+        {
+          "code": "bw = instbw(p, f, t)",
+          "en": "Uses a power spectrogram `p` with frequency vector `f` and time vector `t`.",
+          "pt": "Usa um espectrograma de potência `p` com vetor de frequências `f` e vetor de tempos `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, real or complex. Columns are channels.",
+          "pt": "Sinal, real ou complexo. As colunas são canais."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. A time vector can be given instead.",
+          "pt": "Taxa de amostragem em Hz. Pode-se dar um vetor de tempos no lugar."
+        },
+        {
+          "name": "'FrequencyLimits'",
+          "en": "Two-element vector `[f1 f2]` in Hz; `f2` cannot exceed `fs/2`.",
+          "pt": "Vetor `[f1 f2]` em Hz; `f2` não pode passar de `fs/2`."
+        },
+        {
+          "name": "'ScaleFactor'",
+          "en": "Positive number that scales the spread. The default is `sqrt(4*pi)`.",
+          "pt": "Número positivo que multiplica a dispersão. O padrão é `sqrt(4*pi)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bw",
+          "en": "Instantaneous bandwidth in Hz, one row per time estimate and one column per channel.",
+          "pt": "Largura de banda instantânea em Hz, uma linha por estimativa de tempo e uma coluna por canal."
+        },
+        {
+          "name": "t",
+          "en": "Time of each estimate, a column vector.",
+          "pt": "Instante de cada estimativa, um vetor coluna."
+        }
+      ],
+      "description": {
+        "en": "`instbw` computes a spectrogram of the signal and, at every time slice, measures how widely the power is spread around its mean frequency. The result is that spread (a standard deviation) times `ScaleFactor`. A single clean tone gives a small value, and a slice with several components gives a larger one.\n\nThe estimates come at the time points of the spectrogram, so there are far fewer than samples in `x`. Use `instfreq` to get the center frequency that this bandwidth is measured around.",
+        "pt": "A `instbw` calcula um espectrograma do sinal e, em cada instante, mede o quanto a potência está espalhada em torno da frequência média. O resultado é essa dispersão (um desvio padrão) multiplicada por `ScaleFactor`. Um único tom limpo dá um valor pequeno, e um instante com várias componentes dá um valor maior.\n\nAs estimativas vêm nos instantes do espectrograma, então há bem menos valores do que amostras em `x`. Use `instfreq` para obter a frequência central em torno da qual essa largura de banda é medida."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bandwidth grows when a second tone appears",
+            "pt": "A largura de banda cresce quando surge um segundo tom"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\ny = exp(1i*2*pi*100*t) + (t > 0.128).*exp(1i*2*pi*300*t);\n[bw, tm] = instbw(y, fs);\nfprintf('%d estimates, first at %.3f s\\n', numel(bw), tm(1));\ndisp(round(bw([1 5 10 15 20 25 29])'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "instfreq",
+        "spectrogram",
+        "pspectrum",
+        "obw",
+        "tfridge"
+      ]
+    },
+    "instfreq": {
+      "summary": {
+        "en": "Estimates the instantaneous frequency of a signal over time.",
+        "pt": "Estima a frequência instantânea de um sinal ao longo do tempo."
+      },
+      "syntax": [
+        {
+          "code": "f = instfreq(x, fs)",
+          "en": "Instantaneous frequency of `x`, sampled at `fs` Hz, as the mean frequency of each spectrogram slice.",
+          "pt": "Frequência instantânea de `x`, amostrado a `fs` Hz, como a frequência média de cada instante do espectrograma."
+        },
+        {
+          "code": "[f, t] = instfreq(x, fs)",
+          "en": "Also returns the time of each estimate.",
+          "pt": "Retorna também o instante de cada estimativa."
+        },
+        {
+          "code": "f = instfreq(x, fs, 'Method', 'hilbert')",
+          "en": "Uses the phase of the analytic signal, one value per pair of samples.",
+          "pt": "Usa a fase do sinal analítico, um valor por par de amostras."
+        },
+        {
+          "code": "f = instfreq(p, f, t)",
+          "en": "Uses a power spectrogram `p` with frequency vector `f` and time vector `t`.",
+          "pt": "Usa um espectrograma de potência `p` com vetor de frequências `f` e vetor de tempos `t`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, real or complex. Columns are channels.",
+          "pt": "Sinal, real ou complexo. As colunas são canais."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. A time vector can be given instead.",
+          "pt": "Taxa de amostragem em Hz. Pode-se dar um vetor de tempos no lugar."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'tfmoment'` (default) or `'hilbert'`.",
+          "pt": "`'tfmoment'` (padrão) ou `'hilbert'`."
+        },
+        {
+          "name": "'FrequencyLimits'",
+          "en": "Two-element vector `[f1 f2]` in Hz, only for `'tfmoment'`.",
+          "pt": "Vetor `[f1 f2]` em Hz, apenas para `'tfmoment'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "Instantaneous frequency in Hz, one row per estimate and one column per channel.",
+          "pt": "Frequência instantânea em Hz, uma linha por estimativa e uma coluna por canal."
+        },
+        {
+          "name": "t",
+          "en": "Time of each estimate, a column vector.",
+          "pt": "Instante de cada estimativa, um vetor coluna."
+        }
+      ],
+      "description": {
+        "en": "With the default `'tfmoment'` method, `instfreq` computes a spectrogram and takes the first moment of the power (its center of mass in frequency) at each time slice. This works for noisy or multi-component signals and gives one value per spectrogram slice, so the output is much shorter than `x`.\n\nWith `'hilbert'` the signal is turned into its analytic signal and the frequency is the change of the unwrapped phase between neighboring samples. It returns `length(x)-1` values, placed halfway between samples, and suits a single clean component. `'FrequencyLimits'` cannot be combined with `'hilbert'`.",
+        "pt": "Com o método padrão `'tfmoment'`, a `instfreq` calcula um espectrograma e toma o primeiro momento da potência (o centro de massa em frequência) em cada instante. Isso funciona para sinais ruidosos ou com várias componentes e dá um valor por instante do espectrograma, de modo que a saída é bem mais curta que `x`.\n\nCom `'hilbert'` o sinal vira seu sinal analítico e a frequência é a variação da fase desenrolada entre amostras vizinhas. Ela retorna `length(x)-1` valores, posicionados no meio entre as amostras, e serve para uma única componente limpa. `'FrequencyLimits'` não pode ser combinado com `'hilbert'`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Frequency of a linear chirp",
+            "pt": "Frequência de um chirp linear"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\ny = exp(1i*2*pi*(50*t + 50*t.^2));\n[f, tm] = instfreq(y, fs);\nfprintf('%d estimates\\n', numel(f));\ndisp(round(f([1 10 20 29])'))\ndisp(round(tm([1 10 20 29])'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Phase-difference method on a real signal",
+            "pt": "Método da diferença de fase em um sinal real"
+          },
+          "code": "fs = 1000; t = (0:255)'/fs;\nx = cos(2*pi*(50*t + 50*t.^2));\nf = instfreq(x, fs, 'Method', 'hilbert');\ndisp(numel(f))\ndisp(round(f([20 100 200])'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "instbw",
+        "hilbert",
+        "spectrogram",
+        "tfridge",
+        "pspectrum"
+      ]
+    },
+    "obw": {
+      "summary": {
+        "en": "Measures the occupied bandwidth: the band that holds a given percentage of the power.",
+        "pt": "Mede a largura de banda ocupada: a faixa que contém uma dada porcentagem da potência."
+      },
+      "syntax": [
+        {
+          "code": "bw = obw(x, fs)",
+          "en": "Bandwidth holding 99% of the power of `x`.",
+          "pt": "Largura de banda que contém 99% da potência de `x`."
+        },
+        {
+          "code": "[bw, flo, fhi, pw] = obw(x, fs, freqrange, p)",
+          "en": "Limits the search to `freqrange` and uses `p` percent instead of 99.",
+          "pt": "Limita a busca a `freqrange` e usa `p` por cento no lugar de 99."
+        },
+        {
+          "code": "[bw, flo, fhi, pw] = obw(pxx, f)",
+          "en": "Same measurement on a power spectral density `pxx` at frequencies `f`.",
+          "pt": "Mesma medida sobre uma densidade espectral de potência `pxx` nas frequências `f`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, a vector or a matrix with channels in columns.",
+          "pt": "Sinal real, um vetor ou uma matriz com canais nas colunas."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. Without it the frequency is in rad/sample.",
+          "pt": "Taxa de amostragem em Hz. Sem ela, a frequência é em rad/amostra."
+        },
+        {
+          "name": "freqrange",
+          "en": "Optional `[f1 f2]` range to search in, or `[]` for the whole spectrum.",
+          "pt": "Faixa opcional `[f1 f2]` para a busca, ou `[]` para o espectro inteiro."
+        },
+        {
+          "name": "p",
+          "en": "Percentage of the power to enclose, greater than 0 and less than 100. Default 99.",
+          "pt": "Porcentagem da potência a abranger, maior que 0 e menor que 100. Padrão 99."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bw",
+          "en": "Occupied bandwidth, `fhi - flo`.",
+          "pt": "Largura de banda ocupada, `fhi - flo`."
+        },
+        {
+          "name": "flo, fhi",
+          "en": "Lower and upper edges of the band.",
+          "pt": "Limites inferior e superior da faixa."
+        },
+        {
+          "name": "pw",
+          "en": "Power inside the band.",
+          "pt": "Potência dentro da faixa."
+        }
+      ],
+      "description": {
+        "en": "`obw` estimates the power spectrum with a periodogram, then finds the band that contains `p` percent of the total power, leaving half of the remaining percent outside on each side. It is a common way to state how much spectrum a transmission occupies.\n\nThe edges are interpolated inside frequency bins, so they need not be on the bin grid. Unlike `powerbw`, which looks at the level of the peak, `obw` depends on how the power is spread over the whole spectrum.",
+        "pt": "A `obw` estima o espectro de potência com um periodograma e procura a faixa que contém `p` por cento da potência total, deixando metade do restante de cada lado. É uma forma comum de dizer quanto espectro uma transmissão ocupa.\n\nOs limites são interpolados dentro dos coeficientes de frequência, então não precisam estar na grade. Diferente da `powerbw`, que olha o nível do pico, a `obw` depende de como a potência se distribui por todo o espectro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Occupied bandwidth of two tones",
+            "pt": "Largura de banda ocupada por dois tons"
+          },
+          "code": "fs = 1000; t = (0:999)'/fs;\nx = sin(2*pi*100*t) + 0.5*sin(2*pi*200*t);\n[bw, flo, fhi, pw] = obw(x, fs);\nfprintf('%.1f Hz wide, from %.1f to %.1f Hz\\n', bw, flo, fhi);\nfprintf('power inside: %.4f\\n', pw);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "powerbw",
+        "bandpower",
+        "periodogram",
+        "pwelch",
+        "enbw"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. For single precision the last digits differ, and for a perfectly flat spectrum (such as `ones(256,1)`) the handling of the bin edges differs from MATLAB.",
+        "pt": "Entrada complexa não é suportada. Em precisão simples os últimos dígitos diferem, e para um espectro perfeitamente plano (como `ones(256,1)`) o tratamento das bordas dos coeficientes difere do MATLAB."
+      }
+    },
+    "powerbw": {
+      "summary": {
+        "en": "Measures the power bandwidth: the width where the spectrum stays within a few dB of its peak.",
+        "pt": "Mede a largura de banda de potência: a largura em que o espectro fica a poucos dB do seu pico."
+      },
+      "syntax": [
+        {
+          "code": "bw = powerbw(x, fs)",
+          "en": "3 dB bandwidth of `x`.",
+          "pt": "Largura de banda de 3 dB de `x`."
+        },
+        {
+          "code": "[bw, flo, fhi, pw] = powerbw(x, fs, freqrange, r)",
+          "en": "Limits the search to `freqrange` and uses the reference level `r` in dB.",
+          "pt": "Limita a busca a `freqrange` e usa o nível de referência `r` em dB."
+        },
+        {
+          "code": "[bw, flo, fhi, pw] = powerbw(pxx, f)",
+          "en": "Same measurement on a power spectral density.",
+          "pt": "Mesma medida sobre uma densidade espectral de potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, a vector or a matrix with channels in columns.",
+          "pt": "Sinal real, um vetor ou uma matriz com canais nas colunas."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. Without it the frequency is in rad/sample.",
+          "pt": "Taxa de amostragem em Hz. Sem ela, a frequência é em rad/amostra."
+        },
+        {
+          "name": "freqrange",
+          "en": "Optional `[f1 f2]` range to search in, or `[]` for the whole spectrum.",
+          "pt": "Faixa opcional `[f1 f2]` para a busca, ou `[]` para o espectro inteiro."
+        },
+        {
+          "name": "r",
+          "en": "Reference level in dB, nonzero. The default is about -3.01 dB, the half-power point.",
+          "pt": "Nível de referência em dB, diferente de zero. O padrão é cerca de -3,01 dB, o ponto de meia potência."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bw",
+          "en": "Power bandwidth, `fhi - flo`.",
+          "pt": "Largura de banda de potência, `fhi - flo`."
+        },
+        {
+          "name": "flo, fhi",
+          "en": "Frequencies where the spectrum crosses the reference level on each side of the peak.",
+          "pt": "Frequências em que o espectro cruza o nível de referência de cada lado do pico."
+        },
+        {
+          "name": "pw",
+          "en": "Power inside the band.",
+          "pt": "Potência dentro da faixa."
+        }
+      ],
+      "description": {
+        "en": "`powerbw` computes a periodogram, finds the highest peak, and reports the distance between the two points where the power drops by `r` dB from that peak. With the default level it is the half-power (3 dB) bandwidth, which is how the width of a resonance or of a filter response is usually quoted.\n\nFor a tone that falls exactly on a periodogram bin the peak is one bin wide and the result is tiny, so the value is only meaningful when the spectrum has a real width. For the share of the power instead of a level below the peak, use `obw`.",
+        "pt": "A `powerbw` calcula um periodograma, encontra o maior pico e informa a distância entre os dois pontos em que a potência cai `r` dB em relação a esse pico. Com o nível padrão é a largura de banda de meia potência (3 dB), que é como se costuma informar a largura de uma ressonância ou da resposta de um filtro.\n\nPara um tom que cai exatamente sobre um coeficiente do periodograma, o pico tem um coeficiente de largura e o resultado é minúsculo, então o valor só tem sentido quando o espectro tem largura de fato. Para a fração da potência, em vez de um nível abaixo do pico, use `obw`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "3 dB bandwidth of a tone",
+            "pt": "Largura de banda de 3 dB de um tom"
+          },
+          "code": "fs = 1000; t = (0:999)'/fs;\nx = sin(2*pi*100.5*t);\n[bw, flo, fhi, pw] = powerbw(x, fs);\nfprintf('%.2f Hz wide, from %.2f to %.2f Hz\\n', bw, flo, fhi);\nfprintf('power inside: %.4f\\n', pw);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "obw",
+        "bandpower",
+        "periodogram",
+        "pwelch",
+        "enbw"
+      ],
+      "notes": {
+        "en": "Complex input is not supported. A positive reference level combined with a frequency range is not handled, the power output for a positive reference level differs slightly, and a perfectly flat spectrum (such as `ones(256,1)`) has different edge handling from MATLAB.",
+        "pt": "Entrada complexa não é suportada. Um nível de referência positivo combinado com uma faixa de frequência não é tratado, a potência de saída para nível positivo difere ligeiramente, e um espectro perfeitamente plano (como `ones(256,1)`) tem tratamento de bordas diferente do MATLAB."
+      }
+    },
+    "sfdr": {
+      "summary": {
+        "en": "Measures the spurious free dynamic range: the gap between the fundamental tone and the largest spur.",
+        "pt": "Mede a faixa dinâmica livre de espúrios: a diferença entre o tom fundamental e o maior espúrio."
+      },
+      "syntax": [
+        {
+          "code": "r = sfdr(x, fs)",
+          "en": "SFDR of `x`, sampled at `fs` Hz, in dB.",
+          "pt": "SFDR de `x`, amostrado a `fs` Hz, em dB."
+        },
+        {
+          "code": "[r, spurpow, spurfreq] = sfdr(x, fs)",
+          "en": "Also returns the level and frequency of the largest spur.",
+          "pt": "Retorna também o nível e a frequência do maior espúrio."
+        },
+        {
+          "code": "r = sfdr(x, fs, msd)",
+          "en": "Ignores peaks within `msd` Hz of the fundamental when searching for spurs.",
+          "pt": "Ignora picos a até `msd` Hz da fundamental na busca de espúrios."
+        },
+        {
+          "code": "r = sfdr(sxx, f, rbw, 'power')",
+          "en": "SFDR of a power spectrum `sxx` at frequencies `f` with resolution bandwidth `rbw`.",
+          "pt": "SFDR de um espectro de potência `sxx` nas frequências `f` com largura de banda de resolução `rbw`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal containing one dominant tone, a real vector.",
+          "pt": "Sinal com um tom dominante, um vetor real."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz.",
+          "pt": "Taxa de amostragem em Hz."
+        },
+        {
+          "name": "msd",
+          "en": "Minimum spur distance in Hz: peaks closer than this to the fundamental are not counted as spurs.",
+          "pt": "Distância mínima de espúrio em Hz: picos mais próximos que isso da fundamental não contam como espúrios."
+        },
+        {
+          "name": "sxx, f, rbw",
+          "en": "Power spectrum, its frequencies and resolution bandwidth, for the spectrum form.",
+          "pt": "Espectro de potência, suas frequências e largura de banda de resolução, para a forma com espectro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "SFDR in dB: fundamental level minus the largest spur level.",
+          "pt": "SFDR em dB: nível da fundamental menos o nível do maior espúrio."
+        },
+        {
+          "name": "spurpow",
+          "en": "Level of the largest spur, in dB.",
+          "pt": "Nível do maior espúrio, em dB."
+        },
+        {
+          "name": "spurfreq",
+          "en": "Frequency of the largest spur, in Hz.",
+          "pt": "Frequência do maior espúrio, em Hz."
+        }
+      ],
+      "description": {
+        "en": "These functions work on one record. They compute a power-scaled periodogram of the whole record with a Kaiser window, take the strongest peak above DC as the fundamental, and sum the power over each tone's main lobe. The spur is the largest local maximum outside the fundamental's lobe.\n\nThe example below has a tone plus two weaker harmonics. The second harmonic is the largest spur, 20 dB under the fundamental, so the SFDR is 20 dB. A high SFDR means no unwanted component stands out near the signal.",
+        "pt": "Estas funções trabalham sobre um único registro. Elas calculam um periodograma em escala de potência do registro inteiro com janela Kaiser, tomam o maior pico acima de DC como fundamental e somam a potência no lóbulo principal de cada tom. O espúrio é o maior máximo local fora do lóbulo da fundamental.\n\nO exemplo abaixo tem um tom e duas harmônicas mais fracas. A segunda harmônica é o maior espúrio, 20 dB abaixo da fundamental, então o SFDR é 20 dB. Um SFDR alto significa que nenhuma componente indesejada se destaca perto do sinal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Spurious free dynamic range",
+            "pt": "Faixa dinâmica livre de espúrios"
+          },
+          "code": "n = (0:1023)';\nx = sin(2*pi*77.3*n/1000) + 0.1*sin(2*pi*2*77.3*n/1000+0.3) + 0.05*sin(2*pi*3*77.3*n/1000+1);\n[r, spurpow, spurfreq] = sfdr(x, 1000);\nfprintf('SFDR: %.2f dB\\n', r);\nfprintf('largest spur: %.2f dB at %.1f Hz\\n', spurpow, spurfreq);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "thd",
+        "snr",
+        "sinad",
+        "toi",
+        "periodogram"
+      ],
+      "notes": {
+        "en": "The spectrum form accepts only the `'power'` option: `'psd'` gives the error `Unknown option:  'psd'`. With a large `msd` (such as 200) the spur is a rounding-noise value near -285 dB instead of the MATLAB figure.",
+        "pt": "A forma com espectro aceita apenas a opção `'power'`: `'psd'` gera o erro `Unknown option:  'psd'`. Com `msd` grande (como 200) o espúrio é um valor de ruído de arredondamento perto de -285 dB, e não o valor do MATLAB."
+      }
+    },
+    "sinad": {
+      "summary": {
+        "en": "Measures signal to noise and distortion ratio: the fundamental against everything else.",
+        "pt": "Mede a relação sinal-ruído-distorção: a fundamental contra todo o resto."
+      },
+      "syntax": [
+        {
+          "code": "r = sinad(x, fs)",
+          "en": "SINAD of `x` sampled at `fs` Hz, in dB.",
+          "pt": "SINAD de `x` amostrado a `fs` Hz, em dB."
+        },
+        {
+          "code": "[r, noisepow] = sinad(x, fs)",
+          "en": "Also returns the power of noise plus distortion.",
+          "pt": "Retorna também a potência de ruído mais distorção."
+        },
+        {
+          "code": "r = sinad(sxx, f, rbw, 'power')",
+          "en": "SINAD from a power spectrum.",
+          "pt": "SINAD a partir de um espectro de potência."
+        },
+        {
+          "code": "r = sinad(pxx, f, 'psd')",
+          "en": "SINAD from a power spectral density.",
+          "pt": "SINAD a partir de uma densidade espectral de potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal containing one dominant tone, a real vector.",
+          "pt": "Sinal com um tom dominante, um vetor real."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz.",
+          "pt": "Taxa de amostragem em Hz."
+        },
+        {
+          "name": "sxx, pxx, f, rbw",
+          "en": "Spectrum, its frequencies and, for a power spectrum, the resolution bandwidth.",
+          "pt": "Espectro, suas frequências e, para espectro de potência, a largura de banda de resolução."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "SINAD in dB: fundamental power over the power of everything else (noise, harmonics, spurs), leaving out DC.",
+          "pt": "SINAD em dB: potência da fundamental sobre a potência de todo o resto (ruído, harmônicas, espúrios), sem contar DC."
+        },
+        {
+          "name": "noisepow",
+          "en": "Power of noise plus distortion, in dB.",
+          "pt": "Potência de ruído mais distorção, em dB."
+        }
+      ],
+      "description": {
+        "en": "These functions work on one record. They compute a power-scaled periodogram of the whole record with a Kaiser window, take the strongest peak above DC as the fundamental, and sum the power over each tone's main lobe. SINAD divides the fundamental by all the power outside the DC guard band and the fundamental's lobe.\n\nIt is the usual single-number quality figure for a converter or an amplifier driven with a tone: every error source lowers it. The example has a tone with two harmonics, so `r` is about 19 dB.",
+        "pt": "Estas funções trabalham sobre um único registro. Elas calculam um periodograma em escala de potência do registro inteiro com janela Kaiser, tomam o maior pico acima de DC como fundamental e somam a potência no lóbulo principal de cada tom. O SINAD divide a fundamental por toda a potência fora da banda de guarda de DC e do lóbulo da fundamental.\n\nÉ a medida de qualidade mais usada, em um só número, para um conversor ou amplificador excitado por um tom: toda fonte de erro a reduz. O exemplo tem um tom com duas harmônicas, então `r` fica em cerca de 19 dB."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "SINAD of a distorted tone",
+            "pt": "SINAD de um tom distorcido"
+          },
+          "code": "n = (0:1023)';\nx = sin(2*pi*77.3*n/1000) + 0.1*sin(2*pi*2*77.3*n/1000+0.3) + 0.05*sin(2*pi*3*77.3*n/1000+1);\n[r, np] = sinad(x, 1000);\nfprintf('SINAD: %.2f dB\\n', r);\nfprintf('noise and distortion power: %.2f dB\\n', np);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "snr",
+        "thd",
+        "sfdr",
+        "toi",
+        "periodogram"
+      ],
+      "notes": {
+        "en": "For a record of 600 samples with noise, the noise power differs from MATLAB by about 1e-7 in relative terms.",
+        "pt": "Para um registro de 600 amostras com ruído, a potência de ruído difere do MATLAB em cerca de 1e-7 em termos relativos."
+      }
+    },
+    "snr": {
+      "summary": {
+        "en": "Computes the signal to noise ratio, either from separate signal and noise or from a single tone plus noise.",
+        "pt": "Calcula a relação sinal-ruído, a partir de sinal e ruído separados ou de um único tom com ruído."
+      },
+      "syntax": [
+        {
+          "code": "r = snr(x, y)",
+          "en": "Ratio in dB of the power of `x` to the power of `y`, where `y` is the noise.",
+          "pt": "Razão em dB entre a potência de `x` e a potência de `y`, em que `y` é o ruído."
+        },
+        {
+          "code": "[r, noisepow] = snr(x, fs, n)",
+          "en": "Estimates the SNR of a single record `x`, leaving out the first `n` harmonics from the noise.",
+          "pt": "Estima a SNR de um único registro `x`, deixando as `n` primeiras harmônicas fora do ruído."
+        },
+        {
+          "code": "r = snr(x, fs, n, 'aliased')",
+          "en": "Treats harmonics above Nyquist as folded back into the spectrum.",
+          "pt": "Trata as harmônicas acima de Nyquist como dobradas de volta ao espectro."
+        },
+        {
+          "code": "r = snr(sxx, f, rbw, n, 'power')",
+          "en": "SNR from a power spectrum.",
+          "pt": "SNR a partir de um espectro de potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "With two vectors, the signal. With `fs`, a record that holds one tone plus noise.",
+          "pt": "Com dois vetores, o sinal. Com `fs`, um registro com um tom mais ruído."
+        },
+        {
+          "name": "y",
+          "en": "Noise, a vector of the same length as `x`.",
+          "pt": "Ruído, um vetor do mesmo comprimento que `x`."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz.",
+          "pt": "Taxa de amostragem em Hz."
+        },
+        {
+          "name": "n",
+          "en": "Number of harmonics, besides the fundamental, kept out of the noise. Default 6.",
+          "pt": "Número de harmônicas, além da fundamental, mantidas fora do ruído. Padrão 6."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "SNR in dB.",
+          "pt": "SNR em dB."
+        },
+        {
+          "name": "noisepow",
+          "en": "Estimated noise power in dB (single-record forms).",
+          "pt": "Potência de ruído estimada em dB (formas de um só registro)."
+        }
+      ],
+      "description": {
+        "en": "`snr(x, y)` is just `10*log10(sum(x.^2)/sum(y.^2))`, with `y` the noise. With a sampling rate, `snr` instead analyses a single record: the fundamental is the strongest peak, the noise is the rest of the spectrum without the DC guard band and the first `n` harmonic lobes, and the result is the ratio between the two.\n\nUse the single-record form on a measured tone when you cannot separate the noise. Distortion that you want to count as signal impairment belongs in `sinad`, not here.",
+        "pt": "`snr(x, y)` é apenas `10*log10(sum(x.^2)/sum(y.^2))`, com `y` sendo o ruído. Com uma taxa de amostragem, a `snr` analisa um único registro: a fundamental é o maior pico, o ruído é o resto do espectro sem a banda de guarda de DC e os lóbulos das `n` primeiras harmônicas, e o resultado é a razão entre os dois.\n\nUse a forma de registro único em um tom medido quando não é possível separar o ruído. A distorção que você quer contar como degradação do sinal pertence à `sinad`, não aqui."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Signal and noise as separate vectors",
+            "pt": "Sinal e ruído em vetores separados"
+          },
+          "code": "n = (0:999)';\nx = sin(2*pi*50*n/1000);\nnoise = 0.1*cos(2*pi*13*n/1000 + 0.4);\nfprintf('%.2f dB\\n', snr(x, noise));",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Estimate from a single noisy record",
+            "pt": "Estimativa a partir de um único registro com ruído"
+          },
+          "code": "n = (0:1023)';\nx = sin(2*pi*77.3*n/1000) + 0.1*sin(2*pi*2*77.3*n/1000+0.3) + 0.05*sin(2*pi*3*77.3*n/1000+1);\ny = x + 0.01*cos(1.7*n.^1.2);\n[r, np] = snr(y, 1000, 3);\nfprintf('SNR: %.2f dB\\n', r);\nfprintf('noise power: %.2f dB\\n', np);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sinad",
+        "thd",
+        "sfdr",
+        "periodogram",
+        "bandpower"
+      ],
+      "notes": {
+        "en": "When the record has fewer harmonics than `n`, the noise power can differ from MATLAB by about 0.06 dB, because the exclusion band used for an absent harmonic is not the same. A noise-free tone gives a different noise floor than MATLAB, and a 512-sample record with noise can be off by about 1e-3 dB.",
+        "pt": "Quando o registro tem menos harmônicas do que `n`, a potência de ruído pode diferir do MATLAB em cerca de 0,06 dB, porque a banda de exclusão de uma harmônica ausente não é a mesma. Um tom sem ruído dá um piso de ruído diferente do MATLAB, e um registro de 512 amostras com ruído pode diferir em cerca de 1e-3 dB."
+      }
+    },
+    "thd": {
+      "summary": {
+        "en": "Measures total harmonic distortion: the power of the harmonics against the fundamental.",
+        "pt": "Mede a distorção harmônica total: a potência das harmônicas em relação à fundamental."
+      },
+      "syntax": [
+        {
+          "code": "r = thd(x, fs)",
+          "en": "THD in dB using the first 6 harmonics.",
+          "pt": "THD em dB usando as 6 primeiras harmônicas."
+        },
+        {
+          "code": "[r, harmpow, harmfreq] = thd(x, fs, n)",
+          "en": "Uses `n` harmonics and also returns their levels and frequencies.",
+          "pt": "Usa `n` harmônicas e retorna também seus níveis e frequências."
+        },
+        {
+          "code": "r = thd(x, fs, n, 'aliased')",
+          "en": "Counts harmonics above Nyquist as folded back into the spectrum.",
+          "pt": "Conta harmônicas acima de Nyquist como dobradas de volta ao espectro."
+        },
+        {
+          "code": "r = thd(pxx, f, n, 'psd')",
+          "en": "THD from a power spectral density.",
+          "pt": "THD a partir de uma densidade espectral de potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal containing one dominant tone, a real vector.",
+          "pt": "Sinal com um tom dominante, um vetor real."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz. When omitted the frequencies are normalized.",
+          "pt": "Taxa de amostragem em Hz. Se omitida, as frequências são normalizadas."
+        },
+        {
+          "name": "n",
+          "en": "Number of harmonics, fundamental included. Default 6.",
+          "pt": "Número de harmônicas, incluindo a fundamental. Padrão 6."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "THD in dB: `10*log10` of the summed power of harmonics 2 to `n` over the fundamental power.",
+          "pt": "THD em dB: `10*log10` da potência somada das harmônicas 2 a `n` sobre a potência da fundamental."
+        },
+        {
+          "name": "harmpow",
+          "en": "Level in dB of the fundamental and each harmonic.",
+          "pt": "Nível em dB da fundamental e de cada harmônica."
+        },
+        {
+          "name": "harmfreq",
+          "en": "Frequency in Hz of the fundamental and each harmonic.",
+          "pt": "Frequência em Hz da fundamental e de cada harmônica."
+        }
+      ],
+      "description": {
+        "en": "These functions work on one record. They compute a power-scaled periodogram of the whole record with a Kaiser window, take the strongest peak above DC as the fundamental, and sum the power over each tone's main lobe. Harmonic k is looked for within two bins of k times the fundamental frequency.\n\nA lower (more negative) value means a purer tone. In the example the harmonics are 20 dB and 26 dB below the fundamental, which add up to about -19 dB.",
+        "pt": "Estas funções trabalham sobre um único registro. Elas calculam um periodograma em escala de potência do registro inteiro com janela Kaiser, tomam o maior pico acima de DC como fundamental e somam a potência no lóbulo principal de cada tom. A harmônica k é procurada a até dois coeficientes de k vezes a frequência fundamental.\n\nUm valor menor (mais negativo) significa um tom mais puro. No exemplo as harmônicas estão 20 dB e 26 dB abaixo da fundamental, o que soma cerca de -19 dB."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Total harmonic distortion",
+            "pt": "Distorção harmônica total"
+          },
+          "code": "n = (0:1023)';\nx = sin(2*pi*77.3*n/1000) + 0.1*sin(2*pi*2*77.3*n/1000+0.3) + 0.05*sin(2*pi*3*77.3*n/1000+1);\n[r, hp, hf] = thd(x, 1000, 3);\nfprintf('THD: %.3f dB\\n', r);\ndisp(round(hp'*100)/100)\ndisp(round(hf'*10)/10)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sinad",
+        "snr",
+        "sfdr",
+        "toi",
+        "periodogram"
+      ],
+      "notes": {
+        "en": "When the signal has fewer harmonics than `n`, the power reported for the absent harmonics is a rounding-noise floor near -300 dB, and MATLAB's value there differs (the frequencies agree).",
+        "pt": "Quando o sinal tem menos harmônicas do que `n`, a potência informada para as harmônicas ausentes é um piso de ruído de arredondamento perto de -300 dB, e o valor do MATLAB é diferente (as frequências coincidem)."
+      }
+    },
+    "toi": {
+      "summary": {
+        "en": "Finds the third-order intercept point from a two-tone test.",
+        "pt": "Encontra o ponto de intercepto de terceira ordem a partir de um teste com dois tons."
+      },
+      "syntax": [
+        {
+          "code": "p = toi(x, fs)",
+          "en": "Output third-order intercept of `x`, sampled at `fs` Hz.",
+          "pt": "Intercepto de terceira ordem na saída de `x`, amostrado a `fs` Hz."
+        },
+        {
+          "code": "[p, fp, ff, ip, if_] = toi(x, fs)",
+          "en": "Also returns the fundamental and intermodulation levels and frequencies.",
+          "pt": "Retorna também os níveis e frequências das fundamentais e dos produtos de intermodulação."
+        },
+        {
+          "code": "p = toi(sxx, f, rbw, 'power')",
+          "en": "Intercept from a power spectrum.",
+          "pt": "Intercepto a partir de um espectro de potência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Output of a nonlinear system driven by two tones, a real vector.",
+          "pt": "Saída de um sistema não linear excitado por dois tons, um vetor real."
+        },
+        {
+          "name": "fs",
+          "en": "Sampling rate in Hz.",
+          "pt": "Taxa de amostragem em Hz."
+        },
+        {
+          "name": "sxx, f, rbw",
+          "en": "Power spectrum, its frequencies and resolution bandwidth.",
+          "pt": "Espectro de potência, suas frequências e largura de banda de resolução."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Third-order intercept in dB, the mean over the two fundamentals of `Pf + (Pf - Pim)/2`.",
+          "pt": "Intercepto de terceira ordem em dB, a média sobre as duas fundamentais de `Pf + (Pf - Pim)/2`."
+        },
+        {
+          "name": "fp, ff",
+          "en": "Levels (dB) and frequencies (Hz) of the two fundamental tones.",
+          "pt": "Níveis (dB) e frequências (Hz) das duas fundamentais."
+        },
+        {
+          "name": "ip, if_",
+          "en": "Levels (dB) and frequencies (Hz) of the intermodulation products at `2*f1-f2` and `2*f2-f1`.",
+          "pt": "Níveis (dB) e frequências (Hz) dos produtos de intermodulação em `2*f1-f2` e `2*f2-f1`."
+        }
+      ],
+      "description": {
+        "en": "The two largest peaks are taken as the fundamentals, and the products of third order appear at `2*f1-f2` and `2*f2-f1`. The intercept is the extrapolated level at which the fundamentals and the products would meet, since the products grow three times faster in dB than the fundamentals.\n\nThe input must hold the system output with both tones clearly resolved. In the example the tones are at 200 and 250 Hz and the products at 150 and 300 Hz.",
+        "pt": "Os dois maiores picos são tomados como fundamentais, e os produtos de terceira ordem aparecem em `2*f1-f2` e `2*f2-f1`. O intercepto é o nível extrapolado em que fundamentais e produtos se encontrariam, já que os produtos crescem três vezes mais rápido em dB do que as fundamentais.\n\nA entrada deve conter a saída do sistema com os dois tons bem resolvidos. No exemplo os tons estão em 200 e 250 Hz e os produtos em 150 e 300 Hz."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Intercept of a cubic nonlinearity",
+            "pt": "Ponto de intercepto de uma não linearidade cúbica"
+          },
+          "code": "n = (0:2047)';\nu = 0.01*(sin(2*pi*200*n/2000) + sin(2*pi*250*n/2000));\ny = u + 100*u.^3;\n[p, fp, ff, ip, if_] = toi(y, 2000);\nfprintf('OIP3: %.2f dB\\n', p);\ndisp(round(ff'))\ndisp(round(if_'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "thd",
+        "sfdr",
+        "sinad",
+        "snr",
+        "periodogram"
+      ],
+      "notes": {
+        "en": "When the two tones are only a few bins apart (about 10), their main lobes overlap and the power and frequency of the fundamentals differ slightly from MATLAB. In single precision the result can differ by about 0.01 dB.",
+        "pt": "Quando os dois tons estão a poucos coeficientes de distância (cerca de 10), seus lóbulos principais se sobrepõem e a potência e a frequência das fundamentais diferem ligeiramente do MATLAB. Em precisão simples o resultado pode diferir em cerca de 0,01 dB."
+      }
+    },
+    "bitrevorder": {
+      "summary": {
+        "en": "Reorders a vector into bit-reversed index order.",
+        "pt": "Reordena um vetor na ordem de índices com bits invertidos."
+      },
+      "syntax": [
+        {
+          "code": "y = bitrevorder(x)",
+          "en": "Rearranges `x` so that the element at index `k` moves to the index whose binary digits are reversed.",
+          "pt": "Reorganiza `x` de modo que o elemento no índice `k` vá para o índice cujos dígitos binários estão invertidos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector, or a matrix whose columns are reordered. The length must be a power of 2.",
+          "pt": "Vetor, ou matriz cujas colunas são reordenadas. O comprimento deve ser potência de 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The reordered data, same size as `x`.",
+          "pt": "Os dados reordenados, do mesmo tamanho que `x`."
+        }
+      ],
+      "description": {
+        "en": "Radix-2 FFT algorithms produce or consume data in bit-reversed order. `bitrevorder` applies that permutation, for example to put the output of such an algorithm back in natural order. For length 8 the order is 0 4 2 6 1 5 3 7.\n\nApplying it twice returns the original order. A length that is not a power of 2 gives an error.",
+        "pt": "Os algoritmos de FFT radix-2 produzem ou consomem dados na ordem de bits invertidos. A `bitrevorder` aplica essa permutação, por exemplo para devolver à ordem natural a saída de um desses algoritmos. Para comprimento 8, a ordem é 0 4 2 6 1 5 3 7.\n\nAplicá-la duas vezes devolve a ordem original. Um comprimento que não seja potência de 2 gera erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bit-reversed order of eight samples",
+            "pt": "Ordem bit-reversa de oito amostras"
+          },
+          "code": "disp(bitrevorder(0:7))\ndisp(bitrevorder([10 20 30 40]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "digitrevorder",
+        "fft",
+        "fwht"
+      ],
+      "notes": {
+        "en": "Only one output is supported. The index vector returned as a second output by MATLAB gives `Too many output arguments`.",
+        "pt": "Há suporte apenas para uma saída. O vetor de índices que o MATLAB devolve como segunda saída gera `Too many output arguments`."
+      }
+    },
+    "cceps": {
+      "summary": {
+        "en": "Computes the complex cepstrum of a sequence.",
+        "pt": "Calcula o cepstro complexo de uma sequência."
+      },
+      "syntax": [
+        {
+          "code": "xhat = cceps(x)",
+          "en": "Complex cepstrum of `x`.",
+          "pt": "Cepstro complexo de `x`."
+        },
+        {
+          "code": "[xhat, nd] = cceps(x)",
+          "en": "Also returns the delay, in samples, that was removed from the phase.",
+          "pt": "Retorna também o atraso, em amostras, removido da fase."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real sequence, a vector.",
+          "pt": "Sequência real, um vetor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "xhat",
+          "en": "Complex cepstrum, same length as `x`.",
+          "pt": "Cepstro complexo, com o mesmo comprimento que `x`."
+        },
+        {
+          "name": "nd",
+          "en": "Integer delay removed from the unwrapped phase before the inverse transform.",
+          "pt": "Atraso inteiro removido da fase desenrolada antes da transformada inversa."
+        }
+      ],
+      "description": {
+        "en": "The complex cepstrum is the inverse Fourier transform of the logarithm of the spectrum, using the unwrapped phase: `ifft(log(abs(X)) + 1i*unwrap(angle(X)))`. In this domain a convolution becomes a sum, which is why it is used to separate a signal from a filtering effect (homomorphic processing) and to build minimum-phase versions of a sequence.\n\nA linear-phase term proportional to the delay `nd` would make the unwrapped phase ramp, so it is removed first and returned. Pass `nd` to `icceps` to restore the original sequence.",
+        "pt": "O cepstro complexo é a transformada de Fourier inversa do logaritmo do espectro, usando a fase desenrolada: `ifft(log(abs(X)) + 1i*unwrap(angle(X)))`. Nesse domínio a convolução vira soma, e por isso ele é usado para separar um sinal de um efeito de filtragem (processamento homomórfico) e para construir versões de fase mínima de uma sequência.\n\nUm termo de fase linear proporcional ao atraso `nd` faria a fase desenrolada crescer em rampa, então ele é removido antes e devolvido. Passe `nd` à `icceps` para restaurar a sequência original."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Complex cepstrum and its inverse",
+            "pt": "Cepstro complexo e sua inversa"
+          },
+          "code": "x = [2 1 0.5 0.25];\n[xh, nd] = cceps(x);\ndisp(nd)\ndisp(round(xh*1e4)/1e4)\ndisp(round(icceps(xh, nd)*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "icceps",
+        "rceps",
+        "fft",
+        "unwrap"
+      ]
+    },
+    "czt": {
+      "summary": {
+        "en": "Evaluates the chirp z-transform: the z-transform on a spiral contour, useful for zooming into a band.",
+        "pt": "Calcula a transformada z chirp: a transformada z sobre um contorno em espiral, útil para ampliar uma faixa."
+      },
+      "syntax": [
+        {
+          "code": "y = czt(x)",
+          "en": "Same as `fft(x)`.",
+          "pt": "Igual a `fft(x)`."
+        },
+        {
+          "code": "y = czt(x, m)",
+          "en": "Evaluates `m` points on the unit circle, spaced like the DFT of length `m`.",
+          "pt": "Avalia `m` pontos no círculo unitário, espaçados como a DFT de comprimento `m`."
+        },
+        {
+          "code": "y = czt(x, m, w, a)",
+          "en": "Evaluates `m` points starting at `a`, each step multiplying by `1/w`.",
+          "pt": "Avalia `m` pontos a partir de `a`, cada passo multiplicando por `1/w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector or a matrix whose columns are transformed.",
+          "pt": "Sinal, um vetor ou uma matriz cujas colunas são transformadas."
+        },
+        {
+          "name": "m",
+          "en": "Number of output points. Default `length(x)`.",
+          "pt": "Número de pontos de saída. Padrão `length(x)`."
+        },
+        {
+          "name": "w",
+          "en": "Complex ratio between points. Default `exp(-1i*2*pi/m)`.",
+          "pt": "Razão complexa entre pontos. Padrão `exp(-1i*2*pi/m)`."
+        },
+        {
+          "name": "a",
+          "en": "Complex starting point of the contour. Default 1.",
+          "pt": "Ponto complexo inicial do contorno. Padrão 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Transform values, `m` per column.",
+          "pt": "Valores da transformada, `m` por coluna."
+        }
+      ],
+      "description": {
+        "en": "The transform is `y(k) = sum(x(n) * (a * w^(-(k-1)))^(-(n-1)))` for k = 1 to `m`, so the points are `z_k = a*w^(-(k-1))`. Choosing `a = exp(1i*2*pi*f1/fs)` and `w = exp(-1i*2*pi*df/fs)` evaluates the spectrum at the frequencies `f1`, `f1+df`, ..., which is a fine-grained look at a narrow band without padding the signal to a huge FFT size.\n\nWith the defaults the points sit on the unit circle and the result equals the FFT.",
+        "pt": "A transformada é `y(k) = sum(x(n) * (a * w^(-(k-1)))^(-(n-1)))` para k = 1 até `m`, de modo que os pontos são `z_k = a*w^(-(k-1))`. Escolhendo `a = exp(1i*2*pi*f1/fs)` e `w = exp(-1i*2*pi*df/fs)`, o espectro é avaliado nas frequências `f1`, `f1+df`, ..., o que dá uma visão detalhada de uma faixa estreita sem preencher o sinal com zeros até uma FFT enorme.\n\nCom os valores padrão os pontos ficam no círculo unitário e o resultado é igual à FFT."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zoom into 90 to 110 Hz",
+            "pt": "Ampliar a faixa de 90 a 110 Hz"
+          },
+          "code": "fs = 1000; n = (0:255)';\nx = sin(2*pi*100*n/fs);\na = exp(1i*2*pi*90/fs);\nw = exp(-1i*2*pi*1/fs);\nX = czt(x, 21, w, a);\n[~, k] = max(abs(X));\nfprintf('peak at %d Hz\\n', 90 + k - 1);\nfprintf('max |X| = %.2f\\n', max(abs(X)));",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Same result as the FFT with default arguments",
+            "pt": "Mesmo resultado da FFT com os argumentos padrão"
+          },
+          "code": "x = [1 2 3 4];\ndisp(round(czt(x)*1e3)/1e3)\ndisp(round(fft(x)*1e3)/1e3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fft",
+        "goertzel",
+        "dftmtx",
+        "freqz"
+      ],
+      "notes": {
+        "en": "MatLivre sums the definition directly, while MATLAB evaluates it with an FFT convolution. For extreme contours (such as `abs(w)` = 2 with `abs(a)` = 0.9) or in single precision, the smallest values and the last digits therefore differ.",
+        "pt": "O MatLivre soma a definição diretamente, enquanto o MATLAB a avalia com convolução por FFT. Para contornos extremos (como `abs(w)` = 2 com `abs(a)` = 0,9) ou em precisão simples, os menores valores e os últimos dígitos, portanto, diferem."
+      }
+    },
+    "dct": {
+      "summary": {
+        "en": "Computes the discrete cosine transform (type II, orthonormal).",
+        "pt": "Calcula a transformada discreta de cosseno (tipo II, ortonormal)."
+      },
+      "syntax": [
+        {
+          "code": "y = dct(x)",
+          "en": "DCT of `x`, column by column.",
+          "pt": "DCT de `x`, coluna por coluna."
+        },
+        {
+          "code": "y = dct(x, n)",
+          "en": "Pads `x` with zeros or cuts it to `n` points before the transform.",
+          "pt": "Completa `x` com zeros ou o corta em `n` pontos antes da transformada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector or matrix. Matrix columns are transformed separately.",
+          "pt": "Vetor ou matriz real. As colunas da matriz são transformadas separadamente."
+        },
+        {
+          "name": "n",
+          "en": "Transform length.",
+          "pt": "Comprimento da transformada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "DCT coefficients, same shape as `x` (with `n` points along the transformed dimension).",
+          "pt": "Coeficientes da DCT, com a mesma forma de `x` (com `n` pontos na dimensão transformada)."
+        }
+      ],
+      "description": {
+        "en": "The DCT expresses a signal as a sum of cosines of increasing frequency. For smooth signals most of the energy lands in the first few coefficients, which is why it is used in image and audio compression. The transform is scaled to be orthonormal, so it preserves energy and `idct` inverts it exactly.\n\nThe first coefficient is `sum(x)/sqrt(N)`, the scaled mean. The implementation sums the definition directly, so it is meant for a few thousand samples at most.",
+        "pt": "A DCT expressa um sinal como soma de cossenos de frequência crescente. Para sinais suaves, a maior parte da energia fica nos primeiros coeficientes, e por isso ela é usada em compressão de imagem e áudio. A transformada é escalada para ser ortonormal, então preserva a energia e a `idct` a inverte exatamente.\n\nO primeiro coeficiente é `sum(x)/sqrt(N)`, a média escalada. A implementação soma a definição diretamente, portanto serve para no máximo alguns milhares de amostras."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "DCT of a short ramp and its inverse",
+            "pt": "DCT de uma rampa curta e sua inversa"
+          },
+          "code": "x = [1 2 3 4];\nc = dct(x);\ndisp(round(c*1e4)/1e4)\ndisp(round(idct(c)*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "idct",
+        "fft",
+        "dftmtx",
+        "fwht"
+      ],
+      "notes": {
+        "en": "Arrays with more than two dimensions are not supported, and a dimension argument of 3 gives `Operating along dimension 3 is not supported.` The cost grows with the square of the length.",
+        "pt": "Arrays com mais de duas dimensões não são suportados, e uma dimensão igual a 3 gera `Operating along dimension 3 is not supported.` O custo cresce com o quadrado do comprimento."
+      }
+    },
+    "dftmtx": {
+      "summary": {
+        "en": "Returns the discrete Fourier transform matrix.",
+        "pt": "Retorna a matriz da transformada discreta de Fourier."
+      },
+      "syntax": [
+        {
+          "code": "D = dftmtx(n)",
+          "en": "The `n`-by-`n` DFT matrix.",
+          "pt": "A matriz da DFT, `n` por `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Size of the matrix, a positive integer.",
+          "pt": "Tamanho da matriz, um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Complex matrix with `D(j,k) = exp(-2i*pi*(j-1)*(k-1)/n)`.",
+          "pt": "Matriz complexa com `D(j,k) = exp(-2i*pi*(j-1)*(k-1)/n)`."
+        }
+      ],
+      "description": {
+        "en": "Multiplying a column vector by `dftmtx(n)` gives its DFT, so `dftmtx(n)*x` equals `fft(x)`. The inverse matrix is `conj(dftmtx(n))/n`.\n\nBuilding the matrix costs `n^2` memory, so it is for small sizes and for teaching or for expressing the DFT inside a matrix formula. For real work use `fft`.",
+        "pt": "Multiplicar um vetor coluna por `dftmtx(n)` dá a sua DFT, de modo que `dftmtx(n)*x` é igual a `fft(x)`. A matriz inversa é `conj(dftmtx(n))/n`.\n\nConstruir a matriz custa `n^2` de memória, então ela serve para tamanhos pequenos, para ensino ou para escrever a DFT dentro de uma fórmula matricial. Para uso real, use `fft`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "The matrix gives the same result as fft",
+            "pt": "A matriz dá o mesmo resultado que a fft"
+          },
+          "code": "x = [1; 2; 3; 4];\nD = dftmtx(4);\ndisp(round(D*x*1e3)/1e3)\ndisp(round(fft(x)*1e3)/1e3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fft",
+        "ifft",
+        "czt",
+        "dct",
+        "goertzel"
+      ]
+    },
+    "digitrevorder": {
+      "summary": {
+        "en": "Reorders a vector into digit-reversed index order for a given radix.",
+        "pt": "Reordena um vetor na ordem de índices com dígitos invertidos para uma dada base."
+      },
+      "syntax": [
+        {
+          "code": "y = digitrevorder(x, r)",
+          "en": "Reverses the base-`r` digits of each index.",
+          "pt": "Inverte os dígitos na base `r` de cada índice."
+        },
+        {
+          "code": "[y, i] = digitrevorder(x, r)",
+          "en": "Also returns the permutation as an index vector.",
+          "pt": "Retorna também a permutação como vetor de índices."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector, or a matrix whose columns are reordered. Its length must be a power of `r`.",
+          "pt": "Vetor, ou matriz cujas colunas são reordenadas. O comprimento deve ser potência de `r`."
+        },
+        {
+          "name": "r",
+          "en": "Radix, an integer from 2 to 36.",
+          "pt": "Base, um inteiro de 2 a 36."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The reordered data, same size as `x`.",
+          "pt": "Os dados reordenados, do mesmo tamanho que `x`."
+        },
+        {
+          "name": "i",
+          "en": "Index vector, so that `y = x(i)`, as a column.",
+          "pt": "Vetor de índices, tal que `y = x(i)`, em coluna."
+        }
+      ],
+      "description": {
+        "en": "This is the generalization of `bitrevorder` to radix 3, 4 and so on, as needed by radix-`r` FFT algorithms. Each index is written in base `r`, its digits are reversed, and the result is the new position. With `r = 2` it gives the same order as `bitrevorder`.\n\nThe length of `x` must be an exact power of the radix. In the first line of the example, the 16 values 0 to 15 in radix 4 are listed in the order 0 4 8 12 1 5 9 13 and so on.",
+        "pt": "É a generalização da `bitrevorder` para as bases 3, 4 etc., como exigem os algoritmos de FFT de base `r`. Cada índice é escrito na base `r`, seus dígitos são invertidos e o resultado é a nova posição. Com `r = 2` dá a mesma ordem da `bitrevorder`.\n\nO comprimento de `x` deve ser exatamente uma potência da base. Na primeira linha do exemplo, os 16 valores de 0 a 15 na base 4 aparecem na ordem 0 4 8 12 1 5 9 13 e assim por diante."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Radix-4 digit reversal",
+            "pt": "Reversão de dígitos na base 4"
+          },
+          "code": "disp(digitrevorder(0:15, 4))\n[y, idx] = digitrevorder(10:10:90, 3);\ndisp(y)\ndisp(idx')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bitrevorder",
+        "fft",
+        "fwht"
+      ]
+    },
+    "fwht": {
+      "summary": {
+        "en": "Computes the fast Walsh-Hadamard transform.",
+        "pt": "Calcula a transformada rápida de Walsh-Hadamard."
+      },
+      "syntax": [
+        {
+          "code": "y = fwht(x)",
+          "en": "Transform of `x`, in sequency order.",
+          "pt": "Transformada de `x`, na ordem de sequência."
+        },
+        {
+          "code": "y = fwht(x, n)",
+          "en": "Pads or cuts `x` to `n` points first.",
+          "pt": "Completa ou corta `x` em `n` pontos antes."
+        },
+        {
+          "code": "y = fwht(x, n, ordering)",
+          "en": "Chooses the coefficient order: `'sequency'`, `'hadamard'` or `'dyadic'`.",
+          "pt": "Escolhe a ordem dos coeficientes: `'sequency'`, `'hadamard'` ou `'dyadic'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real vector or matrix whose columns are transformed. The length is padded to a power of 2.",
+          "pt": "Vetor ou matriz real cujas colunas são transformadas. O comprimento é completado até uma potência de 2."
+        },
+        {
+          "name": "n",
+          "en": "Transform length, a power of 2.",
+          "pt": "Comprimento da transformada, potência de 2."
+        },
+        {
+          "name": "ordering",
+          "en": "`'sequency'` (default), `'hadamard'` or `'dyadic'`.",
+          "pt": "`'sequency'` (padrão), `'hadamard'` ou `'dyadic'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Walsh-Hadamard coefficients, scaled by `1/n`.",
+          "pt": "Coeficientes de Walsh-Hadamard, escalados por `1/n`."
+        }
+      ],
+      "description": {
+        "en": "The Walsh-Hadamard transform uses square waves that take only the values +1 and -1 instead of sines. It needs only additions and subtractions, which makes it cheap, and it is used in coding, spreading and image work.\n\nThe forward transform divides by the length, so the first coefficient is the mean of `x`. The three orderings contain the same coefficients in different positions. `ifwht` inverts the transform.",
+        "pt": "A transformada de Walsh-Hadamard usa ondas quadradas que assumem apenas os valores +1 e -1, em vez de senoides. Ela precisa só de somas e subtrações, o que a torna barata, e é usada em codificação, espalhamento espectral e processamento de imagens.\n\nA transformada direta divide pelo comprimento, então o primeiro coeficiente é a média de `x`. As três ordenações contêm os mesmos coeficientes em posições diferentes. A `ifwht` inverte a transformada."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Walsh-Hadamard transform and its inverse",
+            "pt": "Transformada de Walsh-Hadamard e sua inversa"
+          },
+          "code": "x = [1 2 3 4];\ny = fwht(x);\ndisp(y)\ndisp(ifwht(y))\ndisp(fwht(x, 4, 'hadamard'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ifwht",
+        "fft",
+        "dct",
+        "bitrevorder"
+      ]
+    },
+    "goertzel": {
+      "summary": {
+        "en": "Computes selected DFT coefficients with the Goertzel algorithm.",
+        "pt": "Calcula coeficientes selecionados da DFT com o algoritmo de Goertzel."
+      },
+      "syntax": [
+        {
+          "code": "y = goertzel(x)",
+          "en": "All DFT coefficients, the same as `fft(x)`.",
+          "pt": "Todos os coeficientes da DFT, igual a `fft(x)`."
+        },
+        {
+          "code": "y = goertzel(x, ind)",
+          "en": "Only the coefficients at the indices in `ind`.",
+          "pt": "Somente os coeficientes nos índices de `ind`."
+        },
+        {
+          "code": "y = goertzel(x, ind, dim)",
+          "en": "Operates along dimension `dim`.",
+          "pt": "Opera ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector or a matrix whose columns are processed.",
+          "pt": "Sinal, um vetor ou uma matriz cujas colunas são processadas."
+        },
+        {
+          "name": "ind",
+          "en": "Indices (starting at 1) of the DFT bins to compute. Bin `k` is at frequency `(k-1)*fs/N`.",
+          "pt": "Índices (começando em 1) dos coeficientes da DFT a calcular. O coeficiente `k` está na frequência `(k-1)*fs/N`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension along which to operate.",
+          "pt": "Dimensão ao longo da qual operar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The requested DFT values, complex.",
+          "pt": "Os valores pedidos da DFT, complexos."
+        }
+      ],
+      "description": {
+        "en": "When only a few frequency bins are needed, for example to detect the tones of a keypad, the Goertzel algorithm is cheaper than a full FFT. Its values are the same as the entries of `fft(x)`.\n\nIndexing follows MATLAB: `ind = 9` is the bin at `8*fs/N`. In the example a cosine with 8 cycles in 64 samples gives magnitude 32 at index 9 and zero at index 13.",
+        "pt": "Quando só alguns coeficientes de frequência são necessários, por exemplo para detectar os tons de um teclado telefônico, o algoritmo de Goertzel é mais barato que uma FFT completa. Seus valores são os mesmos das entradas de `fft(x)`.\n\nA indexação segue o MATLAB: `ind = 9` é o coeficiente em `8*fs/N`. No exemplo, um cosseno com 8 ciclos em 64 amostras dá magnitude 32 no índice 9 e zero no índice 13."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One DFT bin of a tone",
+            "pt": "Um coeficiente da DFT de um tom"
+          },
+          "code": "n = (0:63)';\nx = cos(2*pi*8*n/64);\nX = fft(x);\nfprintf('%.4f\\n', abs(goertzel(x, 9)));\nfprintf('%.4f\\n', abs(X(9)));\ndisp(round(abs(goertzel(x, [9 13]))*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fft",
+        "czt",
+        "dftmtx",
+        "periodogram"
+      ]
+    },
+    "hilbert": {
+      "summary": {
+        "en": "Returns the analytic signal of a real signal, whose imaginary part is the Hilbert transform.",
+        "pt": "Retorna o sinal analítico de um sinal real, cuja parte imaginária é a transformada de Hilbert."
+      },
+      "syntax": [
+        {
+          "code": "z = hilbert(x)",
+          "en": "Analytic signal of `x`.",
+          "pt": "Sinal analítico de `x`."
+        },
+        {
+          "code": "z = hilbert(x, n)",
+          "en": "Uses an `n`-point transform, padding or cutting `x`.",
+          "pt": "Usa uma transformada de `n` pontos, completando ou cortando `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real signal, a vector or a matrix whose columns are processed.",
+          "pt": "Sinal real, um vetor ou uma matriz cujas colunas são processadas."
+        },
+        {
+          "name": "n",
+          "en": "Transform length. Default `length(x)`.",
+          "pt": "Comprimento da transformada. Padrão `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Complex analytic signal, with `real(z) = x` and `imag(z)` the Hilbert transform of `x`.",
+          "pt": "Sinal analítico complexo, com `real(z) = x` e `imag(z)` a transformada de Hilbert de `x`."
+        }
+      ],
+      "description": {
+        "en": "The analytic signal keeps the positive frequencies of `x` (doubled) and drops the negative ones. Its magnitude `abs(z)` is the envelope of `x`, and `angle(z)` is the instantaneous phase, which `instfreq` uses with `'Method','hilbert'`.\n\nThe imaginary part of a cosine is the matching sine, so `abs(z)` of a pure cosine is 1 everywhere, as in the example. Complex input has its imaginary part ignored, as in MATLAB.",
+        "pt": "O sinal analítico mantém as frequências positivas de `x` (dobradas) e descarta as negativas. Seu módulo `abs(z)` é o envelope de `x`, e `angle(z)` é a fase instantânea, que a `instfreq` usa com `'Method','hilbert'`.\n\nA parte imaginária de um cosseno é o seno correspondente, então `abs(z)` de um cosseno puro vale 1 em toda parte, como no exemplo. A parte imaginária de uma entrada complexa é ignorada, como no MATLAB."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Analytic signal of a cosine",
+            "pt": "Sinal analítico de um cosseno"
+          },
+          "code": "n = 0:7;\nx = cos(2*pi*n/8);\nz = hilbert(x);\ndisp(round(real(z)*1e3)/1e3)\ndisp(round(imag(z)*1e3)/1e3)\ndisp(round(abs(z)*1e3)/1e3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "instfreq",
+        "envelope",
+        "fft",
+        "unwrap"
+      ],
+      "notes": {
+        "en": "Arrays with more than two dimensions are not supported and give the error `N-D arrays are not supported.`",
+        "pt": "Arrays com mais de duas dimensões não são suportados e geram o erro `N-D arrays are not supported.`"
+      }
+    },
+    "icceps": {
+      "summary": {
+        "en": "Computes the inverse complex cepstrum, rebuilding a sequence from its cepstrum.",
+        "pt": "Calcula o cepstro complexo inverso, reconstruindo uma sequência a partir do seu cepstro."
+      },
+      "syntax": [
+        {
+          "code": "x = icceps(xhat)",
+          "en": "Sequence whose complex cepstrum is `xhat`.",
+          "pt": "Sequência cujo cepstro complexo é `xhat`."
+        },
+        {
+          "code": "x = icceps(xhat, nd)",
+          "en": "Restores `nd` samples of delay that `cceps` took out.",
+          "pt": "Restaura `nd` amostras de atraso retiradas pela `cceps`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "xhat",
+          "en": "Complex cepstrum, a vector, typically from `cceps`.",
+          "pt": "Cepstro complexo, um vetor, normalmente obtido de `cceps`."
+        },
+        {
+          "name": "nd",
+          "en": "Delay in samples to put back. Default 0.",
+          "pt": "Atraso em amostras a recolocar. Padrão 0."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Real sequence of the same length as `xhat`.",
+          "pt": "Sequência real com o mesmo comprimento que `xhat`."
+        }
+      ],
+      "description": {
+        "en": "`icceps` undoes `cceps`: it takes the Fourier transform of the cepstrum, exponentiates it, and returns to the time domain. With the delay `nd` returned by `cceps` the original sequence is recovered.\n\nYou can also edit the cepstrum, for example zero its negative-time part, and call `icceps` to obtain a modified sequence. That is how a minimum-phase version of a signal is built.",
+        "pt": "A `icceps` desfaz a `cceps`: toma a transformada de Fourier do cepstro, aplica a exponencial e volta ao domínio do tempo. Com o atraso `nd` devolvido pela `cceps`, a sequência original é recuperada.\n\nTambém é possível editar o cepstro, por exemplo zerando a parte de tempo negativo, e chamar a `icceps` para obter uma sequência modificada. É assim que se constrói uma versão de fase mínima de um sinal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover a sequence from its cepstrum",
+            "pt": "Recuperar uma sequência a partir do cepstro"
+          },
+          "code": "x = [2 1 0.5 0.25];\n[xh, nd] = cceps(x);\ny = icceps(xh, nd);\ndisp(round(y*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cceps",
+        "rceps",
+        "ifft"
+      ]
+    },
+    "idct": {
+      "summary": {
+        "en": "Computes the inverse discrete cosine transform.",
+        "pt": "Calcula a transformada discreta de cosseno inversa."
+      },
+      "syntax": [
+        {
+          "code": "x = idct(y)",
+          "en": "Inverse DCT of `y`, column by column.",
+          "pt": "DCT inversa de `y`, coluna por coluna."
+        },
+        {
+          "code": "x = idct(y, n)",
+          "en": "Pads `y` with zeros or cuts it to `n` coefficients first.",
+          "pt": "Completa `y` com zeros ou o corta em `n` coeficientes antes."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "DCT coefficients, a vector or a matrix with columns.",
+          "pt": "Coeficientes da DCT, um vetor ou uma matriz com colunas."
+        },
+        {
+          "name": "n",
+          "en": "Transform length.",
+          "pt": "Comprimento da transformada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Reconstructed signal.",
+          "pt": "Sinal reconstruído."
+        }
+      ],
+      "description": {
+        "en": "`idct(dct(x))` returns `x`. Because most of the energy of a smooth signal sits in the low coefficients, setting the high ones to zero and calling `idct` gives a smoothed approximation. The example keeps two of four coefficients and the result is a close copy of the ramp.\n\nThe cost grows with the square of the length, because the definition is summed directly.",
+        "pt": "`idct(dct(x))` retorna `x`. Como a maior parte da energia de um sinal suave está nos coeficientes baixos, zerar os altos e chamar a `idct` dá uma aproximação suavizada. O exemplo mantém dois de quatro coeficientes e o resultado é uma cópia próxima da rampa.\n\nO custo cresce com o quadrado do comprimento, pois a definição é somada diretamente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reconstruct from two coefficients",
+            "pt": "Reconstruir a partir de dois coeficientes"
+          },
+          "code": "c = dct([1 2 3 4]);\nc(3:4) = 0;\ndisp(round(idct(c)*1e3)/1e3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "dct",
+        "ifft",
+        "dftmtx"
+      ],
+      "notes": {
+        "en": "Arrays with more than two dimensions are not supported: a dimension argument of 3 gives `Operating along dimension 3 is not supported.`",
+        "pt": "Arrays com mais de duas dimensões não são suportados: uma dimensão igual a 3 gera `Operating along dimension 3 is not supported.`"
+      }
+    },
+    "ifwht": {
+      "summary": {
+        "en": "Computes the inverse fast Walsh-Hadamard transform.",
+        "pt": "Calcula a transformada rápida de Walsh-Hadamard inversa."
+      },
+      "syntax": [
+        {
+          "code": "x = ifwht(y)",
+          "en": "Inverse of `fwht(x)` in sequency order.",
+          "pt": "Inversa de `fwht(x)` na ordem de sequência."
+        },
+        {
+          "code": "x = ifwht(y, n, ordering)",
+          "en": "Same with a length and ordering (`'sequency'`, `'hadamard'` or `'dyadic'`).",
+          "pt": "O mesmo com comprimento e ordenação (`'sequency'`, `'hadamard'` ou `'dyadic'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Walsh-Hadamard coefficients, a vector or a matrix with columns.",
+          "pt": "Coeficientes de Walsh-Hadamard, um vetor ou uma matriz com colunas."
+        },
+        {
+          "name": "n",
+          "en": "Transform length, a power of 2.",
+          "pt": "Comprimento da transformada, potência de 2."
+        },
+        {
+          "name": "ordering",
+          "en": "`'sequency'` (default), `'hadamard'` or `'dyadic'`. It must match the one used in `fwht`.",
+          "pt": "`'sequency'` (padrão), `'hadamard'` ou `'dyadic'`. Deve ser a mesma usada na `fwht`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Reconstructed signal.",
+          "pt": "Sinal reconstruído."
+        }
+      ],
+      "description": {
+        "en": "The forward `fwht` includes the factor `1/n`, and `ifwht` does not, so `ifwht(fwht(x))` returns `x`. Called on data that did not come from `fwht`, the output is the plain sum with no division, for example `ifwht([1 2 3 4])` gives `10 -4 0 -2`.",
+        "pt": "A `fwht` direta inclui o fator `1/n` e a `ifwht` não inclui, então `ifwht(fwht(x))` retorna `x`. Chamada sobre dados que não vieram da `fwht`, a saída é a soma simples sem divisão, por exemplo `ifwht([1 2 3 4])` dá `10 -4 0 -2`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip",
+            "pt": "Ida e volta"
+          },
+          "code": "x = [4 1 0 3 2 2 1 0];\ny = fwht(x);\ndisp(y)\ndisp(ifwht(y))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fwht",
+        "ifft",
+        "idct"
+      ]
+    },
+    "rceps": {
+      "summary": {
+        "en": "Computes the real cepstrum and the minimum-phase sequence with the same magnitude response.",
+        "pt": "Calcula o cepstro real e a sequência de fase mínima com a mesma resposta em magnitude."
+      },
+      "syntax": [
+        {
+          "code": "y = rceps(x)",
+          "en": "Real cepstrum of `x`.",
+          "pt": "Cepstro real de `x`."
+        },
+        {
+          "code": "[y, ym] = rceps(x)",
+          "en": "Also returns the minimum-phase reconstruction.",
+          "pt": "Retorna também a reconstrução de fase mínima."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real sequence, a vector.",
+          "pt": "Sequência real, um vetor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Real cepstrum, `real(ifft(log(abs(fft(x)))))`.",
+          "pt": "Cepstro real, `real(ifft(log(abs(fft(x)))))`."
+        },
+        {
+          "name": "ym",
+          "en": "Minimum-phase sequence with the same magnitude spectrum as `x`.",
+          "pt": "Sequência de fase mínima com o mesmo espectro de magnitude que `x`."
+        }
+      ],
+      "description": {
+        "en": "The real cepstrum uses only the magnitude of the spectrum, so it ignores phase and needs no unwrapping. It is used in pitch detection and speech analysis, where peaks in the cepstrum show periodic structure in the spectrum.\n\nThe second output folds the cepstrum to keep only its causal part, which gives the minimum-phase sequence that has the same magnitude response as `x`. For a short `x` the cepstrum wraps around in time, so pad `x` with zeros first, as in the example.",
+        "pt": "O cepstro real usa apenas a magnitude do espectro, então ignora a fase e dispensa o desenrolamento. É usado em detecção de pitch e análise de voz, onde picos no cepstro revelam estrutura periódica no espectro.\n\nA segunda saída dobra o cepstro para manter só a parte causal, o que dá a sequência de fase mínima com a mesma resposta em magnitude que `x`. Para um `x` curto o cepstro se sobrepõe no tempo, então complete `x` com zeros antes, como no exemplo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Minimum-phase version of a sequence",
+            "pt": "Versão de fase mínima de uma sequência"
+          },
+          "code": "x = [1 2 3 4 zeros(1, 60)];\n[y, ym] = rceps(x);\ndisp(ym(1:5))\nfprintf('%.3f\\n', max(abs(abs(fft(ym)) - abs(fft(x)))))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cceps",
+        "icceps",
+        "fft",
+        "hilbert"
+      ]
+    },
+    "cconv": {
+      "summary": {
+        "en": "Computes the circular convolution of two vectors.",
+        "pt": "Calcula a convolução circular de dois vetores."
+      },
+      "syntax": [
+        {
+          "code": "c = cconv(a, b)",
+          "en": "Linear convolution, the same as `conv(a, b)`.",
+          "pt": "Convolução linear, igual a `conv(a, b)`."
+        },
+        {
+          "code": "c = cconv(a, b, n)",
+          "en": "Circular convolution of period `n`.",
+          "pt": "Convolução circular de período `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Input vectors.",
+          "pt": "Vetores de entrada."
+        },
+        {
+          "name": "n",
+          "en": "Length of the result. When omitted, `length(a)+length(b)-1`.",
+          "pt": "Comprimento do resultado. Se omitido, `length(a)+length(b)-1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Convolution of length `n`.",
+          "pt": "Convolução de comprimento `n`."
+        }
+      ],
+      "description": {
+        "en": "A circular convolution wraps the result around after `n` samples, which is what multiplying DFTs of length `n` computes. With `n` at least `length(a)+length(b)-1` there is nothing to wrap and the answer equals the linear convolution.\n\nIn the example, with `n = 3` the fourth sample of the linear result `1 3 5 3` wraps onto the first one, and it becomes `4 3 5`.",
+        "pt": "Uma convolução circular dobra o resultado após `n` amostras, que é o que a multiplicação de DFTs de comprimento `n` calcula. Com `n` pelo menos `length(a)+length(b)-1`, não há o que dobrar e a resposta é igual à convolução linear.\n\nNo exemplo, com `n = 3` a quarta amostra do resultado linear `1 3 5 3` volta sobre a primeira, e o resultado é `4 3 5`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Circular and linear convolution",
+            "pt": "Convolução circular e linear"
+          },
+          "code": "a = [1 2 3];\nb = [1 1];\ndisp(cconv(a, b, 3))\ndisp(cconv(a, b, 4))\ndisp(conv(a, b))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "conv",
+        "fft",
+        "convmtx",
+        "xcorr"
+      ]
+    },
+    "convmtx": {
+      "summary": {
+        "en": "Builds a convolution matrix, so that convolution becomes a matrix product.",
+        "pt": "Constrói uma matriz de convolução, de modo que a convolução vira um produto de matrizes."
+      },
+      "syntax": [
+        {
+          "code": "T = convmtx(h, n)",
+          "en": "Matrix that convolves a length-`n` signal with `h`.",
+          "pt": "Matriz que convolui um sinal de comprimento `n` com `h`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Filter or impulse response, a vector.",
+          "pt": "Filtro ou resposta ao impulso, um vetor."
+        },
+        {
+          "name": "n",
+          "en": "Length of the signal to be convolved.",
+          "pt": "Comprimento do sinal a ser convoluído."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "For a column `h`, a matrix with `length(h)+n-1` rows and `n` columns, with `T*x = conv(h, x)`. For a row `h`, `n` rows and `length(h)+n-1` columns, with `x*T = conv(h, x)`.",
+          "pt": "Para `h` coluna, uma matriz com `length(h)+n-1` linhas e `n` colunas, com `T*x = conv(h, x)`. Para `h` linha, `n` linhas e `length(h)+n-1` colunas, com `x*T = conv(h, x)`."
+        }
+      ],
+      "description": {
+        "en": "Each column (or row) of the matrix is a shifted copy of `h`. This form is handy when the convolution has to be written as a linear system, for example in least-squares filter design and in system identification.\n\nThe matrix is dense and has about `n*length(h)` nonzero entries, so for long signals use `conv` or `filter` instead.",
+        "pt": "Cada coluna (ou linha) da matriz é uma cópia deslocada de `h`. Essa forma é útil quando a convolução precisa ser escrita como sistema linear, por exemplo no projeto de filtros por mínimos quadrados e na identificação de sistemas.\n\nA matriz é densa e tem cerca de `n*length(h)` elementos não nulos, então para sinais longos use `conv` ou `filter`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Convolution as a matrix product",
+            "pt": "Convolução como produto de matrizes"
+          },
+          "code": "h = [1; 2; 3];\nT = convmtx(h, 2);\ndisp(T)\ndisp((T*[1; 1])')\ndisp(conv(h', [1 1]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "conv",
+        "cconv",
+        "toeplitz",
+        "corrmtx"
+      ]
+    },
+    "corrmtx": {
+      "summary": {
+        "en": "Builds the data matrix used for autocorrelation and covariance estimates of a given order.",
+        "pt": "Constrói a matriz de dados usada em estimativas de autocorrelação e covariância de uma dada ordem."
+      },
+      "syntax": [
+        {
+          "code": "X = corrmtx(x, m)",
+          "en": "Data matrix of order `m` for the autocorrelation method.",
+          "pt": "Matriz de dados de ordem `m` para o método da autocorrelação."
+        },
+        {
+          "code": "X = corrmtx(x, m, method)",
+          "en": "Uses another windowing: `'autocorrelation'`, `'prewindowed'`, `'postwindowed'`, `'covariance'` or `'modified'`.",
+          "pt": "Usa outro janelamento: `'autocorrelation'`, `'prewindowed'`, `'postwindowed'`, `'covariance'` ou `'modified'`."
+        },
+        {
+          "code": "[X, R] = corrmtx(x, m, method)",
+          "en": "Also returns the estimated correlation matrix `R`.",
+          "pt": "Retorna também a matriz de correlação estimada `R`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector of length greater than `m`.",
+          "pt": "Sinal, um vetor de comprimento maior que `m`."
+        },
+        {
+          "name": "m",
+          "en": "Order, which gives `m+1` columns.",
+          "pt": "Ordem, que dá `m+1` colunas."
+        },
+        {
+          "name": "method",
+          "en": "Windowing method, default `'autocorrelation'`.",
+          "pt": "Método de janelamento, padrão `'autocorrelation'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Rectangular matrix with `m+1` columns, each a delayed copy of `x`, scaled by `1/sqrt(length(x))`.",
+          "pt": "Matriz retangular com `m+1` colunas, cada uma uma cópia atrasada de `x`, escalada por `1/sqrt(length(x))`."
+        },
+        {
+          "name": "R",
+          "en": "The `(m+1)`-by-`(m+1)` correlation matrix estimate.",
+          "pt": "Estimativa da matriz de correlação, `(m+1)` por `(m+1)`."
+        }
+      ],
+      "description": {
+        "en": "The columns of `X` are the signal at delays 0 to `m`. The methods differ in how they treat the ends of the record: the autocorrelation method pads with zeros on both sides and has `length(x)+m` rows, the covariance method uses only complete rows (`length(x)-m` rows), and the prewindowed, postwindowed and modified methods lie in between (`length(x)`, `length(x)` and `2*(length(x)-m)` rows).\n\nThe matrix is the input to least-squares spectral estimators such as `pcov`, `pmcov` and `pyulear`, and `X'*X` gives the correlation estimate `R`.",
+        "pt": "As colunas de `X` são o sinal com atrasos de 0 a `m`. Os métodos diferem no tratamento das pontas do registro: o da autocorrelação preenche com zeros dos dois lados e tem `length(x)+m` linhas, o da covariância usa só linhas completas (`length(x)-m` linhas), e os métodos pré-janelado, pós-janelado e modificado ficam entre os dois (`length(x)`, `length(x)` e `2*(length(x)-m)` linhas).\n\nA matriz é a entrada de estimadores espectrais por mínimos quadrados, como `pcov`, `pmcov` e `pyulear`, e `X'*X` dá a estimativa de correlação `R`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Data matrix for order 2",
+            "pt": "Matriz de dados de ordem 2"
+          },
+          "code": "x = (1:5)';\nX = corrmtx(x, 2);\ndisp(size(X))\ndisp(round(X*1e3)/1e3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pcov",
+        "pmcov",
+        "pyulear",
+        "toeplitz",
+        "convmtx"
+      ]
+    },
+    "xcorr2": {
+      "summary": {
+        "en": "Computes the two-dimensional cross-correlation of two matrices.",
+        "pt": "Calcula a correlação cruzada bidimensional de duas matrizes."
+      },
+      "syntax": [
+        {
+          "code": "c = xcorr2(a, b)",
+          "en": "Cross-correlation of `a` and `b`.",
+          "pt": "Correlação cruzada de `a` e `b`."
+        },
+        {
+          "code": "c = xcorr2(a)",
+          "en": "Autocorrelation of `a`.",
+          "pt": "Autocorrelação de `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a, b",
+          "en": "Real matrices, such as images or templates.",
+          "pt": "Matrizes reais, como imagens ou modelos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Correlation of size `(ma+mb-1)`-by-`(na+nb-1)`, where `a` is `ma`-by-`na` and `b` is `mb`-by-`nb`.",
+          "pt": "Correlação de tamanho `(ma+mb-1)` por `(na+nb-1)`, em que `a` é `ma` por `na` e `b` é `mb` por `nb`."
+        }
+      ],
+      "description": {
+        "en": "Each element of `c` is the sum of the products of `a` with a shifted copy of `b`. The position of the maximum of `c` tells where `b` fits best inside `a`, which is the basis of template matching.\n\nWith one argument, `xcorr2(a)` is the autocorrelation, which is symmetric and has its maximum at the center.",
+        "pt": "Cada elemento de `c` é a soma dos produtos de `a` com uma cópia deslocada de `b`. A posição do máximo de `c` mostra onde `b` melhor se encaixa em `a`, que é a base do casamento de padrões (template matching).\n\nCom um só argumento, `xcorr2(a)` é a autocorrelação, que é simétrica e tem o máximo no centro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cross-correlation of two small matrices",
+            "pt": "Correlação cruzada de duas matrizes pequenas"
+          },
+          "code": "a = [1 2; 3 4];\nb = [1 1; 1 1];\ndisp(xcorr2(a, b))\ndisp(xcorr2(a))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "xcorr",
+        "conv2",
+        "corrmtx",
+        "cconv"
+      ]
+    }
+  }
+}

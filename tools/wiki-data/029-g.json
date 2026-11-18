@@ -1,0 +1,1654 @@
+{
+  "functions": {
+    "cell2sos": {
+      "summary": {
+        "en": "Converts a cell array of second-order sections into an L-by-6 SOS matrix and an optional scalar gain.",
+        "pt": "Converte um arranjo de células de seções de segunda ordem em uma matriz SOS L-por-6 e um ganho escalar opcional."
+      },
+      "syntax": [
+        {
+          "code": "sos = cell2sos(c)",
+          "en": "Returns the SOS matrix. A leading gain cell, if present, becomes a section of its own.",
+          "pt": "Retorna a matriz SOS. Uma célula inicial de ganho, se existir, vira uma seção própria."
+        },
+        {
+          "code": "[sos, g] = cell2sos(c)",
+          "en": "Splits a leading scalar gain cell off as `g`.",
+          "pt": "Separa uma célula inicial de ganho escalar e a devolve em `g`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "c",
+          "en": "Cell array in which each element is a cell `{b, a}` holding a section's numerator and denominator coefficients. The first element may be `{g, 1}` for an overall gain.",
+          "pt": "Arranjo de células em que cada elemento é uma célula `{b, a}` com os coeficientes do numerador e do denominador de uma seção. O primeiro elemento pode ser `{g, 1}` para um ganho global."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`. Short coefficient vectors are padded with zeros.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`. Vetores de coeficientes curtos são completados com zeros."
+        },
+        {
+          "name": "g",
+          "en": "Overall gain taken from the leading `{g, 1}` element, or 1 when there is none.",
+          "pt": "Ganho global tirado do elemento inicial `{g, 1}`, ou 1 se não houver."
+        }
+      ],
+      "description": {
+        "en": "A filter stored as a cascade of second-order sections can be kept either as an L-by-6 matrix (the form `sosfilt` and `zp2sos` use) or as a cell array in which every section is a small cell `{b, a}`. `cell2sos` goes from the cell form to the matrix form, and `sos2cell` goes back.\n\nUse the two-output form when the cell array starts with a gain element. With one output, that gain stays in the matrix as a first row `[g 0 0 1 0 0]`.",
+        "pt": "Um filtro guardado como cascata de seções de segunda ordem pode ser mantido como matriz L-por-6 (a forma usada por `sosfilt` e `zp2sos`) ou como arranjo de células em que cada seção é uma pequena célula `{b, a}`. `cell2sos` vai da forma em células para a forma matricial, e `sos2cell` faz o caminho inverso.\n\nUse a forma com duas saídas quando o arranjo começa com um elemento de ganho. Com uma saída, esse ganho fica na matriz como uma primeira linha `[g 0 0 1 0 0]`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip through the cell form",
+            "pt": "Ida e volta pela forma em células"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\nc = sos2cell(sos, 0.5);\ndisp(size(c))\n[s, g] = cell2sos(c);\ndisp(s)\ndisp(g)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sos2cell",
+        "sos2tf",
+        "tf2sos",
+        "zp2sos"
+      ]
+    },
+    "eqtflength": {
+      "summary": {
+        "en": "Pads the shorter of a numerator and denominator with trailing zeros so both have the same length.",
+        "pt": "Completa com zeros à direita o menor entre numerador e denominador para que os dois tenham o mesmo comprimento."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = eqtflength(num, den)",
+          "en": "Returns both vectors with equal length.",
+          "pt": "Retorna os dois vetores com o mesmo comprimento."
+        },
+        {
+          "code": "[b, a, n] = eqtflength(num, den)",
+          "en": "Also returns how many zeros were added.",
+          "pt": "Retorna também quantos zeros foram acrescentados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "num",
+          "en": "Numerator coefficients, as a vector.",
+          "pt": "Coeficientes do numerador, em um vetor."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients, as a vector.",
+          "pt": "Coeficientes do denominador, em um vetor."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator, padded with trailing zeros when it was the shorter one.",
+          "pt": "Numerador, completado com zeros à direita quando era o mais curto."
+        },
+        {
+          "name": "a",
+          "en": "Denominator, padded with trailing zeros when it was the shorter one.",
+          "pt": "Denominador, completado com zeros à direita quando era o mais curto."
+        },
+        {
+          "name": "n",
+          "en": "Number of zeros that were appended (to whichever vector was shorter).",
+          "pt": "Número de zeros acrescentados (ao vetor que era mais curto)."
+        }
+      ],
+      "description": {
+        "en": "Several conversions between filter forms want a numerator and a denominator of the same length. `eqtflength` adds the missing zeros at the end, which in powers of `z^-1` does not change the transfer function.\n\nThe lengths are compared as they are given: nothing is removed from the longer vector.",
+        "pt": "Várias conversões entre formas de filtro querem numerador e denominador do mesmo comprimento. `eqtflength` acrescenta os zeros que faltam no final, o que, em potências de `z^-1`, não altera a função de transferência.\n\nOs comprimentos são comparados como foram dados: nada é removido do vetor mais longo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Equalize two coefficient vectors",
+            "pt": "Igualar dois vetores de coeficientes"
+          },
+          "code": "[b, a, n] = eqtflength([1 2], [1 3 2 1]);\ndisp(b)\ndisp(a)\ndisp(n)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2zpk",
+        "tf2sos",
+        "tf2zp",
+        "zp2tf"
+      ]
+    },
+    "latc2tf": {
+      "summary": {
+        "en": "Converts the reflection coefficients of a lattice filter into a transfer function.",
+        "pt": "Converte os coeficientes de reflexão de um filtro em treliça em uma função de transferência."
+      },
+      "syntax": [
+        {
+          "code": "[num, den] = latc2tf(k)",
+          "en": "FIR lattice: `num` is the prediction-error polynomial and `den` is 1.",
+          "pt": "Treliça FIR: `num` é o polinômio do erro de predição e `den` é 1."
+        },
+        {
+          "code": "[num, den] = latc2tf(k, 'allpole')",
+          "en": "All-pole lattice: `num` is 1 followed by zeros, `den` is the polynomial.",
+          "pt": "Treliça só de polos: `num` é 1 seguido de zeros e `den` é o polinômio."
+        },
+        {
+          "code": "[num, den] = latc2tf(k, 'allpass')",
+          "en": "All-pass lattice: `num` is the reversed `den`.",
+          "pt": "Treliça passa-tudo: `num` é o `den` invertido."
+        },
+        {
+          "code": "[num, den] = latc2tf(k, v)",
+          "en": "Lattice-ladder filter with ladder coefficients `v`.",
+          "pt": "Filtro treliça-escada com coeficientes de escada `v`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Vector of reflection coefficients. A matrix is rejected.",
+          "pt": "Vetor de coeficientes de reflexão. Uma matriz é rejeitada."
+        },
+        {
+          "name": "v",
+          "en": "Ladder coefficients, a vector with one more element than `k` (shorter vectors are padded with zeros).",
+          "pt": "Coeficientes de escada, um vetor com um elemento a mais que `k` (vetores mais curtos são completados com zeros)."
+        },
+        {
+          "name": "type",
+          "en": "`'fir'` (default), `'allpole'` or `'allpass'`.",
+          "pt": "`'fir'` (padrão), `'allpole'` ou `'allpass'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "num",
+          "en": "Numerator coefficients, in powers of `z^-1`.",
+          "pt": "Coeficientes do numerador, em potências de `z^-1`."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients, in powers of `z^-1`, starting with 1.",
+          "pt": "Coeficientes do denominador, em potências de `z^-1`, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "A lattice filter is built from stages, each described by one reflection coefficient. It is common in speech coding and in adaptive filters because stability is easy to check: all-pole and all-pass lattices are stable when every coefficient has magnitude below one.\n\n`latc2tf` expands the stages with the step-up recursion and returns ordinary polynomials you can pass to `filter`, `freqz` or `tf2zp`. Its inverse is `tf2latc`.",
+        "pt": "Um filtro em treliça é formado por estágios, cada um descrito por um coeficiente de reflexão. É comum em codificação de voz e em filtros adaptativos porque a estabilidade é fácil de verificar: treliças só de polos e passa-tudo são estáveis quando todos os coeficientes têm módulo menor que um.\n\n`latc2tf` expande os estágios com a recursão de subida e devolve polinômios comuns, que podem ser usados em `filter`, `freqz` ou `tf2zp`. A operação inversa é `tf2latc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "All-pole lattice with two stages",
+            "pt": "Treliça só de polos com dois estágios"
+          },
+          "code": "[num, den] = latc2tf([0.3 0.2], 'allpole');\ndisp(num)\ndisp(den)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Lattice-ladder filter",
+            "pt": "Filtro treliça-escada"
+          },
+          "code": "[num, den] = latc2tf([0.3 0.2], [1 2 3]);\ndisp(num)\ndisp(den)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2latc",
+        "latcfilt",
+        "rc2poly",
+        "poly2rc"
+      ]
+    },
+    "sos2cell": {
+      "summary": {
+        "en": "Converts an L-by-6 second-order-section matrix into a cell array of `{b, a}` sections, with an optional gain element first.",
+        "pt": "Converte uma matriz de seções de segunda ordem L-por-6 em um arranjo de células `{b, a}`, com um elemento de ganho opcional no início."
+      },
+      "syntax": [
+        {
+          "code": "c = sos2cell(sos)",
+          "en": "One `{b, a}` cell per row of `sos`.",
+          "pt": "Uma célula `{b, a}` por linha de `sos`."
+        },
+        {
+          "code": "c = sos2cell(sos, g)",
+          "en": "Adds a leading `{g, 1}` cell when `g` is not 1.",
+          "pt": "Acrescenta uma célula inicial `{g, 1}` quando `g` não é 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`."
+        },
+        {
+          "name": "g",
+          "en": "Optional overall gain. When it is empty or equal to 1, no gain cell is added.",
+          "pt": "Ganho global opcional. Se for vazio ou igual a 1, nenhuma célula de ganho é acrescentada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Row cell array. Each element is `{b, a}` with trailing zero coefficients removed; a gain, if any, is the first element `{g, 1}`.",
+          "pt": "Arranjo de células em linha. Cada elemento é `{b, a}` com os coeficientes nulos finais removidos; o ganho, se houver, é o primeiro elemento `{g, 1}`."
+        }
+      ],
+      "description": {
+        "en": "The cell form keeps each section as its own pair of coefficient vectors, which is handy when sections have different orders or when you want to look at or edit one section at a time. Trailing zeros of the numerator and denominator are dropped, so a first-order section is stored with two coefficients.\n\nThe matrix must have exactly 6 columns. `cell2sos` is the inverse.",
+        "pt": "A forma em células guarda cada seção como um par próprio de vetores de coeficientes, o que ajuda quando as seções têm ordens diferentes ou quando se quer ver ou editar uma seção por vez. Os zeros finais do numerador e do denominador são descartados, então uma seção de primeira ordem fica com dois coeficientes.\n\nA matriz precisa ter exatamente 6 colunas. `cell2sos` é a operação inversa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sections as cells, with a gain",
+            "pt": "Seções em células, com ganho"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\nc = sos2cell(sos, 0.5);\ndisp(size(c))\ndisp(c{1}{1})\ndisp(c{2}{1})\ndisp(c{3}{2})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cell2sos",
+        "sos2tf",
+        "tf2sos",
+        "sos2zp"
+      ]
+    },
+    "sos2ss": {
+      "summary": {
+        "en": "Converts second-order sections into a state-space model.",
+        "pt": "Converte seções de segunda ordem em um modelo de espaço de estados."
+      },
+      "syntax": [
+        {
+          "code": "[A, B, C, D] = sos2ss(sos)",
+          "en": "State-space matrices of the cascade of the sections in `sos`.",
+          "pt": "Matrizes de espaço de estados da cascata das seções de `sos`."
+        },
+        {
+          "code": "[A, B, C, D] = sos2ss(sos, g)",
+          "en": "Includes an overall gain `g`.",
+          "pt": "Inclui um ganho global `g`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`."
+        },
+        {
+          "name": "g",
+          "en": "Optional overall gain, a scalar (default 1).",
+          "pt": "Ganho global opcional, um escalar (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "State matrix, square, with one state per delay in the cascade.",
+          "pt": "Matriz de estados, quadrada, com um estado por atraso da cascata."
+        },
+        {
+          "name": "B",
+          "en": "Input matrix, a column.",
+          "pt": "Matriz de entrada, uma coluna."
+        },
+        {
+          "name": "C",
+          "en": "Output matrix, a row.",
+          "pt": "Matriz de saída, uma linha."
+        },
+        {
+          "name": "D",
+          "en": "Direct feedthrough, a scalar.",
+          "pt": "Transmissão direta, um escalar."
+        }
+      ],
+      "description": {
+        "en": "The state-space model describes the same filter as the sections: with `[b, a] = ss2tf(A, B, C, D)` you get the same transfer function as `sos2tf(sos, g)`. State space is the form used to analyse controllability and observability, to simulate with matrices, or to pass to routines that expect `A, B, C, D`.\n\nThe model has one state for each unit delay of the whole cascade, so two sections of second order give a 4-by-4 `A`.",
+        "pt": "O modelo de espaço de estados descreve o mesmo filtro das seções: com `[b, a] = ss2tf(A, B, C, D)` obtém-se a mesma função de transferência de `sos2tf(sos, g)`. O espaço de estados é a forma usada para analisar controlabilidade e observabilidade, simular com matrizes ou passar a rotinas que esperam `A, B, C, D`.\n\nO modelo tem um estado para cada atraso unitário da cascata inteira, então duas seções de segunda ordem dão uma `A` de 4 por 4."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two sections as a state-space model",
+            "pt": "Duas seções como modelo de espaço de estados"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\n[A, B, C, D] = sos2ss(sos, 0.5);\ndisp(size(A))\n[b, a] = ss2tf(A, B, C, D);\ndisp(round(b*1e4)/1e4)\ndisp(round(a*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ss2sos",
+        "sos2tf",
+        "tf2ss",
+        "ss2zp"
+      ]
+    },
+    "sos2tf": {
+      "summary": {
+        "en": "Converts second-order sections into one transfer function.",
+        "pt": "Converte seções de segunda ordem em uma única função de transferência."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = sos2tf(sos)",
+          "en": "Multiplies the sections into a single numerator and denominator.",
+          "pt": "Multiplica as seções em um único numerador e denominador."
+        },
+        {
+          "code": "[b, a] = sos2tf(sos, g)",
+          "en": "Also multiplies the numerator by the gain `g`.",
+          "pt": "Multiplica também o numerador pelo ganho `g`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`."
+        },
+        {
+          "name": "g",
+          "en": "Optional overall gain, a scalar (default 1).",
+          "pt": "Ganho global opcional, um escalar (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients of the whole cascade, in powers of `z^-1`.",
+          "pt": "Coeficientes do numerador da cascata inteira, em potências de `z^-1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients of the whole cascade, starting with 1.",
+          "pt": "Coeficientes do denominador da cascata inteira, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "The product of the sections is computed by polynomial multiplication (convolution) of the numerators and of the denominators. The result is the direct-form filter, which you can use with `filter` or `freqz`.\n\nFor high orders, prefer to keep the sections and filter with `sosfilt`: the direct form is more sensitive to rounding of the coefficients. `tf2sos` goes the other way.",
+        "pt": "O produto das seções é calculado pela multiplicação de polinômios (convolução) dos numeradores e dos denominadores. O resultado é o filtro na forma direta, que pode ser usado com `filter` ou `freqz`.\n\nEm ordens altas, prefira manter as seções e filtrar com `sosfilt`: a forma direta é mais sensível ao arredondamento dos coeficientes. `tf2sos` faz o caminho inverso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two sections and a gain",
+            "pt": "Duas seções e um ganho"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\n[b, a] = sos2tf(sos, 0.5);\ndisp(round(b*1e4)/1e4)\ndisp(round(a*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2sos",
+        "sosfilt",
+        "sos2zp",
+        "sos2ss",
+        "zp2sos"
+      ]
+    },
+    "sos2zp": {
+      "summary": {
+        "en": "Converts second-order sections into zeros, poles and gain.",
+        "pt": "Converte seções de segunda ordem em zeros, polos e ganho."
+      },
+      "syntax": [
+        {
+          "code": "[z, p, k] = sos2zp(sos)",
+          "en": "Zeros, poles and gain of the cascade.",
+          "pt": "Zeros, polos e ganho da cascata."
+        },
+        {
+          "code": "[z, p, k] = sos2zp(sos, g)",
+          "en": "Includes an overall gain `g` in `k`.",
+          "pt": "Inclui um ganho global `g` em `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`."
+        },
+        {
+          "name": "g",
+          "en": "Optional overall gain, a scalar (default 1).",
+          "pt": "Ganho global opcional, um escalar (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Column vector with the zeros of all sections.",
+          "pt": "Vetor coluna com os zeros de todas as seções."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the poles of all sections.",
+          "pt": "Vetor coluna com os polos de todas as seções."
+        },
+        {
+          "name": "k",
+          "en": "Scalar gain of the factored form.",
+          "pt": "Ganho escalar da forma fatorada."
+        }
+      ],
+      "description": {
+        "en": "The zeros and poles of the cascade are the roots of the numerators and denominators of the individual sections, so they are found section by section. This avoids forming the high-order polynomial and the loss of accuracy that comes with it.\n\nThe gain `k` is built from the leading numerator coefficients of the sections, times `g`. The result can be passed to `zp2sos`, `zplane` or `zp2tf`.",
+        "pt": "Os zeros e polos da cascata são as raízes dos numeradores e denominadores de cada seção, então são obtidos seção por seção. Isso evita formar o polinômio de ordem alta e a perda de precisão que vem com ele.\n\nO ganho `k` é formado a partir dos coeficientes líderes dos numeradores das seções, vezes `g`. O resultado pode ser passado a `zp2sos`, `zplane` ou `zp2tf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zeros and poles of two sections",
+            "pt": "Zeros e polos de duas seções"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\n[z, p, k] = sos2zp(sos, 0.5);\ndisp(z.')\ndisp(round(p.'*1e4)/1e4)\ndisp(k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "zp2sos",
+        "sos2tf",
+        "tf2zp",
+        "zplane"
+      ]
+    },
+    "ss2sos": {
+      "summary": {
+        "en": "Converts a state-space model into second-order sections.",
+        "pt": "Converte um modelo de espaço de estados em seções de segunda ordem."
+      },
+      "syntax": [
+        {
+          "code": "sos = ss2sos(A, B, C, D)",
+          "en": "Returns the section matrix, with the gain absorbed in it.",
+          "pt": "Retorna a matriz de seções, com o ganho absorvido nela."
+        },
+        {
+          "code": "[sos, g] = ss2sos(A, B, C, D)",
+          "en": "Also returns the overall gain separately.",
+          "pt": "Retorna também o ganho global separadamente."
+        },
+        {
+          "code": "[sos, g] = ss2sos(A, B, C, D, iu, order, scale)",
+          "en": "Chooses the input `iu`, the section order `'up'` or `'down'` and the scaling `'none'`, `'inf'` or `'two'`.",
+          "pt": "Escolhe a entrada `iu`, a ordem das seções `'up'` ou `'down'` e a escala `'none'`, `'inf'` ou `'two'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B, C, D",
+          "en": "State-space matrices of a single-output system.",
+          "pt": "Matrizes de espaço de estados de um sistema de uma saída."
+        },
+        {
+          "name": "iu",
+          "en": "Index of the input to use for a multi-input system (default 1).",
+          "pt": "Índice da entrada a usar em um sistema de várias entradas (padrão 1)."
+        },
+        {
+          "name": "order",
+          "en": "`'down'` (default) puts the poles closest to the unit circle last; `'up'` puts them first.",
+          "pt": "`'down'` (padrão) coloca por último os polos mais próximos do círculo unitário; `'up'` coloca esses polos primeiro."
+        },
+        {
+          "name": "scale",
+          "en": "`'none'` (default), `'inf'` or `'two'`: scale the sections by the infinity norm or the 2-norm to reduce overflow.",
+          "pt": "`'none'` (padrão), `'inf'` ou `'two'`: escala as seções pela norma infinito ou pela norma 2 para reduzir overflow."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`, with `a0 = 1`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`, com `a0 = 1`."
+        },
+        {
+          "name": "g",
+          "en": "Overall gain. With one output it is folded into the first section.",
+          "pt": "Ganho global. Com uma saída, ele é incorporado à primeira seção."
+        }
+      ],
+      "description": {
+        "en": "The poles and zeros of the state-space model are found and then grouped in pairs into second-order sections, in the same way as `zp2sos`. Use it to run a state-space design as a cascade of biquads with `sosfilt`, which is less sensitive to coefficient rounding than a single high-order polynomial.\n\nThe round trip with `sos2ss` returns the same sections when the numerators have no repeated zero at -1 or 1.",
+        "pt": "Os polos e zeros do modelo de espaço de estados são obtidos e depois agrupados em pares nas seções de segunda ordem, como em `zp2sos`. Use-a para executar um projeto em espaço de estados como cascata de biquads com `sosfilt`, que é menos sensível ao arredondamento dos coeficientes do que um único polinômio de ordem alta.\n\nA ida e volta com `sos2ss` devolve as mesmas seções quando os numeradores não têm zero repetido em -1 ou 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sections back from a state-space model",
+            "pt": "Seções de volta a partir de um modelo de espaço de estados"
+          },
+          "code": "sos = [1 2 1 1 -0.5 0.1; 1 0 -1 1 0.2 0.3];\n[A, B, C, D] = sos2ss(sos, 0.5);\n[s, g] = ss2sos(A, B, C, D);\ndisp(round(s*1e4)/1e4)\ndisp(g)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sos2ss",
+        "zp2sos",
+        "tf2sos",
+        "ss2zp"
+      ],
+      "notes": {
+        "en": "For a filter with a repeated zero at z = -1 (for instance a `butter` design) MATLAB computes the zeros with a structured eigenvalue method that gives -1 to the last digit. MatLivre's zeros differ in the last digits and their order follows the rounding noise, so the sections can differ from MATLAB's.",
+        "pt": "Em um filtro com zero repetido em z = -1 (por exemplo um projeto `butter`), o MATLAB calcula os zeros com um método de autovalores estruturado que dá -1 até o último dígito. Os zeros do MatLivre diferem nos últimos dígitos e a ordem deles segue o ruído de arredondamento, então as seções podem diferir das do MATLAB."
+      }
+    },
+    "ss2zp": {
+      "summary": {
+        "en": "Converts a state-space model into zeros, poles and gain.",
+        "pt": "Converte um modelo de espaço de estados em zeros, polos e ganho."
+      },
+      "syntax": [
+        {
+          "code": "[z, p, k] = ss2zp(A, B, C, D)",
+          "en": "Zeros, poles and gain of the first input.",
+          "pt": "Zeros, polos e ganho da primeira entrada."
+        },
+        {
+          "code": "[z, p, k] = ss2zp(A, B, C, D, iu)",
+          "en": "Uses input number `iu`.",
+          "pt": "Usa a entrada de número `iu`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "A, B, C, D",
+          "en": "State-space matrices of the system.",
+          "pt": "Matrizes de espaço de estados do sistema."
+        },
+        {
+          "name": "iu",
+          "en": "Index of the input to use (default 1).",
+          "pt": "Índice da entrada a usar (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Column vector with the zeros.",
+          "pt": "Vetor coluna com os zeros."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the poles, the eigenvalues of `A`.",
+          "pt": "Vetor coluna com os polos, os autovalores de `A`."
+        },
+        {
+          "name": "k",
+          "en": "Scalar gain.",
+          "pt": "Ganho escalar."
+        }
+      ],
+      "description": {
+        "en": "The poles are the eigenvalues of `A`, and the zeros and gain come from the transfer function from input `iu` to the output. The result is a factored form that is easy to read: stable discrete filters have all poles inside the unit circle.\n\nThe example uses a continuous-time system, so poles and zeros are read on the s plane.",
+        "pt": "Os polos são os autovalores de `A`, e os zeros e o ganho vêm da função de transferência da entrada `iu` até a saída. O resultado é uma forma fatorada fácil de ler: filtros discretos estáveis têm todos os polos dentro do círculo unitário.\n\nO exemplo usa um sistema em tempo contínuo, então polos e zeros são lidos no plano s."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zero and poles of a second-order system",
+            "pt": "Zero e polos de um sistema de segunda ordem"
+          },
+          "code": "[A, B, C, D] = tf2ss([1 2], [1 3 2]);\n[z, p, k] = ss2zp(A, B, C, D);\ndisp(round(z.'*1e4)/1e4)\ndisp(round(p.'*1e4)/1e4)\ndisp(round(k*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "zp2ss",
+        "tf2zp",
+        "ss2sos",
+        "tf2ss"
+      ],
+      "notes": {
+        "en": "When the system has a repeated zero at z = -1 (for example a `butter` design), MATLAB gets the zeros from a structured eigenvalue problem that returns -1 to the last digit. MatLivre's zeros differ in the last digits (around 5e-6 in a case I ran) and their order follows the noise.",
+        "pt": "Quando o sistema tem um zero repetido em z = -1 (por exemplo um projeto `butter`), o MATLAB obtém os zeros de um problema de autovalores estruturado que devolve -1 até o último dígito. Os zeros do MatLivre diferem nos últimos dígitos (cerca de 5e-6 em um caso que executei) e a ordem deles segue o ruído."
+      }
+    },
+    "tf2latc": {
+      "summary": {
+        "en": "Converts a transfer function into the reflection coefficients of a lattice filter.",
+        "pt": "Converte uma função de transferência nos coeficientes de reflexão de um filtro em treliça."
+      },
+      "syntax": [
+        {
+          "code": "k = tf2latc(num)",
+          "en": "FIR lattice for the polynomial `num`.",
+          "pt": "Treliça FIR para o polinômio `num`."
+        },
+        {
+          "code": "k = tf2latc(1, den)",
+          "en": "All-pole lattice for the denominator `den`.",
+          "pt": "Treliça só de polos para o denominador `den`."
+        },
+        {
+          "code": "[k, v] = tf2latc(num, den)",
+          "en": "Lattice-ladder: reflection coefficients and ladder coefficients.",
+          "pt": "Treliça-escada: coeficientes de reflexão e coeficientes de escada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "num",
+          "en": "Numerator coefficients, in powers of `z^-1`. Trailing zeros are ignored.",
+          "pt": "Coeficientes do numerador, em potências de `z^-1`. Zeros finais são ignorados."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients. They are divided by `den(1)`.",
+          "pt": "Coeficientes do denominador. Eles são divididos por `den(1)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Column vector of reflection coefficients, one per lattice stage.",
+          "pt": "Vetor coluna de coeficientes de reflexão, um por estágio da treliça."
+        },
+        {
+          "name": "v",
+          "en": "Column vector of ladder coefficients, with one more element than `k`.",
+          "pt": "Vetor coluna de coeficientes de escada, com um elemento a mais que `k`."
+        }
+      ],
+      "description": {
+        "en": "This is the step-down recursion: it peels the polynomial one order at a time and records the reflection coefficient of each stage. A lattice is attractive in implementations because each stage is stable on its own when its coefficient has magnitude below one.\n\nThe call with only `num` treats it as an FIR polynomial whose first coefficient is normalized to 1. If a reflection coefficient has magnitude exactly one, the algorithm cannot continue and raises an error. `latc2tf` is the inverse.",
+        "pt": "É a recursão de descida: o polinômio é reduzido uma ordem por vez e o coeficiente de reflexão de cada estágio é registrado. A treliça é atraente em implementações porque cada estágio é estável por si só quando o coeficiente tem módulo menor que um.\n\nA chamada só com `num` o trata como um polinômio FIR, com o primeiro coeficiente normalizado em 1. Se algum coeficiente de reflexão tiver módulo exatamente um, o algoritmo não prossegue e gera um erro. `latc2tf` é a operação inversa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reflection coefficients of an all-pole filter",
+            "pt": "Coeficientes de reflexão de um filtro só de polos"
+          },
+          "code": "k = tf2latc(1, [1 0.36 0.2]);\ndisp(k.')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Lattice-ladder form",
+            "pt": "Forma treliça-escada"
+          },
+          "code": "[k, v] = tf2latc([1 0.4 0.2], [1 0.5 0.3]);\ndisp(round(k.'*1e4)/1e4)\ndisp(round(v.'*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "latc2tf",
+        "latcfilt",
+        "poly2rc",
+        "rc2poly"
+      ]
+    },
+    "tf2sos": {
+      "summary": {
+        "en": "Converts a transfer function into second-order sections.",
+        "pt": "Converte uma função de transferência em seções de segunda ordem."
+      },
+      "syntax": [
+        {
+          "code": "sos = tf2sos(b, a)",
+          "en": "Section matrix with the gain absorbed in it.",
+          "pt": "Matriz de seções com o ganho absorvido nela."
+        },
+        {
+          "code": "[sos, g] = tf2sos(b, a)",
+          "en": "Also returns the overall gain separately.",
+          "pt": "Retorna também o ganho global separadamente."
+        },
+        {
+          "code": "[sos, g] = tf2sos(b, a, order, scale)",
+          "en": "Chooses `'up'` or `'down'` ordering and `'none'`, `'inf'` or `'two'` scaling.",
+          "pt": "Escolhe a ordem `'up'` ou `'down'` e a escala `'none'`, `'inf'` ou `'two'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, in powers of `z^-1`.",
+          "pt": "Coeficientes do numerador, em potências de `z^-1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, in powers of `z^-1`, with `a(1)` not zero.",
+          "pt": "Coeficientes do denominador, em potências de `z^-1`, com `a(1)` diferente de zero."
+        },
+        {
+          "name": "order",
+          "en": "`'down'` (default) puts the poles closest to the unit circle last; `'up'` puts them first.",
+          "pt": "`'down'` (padrão) coloca por último os polos mais próximos do círculo unitário; `'up'` coloca esses polos primeiro."
+        },
+        {
+          "name": "scale",
+          "en": "`'none'` (default), `'inf'` or `'two'`: scale the sections by the infinity norm or the 2-norm to reduce overflow.",
+          "pt": "`'none'` (padrão), `'inf'` ou `'two'`: escala as seções pela norma infinito ou pela norma 2 para reduzir overflow."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`, with `a0 = 1`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`, com `a0 = 1`."
+        },
+        {
+          "name": "g",
+          "en": "Overall gain. With one output it is folded into the first section.",
+          "pt": "Ganho global. Com uma saída, ele é incorporado à primeira seção."
+        }
+      ],
+      "description": {
+        "en": "A high-order filter in direct form is sensitive to rounding of its coefficients. Splitting it into a cascade of second-order sections, each holding a pair of poles and a pair of zeros, keeps it well behaved. `tf2sos` finds the roots of `b` and `a` and pairs each pole with a nearby zero.\n\nUse the result with `sosfilt` to filter, or with `sos2tf` to check that it multiplies back to the original polynomials. Scaling with `'inf'` or `'two'` lowers the chance of overflow in fixed-point implementations.",
+        "pt": "Um filtro de ordem alta na forma direta é sensível ao arredondamento dos coeficientes. Dividi-lo em uma cascata de seções de segunda ordem, cada uma com um par de polos e um par de zeros, o mantém bem comportado. `tf2sos` encontra as raízes de `b` e `a` e emparelha cada polo com um zero próximo.\n\nUse o resultado com `sosfilt` para filtrar, ou com `sos2tf` para conferir que o produto volta aos polinômios originais. A escala com `'inf'` ou `'two'` reduz a chance de overflow em implementações de ponto fixo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A second-order filter as one section",
+            "pt": "Um filtro de segunda ordem como uma seção"
+          },
+          "code": "[sos, g] = tf2sos([1 2 1], [1 -0.5 0.06]);\ndisp(sos)\ndisp(g)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Third order with infinity-norm scaling",
+            "pt": "Terceira ordem com escala pela norma infinito"
+          },
+          "code": "[sos, g] = tf2sos([1 1 0.25], [1 -1 0.5 0.1], 'down', 'inf');\ndisp(round(sos*1e4)/1e4)\ndisp(round(g*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sos2tf",
+        "zp2sos",
+        "ss2sos",
+        "sosfilt",
+        "tf2zpk"
+      ],
+      "notes": {
+        "en": "Two cases differ from MATLAB. When the numerator has a repeated root at z = 1 or -1 (as in `butter` designs), the order and values of the roots follow rounding noise in the coefficients, so the sections can differ slightly (for example a section `[1 2.0008 1.0008]` where the exact one is `[1 2 1]`). When several poles are tied at the origin, as in `tf2sos([1 2 3 4], [1 0.5])`, MATLAB keeps the pole at -0.5 alone and MatLivre keeps one of the poles at the origin.",
+        "pt": "Dois casos diferem do MATLAB. Quando o numerador tem uma raiz repetida em z = 1 ou -1 (como nos projetos de `butter`), a ordem e os valores das raízes seguem o ruído de arredondamento dos coeficientes, então as seções podem diferir um pouco (por exemplo uma seção `[1 2.0008 1.0008]` onde a exata é `[1 2 1]`). Quando vários polos estão empatados na origem, como em `tf2sos([1 2 3 4], [1 0.5])`, o MATLAB mantém sozinho o polo em -0.5 e o MatLivre mantém um dos polos da origem."
+      }
+    },
+    "tf2ss": {
+      "summary": {
+        "en": "Converts a transfer function into a state-space model.",
+        "pt": "Converte uma função de transferência em um modelo de espaço de estados."
+      },
+      "syntax": [
+        {
+          "code": "[A, B, C, D] = tf2ss(num, den)",
+          "en": "Controller canonical form of the transfer function.",
+          "pt": "Forma canônica de controlador da função de transferência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "num",
+          "en": "Numerator coefficients in descending powers. A matrix has one row per output.",
+          "pt": "Coeficientes do numerador em potências decrescentes. Uma matriz tem uma linha por saída."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients in descending powers, a row vector. The numerator may not be longer than it.",
+          "pt": "Coeficientes do denominador em potências decrescentes, um vetor linha. O numerador não pode ser maior que ele."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "State matrix, `(n-1)`-by-`(n-1)` for a denominator with `n` coefficients, with the negated denominator in its first row.",
+          "pt": "Matriz de estados, `(n-1)` por `(n-1)` para um denominador com `n` coeficientes, com o denominador negado na primeira linha."
+        },
+        {
+          "name": "B",
+          "en": "Input matrix, a column with a 1 in the first position.",
+          "pt": "Matriz de entrada, uma coluna com 1 na primeira posição."
+        },
+        {
+          "name": "C",
+          "en": "Output matrix, one row per row of `num`.",
+          "pt": "Matriz de saída, uma linha para cada linha de `num`."
+        },
+        {
+          "name": "D",
+          "en": "Direct feedthrough, one entry per row of `num`.",
+          "pt": "Transmissão direta, um valor para cada linha de `num`."
+        }
+      ],
+      "description": {
+        "en": "The transfer function is realized in controller canonical form: the first row of `A` holds the negated denominator coefficients (after dividing by `den(1)`), the rest of `A` shifts the states, and `C` holds the numerator terms. The same model works for continuous time (powers of `s`) and discrete time (powers of `z`), since only the coefficients matter.\n\nGoing back, `ss2tf` returns the same polynomials and `ss2zp` gives the zeros and poles.",
+        "pt": "A função de transferência é realizada na forma canônica de controlador: a primeira linha de `A` guarda os coeficientes do denominador negados (após dividir por `den(1)`), o restante de `A` desloca os estados e `C` guarda os termos do numerador. O mesmo modelo serve para tempo contínuo (potências de `s`) e discreto (potências de `z`), pois só os coeficientes importam.\n\nNo caminho de volta, `ss2tf` devolve os mesmos polinômios e `ss2zp` dá zeros e polos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Third-order transfer function",
+            "pt": "Função de transferência de terceira ordem"
+          },
+          "code": "[A, B, C, D] = tf2ss([1 0 2], [1 3 2 1]);\ndisp(A)\ndisp(B.')\ndisp(C)\ndisp(D)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ss2tf",
+        "ss2zp",
+        "zp2ss",
+        "sos2ss"
+      ]
+    },
+    "tf2zp": {
+      "summary": {
+        "en": "Finds the zeros, poles and gain of a transfer function written in descending powers.",
+        "pt": "Encontra os zeros, os polos e o ganho de uma função de transferência escrita em potências decrescentes."
+      },
+      "syntax": [
+        {
+          "code": "[z, p, k] = tf2zp(num, den)",
+          "en": "Roots of `num` and `den`, and the gain.",
+          "pt": "Raízes de `num` e `den`, e o ganho."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "num",
+          "en": "Numerator coefficients in descending powers. A matrix has one row per output.",
+          "pt": "Coeficientes do numerador em potências decrescentes. Uma matriz tem uma linha por saída."
+        },
+        {
+          "name": "den",
+          "en": "Denominator coefficients in descending powers, a row vector, with a nonzero first element.",
+          "pt": "Coeficientes do denominador em potências decrescentes, um vetor linha, com o primeiro elemento diferente de zero."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Zeros, one column per row of `num`.",
+          "pt": "Zeros, uma coluna para cada linha de `num`."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the poles.",
+          "pt": "Vetor coluna com os polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain, `num(1)/den(1)` for each row of `num`.",
+          "pt": "Ganho, `num(1)/den(1)` para cada linha de `num`."
+        }
+      ],
+      "description": {
+        "en": "The zeros are the roots of `num`, the poles are the roots of `den`, and the gain is the ratio of the leading coefficients. Because the coefficients are read as descending powers of `s` (or `z`), a numerator shorter than the denominator simply has fewer zeros. This is the difference from `tf2zpk`, which reads both as powers of `z^-1`.\n\nThe numerator may not have more coefficients than the denominator (the function would not be proper).",
+        "pt": "Os zeros são as raízes de `num`, os polos são as raízes de `den` e o ganho é a razão dos coeficientes líderes. Como os coeficientes são lidos como potências decrescentes de `s` (ou `z`), um numerador mais curto que o denominador simplesmente tem menos zeros. Essa é a diferença para `tf2zpk`, que lê ambos como potências de `z^-1`.\n\nO numerador não pode ter mais coeficientes que o denominador (a função não seria própria)."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Roots of a second-order transfer function",
+            "pt": "Raízes de uma função de transferência de segunda ordem"
+          },
+          "code": "[z, p, k] = tf2zp([2 0 -2], [1 -0.5 0.06]);\ndisp(z.')\ndisp(round(p.'*1e4)/1e4)\ndisp(k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2zpk",
+        "zp2tf",
+        "tf2sos",
+        "roots"
+      ]
+    },
+    "tf2zpk": {
+      "summary": {
+        "en": "Finds the zeros, poles and gain of a discrete transfer function written in powers of z^-1.",
+        "pt": "Encontra os zeros, os polos e o ganho de uma função de transferência discreta escrita em potências de z^-1."
+      },
+      "syntax": [
+        {
+          "code": "[z, p, k] = tf2zpk(b, a)",
+          "en": "Zeros, poles and gain.",
+          "pt": "Zeros, polos e ganho."
+        },
+        {
+          "code": "[z, p, k] = tf2zpk(b)",
+          "en": "Same with a denominator of 1.",
+          "pt": "O mesmo, com denominador 1."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, in ascending powers of `z^-1`.",
+          "pt": "Coeficientes do numerador, em potências crescentes de `z^-1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, in ascending powers of `z^-1` (default 1).",
+          "pt": "Coeficientes do denominador, em potências crescentes de `z^-1` (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Column vector with the zeros.",
+          "pt": "Vetor coluna com os zeros."
+        },
+        {
+          "name": "p",
+          "en": "Column vector with the poles.",
+          "pt": "Vetor coluna com os polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain: the first nonzero coefficient of `b` divided by `a(1)`.",
+          "pt": "Ganho: o primeiro coeficiente não nulo de `b` dividido por `a(1)`."
+        }
+      ],
+      "description": {
+        "en": "This is the form that `filter` uses. The two polynomials are first padded to the same length, so a numerator shorter than the denominator gets extra zeros at the origin. In the example, `b = [1 2]` and `a = [1 3 2 1]` give a zero at -2 and another at 0, because `1 + 2 z^-1` over a third-order denominator is `(z^2 + 2 z) / (z^3 + 3 z^2 + 2 z + 1)`.\n\n`tf2zp` instead reads descending powers and does not add zeros at the origin.",
+        "pt": "Esta é a forma que `filter` usa. Os dois polinômios são primeiro completados até o mesmo comprimento, então um numerador mais curto que o denominador ganha zeros extras na origem. No exemplo, `b = [1 2]` e `a = [1 3 2 1]` dão um zero em -2 e outro em 0, porque `1 + 2 z^-1` sobre um denominador de terceira ordem é `(z^2 + 2 z) / (z^3 + 3 z^2 + 2 z + 1)`.\n\nJá `tf2zp` lê potências decrescentes e não acrescenta zeros na origem."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zeros at the origin from the padding",
+            "pt": "Zeros na origem por causa do preenchimento"
+          },
+          "code": "[z, p, k] = tf2zpk([1 2], [1 3 2 1]);\ndisp(z.')\ndisp(round(p.'*1e4)/1e4)\ndisp(k)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2zp",
+        "zp2tf",
+        "eqtflength",
+        "tf2sos",
+        "zplane"
+      ]
+    },
+    "zp2sos": {
+      "summary": {
+        "en": "Converts zeros, poles and gain into second-order sections.",
+        "pt": "Converte zeros, polos e ganho em seções de segunda ordem."
+      },
+      "syntax": [
+        {
+          "code": "sos = zp2sos(z, p, k)",
+          "en": "Section matrix with the gain absorbed in it.",
+          "pt": "Matriz de seções com o ganho absorvido nela."
+        },
+        {
+          "code": "[sos, g] = zp2sos(z, p, k)",
+          "en": "Also returns the overall gain separately.",
+          "pt": "Retorna também o ganho global separadamente."
+        },
+        {
+          "code": "[sos, g] = zp2sos(z, p, k, order, scale)",
+          "en": "Chooses `'up'` or `'down'` ordering and `'none'`, `'inf'` or `'two'` scaling.",
+          "pt": "Escolhe a ordem `'up'` ou `'down'` e a escala `'none'`, `'inf'` ou `'two'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "z",
+          "en": "Zeros, as a vector. Complex zeros must come in conjugate pairs.",
+          "pt": "Zeros, em um vetor. Zeros complexos devem vir em pares conjugados."
+        },
+        {
+          "name": "p",
+          "en": "Poles, as a vector. Complex poles must come in conjugate pairs. There cannot be more zeros than poles.",
+          "pt": "Polos, em um vetor. Polos complexos devem vir em pares conjugados. Não pode haver mais zeros que polos."
+        },
+        {
+          "name": "k",
+          "en": "Gain, a scalar.",
+          "pt": "Ganho, um escalar."
+        },
+        {
+          "name": "order",
+          "en": "`'down'` (default) puts the poles closest to the unit circle last; `'up'` puts them first.",
+          "pt": "`'down'` (padrão) coloca por último os polos mais próximos do círculo unitário; `'up'` coloca esses polos primeiro."
+        },
+        {
+          "name": "scale",
+          "en": "`'none'` (default), `'inf'` or `'two'`: scale the sections by the infinity norm or the 2-norm to reduce overflow.",
+          "pt": "`'none'` (padrão), `'inf'` ou `'two'`: escala as seções pela norma infinito ou pela norma 2 para reduzir overflow."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sos",
+          "en": "L-by-6 matrix, one section per row, `[b0 b1 b2 a0 a1 a2]`, with `a0 = 1`.",
+          "pt": "Matriz L-por-6, uma seção por linha, `[b0 b1 b2 a0 a1 a2]`, com `a0 = 1`."
+        },
+        {
+          "name": "g",
+          "en": "Overall gain. With one output it is folded into the first section.",
+          "pt": "Ganho global. Com uma saída, ele é incorporado à primeira seção."
+        }
+      ],
+      "description": {
+        "en": "Poles are grouped in pairs (complex conjugates together, real poles two at a time) and each pair is matched with the nearest zeros, so every section is a real biquad. This gives a cascade that is far less sensitive to coefficient rounding than the direct form.\n\nThe number of zeros may not exceed the number of poles. Missing zeros are filled with zeros at the origin so each section has three numerator coefficients.",
+        "pt": "Os polos são agrupados em pares (conjugados complexos juntos, polos reais dois a dois) e cada par é combinado com os zeros mais próximos, de modo que cada seção seja um biquad real. Isso gera uma cascata bem menos sensível ao arredondamento dos coeficientes do que a forma direta.\n\nO número de zeros não pode superar o de polos. Zeros que faltam são completados com zeros na origem, para que cada seção tenha três coeficientes no numerador."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Four poles and four zeros",
+            "pt": "Quatro polos e quatro zeros"
+          },
+          "code": "z = [0.5; -0.5; 1; -1];\np = [0.2+0.3i; 0.2-0.3i; 0.6; 0.1];\n[sos, g] = zp2sos(z, p, 2);\ndisp(round(sos*1e4)/1e4)\ndisp(g)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "sos2zp",
+        "tf2sos",
+        "zp2tf",
+        "sos2tf",
+        "zp2ss"
+      ]
+    },
+    "zp2ss": {
+      "summary": {
+        "en": "Converts zeros, poles and gain into a state-space model.",
+        "pt": "Converte zeros, polos e ganho em um modelo de espaço de estados."
+      },
+      "syntax": [
+        {
+          "code": "[A, B, C, D] = zp2ss(z, p, k)",
+          "en": "State-space model with the given zeros, poles and gain.",
+          "pt": "Modelo de espaço de estados com os zeros, polos e ganho dados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "z",
+          "en": "Zeros, as a vector. Complex zeros must come in conjugate pairs.",
+          "pt": "Zeros, em um vetor. Zeros complexos devem vir em pares conjugados."
+        },
+        {
+          "name": "p",
+          "en": "Poles, as a vector, in conjugate pairs where complex.",
+          "pt": "Polos, em um vetor, em pares conjugados quando complexos."
+        },
+        {
+          "name": "k",
+          "en": "Gain, a scalar.",
+          "pt": "Ganho, um escalar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "State matrix, square, one state per pole.",
+          "pt": "Matriz de estados, quadrada, um estado por polo."
+        },
+        {
+          "name": "B",
+          "en": "Input matrix, a column.",
+          "pt": "Matriz de entrada, uma coluna."
+        },
+        {
+          "name": "C",
+          "en": "Output matrix, a row.",
+          "pt": "Matriz de saída, uma linha."
+        },
+        {
+          "name": "D",
+          "en": "Direct feedthrough, nonzero only when there are as many zeros as poles.",
+          "pt": "Transmissão direta, diferente de zero apenas quando há tantos zeros quanto polos."
+        }
+      ],
+      "description": {
+        "en": "The model is built as a cascade of first and second-order stages, one for each real pole or conjugate pair, so `A` has real entries and a block structure. The poles of the system are the eigenvalues of `A`.\n\nThe number of zeros cannot exceed the number of poles. Use `ss2zp` to go back and `ss2tf` to see the polynomial form.",
+        "pt": "O modelo é montado como uma cascata de estágios de primeira e segunda ordem, um para cada polo real ou par conjugado, então `A` tem entradas reais e estrutura em blocos. Os polos do sistema são os autovalores de `A`.\n\nO número de zeros não pode superar o de polos. Use `ss2zp` para voltar e `ss2tf` para ver a forma polinomial."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One zero and two real poles",
+            "pt": "Um zero e dois polos reais"
+          },
+          "code": "[A, B, C, D] = zp2ss(-2, [-1; -2], 3);\ndisp(round(A*1e4)/1e4)\ndisp(B.')\ndisp(round(C*1e4)/1e4)\ndisp(D)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ss2zp",
+        "zp2tf",
+        "tf2ss",
+        "zp2sos"
+      ],
+      "notes": {
+        "en": "When the poles are real and the zeros are real (the usual case for digital designs), MATLAB orders the real poles and assigns the zeros by a rule that depends on both. MatLivre follows the rule used for analog prototypes, so `A`, `B`, `C` and `D` can differ from MATLAB's.",
+        "pt": "Quando polos e zeros são reais (o caso comum em projetos digitais), o MATLAB ordena os polos reais e atribui os zeros por uma regra que depende de ambos. O MatLivre segue a regra usada em protótipos analógicos, então `A`, `B`, `C` e `D` podem diferir dos do MATLAB."
+      }
+    },
+    "zp2tf": {
+      "summary": {
+        "en": "Converts zeros, poles and gain into the polynomial coefficients of a transfer function.",
+        "pt": "Converte zeros, polos e ganho nos coeficientes polinomiais de uma função de transferência."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = zp2tf(z, p, k)",
+          "en": "Numerator and denominator polynomials.",
+          "pt": "Polinômios do numerador e do denominador."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "z",
+          "en": "Zeros, as a column vector (or a matrix with one column per output).",
+          "pt": "Zeros, em um vetor coluna (ou matriz com uma coluna por saída)."
+        },
+        {
+          "name": "p",
+          "en": "Poles, as a column vector.",
+          "pt": "Polos, em um vetor coluna."
+        },
+        {
+          "name": "k",
+          "en": "Gain, a scalar (one value per column of `z`).",
+          "pt": "Ganho, um escalar (um valor por coluna de `z`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, `k` times the polynomial with roots `z`, in descending powers.",
+          "pt": "Coeficientes do numerador, `k` vezes o polinômio de raízes `z`, em potências decrescentes."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, the polynomial with roots `p`, in descending powers.",
+          "pt": "Coeficientes do denominador, o polinômio de raízes `p`, em potências decrescentes."
+        }
+      ],
+      "description": {
+        "en": "The numerator is built by expanding the product of `(s - z)` terms and multiplying by the gain, and the denominator from the poles. When the zeros or poles come in complex conjugate pairs, the coefficients come out real.\n\nUse it to get back to polynomial form for `filter` or `freqz` after you have designed a filter by placing zeros and poles. `tf2zp` is the inverse.",
+        "pt": "O numerador é construído expandindo o produto dos termos `(s - z)` e multiplicando pelo ganho, e o denominador a partir dos polos. Quando zeros ou polos vêm em pares conjugados complexos, os coeficientes saem reais.\n\nUse-a para voltar à forma polinomial e usar `filter` ou `freqz` depois de projetar um filtro posicionando zeros e polos. `tf2zp` é a operação inversa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Polynomials from conjugate poles",
+            "pt": "Polinômios a partir de polos conjugados"
+          },
+          "code": "[b, a] = zp2tf([0.5; -0.5], [0.2+0.3i; 0.2-0.3i], 2);\ndisp(b)\ndisp(a)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tf2zp",
+        "tf2zpk",
+        "zp2sos",
+        "zp2ss"
+      ]
+    },
+    "decimate": {
+      "summary": {
+        "en": "Lowpass-filters a signal and keeps every r-th sample, reducing the sample rate by a factor of r.",
+        "pt": "Filtra um sinal com um passa-baixas e mantém uma amostra a cada r, reduzindo a taxa de amostragem por um fator r."
+      },
+      "syntax": [
+        {
+          "code": "y = decimate(x, r)",
+          "en": "Chebyshev type I IIR filter of order 8, applied forward and backward (zero phase), then keeps every `r`-th sample.",
+          "pt": "Filtro IIR Chebyshev tipo I de ordem 8, aplicado nos dois sentidos (fase zero), mantendo depois uma amostra a cada `r`."
+        },
+        {
+          "code": "y = decimate(x, r, n)",
+          "en": "Uses an IIR filter of order `n`.",
+          "pt": "Usa um filtro IIR de ordem `n`."
+        },
+        {
+          "code": "y = decimate(x, r, 'fir')",
+          "en": "Uses an FIR filter instead of the IIR one.",
+          "pt": "Usa um filtro FIR em vez do IIR."
+        },
+        {
+          "code": "y = decimate(x, r, n, 'fir')",
+          "en": "FIR filter with parameter `n`.",
+          "pt": "Filtro FIR com o parâmetro `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector.",
+          "pt": "Sinal, um vetor."
+        },
+        {
+          "name": "r",
+          "en": "Decimation factor, a positive integer.",
+          "pt": "Fator de decimação, um inteiro positivo."
+        },
+        {
+          "name": "n",
+          "en": "Filter order (IIR) or filter parameter (FIR). Default 8 for IIR.",
+          "pt": "Ordem do filtro (IIR) ou parâmetro do filtro (FIR). Padrão 8 para IIR."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Decimated signal, with `ceil(length(x)/r)` samples.",
+          "pt": "Sinal decimado, com `ceil(length(x)/r)` amostras."
+        }
+      ],
+      "description": {
+        "en": "Keeping every r-th sample of a signal without filtering folds any content above the new Nyquist frequency back into the band (aliasing). `decimate` first removes that content with a lowpass filter whose cutoff is a fraction of the new Nyquist frequency, then discards the samples in between.\n\nThe IIR filter is run forward and backward with `filtfilt`, so it adds no delay but needs a signal long enough for the edge padding: a 20-sample signal with the default filter gave the error \"Data length must be larger than 24 samples\". To only drop samples with no filtering, use `downsample`.",
+        "pt": "Manter uma amostra a cada r de um sinal sem filtrar dobra para dentro da banda todo o conteúdo acima da nova frequência de Nyquist (aliasing). `decimate` primeiro remove esse conteúdo com um filtro passa-baixas cuja frequência de corte é uma fração da nova frequência de Nyquist, e depois descarta as amostras intermediárias.\n\nO filtro IIR é aplicado nos dois sentidos com `filtfilt`, então não adiciona atraso, mas exige um sinal longo o bastante para o preenchimento das bordas: um sinal de 20 amostras com o filtro padrão deu o erro \"Data length must be larger than 24 samples\". Para apenas descartar amostras, sem filtrar, use `downsample`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Decimate a two-tone signal by 4",
+            "pt": "Decimar um sinal de dois tons por 4"
+          },
+          "code": "n = (0:39)';\nx = sin(2*pi*n/20) + sin(2*pi*0.4*n);\ny = decimate(x, 4);\ndisp(size(y))\ndisp(round(y(1:6).'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "FIR filter",
+            "pt": "Filtro FIR"
+          },
+          "code": "n = (0:39)';\nx = sin(2*pi*n/20) + sin(2*pi*0.4*n);\ny = decimate(x, 4, 'fir');\ndisp(size(y))\ndisp(round(y(1:6).'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "downsample",
+        "interp",
+        "resample",
+        "upfirdn",
+        "filtfilt"
+      ],
+      "notes": {
+        "en": "Three limits come from the known-differences list. For `r` of 10 or more, the order-8 Chebyshev filter at cutoff 0.8/r is ill-conditioned, and its coefficients and the filtered values differ from MATLAB's from about the sixth digit. For `r` above 13 MATLAB decimates in stages while MatLivre applies a single filter. Single-precision input is filtered in double and rounded to single, which differs from MATLAB's single arithmetic by about 5e-5 relative.",
+        "pt": "Três limites vêm da lista de diferenças conhecidas. Para `r` igual ou maior que 10, o filtro Chebyshev de ordem 8 com corte em 0.8/r é mal condicionado, e seus coeficientes e os valores filtrados diferem dos do MATLAB a partir do sexto dígito. Para `r` acima de 13, o MATLAB decima em estágios, enquanto o MatLivre aplica um único filtro. Entrada em precisão simples é filtrada em dupla e arredondada para simples, o que difere da aritmética simples do MATLAB em cerca de 5e-5 relativo."
+      }
+    },
+    "downsample": {
+      "summary": {
+        "en": "Keeps every n-th sample of a signal, with no filtering.",
+        "pt": "Mantém uma amostra a cada n de um sinal, sem filtragem."
+      },
+      "syntax": [
+        {
+          "code": "y = downsample(x, n)",
+          "en": "Keeps samples 1, 1+n, 1+2n, and so on.",
+          "pt": "Mantém as amostras 1, 1+n, 1+2n e assim por diante."
+        },
+        {
+          "code": "y = downsample(x, n, phase)",
+          "en": "Starts at offset `phase` (0 to n-1).",
+          "pt": "Começa no deslocamento `phase` (0 a n-1)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector or matrix. For a matrix, the rows are decimated, so each column is a signal.",
+          "pt": "Vetor ou matriz. Em uma matriz, as linhas são decimadas, então cada coluna é um sinal."
+        },
+        {
+          "name": "n",
+          "en": "Downsampling factor, a positive integer.",
+          "pt": "Fator de subamostragem, um inteiro positivo."
+        },
+        {
+          "name": "phase",
+          "en": "Number of samples to skip at the start, from 0 (default) to `n-1`.",
+          "pt": "Número de amostras a pular no início, de 0 (padrão) a `n-1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The kept samples, `ceil((length(x)-phase)/n)` per column.",
+          "pt": "As amostras mantidas, `ceil((length(x)-phase)/n)` por coluna."
+        }
+      ],
+      "description": {
+        "en": "`downsample` only discards samples. If the signal has energy above the new Nyquist frequency, that energy will alias into the result. Use `decimate` to lowpass-filter before discarding.\n\nIt is the opposite of `upsample`, which inserts zeros between samples. Nothing is interpolated in either direction.",
+        "pt": "`downsample` apenas descarta amostras. Se o sinal tem energia acima da nova frequência de Nyquist, essa energia sofre aliasing no resultado. Use `decimate` para filtrar com um passa-baixas antes de descartar.\n\nÉ o oposto de `upsample`, que insere zeros entre as amostras. Nenhuma das duas interpola."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Every third sample, with and without an offset",
+            "pt": "Uma amostra a cada três, com e sem deslocamento"
+          },
+          "code": "x = 1:10;\ndisp(downsample(x, 3))\ndisp(downsample(x, 3, 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "upsample",
+        "decimate",
+        "resample",
+        "interp"
+      ]
+    },
+    "fillgaps": {
+      "summary": {
+        "en": "Replaces missing samples (NaN) by predictions from an autoregressive model fitted to the nearby data.",
+        "pt": "Substitui amostras ausentes (NaN) por previsões de um modelo autorregressivo ajustado aos dados vizinhos."
+      },
+      "syntax": [
+        {
+          "code": "y = fillgaps(x)",
+          "en": "Fills every gap, choosing the model order automatically.",
+          "pt": "Preenche todos os trechos ausentes, escolhendo a ordem do modelo automaticamente."
+        },
+        {
+          "code": "y = fillgaps(x, maxlen)",
+          "en": "Uses at most `maxlen` samples on each side of a gap to fit the model.",
+          "pt": "Usa no máximo `maxlen` amostras de cada lado do trecho para ajustar o modelo."
+        },
+        {
+          "code": "y = fillgaps(x, maxlen, order)",
+          "en": "Uses an autoregressive model of the given order.",
+          "pt": "Usa um modelo autorregressivo da ordem indicada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Real double signal. Gaps are marked with `NaN`.",
+          "pt": "Sinal real em double. Os trechos ausentes são marcados com `NaN`."
+        },
+        {
+          "name": "maxlen",
+          "en": "Maximum number of samples used on each side of a gap (default: all). An empty value means the default.",
+          "pt": "Número máximo de amostras usadas de cada lado do trecho (padrão: todas). Um valor vazio significa o padrão."
+        },
+        {
+          "name": "order",
+          "en": "Order of the autoregressive model. When omitted, it is chosen by minimizing `N*log(e) + 2*order`, where `e` is the model error. It may not exceed `maxlen`.",
+          "pt": "Ordem do modelo autorregressivo. Se omitida, é escolhida minimizando `N*log(e) + 2*order`, em que `e` é o erro do modelo. Não pode ser maior que `maxlen`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Signal with the gaps filled, same size as `x`.",
+          "pt": "Sinal com os trechos preenchidos, do mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "Each gap is estimated twice, once by predicting forward from the samples before it and once by predicting backward from the samples after it, with models fitted by Burg's method. The two predictions are blended with weights that move linearly across the gap, so the values near the start of a gap lean on the forward estimate and those near its end on the backward one.\n\nIt works best on signals that look like a stationary process, such as a sum of sinusoids with some noise. A gap at the very start or end uses only the one-sided estimate. A signal with no valid sample is returned as all `NaN`.",
+        "pt": "Cada trecho é estimado duas vezes: uma prevendo para frente a partir das amostras anteriores e outra prevendo para trás a partir das posteriores, com modelos ajustados pelo método de Burg. As duas previsões são combinadas com pesos que variam linearmente ao longo do trecho, de modo que os valores perto do início do trecho se apoiam mais na estimativa para frente e os perto do fim, na estimativa para trás.\n\nFunciona melhor em sinais que se parecem com um processo estacionário, como uma soma de senoides com algum ruído. Um trecho logo no início ou no fim usa só a estimativa de um lado. Um sinal sem nenhuma amostra válida volta todo `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fill a gap in a sinusoid",
+            "pt": "Preencher um trecho ausente em uma senoide"
+          },
+          "code": "n = (0:29)';\nx = sin(2*pi*n/12);\ny = x;\ny(10:12) = NaN;\nf = fillgaps(y, 10, 4);\ndisp(round([x(9:13) f(9:13)]*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "interp1",
+        "hampel",
+        "arburg",
+        "isnan"
+      ],
+      "notes": {
+        "en": "Complex input is not supported (it raises the error \"fillgaps: complex input is not supported.\"). With two gaps and automatic order, the model for the first gap can be fitted to data that include the extension of the second gap; the order search then picks the largest order, where the fit is degenerate, and the first gap can differ from MATLAB's (0.046 against -0.004 in a test case).",
+        "pt": "Entrada complexa não é suportada (gera o erro \"fillgaps: complex input is not supported.\"). Com dois trechos e ordem automática, o modelo do primeiro trecho pode ser ajustado a dados que incluem a extensão do segundo trecho; a busca de ordem escolhe então a maior ordem, em que o ajuste é degenerado, e o primeiro trecho pode diferir do MATLAB (0.046 contra -0.004 em um caso de teste)."
+      }
+    },
+    "interp": {
+      "summary": {
+        "en": "Increases the sample rate of a signal by an integer factor, interpolating the new samples with a lowpass filter.",
+        "pt": "Aumenta a taxa de amostragem de um sinal por um fator inteiro, interpolando as novas amostras com um filtro passa-baixas."
+      },
+      "syntax": [
+        {
+          "code": "y = interp(x, r)",
+          "en": "Interpolates by `r` with the default filter.",
+          "pt": "Interpola por `r` com o filtro padrão."
+        },
+        {
+          "code": "y = interp(x, r, l, cutoff)",
+          "en": "Sets the filter length parameter `l` (in input samples) and the cutoff frequency.",
+          "pt": "Define o parâmetro de comprimento `l` do filtro (em amostras de entrada) e a frequência de corte."
+        },
+        {
+          "code": "[y, b] = interp(x, r, l, cutoff)",
+          "en": "Also returns the filter coefficients.",
+          "pt": "Retorna também os coeficientes do filtro."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal, a vector.",
+          "pt": "Sinal, um vetor."
+        },
+        {
+          "name": "r",
+          "en": "Interpolation factor, a positive integer.",
+          "pt": "Fator de interpolação, um inteiro positivo."
+        },
+        {
+          "name": "l",
+          "en": "Filter length parameter (default 4). The filter has `2*l*r+1` coefficients.",
+          "pt": "Parâmetro de comprimento do filtro (padrão 4). O filtro tem `2*l*r+1` coeficientes."
+        },
+        {
+          "name": "cutoff",
+          "en": "Cutoff frequency as a fraction of the input Nyquist frequency, between 0 and 1.",
+          "pt": "Frequência de corte como fração da frequência de Nyquist da entrada, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Interpolated signal, with `r*length(x)` samples.",
+          "pt": "Sinal interpolado, com `r*length(x)` amostras."
+        },
+        {
+          "name": "b",
+          "en": "FIR filter used for the interpolation, a column of `2*l*r+1` coefficients.",
+          "pt": "Filtro FIR usado na interpolação, uma coluna de `2*l*r+1` coeficientes."
+        }
+      ],
+      "description": {
+        "en": "The signal is first expanded by inserting `r-1` zeros after each sample, and then a lowpass FIR filter removes the spectral copies that this creates and fills the zeros with interpolated values. The original samples are kept at positions `1, 1+r, 1+2r...`.\n\nUse it when you need more points on a smooth, band-limited signal. For a rational factor (such as 3/2) use `resample`, and for a general filter and factors use `upfirdn`.",
+        "pt": "O sinal é primeiro expandido inserindo `r-1` zeros depois de cada amostra, e então um filtro FIR passa-baixas remove as cópias espectrais criadas e preenche os zeros com valores interpolados. As amostras originais são mantidas nas posições `1, 1+r, 1+2r...`.\n\nUse quando precisar de mais pontos em um sinal suave e de banda limitada. Para um fator racional (como 3/2) use `resample`, e para um filtro e fatores gerais use `upfirdn`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Interpolate a sinusoid by 3",
+            "pt": "Interpolar uma senoide por 3"
+          },
+          "code": "x = sin(2*pi*(0:19)'/10);\ny = interp(x, 3);\ndisp(size(y))\ndisp(round(y(1:8).'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Filter returned as second output",
+            "pt": "Filtro devolvido como segunda saída"
+          },
+          "code": "x = sin(2*pi*(0:19)'/10);\n[y, b] = interp(x, 3, 4, 0.5);\ndisp(size(y))\ndisp(size(b))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "decimate",
+        "resample",
+        "upsample",
+        "upfirdn",
+        "interp1"
+      ]
+    },
+    "upfirdn": {
+      "summary": {
+        "en": "Upsamples by p, filters with an FIR filter and downsamples by q in a single call.",
+        "pt": "Faz sobreamostragem por p, filtra com um filtro FIR e faz subamostragem por q em uma única chamada."
+      },
+      "syntax": [
+        {
+          "code": "y = upfirdn(x, h)",
+          "en": "Filters `x` with `h` (a convolution).",
+          "pt": "Filtra `x` com `h` (uma convolução)."
+        },
+        {
+          "code": "y = upfirdn(x, h, p)",
+          "en": "Upsamples by `p` before filtering.",
+          "pt": "Faz sobreamostragem por `p` antes de filtrar."
+        },
+        {
+          "code": "y = upfirdn(x, h, p, q)",
+          "en": "Also keeps every `q`-th output sample.",
+          "pt": "Também mantém uma amostra de saída a cada `q`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Input signal. For a matrix, each column is filtered.",
+          "pt": "Sinal de entrada. Em uma matriz, cada coluna é filtrada."
+        },
+        {
+          "name": "h",
+          "en": "FIR filter coefficients, a vector.",
+          "pt": "Coeficientes do filtro FIR, um vetor."
+        },
+        {
+          "name": "p",
+          "en": "Upsampling factor (default 1).",
+          "pt": "Fator de sobreamostragem (padrão 1)."
+        },
+        {
+          "name": "q",
+          "en": "Downsampling factor (default 1).",
+          "pt": "Fator de subamostragem (padrão 1)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Output signal, with `ceil(((length(x)-1)*p + length(h))/q)` samples per column.",
+          "pt": "Sinal de saída, com `ceil(((length(x)-1)*p + length(h))/q)` amostras por coluna."
+        }
+      ],
+      "description": {
+        "en": "The three steps of a sample-rate change (insert `p-1` zeros between samples, filter, keep every `q`-th sample) are written as one operation. This is the way to change the rate by a ratio `p/q`, and also to build a filter bank or a simple interpolator.\n\nThe output includes the full transient of the filter, so it is longer than the input. With the defaults `p = q = 1` the result is the same as `conv(x, h)`.",
+        "pt": "Os três passos de uma mudança de taxa de amostragem (inserir `p-1` zeros entre as amostras, filtrar e manter uma amostra a cada `q`) são escritos como uma só operação. É o modo de mudar a taxa por uma razão `p/q`, e também de montar um banco de filtros ou um interpolador simples.\n\nA saída inclui o transitório completo do filtro, então é mais longa que a entrada. Com os padrões `p = q = 1`, o resultado é igual ao de `conv(x, h)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Filter only, then upsample by 2",
+            "pt": "Só filtrar, depois sobreamostrar por 2"
+          },
+          "code": "x = [1 2 3];\nh = [1 1 1];\ndisp(upfirdn(x, h))\ndisp(upfirdn(x, h, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Rate change by 2/3",
+            "pt": "Mudança de taxa por 2/3"
+          },
+          "code": "y = upfirdn([1 2 3 4 5 6], [1 1 1], 2, 3);\ndisp(y)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "resample",
+        "upsample",
+        "downsample",
+        "interp",
+        "conv"
+      ]
+    },
+    "upsample": {
+      "summary": {
+        "en": "Inserts zeros between samples to raise the sample rate by an integer factor.",
+        "pt": "Insere zeros entre as amostras para aumentar a taxa de amostragem por um fator inteiro."
+      },
+      "syntax": [
+        {
+          "code": "y = upsample(x, n)",
+          "en": "Puts `n-1` zeros after each sample.",
+          "pt": "Coloca `n-1` zeros depois de cada amostra."
+        },
+        {
+          "code": "y = upsample(x, n, phase)",
+          "en": "Shifts the samples by `phase` positions (0 to n-1).",
+          "pt": "Desloca as amostras em `phase` posições (0 a n-1)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector or matrix. For a matrix, the rows are expanded, so each column is a signal.",
+          "pt": "Vetor ou matriz. Em uma matriz, as linhas são expandidas, então cada coluna é um sinal."
+        },
+        {
+          "name": "n",
+          "en": "Upsampling factor, a positive integer.",
+          "pt": "Fator de sobreamostragem, um inteiro positivo."
+        },
+        {
+          "name": "phase",
+          "en": "Number of zeros placed before the first sample, from 0 (default) to `n-1`.",
+          "pt": "Número de zeros colocados antes da primeira amostra, de 0 (padrão) a `n-1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Expanded signal with `n*length(x)` samples per column.",
+          "pt": "Sinal expandido com `n*length(x)` amostras por coluna."
+        }
+      ],
+      "description": {
+        "en": "Zero insertion is the first half of interpolation: it creates spectral copies of the signal that a lowpass filter must remove afterwards. `upsample` does not filter or interpolate, so `interp` or `upfirdn` is what you want if you need smooth values between the samples.\n\nIt is the opposite of `downsample`: `downsample(upsample(x, n), n)` returns `x`.",
+        "pt": "Inserir zeros é a primeira metade da interpolação: cria cópias espectrais do sinal que um filtro passa-baixas deve remover depois. `upsample` não filtra nem interpola, então `interp` ou `upfirdn` é o que se quer para obter valores suaves entre as amostras.\n\nÉ o oposto de `downsample`: `downsample(upsample(x, n), n)` devolve `x`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Zero insertion with and without phase",
+            "pt": "Inserção de zeros com e sem fase"
+          },
+          "code": "x = [1 2 3];\ndisp(upsample(x, 3))\ndisp(upsample(x, 3, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "downsample",
+        "interp",
+        "upfirdn",
+        "resample"
+      ]
+    }
+  }
+}

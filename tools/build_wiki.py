@@ -40,8 +40,8 @@ from wiki_guide import L, esc, slug  # noqa: E402
 SITE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = 'https://campuslivre.github.io'
 REPO = 'https://github.com/campuslivre/matlivre'
-VERSION = 'v0.1.4'
-TODAY = '2026-11-07'
+VERSION = 'v0.1.9'
+TODAY = '2026-11-17'
 DATA_DIR = os.path.join(SITE, 'tools', 'wiki-data')
 CACHE = os.path.join(SITE, 'tools', 'wiki-cache', 'outputs.json')
 WIKI = os.path.join(SITE, 'matlivre', 'wiki')
@@ -635,8 +635,8 @@ def functions_index(ctx, cats, rel, subs, slugs, nxt_names, n_rel, n_pt, topics)
     nxt_note = G.P(f'Names with a dashed outline are in the repository and will be in the next release ({len(nxt_names)} so far).',
                    f'Os nomes com contorno tracejado estão no repositório e estarão na próxima versão ({len(nxt_names)} até agora).', ' class="note"') if nxt_names else ''
     body = (G.H('h1', 'Every function MatLivre covers', 'Todas as funções que o MatLivre cobre')
-            + G.P(f'{n_rel:,} functions, methods and operators from MATLAB R2023b and the Symbolic Math Toolbox, as of MatLivre {VERSION[1:]}. Each name opens its own page.',
-                  f'{n_pt} funções, métodos e operadores do MATLAB R2023b e do Symbolic Math Toolbox, na versão {VERSION[1:]} do MatLivre. Cada nome abre a sua própria página.', ' class="lead"')
+            + G.P(f'{n_rel:,} functions, methods and operators from MATLAB R2023b, the Symbolic Math Toolbox and the Signal Processing Toolbox, as of MatLivre {VERSION[1:]}. Each name opens its own page.',
+                  f'{n_pt} funções, métodos e operadores do MATLAB R2023b, do Symbolic Math Toolbox e do Signal Processing Toolbox, na versão {VERSION[1:]} do MatLivre. Cada nome abre a sua própria página.', ' class="lead"')
             + f'<div class="fn-search"><label for="fn-q" class="sr-only">{L("Filter", "Filtrar")}</label><input id="fn-q" type="search" autocomplete="off" spellcheck="false" placeholder="plot, ode45, containers.Map ..."><span id="fn-status" class="fn-status" aria-live="polite"></span></div>'
             + G.P('Category names follow the MATLAB function reference. Language keywords (<code>if</code>, <code>for</code>, <code>while</code>, <code>switch</code>, <code>try</code>, <code>classdef</code>, <code>function</code> and so on) are part of the language and not listed.',
                   'Os nomes das categorias seguem a referência de funções do MATLAB. As palavras-chave da linguagem (<code>if</code>, <code>for</code>, <code>while</code>, <code>switch</code>, <code>try</code>, <code>classdef</code>, <code>function</code> e outras) fazem parte da linguagem e não aparecem na lista.')
@@ -644,9 +644,9 @@ def functions_index(ctx, cats, rel, subs, slugs, nxt_names, n_rel, n_pt, topics)
             + f'<details class="fn-jump" open><summary>{L("Categories", "Categorias")}</summary><nav class="fn-jump-list" aria-label="Categories">{"".join(jump)}</nav></details>'
             + f'<div id="fn-all">{"".join(secs)}</div><p id="fn-none" class="note" hidden>{L("No function matches your search.", "Nenhuma função corresponde à pesquisa.")}</p>')
     return shell(ctx, title_en=f'MatLivre function reference | {n_rel:,} MATLAB functions covered', title_pt=f'Referência de funções do MatLivre | {n_pt} funções do MATLAB cobertas',
-                 desc_en=f'Searchable list of the {n_rel:,} MATLAB R2023b and Symbolic Math Toolbox functions MatLivre implements, each with its own page.',
-                 desc_pt=f'Lista pesquisável das {n_pt} funções do MATLAB R2023b e do Symbolic Math Toolbox implementadas pelo MatLivre, cada uma com sua página.',
-                 keywords='MatLivre functions, MATLAB function list, MATLAB compatibility, which MATLAB functions work in MatLivre, Octave vs MATLAB functions, Symbolic Math Toolbox functions, funções MATLAB, compatibilidade MATLAB, lista de funções MatLivre',
+                 desc_en=f'Searchable list of the {n_rel:,} MATLAB R2023b, Symbolic Math Toolbox and Signal Processing Toolbox functions MatLivre implements, each with its own page.',
+                 desc_pt=f'Lista pesquisável das {n_pt} funções do MATLAB R2023b, do Symbolic Math Toolbox e do Signal Processing Toolbox implementadas pelo MatLivre, cada uma com sua página.',
+                 keywords='MatLivre functions, MATLAB function list, MATLAB compatibility, which MATLAB functions work in MatLivre, Octave vs MATLAB functions, Symbolic Math Toolbox functions, Signal Processing Toolbox functions, MATLAB filter design, funções MATLAB, compatibilidade MATLAB, lista de funções MatLivre',
                  body=body, topics=topics, current='functions', crumbs=[('Functions', None)],
                  scripts=f'\n  <script src="{ctx.root}assets/functions.js" defer></script>')
 

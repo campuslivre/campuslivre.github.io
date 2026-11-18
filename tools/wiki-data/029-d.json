@@ -1,0 +1,1456 @@
+{
+  "functions": {
+    "ac2poly": {
+      "summary": {
+        "en": "Converts an autocorrelation sequence to the coefficients of the prediction polynomial and the final prediction error.",
+        "pt": "Converte uma sequência de autocorrelação nos coeficientes do polinômio de predição e no erro final de predição."
+      },
+      "syntax": [
+        {
+          "code": "a = ac2poly(r)",
+          "en": "Returns the prediction polynomial of order `length(r)-1`.",
+          "pt": "Retorna o polinômio de predição de ordem `length(r)-1`."
+        },
+        {
+          "code": "[a, efinal] = ac2poly(r)",
+          "en": "Also returns the prediction error of the last order.",
+          "pt": "Retorna também o erro de predição da última ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Autocorrelation sequence as a vector, with the zero-lag value first.",
+          "pt": "Sequência de autocorrelação, em vetor, com o valor de atraso zero primeiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` with the prediction polynomial.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]` com o polinômio de predição."
+        },
+        {
+          "name": "efinal",
+          "en": "Prediction error power for the highest order.",
+          "pt": "Potência do erro de predição para a maior ordem."
+        }
+      ],
+      "description": {
+        "en": "The Levinson-Durbin recursion finds the linear predictor of each order that best predicts a sample from the previous ones, given only the autocorrelation. `ac2poly` runs that recursion and keeps the polynomial of the highest order, with the leading 1 included.\n\nUse it when you have an autocorrelation (measured or modeled) and want the all-pole filter `1/A(z)` that has it. The inverse is `poly2ac`.",
+        "pt": "A recursão de Levinson-Durbin acha, para cada ordem, o preditor linear que melhor prevê uma amostra a partir das anteriores, usando apenas a autocorrelação. `ac2poly` executa essa recursão e devolve o polinômio da maior ordem, já com o 1 inicial.\n\nUse quando você tem uma autocorrelação (medida ou modelada) e quer o filtro só de polos `1/A(z)` que a possui. A operação inversa é `poly2ac`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Polynomial from an autocorrelation",
+            "pt": "Polinômio a partir de uma autocorrelação"
+          },
+          "code": "r = [4.1667 2.5 0.1667];\n[a, e] = ac2poly(r);\ndisp(round(a*1000)/1000)\nfprintf('%.3f\\n', e)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poly2ac",
+        "levinson",
+        "ac2rc",
+        "lpc"
+      ]
+    },
+    "ac2rc": {
+      "summary": {
+        "en": "Converts an autocorrelation sequence to reflection coefficients.",
+        "pt": "Converte uma sequência de autocorrelação em coeficientes de reflexão."
+      },
+      "syntax": [
+        {
+          "code": "k = ac2rc(r)",
+          "en": "Returns the reflection coefficients of order `length(r)-1`.",
+          "pt": "Retorna os coeficientes de reflexão de ordem `length(r)-1`."
+        },
+        {
+          "code": "[k, r0] = ac2rc(r)",
+          "en": "Also returns the zero-lag autocorrelation.",
+          "pt": "Retorna também a autocorrelação de atraso zero."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Autocorrelation sequence as a vector, with the zero-lag value first.",
+          "pt": "Sequência de autocorrelação, em vetor, com o valor de atraso zero primeiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Column vector of reflection coefficients, each with magnitude below 1 for a valid autocorrelation.",
+          "pt": "Vetor coluna de coeficientes de reflexão, cada um com módulo menor que 1 para uma autocorrelação válida."
+        },
+        {
+          "name": "r0",
+          "en": "Zero-lag autocorrelation, `r(1)`.",
+          "pt": "Autocorrelação de atraso zero, `r(1)`."
+        }
+      ],
+      "description": {
+        "en": "Reflection coefficients describe the same all-pole model as the prediction polynomial, but a lattice filter built from them stays stable as long as every coefficient has magnitude below 1. They are also what the Levinson-Durbin recursion produces step by step.\n\n`ac2rc` returns them directly from an autocorrelation sequence. In the example the second coefficient is zero, which tells you the sequence is an exact first-order model.",
+        "pt": "Os coeficientes de reflexão descrevem o mesmo modelo só de polos do polinômio de predição, mas um filtro em treliça construído com eles permanece estável enquanto todos tiverem módulo menor que 1. São também o que a recursão de Levinson-Durbin produz passo a passo.\n\n`ac2rc` os devolve diretamente a partir da autocorrelação. No exemplo o segundo coeficiente é zero, o que indica que a sequência é um modelo exato de primeira ordem."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reflection coefficients of an autocorrelation",
+            "pt": "Coeficientes de reflexão de uma autocorrelação"
+          },
+          "code": "r = [4 2 1];\n[k, r0] = ac2rc(r);\ndisp(k.')\ndisp(r0)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rc2ac",
+        "levinson",
+        "schurrc",
+        "poly2rc"
+      ]
+    },
+    "is2rc": {
+      "summary": {
+        "en": "Converts inverse sine parameters to reflection coefficients.",
+        "pt": "Converte parâmetros de seno inverso em coeficientes de reflexão."
+      },
+      "syntax": [
+        {
+          "code": "k = is2rc(isin)",
+          "en": "Returns `k = sin(pi/2 * isin)`.",
+          "pt": "Retorna `k = sin(pi/2 * isin)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "isin",
+          "en": "Vector of inverse sine parameters, each in the range -1 to 1.",
+          "pt": "Vetor de parâmetros de seno inverso, cada um entre -1 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Reflection coefficients, same size as `isin`.",
+          "pt": "Coeficientes de reflexão, do mesmo tamanho de `isin`."
+        }
+      ],
+      "description": {
+        "en": "Inverse sine parameters are a re-scaling of the reflection coefficients, `isin = 2/pi * asin(k)`. They spread values near plus or minus 1 out, which makes them easier to quantize in speech coding.\n\n`is2rc` undoes that mapping. Its inverse is `rc2is`.",
+        "pt": "Os parâmetros de seno inverso são uma mudança de escala dos coeficientes de reflexão, `isin = 2/pi * asin(k)`. Eles espalham os valores próximos de mais ou menos 1, o que facilita a quantização em codificação de voz.\n\n`is2rc` desfaz esse mapeamento. A inversa é `rc2is`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip through inverse sine parameters",
+            "pt": "Ida e volta pelos parâmetros de seno inverso"
+          },
+          "code": "k = [-0.6 0.5];\nisin = rc2is(k);\ndisp(round(isin*10000)/10000)\ndisp(is2rc(isin))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rc2is",
+        "rc2lar",
+        "lar2rc",
+        "poly2rc"
+      ]
+    },
+    "lar2rc": {
+      "summary": {
+        "en": "Converts log area ratios to reflection coefficients.",
+        "pt": "Converte razões de log-área em coeficientes de reflexão."
+      },
+      "syntax": [
+        {
+          "code": "k = lar2rc(g)",
+          "en": "Returns `k = (exp(g)-1) ./ (exp(g)+1)`.",
+          "pt": "Retorna `k = (exp(g)-1) ./ (exp(g)+1)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "g",
+          "en": "Vector of log area ratios.",
+          "pt": "Vetor de razões de log-área."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Reflection coefficients, same size as `g`, each with magnitude below 1.",
+          "pt": "Coeficientes de reflexão, do mesmo tamanho de `g`, todos com módulo menor que 1."
+        }
+      ],
+      "description": {
+        "en": "A log area ratio is `log((1+k)/(1-k))` for a reflection coefficient `k`. In the acoustic tube model of the vocal tract it is the log of the ratio of neighboring section areas, and it is a common choice for quantizing a predictor because any real value maps to a stable coefficient.\n\n`lar2rc` converts them back to reflection coefficients. Its inverse is `rc2lar`.",
+        "pt": "Uma razão de log-área é `log((1+k)/(1-k))` para um coeficiente de reflexão `k`. No modelo de tubos acústicos do trato vocal, é o logaritmo da razão entre as áreas de seções vizinhas, e é uma escolha comum para quantizar um preditor, pois qualquer valor real resulta em um coeficiente estável.\n\n`lar2rc` converte de volta para coeficientes de reflexão. A inversa é `rc2lar`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip through log area ratios",
+            "pt": "Ida e volta pelas razões de log-área"
+          },
+          "code": "k = [-0.6 0.5];\ng = rc2lar(k);\ndisp(round(g*10000)/10000)\ndisp(lar2rc(g))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rc2lar",
+        "rc2is",
+        "is2rc",
+        "poly2rc"
+      ]
+    },
+    "levinson": {
+      "summary": {
+        "en": "Solves the autocorrelation normal equations with the Levinson-Durbin recursion and returns the prediction polynomial.",
+        "pt": "Resolve as equações normais da autocorrelação pela recursão de Levinson-Durbin e retorna o polinômio de predição."
+      },
+      "syntax": [
+        {
+          "code": "a = levinson(r)",
+          "en": "Predictor of order `length(r)-1`.",
+          "pt": "Preditor de ordem `length(r)-1`."
+        },
+        {
+          "code": "a = levinson(r, n)",
+          "en": "Predictor of order `n`.",
+          "pt": "Preditor de ordem `n`."
+        },
+        {
+          "code": "[a, e, k] = levinson(r, n)",
+          "en": "Also returns the prediction error and the reflection coefficients.",
+          "pt": "Retorna também o erro de predição e os coeficientes de reflexão."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Autocorrelation sequence, zero-lag value first.",
+          "pt": "Sequência de autocorrelação, com o valor de atraso zero primeiro."
+        },
+        {
+          "name": "n",
+          "en": "Order of the predictor. Default is `length(r)-1`.",
+          "pt": "Ordem do preditor. O padrão é `length(r)-1`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(n+1)]`.",
+          "pt": "Vetor linha `[1 a(2) ... a(n+1)]`."
+        },
+        {
+          "name": "e",
+          "en": "Prediction error power of order `n`.",
+          "pt": "Potência do erro de predição de ordem `n`."
+        },
+        {
+          "name": "k",
+          "en": "Column vector of the `n` reflection coefficients.",
+          "pt": "Vetor coluna dos `n` coeficientes de reflexão."
+        }
+      ],
+      "description": {
+        "en": "The recursion solves a Toeplitz system for the linear predictor of each order using the result of the previous order, so it needs about `n^2` operations instead of `n^3`. The result `a` is such that filtering a signal with `a` leaves the smallest possible error power `e` for that autocorrelation.\n\nUse it to fit an all-pole model when you already have the autocorrelation. To start from a signal, use `lpc` or `aryule`.",
+        "pt": "A recursão resolve um sistema de Toeplitz para o preditor linear de cada ordem aproveitando o resultado da ordem anterior, então precisa de cerca de `n^2` operações em vez de `n^3`. O resultado `a` é tal que filtrar um sinal com `a` deixa a menor potência de erro `e` possível para aquela autocorrelação.\n\nUse para ajustar um modelo só de polos quando você já tem a autocorrelação. Para partir de um sinal, use `lpc` ou `aryule`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Predictor from an autocorrelation",
+            "pt": "Preditor a partir de uma autocorrelação"
+          },
+          "code": "r = [2 1 0.5];\n[a, e, k] = levinson(r);\ndisp(a)\ndisp(e)\ndisp(k.')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lpc",
+        "aryule",
+        "rlevinson",
+        "schurrc",
+        "ac2poly"
+      ]
+    },
+    "lpc": {
+      "summary": {
+        "en": "Fits an all-pole (linear predictive coding) model of a given order to a signal.",
+        "pt": "Ajusta a um sinal um modelo só de polos (codificação preditiva linear) de uma dada ordem."
+      },
+      "syntax": [
+        {
+          "code": "a = lpc(x, p)",
+          "en": "Returns the predictor polynomial of order `p`.",
+          "pt": "Retorna o polinômio de predição de ordem `p`."
+        },
+        {
+          "code": "[a, g] = lpc(x, p)",
+          "en": "Also returns the prediction error variance.",
+          "pt": "Retorna também a variância do erro de predição."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a vector, or a matrix whose columns are separate signals.",
+          "pt": "Sinal em vetor, ou matriz cujas colunas são sinais separados."
+        },
+        {
+          "name": "p",
+          "en": "Order of the model, a positive integer smaller than `length(x)`.",
+          "pt": "Ordem do modelo, um inteiro positivo menor que `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]`, one row per signal for matrix input.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]`, uma linha por sinal quando a entrada é matriz."
+        },
+        {
+          "name": "g",
+          "en": "Variance of the prediction error, which is the gain of the all-pole model `sqrt(g)/A(z)`.",
+          "pt": "Variância do erro de predição, que é o ganho do modelo só de polos `sqrt(g)/A(z)`."
+        }
+      ],
+      "description": {
+        "en": "`lpc` estimates the autocorrelation of `x` and solves for the predictor with the Levinson-Durbin recursion. Filtering `x` with the returned `a` gives the prediction error (the residual), and `1/A(z)` is a smooth model of the spectrum of `x` with `p/2` resonances at most.\n\nLPC is the basis of speech coding and of formant estimation. For the same estimate with the reflection coefficients as a named output, see `aryule`.",
+        "pt": "`lpc` estima a autocorrelação de `x` e resolve o preditor com a recursão de Levinson-Durbin. Filtrar `x` com o `a` retornado dá o erro de predição (o resíduo), e `1/A(z)` é um modelo suave do espectro de `x` com no máximo `p/2` ressonâncias.\n\nO LPC é a base da codificação de voz e da estimativa de formantes. Para a mesma estimativa com os coeficientes de reflexão como saída, veja `aryule`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Second-order model of a filtered signal",
+            "pt": "Modelo de segunda ordem de um sinal filtrado"
+          },
+          "code": "n = 0:199;\nx = filter(1, [1 -0.9 0.5], sin(0.3*n.^2));\n[a, g] = lpc(x, 2);\ndisp(round(a*1000)/1000)\nfprintf('%.4f\\n', g)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "aryule",
+        "levinson",
+        "arburg",
+        "arcov",
+        "freqz"
+      ]
+    },
+    "lsf2poly": {
+      "summary": {
+        "en": "Converts line spectral frequencies to the prediction polynomial.",
+        "pt": "Converte frequências de linhas espectrais no polinômio de predição."
+      },
+      "syntax": [
+        {
+          "code": "a = lsf2poly(lsf)",
+          "en": "Returns the polynomial whose line spectral frequencies are `lsf`.",
+          "pt": "Retorna o polinômio cujas frequências de linhas espectrais são `lsf`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "lsf",
+          "en": "Line spectral frequencies in radians, between 0 and pi, in increasing order.",
+          "pt": "Frequências de linhas espectrais em radianos, entre 0 e pi, em ordem crescente."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` with `p = length(lsf)`.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]`, com `p = length(lsf)`."
+        }
+      ],
+      "description": {
+        "en": "Line spectral frequencies are the angles of the roots of two symmetric polynomials built from `A(z)`. They are interleaved on the unit circle exactly when `A(z)` is minimum phase, so a quantized set that stays sorted always gives a stable filter. This is why speech codecs transmit them.\n\n`lsf2poly` rebuilds the polynomial from the angles. Its inverse is `poly2lsf`.",
+        "pt": "As frequências de linhas espectrais são os ângulos das raízes de dois polinômios simétricos construídos a partir de `A(z)`. Elas se intercalam no círculo unitário exatamente quando `A(z)` é de fase mínima, então um conjunto quantizado que continue ordenado sempre resulta em um filtro estável. Por isso os codificadores de voz as transmitem.\n\n`lsf2poly` reconstrói o polinômio a partir dos ângulos. A inversa é `poly2lsf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Round trip through line spectral frequencies",
+            "pt": "Ida e volta por frequências de linhas espectrais"
+          },
+          "code": "a = [1 -0.9 0.5];\nlsf = poly2lsf(a);\ndisp(round(lsf.'*1000)/1000)\ndisp(round(lsf2poly(lsf)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poly2lsf",
+        "poly2rc",
+        "rc2poly",
+        "lpc"
+      ]
+    },
+    "poly2ac": {
+      "summary": {
+        "en": "Converts a prediction polynomial to the autocorrelation sequence it models.",
+        "pt": "Converte um polinômio de predição na sequência de autocorrelação que ele modela."
+      },
+      "syntax": [
+        {
+          "code": "r = poly2ac(a, efinal)",
+          "en": "Returns the autocorrelation sequence.",
+          "pt": "Retorna a sequência de autocorrelação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Prediction polynomial `[1 a(2) ... a(p+1)]`.",
+          "pt": "Polinômio de predição `[1 a(2) ... a(p+1)]`."
+        },
+        {
+          "name": "efinal",
+          "en": "Prediction error power of the final order, which sets the scale of `r`.",
+          "pt": "Potência do erro de predição da ordem final, que define a escala de `r`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Column vector of length `length(a)`, zero-lag value first.",
+          "pt": "Vetor coluna de comprimento `length(a)`, com o valor de atraso zero primeiro."
+        }
+      ],
+      "description": {
+        "en": "An all-pole model with polynomial `a` and error power `efinal` determines the autocorrelation of the process it describes for lags 0 to `p`. `poly2ac` computes those values by running the reflection coefficient recursion forwards from the final error.\n\nUse it to see what autocorrelation a given predictor implies. The inverse is `ac2poly`.",
+        "pt": "Um modelo só de polos com polinômio `a` e potência de erro `efinal` determina a autocorrelação do processo que ele descreve para os atrasos de 0 a `p`. `poly2ac` calcula esses valores pela recursão dos coeficientes de reflexão, a partir do erro final.\n\nUse para ver que autocorrelação um preditor implica. A inversa é `ac2poly`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Autocorrelation implied by a predictor",
+            "pt": "Autocorrelação implicada por um preditor"
+          },
+          "code": "a = [1 -0.9 0.5];\nr = poly2ac(a, 2);\ndisp(round(r.'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ac2poly",
+        "rc2ac",
+        "poly2rc",
+        "levinson"
+      ]
+    },
+    "poly2lsf": {
+      "summary": {
+        "en": "Converts a prediction polynomial to line spectral frequencies.",
+        "pt": "Converte um polinômio de predição em frequências de linhas espectrais."
+      },
+      "syntax": [
+        {
+          "code": "lsf = poly2lsf(a)",
+          "en": "Returns the line spectral frequencies of `a`.",
+          "pt": "Retorna as frequências de linhas espectrais de `a`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Prediction polynomial `[1 a(2) ... a(p+1)]`, minimum phase (all roots inside the unit circle).",
+          "pt": "Polinômio de predição `[1 a(2) ... a(p+1)]`, de fase mínima (todas as raízes dentro do círculo unitário)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lsf",
+          "en": "Column vector of `p` angles in radians between 0 and pi, increasing.",
+          "pt": "Vetor coluna com `p` ângulos em radianos entre 0 e pi, crescentes."
+        }
+      ],
+      "description": {
+        "en": "The line spectral frequencies are the angles of the roots of the sum and difference polynomials `A(z) + z^-(p+1) A(1/z)` and `A(z) - z^-(p+1) A(1/z)`, with the trivial roots at 1 and -1 removed. Where two consecutive frequencies are close together, the spectrum of `1/A(z)` has a sharp peak.\n\nLSFs interpolate and quantize better than polynomial coefficients, which is why they are used in speech coding. The inverse is `lsf2poly`.",
+        "pt": "As frequências de linhas espectrais são os ângulos das raízes dos polinômios soma e diferença `A(z) + z^-(p+1) A(1/z)` e `A(z) - z^-(p+1) A(1/z)`, sem as raízes triviais em 1 e -1. Onde duas frequências consecutivas ficam próximas, o espectro de `1/A(z)` tem um pico acentuado.\n\nAs LSFs se interpolam e se quantizam melhor que os coeficientes do polinômio, e por isso são usadas em codificação de voz. A inversa é `lsf2poly`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "LSFs of a second-order predictor",
+            "pt": "LSFs de um preditor de segunda ordem"
+          },
+          "code": "a = [1 -0.9 0.5];\nlsf = poly2lsf(a);\ndisp(round(lsf.'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lsf2poly",
+        "poly2rc",
+        "lpc",
+        "rc2poly"
+      ]
+    },
+    "poly2rc": {
+      "summary": {
+        "en": "Converts a prediction polynomial to reflection coefficients.",
+        "pt": "Converte um polinômio de predição em coeficientes de reflexão."
+      },
+      "syntax": [
+        {
+          "code": "k = poly2rc(a)",
+          "en": "Returns the reflection coefficients of `a`.",
+          "pt": "Retorna os coeficientes de reflexão de `a`."
+        },
+        {
+          "code": "[k, r0] = poly2rc(a, efinal)",
+          "en": "Also returns the zero-lag autocorrelation implied by the final error power `efinal`.",
+          "pt": "Retorna também a autocorrelação de atraso zero implicada pela potência de erro final `efinal`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Prediction polynomial `[1 a(2) ... a(p+1)]`. It is normalized by `a(1)` first, which must not be zero.",
+          "pt": "Polinômio de predição `[1 a(2) ... a(p+1)]`. Ele é normalizado por `a(1)` antes, que não pode ser zero."
+        },
+        {
+          "name": "efinal",
+          "en": "Prediction error power of the final order (optional).",
+          "pt": "Potência do erro de predição da ordem final (opcional)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Column vector of `length(a)-1` reflection coefficients.",
+          "pt": "Vetor coluna com `length(a)-1` coeficientes de reflexão."
+        },
+        {
+          "name": "r0",
+          "en": "Zero-lag autocorrelation (needs `efinal`).",
+          "pt": "Autocorrelação de atraso zero (exige `efinal`)."
+        }
+      ],
+      "description": {
+        "en": "This is the step-down recursion: from the polynomial of order `p` it peels off one reflection coefficient at a time. The polynomial is minimum phase exactly when every returned coefficient has magnitude below 1, so `poly2rc` doubles as a stability test.\n\nThe inverse is `rc2poly`.",
+        "pt": "Esta é a recursão de rebaixamento: a partir do polinômio de ordem `p`, ela extrai um coeficiente de reflexão por vez. O polinômio é de fase mínima exatamente quando todos os coeficientes retornados têm módulo menor que 1, então `poly2rc` serve também como teste de estabilidade.\n\nA inversa é `rc2poly`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Reflection coefficients and a stability check",
+            "pt": "Coeficientes de reflexão e verificação de estabilidade"
+          },
+          "code": "a = [1 -0.9 0.5];\nk = poly2rc(a);\ndisp(k.')\ndisp(all(abs(k) < 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rc2poly",
+        "ac2rc",
+        "poly2lsf",
+        "poly2ac"
+      ]
+    },
+    "rc2ac": {
+      "summary": {
+        "en": "Converts reflection coefficients to an autocorrelation sequence.",
+        "pt": "Converte coeficientes de reflexão em uma sequência de autocorrelação."
+      },
+      "syntax": [
+        {
+          "code": "r = rc2ac(k, r0)",
+          "en": "Returns the autocorrelation for lags 0 to `length(k)`.",
+          "pt": "Retorna a autocorrelação para os atrasos de 0 a `length(k)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Vector of reflection coefficients.",
+          "pt": "Vetor de coeficientes de reflexão."
+        },
+        {
+          "name": "r0",
+          "en": "Zero-lag autocorrelation (scalar), which sets the scale.",
+          "pt": "Autocorrelação de atraso zero (escalar), que define a escala."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Column vector of length `length(k)+1` with `r(1)` equal to `r0`.",
+          "pt": "Vetor coluna de comprimento `length(k)+1`, com `r(1)` igual a `r0`."
+        }
+      ],
+      "description": {
+        "en": "Given the reflection coefficients of an all-pole model and the power at lag 0, the rest of the autocorrelation follows from the Levinson-Durbin recursion run forwards. This lets you go from a lattice description to the correlation structure it represents.\n\nThe inverse is `ac2rc`.",
+        "pt": "Dados os coeficientes de reflexão de um modelo só de polos e a potência no atraso 0, o resto da autocorrelação decorre da recursão de Levinson-Durbin executada para frente. Isso permite passar de uma descrição em treliça para a estrutura de correlação que ela representa.\n\nA inversa é `ac2rc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Autocorrelation from reflection coefficients",
+            "pt": "Autocorrelação a partir de coeficientes de reflexão"
+          },
+          "code": "k = [-0.6 0.5];\nr = rc2ac(k, 4.1667);\ndisp(round(r.'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ac2rc",
+        "rc2poly",
+        "poly2ac",
+        "levinson"
+      ]
+    },
+    "rc2is": {
+      "summary": {
+        "en": "Converts reflection coefficients to inverse sine parameters.",
+        "pt": "Converte coeficientes de reflexão em parâmetros de seno inverso."
+      },
+      "syntax": [
+        {
+          "code": "isin = rc2is(k)",
+          "en": "Returns `isin = 2/pi * asin(k)`.",
+          "pt": "Retorna `isin = 2/pi * asin(k)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Reflection coefficients, each in the range -1 to 1.",
+          "pt": "Coeficientes de reflexão, cada um entre -1 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "isin",
+          "en": "Inverse sine parameters, same size as `k`, between -1 and 1.",
+          "pt": "Parâmetros de seno inverso, do mesmo tamanho de `k`, entre -1 e 1."
+        }
+      ],
+      "description": {
+        "en": "The mapping `2/pi * asin(k)` stretches coefficients close to plus or minus 1, where small changes in `k` strongly change the spectrum. Quantizing the stretched values spends the bits where they matter.\n\nThe inverse is `is2rc`.",
+        "pt": "O mapeamento `2/pi * asin(k)` alonga os coeficientes próximos de mais ou menos 1, onde pequenas mudanças em `k` alteram bastante o espectro. Quantizar os valores alongados gasta os bits onde eles importam.\n\nA inversa é `is2rc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Inverse sine parameters",
+            "pt": "Parâmetros de seno inverso"
+          },
+          "code": "k = [-0.6 0.5 0.9];\ndisp(round(rc2is(k)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "is2rc",
+        "rc2lar",
+        "lar2rc",
+        "poly2rc"
+      ]
+    },
+    "rc2lar": {
+      "summary": {
+        "en": "Converts reflection coefficients to log area ratios.",
+        "pt": "Converte coeficientes de reflexão em razões de log-área."
+      },
+      "syntax": [
+        {
+          "code": "g = rc2lar(k)",
+          "en": "Returns `g = log((1+k) ./ (1-k))`.",
+          "pt": "Retorna `g = log((1+k) ./ (1-k))`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Reflection coefficients, each with magnitude below 1.",
+          "pt": "Coeficientes de reflexão, cada um com módulo menor que 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "g",
+          "en": "Log area ratios, same size as `k`. Zero for `k = 0`, growing without bound as `k` nears plus or minus 1.",
+          "pt": "Razões de log-área, do mesmo tamanho de `k`. Zero para `k = 0`, crescendo sem limite quando `k` se aproxima de mais ou menos 1."
+        }
+      ],
+      "description": {
+        "en": "Log area ratios are an unbounded, roughly linear scale for reflection coefficients, so they can be quantized or interpolated freely and still map back (with `lar2rc`) to coefficients inside the stability range.",
+        "pt": "As razões de log-área são uma escala ilimitada e aproximadamente linear para os coeficientes de reflexão. Assim podem ser quantizadas ou interpoladas livremente e ainda voltam (com `lar2rc`) a coeficientes dentro da faixa de estabilidade."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Log area ratios",
+            "pt": "Razões de log-área"
+          },
+          "code": "k = [-0.6 0.5 0.9];\ndisp(round(rc2lar(k)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lar2rc",
+        "rc2is",
+        "is2rc",
+        "poly2rc"
+      ]
+    },
+    "rc2poly": {
+      "summary": {
+        "en": "Converts reflection coefficients to the prediction polynomial.",
+        "pt": "Converte coeficientes de reflexão no polinômio de predição."
+      },
+      "syntax": [
+        {
+          "code": "a = rc2poly(k)",
+          "en": "Returns the prediction polynomial of the lattice with coefficients `k`.",
+          "pt": "Retorna o polinômio de predição da treliça de coeficientes `k`."
+        },
+        {
+          "code": "[a, efinal] = rc2poly(k, r0)",
+          "en": "Also returns the final prediction error power, given the zero-lag autocorrelation `r0`.",
+          "pt": "Retorna também a potência final do erro de predição, dada a autocorrelação de atraso zero `r0`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Vector of reflection coefficients.",
+          "pt": "Vetor de coeficientes de reflexão."
+        },
+        {
+          "name": "r0",
+          "en": "Zero-lag autocorrelation. Needed only for `efinal`.",
+          "pt": "Autocorrelação de atraso zero. Necessária apenas para `efinal`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]`, with `p = length(k)`.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]`, com `p = length(k)`."
+        },
+        {
+          "name": "efinal",
+          "en": "`r0` times the product of `1 - k.^2`.",
+          "pt": "`r0` vezes o produto de `1 - k.^2`."
+        }
+      ],
+      "description": {
+        "en": "This is the step-up recursion: each reflection coefficient raises the order of the polynomial by one. The result is minimum phase whenever all `abs(k)` are below 1.\n\nRequesting two outputs without `r0` is an error, since `efinal` depends on the scale. The inverse is `poly2rc`.",
+        "pt": "Esta é a recursão de elevação: cada coeficiente de reflexão aumenta em um a ordem do polinômio. O resultado é de fase mínima quando todos os `abs(k)` são menores que 1.\n\nPedir duas saídas sem `r0` é um erro, pois `efinal` depende da escala. A inversa é `poly2rc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Polynomial from reflection coefficients",
+            "pt": "Polinômio a partir de coeficientes de reflexão"
+          },
+          "code": "k = [-0.6 0.5];\n[a, e] = rc2poly(k, 4.1667);\ndisp(a)\nfprintf('%.3f\\n', e)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poly2rc",
+        "rc2ac",
+        "lsf2poly",
+        "levinson"
+      ]
+    },
+    "rlevinson": {
+      "summary": {
+        "en": "Runs the Levinson-Durbin recursion in reverse: from a prediction polynomial to its autocorrelation, reflection coefficients and all lower-order polynomials.",
+        "pt": "Executa a recursão de Levinson-Durbin ao contrário: de um polinômio de predição, obtém a autocorrelação, os coeficientes de reflexão e os polinômios de ordens menores."
+      },
+      "syntax": [
+        {
+          "code": "[r, u, k] = rlevinson(a, efinal)",
+          "en": "Returns the autocorrelation `r`, the matrix `u` of predictors of every order, and the reflection coefficients `k`.",
+          "pt": "Retorna a autocorrelação `r`, a matriz `u` com os preditores de todas as ordens e os coeficientes de reflexão `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Prediction polynomial `[1 a(2) ... a(p+1)]`.",
+          "pt": "Polinômio de predição `[1 a(2) ... a(p+1)]`."
+        },
+        {
+          "name": "efinal",
+          "en": "Prediction error power of the final order, which sets the scale of `r`.",
+          "pt": "Potência do erro de predição da ordem final, que define a escala de `r`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Column vector of autocorrelation lags 0 to `p`.",
+          "pt": "Vetor coluna dos atrasos de autocorrelação de 0 a `p`."
+        },
+        {
+          "name": "u",
+          "en": "`(p+1)`-by-`(p+1)` upper triangular matrix. Column `m+1` holds the order-`m` predictor in reverse order, so the last column is `fliplr(a)`.",
+          "pt": "Matriz triangular superior `(p+1)`-por-`(p+1)`. A coluna `m+1` guarda o preditor de ordem `m` em ordem inversa, então a última coluna é `fliplr(a)`."
+        },
+        {
+          "name": "k",
+          "en": "Column vector of `p` reflection coefficients.",
+          "pt": "Vetor coluna dos `p` coeficientes de reflexão."
+        }
+      ],
+      "description": {
+        "en": "Where `levinson` goes from autocorrelation to predictor, `rlevinson` goes back: it steps the polynomial down order by order, collecting the reflection coefficients, and then rebuilds the autocorrelation that produces it.\n\nUse it when a model is given as a polynomial and you also need its correlation or its lattice form.",
+        "pt": "Enquanto `levinson` vai da autocorrelação ao preditor, `rlevinson` faz o caminho de volta: reduz o polinômio ordem por ordem, reunindo os coeficientes de reflexão, e depois reconstrói a autocorrelação que o produz.\n\nUse quando um modelo é dado como polinômio e você também precisa da sua correlação ou da forma em treliça."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Autocorrelation and reflection coefficients of a predictor",
+            "pt": "Autocorrelação e coeficientes de reflexão de um preditor"
+          },
+          "code": "a = [1 -0.9 0.5];\n[r, u, k] = rlevinson(a, 2);\ndisp(round(r.'*10000)/10000)\ndisp(k.')\ndisp(u)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "levinson",
+        "poly2ac",
+        "poly2rc",
+        "rc2poly"
+      ]
+    },
+    "schurrc": {
+      "summary": {
+        "en": "Computes reflection coefficients from an autocorrelation sequence with the Schur algorithm.",
+        "pt": "Calcula coeficientes de reflexão a partir de uma sequência de autocorrelação pelo algoritmo de Schur."
+      },
+      "syntax": [
+        {
+          "code": "k = schurrc(r)",
+          "en": "Returns the reflection coefficients.",
+          "pt": "Retorna os coeficientes de reflexão."
+        },
+        {
+          "code": "[k, e] = schurrc(r)",
+          "en": "Also returns the final prediction error power.",
+          "pt": "Retorna também a potência final do erro de predição."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Autocorrelation sequence as a vector, with the zero-lag value first.",
+          "pt": "Sequência de autocorrelação, em vetor, com o valor de atraso zero primeiro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Column vector of `length(r)-1` reflection coefficients.",
+          "pt": "Vetor coluna de `length(r)-1` coeficientes de reflexão."
+        },
+        {
+          "name": "e",
+          "en": "Prediction error power of the highest order.",
+          "pt": "Potência do erro de predição da maior ordem."
+        }
+      ],
+      "description": {
+        "en": "The Schur algorithm reaches the same reflection coefficients as `levinson` but never forms the predictor polynomial itself. It works on the correlation values directly, with operations that are independent across the lattice stages, which suits parallel hardware.\n\nFor a valid autocorrelation the results match those of `ac2rc` and `levinson`.",
+        "pt": "O algoritmo de Schur chega aos mesmos coeficientes de reflexão de `levinson`, mas nunca forma o polinômio de predição. Ele trabalha diretamente sobre os valores de correlação, com operações independentes entre os estágios da treliça, o que convém a hardware paralelo.\n\nPara uma autocorrelação válida, os resultados coincidem com os de `ac2rc` e `levinson`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Schur reflection coefficients",
+            "pt": "Coeficientes de reflexão por Schur"
+          },
+          "code": "r = [2 1 0.5];\n[k, e] = schurrc(r);\ndisp(k.')\ndisp(e)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "levinson",
+        "ac2rc",
+        "rc2poly",
+        "lpc"
+      ]
+    },
+    "arburg": {
+      "summary": {
+        "en": "Estimates autoregressive (AR) model parameters of a signal with Burg's method.",
+        "pt": "Estima os parâmetros de um modelo autorregressivo (AR) de um sinal pelo método de Burg."
+      },
+      "syntax": [
+        {
+          "code": "a = arburg(x, p)",
+          "en": "Returns the AR coefficients of order `p`.",
+          "pt": "Retorna os coeficientes AR de ordem `p`."
+        },
+        {
+          "code": "[a, e, k] = arburg(x, p)",
+          "en": "Also returns the white-noise variance estimate and the reflection coefficients.",
+          "pt": "Retorna também a estimativa da variância do ruído branco e os coeficientes de reflexão."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a real vector.",
+          "pt": "Sinal em vetor real."
+        },
+        {
+          "name": "p",
+          "en": "Model order, a positive integer smaller than `length(x)`.",
+          "pt": "Ordem do modelo, um inteiro positivo menor que `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` of the autoregressive model.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]` do modelo autorregressivo."
+        },
+        {
+          "name": "e",
+          "en": "Estimated variance of the white noise that drives the model.",
+          "pt": "Variância estimada do ruído branco que excita o modelo."
+        },
+        {
+          "name": "k",
+          "en": "Column vector of `p` reflection coefficients.",
+          "pt": "Vetor coluna dos `p` coeficientes de reflexão."
+        }
+      ],
+      "description": {
+        "en": "Burg's method fits the reflection coefficients one order at a time by minimizing the forward and backward prediction errors together, and the resulting model is always stable. It works well on short records, where the estimate from `aryule` tends to be biased.\n\nThe result describes `x` as white noise of variance `e` passed through the all-pole filter `1/A(z)`.",
+        "pt": "O método de Burg ajusta os coeficientes de reflexão ordem por ordem, minimizando juntos os erros de predição para frente e para trás, e o modelo resultante é sempre estável. Funciona bem em registros curtos, onde a estimativa de `aryule` tende a ser enviesada.\n\nO resultado descreve `x` como ruído branco de variância `e` passando pelo filtro só de polos `1/A(z)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Burg estimate of a second-order model",
+            "pt": "Estimativa de Burg de um modelo de segunda ordem"
+          },
+          "code": "n = 0:199;\nx = filter(1, [1 -0.9 0.5], sin(0.3*n.^2));\n[a, e, k] = arburg(x, 2);\ndisp(round(a*1000)/1000)\ndisp(round(k.'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "aryule",
+        "arcov",
+        "armcov",
+        "lpc",
+        "pburg"
+      ]
+    },
+    "arcov": {
+      "summary": {
+        "en": "Estimates autoregressive (AR) model parameters of a signal with the covariance method.",
+        "pt": "Estima os parâmetros de um modelo autorregressivo (AR) de um sinal pelo método da covariância."
+      },
+      "syntax": [
+        {
+          "code": "a = arcov(x, p)",
+          "en": "Returns the AR coefficients of order `p`.",
+          "pt": "Retorna os coeficientes AR de ordem `p`."
+        },
+        {
+          "code": "[a, e] = arcov(x, p)",
+          "en": "Also returns the white-noise variance estimate.",
+          "pt": "Retorna também a estimativa da variância do ruído branco."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a real vector.",
+          "pt": "Sinal em vetor real."
+        },
+        {
+          "name": "p",
+          "en": "Model order, a positive integer smaller than `length(x)`.",
+          "pt": "Ordem do modelo, um inteiro positivo menor que `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` of the autoregressive model.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]` do modelo autorregressivo."
+        },
+        {
+          "name": "e",
+          "en": "Estimated variance of the white noise that drives the model.",
+          "pt": "Variância estimada do ruído branco que excita o modelo."
+        }
+      ],
+      "description": {
+        "en": "The covariance method chooses the AR coefficients by least squares on the forward prediction error, using only the samples where the whole prediction window lies inside the data. It does not assume the signal is zero outside the record, so it has no window bias, but the model is not guaranteed stable.\n\nIt suits short data records, as `arburg` and `armcov` do.",
+        "pt": "O método da covariância escolhe os coeficientes AR por mínimos quadrados sobre o erro de predição para frente, usando apenas as amostras em que toda a janela de predição está dentro dos dados. Ele não supõe que o sinal seja zero fora do registro, então não tem viés de janela, mas a estabilidade do modelo não é garantida.\n\nConvém a registros curtos, assim como `arburg` e `armcov`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Covariance estimate of a second-order model",
+            "pt": "Estimativa pela covariância de um modelo de segunda ordem"
+          },
+          "code": "n = 0:199;\nx = filter(1, [1 -0.9 0.5], sin(0.3*n.^2));\n[a, e] = arcov(x, 2);\ndisp(round(a*1000)/1000)\nfprintf('%.4f\\n', e)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "armcov",
+        "arburg",
+        "aryule",
+        "lpc",
+        "pcov"
+      ]
+    },
+    "armcov": {
+      "summary": {
+        "en": "Estimates autoregressive (AR) model parameters of a signal with the modified covariance method.",
+        "pt": "Estima os parâmetros de um modelo autorregressivo (AR) de um sinal pelo método da covariância modificada."
+      },
+      "syntax": [
+        {
+          "code": "a = armcov(x, p)",
+          "en": "Returns the AR coefficients of order `p`.",
+          "pt": "Retorna os coeficientes AR de ordem `p`."
+        },
+        {
+          "code": "[a, e] = armcov(x, p)",
+          "en": "Also returns the white-noise variance estimate.",
+          "pt": "Retorna também a estimativa da variância do ruído branco."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a real vector.",
+          "pt": "Sinal em vetor real."
+        },
+        {
+          "name": "p",
+          "en": "Model order, a positive integer smaller than `length(x)`.",
+          "pt": "Ordem do modelo, um inteiro positivo menor que `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` of the autoregressive model.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]` do modelo autorregressivo."
+        },
+        {
+          "name": "e",
+          "en": "Estimated variance of the white noise that drives the model.",
+          "pt": "Variância estimada do ruído branco que excita o modelo."
+        }
+      ],
+      "description": {
+        "en": "The modified covariance method minimizes the sum of the forward and backward prediction errors together by least squares, using only samples inside the record. Compared with `arcov` it usually gives a better spectral estimate for the same data.\n\nThe model is not guaranteed to be stable.",
+        "pt": "O método da covariância modificada minimiza juntas, por mínimos quadrados, as somas dos erros de predição para frente e para trás, usando só amostras dentro do registro. Em comparação com `arcov`, costuma dar uma estimativa espectral melhor para os mesmos dados.\n\nA estabilidade do modelo não é garantida."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Modified covariance estimate",
+            "pt": "Estimativa pela covariância modificada"
+          },
+          "code": "n = 0:199;\nx = filter(1, [1 -0.9 0.5], sin(0.3*n.^2));\n[a, e] = armcov(x, 2);\ndisp(round(a*1000)/1000)\nfprintf('%.4f\\n', e)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "arcov",
+        "arburg",
+        "aryule",
+        "lpc",
+        "pmcov"
+      ]
+    },
+    "aryule": {
+      "summary": {
+        "en": "Estimates autoregressive (AR) model parameters of a signal with the Yule-Walker method.",
+        "pt": "Estima os parâmetros de um modelo autorregressivo (AR) de um sinal pelo método de Yule-Walker."
+      },
+      "syntax": [
+        {
+          "code": "a = aryule(x, p)",
+          "en": "Returns the AR coefficients of order `p`.",
+          "pt": "Retorna os coeficientes AR de ordem `p`."
+        },
+        {
+          "code": "[a, e, k] = aryule(x, p)",
+          "en": "Also returns the white-noise variance estimate and the reflection coefficients.",
+          "pt": "Retorna também a estimativa da variância do ruído branco e os coeficientes de reflexão."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Signal as a real vector.",
+          "pt": "Sinal em vetor real."
+        },
+        {
+          "name": "p",
+          "en": "Model order, a positive integer smaller than `length(x)`.",
+          "pt": "Ordem do modelo, um inteiro positivo menor que `length(x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "en": "Row vector `[1 a(2) ... a(p+1)]` of the autoregressive model.",
+          "pt": "Vetor linha `[1 a(2) ... a(p+1)]` do modelo autorregressivo."
+        },
+        {
+          "name": "e",
+          "en": "Estimated variance of the white noise that drives the model.",
+          "pt": "Variância estimada do ruído branco que excita o modelo."
+        },
+        {
+          "name": "k",
+          "en": "Column vector of `p` reflection coefficients.",
+          "pt": "Vetor coluna dos `p` coeficientes de reflexão."
+        }
+      ],
+      "description": {
+        "en": "The Yule-Walker method estimates the autocorrelation of `x` (with a biased estimator) and solves the normal equations with the Levinson-Durbin recursion. The model is always stable, and the third output gives the reflection coefficients found along the way.\n\nThe implied window makes the estimate biased on short records. In that case `arburg` or `armcov` are better choices. `lpc` returns the same polynomial.",
+        "pt": "O método de Yule-Walker estima a autocorrelação de `x` (com um estimador enviesado) e resolve as equações normais com a recursão de Levinson-Durbin. O modelo é sempre estável, e a terceira saída traz os coeficientes de reflexão obtidos no caminho.\n\nA janela implícita enviesa a estimativa em registros curtos. Nesse caso, `arburg` ou `armcov` são melhores escolhas. `lpc` retorna o mesmo polinômio."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Yule-Walker estimate with reflection coefficients",
+            "pt": "Estimativa de Yule-Walker com coeficientes de reflexão"
+          },
+          "code": "n = 0:199;\nx = filter(1, [1 -0.9 0.5], sin(0.3*n.^2));\n[a, e, k] = aryule(x, 2);\ndisp(round(a*1000)/1000)\ndisp(round(k.'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "arburg",
+        "arcov",
+        "armcov",
+        "lpc",
+        "pyulear"
+      ]
+    },
+    "invfreqs": {
+      "summary": {
+        "en": "Fits a analog filter (s domain) to a frequency response given as complex values.",
+        "pt": "Ajusta um filtro analógico (domínio s) a uma resposta em frequência dada em valores complexos."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = invfreqs(h, w, nb, na)",
+          "en": "Fits numerator order `nb` and denominator order `na`.",
+          "pt": "Ajusta numerador de ordem `nb` e denominador de ordem `na`."
+        },
+        {
+          "code": "[b, a] = invfreqs(h, w, nb, na, wt)",
+          "en": "Weights each frequency point by `wt`.",
+          "pt": "Pondera cada ponto de frequência por `wt`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Complex frequency response values, one per frequency in `w`.",
+          "pt": "Valores complexos da resposta em frequência, um para cada frequência em `w`."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies in radians per second, same length as `h`.",
+          "pt": "Frequências em radianos por segundo, com o mesmo comprimento de `h`."
+        },
+        {
+          "name": "nb",
+          "en": "Order of the numerator polynomial.",
+          "pt": "Ordem do polinômio do numerador."
+        },
+        {
+          "name": "na",
+          "en": "Order of the denominator polynomial.",
+          "pt": "Ordem do polinômio do denominador."
+        },
+        {
+          "name": "wt",
+          "en": "Optional weights, same length as `w`. Default is all ones.",
+          "pt": "Pesos opcionais, com o mesmo comprimento de `w`. O padrão é tudo igual a 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients in descending powers of `s`, length `nb+1`.",
+          "pt": "Coeficientes do numerador em potências decrescentes de `s`, com comprimento `nb+1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients in descending powers of `s`, length `na+1`, starting with 1.",
+          "pt": "Coeficientes do denominador em potências decrescentes de `s`, com comprimento `na+1`, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "`invfreqs` finds the transfer function whose response is closest to the measured values `h`, using a least-squares fit on the equation error. It is the inverse of `freqs`.\n\nThe fit is exact when `h` really comes from a filter of the same orders, as in the example. For noisy or non-rational data it is only an approximation.",
+        "pt": "`invfreqs` encontra a função de transferência cuja resposta fica mais próxima dos valores medidos `h`, por mínimos quadrados sobre o erro de equação. É a inversa de `freqs`.\n\nO ajuste é exato quando `h` vem de fato de um filtro das mesmas ordens, como no exemplo. Para dados ruidosos ou não racionais é apenas uma aproximação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover an analog filter from its response",
+            "pt": "Recuperar um filtro analógico a partir da sua resposta"
+          },
+          "code": "w = linspace(0.1, 5, 20);\nh = freqs(2, [1 3 2], w);\n[b, a] = invfreqs(h, w, 0, 2);\ndisp(round(b*1000)/1000)\ndisp(round(a*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "invfreqz",
+        "freqs",
+        "prony",
+        "stmcb"
+      ],
+      "notes": {
+        "en": "The iterative fit is not available: passing an iteration count above 0 gives the error `invfreqs: the iterative fit (ITER > 0) is not implemented.` Only the direct least-squares fit, with or without weights `wt`, works.",
+        "pt": "O ajuste iterativo não está disponível: passar uma contagem de iterações maior que 0 gera o erro `invfreqs: the iterative fit (ITER > 0) is not implemented.` Só funciona o ajuste direto por mínimos quadrados, com ou sem pesos `wt`."
+      }
+    },
+    "invfreqz": {
+      "summary": {
+        "en": "Fits a digital filter (z domain) to a frequency response given as complex values.",
+        "pt": "Ajusta um filtro digital (domínio z) a uma resposta em frequência dada em valores complexos."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = invfreqz(h, w, nb, na)",
+          "en": "Fits numerator order `nb` and denominator order `na`.",
+          "pt": "Ajusta numerador de ordem `nb` e denominador de ordem `na`."
+        },
+        {
+          "code": "[b, a] = invfreqz(h, w, nb, na, wt)",
+          "en": "Weights each frequency point by `wt`.",
+          "pt": "Pondera cada ponto de frequência por `wt`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Complex frequency response values, one per frequency in `w`.",
+          "pt": "Valores complexos da resposta em frequência, um para cada frequência em `w`."
+        },
+        {
+          "name": "w",
+          "en": "Frequencies in radians per sample, between 0 and pi, same length as `h`.",
+          "pt": "Frequências em radianos por amostra, entre 0 e pi, com o mesmo comprimento de `h`."
+        },
+        {
+          "name": "nb",
+          "en": "Order of the numerator polynomial.",
+          "pt": "Ordem do polinômio do numerador."
+        },
+        {
+          "name": "na",
+          "en": "Order of the denominator polynomial.",
+          "pt": "Ordem do polinômio do denominador."
+        },
+        {
+          "name": "wt",
+          "en": "Optional weights, same length as `w`. Default is all ones.",
+          "pt": "Pesos opcionais, com o mesmo comprimento de `w`. O padrão é tudo igual a 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients in descending powers of `z`, length `nb+1`.",
+          "pt": "Coeficientes do numerador em potências decrescentes de `z`, com comprimento `nb+1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients in descending powers of `z`, length `na+1`, starting with 1.",
+          "pt": "Coeficientes do denominador em potências decrescentes de `z`, com comprimento `na+1`, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "`invfreqz` finds the transfer function whose response is closest to the measured values `h`, using a least-squares fit on the equation error. It is the inverse of `freqz`.\n\nThe fit is exact when `h` really comes from a filter of the same orders, as in the example. For noisy or non-rational data it is only an approximation.",
+        "pt": "`invfreqz` encontra a função de transferência cuja resposta fica mais próxima dos valores medidos `h`, por mínimos quadrados sobre o erro de equação. É a inversa de `freqz`.\n\nO ajuste é exato quando `h` vem de fato de um filtro das mesmas ordens, como no exemplo. Para dados ruidosos ou não racionais é apenas uma aproximação."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover a digital filter from its response",
+            "pt": "Recuperar um filtro digital a partir da sua resposta"
+          },
+          "code": "w = linspace(0.1, 3, 20);\nh = freqz([1 0.5], [1 -0.5 0.2], w);\n[b, a] = invfreqz(h, w, 1, 2);\ndisp(round(b*1000)/1000)\ndisp(round(a*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "invfreqs",
+        "freqz",
+        "prony",
+        "stmcb"
+      ],
+      "notes": {
+        "en": "The iterative fit is not available: passing an iteration count above 0 gives the error `invfreqz: the iterative fit (ITER > 0) is not implemented.` Only the direct least-squares fit, with or without weights `wt`, works.",
+        "pt": "O ajuste iterativo não está disponível: passar uma contagem de iterações maior que 0 gera o erro `invfreqz: the iterative fit (ITER > 0) is not implemented.` Só funciona o ajuste direto por mínimos quadrados, com ou sem pesos `wt`."
+      }
+    },
+    "prony": {
+      "summary": {
+        "en": "Fits an IIR filter to a given impulse response with Prony's method.",
+        "pt": "Ajusta um filtro IIR a uma dada resposta ao impulso pelo método de Prony."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = prony(h, nb, na)",
+          "en": "Returns numerator `b` (order `nb`) and denominator `a` (order `na`) whose impulse response approximates `h`.",
+          "pt": "Retorna o numerador `b` (ordem `nb`) e o denominador `a` (ordem `na`) cuja resposta ao impulso aproxima `h`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Impulse response as a vector.",
+          "pt": "Resposta ao impulso em vetor."
+        },
+        {
+          "name": "nb",
+          "en": "Order of the numerator polynomial.",
+          "pt": "Ordem do polinômio do numerador."
+        },
+        {
+          "name": "na",
+          "en": "Order of the denominator polynomial.",
+          "pt": "Ordem do polinômio do denominador."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, length `nb+1`.",
+          "pt": "Coeficientes do numerador, com comprimento `nb+1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, length `na+1`, starting with 1.",
+          "pt": "Coeficientes do denominador, com comprimento `na+1`, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "Prony's method makes the model match the first `nb+1` samples of `h` and then chooses the denominator so that the later samples are predicted as well as possible in the least-squares sense. When `h` is the impulse response of a filter of those orders, it recovers that filter.\n\nIt is a quick way to turn a measured or designed impulse response into a short recursive filter. The result is not guaranteed stable.",
+        "pt": "O método de Prony faz o modelo reproduzir as primeiras `nb+1` amostras de `h` e depois escolhe o denominador de modo que as amostras seguintes sejam previstas o melhor possível por mínimos quadrados. Quando `h` é a resposta ao impulso de um filtro dessas ordens, ele recupera esse filtro.\n\nÉ uma forma rápida de transformar uma resposta ao impulso medida ou projetada em um filtro recursivo curto. A estabilidade do resultado não é garantida."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recover a filter from its impulse response",
+            "pt": "Recuperar um filtro a partir da sua resposta ao impulso"
+          },
+          "code": "h = filter([1 0.5], [1 -0.5 0.2], [1 zeros(1,29)]);\n[b, a] = prony(h, 1, 2);\ndisp(round(b*1000)/1000)\ndisp(round(a*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "stmcb",
+        "invfreqz",
+        "impz",
+        "aryule"
+      ]
+    },
+    "stmcb": {
+      "summary": {
+        "en": "Fits an IIR filter to an impulse response (or to an input and output pair) with the Steiglitz-McBride iteration.",
+        "pt": "Ajusta um filtro IIR a uma resposta ao impulso (ou a um par entrada e saída) pela iteração de Steiglitz-McBride."
+      },
+      "syntax": [
+        {
+          "code": "[b, a] = stmcb(h, nb, na)",
+          "en": "Fits the impulse response `h`.",
+          "pt": "Ajusta a resposta ao impulso `h`."
+        },
+        {
+          "code": "[b, a] = stmcb(h, nb, na, niter, ai)",
+          "en": "Uses `niter` iterations, starting from the denominator guess `ai`.",
+          "pt": "Usa `niter` iterações, partindo do palpite de denominador `ai`."
+        },
+        {
+          "code": "[b, a] = stmcb(y, x, nb, na)",
+          "en": "Fits the filter that maps input `x` to output `y`.",
+          "pt": "Ajusta o filtro que leva a entrada `x` à saída `y`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "h",
+          "en": "Impulse response as a vector.",
+          "pt": "Resposta ao impulso em vetor."
+        },
+        {
+          "name": "y, x",
+          "en": "Output and input signals of the unknown system, of the same length.",
+          "pt": "Sinais de saída e de entrada do sistema desconhecido, de mesmo comprimento."
+        },
+        {
+          "name": "nb",
+          "en": "Order of the numerator polynomial.",
+          "pt": "Ordem do polinômio do numerador."
+        },
+        {
+          "name": "na",
+          "en": "Order of the denominator polynomial.",
+          "pt": "Ordem do polinômio do denominador."
+        },
+        {
+          "name": "niter",
+          "en": "Number of iterations.",
+          "pt": "Número de iterações."
+        },
+        {
+          "name": "ai",
+          "en": "Initial denominator, starting with 1.",
+          "pt": "Denominador inicial, começando em 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Numerator coefficients, length `nb+1`.",
+          "pt": "Coeficientes do numerador, com comprimento `nb+1`."
+        },
+        {
+          "name": "a",
+          "en": "Denominator coefficients, length `na+1`, starting with 1.",
+          "pt": "Coeficientes do denominador, com comprimento `na+1`, começando em 1."
+        }
+      ],
+      "description": {
+        "en": "The Steiglitz-McBride method alternates between filtering the data with the current denominator estimate and solving a linear least-squares problem, which pushes the fit toward the output-error optimum rather than the equation-error one that `prony` minimizes.\n\nIt usually does better than `prony` when the data does not come exactly from a model of the chosen orders.",
+        "pt": "O método de Steiglitz-McBride alterna entre filtrar os dados com a estimativa atual do denominador e resolver um problema linear de mínimos quadrados, o que aproxima o ajuste do ótimo do erro de saída, em vez do ótimo do erro de equação que `prony` minimiza.\n\nCostuma ser melhor que `prony` quando os dados não vêm exatamente de um modelo das ordens escolhidas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Iterative fit of an impulse response",
+            "pt": "Ajuste iterativo de uma resposta ao impulso"
+          },
+          "code": "h = filter([1 0.5], [1 -0.5 0.2], [1 zeros(1,29)]);\n[b, a] = stmcb(h, 1, 2, 10);\ndisp(round(b*1000)/1000)\ndisp(round(a*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "prony",
+        "invfreqz",
+        "aryule",
+        "impz"
+      ]
+    }
+  }
+}
