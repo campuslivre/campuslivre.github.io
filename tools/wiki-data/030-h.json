@@ -1,0 +1,1745 @@
+{
+  "functions": {
+    "lognrnd": {
+      "summary": {
+        "en": "Generates random numbers from the lognormal distribution with log-mean mu and log-standard-deviation sigma.",
+        "pt": "Gera números aleatórios da distribuição lognormal com média logarítmica mu e desvio padrão logarítmico sigma."
+      },
+      "syntax": [
+        {
+          "code": "r = lognrnd(mu, sigma)",
+          "en": "One random value, or one per element when the parameters are arrays.",
+          "pt": "Um valor aleatório, ou um por elemento quando os parâmetros são arrays."
+        },
+        {
+          "code": "r = lognrnd(mu, sigma, m, n)",
+          "en": "An `m`-by-`n` array of random values.",
+          "pt": "Um array `m`-por-`n` de valores aleatórios."
+        },
+        {
+          "code": "r = lognrnd(mu, sigma, [m n])",
+          "en": "Same, with the size given as a vector.",
+          "pt": "O mesmo, com o tamanho dado como vetor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the logarithm of the values. Scalar or array.",
+          "pt": "Média do logaritmo dos valores. Escalar ou array."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of the logarithm of the values, nonnegative. Scalar or array.",
+          "pt": "Desvio padrão do logaritmo dos valores, não negativo. Escalar ou array."
+        },
+        {
+          "name": "m, n",
+          "en": "Size of the result. Without them the size follows the parameters.",
+          "pt": "Tamanho do resultado. Sem eles, o tamanho segue o dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random values, all positive.",
+          "pt": "Valores aleatórios, todos positivos."
+        }
+      ],
+      "description": {
+        "en": "A value is lognormal when its logarithm is normally distributed. `lognrnd(mu, sigma)` draws such values, so `log(r)` has mean `mu` and standard deviation `sigma`. Lognormal data are positive and skewed to the right, which fits sizes, incomes and many measured concentrations.\n\n`mu` and `sigma` describe the logarithm, not the values themselves. Use `lognstat` to get the mean and variance of the values.",
+        "pt": "Um valor é lognormal quando o seu logaritmo tem distribuição normal. `lognrnd(mu, sigma)` sorteia esses valores, de modo que `log(r)` tem média `mu` e desvio padrão `sigma`. Dados lognormais são positivos e assimétricos à direita, o que combina com tamanhos, rendas e muitas concentrações medidas.\n\n`mu` e `sigma` descrevem o logaritmo, não os valores. Use `lognstat` para obter a média e a variância dos valores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and range of the draws",
+            "pt": "Tamanho e faixa dos sorteios"
+          },
+          "code": "r = lognrnd(0, 1, 3, 4);\ndisp(size(r))\ndisp(all(r(:) > 0))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Parameters as arrays",
+            "pt": "Parâmetros como arrays"
+          },
+          "code": "r = lognrnd([0 1 2], 0.5);\ndisp(size(r))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lognpdf",
+        "lognstat",
+        "lognfit",
+        "normrnd",
+        "random"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random streams, so the same seed gives different numbers than MATLAB.",
+        "pt": "O gerador não reproduz as sequências aleatórias do MATLAB, então a mesma semente dá números diferentes dos do MATLAB."
+      }
+    },
+    "lognstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the lognormal distribution with log-mean mu and log-standard-deviation sigma.",
+        "pt": "Retorna a média e a variância da distribuição lognormal com média logarítmica mu e desvio padrão logarítmico sigma."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = lognstat(mu, sigma)",
+          "en": "Mean and variance of the values for each pair `mu`, `sigma`.",
+          "pt": "Média e variância dos valores para cada par `mu`, `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the logarithm of the values. Scalar or array.",
+          "pt": "Média do logaritmo dos valores. Escalar ou array."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of the logarithm of the values, nonnegative. Scalar or array.",
+          "pt": "Desvio padrão do logaritmo dos valores, não negativo. Escalar ou array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean of the lognormal distribution, `exp(mu + sigma^2/2)`.",
+          "pt": "Média da distribuição lognormal, `exp(mu + sigma^2/2)`."
+        },
+        {
+          "name": "v",
+          "en": "Variance of the lognormal distribution, `(exp(sigma^2) - 1) * exp(2*mu + sigma^2)`.",
+          "pt": "Variância da distribuição lognormal, `(exp(sigma^2) - 1) * exp(2*mu + sigma^2)`."
+        }
+      ],
+      "description": {
+        "en": "`lognstat` converts the parameters of the underlying normal distribution (the mean and standard deviation of the logarithm) into the mean and variance of the lognormal values themselves. The two differ: the mean of the values is always larger than `exp(mu)`, which is the median.\n\nWith array inputs the outputs have the common size of `mu` and `sigma`.",
+        "pt": "`lognstat` converte os parâmetros da distribuição normal subjacente (média e desvio padrão do logaritmo) na média e na variância dos próprios valores lognormais. Os dois diferem: a média dos valores é sempre maior que `exp(mu)`, que é a mediana.\n\nCom entradas em array, as saídas têm o tamanho comum de `mu` e `sigma`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = lognstat(0, 0.5);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Several parameters at once",
+            "pt": "Vários parâmetros de uma vez"
+          },
+          "code": "m = lognstat([0 1 2], 0.25);\ndisp(round(m*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lognpdf",
+        "lognrnd",
+        "lognfit",
+        "normstat",
+        "expstat"
+      ]
+    },
+    "makedist": {
+      "summary": {
+        "en": "Creates a probability distribution object for a named family and parameter values, which you can query with pdf, cdf, icdf, mean and more.",
+        "pt": "Cria um objeto de distribuição de probabilidade para uma família e valores de parâmetros, que você consulta com pdf, cdf, icdf, mean e outros."
+      },
+      "syntax": [
+        {
+          "code": "pd = makedist(distname)",
+          "en": "Distribution with the default parameters of the family.",
+          "pt": "Distribuição com os parâmetros padrão da família."
+        },
+        {
+          "code": "pd = makedist(distname, Name, Value)",
+          "en": "Sets parameters by name, for example `'mu'` and `'sigma'` for `'Normal'`.",
+          "pt": "Define os parâmetros pelo nome, por exemplo `'mu'` e `'sigma'` para `'Normal'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "distname",
+          "en": "Family name, as text. Supported: `'Normal'`, `'Lognormal'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Beta'`, `'Poisson'`, `'Binomial'`, `'NegativeBinomial'`, `'Rayleigh'`, `'ExtremeValue'`, `'GeneralizedExtremeValue'`, `'GeneralizedPareto'`, `'Uniform'`. Case is ignored.",
+          "pt": "Nome da família, como texto. Suportadas: `'Normal'`, `'Lognormal'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Beta'`, `'Poisson'`, `'Binomial'`, `'NegativeBinomial'`, `'Rayleigh'`, `'ExtremeValue'`, `'GeneralizedExtremeValue'`, `'GeneralizedPareto'`, `'Uniform'`. Maiúsculas e minúsculas são ignoradas."
+        },
+        {
+          "name": "Name, Value",
+          "en": "Parameter name and value pairs. The names are the family's own, for example `'a'` and `'b'` for `'Gamma'`, `'N'` and `'p'` for `'Binomial'`, `'Lower'` and `'Upper'` for `'Uniform'`.",
+          "pt": "Pares nome e valor de parâmetros. Os nomes são os da própria família, por exemplo `'a'` e `'b'` para `'Gamma'`, `'N'` e `'p'` para `'Binomial'`, `'Lower'` e `'Upper'` para `'Uniform'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pd",
+          "en": "Distribution object. Its properties include the parameters, `DistributionName`, `ParameterNames`, `ParameterValues`, `Truncation` and `IsTruncated`.",
+          "pt": "Objeto de distribuição. Suas propriedades incluem os parâmetros, `DistributionName`, `ParameterNames`, `ParameterValues`, `Truncation` e `IsTruncated`."
+        }
+      ],
+      "description": {
+        "en": "A distribution object keeps a family and its parameters in one variable, so you do not repeat the parameters in every call. After creating it, call `pdf(pd, x)`, `cdf(pd, x)`, `icdf(pd, p)`, `mean(pd)`, `var(pd)`, `std(pd)`, `median(pd)` and `iqr(pd)`. `truncate(pd, lower, upper)` returns the distribution restricted to an interval.\n\nParameters not given keep the family defaults, for example `mu = 0` and `sigma = 1` for the normal distribution.",
+        "pt": "Um objeto de distribuição guarda uma família e seus parâmetros em uma só variável, então você não repete os parâmetros a cada chamada. Depois de criá-lo, chame `pdf(pd, x)`, `cdf(pd, x)`, `icdf(pd, p)`, `mean(pd)`, `var(pd)`, `std(pd)`, `median(pd)` e `iqr(pd)`. `truncate(pd, lower, upper)` devolve a distribuição restrita a um intervalo.\n\nOs parâmetros não informados ficam com o padrão da família, por exemplo `mu = 0` e `sigma = 1` na distribuição normal."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal distribution object",
+            "pt": "Objeto de distribuição normal"
+          },
+          "code": "pd = makedist('Normal', 'mu', 2, 'sigma', 3);\nfprintf('%.4f\\n', pdf(pd, 2))\nfprintf('%.4f\\n', cdf(pd, 5))\nfprintf('%.4f\\n', icdf(pd, 0.975))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Truncated Weibull",
+            "pt": "Weibull truncada"
+          },
+          "code": "pd = makedist('Weibull', 'a', 2, 'b', 1.5);\nt = truncate(pd, 0.5, 3);\nfprintf('%.4f\\n', cdf(pd, 1))\nfprintf('%.4f\\n', cdf(t, 1))\ndisp(t.IsTruncated)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitdist",
+        "pdf",
+        "cdf",
+        "icdf",
+        "truncate"
+      ],
+      "notes": {
+        "en": "Only the 14 families listed above are supported; other names, such as `'Logistic'`, `'HalfNormal'` or `'Kernel'`, fail with an unrecognized name error. `random(pd, ...)` with a distribution object is not supported. The mean and variance of a truncated distribution are integrated more accurately than in MATLAB, which only agrees to about 1e-6. The class name of the objects (for example the one shown in messages) differs from MATLAB's.",
+        "pt": "Só as 14 famílias listadas acima são suportadas; outros nomes, como `'Logistic'`, `'HalfNormal'` ou `'Kernel'`, dão erro de nome não reconhecido. `random(pd, ...)` com um objeto de distribuição não é suportado. A média e a variância de uma distribuição truncada são integradas com mais precisão do que no MATLAB, que concorda apenas até cerca de 1e-6. O nome da classe dos objetos (por exemplo o que aparece em mensagens) difere do do MATLAB."
+      }
+    },
+    "nbincdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the negative binomial distribution: the chance of at most x failures before the r-th success.",
+        "pt": "Função de distribuição acumulada da distribuição binomial negativa: a chance de no máximo x falhas antes do r-ésimo sucesso."
+      },
+      "syntax": [
+        {
+          "code": "y = nbincdf(x, r, p)",
+          "en": "Cumulative probability at each `x`.",
+          "pt": "Probabilidade acumulada em cada `x`."
+        },
+        {
+          "code": "y = nbincdf(x, r, p, 'upper')",
+          "en": "Upper tail, the probability of more than `x` failures.",
+          "pt": "Cauda superior, a probabilidade de mais de `x` falhas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Counts of failures. Scalar or array.",
+          "pt": "Contagens de falhas. Escalar ou array."
+        },
+        {
+          "name": "r",
+          "en": "Number of successes, positive. Scalar or array.",
+          "pt": "Número de sucessos, positivo. Escalar ou array."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success in each trial, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "'upper'",
+          "en": "Return the upper tail `1 - cdf` instead, computed so that small tails keep their accuracy.",
+          "pt": "Retorna a cauda superior `1 - cdf`, calculada de modo que caudas pequenas mantenham a precisão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Cumulative probabilities, with the common size of the inputs.",
+          "pt": "Probabilidades acumuladas, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The negative binomial distribution counts the failures observed before the `r`-th success in independent trials that each succeed with probability `p`. It is a common model for overdispersed counts, whose variance is larger than their mean.\n\nThe function is a step function: it is constant between integers and jumps at each nonnegative integer.",
+        "pt": "A distribuição binomial negativa conta as falhas observadas antes do `r`-ésimo sucesso em tentativas independentes, cada uma com probabilidade de sucesso `p`. É um modelo comum para contagens com superdispersão, cuja variância é maior que a média.\n\nA função é em degraus: é constante entre inteiros e salta em cada inteiro não negativo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probabilities",
+            "pt": "Probabilidades acumuladas"
+          },
+          "code": "y = nbincdf(0:4, 3, 0.5);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Upper tail",
+            "pt": "Cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', nbincdf(3, 3, 0.5, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nbinpdf",
+        "nbininv",
+        "nbinstat",
+        "nbinfit",
+        "binocdf"
+      ]
+    },
+    "nbinfit": {
+      "summary": {
+        "en": "Fits a negative binomial distribution to count data by maximum likelihood and returns r and p with confidence intervals.",
+        "pt": "Ajusta uma distribuição binomial negativa a dados de contagem por máxima verossimilhança e retorna r e p com intervalos de confiança."
+      },
+      "syntax": [
+        {
+          "code": "parmhat = nbinfit(data)",
+          "en": "Estimates `[r p]` from the counts in `data`.",
+          "pt": "Estima `[r p]` a partir das contagens em `data`."
+        },
+        {
+          "code": "[parmhat, parmci] = nbinfit(data)",
+          "en": "Also returns 95% confidence intervals for both parameters.",
+          "pt": "Também retorna intervalos de confiança de 95% para os dois parâmetros."
+        },
+        {
+          "code": "[parmhat, parmci] = nbinfit(data, alpha)",
+          "en": "Uses the confidence level `100*(1-alpha)`%.",
+          "pt": "Usa o nível de confiança `100*(1-alpha)`%."
+        },
+        {
+          "code": "[parmhat, parmci] = nbinfit(data, alpha, freq)",
+          "en": "Weights each count by `freq`.",
+          "pt": "Pondera cada contagem por `freq`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Vector of observed counts, nonnegative integers.",
+          "pt": "Vetor de contagens observadas, inteiros não negativos."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level of the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05."
+        },
+        {
+          "name": "freq",
+          "en": "Frequencies, the same length as `data`. Default all 1.",
+          "pt": "Frequências, do mesmo tamanho de `data`. O padrão é 1 para todos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "parmhat",
+          "en": "Two-element row `[r p]`, the maximum likelihood estimates.",
+          "pt": "Linha com dois elementos `[r p]`, as estimativas de máxima verossimilhança."
+        },
+        {
+          "name": "parmci",
+          "en": "2-by-2 matrix. Column 1 holds the lower and upper limits for `r`, column 2 those for `p`.",
+          "pt": "Matriz 2-por-2. A coluna 1 tem os limites inferior e superior de `r`, e a coluna 2 os de `p`."
+        }
+      ],
+      "description": {
+        "en": "`nbinfit` finds the `r` and `p` that make the observed counts most likely. The fit is found by a numerical search, so very small differences in the last digits are normal. When the sample variance is not larger than the sample mean, the data do not look overdispersed and `nbinfit` returns `Inf` for `r` and 1 for `p`.\n\nTo check the result, compare `nbinstat(parmhat(1), parmhat(2))` with the sample mean and variance.",
+        "pt": "`nbinfit` encontra o `r` e o `p` que tornam as contagens observadas mais prováveis. O ajuste vem de uma busca numérica, então pequenas diferenças nos últimos dígitos são normais. Quando a variância da amostra não é maior que a média, os dados não parecem superdispersos e o `nbinfit` devolve `Inf` para `r` e 1 para `p`.\n\nPara conferir o resultado, compare `nbinstat(parmhat(1), parmhat(2))` com a média e a variância da amostra."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and intervals",
+            "pt": "Ajuste e intervalos"
+          },
+          "code": "c = [0 1 3 2 5 0 7 4 2 9];\n[ph, ci] = nbinfit(c);\ndisp(round(ph*1000)/1000)\ndisp(size(ci))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Fitted mean and variance",
+            "pt": "Média e variância ajustadas"
+          },
+          "code": "c = [0 1 3 2 5 0 7 4 2 9];\nph = nbinfit(c);\n[m, v] = nbinstat(ph(1), ph(2));\nfprintf('%.3f %.3f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nbinpdf",
+        "nbinstat",
+        "nbincdf",
+        "poissfit",
+        "binofit"
+      ],
+      "notes": {
+        "en": "The numerical search stops at a slightly different point than in MATLAB, so the estimates agree to about 7 significant digits, not to the last one.",
+        "pt": "A busca numérica para em um ponto ligeiramente diferente do MATLAB, então as estimativas concordam em cerca de 7 dígitos significativos, não até o último."
+      }
+    },
+    "nbininv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the negative binomial distribution: the smallest count whose cumulative probability reaches y.",
+        "pt": "Inversa da função de distribuição acumulada da binomial negativa: a menor contagem cuja probabilidade acumulada alcança y."
+      },
+      "syntax": [
+        {
+          "code": "x = nbininv(y, r, p)",
+          "en": "Quantile of the negative binomial distribution for each probability in `y`.",
+          "pt": "Quantil da distribuição binomial negativa para cada probabilidade em `y`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidades, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "r",
+          "en": "Number of successes, positive. Scalar or array.",
+          "pt": "Número de sucessos, positivo. Escalar ou array."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success in each trial, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1. Escalar ou array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, nonnegative integers, with the common size of the inputs.",
+          "pt": "Quantis, inteiros não negativos, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The negative binomial distribution counts the failures observed before the `r`-th success in independent trials that each succeed with probability `p`. It is a common model for overdispersed counts, whose variance is larger than their mean.\n\nBecause the distribution is discrete, `x` is the smallest integer for which `nbincdf(x, r, p)` is at least `y`.",
+        "pt": "A distribuição binomial negativa conta as falhas observadas antes do `r`-ésimo sucesso em tentativas independentes, cada uma com probabilidade de sucesso `p`. É um modelo comum para contagens com superdispersão, cuja variância é maior que a média.\n\nComo a distribuição é discreta, `x` é o menor inteiro para o qual `nbincdf(x, r, p)` é pelo menos `y`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quartiles and the 90th percentile",
+            "pt": "Quartis e o percentil 90"
+          },
+          "code": "x = nbininv([0.25 0.5 0.9], 3, 0.5);\ndisp(x)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nbincdf",
+        "nbinpdf",
+        "nbinstat",
+        "nbinfit",
+        "binoinv"
+      ]
+    },
+    "nbinpdf": {
+      "summary": {
+        "en": "Probability mass function of the negative binomial distribution: the chance of observing exactly x failures before the r-th success.",
+        "pt": "Função de massa de probabilidade da distribuição binomial negativa: a chance de observar exatamente x falhas antes do r-ésimo sucesso."
+      },
+      "syntax": [
+        {
+          "code": "y = nbinpdf(x, r, p)",
+          "en": "Probability of each count in `x`.",
+          "pt": "Probabilidade de cada contagem em `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Counts of failures, nonnegative integers. Scalar or array.",
+          "pt": "Contagens de falhas, inteiros não negativos. Escalar ou array."
+        },
+        {
+          "name": "r",
+          "en": "Number of successes, positive. Scalar or array.",
+          "pt": "Número de sucessos, positivo. Escalar ou array."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success in each trial, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1. Escalar ou array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, with the common size of the inputs. Values of `x` that are not nonnegative integers give 0.",
+          "pt": "Probabilidades, com o tamanho comum das entradas. Valores de `x` que não são inteiros não negativos dão 0."
+        }
+      ],
+      "description": {
+        "en": "The negative binomial distribution counts the failures observed before the `r`-th success in independent trials that each succeed with probability `p`. It is a common model for overdispersed counts, whose variance is larger than their mean.\n\nThe result sums to 1 over `x = 0, 1, 2, ...`. With `r = 1` it reduces to the geometric distribution.",
+        "pt": "A distribuição binomial negativa conta as falhas observadas antes do `r`-ésimo sucesso em tentativas independentes, cada uma com probabilidade de sucesso `p`. É um modelo comum para contagens com superdispersão, cuja variância é maior que a média.\n\nO resultado soma 1 sobre `x = 0, 1, 2, ...`. Com `r = 1` ele se reduz à distribuição geométrica."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probabilities of 0 to 4 failures",
+            "pt": "Probabilidades de 0 a 4 falhas"
+          },
+          "code": "y = nbinpdf(0:4, 3, 0.5);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nbincdf",
+        "nbininv",
+        "nbinstat",
+        "nbinfit",
+        "binopdf"
+      ]
+    },
+    "nbinstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the negative binomial distribution with r successes and success probability p.",
+        "pt": "Retorna a média e a variância da distribuição binomial negativa com r sucessos e probabilidade de sucesso p."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = nbinstat(r, p)",
+          "en": "Mean and variance for each pair `r`, `p`.",
+          "pt": "Média e variância para cada par `r`, `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Number of successes, positive. Scalar or array.",
+          "pt": "Número de sucessos, positivo. Escalar ou array."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success in each trial, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1. Escalar ou array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean number of failures, `r*(1-p)/p`.",
+          "pt": "Número médio de falhas, `r*(1-p)/p`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `r*(1-p)/p^2`.",
+          "pt": "Variância, `r*(1-p)/p^2`."
+        }
+      ],
+      "description": {
+        "en": "The negative binomial distribution counts the failures observed before the `r`-th success in independent trials that each succeed with probability `p`. It is a common model for overdispersed counts, whose variance is larger than their mean.\n\nThe variance is always larger than the mean, which is why this distribution is used for overdispersed counts.",
+        "pt": "A distribuição binomial negativa conta as falhas observadas antes do `r`-ésimo sucesso em tentativas independentes, cada uma com probabilidade de sucesso `p`. É um modelo comum para contagens com superdispersão, cuja variância é maior que a média.\n\nA variância é sempre maior que a média, e por isso essa distribuição é usada para contagens com superdispersão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = nbinstat(3, 0.5);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nbinpdf",
+        "nbincdf",
+        "nbininv",
+        "nbinfit",
+        "binostat"
+      ]
+    },
+    "ncfcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the noncentral F distribution, with an option for the upper tail.",
+        "pt": "Função de distribuição acumulada da distribuição F não central, com opção para a cauda superior."
+      },
+      "syntax": [
+        {
+          "code": "p = ncfcdf(x, nu1, nu2, delta)",
+          "en": "Probability that the variable is at most `x`.",
+          "pt": "Probabilidade de a variável ser no máximo `x`."
+        },
+        {
+          "code": "p = ncfcdf(x, nu1, nu2, delta, 'upper')",
+          "en": "Upper tail, the probability of exceeding `x`.",
+          "pt": "Cauda superior, a probabilidade de exceder `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, nonnegative. Scalar or array.",
+          "pt": "Pontos de avaliação, não negativos. Escalar ou array."
+        },
+        {
+          "name": "nu1",
+          "en": "Numerator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do numerador, positivos. Escalar ou array."
+        },
+        {
+          "name": "nu2",
+          "en": "Denominator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do denominador, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative. With `delta = 0` the distribution is the ordinary F distribution.",
+          "pt": "Parâmetro de não centralidade, não negativo. Com `delta = 0` a distribuição é a F comum."
+        },
+        {
+          "name": "'upper'",
+          "en": "Return the upper tail `1 - cdf`.",
+          "pt": "Retorna a cauda superior `1 - cdf`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the common size of the inputs.",
+          "pt": "Probabilidades acumuladas, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral F distribution is the ratio of a noncentral chi-square variable (divided by `nu1`) to an independent central chi-square variable (divided by `nu2`). It describes the F statistic when the null hypothesis is false, so it is used to compute the power of F tests.\n\nFor a power calculation, take the critical value `c = finv(1-alpha, nu1, nu2)` of the central F test and compute `ncfcdf(c, nu1, nu2, delta, 'upper')`.",
+        "pt": "A distribuição F não central é a razão entre uma variável qui-quadrado não central (dividida por `nu1`) e uma qui-quadrado central independente (dividida por `nu2`). Ela descreve a estatística F quando a hipótese nula é falsa, e por isso é usada para calcular o poder de testes F.\n\nPara um cálculo de poder, pegue o valor crítico `c = finv(1-alpha, nu1, nu2)` do teste F central e calcule `ncfcdf(c, nu1, nu2, delta, 'upper')`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probability and upper tail",
+            "pt": "Probabilidade acumulada e cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', ncfcdf(2, 3, 10, 2))\nfprintf('%.4f\\n', ncfcdf(2, 3, 10, 2, 'upper'))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Power of an F test",
+            "pt": "Poder de um teste F"
+          },
+          "code": "c = finv(0.95, 3, 10);\nfprintf('%.4f\\n', ncfcdf(c, 3, 10, 2, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncfpdf",
+        "ncfinv",
+        "ncfstat",
+        "fcdf",
+        "ncx2cdf"
+      ]
+    },
+    "ncfinv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the noncentral F distribution: the value x at which the cumulative probability equals p.",
+        "pt": "Inversa da função de distribuição acumulada da distribuição F não central: o valor x em que a probabilidade acumulada é igual a p."
+      },
+      "syntax": [
+        {
+          "code": "x = ncfinv(p, nu1, nu2, delta)",
+          "en": "Quantile for each probability in `p`.",
+          "pt": "Quantil para cada probabilidade em `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidades, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "nu1",
+          "en": "Numerator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do numerador, positivos. Escalar ou array."
+        },
+        {
+          "name": "nu2",
+          "en": "Denominator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do denominador, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative. With `delta = 0` the distribution is the ordinary F distribution.",
+          "pt": "Parâmetro de não centralidade, não negativo. Com `delta = 0` a distribuição é a F comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, with the common size of the inputs.",
+          "pt": "Quantis, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral F distribution is the ratio of a noncentral chi-square variable (divided by `nu1`) to an independent central chi-square variable (divided by `nu2`). It describes the F statistic when the null hypothesis is false, so it is used to compute the power of F tests.\n\n`ncfinv` undoes `ncfcdf`: `ncfcdf(ncfinv(p, nu1, nu2, delta), nu1, nu2, delta)` returns `p`.",
+        "pt": "A distribuição F não central é a razão entre uma variável qui-quadrado não central (dividida por `nu1`) e uma qui-quadrado central independente (dividida por `nu2`). Ela descreve a estatística F quando a hipótese nula é falsa, e por isso é usada para calcular o poder de testes F.\n\n`ncfinv` desfaz `ncfcdf`: `ncfcdf(ncfinv(p, nu1, nu2, delta), nu1, nu2, delta)` retorna `p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median",
+            "pt": "Mediana"
+          },
+          "code": "fprintf('%.4f\\n', ncfinv(0.5, 3, 10, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Round trip",
+            "pt": "Ida e volta"
+          },
+          "code": "x = ncfinv(0.9, 3, 10, 2);\nfprintf('%.4f %.4f\\n', x, ncfcdf(x, 3, 10, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncfcdf",
+        "ncfpdf",
+        "ncfstat",
+        "finv",
+        "ncx2inv"
+      ]
+    },
+    "ncfpdf": {
+      "summary": {
+        "en": "Probability density function of the noncentral F distribution with degrees of freedom nu1 and nu2 and noncentrality delta.",
+        "pt": "Função densidade de probabilidade da distribuição F não central com graus de liberdade nu1 e nu2 e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "y = ncfpdf(x, nu1, nu2, delta)",
+          "en": "Density at each `x`.",
+          "pt": "Densidade em cada `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, nonnegative. Scalar or array.",
+          "pt": "Pontos de avaliação, não negativos. Escalar ou array."
+        },
+        {
+          "name": "nu1",
+          "en": "Numerator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do numerador, positivos. Escalar ou array."
+        },
+        {
+          "name": "nu2",
+          "en": "Denominator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do denominador, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative. With `delta = 0` the distribution is the ordinary F distribution.",
+          "pt": "Parâmetro de não centralidade, não negativo. Com `delta = 0` a distribuição é a F comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the common size of the inputs.",
+          "pt": "Valores da densidade, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral F distribution is the ratio of a noncentral chi-square variable (divided by `nu1`) to an independent central chi-square variable (divided by `nu2`). It describes the F statistic when the null hypothesis is false, so it is used to compute the power of F tests.\n\nThe density is 0 for negative `x`.",
+        "pt": "A distribuição F não central é a razão entre uma variável qui-quadrado não central (dividida por `nu1`) e uma qui-quadrado central independente (dividida por `nu2`). Ela descreve a estatística F quando a hipótese nula é falsa, e por isso é usada para calcular o poder de testes F.\n\nA densidade é 0 para `x` negativo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at one point",
+            "pt": "Densidade em um ponto"
+          },
+          "code": "fprintf('%.4f\\n', ncfpdf(1, 3, 10, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Central case",
+            "pt": "Caso central"
+          },
+          "code": "fprintf('%.4f %.4f\\n', ncfpdf(1, 3, 10, 0), fpdf(1, 3, 10))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncfcdf",
+        "ncfinv",
+        "ncfstat",
+        "fpdf",
+        "ncx2pdf"
+      ]
+    },
+    "ncfstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the noncentral F distribution with degrees of freedom nu1 and nu2 and noncentrality delta.",
+        "pt": "Retorna a média e a variância da distribuição F não central com graus de liberdade nu1 e nu2 e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = ncfstat(nu1, nu2, delta)",
+          "en": "Mean and variance for each set of parameters.",
+          "pt": "Média e variância para cada conjunto de parâmetros."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nu1",
+          "en": "Numerator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do numerador, positivos. Escalar ou array."
+        },
+        {
+          "name": "nu2",
+          "en": "Denominator degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade do denominador, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative. With `delta = 0` the distribution is the ordinary F distribution.",
+          "pt": "Parâmetro de não centralidade, não negativo. Com `delta = 0` a distribuição é a F comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean. It exists only when `nu2 > 2`, otherwise it is `NaN`.",
+          "pt": "Média. Só existe quando `nu2 > 2`; caso contrário é `NaN`."
+        },
+        {
+          "name": "v",
+          "en": "Variance. It exists only when `nu2 > 4`, otherwise it is `NaN`.",
+          "pt": "Variância. Só existe quando `nu2 > 4`; caso contrário é `NaN`."
+        }
+      ],
+      "description": {
+        "en": "The noncentral F distribution is the ratio of a noncentral chi-square variable (divided by `nu1`) to an independent central chi-square variable (divided by `nu2`). It describes the F statistic when the null hypothesis is false, so it is used to compute the power of F tests.\n\nA larger `delta` raises both the mean and the variance.",
+        "pt": "A distribuição F não central é a razão entre uma variável qui-quadrado não central (dividida por `nu1`) e uma qui-quadrado central independente (dividida por `nu2`). Ela descreve a estatística F quando a hipótese nula é falsa, e por isso é usada para calcular o poder de testes F.\n\nUm `delta` maior aumenta a média e a variância."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = ncfstat(3, 10, 2);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Moments that do not exist",
+            "pt": "Momentos que não existem"
+          },
+          "code": "[m, v] = ncfstat(3, 3, 2);\ndisp([m v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncfpdf",
+        "ncfcdf",
+        "ncfinv",
+        "fstat",
+        "ncx2stat"
+      ]
+    },
+    "nctcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the noncentral t distribution, with an option for the upper tail.",
+        "pt": "Função de distribuição acumulada da distribuição t não central, com opção para a cauda superior."
+      },
+      "syntax": [
+        {
+          "code": "p = nctcdf(x, nu, delta)",
+          "en": "Probability that the variable is at most `x`.",
+          "pt": "Probabilidade de a variável ser no máximo `x`."
+        },
+        {
+          "code": "p = nctcdf(x, nu, delta, 'upper')",
+          "en": "Upper tail, the probability of exceeding `x`.",
+          "pt": "Cauda superior, a probabilidade de exceder `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar or array.",
+          "pt": "Pontos de avaliação. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, any real number. With `delta = 0` the distribution is Student's t.",
+          "pt": "Parâmetro de não centralidade, qualquer número real. Com `delta = 0` a distribuição é a t de Student."
+        },
+        {
+          "name": "'upper'",
+          "en": "Return the upper tail `1 - cdf`.",
+          "pt": "Retorna a cauda superior `1 - cdf`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the common size of the inputs.",
+          "pt": "Probabilidades acumuladas, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral t distribution is the ratio of a normal variable with mean `delta` and variance 1 to the square root of an independent chi-square variable divided by its `nu` degrees of freedom. It describes the t statistic when the true mean differs from the hypothesized one, so it is used for the power of t tests and for tolerance limits.\n\nFor the power of a one-sided t test, take the critical value `c = tinv(1-alpha, nu)` and compute `nctcdf(c, nu, delta, 'upper')`.",
+        "pt": "A distribuição t não central é a razão entre uma variável normal com média `delta` e variância 1 e a raiz quadrada de uma variável qui-quadrado independente dividida por seus `nu` graus de liberdade. Ela descreve a estatística t quando a média verdadeira difere da hipotetizada, e por isso é usada no poder de testes t e em limites de tolerância.\n\nPara o poder de um teste t unilateral, pegue o valor crítico `c = tinv(1-alpha, nu)` e calcule `nctcdf(c, nu, delta, 'upper')`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probability and upper tail",
+            "pt": "Probabilidade acumulada e cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', nctcdf(1, 10, 1))\nfprintf('%.4f\\n', nctcdf(1, 10, 1, 'upper'))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Power of a one-sided t test",
+            "pt": "Poder de um teste t unilateral"
+          },
+          "code": "c = tinv(0.95, 10);\nfprintf('%.4f\\n', nctcdf(c, 10, 2, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nctpdf",
+        "nctinv",
+        "nctstat",
+        "tcdf",
+        "ncx2cdf"
+      ]
+    },
+    "nctinv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the noncentral t distribution: the value x at which the cumulative probability equals p.",
+        "pt": "Inversa da função de distribuição acumulada da distribuição t não central: o valor x em que a probabilidade acumulada é igual a p."
+      },
+      "syntax": [
+        {
+          "code": "x = nctinv(p, nu, delta)",
+          "en": "Quantile for each probability in `p`.",
+          "pt": "Quantil para cada probabilidade em `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidades, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, any real number. With `delta = 0` the distribution is Student's t.",
+          "pt": "Parâmetro de não centralidade, qualquer número real. Com `delta = 0` a distribuição é a t de Student."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, with the common size of the inputs.",
+          "pt": "Quantis, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral t distribution is the ratio of a normal variable with mean `delta` and variance 1 to the square root of an independent chi-square variable divided by its `nu` degrees of freedom. It describes the t statistic when the true mean differs from the hypothesized one, so it is used for the power of t tests and for tolerance limits.\n\n`nctinv` undoes `nctcdf`: `nctcdf(nctinv(p, nu, delta), nu, delta)` returns `p`.",
+        "pt": "A distribuição t não central é a razão entre uma variável normal com média `delta` e variância 1 e a raiz quadrada de uma variável qui-quadrado independente dividida por seus `nu` graus de liberdade. Ela descreve a estatística t quando a média verdadeira difere da hipotetizada, e por isso é usada no poder de testes t e em limites de tolerância.\n\n`nctinv` desfaz `nctcdf`: `nctcdf(nctinv(p, nu, delta), nu, delta)` retorna `p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median",
+            "pt": "Mediana"
+          },
+          "code": "fprintf('%.4f\\n', nctinv(0.5, 10, 1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Round trip",
+            "pt": "Ida e volta"
+          },
+          "code": "x = nctinv(0.9, 10, 1);\nfprintf('%.4f %.4f\\n', x, nctcdf(x, 10, 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nctcdf",
+        "nctpdf",
+        "nctstat",
+        "tinv",
+        "ncx2inv"
+      ]
+    },
+    "nctpdf": {
+      "summary": {
+        "en": "Probability density function of the noncentral t distribution with nu degrees of freedom and noncentrality delta.",
+        "pt": "Função densidade de probabilidade da distribuição t não central com nu graus de liberdade e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "y = nctpdf(x, nu, delta)",
+          "en": "Density at each `x`.",
+          "pt": "Densidade em cada `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar or array.",
+          "pt": "Pontos de avaliação. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, any real number. With `delta = 0` the distribution is Student's t.",
+          "pt": "Parâmetro de não centralidade, qualquer número real. Com `delta = 0` a distribuição é a t de Student."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the common size of the inputs.",
+          "pt": "Valores da densidade, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral t distribution is the ratio of a normal variable with mean `delta` and variance 1 to the square root of an independent chi-square variable divided by its `nu` degrees of freedom. It describes the t statistic when the true mean differs from the hypothesized one, so it is used for the power of t tests and for tolerance limits.\n\nUnlike Student's t, the density is skewed when `delta` is not 0, with a longer tail on the side of the sign of `delta`.",
+        "pt": "A distribuição t não central é a razão entre uma variável normal com média `delta` e variância 1 e a raiz quadrada de uma variável qui-quadrado independente dividida por seus `nu` graus de liberdade. Ela descreve a estatística t quando a média verdadeira difere da hipotetizada, e por isso é usada no poder de testes t e em limites de tolerância.\n\nAo contrário da t de Student, a densidade é assimétrica quando `delta` não é 0, com cauda mais longa do lado do sinal de `delta`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at one point",
+            "pt": "Densidade em um ponto"
+          },
+          "code": "fprintf('%.4f\\n', nctpdf(1, 10, 1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Central case",
+            "pt": "Caso central"
+          },
+          "code": "fprintf('%.4f %.4f\\n', nctpdf(1, 10, 0), tpdf(1, 10))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nctcdf",
+        "nctinv",
+        "nctstat",
+        "tpdf",
+        "ncx2pdf"
+      ]
+    },
+    "nctstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the noncentral t distribution with nu degrees of freedom and noncentrality delta.",
+        "pt": "Retorna a média e a variância da distribuição t não central com nu graus de liberdade e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = nctstat(nu, delta)",
+          "en": "Mean and variance for each pair `nu`, `delta`.",
+          "pt": "Média e variância para cada par `nu`, `delta`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, any real number. With `delta = 0` the distribution is Student's t.",
+          "pt": "Parâmetro de não centralidade, qualquer número real. Com `delta = 0` a distribuição é a t de Student."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean. It exists only when `nu > 1`, otherwise it is `NaN`.",
+          "pt": "Média. Só existe quando `nu > 1`; caso contrário é `NaN`."
+        },
+        {
+          "name": "v",
+          "en": "Variance. It exists only when `nu > 2`, otherwise it is `NaN`.",
+          "pt": "Variância. Só existe quando `nu > 2`; caso contrário é `NaN`."
+        }
+      ],
+      "description": {
+        "en": "The noncentral t distribution is the ratio of a normal variable with mean `delta` and variance 1 to the square root of an independent chi-square variable divided by its `nu` degrees of freedom. It describes the t statistic when the true mean differs from the hypothesized one, so it is used for the power of t tests and for tolerance limits.\n\nThe mean is not `delta`: it is slightly larger in magnitude, and the difference shrinks as `nu` grows.",
+        "pt": "A distribuição t não central é a razão entre uma variável normal com média `delta` e variância 1 e a raiz quadrada de uma variável qui-quadrado independente dividida por seus `nu` graus de liberdade. Ela descreve a estatística t quando a média verdadeira difere da hipotetizada, e por isso é usada no poder de testes t e em limites de tolerância.\n\nA média não é `delta`: é um pouco maior em módulo, e a diferença diminui conforme `nu` cresce."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = nctstat(10, 1);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Moments that do not exist",
+            "pt": "Momentos que não existem"
+          },
+          "code": "[m, v] = nctstat(1, 1);\ndisp([m v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nctpdf",
+        "nctcdf",
+        "nctinv",
+        "tstat",
+        "ncx2stat"
+      ]
+    },
+    "ncx2cdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the noncentral chi-square distribution, with an option for the upper tail.",
+        "pt": "Função de distribuição acumulada da distribuição qui-quadrado não central, com opção para a cauda superior."
+      },
+      "syntax": [
+        {
+          "code": "p = ncx2cdf(x, nu, delta)",
+          "en": "Probability that the variable is at most `x`.",
+          "pt": "Probabilidade de a variável ser no máximo `x`."
+        },
+        {
+          "code": "p = ncx2cdf(x, nu, delta, 'upper')",
+          "en": "Upper tail, the probability of exceeding `x`.",
+          "pt": "Cauda superior, a probabilidade de exceder `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, nonnegative. Scalar or array.",
+          "pt": "Pontos de avaliação, não negativos. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative: the sum of the squared means of the underlying normal variables. With `delta = 0` the distribution is the ordinary chi-square.",
+          "pt": "Parâmetro de não centralidade, não negativo: a soma dos quadrados das médias das variáveis normais subjacentes. Com `delta = 0` a distribuição é a qui-quadrado comum."
+        },
+        {
+          "name": "'upper'",
+          "en": "Return the upper tail `1 - cdf`.",
+          "pt": "Retorna a cauda superior `1 - cdf`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the common size of the inputs.",
+          "pt": "Probabilidades acumuladas, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral chi-square distribution is the distribution of the sum of squares of `nu` independent normal variables with unit variance and nonzero means; `delta` is the sum of the squared means. It appears in the power of chi-square and likelihood ratio tests and in the distribution of the F statistic when the null hypothesis is false.\n\nFor the power of a chi-square test, take the critical value `c = chi2inv(1-alpha, nu)` and compute `ncx2cdf(c, nu, delta, 'upper')`.",
+        "pt": "A distribuição qui-quadrado não central é a distribuição da soma dos quadrados de `nu` variáveis normais independentes com variância 1 e médias não nulas; `delta` é a soma dos quadrados das médias. Ela aparece no poder de testes qui-quadrado e da razão de verossimilhanças e na distribuição da estatística F quando a hipótese nula é falsa.\n\nPara o poder de um teste qui-quadrado, pegue o valor crítico `c = chi2inv(1-alpha, nu)` e calcule `ncx2cdf(c, nu, delta, 'upper')`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probability and upper tail",
+            "pt": "Probabilidade acumulada e cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', ncx2cdf(3, 4, 2))\nfprintf('%.4f\\n', ncx2cdf(3, 4, 2, 'upper'))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Power of a chi-square test",
+            "pt": "Poder de um teste qui-quadrado"
+          },
+          "code": "c = chi2inv(0.95, 4);\nfprintf('%.4f\\n', ncx2cdf(c, 4, 6, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncx2pdf",
+        "ncx2inv",
+        "ncx2stat",
+        "chi2cdf",
+        "nctcdf"
+      ]
+    },
+    "ncx2inv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the noncentral chi-square distribution: the value x at which the cumulative probability equals p.",
+        "pt": "Inversa da função de distribuição acumulada da distribuição qui-quadrado não central: o valor x em que a probabilidade acumulada é igual a p."
+      },
+      "syntax": [
+        {
+          "code": "x = ncx2inv(p, nu, delta)",
+          "en": "Quantile for each probability in `p`.",
+          "pt": "Quantil para cada probabilidade em `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidades, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative: the sum of the squared means of the underlying normal variables. With `delta = 0` the distribution is the ordinary chi-square.",
+          "pt": "Parâmetro de não centralidade, não negativo: a soma dos quadrados das médias das variáveis normais subjacentes. Com `delta = 0` a distribuição é a qui-quadrado comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, with the common size of the inputs. `p = 0` gives 0 and `p = 1` gives `Inf`.",
+          "pt": "Quantis, com o tamanho comum das entradas. `p = 0` dá 0 e `p = 1` dá `Inf`."
+        }
+      ],
+      "description": {
+        "en": "The noncentral chi-square distribution is the distribution of the sum of squares of `nu` independent normal variables with unit variance and nonzero means; `delta` is the sum of the squared means. It appears in the power of chi-square and likelihood ratio tests and in the distribution of the F statistic when the null hypothesis is false.\n\n`ncx2inv` undoes `ncx2cdf`: `ncx2cdf(ncx2inv(p, nu, delta), nu, delta)` returns `p`.",
+        "pt": "A distribuição qui-quadrado não central é a distribuição da soma dos quadrados de `nu` variáveis normais independentes com variância 1 e médias não nulas; `delta` é a soma dos quadrados das médias. Ela aparece no poder de testes qui-quadrado e da razão de verossimilhanças e na distribuição da estatística F quando a hipótese nula é falsa.\n\n`ncx2inv` desfaz `ncx2cdf`: `ncx2cdf(ncx2inv(p, nu, delta), nu, delta)` retorna `p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median",
+            "pt": "Mediana"
+          },
+          "code": "fprintf('%.4f\\n', ncx2inv(0.5, 4, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Round trip",
+            "pt": "Ida e volta"
+          },
+          "code": "x = ncx2inv(0.9, 4, 2);\nfprintf('%.4f %.4f\\n', x, ncx2cdf(x, 4, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncx2cdf",
+        "ncx2pdf",
+        "ncx2stat",
+        "chi2inv",
+        "nctinv"
+      ],
+      "notes": {
+        "en": "With single precision inputs, MATLAB runs its solver in single precision and agrees only to about 1e-6 relative, so results for `single` data can differ from MATLAB in the last digits.",
+        "pt": "Com entradas em precisão simples (`single`), o MATLAB executa seu solver em precisão simples e concorda apenas até cerca de 1e-6 relativo, então os resultados para dados `single` podem diferir do MATLAB nos últimos dígitos."
+      }
+    },
+    "ncx2pdf": {
+      "summary": {
+        "en": "Probability density function of the noncentral chi-square distribution with nu degrees of freedom and noncentrality delta.",
+        "pt": "Função densidade de probabilidade da distribuição qui-quadrado não central com nu graus de liberdade e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "y = ncx2pdf(x, nu, delta)",
+          "en": "Density at each `x`.",
+          "pt": "Densidade em cada `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, nonnegative. Scalar or array.",
+          "pt": "Pontos de avaliação, não negativos. Escalar ou array."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative: the sum of the squared means of the underlying normal variables. With `delta = 0` the distribution is the ordinary chi-square.",
+          "pt": "Parâmetro de não centralidade, não negativo: a soma dos quadrados das médias das variáveis normais subjacentes. Com `delta = 0` a distribuição é a qui-quadrado comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the common size of the inputs.",
+          "pt": "Valores da densidade, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "The noncentral chi-square distribution is the distribution of the sum of squares of `nu` independent normal variables with unit variance and nonzero means; `delta` is the sum of the squared means. It appears in the power of chi-square and likelihood ratio tests and in the distribution of the F statistic when the null hypothesis is false.\n\nThe density is 0 for negative `x`.",
+        "pt": "A distribuição qui-quadrado não central é a distribuição da soma dos quadrados de `nu` variáveis normais independentes com variância 1 e médias não nulas; `delta` é a soma dos quadrados das médias. Ela aparece no poder de testes qui-quadrado e da razão de verossimilhanças e na distribuição da estatística F quando a hipótese nula é falsa.\n\nA densidade é 0 para `x` negativo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at one point",
+            "pt": "Densidade em um ponto"
+          },
+          "code": "fprintf('%.4f\\n', ncx2pdf(3, 4, 2))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Central case",
+            "pt": "Caso central"
+          },
+          "code": "fprintf('%.4f %.4f\\n', ncx2pdf(3, 4, 0), chi2pdf(3, 4))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncx2cdf",
+        "ncx2inv",
+        "ncx2stat",
+        "chi2pdf",
+        "nctpdf"
+      ]
+    },
+    "ncx2stat": {
+      "summary": {
+        "en": "Returns the mean and variance of the noncentral chi-square distribution with nu degrees of freedom and noncentrality delta.",
+        "pt": "Retorna a média e a variância da distribuição qui-quadrado não central com nu graus de liberdade e não centralidade delta."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = ncx2stat(nu, delta)",
+          "en": "Mean and variance for each pair `nu`, `delta`.",
+          "pt": "Média e variância para cada par `nu`, `delta`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. Scalar or array.",
+          "pt": "Graus de liberdade, positivos. Escalar ou array."
+        },
+        {
+          "name": "delta",
+          "en": "Noncentrality parameter, nonnegative: the sum of the squared means of the underlying normal variables. With `delta = 0` the distribution is the ordinary chi-square.",
+          "pt": "Parâmetro de não centralidade, não negativo: a soma dos quadrados das médias das variáveis normais subjacentes. Com `delta = 0` a distribuição é a qui-quadrado comum."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `nu + delta`.",
+          "pt": "Média, `nu + delta`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `2*(nu + 2*delta)`.",
+          "pt": "Variância, `2*(nu + 2*delta)`."
+        }
+      ],
+      "description": {
+        "en": "The noncentral chi-square distribution is the distribution of the sum of squares of `nu` independent normal variables with unit variance and nonzero means; `delta` is the sum of the squared means. It appears in the power of chi-square and likelihood ratio tests and in the distribution of the F statistic when the null hypothesis is false.\n\nBoth moments grow with `delta`.",
+        "pt": "A distribuição qui-quadrado não central é a distribuição da soma dos quadrados de `nu` variáveis normais independentes com variância 1 e médias não nulas; `delta` é a soma dos quadrados das médias. Ela aparece no poder de testes qui-quadrado e da razão de verossimilhanças e na distribuição da estatística F quando a hipótese nula é falsa.\n\nOs dois momentos crescem com `delta`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = ncx2stat(4, 2);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ncx2pdf",
+        "ncx2cdf",
+        "ncx2inv",
+        "chi2stat",
+        "nctstat"
+      ]
+    },
+    "normcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the normal distribution: the probability that a value is at most x.",
+        "pt": "Função de distribuição acumulada da distribuição normal: a probabilidade de um valor ser no máximo x."
+      },
+      "syntax": [
+        {
+          "code": "p = normcdf(x)",
+          "en": "Standard normal distribution (`mu = 0`, `sigma = 1`).",
+          "pt": "Distribuição normal padrão (`mu = 0`, `sigma = 1`)."
+        },
+        {
+          "code": "p = normcdf(x, mu, sigma)",
+          "en": "Normal distribution with mean `mu` and standard deviation `sigma`.",
+          "pt": "Distribuição normal com média `mu` e desvio padrão `sigma`."
+        },
+        {
+          "code": "p = normcdf(x, mu, sigma, 'upper')",
+          "en": "Upper tail, the probability of exceeding `x`.",
+          "pt": "Cauda superior, a probabilidade de exceder `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar or array.",
+          "pt": "Pontos de avaliação. Escalar ou array."
+        },
+        {
+          "name": "mu",
+          "en": "Mean. Scalar or array. Default 0.",
+          "pt": "Média. Escalar ou array. O padrão é 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation, nonnegative. Scalar or array. Default 1.",
+          "pt": "Desvio padrão, não negativo. Escalar ou array. O padrão é 1."
+        },
+        {
+          "name": "'upper'",
+          "en": "Return the upper tail `1 - cdf`, computed so that small tails keep their accuracy.",
+          "pt": "Retorna a cauda superior `1 - cdf`, calculada de modo que caudas pequenas mantenham a precisão."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the common size of the inputs.",
+          "pt": "Probabilidades acumuladas, com o tamanho comum das entradas."
+        }
+      ],
+      "description": {
+        "en": "`normcdf` gives the area under the bell curve to the left of `x`. About 68% of the probability lies within one standard deviation of the mean and about 95% within 1.96 standard deviations. The inputs follow the usual scalar expansion: scalars and arrays of a common size can be mixed.\n\nUse `'upper'` for p-values of one-sided tests, since it stays accurate far in the tail where `1 - normcdf(x)` would round to 0.",
+        "pt": "`normcdf` dá a área sob a curva em sino à esquerda de `x`. Cerca de 68% da probabilidade fica a até um desvio padrão da média e cerca de 95% a até 1,96 desvio padrão. As entradas seguem a expansão usual de escalares: escalares e arrays de mesmo tamanho podem ser misturados.\n\nUse `'upper'` para valores-p de testes unilaterais, pois permanece preciso longe na cauda, onde `1 - normcdf(x)` seria arredondado para 0."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Standard normal",
+            "pt": "Normal padrão"
+          },
+          "code": "p = normcdf([-1 0 1.96]);\ndisp(round(p*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Upper tail and a general normal",
+            "pt": "Cauda superior e uma normal geral"
+          },
+          "code": "p = normcdf(1.96, 0, 1, 'upper');\nfprintf('%.4f\\n', p)\nfprintf('%.4f\\n', normcdf(12, 10, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normpdf",
+        "norminv",
+        "normfit",
+        "normlike",
+        "normstat"
+      ],
+      "notes": {
+        "en": "The forms with a covariance matrix of the parameters and a confidence interval for `p` (`[p, pLo, pUp] = normcdf(x, mu, sigma, pCov, alpha)`) are not supported and fail with a too-many-arguments error.",
+        "pt": "As formas com matriz de covariância dos parâmetros e intervalo de confiança para `p` (`[p, pLo, pUp] = normcdf(x, mu, sigma, pCov, alpha)`) não são suportadas e dão erro de argumentos demais."
+      }
+    },
+    "normfit": {
+      "summary": {
+        "en": "Estimates the mean and standard deviation of a normal distribution from a sample, with confidence intervals for both.",
+        "pt": "Estima a média e o desvio padrão de uma distribuição normal a partir de uma amostra, com intervalos de confiança para ambos."
+      },
+      "syntax": [
+        {
+          "code": "[muhat, sigmahat] = normfit(x)",
+          "en": "Estimates of the mean and standard deviation.",
+          "pt": "Estimativas da média e do desvio padrão."
+        },
+        {
+          "code": "[muhat, sigmahat, muci, sigmaci] = normfit(x)",
+          "en": "Also returns 95% confidence intervals.",
+          "pt": "Também retorna intervalos de confiança de 95%."
+        },
+        {
+          "code": "[muhat, sigmahat, muci, sigmaci] = normfit(x, alpha)",
+          "en": "Uses the confidence level `100*(1-alpha)`%.",
+          "pt": "Usa o nível de confiança `100*(1-alpha)`%."
+        },
+        {
+          "code": "[...] = normfit(x, alpha, censoring, freq)",
+          "en": "Weights observations by `freq`.",
+          "pt": "Pondera as observações por `freq`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample. A vector, or a matrix whose columns are fitted separately.",
+          "pt": "Amostra. Um vetor, ou uma matriz cujas colunas são ajustadas separadamente."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level of the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05."
+        },
+        {
+          "name": "censoring",
+          "en": "Must be empty or all zeros.",
+          "pt": "Deve ser vazio ou só zeros."
+        },
+        {
+          "name": "freq",
+          "en": "Frequencies, the size of `x`. Default all 1.",
+          "pt": "Frequências, do tamanho de `x`. O padrão é 1 para todos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "muhat",
+          "en": "Estimated mean, the sample mean.",
+          "pt": "Média estimada, a média amostral."
+        },
+        {
+          "name": "sigmahat",
+          "en": "Estimated standard deviation. It uses the unbiased divisor `n-1`, like `std`.",
+          "pt": "Desvio padrão estimado. Usa o divisor não viesado `n-1`, como `std`."
+        },
+        {
+          "name": "muci",
+          "en": "2-by-1 confidence interval for the mean, based on the t distribution.",
+          "pt": "Intervalo de confiança 2-por-1 para a média, baseado na distribuição t."
+        },
+        {
+          "name": "sigmaci",
+          "en": "2-by-1 confidence interval for the standard deviation, based on the chi-square distribution.",
+          "pt": "Intervalo de confiança 2-por-1 para o desvio padrão, baseado na distribuição qui-quadrado."
+        }
+      ],
+      "description": {
+        "en": "`normfit` summarizes a sample by the normal distribution that fits it best. The intervals tell how far the true mean and standard deviation could plausibly be from the estimates; they get narrower as the sample grows and wider when you ask for a higher confidence level (smaller `alpha`).\n\nCheck the normality assumption before trusting the intervals, for instance with a histogram or `kstest`.",
+        "pt": "`normfit` resume uma amostra pela distribuição normal que melhor a ajusta. Os intervalos mostram o quão longe a média e o desvio padrão verdadeiros podem estar das estimativas; ficam mais estreitos com amostras maiores e mais largos quando você pede um nível de confiança maior (`alpha` menor).\n\nVerifique a suposição de normalidade antes de confiar nos intervalos, por exemplo com um histograma ou `kstest`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and 95% intervals",
+            "pt": "Ajuste e intervalos de 95%"
+          },
+          "code": "x = [9.8 10.1 10.4 9.7 10.0 10.3 9.9 10.2];\n[m, s, mci, sci] = normfit(x);\ndisp(round([m s]*10000)/10000)\ndisp(round(mci'*10000)/10000)\ndisp(round(sci'*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "99% interval for the mean",
+            "pt": "Intervalo de 99% para a média"
+          },
+          "code": "x = [9.8 10.1 10.4 9.7 10.0 10.3 9.9 10.2];\n[m, s, mci] = normfit(x, 0.01);\ndisp(round(mci'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normlike",
+        "norminv",
+        "normcdf",
+        "mle",
+        "fitdist"
+      ],
+      "notes": {
+        "en": "Censored data are not supported: a `censoring` vector with any nonzero entry fails with an error.",
+        "pt": "Dados censurados não são suportados: um vetor `censoring` com qualquer elemento diferente de zero dá erro."
+      }
+    },
+    "norminv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the normal distribution: the value x below which a fraction p of the probability lies.",
+        "pt": "Inversa da função de distribuição acumulada da distribuição normal: o valor x abaixo do qual está a fração p da probabilidade."
+      },
+      "syntax": [
+        {
+          "code": "x = norminv(p)",
+          "en": "Quantile of the standard normal distribution.",
+          "pt": "Quantil da distribuição normal padrão."
+        },
+        {
+          "code": "x = norminv(p, mu, sigma)",
+          "en": "Quantile of the normal distribution with mean `mu` and standard deviation `sigma`.",
+          "pt": "Quantil da distribuição normal com média `mu` e desvio padrão `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1. Scalar or array.",
+          "pt": "Probabilidades, entre 0 e 1. Escalar ou array."
+        },
+        {
+          "name": "mu",
+          "en": "Mean. Scalar or array. Default 0.",
+          "pt": "Média. Escalar ou array. O padrão é 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation, nonnegative. Scalar or array. Default 1.",
+          "pt": "Desvio padrão, não negativo. Escalar ou array. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, with the common size of the inputs. `p = 0` gives `-Inf` and `p = 1` gives `Inf`.",
+          "pt": "Quantis, com o tamanho comum das entradas. `p = 0` dá `-Inf` e `p = 1` dá `Inf`."
+        }
+      ],
+      "description": {
+        "en": "`norminv` undoes `normcdf`. It is the function behind critical values: `norminv(0.975)` is the familiar 1.96 used for 95% two-sided intervals.\n\nThe quantile for a general normal distribution is `mu + sigma * norminv(p)`.",
+        "pt": "`norminv` desfaz `normcdf`. É a função por trás dos valores críticos: `norminv(0.975)` é o conhecido 1,96 usado em intervalos bilaterais de 95%.\n\nO quantil de uma distribuição normal geral é `mu + sigma * norminv(p)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Critical values",
+            "pt": "Valores críticos"
+          },
+          "code": "x = norminv([0.025 0.5 0.975]);\ndisp(round(x*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "With mean and deviation",
+            "pt": "Com média e desvio"
+          },
+          "code": "fprintf('%.4f\\n', norminv(0.9, 10, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normcdf",
+        "normpdf",
+        "normfit",
+        "normstat",
+        "normrnd"
+      ]
+    },
+    "normlike": {
+      "summary": {
+        "en": "Returns the negative log-likelihood of a normal distribution with given mean and standard deviation for a data sample.",
+        "pt": "Retorna o logaritmo da verossimilhança negativo de uma distribuição normal com média e desvio padrão dados para uma amostra."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = normlike(params, data)",
+          "en": "Negative log-likelihood for `params = [mu sigma]`.",
+          "pt": "Log-verossimilhança negativo para `params = [mu sigma]`."
+        },
+        {
+          "code": "[nlogL, avar] = normlike(params, data)",
+          "en": "Also returns the approximate covariance matrix of the estimates.",
+          "pt": "Também retorna a matriz de covariância aproximada das estimativas."
+        },
+        {
+          "code": "[nlogL, avar] = normlike(params, data, censoring, freq)",
+          "en": "Handles censored observations and frequency weights.",
+          "pt": "Trata observações censuradas e pesos de frequência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Two-element vector `[mu sigma]` with the mean and the standard deviation.",
+          "pt": "Vetor com dois elementos `[mu sigma]`, a média e o desvio padrão."
+        },
+        {
+          "name": "data",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        },
+        {
+          "name": "censoring",
+          "en": "Optional vector the size of `data`: 1 for a right-censored observation, 0 for an observed one. Use `[]` to skip.",
+          "pt": "Vetor opcional do tamanho de `data`: 1 para observação censurada à direita, 0 para observada. Use `[]` para pular."
+        },
+        {
+          "name": "freq",
+          "en": "Optional frequencies, the size of `data`. Default all 1.",
+          "pt": "Frequências opcionais, do tamanho de `data`. O padrão é 1 para todos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative of the log-likelihood. Smaller means the parameters explain the data better.",
+          "pt": "Negativo do logaritmo da verossimilhança. Menor significa que os parâmetros explicam melhor os dados."
+        },
+        {
+          "name": "avar",
+          "en": "2-by-2 approximate covariance matrix of the estimates of `mu` and `sigma`.",
+          "pt": "Matriz de covariância aproximada 2-por-2 das estimativas de `mu` e `sigma`."
+        }
+      ],
+      "description": {
+        "en": "`normlike` evaluates how likely the sample is under the given parameters, on the log scale and with the sign flipped, so you can minimize it. Comparing it for two parameter sets tells which one fits better, and it is the objective that `normfit` minimizes.\n\nThe value can be negative, since it comes from densities and not from probabilities.",
+        "pt": "`normlike` avalia quão provável é a amostra sob os parâmetros dados, na escala logarítmica e com o sinal trocado, para que possa ser minimizado. Comparar o valor para dois conjuntos de parâmetros mostra qual ajusta melhor, e é o objetivo que `normfit` minimiza.\n\nO valor pode ser negativo, porque vem de densidades e não de probabilidades."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at two parameter sets",
+            "pt": "Verossimilhança em dois conjuntos de parâmetros"
+          },
+          "code": "x = [9.8 10.1 10.4 9.7 10.0 10.3 9.9 10.2];\nfprintf('%.4f\\n', normlike([10 0.2], x))\nfprintf('%.4f\\n', normlike([11 0.2], x))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Covariance of the estimates",
+            "pt": "Covariância das estimativas"
+          },
+          "code": "x = [9.8 10.1 10.4 9.7 10.0 10.3 9.9 10.2];\n[nl, av] = normlike([10 0.2], x);\ndisp(round(av*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normfit",
+        "normpdf",
+        "normcdf",
+        "lognlike",
+        "mle"
+      ]
+    }
+  }
+}

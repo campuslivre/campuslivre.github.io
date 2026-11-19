@@ -1,0 +1,1853 @@
+{
+  "functions": {
+    "gevpdf": {
+      "summary": {
+        "en": "Probability density of the generalized extreme value distribution with shape k, scale sigma and location mu.",
+        "pt": "Densidade de probabilidade da distribuição de valores extremos generalizada com forma k, escala sigma e posição mu."
+      },
+      "syntax": [
+        {
+          "code": "y = gevpdf(x, k, sigma, mu)",
+          "en": "Density at each element of `x`.",
+          "pt": "Densidade em cada elemento de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar, vector or array.",
+          "pt": "Pontos em que calcular. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the Gumbel case, `k > 0` a heavy upper tail, `k < 0` a bounded upper tail.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso de Gumbel, `k > 0` uma cauda superior pesada e `k < 0` uma cauda superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter (any real number).",
+          "pt": "Parâmetro de posição (qualquer real)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as the inputs after scalar expansion.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The generalized extreme value (GEV) family describes the largest (or smallest) value of many observations, such as yearly maximum rainfall or wind speed. It joins the Gumbel, Frechet and reversed Weibull laws in one formula controlled by `k`.\n\nThe density is zero outside the support: for `k > 0` it is zero below `mu - sigma/k`, and for `k < 0` it is zero above `mu - sigma/k`. Arguments may be arrays of the same size, or scalars that are expanded. Invalid parameters (such as `sigma <= 0`) give `NaN`.",
+        "pt": "A família de valores extremos generalizada (GEV) descreve o maior (ou o menor) valor de muitas observações, como a chuva máxima anual ou a velocidade máxima do vento. Ela reúne as leis de Gumbel, Fréchet e Weibull invertida em uma só fórmula, controlada por `k`.\n\nA densidade é zero fora do suporte: para `k > 0` é zero abaixo de `mu - sigma/k`, e para `k < 0` é zero acima de `mu - sigma/k`. Os argumentos podem ser matrizes de mesmo tamanho ou escalares, que são expandidos. Parâmetros inválidos (como `sigma <= 0`) dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density of a GEV with k = 0.2",
+            "pt": "Densidade de uma GEV com k = 0,2"
+          },
+          "code": "x = [-1 0 1 2 4];\ny = gevpdf(x, 0.2, 1, 0);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Zero density below the lower bound",
+            "pt": "Densidade zero abaixo do limite inferior"
+          },
+          "code": "% k > 0: support starts at mu - sigma/k = -5\ndisp(gevpdf([-6 -5 -4], 0.2, 1, 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevcdf",
+        "gevinv",
+        "gevstat",
+        "gevfit",
+        "gevrnd"
+      ]
+    },
+    "gevinv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function (quantile function) of the generalized extreme value distribution with shape k, scale sigma and location mu.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição de valores extremos generalizada com forma k, escala sigma e posição mu."
+      },
+      "syntax": [
+        {
+          "code": "x = gevinv(p, k, sigma, mu)",
+          "en": "Value `x` such that the probability of being at most `x` is `p`.",
+          "pt": "Valor `x` tal que a probabilidade de ser no máximo `x` é `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Scalar, vector or array.",
+          "pt": "Probabilidades entre 0 e 1. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the Gumbel case, `k > 0` a heavy upper tail, `k < 0` a bounded upper tail.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso de Gumbel, `k > 0` uma cauda superior pesada e `k < 0` uma cauda superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter (any real number).",
+          "pt": "Parâmetro de posição (qualquer real)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as the inputs after scalar expansion.",
+          "pt": "Quantis, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`gevinv` undoes `gevcdf`. Its main use is the return level: the level exceeded on average once every T blocks (for example T years of yearly maxima) is `gevinv(1 - 1/T, k, sigma, mu)`.\n\n`p = 0` and `p = 1` return the ends of the support (possibly `-Inf` or `Inf`). Values of `p` outside `[0, 1]` and invalid parameters give `NaN`.",
+        "pt": "`gevinv` desfaz `gevcdf`. O uso principal é o nível de retorno: o nível excedido em média uma vez a cada T blocos (por exemplo, T anos de máximos anuais) é `gevinv(1 - 1/T, k, sigma, mu)`.\n\n`p = 0` e `p = 1` retornam as extremidades do suporte (possivelmente `-Inf` ou `Inf`). Valores de `p` fora de `[0, 1]` e parâmetros inválidos dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quartiles",
+            "pt": "Quartis"
+          },
+          "code": "q = gevinv([0.25 0.5 0.75], 0.2, 1, 0);\ndisp(round(q*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "50-year return level",
+            "pt": "Nível de retorno de 50 anos"
+          },
+          "code": "T = 50;\nlevel = gevinv(1 - 1/T, 0.1, 1, 0);\nfprintf('%.4f\\n', level)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevcdf",
+        "gevpdf",
+        "gevstat",
+        "gevfit",
+        "icdf"
+      ]
+    },
+    "gevstat": {
+      "summary": {
+        "en": "Mean and variance of the generalized extreme value distribution with shape k, scale sigma and location mu.",
+        "pt": "Média e variância da distribuição de valores extremos generalizada com forma k, escala sigma e posição mu."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = gevstat(k, sigma, mu)",
+          "en": "Mean `m` and variance `v` for each parameter set.",
+          "pt": "Média `m` e variância `v` para cada conjunto de parâmetros."
+        },
+        {
+          "code": "m = gevstat(k, sigma, mu)",
+          "en": "Mean only.",
+          "pt": "Somente a média."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the Gumbel case, `k > 0` a heavy upper tail, `k < 0` a bounded upper tail.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso de Gumbel, `k > 0` uma cauda superior pesada e `k < 0` uma cauda superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter (any real number).",
+          "pt": "Parâmetro de posição (qualquer real)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean. It is `Inf` when `k >= 1`.",
+          "pt": "Média. É `Inf` quando `k >= 1`."
+        },
+        {
+          "name": "v",
+          "en": "Variance. It is `Inf` when `k >= 0.5`.",
+          "pt": "Variância. É `Inf` quando `k >= 0,5`."
+        }
+      ],
+      "description": {
+        "en": "The inputs may be scalars or arrays of the same size, and the outputs have that size. The moments exist only for small `k`: a heavy upper tail (large positive `k`) makes the mean or the variance infinite.\n\nFor `k = 0` (Gumbel case) the mean is `mu + sigma*0.5772...` and the variance is `(pi*sigma)^2/6`.",
+        "pt": "As entradas podem ser escalares ou matrizes de mesmo tamanho, e as saídas têm esse tamanho. Os momentos só existem para `k` pequeno: uma cauda superior pesada (`k` positivo e grande) torna a média ou a variância infinita.\n\nPara `k = 0` (caso de Gumbel) a média é `mu + sigma*0,5772...` e a variância é `(pi*sigma)^2/6`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Moments for k = 0.2",
+            "pt": "Momentos para k = 0,2"
+          },
+          "code": "[m, v] = gevstat(0.2, 1, 0);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Gumbel case",
+            "pt": "Caso de Gumbel"
+          },
+          "code": "[m, v] = gevstat(0, 1, 0);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevpdf",
+        "gevcdf",
+        "gevfit",
+        "gevrnd",
+        "evstat"
+      ]
+    },
+    "gevrnd": {
+      "summary": {
+        "en": "Random numbers from the generalized extreme value distribution with shape k, scale sigma and location mu.",
+        "pt": "Números aleatórios da distribuição de valores extremos generalizada com forma k, escala sigma e posição mu."
+      },
+      "syntax": [
+        {
+          "code": "r = gevrnd(k, sigma, mu)",
+          "en": "One random number per element of the (expanded) parameters.",
+          "pt": "Um número aleatório por elemento dos parâmetros (expandidos)."
+        },
+        {
+          "code": "r = gevrnd(k, sigma, mu, m, n)",
+          "en": "`m`-by-`n` array of random numbers.",
+          "pt": "Matriz `m` por `n` de números aleatórios."
+        },
+        {
+          "code": "r = gevrnd(k, sigma, mu, sz)",
+          "en": "Array of size `sz`, for example `[3 4]`.",
+          "pt": "Matriz de tamanho `sz`, por exemplo `[3 4]`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the Gumbel case, `k > 0` a heavy upper tail, `k < 0` a bounded upper tail.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso de Gumbel, `k > 0` uma cauda superior pesada e `k < 0` uma cauda superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter (any real number).",
+          "pt": "Parâmetro de posição (qualquer real)."
+        },
+        {
+          "name": "m, n, sz",
+          "en": "Size of the result. Omit to match the parameter size.",
+          "pt": "Tamanho do resultado. Omita para usar o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random values. Each one is at least `mu - sigma/k` when `k > 0`, and at most that value when `k < 0`.",
+          "pt": "Valores aleatórios. Cada um é no mínimo `mu - sigma/k` quando `k > 0` e no máximo esse valor quando `k < 0`."
+        }
+      ],
+      "description": {
+        "en": "Draws are generated by inverting the distribution function at uniform random numbers, so they follow `gevpdf`. Use them to simulate yearly maxima or to build confidence intervals by resampling.\n\nParameter arrays must match the requested size, or be scalars.",
+        "pt": "Os sorteios são gerados invertendo a função de distribuição em números uniformes aleatórios, então seguem `gevpdf`. Use-os para simular máximos anuais ou para construir intervalos de confiança por reamostragem.\n\nMatrizes de parâmetros devem ter o tamanho pedido, ou ser escalares."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sizes and range of a sample",
+            "pt": "Tamanho e faixa de uma amostra"
+          },
+          "code": "r = gevrnd(0.1, 1, 2, [3 4]);\ndisp(size(r))\ndisp(all(r(:) > 2 - 1/0.1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Sample mean is near the theoretical mean",
+            "pt": "A média da amostra fica perto da teórica"
+          },
+          "code": "r = gevrnd(0, 1, 0, 2000, 1);\ndisp(abs(mean(r) - 0.5772) < 0.15)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevpdf",
+        "gevcdf",
+        "gevinv",
+        "gevfit",
+        "random"
+      ],
+      "notes": {
+        "en": "The random numbers come from MatLivre's own generator, so they do not reproduce the stream MATLAB gives for the same seed. Sizes, ranges and the distribution are the same.",
+        "pt": "Os números aleatórios vêm do gerador próprio do MatLivre, então não reproduzem a sequência que o MATLAB gera para a mesma semente. Tamanhos, faixas de valores e a distribuição são os mesmos."
+      }
+    },
+    "gevfit": {
+      "summary": {
+        "en": "Fits a generalized extreme value distribution to data by maximum likelihood and returns k, sigma and mu, with confidence intervals on request.",
+        "pt": "Ajusta uma distribuição de valores extremos generalizada aos dados por máxima verossimilhança e retorna k, sigma e mu, com intervalos de confiança se pedidos."
+      },
+      "syntax": [
+        {
+          "code": "p = gevfit(x)",
+          "en": "Parameter estimates `[k sigma mu]`.",
+          "pt": "Estimativas dos parâmetros `[k sigma mu]`."
+        },
+        {
+          "code": "[p, pci] = gevfit(x)",
+          "en": "Also returns 95% confidence intervals.",
+          "pt": "Retorna também intervalos de confiança de 95%."
+        },
+        {
+          "code": "[p, pci] = gevfit(x, alpha)",
+          "en": "Confidence level `100*(1 - alpha)` percent.",
+          "pt": "Nível de confiança de `100*(1 - alpha)` por cento."
+        },
+        {
+          "code": "[p, pci] = gevfit(x, alpha, options)",
+          "en": "Passes optimizer settings made with `statset`.",
+          "pt": "Passa configurações do otimizador feitas com `statset`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Data vector, for example block maxima.",
+          "pt": "Vetor de dados, por exemplo máximos por bloco."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. Padrão 0,05."
+        },
+        {
+          "name": "options",
+          "en": "Structure from `statset` (`TolX`, `TolFun`, `MaxIter`, `MaxFunEvals`).",
+          "pt": "Estrutura de `statset` (`TolX`, `TolFun`, `MaxIter`, `MaxFunEvals`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Row vector `[k sigma mu]` of estimated shape, scale and location.",
+          "pt": "Vetor linha `[k sigma mu]` com forma, escala e posição estimadas."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-3 matrix. Row 1 holds the lower limits and row 2 the upper limits, one column per parameter, in the order of `p`.",
+          "pt": "Matriz 2 por 3. A linha 1 tem os limites inferiores e a linha 2 os superiores, uma coluna por parâmetro, na ordem de `p`."
+        }
+      ],
+      "description": {
+        "en": "Use `gevfit` on block maxima (the largest value of each year, month or batch). The estimate maximises the likelihood given by `gevlike`, starting from a guess based on the data.\n\nWith few observations the shape `k` is uncertain and its interval is wide, so read `pci` before trusting a sign of `k`. To check the fit, compare `gevcdf` at the fitted values with the empirical distribution.",
+        "pt": "Use `gevfit` em máximos por bloco (o maior valor de cada ano, mês ou lote). A estimativa maximiza a verossimilhança dada por `gevlike`, partindo de um valor inicial calculado dos dados.\n\nCom poucas observações a forma `k` é incerta e seu intervalo é largo, então leia `pci` antes de confiar no sinal de `k`. Para checar o ajuste, compare `gevcdf` nos valores ajustados com a distribuição empírica."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit a sample of maxima",
+            "pt": "Ajuste de uma amostra de máximos"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gevfit(x);\nfprintf('k=%.4f sigma=%.4f mu=%.4f\\n', p)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Confidence intervals",
+            "pt": "Intervalos de confiança"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\n[p, pci] = gevfit(x);\ndisp(round(pci*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevlike",
+        "gevpdf",
+        "gevinv",
+        "gpfit",
+        "evfit"
+      ]
+    },
+    "gevlike": {
+      "summary": {
+        "en": "Negative log-likelihood of the generalized extreme value distribution for given parameters and data, with the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa da distribuição de valores extremos generalizada para parâmetros e dados dados, com a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = gevlike(params, data)",
+          "en": "Negative log-likelihood at `params = [k sigma mu]`.",
+          "pt": "Log-verossimilhança negativa em `params = [k sigma mu]`."
+        },
+        {
+          "code": "[nlogL, acov] = gevlike(params, data)",
+          "en": "Also the 3-by-3 approximate covariance matrix of the estimates.",
+          "pt": "Retorna também a matriz de covariância aproximada 3 por 3 das estimativas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Vector `[k sigma mu]` of shape, scale and location.",
+          "pt": "Vetor `[k sigma mu]` com forma, escala e posição."
+        },
+        {
+          "name": "data",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative log-likelihood. Smaller means the parameters explain the data better.",
+          "pt": "Log-verossimilhança negativa. Menor significa que os parâmetros explicam melhor os dados."
+        },
+        {
+          "name": "acov",
+          "en": "3-by-3 covariance matrix of the estimates, in the order `k`, `sigma`, `mu`. It is only meaningful at the maximum-likelihood point.",
+          "pt": "Matriz de covariância 3 por 3 das estimativas, na ordem `k`, `sigma`, `mu`. Só tem sentido no ponto de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`gevlike` is the function that `gevfit` minimises. Call it directly to compare two candidate parameter sets, to build a likelihood-ratio test, or to get the standard errors from the square root of the diagonal of `acov`.",
+        "pt": "`gevlike` é a função que `gevfit` minimiza. Chame-a diretamente para comparar dois conjuntos de parâmetros, montar um teste da razão de verossimilhanças ou obter os erros padrão pela raiz quadrada da diagonal de `acov`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at the fitted parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gevfit(x);\nnl = gevlike(p, x);\nfprintf('%.4f\\n', nl)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Standard errors",
+            "pt": "Erros padrão"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gevfit(x);\n[nl, acov] = gevlike(p, x);\ndisp(round(sqrt(diag(acov))'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevfit",
+        "gevpdf",
+        "gplike",
+        "lognlike",
+        "evlike"
+      ]
+    },
+    "gppdf": {
+      "summary": {
+        "en": "Probability density of the generalized Pareto distribution with shape k, scale sigma and threshold theta.",
+        "pt": "Densidade de probabilidade da distribuição de Pareto generalizada com forma k, escala sigma e limiar theta."
+      },
+      "syntax": [
+        {
+          "code": "y = gppdf(x, k, sigma, theta)",
+          "en": "Density at each element of `x`.",
+          "pt": "Densidade em cada elemento de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar, vector or array.",
+          "pt": "Pontos em que calcular. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the exponential case, `k > 0` a heavy tail, `k < 0` a bounded upper end.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso exponencial, `k > 0` uma cauda pesada e `k < 0` uma extremidade superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "theta",
+          "en": "Threshold (location) parameter: the smallest possible value.",
+          "pt": "Parâmetro de limiar (posição): o menor valor possível."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as the inputs after scalar expansion.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The generalized Pareto (GP) distribution models the excesses over a high threshold, the usual companion of block maxima in extreme value analysis. The density is zero below `theta`, and for `k < 0` also above `theta - sigma/k`.\n\nAt `k = 0` it reduces to a shifted exponential with mean `sigma`. Arguments may be arrays of the same size or scalars that are expanded. Invalid parameters (such as `sigma <= 0`) give `NaN`.",
+        "pt": "A distribuição de Pareto generalizada (GP) modela os excessos acima de um limiar alto, e é a companheira usual dos máximos por bloco na análise de valores extremos. A densidade é zero abaixo de `theta` e, para `k < 0`, também acima de `theta - sigma/k`.\n\nEm `k = 0` ela vira uma exponencial deslocada com média `sigma`. Os argumentos podem ser matrizes de mesmo tamanho ou escalares, que são expandidos. Parâmetros inválidos (como `sigma <= 0`) dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density for k = 0.3",
+            "pt": "Densidade para k = 0,3"
+          },
+          "code": "x = [0 0.5 1 2 5];\ny = gppdf(x, 0.3, 1, 0);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Exponential case",
+            "pt": "Caso exponencial"
+          },
+          "code": "% k = 0 matches an exponential with mean sigma = 2\ndisp(round([gppdf(1,0,2,0) exppdf(1,2)]*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gpcdf",
+        "gpinv",
+        "gpstat",
+        "gpfit",
+        "gprnd"
+      ]
+    },
+    "gpcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the generalized Pareto distribution with shape k, scale sigma and threshold theta.",
+        "pt": "Função de distribuição acumulada da distribuição de Pareto generalizada com forma k, escala sigma e limiar theta."
+      },
+      "syntax": [
+        {
+          "code": "p = gpcdf(x, k, sigma, theta)",
+          "en": "Probability of being at most `x`.",
+          "pt": "Probabilidade de ser no máximo `x`."
+        },
+        {
+          "code": "p = gpcdf(x, k, sigma, theta, 'upper')",
+          "en": "Upper tail probability `1 - p`, accurate far in the tail.",
+          "pt": "Probabilidade da cauda superior `1 - p`, precisa longe no centro da distribuição."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar, vector or array.",
+          "pt": "Pontos em que calcular. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the exponential case, `k > 0` a heavy tail, `k < 0` a bounded upper end.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso exponencial, `k > 0` uma cauda pesada e `k < 0` uma extremidade superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "theta",
+          "en": "Threshold (location) parameter: the smallest possible value.",
+          "pt": "Parâmetro de limiar (posição): o menor valor possível."
+        },
+        {
+          "name": "'upper'",
+          "en": "Option that returns the upper tail instead of the lower one.",
+          "pt": "Opção que retorna a cauda superior em vez da inferior."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1, same size as the inputs after scalar expansion.",
+          "pt": "Probabilidades entre 0 e 1, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`gpcdf(x, k, sigma, theta)` is the probability that an observation does not exceed `x`. It is 0 below `theta` and rises to 1 (at infinity, or at `theta - sigma/k` when `k < 0`).\n\nThe survival form `gpcdf(x, ..., 'upper')` answers the practical question \"how likely is an excess larger than `x`?\" and avoids losing digits when that probability is tiny.",
+        "pt": "`gpcdf(x, k, sigma, theta)` é a probabilidade de uma observação não exceder `x`. Vale 0 abaixo de `theta` e sobe até 1 (no infinito, ou em `theta - sigma/k` quando `k < 0`).\n\nA forma de sobrevivência `gpcdf(x, ..., 'upper')` responde à pergunta prática \"qual a chance de um excesso maior que `x`?\" e evita perda de dígitos quando essa probabilidade é minúscula."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probabilities",
+            "pt": "Probabilidades acumuladas"
+          },
+          "code": "x = [0 0.5 1 2 5];\np = gpcdf(x, 0.3, 1, 0);\ndisp(round(p*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Chance of an excess above 10",
+            "pt": "Chance de um excesso acima de 10"
+          },
+          "code": "pu = gpcdf(10, 0.3, 1, 0, 'upper');\nfprintf('%.4f\\n', pu)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gppdf",
+        "gpinv",
+        "gpstat",
+        "gpfit",
+        "gevcdf"
+      ]
+    },
+    "gpinv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function (quantile function) of the generalized Pareto distribution with shape k, scale sigma and threshold theta.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição de Pareto generalizada com forma k, escala sigma e limiar theta."
+      },
+      "syntax": [
+        {
+          "code": "x = gpinv(p, k, sigma, theta)",
+          "en": "Value `x` such that the probability of being at most `x` is `p`.",
+          "pt": "Valor `x` tal que a probabilidade de ser no máximo `x` é `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Scalar, vector or array.",
+          "pt": "Probabilidades entre 0 e 1. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the exponential case, `k > 0` a heavy tail, `k < 0` a bounded upper end.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso exponencial, `k > 0` uma cauda pesada e `k < 0` uma extremidade superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "theta",
+          "en": "Threshold (location) parameter: the smallest possible value.",
+          "pt": "Parâmetro de limiar (posição): o menor valor possível."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as the inputs after scalar expansion.",
+          "pt": "Quantis, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`gpinv` undoes `gpcdf`. In threshold-excess modelling it gives the excess that is exceeded with a chosen small probability. `p = 0` returns `theta`, and `p = 1` returns the upper end of the support (`Inf` when `k >= 0`).\n\nValues of `p` outside `[0, 1]` and invalid parameters give `NaN`.",
+        "pt": "`gpinv` desfaz `gpcdf`. Na modelagem de excessos acima de um limiar, ela dá o excesso que é superado com uma probabilidade pequena escolhida. `p = 0` retorna `theta` e `p = 1` retorna a extremidade superior do suporte (`Inf` quando `k >= 0`).\n\nValores de `p` fora de `[0, 1]` e parâmetros inválidos dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quartiles",
+            "pt": "Quartis"
+          },
+          "code": "q = gpinv([0.25 0.5 0.75], 0.3, 1, 0);\ndisp(round(q*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Round trip with gpcdf",
+            "pt": "Ida e volta com gpcdf"
+          },
+          "code": "x = gpinv(0.9, 0.3, 1, 0);\nfprintf('%.4f %.4f\\n', x, gpcdf(x, 0.3, 1, 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gpcdf",
+        "gppdf",
+        "gpstat",
+        "gpfit",
+        "icdf"
+      ]
+    },
+    "gpstat": {
+      "summary": {
+        "en": "Mean and variance of the generalized Pareto distribution with shape k, scale sigma and threshold theta.",
+        "pt": "Média e variância da distribuição de Pareto generalizada com forma k, escala sigma e limiar theta."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = gpstat(k, sigma, theta)",
+          "en": "Mean `m` and variance `v` for each parameter set.",
+          "pt": "Média `m` e variância `v` para cada conjunto de parâmetros."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the exponential case, `k > 0` a heavy tail, `k < 0` a bounded upper end.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso exponencial, `k > 0` uma cauda pesada e `k < 0` uma extremidade superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "theta",
+          "en": "Threshold (location) parameter: the smallest possible value.",
+          "pt": "Parâmetro de limiar (posição): o menor valor possível."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean. It is `Inf` when `k >= 1`.",
+          "pt": "Média. É `Inf` quando `k >= 1`."
+        },
+        {
+          "name": "v",
+          "en": "Variance. It is `Inf` when `k >= 0.5`.",
+          "pt": "Variância. É `Inf` quando `k >= 0,5`."
+        }
+      ],
+      "description": {
+        "en": "The inputs may be scalars or arrays of the same size, and the outputs have that size. For `k < 1` the mean is `theta + sigma/(1 - k)`. A heavy tail makes the moments infinite, which is a warning that sample averages of such data are unstable.",
+        "pt": "As entradas podem ser escalares ou matrizes de mesmo tamanho, e as saídas têm esse tamanho. Para `k < 1` a média é `theta + sigma/(1 - k)`. Uma cauda pesada torna os momentos infinitos, o que avisa que médias amostrais desses dados são instáveis."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Moments for k = 0.2",
+            "pt": "Momentos para k = 0,2"
+          },
+          "code": "[m, v] = gpstat(0.2, 1, 0);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Heavy tail: infinite mean",
+            "pt": "Cauda pesada: média infinita"
+          },
+          "code": "[m, v] = gpstat(1.5, 1, 0);\ndisp([m v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gppdf",
+        "gpcdf",
+        "gpfit",
+        "gprnd",
+        "gevstat"
+      ]
+    },
+    "gprnd": {
+      "summary": {
+        "en": "Random numbers from the generalized Pareto distribution with shape k, scale sigma and threshold theta.",
+        "pt": "Números aleatórios da distribuição de Pareto generalizada com forma k, escala sigma e limiar theta."
+      },
+      "syntax": [
+        {
+          "code": "r = gprnd(k, sigma, theta)",
+          "en": "One random number per element of the (expanded) parameters.",
+          "pt": "Um número aleatório por elemento dos parâmetros (expandidos)."
+        },
+        {
+          "code": "r = gprnd(k, sigma, theta, m, n)",
+          "en": "`m`-by-`n` array of random numbers.",
+          "pt": "Matriz `m` por `n` de números aleatórios."
+        },
+        {
+          "code": "r = gprnd(k, sigma, theta, sz)",
+          "en": "Array of size `sz`.",
+          "pt": "Matriz de tamanho `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "k",
+          "en": "Shape parameter (any real number). `k = 0` gives the exponential case, `k > 0` a heavy tail, `k < 0` a bounded upper end.",
+          "pt": "Parâmetro de forma (qualquer real). `k = 0` dá o caso exponencial, `k > 0` uma cauda pesada e `k < 0` uma extremidade superior limitada."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "theta",
+          "en": "Threshold (location) parameter: the smallest possible value.",
+          "pt": "Parâmetro de limiar (posição): o menor valor possível."
+        },
+        {
+          "name": "m, n, sz",
+          "en": "Size of the result. Omit to match the parameter size.",
+          "pt": "Tamanho do resultado. Omita para usar o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random values, all at least `theta`.",
+          "pt": "Valores aleatórios, todos maiores ou iguais a `theta`."
+        }
+      ],
+      "description": {
+        "en": "Draws are generated by inverting the distribution function at uniform random numbers, so they follow `gppdf`. Use them to simulate threshold excesses.\n\nParameter arrays must match the requested size, or be scalars.",
+        "pt": "Os sorteios são gerados invertendo a função de distribuição em números uniformes aleatórios, então seguem `gppdf`. Use-os para simular excessos acima de um limiar.\n\nMatrizes de parâmetros devem ter o tamanho pedido, ou ser escalares."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and lower bound",
+            "pt": "Tamanho e limite inferior"
+          },
+          "code": "r = gprnd(0.1, 1, 5, [3 2]);\ndisp(size(r))\ndisp(all(r(:) >= 5))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Sample mean near the theoretical mean",
+            "pt": "Média da amostra perto da teórica"
+          },
+          "code": "r = gprnd(0, 2, 0, 3000, 1);\ndisp(abs(mean(r) - 2) < 0.3)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gppdf",
+        "gpcdf",
+        "gpinv",
+        "gpfit",
+        "random"
+      ],
+      "notes": {
+        "en": "The random numbers come from MatLivre's own generator, so they do not reproduce the stream MATLAB gives for the same seed. Sizes, ranges and the distribution are the same.",
+        "pt": "Os números aleatórios vêm do gerador próprio do MatLivre, então não reproduzem a sequência que o MATLAB gera para a mesma semente. Tamanhos, faixas de valores e a distribuição são os mesmos."
+      }
+    },
+    "gpfit": {
+      "summary": {
+        "en": "Fits a generalized Pareto distribution with threshold zero to positive data by maximum likelihood and returns k and sigma, with confidence intervals on request.",
+        "pt": "Ajusta uma distribuição de Pareto generalizada com limiar zero a dados positivos por máxima verossimilhança e retorna k e sigma, com intervalos de confiança se pedidos."
+      },
+      "syntax": [
+        {
+          "code": "p = gpfit(x)",
+          "en": "Parameter estimates `[k sigma]`.",
+          "pt": "Estimativas dos parâmetros `[k sigma]`."
+        },
+        {
+          "code": "[p, pci] = gpfit(x)",
+          "en": "Also returns 95% confidence intervals.",
+          "pt": "Retorna também intervalos de confiança de 95%."
+        },
+        {
+          "code": "[p, pci] = gpfit(x, alpha)",
+          "en": "Confidence level `100*(1 - alpha)` percent.",
+          "pt": "Nível de confiança de `100*(1 - alpha)` por cento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of positive data, typically the excesses over a threshold (observation minus threshold).",
+          "pt": "Vetor de dados positivos, tipicamente os excessos acima de um limiar (observação menos limiar)."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. Padrão 0,05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Row vector `[k sigma]` of estimated shape and scale.",
+          "pt": "Vetor linha `[k sigma]` com forma e escala estimadas."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-2 matrix. Row 1 holds the lower limits and row 2 the upper limits, one column per parameter, in the order of `p`.",
+          "pt": "Matriz 2 por 2. A linha 1 tem os limites inferiores e a linha 2 os superiores, uma coluna por parâmetro, na ordem de `p`."
+        }
+      ],
+      "description": {
+        "en": "To use `gpfit`, pick a threshold, keep the observations above it and subtract the threshold, so the data start at zero. The fit then describes how large the excesses tend to be. The estimate maximises the likelihood given by `gplike`.\n\nA shape `k` near zero means exponential-like excesses, and a clearly positive `k` means a heavy tail. With few points the interval `pci` is wide.",
+        "pt": "Para usar `gpfit`, escolha um limiar, mantenha as observações acima dele e subtraia o limiar, de modo que os dados comecem em zero. O ajuste descreve então o tamanho típico dos excessos. A estimativa maximiza a verossimilhança dada por `gplike`.\n\nUma forma `k` perto de zero indica excessos tipo exponencial, e um `k` claramente positivo indica cauda pesada. Com poucos pontos o intervalo `pci` é largo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit excesses",
+            "pt": "Ajuste de excessos"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gpfit(x);\nfprintf('k=%.4f sigma=%.4f\\n', p)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Confidence intervals",
+            "pt": "Intervalos de confiança"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\n[p, pci] = gpfit(x);\ndisp(round(pci*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gplike",
+        "gppdf",
+        "gpcdf",
+        "gevfit",
+        "gpinv"
+      ],
+      "notes": {
+        "en": "The threshold is fixed at zero. `gpfit` raises an error when `x` has any value that is zero or negative (\"The data in X must be positive.\"). Subtract your threshold first.",
+        "pt": "O limiar é fixo em zero. `gpfit` dá erro quando `x` tem algum valor zero ou negativo (\"The data in X must be positive.\"). Subtraia seu limiar antes."
+      }
+    },
+    "gplike": {
+      "summary": {
+        "en": "Negative log-likelihood of the generalized Pareto distribution (threshold zero) for given parameters and data, with the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa da distribuição de Pareto generalizada (limiar zero) para parâmetros e dados dados, com a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = gplike(params, data)",
+          "en": "Negative log-likelihood at `params = [k sigma]`.",
+          "pt": "Log-verossimilhança negativa em `params = [k sigma]`."
+        },
+        {
+          "code": "[nlogL, acov] = gplike(params, data)",
+          "en": "Also the 2-by-2 approximate covariance matrix of the estimates.",
+          "pt": "Retorna também a matriz de covariância aproximada 2 por 2 das estimativas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Vector `[k sigma]` of shape and scale.",
+          "pt": "Vetor `[k sigma]` com forma e escala."
+        },
+        {
+          "name": "data",
+          "en": "Vector of positive observations (excesses).",
+          "pt": "Vetor de observações positivas (excessos)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative log-likelihood. Smaller means a better fit.",
+          "pt": "Log-verossimilhança negativa. Menor significa melhor ajuste."
+        },
+        {
+          "name": "acov",
+          "en": "2-by-2 covariance matrix of the estimates, in the order `k`, `sigma`. Meaningful at the maximum-likelihood point.",
+          "pt": "Matriz de covariância 2 por 2 das estimativas, na ordem `k`, `sigma`. Tem sentido no ponto de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`gplike` is the function that `gpfit` minimises. Use it to compare candidate parameters, for a likelihood-ratio test between `k = 0` (exponential) and a free `k`, or to get standard errors from the square root of the diagonal of `acov`.",
+        "pt": "`gplike` é a função que `gpfit` minimiza. Use-a para comparar parâmetros candidatos, para um teste da razão de verossimilhanças entre `k = 0` (exponencial) e um `k` livre, ou para obter erros padrão pela raiz quadrada da diagonal de `acov`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at the fitted parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gpfit(x);\nfprintf('%.4f\\n', gplike(p, x))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Exponential versus free shape",
+            "pt": "Exponencial versus forma livre"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = gpfit(x);\nfree = gplike(p, x);\nexpo = gplike([0 mean(x)], x);\nfprintf('%.4f %.4f\\n', free, expo)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gpfit",
+        "gppdf",
+        "gevlike",
+        "lognlike",
+        "explike"
+      ]
+    },
+    "hygepdf": {
+      "summary": {
+        "en": "Probability mass function of the hypergeometric distribution: the chance of exactly x items with the property when drawing n from a population of M that holds K of them.",
+        "pt": "Função de massa de probabilidade da distribuição hipergeométrica: a chance de exatamente x itens com a propriedade ao sortear n de uma população de M que contém K deles."
+      },
+      "syntax": [
+        {
+          "code": "y = hygepdf(x, M, K, n)",
+          "en": "Probability of exactly `x` successes.",
+          "pt": "Probabilidade de exatamente `x` sucessos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of items with the property in the sample. Scalar, vector or array.",
+          "pt": "Número de itens com a propriedade na amostra. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "M",
+          "en": "Population size: total number of items (nonnegative integer).",
+          "pt": "Tamanho da população: número total de itens (inteiro não negativo)."
+        },
+        {
+          "name": "K",
+          "en": "Number of items in the population that have the property of interest (integer from 0 to `M`).",
+          "pt": "Número de itens da população que têm a propriedade de interesse (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "n",
+          "en": "Number of items drawn without replacement (integer from 0 to `M`).",
+          "pt": "Número de itens sorteados sem reposição (inteiro de 0 a `M`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, same size as the inputs after scalar expansion. Zero when `x` is outside the support or not an integer.",
+          "pt": "Probabilidades, com o tamanho das entradas após a expansão dos escalares. Zero quando `x` está fora do suporte ou não é inteiro."
+        }
+      ],
+      "description": {
+        "en": "Use it for sampling without replacement, for example the chance of finding 2 defective parts in a sample of 5 taken from a lot of 20 that contains 7 defective ones. The distribution lives on the integers from `max(0, n - (M - K))` to `min(n, K)`. Unlike the binomial distribution, draws are not independent: each removes an item from the population.\n\nIt is also the null distribution of Fisher's exact test.",
+        "pt": "Use-a para amostragem sem reposição, por exemplo a chance de achar 2 peças defeituosas em uma amostra de 5 retirada de um lote de 20 que contém 7 defeituosas. A distribuição vive nos inteiros de `max(0, n - (M - K))` até `min(n, K)`. Ao contrário da binomial, os sorteios não são independentes: cada um retira um item da população.\n\nTambém é a distribuição nula do teste exato de Fisher."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Defective parts in a sample",
+            "pt": "Peças defeituosas em uma amostra"
+          },
+          "code": "% lot of 20 with 7 defective, sample of 5\np = hygepdf(0:5, 20, 7, 5);\ndisp(round(p*10000)/10000)\nfprintf('sum = %.4f\\n', sum(p))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Chance of exactly 2",
+            "pt": "Chance de exatamente 2"
+          },
+          "code": "fprintf('%.4f\\n', hygepdf(2, 20, 7, 5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hygecdf",
+        "hygeinv",
+        "hygestat",
+        "hygernd",
+        "binopdf"
+      ]
+    },
+    "hygecdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the hypergeometric distribution: the chance of at most x items with the property in a sample of n from M items that hold K of them.",
+        "pt": "Função de distribuição acumulada da distribuição hipergeométrica: a chance de no máximo x itens com a propriedade em uma amostra de n tirada de M que contêm K deles."
+      },
+      "syntax": [
+        {
+          "code": "p = hygecdf(x, M, K, n)",
+          "en": "Probability of at most `x` successes.",
+          "pt": "Probabilidade de no máximo `x` sucessos."
+        },
+        {
+          "code": "p = hygecdf(x, M, K, n, 'upper')",
+          "en": "Probability of more than `x` successes.",
+          "pt": "Probabilidade de mais de `x` sucessos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of items with the property in the sample. Scalar, vector or array.",
+          "pt": "Número de itens com a propriedade na amostra. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "M",
+          "en": "Population size: total number of items (nonnegative integer).",
+          "pt": "Tamanho da população: número total de itens (inteiro não negativo)."
+        },
+        {
+          "name": "K",
+          "en": "Number of items in the population that have the property of interest (integer from 0 to `M`).",
+          "pt": "Número de itens da população que têm a propriedade de interesse (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "n",
+          "en": "Number of items drawn without replacement (integer from 0 to `M`).",
+          "pt": "Número de itens sorteados sem reposição (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "'upper'",
+          "en": "Option that returns the upper tail `P(X > x)` instead.",
+          "pt": "Opção que retorna a cauda superior `P(X > x)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1, same size as the inputs after scalar expansion.",
+          "pt": "Probabilidades entre 0 e 1, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`hygecdf(x, M, K, n)` adds the probabilities of `0, 1, ..., x` successes. It is a step function: non-integer `x` is treated as `floor(x)`.\n\nThe `'upper'` form gives `P(X > x)`, which is the usual way to compute a one-sided p-value for over-representation, such as \"how likely are 4 or more defective parts in the sample?\", written `hygecdf(3, M, K, n, 'upper')`.",
+        "pt": "`hygecdf(x, M, K, n)` soma as probabilidades de `0, 1, ..., x` sucessos. É uma função em degraus: `x` não inteiro é tratado como `floor(x)`.\n\nA forma `'upper'` dá `P(X > x)`, que é a maneira usual de calcular um valor-p unilateral de super-representação, como \"qual a chance de 4 ou mais peças defeituosas na amostra?\", escrito `hygecdf(3, M, K, n, 'upper')`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "At most 2 defective",
+            "pt": "No máximo 2 defeituosas"
+          },
+          "code": "fprintf('%.4f\\n', hygecdf(2, 20, 7, 5))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Four or more defective (upper tail)",
+            "pt": "Quatro ou mais defeituosas (cauda superior)"
+          },
+          "code": "p = hygecdf(3, 20, 7, 5, 'upper');\nfprintf('%.4f\\n', p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hygepdf",
+        "hygeinv",
+        "hygestat",
+        "hygernd",
+        "binocdf"
+      ]
+    },
+    "hygeinv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function of the hypergeometric distribution: the smallest count x whose cumulative probability reaches p.",
+        "pt": "Função de distribuição acumulada inversa da distribuição hipergeométrica: a menor contagem x cuja probabilidade acumulada alcança p."
+      },
+      "syntax": [
+        {
+          "code": "x = hygeinv(p, M, K, n)",
+          "en": "Smallest integer `x` with `hygecdf(x, M, K, n) >= p`.",
+          "pt": "Menor inteiro `x` com `hygecdf(x, M, K, n) >= p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Scalar, vector or array.",
+          "pt": "Probabilidades entre 0 e 1. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "M",
+          "en": "Population size: total number of items (nonnegative integer).",
+          "pt": "Tamanho da população: número total de itens (inteiro não negativo)."
+        },
+        {
+          "name": "K",
+          "en": "Number of items in the population that have the property of interest (integer from 0 to `M`).",
+          "pt": "Número de itens da população que têm a propriedade de interesse (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "n",
+          "en": "Number of items drawn without replacement (integer from 0 to `M`).",
+          "pt": "Número de itens sorteados sem reposição (inteiro de 0 a `M`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Integer quantiles, same size as the inputs after scalar expansion.",
+          "pt": "Quantis inteiros, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "Because the distribution is discrete, `hygeinv` returns an integer from the support, the first count at which the cumulative probability is at least `p`. `hygeinv(0.5, M, K, n)` is the median.\n\nValues of `p` outside `[0, 1]` give `NaN`.",
+        "pt": "Como a distribuição é discreta, `hygeinv` retorna um inteiro do suporte, a primeira contagem em que a probabilidade acumulada é pelo menos `p`. `hygeinv(0.5, M, K, n)` é a mediana.\n\nValores de `p` fora de `[0, 1]` dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles",
+            "pt": "Quantis"
+          },
+          "code": "x = hygeinv([0.1 0.5 0.9], 20, 7, 5);\ndisp(x)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Check against the cumulative probability",
+            "pt": "Conferência com a probabilidade acumulada"
+          },
+          "code": "x = hygeinv(0.9, 20, 7, 5);\nfprintf('%d %.4f %.4f\\n', x, hygecdf(x-1, 20, 7, 5), hygecdf(x, 20, 7, 5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hygecdf",
+        "hygepdf",
+        "hygestat",
+        "hygernd",
+        "icdf"
+      ]
+    },
+    "hygestat": {
+      "summary": {
+        "en": "Mean and variance of the hypergeometric distribution with population size M, K items with the property and n items drawn.",
+        "pt": "Média e variância da distribuição hipergeométrica com população M, K itens com a propriedade e n itens sorteados."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = hygestat(M, K, n)",
+          "en": "Mean `m` and variance `v` for each parameter set.",
+          "pt": "Média `m` e variância `v` para cada conjunto de parâmetros."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "M",
+          "en": "Population size: total number of items (nonnegative integer).",
+          "pt": "Tamanho da população: número total de itens (inteiro não negativo)."
+        },
+        {
+          "name": "K",
+          "en": "Number of items in the population that have the property of interest (integer from 0 to `M`).",
+          "pt": "Número de itens da população que têm a propriedade de interesse (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "n",
+          "en": "Number of items drawn without replacement (integer from 0 to `M`).",
+          "pt": "Número de itens sorteados sem reposição (inteiro de 0 a `M`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean number of items with the property: `n*K/M`.",
+          "pt": "Número médio de itens com a propriedade: `n*K/M`."
+        },
+        {
+          "name": "v",
+          "en": "Variance: `n*(K/M)*(1 - K/M)*(M - n)/(M - 1)`.",
+          "pt": "Variância: `n*(K/M)*(1 - K/M)*(M - n)/(M - 1)`."
+        }
+      ],
+      "description": {
+        "en": "The mean is the same as in the binomial case with success probability `K/M`. The variance is smaller by the factor `(M - n)/(M - 1)`, which reflects sampling without replacement, and it shrinks to zero when the whole population is drawn (`n = M`).\n\nInputs may be arrays of the same size.",
+        "pt": "A média é a mesma do caso binomial com probabilidade de sucesso `K/M`. A variância é menor pelo fator `(M - n)/(M - 1)`, que reflete a amostragem sem reposição, e vai a zero quando toda a população é sorteada (`n = M`).\n\nAs entradas podem ser matrizes de mesmo tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lot of 20 with 7 defective, sample of 5",
+            "pt": "Lote de 20 com 7 defeituosas, amostra de 5"
+          },
+          "code": "[m, v] = hygestat(20, 7, 5);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Compare with the binomial variance",
+            "pt": "Comparação com a variância binomial"
+          },
+          "code": "[m, v] = hygestat(20, 7, 5);\n[mb, vb] = binostat(5, 7/20);\nfprintf('%.4f %.4f\\n', v, vb)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hygepdf",
+        "hygecdf",
+        "hygeinv",
+        "hygernd",
+        "binostat"
+      ]
+    },
+    "hygernd": {
+      "summary": {
+        "en": "Random numbers from the hypergeometric distribution: the count of items with the property in a sample of n drawn without replacement from M items holding K of them.",
+        "pt": "Números aleatórios da distribuição hipergeométrica: a contagem de itens com a propriedade em uma amostra de n sorteada sem reposição de M itens que contêm K deles."
+      },
+      "syntax": [
+        {
+          "code": "r = hygernd(M, K, n)",
+          "en": "One random count per element of the (expanded) parameters.",
+          "pt": "Uma contagem aleatória por elemento dos parâmetros (expandidos)."
+        },
+        {
+          "code": "r = hygernd(M, K, n, m, k)",
+          "en": "`m`-by-`k` array of random counts.",
+          "pt": "Matriz `m` por `k` de contagens aleatórias."
+        },
+        {
+          "code": "r = hygernd(M, K, n, sz)",
+          "en": "Array of size `sz`.",
+          "pt": "Matriz de tamanho `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "M",
+          "en": "Population size: total number of items (nonnegative integer).",
+          "pt": "Tamanho da população: número total de itens (inteiro não negativo)."
+        },
+        {
+          "name": "K",
+          "en": "Number of items in the population that have the property of interest (integer from 0 to `M`).",
+          "pt": "Número de itens da população que têm a propriedade de interesse (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "n",
+          "en": "Number of items drawn without replacement (integer from 0 to `M`).",
+          "pt": "Número de itens sorteados sem reposição (inteiro de 0 a `M`)."
+        },
+        {
+          "name": "m, k, sz",
+          "en": "Size of the result. Omit to match the parameter size.",
+          "pt": "Tamanho do resultado. Omita para usar o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Integer counts between `max(0, n - (M - K))` and `min(n, K)`.",
+          "pt": "Contagens inteiras entre `max(0, n - (M - K))` e `min(n, K)`."
+        }
+      ],
+      "description": {
+        "en": "Each value simulates one draw of `n` items without replacement and counts how many have the property, so values follow `hygepdf`. Use it to simulate quality-control sampling or to build a reference distribution.\n\nParameter arrays must match the requested size, or be scalars.",
+        "pt": "Cada valor simula um sorteio de `n` itens sem reposição e conta quantos têm a propriedade, então os valores seguem `hygepdf`. Use-a para simular amostragem de controle de qualidade ou para montar uma distribuição de referência.\n\nMatrizes de parâmetros devem ter o tamanho pedido, ou ser escalares."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sizes and range",
+            "pt": "Tamanho e faixa de valores"
+          },
+          "code": "r = hygernd(20, 7, 5, [2 3]);\ndisp(size(r))\ndisp(all(r(:) >= 0 & r(:) <= 5))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Sample mean near the theoretical mean",
+            "pt": "Média da amostra perto da teórica"
+          },
+          "code": "r = hygernd(20, 7, 5, 4000, 1);\ndisp(abs(mean(r) - 5*7/20) < 0.1)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hygepdf",
+        "hygecdf",
+        "hygeinv",
+        "hygestat",
+        "random"
+      ],
+      "notes": {
+        "en": "The random numbers come from MatLivre's own generator, so they do not reproduce the stream MATLAB gives for the same seed. Sizes, ranges and the distribution are the same.",
+        "pt": "Os números aleatórios vêm do gerador próprio do MatLivre, então não reproduzem a sequência que o MATLAB gera para a mesma semente. Tamanhos, faixas de valores e a distribuição são os mesmos."
+      }
+    },
+    "icdf": {
+      "summary": {
+        "en": "Inverse cumulative distribution function (quantile) of a distribution chosen by name, with its parameters.",
+        "pt": "Função de distribuição acumulada inversa (quantil) de uma distribuição escolhida pelo nome, com seus parâmetros."
+      },
+      "syntax": [
+        {
+          "code": "x = icdf(name, p, a)",
+          "en": "Distribution with one parameter `a`.",
+          "pt": "Distribuição com um parâmetro `a`."
+        },
+        {
+          "code": "x = icdf(name, p, a, b)",
+          "en": "Two parameters, for example `'Normal'` with `mu` and `sigma`.",
+          "pt": "Dois parâmetros, por exemplo `'Normal'` com `mu` e `sigma`."
+        },
+        {
+          "code": "x = icdf(name, p, a, b, c)",
+          "en": "Three parameters, for example `'gev'` or `'hyge'`.",
+          "pt": "Três parâmetros, por exemplo `'gev'` ou `'hyge'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "name",
+          "en": "Distribution name as text, such as `'Normal'`, `'Lognormal'`, `'Poisson'`, `'gev'`. Case does not matter and common short names such as `'norm'` work.",
+          "pt": "Nome da distribuição como texto, como `'Normal'`, `'Lognormal'`, `'Poisson'`, `'gev'`. Maiúsculas e minúsculas não importam e nomes curtos comuns, como `'norm'`, funcionam."
+        },
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Scalar, vector or array.",
+          "pt": "Probabilidades entre 0 e 1. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "a, b, c",
+          "en": "Distribution parameters, in the same order as the specific function (for example `mu, sigma` for the normal, `k, sigma, mu` for `gev`).",
+          "pt": "Parâmetros da distribuição, na mesma ordem da função específica (por exemplo `mu, sigma` para a normal, `k, sigma, mu` para `gev`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as `p` after scalar expansion.",
+          "pt": "Quantis, com o tamanho de `p` após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`icdf` is a single entry point to the family of `*inv` functions: `icdf('Normal', p, mu, sigma)` gives the same result as `norminv(p, mu, sigma)`. It is handy when the distribution name is a variable, for example when looping over several candidate models.\n\nAn unknown name raises an error saying the distribution name is unrecognized. For discrete distributions the result is the smallest integer whose cumulative probability reaches `p`.",
+        "pt": "`icdf` é uma porta de entrada única para a família de funções `*inv`: `icdf('Normal', p, mu, sigma)` dá o mesmo resultado que `norminv(p, mu, sigma)`. É útil quando o nome da distribuição é uma variável, por exemplo ao percorrer vários modelos candidatos.\n\nUm nome desconhecido gera um erro dizendo que o nome da distribuição não foi reconhecido. Para distribuições discretas o resultado é o menor inteiro cuja probabilidade acumulada alcança `p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal and lognormal quantiles",
+            "pt": "Quantis da normal e da lognormal"
+          },
+          "code": "disp(icdf('Normal', 0.975, 0, 1))\ndisp(icdf('Lognormal', 0.5, 0, 1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Discrete and extreme value laws",
+            "pt": "Distribuições discretas e de valores extremos"
+          },
+          "code": "disp(icdf('Poisson', [0.2 0.5 0.9], 3))\ndisp(round(icdf('gev', 0.5, 0.1, 1, 0)*10000)/10000)\ndisp(icdf('hyge', 0.5, 20, 7, 5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "norminv",
+        "cdf",
+        "pdf",
+        "random",
+        "gevinv"
+      ]
+    },
+    "lognpdf": {
+      "summary": {
+        "en": "Probability density of the lognormal distribution, where the logarithm of the variable is normal with mean mu and standard deviation sigma.",
+        "pt": "Densidade de probabilidade da distribuição lognormal, em que o logaritmo da variável é normal com média mu e desvio padrão sigma."
+      },
+      "syntax": [
+        {
+          "code": "y = lognpdf(x)",
+          "en": "Density with `mu = 0` and `sigma = 1`.",
+          "pt": "Densidade com `mu = 0` e `sigma = 1`."
+        },
+        {
+          "code": "y = lognpdf(x, mu, sigma)",
+          "en": "Density with the given parameters.",
+          "pt": "Densidade com os parâmetros dados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar, vector or array.",
+          "pt": "Pontos em que calcular. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the logarithm of the variable (any real number). Default 0.",
+          "pt": "Média do logaritmo da variável (qualquer real). Padrão 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of the logarithm of the variable, positive. Default 1.",
+          "pt": "Desvio padrão do logaritmo da variável, positivo. Padrão 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as the inputs after scalar expansion. Zero for `x <= 0`.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares. Zero para `x <= 0`."
+        }
+      ],
+      "description": {
+        "en": "A variable is lognormal when its logarithm is normal. It is positive and right-skewed, a common model for sizes, incomes, concentrations and other quantities built from many multiplicative effects.\n\nNote that `mu` and `sigma` describe the logarithm, not the variable itself: the median is `exp(mu)`. Use `lognstat` to get the mean and variance of the variable. Invalid `sigma` (zero or negative) gives `NaN`.",
+        "pt": "Uma variável é lognormal quando seu logaritmo é normal. Ela é positiva e assimétrica à direita, um modelo comum para tamanhos, rendas, concentrações e outras grandezas formadas por muitos efeitos multiplicativos.\n\nNote que `mu` e `sigma` descrevem o logaritmo, não a variável: a mediana é `exp(mu)`. Use `lognstat` para obter a média e a variância da variável. `sigma` inválido (zero ou negativo) dá `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Standard lognormal density",
+            "pt": "Densidade lognormal padrão"
+          },
+          "code": "x = [0.5 1 2 4];\ny = lognpdf(x, 0, 1);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Density is zero for x <= 0",
+            "pt": "A densidade é zero para x <= 0"
+          },
+          "code": "disp(lognpdf([-1 0 1], 0.5, 0.7))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "logncdf",
+        "logninv",
+        "lognstat",
+        "lognfit",
+        "normpdf"
+      ]
+    },
+    "logncdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the lognormal distribution, where the logarithm of the variable is normal with mean mu and standard deviation sigma.",
+        "pt": "Função de distribuição acumulada da distribuição lognormal, em que o logaritmo da variável é normal com média mu e desvio padrão sigma."
+      },
+      "syntax": [
+        {
+          "code": "p = logncdf(x)",
+          "en": "Probability with `mu = 0` and `sigma = 1`.",
+          "pt": "Probabilidade com `mu = 0` e `sigma = 1`."
+        },
+        {
+          "code": "p = logncdf(x, mu, sigma)",
+          "en": "Probability with the given parameters.",
+          "pt": "Probabilidade com os parâmetros dados."
+        },
+        {
+          "code": "p = logncdf(x, mu, sigma, 'upper')",
+          "en": "Upper tail probability `1 - p`.",
+          "pt": "Probabilidade da cauda superior `1 - p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate. Scalar, vector or array.",
+          "pt": "Pontos em que calcular. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the logarithm of the variable (any real number). Default 0.",
+          "pt": "Média do logaritmo da variável (qualquer real). Padrão 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of the logarithm of the variable, positive. Default 1.",
+          "pt": "Desvio padrão do logaritmo da variável, positivo. Padrão 1."
+        },
+        {
+          "name": "'upper'",
+          "en": "Option that returns the upper tail instead of the lower one.",
+          "pt": "Opção que retorna a cauda superior em vez da inferior."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1, same size as the inputs after scalar expansion. Zero for `x <= 0`.",
+          "pt": "Probabilidades entre 0 e 1, com o tamanho das entradas após a expansão dos escalares. Zero para `x <= 0`."
+        }
+      ],
+      "description": {
+        "en": "`logncdf(x, mu, sigma)` is the probability that the variable is at most `x`. It equals `normcdf(log(x), mu, sigma)` for positive `x`.\n\nThe `'upper'` form returns the probability of exceeding `x` and keeps precision when that probability is very small. Any other text in that position gives an error.",
+        "pt": "`logncdf(x, mu, sigma)` é a probabilidade de a variável ser no máximo `x`. Equivale a `normcdf(log(x), mu, sigma)` para `x` positivo.\n\nA forma `'upper'` retorna a probabilidade de exceder `x` e mantém a precisão quando ela é muito pequena. Qualquer outro texto nessa posição gera um erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probability below the median",
+            "pt": "Probabilidade abaixo da mediana"
+          },
+          "code": "% the median of this lognormal is exp(1) = 2.7183\nfprintf('%.4f\\n', logncdf(exp(1), 1, 0.5))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Lower and upper tails",
+            "pt": "Caudas inferior e superior"
+          },
+          "code": "x = [1 2 5];\ndisp(round(logncdf(x, 0, 1)*10000)/10000)\ndisp(round(logncdf(x, 0, 1, 'upper')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lognpdf",
+        "logninv",
+        "lognstat",
+        "lognfit",
+        "normcdf"
+      ]
+    },
+    "logninv": {
+      "summary": {
+        "en": "Inverse cumulative distribution function (quantile function) of the lognormal distribution with log-mean mu and log-standard deviation sigma.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição lognormal, em que o logaritmo da variável é normal com média mu e desvio padrão sigma."
+      },
+      "syntax": [
+        {
+          "code": "x = logninv(p)",
+          "en": "Quantile with `mu = 0` and `sigma = 1`.",
+          "pt": "Quantil com `mu = 0` e `sigma = 1`."
+        },
+        {
+          "code": "x = logninv(p, mu, sigma)",
+          "en": "Quantile with the given parameters.",
+          "pt": "Quantil com os parâmetros dados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Scalar, vector or array.",
+          "pt": "Probabilidades entre 0 e 1. Escalar, vetor ou matriz."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the logarithm of the variable (any real number). Default 0.",
+          "pt": "Média do logaritmo da variável (qualquer real). Padrão 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of the logarithm of the variable, positive. Default 1.",
+          "pt": "Desvio padrão do logaritmo da variável, positivo. Padrão 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as the inputs after scalar expansion.",
+          "pt": "Quantis, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`logninv` undoes `logncdf`. `logninv(p, mu, sigma)` equals `exp(norminv(p, mu, sigma))`. For example `logninv(0.5, mu, sigma)` is the median, `exp(mu)`.\n\n`p = 0` returns 0 and `p = 1` returns `Inf`. Values of `p` outside `[0, 1]` and invalid `sigma` give `NaN`.",
+        "pt": "`logninv` desfaz `logncdf`. `logninv(p, mu, sigma)` é igual a `exp(norminv(p, mu, sigma))`. Por exemplo, `logninv(0.5, mu, sigma)` é a mediana, `exp(mu)`.\n\n`p = 0` retorna 0 e `p = 1` retorna `Inf`. Valores de `p` fora de `[0, 1]` e `sigma` inválido dão `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles of the standard lognormal",
+            "pt": "Quantis da lognormal padrão"
+          },
+          "code": "x = logninv([0.1 0.5 0.9], 0, 1);\ndisp(round(x*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Median and 95th percentile",
+            "pt": "Mediana e percentil 95"
+          },
+          "code": "fprintf('%.4f %.4f\\n', logninv(0.5, 1, 0.5), logninv(0.95, 1, 0.5))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "logncdf",
+        "lognpdf",
+        "lognstat",
+        "lognfit",
+        "icdf"
+      ]
+    },
+    "lognfit": {
+      "summary": {
+        "en": "Fits a lognormal distribution to positive data by maximum likelihood and returns mu and sigma of the logarithm, with confidence intervals on request.",
+        "pt": "Ajusta uma distribuição lognormal a dados positivos por máxima verossimilhança e retorna mu e sigma do logaritmo, com intervalos de confiança se pedidos."
+      },
+      "syntax": [
+        {
+          "code": "p = lognfit(x)",
+          "en": "Parameter estimates `[mu sigma]`.",
+          "pt": "Estimativas dos parâmetros `[mu sigma]`."
+        },
+        {
+          "code": "[p, pci] = lognfit(x)",
+          "en": "Also returns 95% confidence intervals.",
+          "pt": "Retorna também intervalos de confiança de 95%."
+        },
+        {
+          "code": "[p, pci] = lognfit(x, alpha)",
+          "en": "Confidence level `100*(1 - alpha)` percent.",
+          "pt": "Nível de confiança de `100*(1 - alpha)` por cento."
+        },
+        {
+          "code": "[p, pci] = lognfit(x, alpha, [], freq)",
+          "en": "Frequencies `freq` count repeated observations.",
+          "pt": "`freq` conta observações repetidas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of positive data.",
+          "pt": "Vetor de dados positivos."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. Padrão 0,05."
+        },
+        {
+          "name": "freq",
+          "en": "Optional vector of frequencies, one count per element of `x`.",
+          "pt": "Vetor opcional de frequências, uma contagem por elemento de `x`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Row vector `[mu sigma]`: the mean and standard deviation of `log(x)`.",
+          "pt": "Vetor linha `[mu sigma]`: média e desvio padrão de `log(x)`."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-2 matrix. Row 1 holds the lower limits and row 2 the upper limits, one column per parameter, in the order of `p`.",
+          "pt": "Matriz 2 por 2. A linha 1 tem os limites inferiores e a linha 2 os superiores, uma coluna por parâmetro, na ordem de `p`."
+        }
+      ],
+      "description": {
+        "en": "The maximum-likelihood estimates have a closed form: `mu` is the mean of `log(x)`, and `sigma` is the standard deviation of `log(x)` computed with divisor `n` (not `n - 1`). The data must be positive.\n\nThe estimates describe the logarithm. The median of the data is `exp(mu)`, and `lognstat` converts `[mu sigma]` into the mean and variance of the original variable.",
+        "pt": "As estimativas de máxima verossimilhança têm forma fechada: `mu` é a média de `log(x)` e `sigma` é o desvio padrão de `log(x)` calculado com divisor `n` (não `n - 1`). Os dados devem ser positivos.\n\nAs estimativas descrevem o logaritmo. A mediana dos dados é `exp(mu)`, e `lognstat` converte `[mu sigma]` na média e na variância da variável original."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and compare with the log data",
+            "pt": "Ajuste e comparação com os dados em log"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = lognfit(x);\nfprintf('mu=%.4f sigma=%.4f\\n', p)\nfprintf('%.4f %.4f\\n', mean(log(x)), std(log(x), 1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Confidence intervals",
+            "pt": "Intervalos de confiança"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\n[p, pci] = lognfit(x);\ndisp(round(pci*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lognlike",
+        "lognpdf",
+        "logncdf",
+        "lognstat",
+        "normfit"
+      ],
+      "notes": {
+        "en": "Censored observations are not supported: a non-empty `censoring` argument gives the error \"Censored data are not supported by normfit in this release.\" Frequencies (`freq`) work. `lognlike` does accept censoring.",
+        "pt": "Observações censuradas não são suportadas: um argumento `censoring` não vazio gera o erro \"Censored data are not supported by normfit in this release.\" As frequências (`freq`) funcionam. `lognlike` aceita censura."
+      }
+    },
+    "lognlike": {
+      "summary": {
+        "en": "Negative log-likelihood of the lognormal distribution for given mu, sigma and data, with the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa da distribuição lognormal para mu, sigma e dados dados, com a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = lognlike(params, data)",
+          "en": "Negative log-likelihood at `params = [mu sigma]`.",
+          "pt": "Log-verossimilhança negativa em `params = [mu sigma]`."
+        },
+        {
+          "code": "[nlogL, avar] = lognlike(params, data)",
+          "en": "Also the 2-by-2 approximate covariance matrix of the estimates.",
+          "pt": "Retorna também a matriz de covariância aproximada 2 por 2 das estimativas."
+        },
+        {
+          "code": "nlogL = lognlike(params, data, censoring)",
+          "en": "Treats observations flagged in `censoring` as right-censored.",
+          "pt": "Trata como censuradas à direita as observações marcadas em `censoring`."
+        },
+        {
+          "code": "nlogL = lognlike(params, data, censoring, freq)",
+          "en": "Weights each observation by `freq`.",
+          "pt": "Pondera cada observação por `freq`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Vector `[mu sigma]` of the mean and standard deviation of the logarithm.",
+          "pt": "Vetor `[mu sigma]` com a média e o desvio padrão do logaritmo."
+        },
+        {
+          "name": "data",
+          "en": "Vector of positive observations.",
+          "pt": "Vetor de observações positivas."
+        },
+        {
+          "name": "censoring",
+          "en": "Optional vector, 1 for a right-censored observation and 0 for an exact one.",
+          "pt": "Vetor opcional, 1 para observação censurada à direita e 0 para observação exata."
+        },
+        {
+          "name": "freq",
+          "en": "Optional vector of frequencies.",
+          "pt": "Vetor opcional de frequências."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative log-likelihood. Smaller means a better fit.",
+          "pt": "Log-verossimilhança negativa. Menor significa melhor ajuste."
+        },
+        {
+          "name": "avar",
+          "en": "2-by-2 covariance matrix of the estimates, in the order `mu`, `sigma`. Meaningful at the maximum-likelihood point.",
+          "pt": "Matriz de covariância 2 por 2 das estimativas, na ordem `mu`, `sigma`. Tem sentido no ponto de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`lognlike` evaluates the quantity that `lognfit` minimises. Use it to compare candidate parameters or to compare models fitted to the same data: the lower value fits better.\n\nBecause the data enter through their logarithm, all observations must be positive.",
+        "pt": "`lognlike` avalia a quantidade que `lognfit` minimiza. Use-a para comparar parâmetros candidatos ou modelos ajustados aos mesmos dados: o menor valor ajusta melhor.\n\nComo os dados entram pelo logaritmo, todas as observações devem ser positivas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at the fitted parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = lognfit(x);\nfprintf('%.4f\\n', lognlike(p, x))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Standard errors and a censored value",
+            "pt": "Erros padrão e um valor censurado"
+          },
+          "code": "x = [0.8 1.1 1.5 2.0 2.4 3.1 3.9 4.6 5.8 7.5 9.9 13.2];\np = lognfit(x);\n[nl, avar] = lognlike(p, x);\ndisp(round(sqrt(diag(avar))'*10000)/10000)\ncens = zeros(size(x)); cens(end) = 1;\nfprintf('%.4f\\n', lognlike(p, x, cens))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lognfit",
+        "lognpdf",
+        "gevlike",
+        "gplike",
+        "normlike"
+      ]
+    }
+  }
+}

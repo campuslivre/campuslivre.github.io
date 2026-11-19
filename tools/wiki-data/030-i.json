@@ -1,0 +1,1582 @@
+{
+  "functions": {
+    "normpdf": {
+      "summary": {
+        "en": "Probability density function of the normal distribution with mean mu and standard deviation sigma, evaluated at x.",
+        "pt": "Função densidade de probabilidade da distribuição normal com média mu e desvio padrão sigma, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "y = normpdf(x)",
+          "en": "Standard normal density (`mu = 0`, `sigma = 1`).",
+          "pt": "Densidade da normal padrão (`mu = 0`, `sigma = 1`)."
+        },
+        {
+          "code": "y = normpdf(x, mu)",
+          "en": "Normal density with mean `mu` and `sigma = 1`.",
+          "pt": "Densidade normal com média `mu` e `sigma = 1`."
+        },
+        {
+          "code": "y = normpdf(x, mu, sigma)",
+          "en": "Normal density with mean `mu` and standard deviation `sigma`.",
+          "pt": "Densidade normal com média `mu` e desvio padrão `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the density is evaluated.",
+          "pt": "Pontos em que a densidade é calculada."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the distribution. Default 0.",
+          "pt": "Média da distribuição. O padrão é 0."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation, positive. Default 1.",
+          "pt": "Desvio padrão, positivo. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size of the inputs after scalar expansion.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The density is the bell curve `exp(-(x-mu)^2/(2*sigma^2)) / (sigma*sqrt(2*pi))`. It is a height, not a probability: the probability of an interval is the area under the curve, which `normcdf` gives.\n\n`x`, `mu` and `sigma` may be arrays of the same size, or scalars that are expanded to match.",
+        "pt": "A densidade é a curva em forma de sino `exp(-(x-mu)^2/(2*sigma^2)) / (sigma*sqrt(2*pi))`. Ela é uma altura, não uma probabilidade: a probabilidade de um intervalo é a área sob a curva, que `normcdf` fornece.\n\n`x`, `mu` e `sigma` podem ser arrays de mesmo tamanho ou escalares, que são expandidos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Standard normal at three points",
+            "pt": "Normal padrão em três pontos"
+          },
+          "code": "y = normpdf([-1 0 1]);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Mean 1, standard deviation 2",
+            "pt": "Média 1, desvio padrão 2"
+          },
+          "code": "fprintf('%.4f\\n', normpdf(3, 1, 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normcdf",
+        "norminv",
+        "normrnd",
+        "normstat",
+        "normfit"
+      ]
+    },
+    "normrnd": {
+      "summary": {
+        "en": "Generates random numbers from the normal distribution with mean mu and standard deviation sigma.",
+        "pt": "Gera números aleatórios da distribuição normal com média mu e desvio padrão sigma."
+      },
+      "syntax": [
+        {
+          "code": "r = normrnd(mu, sigma)",
+          "en": "One random number per element of `mu` and `sigma`.",
+          "pt": "Um número aleatório para cada elemento de `mu` e `sigma`."
+        },
+        {
+          "code": "r = normrnd(mu, sigma, sz1, ..., szN)",
+          "en": "Array with the given dimensions.",
+          "pt": "Array com as dimensões dadas."
+        },
+        {
+          "code": "r = normrnd(mu, sigma, sz)",
+          "en": "Array whose size is the vector `sz`.",
+          "pt": "Array cujo tamanho é o vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the distribution.",
+          "pt": "Média da distribuição."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation, positive.",
+          "pt": "Desvio padrão, positivo."
+        },
+        {
+          "name": "sz",
+          "en": "Optional size arguments (`sz1,...,szN` or a size vector). When omitted, the result has the size of the parameters.",
+          "pt": "Argumentos opcionais de tamanho (`sz1,...,szN` ou um vetor de tamanho). Se omitidos, o resultado tem o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random numbers drawn from the normal distribution.",
+          "pt": "Números aleatórios sorteados da distribuição normal."
+        }
+      ],
+      "description": {
+        "en": "Each value is `mu + sigma*z`, where `z` is a standard normal draw. Seed the generator with `rng` to repeat a run in MatLivre.\n\nBecause the output is random, check a sample through summaries such as its size, mean or standard deviation.",
+        "pt": "Cada valor é `mu + sigma*z`, em que `z` é um sorteio da normal padrão. Use `rng` para fixar a semente e repetir uma execução no MatLivre.\n\nComo a saída é aleatória, verifique uma amostra por resumos como tamanho, média ou desvio padrão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size of a sample",
+            "pt": "Tamanho de uma amostra"
+          },
+          "code": "r = normrnd(5, 2, 3, 4);\ndisp(size(r))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One value per mean",
+            "pt": "Um valor para cada média"
+          },
+          "code": "r = normrnd([1 2 3], 1);\ndisp(size(r))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normpdf",
+        "normcdf",
+        "norminv",
+        "randn",
+        "random"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random stream, so the same seed gives different numbers than MATLAB. Only the distribution and the sizes match.",
+        "pt": "O gerador não reproduz o fluxo de números aleatórios do MATLAB, então a mesma semente gera números diferentes. Só a distribuição e os tamanhos coincidem."
+      }
+    },
+    "normstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the normal distribution for the given parameters.",
+        "pt": "Retorna a média e a variância da distribuição normal para os parâmetros dados."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = normstat(mu, sigma)",
+          "en": "Mean and variance for each pair `mu`, `sigma`.",
+          "pt": "Média e variância para cada par `mu`, `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the distribution.",
+          "pt": "Média da distribuição."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation, positive.",
+          "pt": "Desvio padrão, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, equal to `mu`.",
+          "pt": "Média, igual a `mu`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, equal to `sigma.^2`.",
+          "pt": "Variância, igual a `sigma.^2`."
+        }
+      ],
+      "description": {
+        "en": "For the normal distribution the mean is `mu` and the variance is `sigma^2`. The function accepts arrays of parameters and returns arrays of the same size.",
+        "pt": "Na distribuição normal, a média é `mu` e a variância é `sigma^2`. A função aceita arrays de parâmetros e devolve arrays do mesmo tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two normal distributions",
+            "pt": "Duas distribuições normais"
+          },
+          "code": "[m, v] = normstat([0 1], [1 2]);\ndisp([m; v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "normpdf",
+        "normcdf",
+        "normfit",
+        "normrnd"
+      ]
+    },
+    "pdf": {
+      "summary": {
+        "en": "Evaluates the probability density (or mass) function of a named distribution at x, with the distribution's parameters given as arguments.",
+        "pt": "Calcula a função densidade (ou massa) de probabilidade de uma distribuição escolhida pelo nome, em x, com os parâmetros dados como argumentos."
+      },
+      "syntax": [
+        {
+          "code": "y = pdf(name, x, A)",
+          "en": "Distribution with one parameter `A`.",
+          "pt": "Distribuição com um parâmetro `A`."
+        },
+        {
+          "code": "y = pdf(name, x, A, B)",
+          "en": "Distribution with two parameters.",
+          "pt": "Distribuição com dois parâmetros."
+        },
+        {
+          "code": "y = pdf(name, x, A, B, C)",
+          "en": "Distribution with three parameters.",
+          "pt": "Distribuição com três parâmetros."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "name",
+          "en": "Distribution name, for example `'Normal'`, `'Poisson'`, `'T'`, `'Rayleigh'`, `'Discrete Uniform'`, or a short form such as `'norm'`, `'poiss'`, `'rayl'`, `'unid'`.",
+          "pt": "Nome da distribuição, por exemplo `'Normal'`, `'Poisson'`, `'T'`, `'Rayleigh'`, `'Discrete Uniform'`, ou uma forma curta como `'norm'`, `'poiss'`, `'rayl'`, `'unid'`."
+        },
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated.",
+          "pt": "Pontos em que a função é calculada."
+        },
+        {
+          "name": "A, B, C",
+          "en": "Distribution parameters, in the same order as the specific function (for example mean then standard deviation for `'Normal'`).",
+          "pt": "Parâmetros da distribuição, na mesma ordem da função específica (por exemplo média e depois desvio padrão em `'Normal'`)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density or mass values, with the size of `x` after scalar expansion.",
+          "pt": "Valores da densidade ou massa, com o tamanho de `x` após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "`pdf` is a front end to the specific functions: `pdf('Normal', x, mu, sigma)` gives the same values as `normpdf(x, mu, sigma)`. Use it when the distribution is chosen at run time, for instance from a string.\n\nFor discrete distributions such as `'Poisson'` the result is the probability of exactly `x`.",
+        "pt": "`pdf` é uma interface para as funções específicas: `pdf('Normal', x, mu, sigma)` dá os mesmos valores de `normpdf(x, mu, sigma)`. Use quando a distribuição é escolhida durante a execução, por exemplo a partir de um texto.\n\nEm distribuições discretas como `'Poisson'`, o resultado é a probabilidade de exatamente `x`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal density",
+            "pt": "Densidade normal"
+          },
+          "code": "y = pdf('Normal', [0 1], 0, 1);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Poisson probabilities",
+            "pt": "Probabilidades de Poisson"
+          },
+          "code": "y = pdf('Poisson', [0 1 2], 3);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "random",
+        "normpdf",
+        "poisspdf",
+        "tpdf",
+        "raylpdf"
+      ],
+      "notes": {
+        "en": "Probability distribution objects from `makedist` are not available, so a name such as `'Half Normal'` fails. Pass a name and the parameters directly.",
+        "pt": "Objetos de distribuição criados com `makedist` não estão disponíveis, então um nome como `'Half Normal'` falha. Passe o nome e os parâmetros diretamente."
+      }
+    },
+    "poisscdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the Poisson distribution with mean lambda, evaluated at x.",
+        "pt": "Função de distribuição acumulada da distribuição de Poisson com média lambda, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "p = poisscdf(x, lambda)",
+          "en": "Probability that a Poisson count is at most `x`.",
+          "pt": "Probabilidade de uma contagem de Poisson ser no máximo `x`."
+        },
+        {
+          "code": "p = poisscdf(x, lambda, 'upper')",
+          "en": "Upper tail: probability that the count is greater than `x`.",
+          "pt": "Cauda superior: probabilidade de a contagem ser maior que `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Counts at which the function is evaluated.",
+          "pt": "Contagens em que a função é calculada."
+        },
+        {
+          "name": "lambda",
+          "en": "Mean of the distribution (rate), positive.",
+          "pt": "Média da distribuição (taxa), positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities.",
+          "pt": "Probabilidades acumuladas."
+        }
+      ],
+      "description": {
+        "en": "`poisscdf(x, lambda)` adds the probabilities `poisspdf(k, lambda)` for `k = 0` up to `floor(x)`. Use it to ask how likely it is to see at most `x` events when `lambda` are expected.\n\nThe `'upper'` option computes the complement directly, which keeps precision when the answer is very small.",
+        "pt": "`poisscdf(x, lambda)` soma as probabilidades `poisspdf(k, lambda)` de `k = 0` até `floor(x)`. Use para saber a chance de ver no máximo `x` eventos quando se esperam `lambda`.\n\nA opção `'upper'` calcula o complemento diretamente, o que preserva a precisão quando a resposta é muito pequena."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "At most 0 to 3 events",
+            "pt": "No máximo 0 a 3 eventos"
+          },
+          "code": "p = poisscdf([0 1 2 3], 2);\ndisp(round(p*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Upper tail",
+            "pt": "Cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', poisscdf(2, 2, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poisspdf",
+        "poissinv",
+        "poissfit",
+        "poisstat",
+        "cdf"
+      ]
+    },
+    "poissfit": {
+      "summary": {
+        "en": "Fits a Poisson distribution to count data, returning the estimated mean and its confidence interval.",
+        "pt": "Ajusta uma distribuição de Poisson a dados de contagem, devolvendo a média estimada e seu intervalo de confiança."
+      },
+      "syntax": [
+        {
+          "code": "lambdahat = poissfit(data)",
+          "en": "Maximum likelihood estimate of the mean.",
+          "pt": "Estimativa de máxima verossimilhança da média."
+        },
+        {
+          "code": "[lambdahat, lambdaci] = poissfit(data)",
+          "en": "Also returns the 95% confidence interval.",
+          "pt": "Devolve também o intervalo de confiança de 95%."
+        },
+        {
+          "code": "[lambdahat, lambdaci] = poissfit(data, alpha)",
+          "en": "Confidence level `100*(1-alpha)`%.",
+          "pt": "Nível de confiança `100*(1-alpha)`%."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Vector of non-negative integer counts.",
+          "pt": "Vetor de contagens inteiras não negativas."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the interval. Default 0.05.",
+          "pt": "Nível de significância do intervalo. O padrão é 0.05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lambdahat",
+          "en": "Estimated mean, which is the sample mean of `data`.",
+          "pt": "Média estimada, que é a média amostral de `data`."
+        },
+        {
+          "name": "lambdaci",
+          "en": "Column vector with the lower and upper limits of the confidence interval.",
+          "pt": "Vetor coluna com os limites inferior e superior do intervalo de confiança."
+        }
+      ],
+      "description": {
+        "en": "For a Poisson model the maximum likelihood estimate of the mean is simply the average count. The confidence interval is built from the chi-square distribution and is not symmetric around the estimate.\n\nA smaller `alpha` gives a wider interval.",
+        "pt": "No modelo de Poisson, a estimativa de máxima verossimilhança da média é simplesmente a contagem média. O intervalo de confiança é construído a partir da distribuição qui-quadrado e não é simétrico em torno da estimativa.\n\nUm `alpha` menor gera um intervalo mais largo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Estimate and 95% interval",
+            "pt": "Estimativa e intervalo de 95%"
+          },
+          "code": "k = [3 5 4 6 2 5 4 3];\n[l, ci] = poissfit(k);\nfprintf('%.4f\\n', l)\ndisp(round(ci*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "90% interval",
+            "pt": "Intervalo de 90%"
+          },
+          "code": "k = [3 5 4 6 2 5 4 3];\n[l, ci] = poissfit(k, 0.1);\ndisp(round(ci*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poisspdf",
+        "poisscdf",
+        "poissinv",
+        "poisstat",
+        "mle"
+      ]
+    },
+    "poissinv": {
+      "summary": {
+        "en": "Inverse of the Poisson cumulative distribution function: the smallest count whose cumulative probability reaches p.",
+        "pt": "Inversa da função de distribuição acumulada de Poisson: a menor contagem cuja probabilidade acumulada atinge p."
+      },
+      "syntax": [
+        {
+          "code": "x = poissinv(p, lambda)",
+          "en": "Smallest integer `x` with `poisscdf(x, lambda) >= p`.",
+          "pt": "Menor inteiro `x` com `poisscdf(x, lambda) >= p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "lambda",
+          "en": "Mean of the distribution (rate), positive.",
+          "pt": "Média da distribuição (taxa), positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, which are non-negative integers.",
+          "pt": "Quantis, que são inteiros não negativos."
+        }
+      ],
+      "description": {
+        "en": "Because the Poisson distribution is discrete, its cumulative function is a staircase and the inverse returns the first step that reaches `p`. It is a quantile function: `poissinv(0.5, lambda)` is the median.\n\nUse it to find, for example, the count that is exceeded only 10% of the time.",
+        "pt": "Como a distribuição de Poisson é discreta, sua função acumulada é uma escada e a inversa devolve o primeiro degrau que alcança `p`. É uma função quantil: `poissinv(0.5, lambda)` é a mediana.\n\nUse para achar, por exemplo, a contagem que só é ultrapassada em 10% das vezes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles for mean 3",
+            "pt": "Quantis para média 3"
+          },
+          "code": "x = poissinv([0.1 0.5 0.9], 3);\ndisp(x)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poisscdf",
+        "poisspdf",
+        "poissfit",
+        "poisstat",
+        "icdf"
+      ]
+    },
+    "poisspdf": {
+      "summary": {
+        "en": "Probability mass function of the Poisson distribution with mean lambda, evaluated at x.",
+        "pt": "Função massa de probabilidade da distribuição de Poisson com média lambda, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "y = poisspdf(x, lambda)",
+          "en": "Probability of observing exactly `x` events.",
+          "pt": "Probabilidade de observar exatamente `x` eventos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Counts at which the function is evaluated.",
+          "pt": "Contagens em que a função é calculada."
+        },
+        {
+          "name": "lambda",
+          "en": "Mean of the distribution (rate), positive.",
+          "pt": "Média da distribuição (taxa), positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, with the size of the inputs after scalar expansion.",
+          "pt": "Probabilidades, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The probability of exactly `x` events is `exp(-lambda) * lambda^x / x!`. The Poisson distribution models the number of events in a fixed interval when they occur independently at a constant average rate.\n\nValues of `x` that are not non-negative integers have probability 0.",
+        "pt": "A probabilidade de exatamente `x` eventos é `exp(-lambda) * lambda^x / x!`. A distribuição de Poisson modela o número de eventos em um intervalo fixo quando eles ocorrem de forma independente a uma taxa média constante.\n\nValores de `x` que não são inteiros não negativos têm probabilidade 0."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probabilities for 0 to 4 events",
+            "pt": "Probabilidades de 0 a 4 eventos"
+          },
+          "code": "y = poisspdf(0:4, 2);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poisscdf",
+        "poissinv",
+        "poissfit",
+        "poisstat",
+        "pdf"
+      ]
+    },
+    "poisstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the Poisson distribution for the given lambda.",
+        "pt": "Retorna a média e a variância da distribuição de Poisson para o lambda dado."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = poisstat(lambda)",
+          "en": "Mean and variance for each `lambda`.",
+          "pt": "Média e variância para cada `lambda`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "lambda",
+          "en": "Mean of the distribution (rate), positive.",
+          "pt": "Média da distribuição (taxa), positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, equal to `lambda`.",
+          "pt": "Média, igual a `lambda`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, also equal to `lambda`.",
+          "pt": "Variância, também igual a `lambda`."
+        }
+      ],
+      "description": {
+        "en": "The Poisson distribution has the property that its mean and variance are the same number. A sample whose variance is much larger than its mean is a sign that a Poisson model may not fit.",
+        "pt": "A distribuição de Poisson tem a propriedade de que média e variância são o mesmo número. Uma amostra cuja variância é bem maior que a média indica que o modelo de Poisson pode não se ajustar."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two means",
+            "pt": "Duas médias"
+          },
+          "code": "[m, v] = poisstat([1 4]);\ndisp([m; v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "poisspdf",
+        "poisscdf",
+        "poissfit"
+      ]
+    },
+    "random": {
+      "summary": {
+        "en": "Generates random numbers from a distribution chosen by name, with the parameters given as arguments.",
+        "pt": "Gera números aleatórios de uma distribuição escolhida pelo nome, com os parâmetros dados como argumentos."
+      },
+      "syntax": [
+        {
+          "code": "r = random(name, A)",
+          "en": "Distribution with one parameter.",
+          "pt": "Distribuição com um parâmetro."
+        },
+        {
+          "code": "r = random(name, A, B)",
+          "en": "Distribution with two parameters.",
+          "pt": "Distribuição com dois parâmetros."
+        },
+        {
+          "code": "r = random(name, A, B, sz1, ..., szN)",
+          "en": "Array of the given size.",
+          "pt": "Array com o tamanho dado."
+        },
+        {
+          "code": "r = random(name, A, B, sz)",
+          "en": "Array whose size is the vector `sz`.",
+          "pt": "Array cujo tamanho é o vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "name",
+          "en": "Distribution name, for example `'Normal'`, `'Uniform'`, `'Exponential'`, `'Rayleigh'` or a short form such as `'norm'`.",
+          "pt": "Nome da distribuição, por exemplo `'Normal'`, `'Uniform'`, `'Exponential'`, `'Rayleigh'` ou uma forma curta como `'norm'`."
+        },
+        {
+          "name": "A, B, C",
+          "en": "Distribution parameters, in the same order as the specific `*rnd` function.",
+          "pt": "Parâmetros da distribuição, na mesma ordem da função `*rnd` específica."
+        },
+        {
+          "name": "sz",
+          "en": "Optional size arguments (`sz1,...,szN` or a size vector). When omitted, the result has the size of the parameters.",
+          "pt": "Argumentos opcionais de tamanho (`sz1,...,szN` ou um vetor de tamanho). Se omitidos, o resultado tem o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random numbers from the chosen distribution.",
+          "pt": "Números aleatórios da distribuição escolhida."
+        }
+      ],
+      "description": {
+        "en": "`random` calls the matching `*rnd` function: `random('Normal', 0, 1, 2, 3)` behaves like `normrnd(0, 1, 2, 3)`. Use it when the distribution is picked at run time.\n\nBecause the values are random, print properties that do not depend on the draw, such as the size.",
+        "pt": "`random` chama a função `*rnd` correspondente: `random('Normal', 0, 1, 2, 3)` se comporta como `normrnd(0, 1, 2, 3)`. Use quando a distribuição é escolhida durante a execução.\n\nComo os valores são aleatórios, mostre propriedades que não dependem do sorteio, como o tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal sample size",
+            "pt": "Tamanho de uma amostra normal"
+          },
+          "code": "r = random('Normal', 0, 1, 2, 3);\ndisp(size(r))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Exponential sample",
+            "pt": "Amostra exponencial"
+          },
+          "code": "r = random('Exponential', 2, 3, 1);\ndisp(size(r))\ndisp(all(r > 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdf",
+        "normrnd",
+        "raylrnd",
+        "rand",
+        "randn"
+      ],
+      "notes": {
+        "en": "Only distributions whose generator exists in MatLivre work. `'Normal'`, `'Uniform'`, `'Exponential'`, `'Extreme Value'`, `'Binomial'`, `'Geometric'`, `'Lognormal'`, `'Rayleigh'`, `'Discrete Uniform'` and `'Weibull'` ran. `'Poisson'`, `'Gamma'`, `'Beta'`, `'Chi-square'`, `'F'` and `'T'` fail with an error saying the generator is not defined. The numbers do not match MATLAB's random stream.",
+        "pt": "Só funcionam as distribuições cujo gerador existe no MatLivre. `'Normal'`, `'Uniform'`, `'Exponential'`, `'Extreme Value'`, `'Binomial'`, `'Geometric'`, `'Lognormal'`, `'Rayleigh'`, `'Discrete Uniform'` e `'Weibull'` funcionaram. `'Poisson'`, `'Gamma'`, `'Beta'`, `'Chi-square'`, `'F'` e `'T'` falham com um erro dizendo que o gerador não está definido. Os números não coincidem com o fluxo aleatório do MATLAB."
+      }
+    },
+    "raylcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the Rayleigh distribution with scale parameter b, evaluated at x.",
+        "pt": "Função de distribuição acumulada da distribuição de Rayleigh com parâmetro de escala b, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "p = raylcdf(x, b)",
+          "en": "Probability that a Rayleigh variable is at most `x`.",
+          "pt": "Probabilidade de uma variável de Rayleigh ser no máximo `x`."
+        },
+        {
+          "code": "p = raylcdf(x, b, 'upper')",
+          "en": "Upper tail probability.",
+          "pt": "Probabilidade da cauda superior."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated, non-negative.",
+          "pt": "Pontos em que a função é calculada, não negativos."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities.",
+          "pt": "Probabilidades acumuladas."
+        }
+      ],
+      "description": {
+        "en": "The Rayleigh distribution describes the length of a two-dimensional vector whose components are independent normal variables with the same standard deviation `b`, for example wind speed or the magnitude of a noise signal. The cumulative function is `1 - exp(-x^2/(2*b^2))` for `x >= 0`.",
+        "pt": "A distribuição de Rayleigh descreve o comprimento de um vetor bidimensional cujas componentes são variáveis normais independentes com o mesmo desvio padrão `b`, por exemplo a velocidade do vento ou a magnitude de um sinal de ruído. A função acumulada é `1 - exp(-x^2/(2*b^2))` para `x >= 0`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cumulative probabilities",
+            "pt": "Probabilidades acumuladas"
+          },
+          "code": "p = raylcdf([0.5 1 2], 1);\ndisp(round(p*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Upper tail",
+            "pt": "Cauda superior"
+          },
+          "code": "fprintf('%.4f\\n', raylcdf(2, 1, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylpdf",
+        "raylinv",
+        "raylfit",
+        "raylrnd",
+        "raylstat"
+      ]
+    },
+    "raylfit": {
+      "summary": {
+        "en": "Fits a Rayleigh distribution to data, returning the estimated scale parameter and its confidence interval.",
+        "pt": "Ajusta uma distribuição de Rayleigh aos dados, devolvendo o parâmetro de escala estimado e seu intervalo de confiança."
+      },
+      "syntax": [
+        {
+          "code": "sigmahat = raylfit(data)",
+          "en": "Maximum likelihood estimate of the scale parameter.",
+          "pt": "Estimativa de máxima verossimilhança do parâmetro de escala."
+        },
+        {
+          "code": "[sigmahat, sigmaci] = raylfit(data)",
+          "en": "Also returns the 95% confidence interval.",
+          "pt": "Devolve também o intervalo de confiança de 95%."
+        },
+        {
+          "code": "[sigmahat, sigmaci] = raylfit(data, alpha)",
+          "en": "Confidence level `100*(1-alpha)`%.",
+          "pt": "Nível de confiança `100*(1-alpha)`%."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Vector of positive observations.",
+          "pt": "Vetor de observações positivas."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the interval. Default 0.05.",
+          "pt": "Nível de significância do intervalo. O padrão é 0.05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "sigmahat",
+          "en": "Estimated scale parameter.",
+          "pt": "Parâmetro de escala estimado."
+        },
+        {
+          "name": "sigmaci",
+          "en": "Column vector with the lower and upper limits of the confidence interval.",
+          "pt": "Vetor coluna com os limites inferior e superior do intervalo de confiança."
+        }
+      ],
+      "description": {
+        "en": "The maximum likelihood estimate is `sqrt(sum(data.^2) / (2*n))`, where `n` is the number of observations. The interval is based on the chi-square distribution.\n\nUse it to estimate the noise level or speed scale from measured magnitudes.",
+        "pt": "A estimativa de máxima verossimilhança é `sqrt(sum(data.^2) / (2*n))`, em que `n` é o número de observações. O intervalo é baseado na distribuição qui-quadrado.\n\nUse para estimar o nível de ruído ou a escala de velocidade a partir de magnitudes medidas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Estimate and interval",
+            "pt": "Estimativa e intervalo"
+          },
+          "code": "d = [0.5 1.1 0.8 1.7 2.2 1.3];\n[s, ci] = raylfit(d);\nfprintf('%.4f\\n', s)\ndisp(round(ci*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylpdf",
+        "raylcdf",
+        "raylinv",
+        "raylstat",
+        "mle"
+      ]
+    },
+    "raylinv": {
+      "summary": {
+        "en": "Inverse of the Rayleigh cumulative distribution function: the value x with probability p below it.",
+        "pt": "Inversa da função de distribuição acumulada de Rayleigh: o valor x com probabilidade p abaixo dele."
+      },
+      "syntax": [
+        {
+          "code": "x = raylinv(p, b)",
+          "en": "Quantile for each probability `p`.",
+          "pt": "Quantil para cada probabilidade `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, non-negative.",
+          "pt": "Quantis, não negativos."
+        }
+      ],
+      "description": {
+        "en": "The quantile is `b*sqrt(-2*log(1-p))`. `raylinv(0.5, b)` is the median. Use it to find thresholds, for example the magnitude that is exceeded only 10% of the time.",
+        "pt": "O quantil é `b*sqrt(-2*log(1-p))`. `raylinv(0.5, b)` é a mediana. Use para achar limiares, por exemplo a magnitude que só é ultrapassada em 10% das vezes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles for scale 1",
+            "pt": "Quantis para escala 1"
+          },
+          "code": "x = raylinv([0.1 0.5 0.9], 1);\ndisp(round(x*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylcdf",
+        "raylpdf",
+        "raylfit",
+        "raylrnd",
+        "icdf"
+      ]
+    },
+    "raylpdf": {
+      "summary": {
+        "en": "Probability density function of the Rayleigh distribution with scale parameter b, evaluated at x.",
+        "pt": "Função densidade de probabilidade da distribuição de Rayleigh com parâmetro de escala b, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "y = raylpdf(x, b)",
+          "en": "Rayleigh density at each `x`.",
+          "pt": "Densidade de Rayleigh em cada `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the density is evaluated, non-negative.",
+          "pt": "Pontos em que a densidade é calculada, não negativos."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size of the inputs after scalar expansion.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The density is `(x/b^2) * exp(-x^2/(2*b^2))` for `x >= 0` and 0 below. It rises from zero, peaks at `x = b` and then decays.",
+        "pt": "A densidade é `(x/b^2) * exp(-x^2/(2*b^2))` para `x >= 0` e 0 abaixo disso. Ela sobe a partir de zero, tem o pico em `x = b` e depois decai."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density for scale 1",
+            "pt": "Densidade para escala 1"
+          },
+          "code": "y = raylpdf([0.5 1 2], 1);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylcdf",
+        "raylinv",
+        "raylfit",
+        "raylrnd",
+        "pdf"
+      ]
+    },
+    "raylrnd": {
+      "summary": {
+        "en": "Generates random numbers from the Rayleigh distribution with scale parameter b.",
+        "pt": "Gera números aleatórios da distribuição de Rayleigh com parâmetro de escala b."
+      },
+      "syntax": [
+        {
+          "code": "r = raylrnd(b)",
+          "en": "One random number per element of `b`.",
+          "pt": "Um número aleatório para cada elemento de `b`."
+        },
+        {
+          "code": "r = raylrnd(b, sz1, ..., szN)",
+          "en": "Array with the given dimensions.",
+          "pt": "Array com as dimensões dadas."
+        },
+        {
+          "code": "r = raylrnd(b, sz)",
+          "en": "Array whose size is the vector `sz`.",
+          "pt": "Array cujo tamanho é o vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "sz",
+          "en": "Optional size arguments (`sz1,...,szN` or a size vector). When omitted, the result has the size of the parameters.",
+          "pt": "Argumentos opcionais de tamanho (`sz1,...,szN` ou um vetor de tamanho). Se omitidos, o resultado tem o tamanho dos parâmetros."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random numbers, all positive.",
+          "pt": "Números aleatórios, todos positivos."
+        }
+      ],
+      "description": {
+        "en": "Each value is the length of a pair of independent normal numbers with standard deviation `b`. Seed the generator with `rng` to repeat a run in MatLivre. Print sizes or ranges rather than the values themselves.",
+        "pt": "Cada valor é o comprimento de um par de números normais independentes com desvio padrão `b`. Use `rng` para fixar a semente e repetir uma execução no MatLivre. Mostre tamanhos ou intervalos em vez dos valores."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and positivity",
+            "pt": "Tamanho e positividade"
+          },
+          "code": "r = raylrnd(2, 3, 2);\ndisp(size(r))\ndisp(all(r(:) > 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylpdf",
+        "raylcdf",
+        "raylinv",
+        "raylfit",
+        "random"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random stream, so the same seed gives different numbers than MATLAB. Only the distribution and the sizes match.",
+        "pt": "O gerador não reproduz o fluxo de números aleatórios do MATLAB, então a mesma semente gera números diferentes. Só a distribuição e os tamanhos coincidem."
+      }
+    },
+    "raylstat": {
+      "summary": {
+        "en": "Returns the mean and variance of the Rayleigh distribution for the given scale parameter b.",
+        "pt": "Retorna a média e a variância da distribuição de Rayleigh para o parâmetro de escala b dado."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = raylstat(b)",
+          "en": "Mean and variance for each `b`.",
+          "pt": "Média e variância para cada `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `b*sqrt(pi/2)`.",
+          "pt": "Média, `b*sqrt(pi/2)`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `(4-pi)/2 * b^2`.",
+          "pt": "Variância, `(4-pi)/2 * b^2`."
+        }
+      ],
+      "description": {
+        "en": "Both values grow with the scale parameter: the mean linearly and the variance with its square.",
+        "pt": "Os dois valores crescem com o parâmetro de escala: a média linearmente e a variância com o seu quadrado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two scales",
+            "pt": "Duas escalas"
+          },
+          "code": "[m, v] = raylstat([1 2]);\ndisp(round([m; v]*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "raylpdf",
+        "raylcdf",
+        "raylfit",
+        "raylrnd"
+      ]
+    },
+    "tcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of Student's t distribution with nu degrees of freedom, evaluated at x.",
+        "pt": "Função de distribuição acumulada da distribuição t de Student com nu graus de liberdade, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "p = tcdf(x, nu)",
+          "en": "Probability that a t variable is at most `x`.",
+          "pt": "Probabilidade de uma variável t ser no máximo `x`."
+        },
+        {
+          "code": "p = tcdf(x, nu, 'upper')",
+          "en": "Upper tail probability.",
+          "pt": "Probabilidade da cauda superior."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated.",
+          "pt": "Pontos em que a função é calculada."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities.",
+          "pt": "Probabilidades acumuladas."
+        }
+      ],
+      "description": {
+        "en": "The t distribution is symmetric around zero and has heavier tails than the normal distribution, especially for small `nu`. It is the reference distribution of the t statistic in tests on means, so `2*tcdf(-abs(t), nu)` is the two-sided p-value of an observed statistic `t`.",
+        "pt": "A distribuição t é simétrica em torno de zero e tem caudas mais pesadas que a normal, principalmente para `nu` pequeno. É a distribuição de referência da estatística t em testes sobre médias, então `2*tcdf(-abs(t), nu)` é o valor-p bilateral de uma estatística observada `t`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probabilities with 5 degrees of freedom",
+            "pt": "Probabilidades com 5 graus de liberdade"
+          },
+          "code": "p = tcdf([-2 0 2], 5);\ndisp(round(p*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Two-sided p-value",
+            "pt": "Valor-p bilateral"
+          },
+          "code": "t = 2.5;\nfprintf('%.4f\\n', 2*tcdf(-abs(t), 10))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tpdf",
+        "tinv",
+        "tstat",
+        "ttest",
+        "normcdf"
+      ]
+    },
+    "tinv": {
+      "summary": {
+        "en": "Inverse of Student's t cumulative distribution function: the value x with probability p below it, for nu degrees of freedom.",
+        "pt": "Inversa da função de distribuição acumulada t de Student: o valor x com probabilidade p abaixo dele, para nu graus de liberdade."
+      },
+      "syntax": [
+        {
+          "code": "x = tinv(p, nu)",
+          "en": "Quantile for each probability `p`.",
+          "pt": "Quantil para cada probabilidade `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles of the t distribution.",
+          "pt": "Quantis da distribuição t."
+        }
+      ],
+      "description": {
+        "en": "`tinv(0.975, nu)` is the critical value used to build a 95% two-sided confidence interval for a mean: the interval is the sample mean plus or minus this value times the standard error. The distribution is symmetric, so `tinv(0.025, nu) = -tinv(0.975, nu)`.",
+        "pt": "`tinv(0.975, nu)` é o valor crítico usado para construir um intervalo de confiança bilateral de 95% para uma média: o intervalo é a média amostral mais ou menos esse valor vezes o erro padrão. A distribuição é simétrica, então `tinv(0.025, nu) = -tinv(0.975, nu)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Critical values for 10 degrees of freedom",
+            "pt": "Valores críticos para 10 graus de liberdade"
+          },
+          "code": "x = tinv([0.025 0.5 0.975], 10);\ndisp(round(x*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tcdf",
+        "tpdf",
+        "tstat",
+        "ttest",
+        "norminv"
+      ]
+    },
+    "tpdf": {
+      "summary": {
+        "en": "Probability density function of Student's t distribution with nu degrees of freedom, evaluated at x.",
+        "pt": "Função densidade de probabilidade da distribuição t de Student com nu graus de liberdade, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "y = tpdf(x, nu)",
+          "en": "t density at each `x`.",
+          "pt": "Densidade t em cada `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the density is evaluated.",
+          "pt": "Pontos em que a densidade é calculada."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size of the inputs after scalar expansion.",
+          "pt": "Valores da densidade, com o tamanho das entradas após a expansão dos escalares."
+        }
+      ],
+      "description": {
+        "en": "The density is a symmetric bell shape centered at zero. It approaches the standard normal density as `nu` grows and has heavier tails when `nu` is small.",
+        "pt": "A densidade tem formato de sino simétrico, centrado em zero. Ela se aproxima da densidade normal padrão quando `nu` cresce e tem caudas mais pesadas quando `nu` é pequeno."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density with 4 degrees of freedom",
+            "pt": "Densidade com 4 graus de liberdade"
+          },
+          "code": "y = tpdf([-1 0 1], 4);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tcdf",
+        "tinv",
+        "tstat",
+        "normpdf",
+        "pdf"
+      ]
+    },
+    "tstat": {
+      "summary": {
+        "en": "Returns the mean and variance of Student's t distribution for the given degrees of freedom.",
+        "pt": "Retorna a média e a variância da distribuição t de Student para os graus de liberdade dados."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = tstat(nu)",
+          "en": "Mean and variance for each `nu`.",
+          "pt": "Média e variância para cada `nu`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean: 0 when `nu` is greater than 1, otherwise `NaN`.",
+          "pt": "Média: 0 quando `nu` é maior que 1, caso contrário `NaN`."
+        },
+        {
+          "name": "v",
+          "en": "Variance: `nu/(nu-2)` when `nu` is greater than 2, otherwise `NaN`.",
+          "pt": "Variância: `nu/(nu-2)` quando `nu` é maior que 2, caso contrário `NaN`."
+        }
+      ],
+      "description": {
+        "en": "The t distribution has very heavy tails when `nu` is small, so its moments are not always defined. In MatLivre the mean is reported only for `nu > 1` and the variance only for `nu > 2`; elsewhere the result is `NaN`. The variance approaches 1 as `nu` grows.",
+        "pt": "A distribuição t tem caudas muito pesadas quando `nu` é pequeno, então seus momentos nem sempre existem. No MatLivre a média só é informada para `nu > 1` e a variância só para `nu > 2`; fora disso o resultado é `NaN`. A variância se aproxima de 1 quando `nu` cresce."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three degrees of freedom",
+            "pt": "Três valores de graus de liberdade"
+          },
+          "code": "[m, v] = tstat([3 5 1]);\ndisp([m; v])",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tpdf",
+        "tcdf",
+        "tinv",
+        "normstat"
+      ]
+    },
+    "ttest": {
+      "summary": {
+        "en": "One-sample or paired-sample t-test: tests whether a mean (or a mean difference) equals a value, and returns the decision, p-value and confidence interval.",
+        "pt": "Teste t de uma amostra ou de amostras pareadas: testa se uma média (ou diferença média) é igual a um valor, e devolve a decisão, o valor-p e o intervalo de confiança."
+      },
+      "syntax": [
+        {
+          "code": "h = ttest(x)",
+          "en": "Tests whether the mean of `x` is 0.",
+          "pt": "Testa se a média de `x` é 0."
+        },
+        {
+          "code": "h = ttest(x, m)",
+          "en": "Tests whether the mean of `x` is `m`.",
+          "pt": "Testa se a média de `x` é `m`."
+        },
+        {
+          "code": "h = ttest(x, y)",
+          "en": "Paired test: tests whether the mean of `x - y` is 0.",
+          "pt": "Teste pareado: testa se a média de `x - y` é 0."
+        },
+        {
+          "code": "[h, p, ci, stats] = ttest(___, Name, Value)",
+          "en": "Also returns the p-value, confidence interval and statistics. Options `'Alpha'`, `'Tail'` and `'Dim'`.",
+          "pt": "Devolve também o valor-p, o intervalo de confiança e as estatísticas. Opções `'Alpha'`, `'Tail'` e `'Dim'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample. For a matrix, each column is tested separately (see `'Dim'`).",
+          "pt": "Amostra. Em uma matriz, cada coluna é testada separadamente (veja `'Dim'`)."
+        },
+        {
+          "name": "m",
+          "en": "Hypothesized mean. Default 0.",
+          "pt": "Média hipotética. O padrão é 0."
+        },
+        {
+          "name": "y",
+          "en": "Second sample, of the same size as `x`, for the paired test.",
+          "pt": "Segunda amostra, com o mesmo tamanho de `x`, para o teste pareado."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`: the alternative hypothesis is that the mean differs from, is greater than, or is less than the hypothesized value.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`: a hipótese alternativa é que a média seja diferente, maior ou menor que o valor hipotético."
+        },
+        {
+          "name": "'Dim'",
+          "en": "Dimension to test along. Default is the first non-singleton dimension.",
+          "pt": "Dimensão ao longo da qual testar. O padrão é a primeira dimensão não singleton."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if the null hypothesis is rejected at level `Alpha`, otherwise 0.",
+          "pt": "1 se a hipótese nula é rejeitada no nível `Alpha`, caso contrário 0."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "ci",
+          "en": "Confidence interval for the mean, with level `100*(1-Alpha)`%.",
+          "pt": "Intervalo de confiança para a média, com nível `100*(1-Alpha)`%."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with fields `tstat` (the t statistic), `df` (degrees of freedom) and `sd` (sample standard deviation).",
+          "pt": "Estrutura com os campos `tstat` (a estatística t), `df` (graus de liberdade) e `sd` (desvio padrão amostral)."
+        }
+      ],
+      "description": {
+        "en": "The test assumes the data come from a normal distribution, or that the sample is large enough for the mean to be roughly normal. The statistic is `(mean(x) - m) / (std(x)/sqrt(n))`, compared with a t distribution with `n - 1` degrees of freedom.\n\nA small p-value (below `Alpha`) is evidence against the null hypothesis, and then `h` is 1. The interval `ci` contains the means that would not be rejected at that level.",
+        "pt": "O teste supõe que os dados vêm de uma distribuição normal, ou que a amostra é grande o bastante para a média ser aproximadamente normal. A estatística é `(mean(x) - m) / (std(x)/sqrt(n))`, comparada a uma distribuição t com `n - 1` graus de liberdade.\n\nUm valor-p pequeno (abaixo de `Alpha`) é evidência contra a hipótese nula, e então `h` vale 1. O intervalo `ci` contém as médias que não seriam rejeitadas nesse nível."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Test whether the mean is 5",
+            "pt": "Teste de média igual a 5"
+          },
+          "code": "x = [5.1 4.9 5.6 5.8 6.1 5.3 5.5 5.9];\n[h, p, ci, st] = ttest(x, 5);\nfprintf('h=%d p=%.4f\\n', h, p)\ndisp(round(ci*10000)/10000)\nfprintf('t=%.4f df=%d\\n', st.tstat, st.df)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Paired test and one-sided test",
+            "pt": "Teste pareado e teste unilateral"
+          },
+          "code": "x = [5.1 4.9 5.6 5.8 6.1 5.3 5.5 5.9];\ny = [5.0 5.2 5.4 5.5 6.0 5.1 5.3 5.4];\n[h, p] = ttest(x, y);\nfprintf('paired: h=%d p=%.4f\\n', h, p)\n[h, p] = ttest(x, 5, 'Tail', 'right');\nfprintf('right: h=%d p=%.4f\\n', h, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ttest2",
+        "ztest",
+        "signrank",
+        "tcdf",
+        "tinv"
+      ]
+    },
+    "ttest2": {
+      "summary": {
+        "en": "Two-sample t-test: tests whether two independent samples have equal means, and returns the decision, p-value and confidence interval for the difference.",
+        "pt": "Teste t de duas amostras: testa se duas amostras independentes têm médias iguais, e devolve a decisão, o valor-p e o intervalo de confiança da diferença."
+      },
+      "syntax": [
+        {
+          "code": "h = ttest2(x, y)",
+          "en": "Tests whether `x` and `y` have equal means, assuming equal variances.",
+          "pt": "Testa se `x` e `y` têm médias iguais, supondo variâncias iguais."
+        },
+        {
+          "code": "h = ttest2(x, y, 'Vartype', 'unequal')",
+          "en": "Does not assume equal variances (Satterthwaite degrees of freedom).",
+          "pt": "Não supõe variâncias iguais (graus de liberdade de Satterthwaite)."
+        },
+        {
+          "code": "[h, p, ci, stats] = ttest2(___, Name, Value)",
+          "en": "Also returns the p-value, confidence interval and statistics. Options `'Alpha'`, `'Tail'`, `'Vartype'` and `'Dim'`.",
+          "pt": "Devolve também o valor-p, o intervalo de confiança e as estatísticas. Opções `'Alpha'`, `'Tail'`, `'Vartype'` e `'Dim'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Two samples. They may have different lengths. For matrices, columns are compared one by one.",
+          "pt": "Duas amostras. Podem ter comprimentos diferentes. Em matrizes, as colunas são comparadas uma a uma."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`: the alternative is that the mean of `x` differs from, is greater than, or is less than the mean of `y`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`: a alternativa é que a média de `x` seja diferente, maior ou menor que a média de `y`."
+        },
+        {
+          "name": "'Vartype'",
+          "en": "`'equal'` (default) or `'unequal'`.",
+          "pt": "`'equal'` (padrão) ou `'unequal'`."
+        },
+        {
+          "name": "'Dim'",
+          "en": "Dimension to test along.",
+          "pt": "Dimensão ao longo da qual testar."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if the null hypothesis of equal means is rejected, otherwise 0.",
+          "pt": "1 se a hipótese nula de médias iguais é rejeitada, caso contrário 0."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "ci",
+          "en": "Confidence interval for the difference of means `mean(x) - mean(y)`.",
+          "pt": "Intervalo de confiança para a diferença de médias `mean(x) - mean(y)`."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with fields `tstat`, `df` and `sd`.",
+          "pt": "Estrutura com os campos `tstat`, `df` e `sd`."
+        }
+      ],
+      "description": {
+        "en": "Use `ttest2` when the two samples are independent, for example two groups of different subjects. For measurements on the same subjects before and after, use the paired form of `ttest`.\n\nWith `'Vartype','equal'` the two variances are pooled and the degrees of freedom are `n1 + n2 - 2`. With `'unequal'` the degrees of freedom are not an integer in general, and the test is more careful when the group variances differ.",
+        "pt": "Use `ttest2` quando as duas amostras são independentes, por exemplo dois grupos de indivíduos diferentes. Para medições nos mesmos indivíduos antes e depois, use a forma pareada de `ttest`.\n\nCom `'Vartype','equal'` as duas variâncias são combinadas e os graus de liberdade são `n1 + n2 - 2`. Com `'unequal'` os graus de liberdade em geral não são inteiros, e o teste é mais cuidadoso quando as variâncias dos grupos diferem."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Equal variances",
+            "pt": "Variâncias iguais"
+          },
+          "code": "a = [10 12 9 11 13 10];\nb = [14 15 13 16 12 15 14];\n[h, p, ci, st] = ttest2(a, b);\nfprintf('h=%d p=%.4f\\n', h, p)\ndisp(round(ci*10000)/10000)\ndisp(round([st.tstat st.df]*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Unequal variances",
+            "pt": "Variâncias diferentes"
+          },
+          "code": "a = [10 12 9 11 13 10];\nb = [14 15 13 16 12 15 14];\n[h, p, ci, st] = ttest2(a, b, 'Vartype', 'unequal');\nfprintf('h=%d p=%.4f\\n', h, p)\ndisp(round([st.tstat st.df]*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ttest",
+        "vartest2",
+        "ranksum",
+        "anova1",
+        "tcdf"
+      ]
+    },
+    "unidcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the discrete uniform distribution on the integers 1 to n, evaluated at x.",
+        "pt": "Função de distribuição acumulada da distribuição uniforme discreta nos inteiros de 1 a n, calculada em x."
+      },
+      "syntax": [
+        {
+          "code": "p = unidcdf(x, n)",
+          "en": "Probability that the outcome is at most `x`.",
+          "pt": "Probabilidade de o resultado ser no máximo `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated.",
+          "pt": "Pontos em que a função é calculada."
+        },
+        {
+          "name": "n",
+          "en": "Maximum observable value: a positive integer. The distribution takes the values 1, 2, ..., n with equal probability.",
+          "pt": "Valor máximo observável: um inteiro positivo. A distribuição assume os valores 1, 2, ..., n com igual probabilidade."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities: `floor(x)/n` for `x` between 1 and `n`, 0 below 1 and 1 above `n`.",
+          "pt": "Probabilidades acumuladas: `floor(x)/n` para `x` entre 1 e `n`, 0 abaixo de 1 e 1 acima de `n`."
+        }
+      ],
+      "description": {
+        "en": "This is the distribution of a fair die with `n` faces. The cumulative function is a staircase that rises by `1/n` at each integer.",
+        "pt": "É a distribuição de um dado justo com `n` faces. A função acumulada é uma escada que sobe `1/n` em cada inteiro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fair ten-sided die",
+            "pt": "Dado justo de dez faces"
+          },
+          "code": "p = unidcdf([0 1 5 10 11], 10);\ndisp(p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unidinv",
+        "unidpdf",
+        "unidrnd",
+        "unidstat",
+        "cdf"
+      ]
+    },
+    "unidinv": {
+      "summary": {
+        "en": "Inverse of the discrete uniform cumulative distribution function: the smallest integer x in 1 to n whose cumulative probability reaches p.",
+        "pt": "Inversa da função de distribuição acumulada uniforme discreta: o menor inteiro x entre 1 e n cuja probabilidade acumulada atinge p."
+      },
+      "syntax": [
+        {
+          "code": "x = unidinv(p, n)",
+          "en": "Smallest `x` with `unidcdf(x, n) >= p`.",
+          "pt": "Menor `x` com `unidcdf(x, n) >= p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "n",
+          "en": "Maximum observable value: a positive integer. The distribution takes the values 1, 2, ..., n with equal probability.",
+          "pt": "Valor máximo observável: um inteiro positivo. A distribuição assume os valores 1, 2, ..., n com igual probabilidade."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, integers from 1 to `n`.",
+          "pt": "Quantis, inteiros de 1 a `n`."
+        }
+      ],
+      "description": {
+        "en": "Because the distribution is discrete, the result is always an integer: the first step of the cumulative staircase that reaches `p`. For example with `n = 10`, a probability of 0.5 gives 5 and a probability of 1 gives 10.",
+        "pt": "Como a distribuição é discreta, o resultado é sempre um inteiro: o primeiro degrau da escada acumulada que alcança `p`. Por exemplo, com `n = 10`, a probabilidade 0.5 dá 5 e a probabilidade 1 dá 10."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles for n = 10",
+            "pt": "Quantis para n = 10"
+          },
+          "code": "x = unidinv([0.05 0.5 1], 10);\ndisp(x)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unidcdf",
+        "unidpdf",
+        "unidrnd",
+        "unidstat",
+        "icdf"
+      ]
+    }
+  }
+}

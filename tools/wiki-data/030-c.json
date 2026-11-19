@@ -1,0 +1,2019 @@
+{
+  "functions": {
+    "clusterdata": {
+      "summary": {
+        "en": "Groups the rows of a data matrix into clusters by hierarchical clustering in one call: distances, linkage and cut of the tree.",
+        "pt": "Agrupa as linhas de uma matriz de dados em clusters por agrupamento hierárquico em uma só chamada: distâncias, ligação e corte da árvore."
+      },
+      "syntax": [
+        {
+          "code": "T = clusterdata(X, cutoff)",
+          "en": "Clusters the rows of `X` with single linkage and cuts the tree at the inconsistency threshold `cutoff`.",
+          "pt": "Agrupa as linhas de `X` com ligação simples e corta a árvore no limiar de inconsistência `cutoff`."
+        },
+        {
+          "code": "T = clusterdata(X, 'maxclust', k)",
+          "en": "Cuts the tree so that at most `k` clusters result.",
+          "pt": "Corta a árvore de modo a obter no máximo `k` clusters."
+        },
+        {
+          "code": "T = clusterdata(X, Name, Value)",
+          "en": "Chooses `'distance'`, `'linkage'`, `'criterion'`, `'cutoff'`, `'maxclust'` or `'depth'`.",
+          "pt": "Escolhe `'distance'`, `'linkage'`, `'criterion'`, `'cutoff'`, `'maxclust'` ou `'depth'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix with one observation per row and one variable per column.",
+          "pt": "Matriz de dados com uma observação por linha e uma variável por coluna."
+        },
+        {
+          "name": "'maxclust'",
+          "en": "Maximum number of clusters. Use it instead of `cutoff` to set the size of the partition directly.",
+          "pt": "Número máximo de clusters. Use no lugar de `cutoff` para definir diretamente o tamanho da partição."
+        },
+        {
+          "name": "'cutoff'",
+          "en": "Threshold for the cut. With the default `'inconsistent'` criterion it is an inconsistency coefficient, with `'distance'` it is a link height.",
+          "pt": "Limiar do corte. Com o critério padrão `'inconsistent'` é um coeficiente de inconsistência, com `'distance'` é uma altura de ligação."
+        },
+        {
+          "name": "'linkage'",
+          "en": "Linkage method such as `'single'` (default), `'complete'`, `'average'` or `'ward'`.",
+          "pt": "Método de ligação, como `'single'` (padrão), `'complete'`, `'average'` ou `'ward'`."
+        },
+        {
+          "name": "'distance'",
+          "en": "Distance used between rows, for example `'euclidean'` (default) or `'cityblock'`.",
+          "pt": "Distância usada entre as linhas, por exemplo `'euclidean'` (padrão) ou `'cityblock'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "Column vector with the cluster number of each row of `X`.",
+          "pt": "Vetor coluna com o número do cluster de cada linha de `X`."
+        }
+      ],
+      "description": {
+        "en": "`clusterdata` is a shortcut for the usual three steps: `pdist` to measure distances, `linkage` to build the tree and `cluster` to cut it. Use it when you only want the labels and not the tree.\n\nThe cluster numbers are only labels. Two runs that find the same groups can number them differently, so compare the groups, not the numbers.",
+        "pt": "`clusterdata` é um atalho para os três passos habituais: `pdist` para medir as distâncias, `linkage` para montar a árvore e `cluster` para cortá-la. Use quando você só precisa dos rótulos e não da árvore.\n\nOs números dos clusters são apenas rótulos. Duas execuções que encontram os mesmos grupos podem numerá-los de forma diferente, então compare os grupos e não os números."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three clusters among eight points",
+            "pt": "Três clusters entre oito pontos"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nT = clusterdata(X, 'maxclust', 3);\ndisp(T')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Ward linkage with two clusters",
+            "pt": "Ligação de Ward com dois clusters"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nT = clusterdata(X, 'linkage', 'ward', 'maxclust', 2);\ndisp(T')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "linkage",
+        "cluster",
+        "pdist",
+        "kmeans",
+        "cophenet"
+      ],
+      "notes": {
+        "en": "The `'savememory'` option is not supported and raises an error.",
+        "pt": "A opção `'savememory'` não é suportada e gera um erro."
+      }
+    },
+    "cophenet": {
+      "summary": {
+        "en": "Measures how faithfully a hierarchical cluster tree preserves the original pairwise distances, using the cophenetic correlation coefficient.",
+        "pt": "Mede o quanto uma árvore de clusters hierárquica preserva as distâncias originais entre pares, pelo coeficiente de correlação cofenética."
+      },
+      "syntax": [
+        {
+          "code": "c = cophenet(Z, Y)",
+          "en": "Correlation between the tree heights and the distances in `Y`.",
+          "pt": "Correlação entre as alturas da árvore e as distâncias em `Y`."
+        },
+        {
+          "code": "[c, d] = cophenet(Z, Y)",
+          "en": "Also returns the cophenetic distances.",
+          "pt": "Retorna também as distâncias cofenéticas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Z",
+          "en": "Linkage matrix from `linkage`, with `m-1` rows for `m` observations.",
+          "pt": "Matriz de ligação de `linkage`, com `m-1` linhas para `m` observações."
+        },
+        {
+          "name": "Y",
+          "en": "Original distances as a vector in the order of `pdist`, with `m*(m-1)/2` elements.",
+          "pt": "Distâncias originais em vetor, na ordem de `pdist`, com `m*(m-1)/2` elementos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Cophenetic correlation coefficient. Values close to 1 mean the tree reflects the distances well.",
+          "pt": "Coeficiente de correlação cofenética. Valores perto de 1 indicam que a árvore reflete bem as distâncias."
+        },
+        {
+          "name": "d",
+          "en": "Cophenetic distances as a vector in the same order as `Y`. Each one is the height at which two observations first join.",
+          "pt": "Distâncias cofenéticas em vetor, na mesma ordem de `Y`. Cada uma é a altura em que duas observações se unem pela primeira vez."
+        }
+      ],
+      "description": {
+        "en": "The cophenetic distance between two observations is the height of the link where they first fall in the same cluster. `cophenet` correlates these heights with the true distances. A high value suggests the tree is a good summary of the data, and you can use it to compare linkage methods on the same distances.",
+        "pt": "A distância cofenética entre duas observações é a altura da ligação em que elas passam a ficar no mesmo cluster. `cophenet` correlaciona essas alturas com as distâncias verdadeiras. Um valor alto sugere que a árvore resume bem os dados, e você pode usá-lo para comparar métodos de ligação sobre as mesmas distâncias."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cophenetic correlation of average linkage",
+            "pt": "Correlação cofenética da ligação média"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nD = pdist(X);\nZ = linkage(D, 'average');\nc = cophenet(Z, D);\nfprintf('%.4f\\n', c)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Cophenetic distances of single linkage",
+            "pt": "Distâncias cofenéticas da ligação simples"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nD = pdist(X);\nZ = linkage(D, 'single');\n[c, d] = cophenet(Z, D);\nfprintf('%.4f\\n', c)\ndisp(size(d))\ndisp(round(d(1:4)*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "linkage",
+        "pdist",
+        "inconsistent",
+        "cluster",
+        "squareform"
+      ]
+    },
+    "inconsistent": {
+      "summary": {
+        "en": "Computes the inconsistency coefficient of every link in a hierarchical cluster tree, comparing its height with nearby links.",
+        "pt": "Calcula o coeficiente de inconsistência de cada ligação de uma árvore de clusters hierárquica, comparando sua altura com a das ligações vizinhas."
+      },
+      "syntax": [
+        {
+          "code": "Y = inconsistent(Z)",
+          "en": "Uses each link and the links below it down to depth 2.",
+          "pt": "Usa cada ligação e as ligações abaixo dela até a profundidade 2."
+        },
+        {
+          "code": "Y = inconsistent(Z, d)",
+          "en": "Looks `d` levels down the tree.",
+          "pt": "Olha `d` níveis para baixo na árvore."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Z",
+          "en": "Linkage matrix from `linkage`, `m-1` rows.",
+          "pt": "Matriz de ligação de `linkage`, com `m-1` linhas."
+        },
+        {
+          "name": "d",
+          "en": "Depth: how many levels of the tree below each link are included. Default 2.",
+          "pt": "Profundidade: quantos níveis da árvore abaixo de cada ligação entram no cálculo. O padrão é 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "Matrix with `m-1` rows and four columns: mean height of the links considered, their standard deviation, how many links were used, and the inconsistency coefficient.",
+          "pt": "Matriz com `m-1` linhas e quatro colunas: altura média das ligações consideradas, desvio padrão, quantas ligações foram usadas e o coeficiente de inconsistência."
+        }
+      ],
+      "description": {
+        "en": "The coefficient of a link says how far its height is from the mean height of the links just below it, in units of their standard deviation. A link that joins very different clusters has a high coefficient, which makes it a natural place to cut the tree. A link between two single observations has coefficient 0 because there is nothing to compare with.\n\nUse the result with `cluster` and its `'cutoff'` option, or use `clusterdata`, to cut the tree by inconsistency.",
+        "pt": "O coeficiente de uma ligação diz quanto a altura dela se afasta da altura média das ligações logo abaixo, em unidades do desvio padrão delas. Uma ligação que une clusters muito diferentes tem coeficiente alto, o que a torna um bom ponto para cortar a árvore. Uma ligação entre duas observações isoladas tem coeficiente 0 porque não há com o que comparar.\n\nUse o resultado com `cluster` e sua opção `'cutoff'`, ou use `clusterdata`, para cortar a árvore por inconsistência."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Default depth of 2",
+            "pt": "Profundidade padrão 2"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nZ = linkage(pdist(X), 'average');\nI = inconsistent(Z);\ndisp(round(I*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Looking three levels down",
+            "pt": "Olhando três níveis abaixo"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nZ = linkage(pdist(X), 'average');\nI = inconsistent(Z, 3);\ndisp(round(I*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "linkage",
+        "cluster",
+        "clusterdata",
+        "cophenet",
+        "dendrogram"
+      ]
+    },
+    "linkage": {
+      "summary": {
+        "en": "Builds an agglomerative hierarchical cluster tree from data rows or from a vector of pairwise distances.",
+        "pt": "Monta uma árvore de clusters hierárquica aglomerativa a partir das linhas de dados ou de um vetor de distâncias entre pares."
+      },
+      "syntax": [
+        {
+          "code": "Z = linkage(Y)",
+          "en": "Single linkage on the distance vector `Y` from `pdist`.",
+          "pt": "Ligação simples sobre o vetor de distâncias `Y` obtido de `pdist`."
+        },
+        {
+          "code": "Z = linkage(Y, method)",
+          "en": "Chooses how distances between clusters are computed.",
+          "pt": "Escolhe como as distâncias entre clusters são calculadas."
+        },
+        {
+          "code": "Z = linkage(X, method, metric)",
+          "en": "Takes the data matrix `X` and computes the distances with `metric`.",
+          "pt": "Recebe a matriz de dados `X` e calcula as distâncias com `metric`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Y",
+          "en": "Vector of pairwise distances in the order of `pdist`, with `m*(m-1)/2` elements for `m` observations.",
+          "pt": "Vetor de distâncias entre pares na ordem de `pdist`, com `m*(m-1)/2` elementos para `m` observações."
+        },
+        {
+          "name": "X",
+          "en": "Data matrix, one observation per row. Used instead of `Y` when you pass a `metric`.",
+          "pt": "Matriz de dados, uma observação por linha. Usada no lugar de `Y` quando você informa `metric`."
+        },
+        {
+          "name": "method",
+          "en": "`'single'` (default), `'complete'`, `'average'`, `'weighted'`, `'centroid'`, `'median'` or `'ward'`.",
+          "pt": "`'single'` (padrão), `'complete'`, `'average'`, `'weighted'`, `'centroid'`, `'median'` ou `'ward'`."
+        },
+        {
+          "name": "metric",
+          "en": "Distance name accepted by `pdist`, for example `'cityblock'`. Default `'euclidean'`.",
+          "pt": "Nome de distância aceito por `pdist`, por exemplo `'cityblock'`. O padrão é `'euclidean'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Z",
+          "en": "Matrix with `m-1` rows and three columns. Each row is a merge: the numbers of the two clusters joined and the distance between them. Original observations are numbered 1 to `m` and each new cluster gets the next number.",
+          "pt": "Matriz com `m-1` linhas e três colunas. Cada linha é uma fusão: os números dos dois clusters unidos e a distância entre eles. As observações originais são numeradas de 1 a `m` e cada novo cluster recebe o número seguinte."
+        }
+      ],
+      "description": {
+        "en": "At the start every observation is its own cluster. At each step `linkage` merges the two closest clusters, until one cluster remains. The method decides what close means between clusters: the nearest pair of points (`'single'`), the farthest pair (`'complete'`), the mean of all pairs (`'average'`), or the increase in within-cluster variance (`'ward'`).\n\nThe `'centroid'`, `'median'` and `'ward'` methods are meant for Euclidean distances. Cut the tree with `cluster` or `clusterdata`, or check its quality with `cophenet`.",
+        "pt": "No início cada observação é um cluster. A cada passo `linkage` une os dois clusters mais próximos, até restar um só. O método define o que é próximo entre clusters: o par de pontos mais perto (`'single'`), o par mais distante (`'complete'`), a média de todos os pares (`'average'`) ou o aumento da variância dentro dos clusters (`'ward'`).\n\nOs métodos `'centroid'`, `'median'` e `'ward'` são pensados para distâncias euclidianas. Corte a árvore com `cluster` ou `clusterdata`, ou avalie sua qualidade com `cophenet`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Single linkage on data rows",
+            "pt": "Ligação simples sobre linhas de dados"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nZ = linkage(X, 'single');\ndisp(round(Z*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Ward linkage heights from a distance vector",
+            "pt": "Alturas da ligação de Ward a partir de um vetor de distâncias"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nZ = linkage(pdist(X), 'ward');\ndisp(round(Z(:,3)'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist",
+        "cluster",
+        "clusterdata",
+        "cophenet",
+        "inconsistent"
+      ],
+      "notes": {
+        "en": "When several pairs of clusters are at exactly the same distance, the order of the merges can differ from MATLAB for the complete, average, weighted and Ward methods: MatLivre scans the pairs in order, while MATLAB follows its own nearest-neighbor chain. On data without exact ties the result is the same.",
+        "pt": "Quando vários pares de clusters estão exatamente à mesma distância, a ordem das fusões pode diferir do MATLAB nos métodos complete, average, weighted e ward: o MatLivre percorre os pares em ordem, enquanto o MATLAB segue sua própria cadeia de vizinhos mais próximos. Em dados sem empates exatos o resultado é o mesmo."
+      }
+    },
+    "squareform": {
+      "summary": {
+        "en": "Converts between a vector of pairwise distances and the equivalent symmetric distance matrix.",
+        "pt": "Converte entre um vetor de distâncias entre pares e a matriz de distâncias simétrica equivalente."
+      },
+      "syntax": [
+        {
+          "code": "S = squareform(v)",
+          "en": "Turns the distance vector `v` into a square symmetric matrix with zero diagonal.",
+          "pt": "Transforma o vetor de distâncias `v` em uma matriz quadrada simétrica com diagonal nula."
+        },
+        {
+          "code": "v = squareform(S)",
+          "en": "Turns a square symmetric matrix with zero diagonal into a vector.",
+          "pt": "Transforma uma matriz quadrada simétrica com diagonal nula em um vetor."
+        },
+        {
+          "code": "Z = squareform(X, 'tomatrix')",
+          "en": "Forces the vector to matrix direction (or `'tovector'` for the opposite).",
+          "pt": "Força o sentido vetor para matriz (ou `'tovector'` para o oposto)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v",
+          "en": "Row vector with `m*(m-1)/2` distances in the order `(2,1), (3,1), ..., (m,1), (3,2), ...`, as returned by `pdist`.",
+          "pt": "Vetor linha com `m*(m-1)/2` distâncias na ordem `(2,1), (3,1), ..., (m,1), (3,2), ...`, como `pdist` retorna."
+        },
+        {
+          "name": "S",
+          "en": "Square symmetric `m`-by-`m` matrix with zeros on the diagonal.",
+          "pt": "Matriz quadrada simétrica `m` por `m` com zeros na diagonal."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "S",
+          "en": "Distance matrix when the input was a vector.",
+          "pt": "Matriz de distâncias quando a entrada era um vetor."
+        },
+        {
+          "name": "v",
+          "en": "Distance vector when the input was a matrix.",
+          "pt": "Vetor de distâncias quando a entrada era uma matriz."
+        }
+      ],
+      "description": {
+        "en": "`pdist` returns distances as a compact vector, while many tools (and people) prefer the full matrix. `squareform` moves between the two without recomputing anything. The length of a vector must be a triangular number: 1, 3, 6, 10 and so on.\n\nGoing from a matrix to a vector requires the matrix to be symmetric with a zero diagonal.",
+        "pt": "`pdist` devolve as distâncias em um vetor compacto, mas muitas ferramentas (e pessoas) preferem a matriz completa. `squareform` passa de um formato ao outro sem recalcular nada. O comprimento do vetor precisa ser um número triangular: 1, 3, 6, 10 e assim por diante.\n\nPara ir de matriz a vetor, a matriz deve ser simétrica com diagonal nula."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Vector of 6 distances to a 4-by-4 matrix",
+            "pt": "Vetor de 6 distâncias para uma matriz 4 por 4"
+          },
+          "code": "v = [1 2 3 4 5 6];\nS = squareform(v);\ndisp(S)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Matrix back to a vector",
+            "pt": "De volta da matriz para o vetor"
+          },
+          "code": "S = [0 1 2; 1 0 3; 2 3 0];\nv = squareform(S);\ndisp(v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist",
+        "pdist2",
+        "linkage",
+        "cmdscale",
+        "cophenet"
+      ]
+    },
+    "kmeans": {
+      "summary": {
+        "en": "Partitions the rows of a data matrix into k clusters by k-means, returning labels, centroids and distances.",
+        "pt": "Divide as linhas de uma matriz de dados em k clusters pelo método k-means, retornando rótulos, centroides e distâncias."
+      },
+      "syntax": [
+        {
+          "code": "idx = kmeans(X, k)",
+          "en": "Cluster index of each row, using squared Euclidean distance.",
+          "pt": "Índice do cluster de cada linha, usando distância euclidiana ao quadrado."
+        },
+        {
+          "code": "[idx, C] = kmeans(X, k)",
+          "en": "Also returns the `k` centroids.",
+          "pt": "Retorna também os `k` centroides."
+        },
+        {
+          "code": "[idx, C, sumd, D] = kmeans(X, k)",
+          "en": "Also returns the within-cluster sums of distances and the distance from every point to every centroid.",
+          "pt": "Retorna também as somas de distâncias dentro de cada cluster e a distância de cada ponto a cada centroide."
+        },
+        {
+          "code": "[...] = kmeans(X, k, Name, Value)",
+          "en": "Options such as `'Start'`, `'Replicates'`, `'Distance'` and `'MaxIter'`.",
+          "pt": "Opções como `'Start'`, `'Replicates'`, `'Distance'` e `'MaxIter'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix, one observation per row.",
+          "pt": "Matriz de dados, uma observação por linha."
+        },
+        {
+          "name": "k",
+          "en": "Number of clusters.",
+          "pt": "Número de clusters."
+        },
+        {
+          "name": "'Start'",
+          "en": "Initial centroids: `'plus'` (default), `'sample'`, `'uniform'`, `'cluster'`, or a `k`-by-`p` matrix.",
+          "pt": "Centroides iniciais: `'plus'` (padrão), `'sample'`, `'uniform'`, `'cluster'`, ou uma matriz `k` por `p`."
+        },
+        {
+          "name": "'Replicates'",
+          "en": "How many times to repeat the clustering from new starting points. The best result (lowest total distance) is kept. Default 1.",
+          "pt": "Quantas vezes repetir o agrupamento a partir de novos pontos iniciais. Fica o melhor resultado (menor distância total). O padrão é 1."
+        },
+        {
+          "name": "'Distance'",
+          "en": "`'sqeuclidean'` (default), `'cosine'` or `'correlation'`.",
+          "pt": "`'sqeuclidean'` (padrão), `'cosine'` ou `'correlation'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "Column vector with the cluster number (1 to `k`) of each row.",
+          "pt": "Vetor coluna com o número do cluster (1 a `k`) de cada linha."
+        },
+        {
+          "name": "C",
+          "en": "`k`-by-`p` matrix of cluster centroids.",
+          "pt": "Matriz `k` por `p` com os centroides dos clusters."
+        },
+        {
+          "name": "sumd",
+          "en": "Column vector with the sum of point-to-centroid distances inside each cluster.",
+          "pt": "Vetor coluna com a soma das distâncias dos pontos ao centroide em cada cluster."
+        },
+        {
+          "name": "D",
+          "en": "`n`-by-`k` matrix of distances from each point to each centroid.",
+          "pt": "Matriz `n` por `k` com as distâncias de cada ponto a cada centroide."
+        }
+      ],
+      "description": {
+        "en": "`kmeans` alternates between assigning each point to its nearest centroid and moving each centroid to the mean of its points, until the assignment stops changing. The result depends on the starting centroids and can be a local optimum, so use `'Replicates'` or pass your own `'Start'` matrix when the answer matters.\n\nThe cluster numbers are arbitrary labels. With the default `'plus'` start the initial centroids are random, so repeated calls can number the clusters differently.",
+        "pt": "`kmeans` alterna entre atribuir cada ponto ao centroide mais próximo e mover cada centroide para a média de seus pontos, até a atribuição parar de mudar. O resultado depende dos centroides iniciais e pode ser um ótimo local, então use `'Replicates'` ou informe sua própria matriz em `'Start'` quando o resultado importar.\n\nOs números dos clusters são rótulos arbitrários. Com a inicialização padrão `'plus'` os centroides iniciais são aleatórios, então chamadas repetidas podem numerar os clusters de outra forma."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fixed starting centroids, so the result is reproducible",
+            "pt": "Centroides iniciais fixos, para um resultado reprodutível"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\n[idx, C, sumd] = kmeans(X, 3, 'Start', X([1 4 7],:));\ndisp(idx')\ndisp(round(C*1000)/1000)\ndisp(round(sumd'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Random starts with replicates: only sizes are printed",
+            "pt": "Inicializações aleatórias com réplicas: só os tamanhos são exibidos"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\n[idx, C] = kmeans(X, 2, 'Replicates', 5);\ndisp(size(idx))\ndisp(size(C))\ndisp(sort(unique(idx))')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "clusterdata",
+        "linkage",
+        "pca",
+        "mahal",
+        "pdist2"
+      ],
+      "notes": {
+        "en": "The `'cityblock'` and `'hamming'` distances are not implemented and raise an error. Random starting points (`'plus'`, `'sample'`, `'uniform'`) do not follow MATLAB's random streams, so results from random starts will not match MATLAB even with the same seed; pass a `'Start'` matrix for a reproducible run. With `'correlation'` distance and data where points tie exactly, the assignment of tied points can differ from MATLAB.",
+        "pt": "As distâncias `'cityblock'` e `'hamming'` não estão implementadas e geram um erro. Os pontos iniciais aleatórios (`'plus'`, `'sample'`, `'uniform'`) não seguem os fluxos aleatórios do MATLAB, então os resultados com inicialização aleatória não coincidem com os do MATLAB mesmo com a mesma semente; informe uma matriz em `'Start'` para uma execução reprodutível. Com a distância `'correlation'` e dados com empates exatos, a atribuição dos pontos empatados pode diferir do MATLAB."
+      }
+    },
+    "mahal": {
+      "summary": {
+        "en": "Computes the squared Mahalanobis distance of each row of Y to the sample in X, accounting for its means and covariance.",
+        "pt": "Calcula a distância de Mahalanobis ao quadrado de cada linha de Y até a amostra X, levando em conta suas médias e covariância."
+      },
+      "syntax": [
+        {
+          "code": "d = mahal(Y, X)",
+          "en": "Squared Mahalanobis distance from each row of `Y` to the distribution of `X`.",
+          "pt": "Distância de Mahalanobis ao quadrado de cada linha de `Y` à distribuição de `X`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Y",
+          "en": "Points to measure, one per row. It must have the same number of columns as `X`.",
+          "pt": "Pontos a medir, um por linha. Deve ter o mesmo número de colunas de `X`."
+        },
+        {
+          "name": "X",
+          "en": "Reference sample, one observation per row. It needs more rows than columns so its covariance can be inverted.",
+          "pt": "Amostra de referência, uma observação por linha. Precisa de mais linhas do que colunas para que a covariância possa ser invertida."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Column vector with the squared distance of each row of `Y`.",
+          "pt": "Vetor coluna com a distância ao quadrado de cada linha de `Y`."
+        }
+      ],
+      "description": {
+        "en": "Unlike the Euclidean distance, the Mahalanobis distance scales each direction by how much `X` varies along it and takes correlation between variables into account. A point that is far from the center in a direction where `X` hardly varies gets a large distance. This makes it useful to spot outliers: compare the values with a chi-square distribution with as many degrees of freedom as columns.\n\nThe mean and covariance are estimated from `X` only, so `Y` does not influence them. When `Y` is `X` itself, the distances add up to `(n-1)*p` for `n` rows and `p` columns.",
+        "pt": "Ao contrário da distância euclidiana, a distância de Mahalanobis escala cada direção conforme a variação de `X` nela e considera a correlação entre as variáveis. Um ponto longe do centro em uma direção na qual `X` quase não varia recebe uma distância grande. Isso ajuda a identificar outliers: compare os valores com uma distribuição qui-quadrado com tantos graus de liberdade quanto colunas.\n\nA média e a covariância são estimadas só a partir de `X`, então `Y` não as influencia. Quando `Y` é o próprio `X`, as distâncias somam `(n-1)*p` para `n` linhas e `p` colunas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Distance of three points to a group of 8 observations",
+            "pt": "Distância de três pontos a um grupo de 8 observações"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nY = [1 2; 5 5; 9 9];\nd = mahal(Y, X);\ndisp(round(d'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Distances of the sample to itself add up to (n-1)*p",
+            "pt": "As distâncias da amostra a si mesma somam (n-1)*p"
+          },
+          "code": "X = [1 2; 2 1; 3 5; 4 3; 5 6; 6 4];\nd = mahal(X, X);\nfprintf('%.4f\\n', sum(d))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist2",
+        "cov",
+        "chi2inv",
+        "pca",
+        "kmeans"
+      ]
+    },
+    "cmdscale": {
+      "summary": {
+        "en": "Classical multidimensional scaling: finds points in a low-dimensional space whose distances approximate a given distance matrix.",
+        "pt": "Escalonamento multidimensional clássico: encontra pontos em um espaço de poucas dimensões cujas distâncias aproximam uma matriz de distâncias dada."
+      },
+      "syntax": [
+        {
+          "code": "Y = cmdscale(D)",
+          "en": "Coordinates that best reproduce the distances `D`.",
+          "pt": "Coordenadas que melhor reproduzem as distâncias `D`."
+        },
+        {
+          "code": "[Y, e] = cmdscale(D)",
+          "en": "Also returns the eigenvalues of the doubly centered matrix.",
+          "pt": "Retorna também os autovalores da matriz duplamente centrada."
+        },
+        {
+          "code": "[Y, e] = cmdscale(D, p)",
+          "en": "Keeps only the first `p` coordinates.",
+          "pt": "Mantém apenas as primeiras `p` coordenadas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "D",
+          "en": "Distances between `n` points: an `n`-by-`n` symmetric matrix with zero diagonal, or the vector form from `pdist`.",
+          "pt": "Distâncias entre `n` pontos: matriz simétrica `n` por `n` com diagonal nula, ou o vetor gerado por `pdist`."
+        },
+        {
+          "name": "p",
+          "en": "Number of coordinates to return. By default all those with positive eigenvalues.",
+          "pt": "Número de coordenadas a retornar. Por padrão, todas as que têm autovalor positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Y",
+          "en": "`n`-by-`q` matrix of coordinates, one row per point, ordered by importance.",
+          "pt": "Matriz `n` por `q` de coordenadas, uma linha por ponto, em ordem de importância."
+        },
+        {
+          "name": "e",
+          "en": "Eigenvalues in decreasing order. Large positive values mark coordinates that matter. Negative values show that the distances are not exactly Euclidean.",
+          "pt": "Autovalores em ordem decrescente. Valores positivos grandes indicam coordenadas importantes. Valores negativos mostram que as distâncias não são exatamente euclidianas."
+        }
+      ],
+      "description": {
+        "en": "`cmdscale` double-centers the squared distances and takes the leading eigenvectors, scaled by the square root of the eigenvalues. Use it to draw a map of objects when you only know how far apart they are. The solution is unique only up to rotation, reflection and translation, so the signs of the columns of `Y` may differ from other programs.\n\nIf the distances come from points in a plane, two coordinates reproduce them exactly. Otherwise the ratio of the first eigenvalues to their total tells how much of the structure a low-dimensional map keeps.",
+        "pt": "`cmdscale` centraliza duplamente as distâncias ao quadrado e toma os autovetores principais, escalados pela raiz quadrada dos autovalores. Use para desenhar um mapa de objetos quando só se sabe quão distantes eles estão. A solução é única apenas a menos de rotação, reflexão e translação, então os sinais das colunas de `Y` podem diferir de outros programas.\n\nSe as distâncias vêm de pontos em um plano, duas coordenadas as reproduzem exatamente. Caso contrário, a razão dos primeiros autovalores pelo total indica quanto da estrutura um mapa de poucas dimensões preserva."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recovering a 3-4-5 triangle (absolute values of the coordinates)",
+            "pt": "Recuperando um triângulo 3-4-5 (valores absolutos das coordenadas)"
+          },
+          "code": "D = pdist([0 0; 3 0; 0 4]);\n[Y, e] = cmdscale(D);\ndisp(round(abs(Y)*1000)/1000)\ndisp(round(e'*1000)/1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Distances of the map compared with the originals",
+            "pt": "Distâncias do mapa comparadas com as originais"
+          },
+          "code": "X = [1 2; 1.3 1.8; 0.8 2.4; 5 5; 5.5 4.9; 4.6 5.3; 9 1; 9.2 1.5];\nD = pdist(X);\nY = cmdscale(D, 2);\nD2 = pdist(Y);\nfprintf('%.4f\\n', max(abs(D - D2)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist",
+        "squareform",
+        "procrustes",
+        "pca",
+        "mdscale"
+      ],
+      "notes": {
+        "en": "Called with single-precision input, the result is computed in double precision and rounded, so it can differ from MATLAB's single-precision arithmetic at about the 1e-6 level.",
+        "pt": "Com entrada em precisão simples, o resultado é calculado em precisão dupla e arredondado, então pode diferir da aritmética em precisão simples do MATLAB na ordem de 1e-6."
+      }
+    },
+    "pca": {
+      "summary": {
+        "en": "Principal component analysis of a data matrix: returns the component directions, the scores, the variances and the share of variance of each component.",
+        "pt": "Análise de componentes principais de uma matriz de dados: retorna as direções dos componentes, os escores, as variâncias e a parcela da variância de cada componente."
+      },
+      "syntax": [
+        {
+          "code": "coeff = pca(X)",
+          "en": "Principal component coefficients (loadings) of `X`.",
+          "pt": "Coeficientes dos componentes principais (cargas) de `X`."
+        },
+        {
+          "code": "[coeff, score, latent] = pca(X)",
+          "en": "Also returns the scores and the variances of the components.",
+          "pt": "Retorna também os escores e as variâncias dos componentes."
+        },
+        {
+          "code": "[coeff, score, latent, tsquared, explained, mu] = pca(X)",
+          "en": "Adds Hotelling's T-squared for each row, the percentage of variance explained and the column means.",
+          "pt": "Acrescenta o T² de Hotelling de cada linha, a porcentagem de variância explicada e as médias das colunas."
+        },
+        {
+          "code": "[...] = pca(X, Name, Value)",
+          "en": "Options such as `'NumComponents'`, `'Centered'`, `'Algorithm'` and `'VariableWeights'`.",
+          "pt": "Opções como `'NumComponents'`, `'Centered'`, `'Algorithm'` e `'VariableWeights'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix with `n` observations in rows and `p` variables in columns.",
+          "pt": "Matriz de dados com `n` observações nas linhas e `p` variáveis nas colunas."
+        },
+        {
+          "name": "'NumComponents'",
+          "en": "Number of components to return. Default: all that are meaningful.",
+          "pt": "Número de componentes a retornar. Padrão: todos os que fazem sentido."
+        },
+        {
+          "name": "'Centered'",
+          "en": "If `false`, the column means are not subtracted. Default `true`.",
+          "pt": "Se `false`, as médias das colunas não são subtraídas. O padrão é `true`."
+        },
+        {
+          "name": "'Algorithm'",
+          "en": "`'svd'` (default) or `'eig'`.",
+          "pt": "`'svd'` (padrão) ou `'eig'`."
+        },
+        {
+          "name": "'VariableWeights'",
+          "en": "`'variance'` to weight variables by the inverse of their variance (analysis of the correlation matrix), or a vector of weights.",
+          "pt": "`'variance'` para ponderar as variáveis pelo inverso da variância (análise da matriz de correlação), ou um vetor de pesos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "coeff",
+          "en": "`p`-by-`k` matrix. Each column is a principal component direction, with unit length, ordered by decreasing variance.",
+          "pt": "Matriz `p` por `k`. Cada coluna é a direção de um componente principal, com comprimento unitário, em ordem decrescente de variância."
+        },
+        {
+          "name": "score",
+          "en": "`n`-by-`k` matrix of the data expressed in the new axes.",
+          "pt": "Matriz `n` por `k` com os dados expressos nos novos eixos."
+        },
+        {
+          "name": "latent",
+          "en": "Variance of each component, in decreasing order (eigenvalues of the covariance matrix).",
+          "pt": "Variância de cada componente, em ordem decrescente (autovalores da matriz de covariância)."
+        },
+        {
+          "name": "tsquared",
+          "en": "Hotelling's T-squared statistic of each observation, a distance from the center that is large for outliers.",
+          "pt": "Estatística T² de Hotelling de cada observação, uma distância ao centro que é grande para outliers."
+        },
+        {
+          "name": "explained",
+          "en": "Percentage of the total variance explained by each component.",
+          "pt": "Porcentagem da variância total explicada por cada componente."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of each column of `X`.",
+          "pt": "Média de cada coluna de `X`."
+        }
+      ],
+      "description": {
+        "en": "`pca` finds orthogonal directions along which the data vary the most. The first component is the direction of largest variance, the second is the largest one perpendicular to it, and so on. The `explained` output tells how many components you need to keep most of the variability.\n\nVariables on different scales dominate the result if they have larger variance. When the units differ, use `'VariableWeights', 'variance'` or standardize with `zscore` first. The sign of each column of `coeff` is arbitrary.",
+        "pt": "`pca` encontra direções ortogonais ao longo das quais os dados mais variam. O primeiro componente é a direção de maior variância, o segundo é a de maior variância perpendicular a ela, e assim por diante. A saída `explained` mostra quantos componentes são necessários para manter a maior parte da variabilidade.\n\nVariáveis em escalas diferentes dominam o resultado se tiverem variância maior. Quando as unidades diferem, use `'VariableWeights', 'variance'` ou padronize antes com `zscore`. O sinal de cada coluna de `coeff` é arbitrário."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Variances and explained percentage of three variables",
+            "pt": "Variâncias e porcentagem explicada de três variáveis"
+          },
+          "code": "A = [2 4 1; 3 5 2; 5 8 3; 4 7 2; 6 9 5; 7 12 4];\n[coeff, score, latent, tsquared, explained, mu] = pca(A);\ndisp(round(latent'*1000)/1000)\ndisp(round(explained'*100)/100)\ndisp(mu)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Keeping two components",
+            "pt": "Mantendo dois componentes"
+          },
+          "code": "A = [2 4 1; 3 5 2; 5 8 3; 4 7 2; 6 9 5; 7 12 4];\n[coeff, score] = pca(A, 'NumComponents', 2);\ndisp(size(coeff))\ndisp(size(score))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pcacov",
+        "pcares",
+        "cmdscale",
+        "zscore",
+        "svd"
+      ],
+      "notes": {
+        "en": "The `'als'` algorithm is not implemented and raises an error. For single-precision input the result is computed in double precision and rounded, so it can differ from MATLAB's single-precision arithmetic at about the 1e-6 level. With `'Economy', false` on data with fewer rows than columns, the extra columns of `coeff` span a null space and MatLivre may pick a different basis than MATLAB.",
+        "pt": "O algoritmo `'als'` não está implementado e gera um erro. Com entrada em precisão simples o resultado é calculado em precisão dupla e arredondado, então pode diferir da aritmética em precisão simples do MATLAB na ordem de 1e-6. Com `'Economy', false` e menos linhas do que colunas, as colunas extras de `coeff` geram um espaço nulo e o MatLivre pode escolher uma base diferente da do MATLAB."
+      }
+    },
+    "pcacov": {
+      "summary": {
+        "en": "Principal component analysis starting from a covariance matrix instead of raw data.",
+        "pt": "Análise de componentes principais a partir de uma matriz de covariância, em vez dos dados brutos."
+      },
+      "syntax": [
+        {
+          "code": "coeff = pcacov(V)",
+          "en": "Principal component directions of the covariance matrix `V`.",
+          "pt": "Direções dos componentes principais da matriz de covariância `V`."
+        },
+        {
+          "code": "[coeff, latent, explained] = pcacov(V)",
+          "en": "Also returns the variances and the percentage of variance explained.",
+          "pt": "Retorna também as variâncias e a porcentagem da variância explicada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "V",
+          "en": "Square symmetric covariance (or correlation) matrix, `p`-by-`p`.",
+          "pt": "Matriz de covariância (ou correlação) simétrica quadrada, `p` por `p`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "coeff",
+          "en": "`p`-by-`p` matrix whose columns are the component directions, ordered by decreasing variance.",
+          "pt": "Matriz `p` por `p` cujas colunas são as direções dos componentes, em ordem decrescente de variância."
+        },
+        {
+          "name": "latent",
+          "en": "Eigenvalues of `V` in decreasing order: the variance of each component.",
+          "pt": "Autovalores de `V` em ordem decrescente: a variância de cada componente."
+        },
+        {
+          "name": "explained",
+          "en": "Percentage of the total variance explained by each component.",
+          "pt": "Porcentagem da variância total explicada por cada componente."
+        }
+      ],
+      "description": {
+        "en": "Use `pcacov` when you only have a covariance or correlation matrix, for example one published in a paper or computed from pairwise data. With raw data, `pca` is more convenient because it also returns scores.\n\nThe result matches `pca` of the data that produced `V`, except for the sign of each column of `coeff`, which is arbitrary.",
+        "pt": "Use `pcacov` quando você só tem uma matriz de covariância ou correlação, por exemplo uma publicada em um artigo ou calculada a partir de dados em pares. Com os dados brutos, `pca` é mais conveniente porque também retorna os escores.\n\nO resultado coincide com o `pca` dos dados que produziram `V`, exceto pelo sinal de cada coluna de `coeff`, que é arbitrário."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Components of the covariance matrix of a data set",
+            "pt": "Componentes da matriz de covariância de um conjunto de dados"
+          },
+          "code": "A = [2 4 1; 3 5 2; 5 8 3; 4 7 2; 6 9 5; 7 12 4];\n[coeff, latent, explained] = pcacov(cov(A));\ndisp(round(latent'*1000)/1000)\ndisp(round(explained'*100)/100)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "A diagonal covariance matrix",
+            "pt": "Uma matriz de covariância diagonal"
+          },
+          "code": "S = [4 0; 0 1];\n[coeff, latent, explained] = pcacov(S);\ndisp(abs(coeff))\ndisp(latent')\ndisp(explained')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pca",
+        "pcares",
+        "cov",
+        "corrcov",
+        "eig"
+      ]
+    },
+    "pcares": {
+      "summary": {
+        "en": "Residuals of a data matrix after keeping only its first few principal components.",
+        "pt": "Resíduos de uma matriz de dados depois de manter apenas seus primeiros componentes principais."
+      },
+      "syntax": [
+        {
+          "code": "residuals = pcares(X, ndim)",
+          "en": "Residuals of `X` after reconstructing it from `ndim` principal components.",
+          "pt": "Resíduos de `X` depois de reconstruí-la com `ndim` componentes principais."
+        },
+        {
+          "code": "[residuals, reconstructed] = pcares(X, ndim)",
+          "en": "Also returns the reconstruction.",
+          "pt": "Retorna também a reconstrução."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix, `n` observations in rows and `p` variables in columns.",
+          "pt": "Matriz de dados, `n` observações nas linhas e `p` variáveis nas colunas."
+        },
+        {
+          "name": "ndim",
+          "en": "Number of principal components kept, an integer from 0 to `p`.",
+          "pt": "Número de componentes principais mantidos, um inteiro de 0 a `p`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "residuals",
+          "en": "`n`-by-`p` matrix of what the first `ndim` components do not explain: `X` minus the reconstruction.",
+          "pt": "Matriz `n` por `p` com o que os primeiros `ndim` componentes não explicam: `X` menos a reconstrução."
+        },
+        {
+          "name": "reconstructed",
+          "en": "`n`-by-`p` matrix: the means plus the data projected on the first `ndim` components.",
+          "pt": "Matriz `n` por `p`: as médias mais os dados projetados nos primeiros `ndim` componentes."
+        }
+      ],
+      "description": {
+        "en": "`pcares` shows what is lost when you reduce the data to `ndim` dimensions. Rows with large residuals are poorly described by the low-dimensional model, which can flag outliers. With `ndim = p` the residuals are zero apart from rounding, and with `ndim = 0` the reconstruction is just the column means.\n\nThe data are centered by their column means but not scaled.",
+        "pt": "`pcares` mostra o que se perde ao reduzir os dados a `ndim` dimensões. Linhas com resíduos grandes são mal descritas pelo modelo de poucas dimensões, o que ajuda a apontar outliers. Com `ndim = p` os resíduos são nulos a menos de arredondamento, e com `ndim = 0` a reconstrução são só as médias das colunas.\n\nOs dados são centrados pelas médias das colunas, mas não são escalados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Residuals after keeping one component",
+            "pt": "Resíduos depois de manter um componente"
+          },
+          "code": "A = [2 4 1; 3 5 2; 5 8 3; 4 7 2; 6 9 5; 7 12 4];\n[residuals, reconstructed] = pcares(A, 1);\ndisp(round(residuals*1000)/1000)\ndisp(round(max(abs(A - reconstructed - residuals),[],'all')*1e6)/1e6)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Size of the residuals for 0 to 3 components",
+            "pt": "Tamanho dos resíduos para 0 a 3 componentes"
+          },
+          "code": "A = [2 4 1; 3 5 2; 5 8 3; 4 7 2; 6 9 5; 7 12 4];\nfor k = 0:3\n  r = pcares(A, k);\n  fprintf('%d %.4f\\n', k, norm(r, 'fro'));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pca",
+        "pcacov",
+        "cmdscale",
+        "svd",
+        "norm"
+      ],
+      "notes": {
+        "en": "For single-precision input the result is computed in double precision and rounded, so it can differ from MATLAB's single-precision arithmetic at about the 1e-5 level.",
+        "pt": "Com entrada em precisão simples o resultado é calculado em precisão dupla e arredondado, então pode diferir da aritmética em precisão simples do MATLAB na ordem de 1e-5."
+      }
+    },
+    "procrustes": {
+      "summary": {
+        "en": "Procrustes analysis: finds the rotation, scaling and translation that make one set of points as close as possible to another.",
+        "pt": "Análise de Procrustes: encontra a rotação, o escalonamento e a translação que deixam um conjunto de pontos o mais próximo possível de outro."
+      },
+      "syntax": [
+        {
+          "code": "d = procrustes(X, Y)",
+          "en": "Dissimilarity measure after the best fit of `Y` to `X`.",
+          "pt": "Medida de dissimilaridade depois do melhor ajuste de `Y` a `X`."
+        },
+        {
+          "code": "[d, Z, transform] = procrustes(X, Y)",
+          "en": "Also returns the transformed `Y` and the transformation itself.",
+          "pt": "Retorna também o `Y` transformado e a própria transformação."
+        },
+        {
+          "code": "[...] = procrustes(X, Y, 'Scaling', false)",
+          "en": "Does not scale: only rotation (or reflection) and translation.",
+          "pt": "Não escala: apenas rotação (ou reflexão) e translação."
+        },
+        {
+          "code": "[...] = procrustes(X, Y, 'Reflection', false)",
+          "en": "Forbids reflections, so only proper rotations are used (`'best'` chooses automatically).",
+          "pt": "Proíbe reflexões, de modo que só rotações próprias são usadas (`'best'` escolhe automaticamente)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Target configuration, `n` points in rows and `m` dimensions in columns.",
+          "pt": "Configuração alvo, `n` pontos nas linhas e `m` dimensões nas colunas."
+        },
+        {
+          "name": "Y",
+          "en": "Configuration to transform, with the same number of rows as `X`. If it has fewer columns than `X`, it is padded with zeros.",
+          "pt": "Configuração a transformar, com o mesmo número de linhas de `X`. Se tiver menos colunas do que `X`, é completada com zeros."
+        },
+        {
+          "name": "'Scaling'",
+          "en": "Whether to allow a scale factor. Default `true`.",
+          "pt": "Se permite um fator de escala. O padrão é `true`."
+        },
+        {
+          "name": "'Reflection'",
+          "en": "`'best'` (default), `true` or `false`.",
+          "pt": "`'best'` (padrão), `true` ou `false`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "d",
+          "en": "Sum of squared differences between `X` and `Z`, divided by the sum of squares of `X` about its means. It is 0 for a perfect match.",
+          "pt": "Soma dos quadrados das diferenças entre `X` e `Z`, dividida pela soma dos quadrados de `X` em torno de suas médias. Vale 0 em um ajuste perfeito."
+        },
+        {
+          "name": "Z",
+          "en": "`Y` after the best transformation, in the coordinates of `X`.",
+          "pt": "`Y` depois da melhor transformação, nas coordenadas de `X`."
+        },
+        {
+          "name": "transform",
+          "en": "Structure with `T` (orthogonal rotation or reflection matrix), `b` (scale factor) and `c` (translation, one row per point), such that `Z = b*Y*T + c`.",
+          "pt": "Estrutura com `T` (matriz ortogonal de rotação ou reflexão), `b` (fator de escala) e `c` (translação, uma linha por ponto), tal que `Z = b*Y*T + c`."
+        }
+      ],
+      "description": {
+        "en": "Use `procrustes` to compare two shapes or two low-dimensional maps (for example the output of `cmdscale` for two sets of distances) after removing differences that do not matter: position, orientation and size. A small `d` means the shapes agree.\n\nThe rows of `X` and `Y` must correspond: row `i` of `Y` is matched with row `i` of `X`.",
+        "pt": "Use `procrustes` para comparar duas formas ou dois mapas de poucas dimensões (por exemplo a saída de `cmdscale` para dois conjuntos de distâncias) depois de remover diferenças que não importam: posição, orientação e tamanho. Um `d` pequeno significa que as formas concordam.\n\nAs linhas de `X` e `Y` devem corresponder: a linha `i` de `Y` é pareada com a linha `i` de `X`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Recovering a rotated, scaled and shifted square with a tip",
+            "pt": "Recuperando um quadrado com ponta, girado, ampliado e deslocado"
+          },
+          "code": "X = [0 0; 1 0; 1 1; 0 1; 0.5 2];\nth = pi/6;\nR = [cos(th) -sin(th); sin(th) cos(th)];\nY = 2*X*R + [3 -1];\n[d, Z, tr] = procrustes(X, Y);\nfprintf('%.6f\\n', d)\ndisp(round(Z*1000)/1000)\nfprintf('%.4f\\n', tr.b)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Without scaling the best fit is worse",
+            "pt": "Sem escala o melhor ajuste é pior"
+          },
+          "code": "X = [0 0; 1 0; 1 1; 0 1; 0.5 2];\nY = [X(:,1)*3, X(:,2)*3] + [1 1];\n[d, Z, tr] = procrustes(X, Y, 'Scaling', false);\nfprintf('%.4f %.4f\\n', d, tr.b)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cmdscale",
+        "pca",
+        "rotatefactors",
+        "svd",
+        "pdist"
+      ]
+    },
+    "bbdesign": {
+      "summary": {
+        "en": "Generates a Box-Behnken design for fitting a second-order response surface with three or more factors.",
+        "pt": "Gera um planejamento de Box-Behnken para ajustar uma superfície de resposta de segunda ordem com três ou mais fatores."
+      },
+      "syntax": [
+        {
+          "code": "D = bbdesign(n)",
+          "en": "Design for `n` factors, with 3 center points for 3 factors.",
+          "pt": "Planejamento para `n` fatores, com 3 pontos centrais para 3 fatores."
+        },
+        {
+          "code": "[D, blk] = bbdesign(n)",
+          "en": "Also returns the block of each run.",
+          "pt": "Retorna também o bloco de cada ensaio."
+        },
+        {
+          "code": "D = bbdesign(n, 'center', c)",
+          "en": "Uses `c` center points.",
+          "pt": "Usa `c` pontos centrais."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of factors, an integer of at least 3.",
+          "pt": "Número de fatores, um inteiro igual ou maior que 3."
+        },
+        {
+          "name": "'center'",
+          "en": "Number of center points (runs with all factors at 0).",
+          "pt": "Número de pontos centrais (ensaios com todos os fatores em 0)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Matrix with one run per row and one factor per column. Values are -1, 0 and 1 for the low, middle and high levels.",
+          "pt": "Matriz com um ensaio por linha e um fator por coluna. Os valores são -1, 0 e 1 para os níveis baixo, médio e alto."
+        },
+        {
+          "name": "blk",
+          "en": "Column vector with the block of each run. Without the `'blocksize'` option every run is in block 1.",
+          "pt": "Vetor coluna com o bloco de cada ensaio. Sem a opção `'blocksize'` todos os ensaios ficam no bloco 1."
+        }
+      ],
+      "description": {
+        "en": "In a Box-Behnken design each run sets two or more factors at -1 or 1 while the others stay at 0, so no run sits at a corner of the cube. It needs fewer runs than a full three-level factorial and still lets you estimate linear, interaction and squared terms. For 3 factors the design has 12 edge runs plus the center points.\n\nThe levels are coded. Convert them to real units with a linear map, for example `low + (D+1)/2*(high-low)`. Repeated center points give a pure estimate of the experimental error.",
+        "pt": "Em um planejamento de Box-Behnken, cada ensaio coloca dois ou mais fatores em -1 ou 1 enquanto os demais ficam em 0, de modo que nenhum ensaio está em um vértice do cubo. Ele precisa de menos ensaios do que um fatorial completo de três níveis e ainda permite estimar termos lineares, de interação e quadráticos. Para 3 fatores o planejamento tem 12 ensaios nas arestas mais os pontos centrais.\n\nOs níveis são codificados. Converta para as unidades reais com um mapeamento linear, por exemplo `baixo + (D+1)/2*(alto-baixo)`. Pontos centrais repetidos dão uma estimativa pura do erro experimental."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Design for three factors",
+            "pt": "Planejamento para três fatores"
+          },
+          "code": "D = bbdesign(3);\ndisp(D)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Four factors and the effect of the center points",
+            "pt": "Quatro fatores e o efeito dos pontos centrais"
+          },
+          "code": "[D, blk] = bbdesign(4);\ndisp(size(D))\ndisp(size(bbdesign(4, 'center', 1)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ff2n",
+        "fullfact",
+        "x2fx",
+        "regress",
+        "fitlm"
+      ],
+      "notes": {
+        "en": "The `'blocksize'` option is not implemented and raises an error.",
+        "pt": "A opção `'blocksize'` não está implementada e gera um erro."
+      }
+    },
+    "ff2n": {
+      "summary": {
+        "en": "Generates a two-level full factorial design: every combination of low (0) and high (1) levels of n factors.",
+        "pt": "Gera um planejamento fatorial completo de dois níveis: todas as combinações dos níveis baixo (0) e alto (1) de n fatores."
+      },
+      "syntax": [
+        {
+          "code": "D = ff2n(n)",
+          "en": "All `2^n` combinations of `n` two-level factors.",
+          "pt": "Todas as `2^n` combinações de `n` fatores de dois níveis."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of factors, a non-negative integer.",
+          "pt": "Número de fatores, um inteiro não negativo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "`2^n`-by-`n` matrix of zeros and ones. Each row is one run and each column one factor. The last factor changes fastest.",
+          "pt": "Matriz `2^n` por `n` de zeros e uns. Cada linha é um ensaio e cada coluna um fator. O último fator varia mais rápido."
+        }
+      ],
+      "description": {
+        "en": "A two-level full factorial runs every combination of the low and high levels, so it can estimate all main effects and all interactions. The number of runs doubles with each factor, so it is practical only for a modest number of factors.\n\nThe levels are 0 and 1. Use `2*D - 1` to get the usual coded levels -1 and 1.",
+        "pt": "Um fatorial completo de dois níveis executa todas as combinações dos níveis baixo e alto, e por isso permite estimar todos os efeitos principais e todas as interações. O número de ensaios dobra a cada fator, então só é prático para poucos fatores.\n\nOs níveis são 0 e 1. Use `2*D - 1` para obter os níveis codificados usuais -1 e 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Eight runs for three factors",
+            "pt": "Oito ensaios para três fatores"
+          },
+          "code": "disp(ff2n(3))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Size of the design for four factors",
+            "pt": "Tamanho do planejamento para quatro fatores"
+          },
+          "code": "D = ff2n(4);\ndisp(size(D))\ndisp(sum(D, 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fullfact",
+        "bbdesign",
+        "x2fx",
+        "dummyvar",
+        "fitlm"
+      ]
+    },
+    "fullfact": {
+      "summary": {
+        "en": "Generates a full factorial design for factors with any number of levels.",
+        "pt": "Gera um planejamento fatorial completo para fatores com qualquer número de níveis."
+      },
+      "syntax": [
+        {
+          "code": "D = fullfact(levels)",
+          "en": "All combinations of the levels of each factor.",
+          "pt": "Todas as combinações dos níveis de cada fator."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "levels",
+          "en": "Vector with the number of levels of each factor, for example `[2 3 2]`. Each must be a positive integer.",
+          "pt": "Vetor com o número de níveis de cada fator, por exemplo `[2 3 2]`. Cada um deve ser um inteiro positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Matrix with `prod(levels)` rows and one column per factor. Level numbers run from 1 to the number of levels of that factor. The first factor changes fastest.",
+          "pt": "Matriz com `prod(levels)` linhas e uma coluna por fator. Os números dos níveis vão de 1 ao número de níveis daquele fator. O primeiro fator varia mais rápido."
+        }
+      ],
+      "description": {
+        "en": "Each row of the result is one run of the experiment, and the entries are level numbers, not physical values. Map them to your own values with indexing, for example `temps(D(:,1))`.\n\nFor factors with only two levels each, `ff2n` returns the same design with levels 0 and 1.",
+        "pt": "Cada linha do resultado é um ensaio do experimento, e as entradas são números de níveis, não valores físicos. Converta para seus próprios valores por indexação, por exemplo `temps(D(:,1))`.\n\nPara fatores com apenas dois níveis cada, `ff2n` retorna o mesmo planejamento com níveis 0 e 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two factors with 2 and 3 levels",
+            "pt": "Dois fatores com 2 e 3 níveis"
+          },
+          "code": "disp(fullfact([2 3]))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Three factors with 3, 2 and 2 levels",
+            "pt": "Três fatores com 3, 2 e 2 níveis"
+          },
+          "code": "D = fullfact([3 2 2]);\ndisp(size(D))\ndisp(D(1:4,:))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ff2n",
+        "bbdesign",
+        "dummyvar",
+        "x2fx",
+        "combvec"
+      ]
+    },
+    "barttest": {
+      "summary": {
+        "en": "Bartlett's test for the number of dimensions of a data set: tests whether the smallest principal components can be treated as having equal variance.",
+        "pt": "Teste de Bartlett para o número de dimensões de um conjunto de dados: verifica se os menores componentes principais podem ser tratados como tendo a mesma variância."
+      },
+      "syntax": [
+        {
+          "code": "ndim = barttest(X)",
+          "en": "Number of significant dimensions at the 5% level.",
+          "pt": "Número de dimensões significativas ao nível de 5%."
+        },
+        {
+          "code": "[ndim, prob, chisquare] = barttest(X, alpha)",
+          "en": "Uses the significance level `alpha` and also returns the p-values and test statistics.",
+          "pt": "Usa o nível de significância `alpha` e retorna também os valores-p e as estatísticas do teste."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix, `n` observations in rows and `p` variables in columns, with more than one row and column.",
+          "pt": "Matriz de dados, `n` observações nas linhas e `p` variáveis nas colunas, com mais de uma linha e uma coluna."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level between 0 and 1. Default 0.05.",
+          "pt": "Nível de significância entre 0 e 1. O padrão é 0,05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ndim",
+          "en": "Number of leading tests whose p-value does not exceed `alpha`: the number of dimensions judged to be needed. It is `NaN` when even the first test is not significant, and `p` when all of them are.",
+          "pt": "Número de testes iniciais cujo valor-p não excede `alpha`: o número de dimensões consideradas necessárias. É `NaN` quando nem o primeiro teste é significativo, e `p` quando todos são."
+        },
+        {
+          "name": "prob",
+          "en": "Column vector with `p-1` p-values, one per test.",
+          "pt": "Vetor coluna com `p-1` valores-p, um por teste."
+        },
+        {
+          "name": "chisquare",
+          "en": "Column vector with the `p-1` chi-square statistics.",
+          "pt": "Vetor coluna com as `p-1` estatísticas qui-quadrado."
+        }
+      ],
+      "description": {
+        "en": "The first test asks whether all `p` eigenvalues of the covariance matrix are equal, which would mean the data have no preferred directions. If that is rejected, the next test drops the largest eigenvalue and asks again about the rest, and so on. The tests are meant to be read in order: the number of leading small p-values is the suggested dimension.\n\nThe test assumes approximately normal data, and it is only a guide to choose the number of components to keep in `pca`.",
+        "pt": "O primeiro teste pergunta se todos os `p` autovalores da matriz de covariância são iguais, o que significaria que os dados não têm direções preferenciais. Se for rejeitado, o teste seguinte descarta o maior autovalor e pergunta de novo sobre os restantes, e assim por diante. Os testes devem ser lidos em ordem: o número de valores-p pequenos no início é a dimensão sugerida.\n\nO teste supõe dados aproximadamente normais e serve apenas de guia para escolher quantos componentes manter em `pca`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Four variables: only the first test rejects",
+            "pt": "Quatro variáveis: só o primeiro teste rejeita"
+          },
+          "code": "B = [1 5 2 8; 2 3 9 1; 3 7 4 6; 4 2 8 3; 5 9 1 7; 6 4 7 2; 7 8 3 9; 8 1 6 5];\n[ndim, p, chisq] = barttest(B);\ndisp(ndim)\ndisp(round(p'*10000)/10000)\ndisp(round(chisq'*100)/100)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Three strongly related variables at the 1% level",
+            "pt": "Três variáveis fortemente relacionadas ao nível de 1%"
+          },
+          "code": "A = [1 2 3; 2 4 5; 3 5 9; 4 9 8; 5 8 12; 6 12 11; 7 11 15; 8 15 14];\n[ndim, p] = barttest(A, 0.01);\ndisp(ndim)\ndisp(p' < 0.01)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pca",
+        "pcacov",
+        "cov",
+        "chi2cdf",
+        "vartestn"
+      ],
+      "notes": {
+        "en": "When the data have an exactly duplicated column, the smallest eigenvalue is only rounding noise and the chi-square statistics depend on it, so they can differ from MATLAB.",
+        "pt": "Quando os dados têm uma coluna exatamente duplicada, o menor autovalor é apenas ruído de arredondamento e as estatísticas qui-quadrado dependem dele, então podem diferir do MATLAB."
+      }
+    },
+    "fishertest": {
+      "summary": {
+        "en": "Fisher's exact test for a 2-by-2 contingency table: tests whether the two categorical variables are independent.",
+        "pt": "Teste exato de Fisher para uma tabela de contingência 2 por 2: verifica se as duas variáveis categóricas são independentes."
+      },
+      "syntax": [
+        {
+          "code": "h = fishertest(x)",
+          "en": "Returns 1 if independence is rejected at the 5% level.",
+          "pt": "Retorna 1 se a independência é rejeitada ao nível de 5%."
+        },
+        {
+          "code": "[h, p, stats] = fishertest(x)",
+          "en": "Also returns the p-value and the odds ratio with its confidence interval.",
+          "pt": "Retorna também o valor-p e a razão de chances com seu intervalo de confiança."
+        },
+        {
+          "code": "[...] = fishertest(x, Name, Value)",
+          "en": "Options `'Alpha'` and `'Tail'`.",
+          "pt": "Opções `'Alpha'` e `'Tail'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "2-by-2 matrix of counts (non-negative integers).",
+          "pt": "Matriz 2 por 2 de contagens (inteiros não negativos)."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`: alternative that the odds ratio differs from, is greater than, or is less than 1.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`: alternativa de que a razão de chances é diferente de, maior que, ou menor que 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if the null hypothesis of independence is rejected, 0 otherwise.",
+          "pt": "1 se a hipótese nula de independência é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "Exact p-value.",
+          "pt": "Valor-p exato."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `OddsRatio` and `ConfidenceInterval` (two elements).",
+          "pt": "Estrutura com `OddsRatio` e `ConfidenceInterval` (dois elementos)."
+        }
+      ],
+      "description": {
+        "en": "Unlike the chi-square test of independence, `fishertest` computes the probability of the table exactly from the hypergeometric distribution, so it is reliable for small counts. Use it, for example, to compare the success rates of two treatments with few patients.\n\nThe odds ratio is the product of the diagonal divided by the product of the other cells. A value of 1 means independence. Only 2-by-2 tables are accepted.",
+        "pt": "Ao contrário do teste qui-quadrado de independência, `fishertest` calcula a probabilidade da tabela de forma exata a partir da distribuição hipergeométrica, por isso é confiável com contagens pequenas. Use, por exemplo, para comparar as taxas de sucesso de dois tratamentos com poucos pacientes.\n\nA razão de chances é o produto da diagonal dividido pelo produto das outras células. O valor 1 significa independência. Apenas tabelas 2 por 2 são aceitas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Small table, two-sided test",
+            "pt": "Tabela pequena, teste bilateral"
+          },
+          "code": "[h, p, stats] = fishertest([3 1; 1 3]);\nfprintf('%d %.4f\\n', h, p)\nfprintf('%.4f\\n', stats.OddsRatio)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One-sided test for an odds ratio above 1",
+            "pt": "Teste unilateral para razão de chances acima de 1"
+          },
+          "code": "[h, p] = fishertest([8 2; 1 5], 'Tail', 'right');\nfprintf('%d %.4f\\n', h, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chi2gof",
+        "crosstab",
+        "hygepdf",
+        "signtest",
+        "ranksum"
+      ]
+    },
+    "friedman": {
+      "summary": {
+        "en": "Friedman's nonparametric test for differences among columns (treatments) of a matrix, with rows as blocks.",
+        "pt": "Teste não paramétrico de Friedman para diferenças entre as colunas (tratamentos) de uma matriz, com as linhas como blocos."
+      },
+      "syntax": [
+        {
+          "code": "p = friedman(X)",
+          "en": "p-value for the hypothesis that all columns have the same distribution.",
+          "pt": "Valor-p da hipótese de que todas as colunas têm a mesma distribuição."
+        },
+        {
+          "code": "p = friedman(X, reps, displayopt)",
+          "en": "Handles `reps` replicates per cell and turns the table figure on or off with `'on'` or `'off'`.",
+          "pt": "Trata `reps` replicações por célula e liga ou desliga a figura da tabela com `'on'` ou `'off'`."
+        },
+        {
+          "code": "[p, tbl, stats] = friedman(...)",
+          "en": "Also returns the ANOVA-style table and a structure with the mean ranks.",
+          "pt": "Retorna também a tabela no estilo ANOVA e uma estrutura com os postos médios."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data matrix. Columns are the treatments and rows are the blocks. With replicates, each block has `reps` consecutive rows.",
+          "pt": "Matriz de dados. As colunas são os tratamentos e as linhas são os blocos. Com replicações, cada bloco ocupa `reps` linhas consecutivas."
+        },
+        {
+          "name": "reps",
+          "en": "Number of replicates per cell. Default 1.",
+          "pt": "Número de replicações por célula. O padrão é 1."
+        },
+        {
+          "name": "displayopt",
+          "en": "`'on'` (default) or `'off'`. Use `'off'` in scripts to skip the table figure.",
+          "pt": "`'on'` (padrão) ou `'off'`. Use `'off'` em scripts para não abrir a figura da tabela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test. A small value says at least one column tends to rank differently from the others.",
+          "pt": "Valor-p do teste. Um valor pequeno indica que pelo menos uma coluna tende a ter postos diferentes das demais."
+        },
+        {
+          "name": "tbl",
+          "en": "Cell array with the table: rows `Columns`, `Error` and `Total` (plus `Interaction` with replicates), and columns for sum of squares, degrees of freedom, mean squares, chi-square and its p-value.",
+          "pt": "Arranjo de células com a tabela: linhas `Columns`, `Error` e `Total` (mais `Interaction` com replicações), e colunas de soma de quadrados, graus de liberdade, quadrados médios, qui-quadrado e seu valor-p."
+        },
+        {
+          "name": "stats",
+          "en": "Structure for follow-up comparisons with `multcompare`. Field `meanranks` holds the mean rank of each column.",
+          "pt": "Estrutura para comparações posteriores com `multcompare`. O campo `meanranks` guarda o posto médio de cada coluna."
+        }
+      ],
+      "description": {
+        "en": "`friedman` replaces the data by ranks inside each block and then asks whether the columns have different average ranks. It is the nonparametric counterpart of a repeated-measures or randomized-block ANOVA and does not assume normality. Use it when the same subjects are measured under several conditions.\n\nPassing `'off'` as the third argument is advised in scripts, because the default opens a figure.",
+        "pt": "`friedman` substitui os dados por postos dentro de cada bloco e depois pergunta se as colunas têm postos médios diferentes. É a versão não paramétrica de uma ANOVA de medidas repetidas ou de blocos casualizados e não supõe normalidade. Use quando os mesmos indivíduos são medidos em várias condições.\n\nÉ recomendável passar `'off'` como terceiro argumento em scripts, porque o padrão abre uma figura."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Six blocks and three treatments",
+            "pt": "Seis blocos e três tratamentos"
+          },
+          "code": "Y = [10 14 12; 8 9 11; 12 15 13; 7 10 9; 11 13 14; 9 8 12];\n[p, tbl, stats] = friedman(Y, 1, 'off');\nfprintf('p = %.4f\\n', p)\ndisp(tbl{2,5})\ndisp(stats.meanranks)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Two replicates per cell: rows of the table",
+            "pt": "Duas replicações por célula: linhas da tabela"
+          },
+          "code": "Y = [4 5 6; 3 6 7; 5 4 8; 2 5 6; 4 7 5; 3 4 9; 5 6 7; 4 5 8];\n[p, tbl] = friedman(Y, 2, 'off');\nfprintf('p = %.4f\\n', p)\ndisp(tbl(:,1)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kruskalwallis",
+        "anova2",
+        "multcompare",
+        "signrank",
+        "ranksum"
+      ]
+    },
+    "kruskalwallis": {
+      "summary": {
+        "en": "Kruskal-Wallis test: a nonparametric one-way test of whether several groups come from the same distribution.",
+        "pt": "Teste de Kruskal-Wallis: teste não paramétrico de uma via para verificar se vários grupos vêm da mesma distribuição."
+      },
+      "syntax": [
+        {
+          "code": "p = kruskalwallis(X)",
+          "en": "Compares the columns of the matrix `X`.",
+          "pt": "Compara as colunas da matriz `X`."
+        },
+        {
+          "code": "p = kruskalwallis(x, group, displayopt)",
+          "en": "Compares the values in vector `x` according to the labels in `group`.",
+          "pt": "Compara os valores do vetor `x` segundo os rótulos em `group`."
+        },
+        {
+          "code": "[p, tbl, stats] = kruskalwallis(...)",
+          "en": "Also returns the ANOVA-style table and a structure with the mean ranks.",
+          "pt": "Retorna também a tabela no estilo ANOVA e uma estrutura com os postos médios."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Matrix whose columns are the samples. Use `[]` for `group` when you pass a matrix.",
+          "pt": "Matriz cujas colunas são as amostras. Use `[]` em `group` quando passar uma matriz."
+        },
+        {
+          "name": "x",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        },
+        {
+          "name": "group",
+          "en": "Labels with the same length as `x`: a numeric vector, a character array, a string array or a cell array of text.",
+          "pt": "Rótulos com o mesmo comprimento de `x`: vetor numérico, arranjo de caracteres, vetor de strings ou arranjo de células de texto."
+        },
+        {
+          "name": "displayopt",
+          "en": "`'on'` (default) or `'off'`. Use `'off'` in scripts to skip the figures.",
+          "pt": "`'on'` (padrão) ou `'off'`. Use `'off'` em scripts para não abrir as figuras."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value. A small value says that at least one group tends to have larger or smaller values than the others.",
+          "pt": "Valor-p. Um valor pequeno indica que pelo menos um grupo tende a ter valores maiores ou menores que os outros."
+        },
+        {
+          "name": "tbl",
+          "en": "Cell array with the table: `Groups`, `Error` and `Total`, with sum of squares of the ranks, degrees of freedom, mean squares, chi-square and its p-value.",
+          "pt": "Arranjo de células com a tabela: `Groups`, `Error` e `Total`, com soma de quadrados dos postos, graus de liberdade, quadrados médios, qui-quadrado e seu valor-p."
+        },
+        {
+          "name": "stats",
+          "en": "Structure for follow-up comparisons with `multcompare`. Field `meanranks` has the mean rank of each group.",
+          "pt": "Estrutura para comparações posteriores com `multcompare`. O campo `meanranks` tem o posto médio de cada grupo."
+        }
+      ],
+      "description": {
+        "en": "`kruskalwallis` ranks all observations together and checks whether the mean ranks of the groups differ more than chance would allow. It extends the rank-sum test to more than two groups and is the nonparametric counterpart of one-way `anova1`, without assuming normality. Groups may have different sizes.\n\nThe test says that groups differ, not which ones. Use `multcompare` with `stats` to find out.",
+        "pt": "`kruskalwallis` ordena todas as observações juntas e verifica se os postos médios dos grupos diferem mais do que o acaso permitiria. Estende o teste da soma de postos a mais de dois grupos e é a versão não paramétrica da `anova1` de uma via, sem supor normalidade. Os grupos podem ter tamanhos diferentes.\n\nO teste diz que os grupos diferem, não quais. Use `multcompare` com `stats` para descobrir."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three groups given by a label vector",
+            "pt": "Três grupos dados por um vetor de rótulos"
+          },
+          "code": "y = [2.1 3.4 1.9 5.6 4.8 6.1 7.2 8.8 6.9]';\ng = [1 1 1 2 2 2 3 3 3]';\n[p, tbl, stats] = kruskalwallis(y, g, 'off');\nfprintf('p = %.4f\\n', p)\ndisp(stats.meanranks)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Samples in the columns of a matrix",
+            "pt": "Amostras nas colunas de uma matriz"
+          },
+          "code": "M = [2.1 5.6 7.2; 3.4 4.8 8.8; 1.9 6.1 6.9];\n[p, tbl] = kruskalwallis(M, [], 'off');\nfprintf('chi-square = %.4f, p = %.4f\\n', tbl{2,5}, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "anova1",
+        "ranksum",
+        "friedman",
+        "multcompare",
+        "signrank"
+      ]
+    },
+    "kstest": {
+      "summary": {
+        "en": "One-sample Kolmogorov-Smirnov test: compares the empirical distribution of a sample with a reference distribution (standard normal by default).",
+        "pt": "Teste de Kolmogorov-Smirnov de uma amostra: compara a distribuição empírica de uma amostra com uma distribuição de referência (normal padrão por padrão)."
+      },
+      "syntax": [
+        {
+          "code": "h = kstest(x)",
+          "en": "Tests whether `x` comes from the standard normal distribution.",
+          "pt": "Testa se `x` vem da distribuição normal padrão."
+        },
+        {
+          "code": "[h, p, ksstat, cv] = kstest(x)",
+          "en": "Also returns the p-value, the test statistic and the critical value.",
+          "pt": "Retorna também o valor-p, a estatística do teste e o valor crítico."
+        },
+        {
+          "code": "[...] = kstest(x, 'CDF', cdf)",
+          "en": "Uses a two-column matrix `cdf` of sample points and cumulative probabilities as the reference.",
+          "pt": "Usa como referência uma matriz `cdf` de duas colunas com pontos e probabilidades acumuladas."
+        },
+        {
+          "code": "[...] = kstest(x, 'Alpha', a, 'Tail', t)",
+          "en": "Sets the significance level and the alternative.",
+          "pt": "Define o nível de significância e a alternativa."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of observations. `NaN` values are ignored.",
+          "pt": "Vetor de observações. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "'CDF'",
+          "en": "Matrix with two columns: values in the first, the reference cumulative probability at those values in the second. Default: the standard normal.",
+          "pt": "Matriz com duas colunas: valores na primeira e a probabilidade acumulada de referência nesses valores na segunda. O padrão é a normal padrão."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'unequal'` (default), `'larger'` or `'smaller'`: which difference between the empirical and the reference distribution is tested.",
+          "pt": "`'unequal'` (padrão), `'larger'` ou `'smaller'`: qual diferença entre a distribuição empírica e a de referência é testada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if the hypothesis that the sample follows the reference distribution is rejected, 0 otherwise.",
+          "pt": "1 se a hipótese de que a amostra segue a distribuição de referência é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "ksstat",
+          "en": "Largest vertical distance between the empirical and reference cumulative distributions.",
+          "pt": "Maior distância vertical entre as distribuições acumuladas empírica e de referência."
+        },
+        {
+          "name": "cv",
+          "en": "Critical value of the statistic at level `alpha`.",
+          "pt": "Valor crítico da estatística ao nível `alpha`."
+        }
+      ],
+      "description": {
+        "en": "The test compares the empirical cumulative distribution of the sample with a fully specified reference. Because the default reference is the standard normal with mean 0 and standard deviation 1, standardize your data first with `zscore` to test normality of arbitrary data. Estimating the mean and deviation from the same sample makes the p-value too large; for that case use `lillietest`.\n\nA large p-value does not prove that the sample follows the distribution, only that the test did not find evidence against it.",
+        "pt": "O teste compara a distribuição acumulada empírica da amostra com uma referência totalmente especificada. Como a referência padrão é a normal padrão, com média 0 e desvio padrão 1, padronize seus dados com `zscore` antes para testar normalidade de dados quaisquer. Estimar a média e o desvio padrão da própria amostra torna o valor-p grande demais; para esse caso use `lillietest`.\n\nUm valor-p grande não prova que a amostra segue a distribuição, apenas que o teste não encontrou evidência contra."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A symmetric sample against the standard normal",
+            "pt": "Uma amostra simétrica contra a normal padrão"
+          },
+          "code": "s = (-7:7)'/4;\n[h, p, ksstat, cv] = kstest(s);\nfprintf('%d %.4f %.4f %.4f\\n', h, p, ksstat, cv)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "A shifted sample, and a custom reference distribution",
+            "pt": "Uma amostra deslocada e uma distribuição de referência própria"
+          },
+          "code": "s = (-7:7)'/4;\n[h, p] = kstest(s + 3);\nfprintf('%d %.3g\\n', h, p)\n[h, p] = kstest(s, 'CDF', [s normcdf(s, 0.5, 1)]);\nfprintf('%d %.4f\\n', h, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kstest2",
+        "lillietest",
+        "adtest",
+        "jbtest",
+        "chi2gof"
+      ]
+    },
+    "kstest2": {
+      "summary": {
+        "en": "Two-sample Kolmogorov-Smirnov test: tests whether two samples come from the same continuous distribution.",
+        "pt": "Teste de Kolmogorov-Smirnov de duas amostras: verifica se duas amostras vêm da mesma distribuição contínua."
+      },
+      "syntax": [
+        {
+          "code": "h = kstest2(x1, x2)",
+          "en": "Returns 1 if the two samples differ at the 5% level.",
+          "pt": "Retorna 1 se as duas amostras diferem ao nível de 5%."
+        },
+        {
+          "code": "[h, p, ks2stat] = kstest2(x1, x2)",
+          "en": "Also returns the p-value and the test statistic.",
+          "pt": "Retorna também o valor-p e a estatística do teste."
+        },
+        {
+          "code": "[...] = kstest2(x1, x2, 'Alpha', a, 'Tail', t)",
+          "en": "Sets the significance level and the alternative.",
+          "pt": "Define o nível de significância e a alternativa."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x1, x2",
+          "en": "Vectors of observations, possibly of different lengths. `NaN` values are ignored.",
+          "pt": "Vetores de observações, possivelmente de comprimentos diferentes. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'unequal'` (default), `'larger'` or `'smaller'`: alternative about the cumulative distribution of `x1` relative to `x2`.",
+          "pt": "`'unequal'` (padrão), `'larger'` ou `'smaller'`: alternativa sobre a distribuição acumulada de `x1` em relação à de `x2`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if the hypothesis of equal distributions is rejected, 0 otherwise.",
+          "pt": "1 se a hipótese de distribuições iguais é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "ks2stat",
+          "en": "Largest vertical distance between the two empirical cumulative distributions.",
+          "pt": "Maior distância vertical entre as duas distribuições acumuladas empíricas."
+        }
+      ],
+      "description": {
+        "en": "`kstest2` looks at the largest gap between the two empirical cumulative distribution functions. It is sensitive to any kind of difference (location, spread, shape) and makes no assumption about the distribution. With the `'larger'` and `'smaller'` tails it tests one direction only.\n\nThe test is most reliable for continuous data without many repeated values.",
+        "pt": "`kstest2` olha a maior distância entre as duas funções de distribuição acumulada empíricas. É sensível a qualquer tipo de diferença (posição, dispersão, forma) e não supõe nenhuma distribuição. Com as caudas `'larger'` e `'smaller'` testa só um sentido.\n\nO teste é mais confiável para dados contínuos sem muitos valores repetidos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two samples of different sizes",
+            "pt": "Duas amostras de tamanhos diferentes"
+          },
+          "code": "a = [1.1 2.3 3.2 4.8 5.1 6.7 7.4];\nb = [3.5 4.1 5.9 6.3 8.2 9.1 9.9 10.4];\n[h, p, ks2stat] = kstest2(a, b);\nfprintf('%d %.4f %.4f\\n', h, p, ks2stat)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One-sided alternative",
+            "pt": "Alternativa unilateral"
+          },
+          "code": "a = [1.1 2.3 3.2 4.8 5.1 6.7 7.4];\nb = [3.5 4.1 5.9 6.3 8.2 9.1 9.9 10.4];\n[h, p, ks2stat] = kstest2(a, b, 'Tail', 'larger');\nfprintf('%d %.4f %.4f\\n', h, p, ks2stat)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kstest",
+        "ranksum",
+        "lillietest",
+        "ttest2",
+        "vartest2"
+      ]
+    },
+    "ranksum": {
+      "summary": {
+        "en": "Wilcoxon rank sum test (Mann-Whitney U): a nonparametric test of whether two independent samples have equal medians.",
+        "pt": "Teste da soma de postos de Wilcoxon (Mann-Whitney U): teste não paramétrico para verificar se duas amostras independentes têm medianas iguais."
+      },
+      "syntax": [
+        {
+          "code": "p = ranksum(x, y)",
+          "en": "p-value of the two-sided test.",
+          "pt": "Valor-p do teste bilateral."
+        },
+        {
+          "code": "[p, h, stats] = ranksum(x, y)",
+          "en": "Also returns the decision and the rank sum.",
+          "pt": "Retorna também a decisão e a soma de postos."
+        },
+        {
+          "code": "[...] = ranksum(x, y, Name, Value)",
+          "en": "Options `'alpha'`, `'tail'` and `'method'`.",
+          "pt": "Opções `'alpha'`, `'tail'` e `'method'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Vectors of observations from the two populations, possibly of different lengths. `NaN` values are ignored.",
+          "pt": "Vetores de observações das duas populações, possivelmente de comprimentos diferentes. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "'alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`: alternative that the median of `x` differs from, is above, or is below the median of `y`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`: alternativa de que a mediana de `x` é diferente, está acima ou está abaixo da mediana de `y`."
+        },
+        {
+          "name": "'method'",
+          "en": "`'exact'` or `'approximate'`. By default the exact distribution is used for small samples and the normal approximation otherwise.",
+          "pt": "`'exact'` ou `'approximate'`. Por padrão usa-se a distribuição exata para amostras pequenas e a aproximação normal nos demais casos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "h",
+          "en": "1 if the null hypothesis of equal medians is rejected, 0 otherwise.",
+          "pt": "1 se a hipótese nula de medianas iguais é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `ranksum`, the sum of the ranks of `x` in the combined sample, and with the approximate method also `zval`, the normal statistic.",
+          "pt": "Estrutura com `ranksum`, a soma dos postos de `x` na amostra combinada, e, no método aproximado, também `zval`, a estatística normal."
+        }
+      ],
+      "description": {
+        "en": "`ranksum` ranks the two samples together and asks whether the ranks of one sample are systematically higher than those of the other. It needs no assumption of normality, so it is a good alternative to `ttest2` for skewed data or outliers. The two samples are independent; for paired data use `signrank`.\n\nTies are handled with average ranks, and the approximate method corrects the variance for them.",
+        "pt": "`ranksum` ordena as duas amostras juntas e pergunta se os postos de uma são sistematicamente maiores que os da outra. Não exige normalidade, por isso é uma boa alternativa a `ttest2` quando os dados são assimétricos ou têm outliers. As duas amostras são independentes; para dados pareados use `signrank`.\n\nOs empates recebem a média dos postos, e o método aproximado corrige a variância por eles."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Exact test for two small samples",
+            "pt": "Teste exato para duas amostras pequenas"
+          },
+          "code": "a = [1.1 2.3 3.2 4.8 5.1 6.7 7.4];\nb = [3.5 4.1 5.9 6.3 8.2 9.1 9.9 10.4];\n[p, h, stats] = ranksum(a, b);\nfprintf('%.4f %d %d\\n', p, h, stats.ranksum)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Normal approximation",
+            "pt": "Aproximação normal"
+          },
+          "code": "a = [1.1 2.3 3.2 4.8 5.1 6.7 7.4];\nb = [3.5 4.1 5.9 6.3 8.2 9.1 9.9 10.4];\n[p, h, stats] = ranksum(a, b, 'method', 'approximate');\nfprintf('%.4f %d\\n', p, h)\nfprintf('%.4f\\n', stats.zval)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "signrank",
+        "kruskalwallis",
+        "ttest2",
+        "kstest2",
+        "signtest"
+      ]
+    },
+    "runstest": {
+      "summary": {
+        "en": "Runs test for randomness: checks whether the sequence of values above and below a threshold looks random.",
+        "pt": "Teste de sequências (runs) para aleatoriedade: verifica se a sequência de valores acima e abaixo de um limiar parece aleatória."
+      },
+      "syntax": [
+        {
+          "code": "h = runstest(x)",
+          "en": "Tests whether `x` is random around its mean.",
+          "pt": "Testa se `x` é aleatório em torno de sua média."
+        },
+        {
+          "code": "[h, p, stats] = runstest(x, v)",
+          "en": "Uses the threshold `v`, or `'ud'` to count runs of increases and decreases.",
+          "pt": "Usa o limiar `v`, ou `'ud'` para contar sequências de aumentos e diminuições."
+        },
+        {
+          "code": "[...] = runstest(x, v, Name, Value)",
+          "en": "Options `'Alpha'`, `'Method'` and `'Tail'`.",
+          "pt": "Opções `'Alpha'`, `'Method'` e `'Tail'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of observations in the order they were collected. `NaN` values are ignored.",
+          "pt": "Vetor de observações na ordem em que foram coletadas. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "v",
+          "en": "Threshold that splits the values into above and below, or `'ud'`. Default: the mean of `x`.",
+          "pt": "Limiar que separa os valores em acima e abaixo, ou `'ud'`. O padrão é a média de `x`."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'exact'` or `'approximate'` (normal approximation).",
+          "pt": "`'exact'` ou `'approximate'` (aproximação normal)."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 if randomness is rejected, 0 otherwise.",
+          "pt": "1 se a aleatoriedade é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `nruns` (number of runs), `n1` (values above the threshold), `n0` (values below it) and `z` (normal statistic).",
+          "pt": "Estrutura com `nruns` (número de sequências), `n1` (valores acima do limiar), `n0` (valores abaixo dele) e `z` (estatística normal)."
+        }
+      ],
+      "description": {
+        "en": "A run is a maximal stretch of consecutive values on the same side of the threshold. Too few runs suggest clustering or a trend, and too many suggest alternation. The test compares the observed number of runs with what a random order would give.\n\nIt is useful, for example, to check the residuals of a model for leftover structure, in the order of the observations.",
+        "pt": "Uma sequência (run) é um trecho máximo de valores consecutivos do mesmo lado do limiar. Poucas sequências sugerem agrupamento ou tendência, e muitas sugerem alternância. O teste compara o número observado de sequências com o que uma ordem aleatória daria.\n\nÉ útil, por exemplo, para verificar se os resíduos de um modelo ainda têm estrutura, na ordem das observações."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "A binary sequence",
+            "pt": "Uma sequência binária"
+          },
+          "code": "x = [1 0 1 1 0 0 1 0 1 1 1 0 0 1 0 0 0 1 1 0];\n[h, p, stats] = runstest(x, 0.5);\nfprintf('%d %.4f\\n', h, p)\ndisp(stats.nruns)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "A sine wave is far from random",
+            "pt": "Uma senoide está longe de ser aleatória"
+          },
+          "code": "x = sin(1:30);\n[h, p, stats] = runstest(x);\nfprintf('%d %.4f\\n', h, p)\nfprintf('%d runs, z = %.4f\\n', stats.nruns, stats.z)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "signtest",
+        "kstest",
+        "dwtest",
+        "autocorr",
+        "jbtest"
+      ],
+      "notes": {
+        "en": "With `'ud'` the counts `nruns`, `n1`, `n0` and `z` agree with MATLAB, but the p-value follows a distribution that was not matched, so it can differ.",
+        "pt": "Com `'ud'` os valores `nruns`, `n1`, `n0` e `z` coincidem com os do MATLAB, mas o valor-p segue uma distribuição que não foi reproduzida, então pode diferir."
+      }
+    },
+    "signrank": {
+      "summary": {
+        "en": "Wilcoxon signed rank test: a nonparametric test that paired differences (or one sample) have a median of zero.",
+        "pt": "Teste dos postos sinalizados de Wilcoxon: teste não paramétrico de que as diferenças pareadas (ou uma amostra) têm mediana zero."
+      },
+      "syntax": [
+        {
+          "code": "p = signrank(x)",
+          "en": "Tests whether the median of `x` is zero.",
+          "pt": "Testa se a mediana de `x` é zero."
+        },
+        {
+          "code": "p = signrank(x, m)",
+          "en": "Tests whether the median of `x` equals the scalar `m`; with a vector `y` of the same length instead, tests the differences `x - y`.",
+          "pt": "Testa se a mediana de `x` é igual ao escalar `m`; com um vetor `y` do mesmo tamanho, testa as diferenças `x - y`."
+        },
+        {
+          "code": "[p, h, stats] = signrank(x, y, Name, Value)",
+          "en": "Also returns the decision and the signed rank. Options `'alpha'`, `'tail'` and `'method'`.",
+          "pt": "Retorna também a decisão e o posto sinalizado. Opções `'alpha'`, `'tail'` e `'method'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of observations, or the first of two paired samples.",
+          "pt": "Vetor de observações, ou a primeira de duas amostras pareadas."
+        },
+        {
+          "name": "y",
+          "en": "Second paired sample, the same length as `x`.",
+          "pt": "Segunda amostra pareada, com o mesmo comprimento de `x`."
+        },
+        {
+          "name": "m",
+          "en": "Hypothesized median, a scalar.",
+          "pt": "Mediana hipotética, um escalar."
+        },
+        {
+          "name": "'alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        },
+        {
+          "name": "'method'",
+          "en": "`'exact'` or `'approximate'`. By default the exact distribution is used for up to 15 observations and the normal approximation above that.",
+          "pt": "`'exact'` ou `'approximate'`. Por padrão usa-se a distribuição exata até 15 observações e a aproximação normal acima disso."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "h",
+          "en": "1 if the null hypothesis of zero median difference is rejected, 0 otherwise.",
+          "pt": "1 se a hipótese nula de mediana zero da diferença é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `signedrank`, the sum of ranks of the positive differences, and with the approximate method also `zval`.",
+          "pt": "Estrutura com `signedrank`, a soma dos postos das diferenças positivas, e, no método aproximado, também `zval`."
+        }
+      ],
+      "description": {
+        "en": "`signrank` ranks the absolute differences, then adds up the ranks of the positive ones. If the median difference is zero, the positive and negative ranks should balance. It uses the size of the differences, not only their signs, so it is more powerful than `signtest`, but it assumes the differences are roughly symmetric around the median.\n\nFor independent samples use `ranksum`; for normal differences `ttest` is the parametric option.",
+        "pt": "`signrank` ordena as diferenças em valor absoluto e soma os postos das positivas. Se a mediana da diferença for zero, os postos positivos e negativos devem se equilibrar. Usa o tamanho das diferenças, e não só os sinais, por isso é mais poderoso que `signtest`, mas supõe que as diferenças sejam aproximadamente simétricas em torno da mediana.\n\nDiferenças nulas são descartadas. Para amostras independentes use `ranksum`; para diferenças normais, `ttest` é a opção paramétrica."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Paired measurements before and after",
+            "pt": "Medidas pareadas antes e depois"
+          },
+          "code": "bef = [125 115 130 140 140 115 140 125 140 135];\naft = [110 122 125 120 140 124 123 137 135 145];\n[p, h, stats] = signrank(bef, aft);\nfprintf('%.4f %d %d\\n', p, h, stats.signedrank)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Normal approximation on the differences",
+            "pt": "Aproximação normal sobre as diferenças"
+          },
+          "code": "bef = [125 115 130 140 140 115 140 125 140 135];\naft = [110 122 125 120 140 124 123 137 135 145];\n[p, h, stats] = signrank(bef - aft, 0, 'method', 'approximate');\nfprintf('%.4f %d\\n', p, h)\nfprintf('%.4f\\n', stats.zval)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "signtest",
+        "ranksum",
+        "ttest",
+        "friedman",
+        "kruskalwallis"
+      ]
+    }
+  }
+}

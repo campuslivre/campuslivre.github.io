@@ -1,0 +1,2128 @@
+{
+  "functions": {
+    "dummyvar": {
+      "summary": {
+        "en": "Converts grouping labels into a matrix of 0/1 indicator (dummy) columns, one column per group.",
+        "pt": "Converte rótulos de grupos em uma matriz de colunas indicadoras (dummy) de 0 e 1, uma coluna por grupo."
+      },
+      "syntax": [
+        {
+          "code": "D = dummyvar(group)",
+          "en": "Builds the indicator matrix for a vector of group numbers, or one block of columns per column of a matrix of group numbers.",
+          "pt": "Monta a matriz indicadora para um vetor de números de grupo, ou um bloco de colunas para cada coluna de uma matriz de números de grupo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "group",
+          "en": "Positive integers that name the group of each observation: a column vector, or a matrix with one grouping variable per column.",
+          "pt": "Inteiros positivos que indicam o grupo de cada observação: um vetor coluna, ou uma matriz com uma variável de agrupamento por coluna."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Matrix of 0 and 1 with one row per observation. Each grouping variable contributes as many columns as its largest group number, and each row has exactly one 1 in every block.",
+          "pt": "Matriz de 0 e 1 com uma linha por observação. Cada variável de agrupamento contribui com tantas colunas quanto o seu maior número de grupo, e cada linha tem exatamente um 1 em cada bloco."
+        }
+      ],
+      "description": {
+        "en": "`dummyvar` turns a categorical predictor into numeric columns so it can be used in a regression or a design matrix. Row `i` of `D` has a 1 in the column of the group that observation `i` belongs to and 0 elsewhere.\n\nThe columns of one block always add up to a column of ones, so a model with an intercept and every column of a block is rank deficient. Drop one column of each block, or drop the intercept, before fitting.",
+        "pt": "`dummyvar` transforma um preditor categórico em colunas numéricas para uso em uma regressão ou em uma matriz de planejamento. A linha `i` de `D` tem 1 na coluna do grupo a que a observação `i` pertence e 0 nas demais.\n\nAs colunas de um bloco sempre somam uma coluna de uns, então um modelo com intercepto e todas as colunas de um bloco tem posto deficiente. Remova uma coluna de cada bloco, ou o intercepto, antes de ajustar."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One grouping variable",
+            "pt": "Uma variável de agrupamento"
+          },
+          "code": "g = [1 2 3 1 2]';\nD = dummyvar(g)\ndisp(sum(D))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Two grouping variables",
+            "pt": "Duas variáveis de agrupamento"
+          },
+          "code": "g = [1 2; 1 1; 2 2];\nD = dummyvar(g)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "grp2idx",
+        "regress",
+        "x2fx",
+        "anova1"
+      ]
+    },
+    "grp2idx": {
+      "summary": {
+        "en": "Converts a grouping variable into integer group indices, with the name of each group.",
+        "pt": "Converte uma variável de agrupamento em índices inteiros de grupo, junto com o nome de cada grupo."
+      },
+      "syntax": [
+        {
+          "code": "[g, gn] = grp2idx(s)",
+          "en": "Returns the group index of each element of `s` and the group names as a cell array of character vectors.",
+          "pt": "Retorna o índice de grupo de cada elemento de `s` e os nomes dos grupos como um cell array de vetores de caracteres."
+        },
+        {
+          "code": "[g, gn, gl] = grp2idx(s)",
+          "en": "Also returns the distinct values (levels) in the same type as `s`.",
+          "pt": "Retorna também os valores distintos (níveis) no mesmo tipo de `s`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "s",
+          "en": "Grouping variable: a numeric or logical vector, or a cell array of character vectors. Missing values (`NaN`, empty text) belong to no group.",
+          "pt": "Variável de agrupamento: um vetor numérico ou lógico, ou um cell array de vetores de caracteres. Valores ausentes (`NaN`, texto vazio) não pertencem a nenhum grupo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "g",
+          "en": "Column vector of group indices, from 1 to the number of groups, with `NaN` where `s` is missing.",
+          "pt": "Vetor coluna de índices de grupo, de 1 até o número de grupos, com `NaN` onde `s` é ausente."
+        },
+        {
+          "name": "gn",
+          "en": "Cell array with the name of each group, as text.",
+          "pt": "Cell array com o nome de cada grupo, como texto."
+        },
+        {
+          "name": "gl",
+          "en": "Distinct values of `s`, in the order of the group indices.",
+          "pt": "Valores distintos de `s`, na ordem dos índices de grupo."
+        }
+      ],
+      "description": {
+        "en": "`grp2idx` gives every distinct value of a grouping variable a number, so the labels can be used as indices into per-group arrays. For numeric input the groups are numbered in increasing order of value. For text labels they are numbered in the order of first appearance.\n\nThe result `gn(g)` rebuilds the original labels as text, which is handy for labelling plots and tables of group statistics.",
+        "pt": "`grp2idx` dá um número a cada valor distinto de uma variável de agrupamento, de modo que os rótulos possam ser usados como índices de arrays por grupo. Para entrada numérica, os grupos são numerados em ordem crescente de valor. Para rótulos de texto, na ordem da primeira aparição.\n\nO resultado `gn(g)` reconstrói os rótulos originais como texto, o que ajuda a rotular gráficos e tabelas de estatísticas por grupo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Text labels",
+            "pt": "Rótulos de texto"
+          },
+          "code": "s = {'b','a','b','c','a'}';\n[g, gn] = grp2idx(s);\ndisp(g')\ndisp(gn')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Numeric labels with a missing value",
+            "pt": "Rótulos numéricos com um valor ausente"
+          },
+          "code": "s = [30 10 30 20 NaN]';\n[g, gn, gl] = grp2idx(s);\ndisp(g')\ndisp(gl')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "dummyvar",
+        "unique",
+        "anova1",
+        "confusionmat"
+      ],
+      "notes": {
+        "en": "Categorical arrays (`categorical`) are not supported as input.",
+        "pt": "Arrays categóricos (`categorical`) não são aceitos como entrada."
+      }
+    },
+    "anova1": {
+      "summary": {
+        "en": "One-way analysis of variance: tests whether several groups share the same mean, and returns the p-value, the ANOVA table and group statistics.",
+        "pt": "Análise de variância de um fator: testa se vários grupos têm a mesma média e retorna o valor-p, a tabela ANOVA e estatísticas dos grupos."
+      },
+      "syntax": [
+        {
+          "code": "p = anova1(y)",
+          "en": "Treats each column of the matrix `y` as one group and returns the p-value of the F test.",
+          "pt": "Trata cada coluna da matriz `y` como um grupo e retorna o valor-p do teste F."
+        },
+        {
+          "code": "p = anova1(y, group)",
+          "en": "Takes a vector `y` and a vector `group` that labels each element.",
+          "pt": "Recebe um vetor `y` e um vetor `group` que rotula cada elemento."
+        },
+        {
+          "code": "[p, tbl, stats] = anova1(y, group, displayopt)",
+          "en": "Also returns the ANOVA table as a cell array and a structure of group statistics. `displayopt` is `'on'` or `'off'`.",
+          "pt": "Retorna também a tabela ANOVA como cell array e uma estrutura com estatísticas dos grupos. `displayopt` é `'on'` ou `'off'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Measurements. A matrix with one group per column (balanced data), or a vector when `group` is given.",
+          "pt": "Medições. Uma matriz com um grupo por coluna (dados balanceados), ou um vetor quando `group` é informado."
+        },
+        {
+          "name": "group",
+          "en": "Group label of each element of `y`: numeric vector or cell array of character vectors. For a matrix `y` use `[]`, or a cell array with one name per column.",
+          "pt": "Rótulo de grupo de cada elemento de `y`: vetor numérico ou cell array de vetores de caracteres. Para uma matriz `y`, use `[]` ou um cell array com um nome por coluna."
+        },
+        {
+          "name": "displayopt",
+          "en": "`'on'` (default) or `'off'`.",
+          "pt": "`'on'` (padrão) ou `'off'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the F test of equal group means. A small value is evidence that at least one mean differs.",
+          "pt": "Valor-p do teste F de médias iguais entre os grupos. Um valor pequeno indica que pelo menos uma média difere."
+        },
+        {
+          "name": "tbl",
+          "en": "ANOVA table as a cell array with columns Source, SS, df, MS, F and Prob>F, and rows Columns (between groups), Error and Total.",
+          "pt": "Tabela ANOVA como cell array com as colunas Source, SS, df, MS, F e Prob>F, e as linhas Columns (entre grupos), Error e Total."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `gnames`, `n` (group sizes), `means`, `df` (error degrees of freedom) and `s` (pooled standard deviation).",
+          "pt": "Estrutura com `gnames`, `n` (tamanhos dos grupos), `means`, `df` (graus de liberdade do erro) e `s` (desvio padrão combinado)."
+        }
+      ],
+      "description": {
+        "en": "`anova1` splits the total variation of `y` into variation between the group means and variation inside the groups. The F statistic is the ratio of the two mean squares, and the p-value is the chance of an F at least that large if all groups had the same mean.\n\nThe test assumes independent observations, roughly normal errors and equal variances in the groups. When these assumptions are doubtful, `kruskalwallis` is a rank-based alternative.",
+        "pt": "`anova1` divide a variação total de `y` em variação entre as médias dos grupos e variação dentro dos grupos. A estatística F é a razão entre os dois quadrados médios, e o valor-p é a chance de obter um F pelo menos tão grande se todos os grupos tivessem a mesma média.\n\nO teste supõe observações independentes, erros aproximadamente normais e variâncias iguais nos grupos. Quando essas hipóteses são duvidosas, `kruskalwallis` é uma alternativa baseada em postos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three groups in the columns of a matrix",
+            "pt": "Três grupos nas colunas de uma matriz"
+          },
+          "code": "y = [6 9 14; 8 11 13; 7 10 15; 5 12 12; 9 8 16];\n[p, tbl, st] = anova1(y, [], 'off');\nfprintf('F = %.4f, p = %.5f\\n', tbl{2,5}, p)\ndisp(st.means)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Vector with text group labels",
+            "pt": "Vetor com rótulos de grupo em texto"
+          },
+          "code": "y = [6 8 7 5 9 9 11 10 12 8 14 13 15 12 16];\ng = [repmat({'a'},1,5) repmat({'b'},1,5) repmat({'c'},1,5)];\n[p, tbl, st] = anova1(y, g, 'off');\nfprintf('p = %.5f\\n', p)\ndisp(st.gnames')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "anova2",
+        "kruskalwallis",
+        "grp2idx",
+        "ttest2",
+        "ranksum"
+      ],
+      "notes": {
+        "en": "The ANOVA table and box plot figures are not drawn, even with `'on'`: use the outputs. For `single` input the sums are computed in double and rounded to single, so results can differ from MATLAB's single arithmetic at about 1e-6.",
+        "pt": "As figuras da tabela ANOVA e do box plot não são desenhadas, mesmo com `'on'`: use as saídas. Para entrada `single`, as somas são calculadas em double e arredondadas para single, então os resultados podem diferir da aritmética single do MATLAB em cerca de 1e-6."
+      }
+    },
+    "anova2": {
+      "summary": {
+        "en": "Two-way analysis of variance for balanced data: tests the column effect, the row effect and, with replicates, their interaction.",
+        "pt": "Análise de variância de dois fatores para dados balanceados: testa o efeito das colunas, o das linhas e, com repetições, a interação."
+      },
+      "syntax": [
+        {
+          "code": "p = anova2(x, reps)",
+          "en": "Returns the p-values of the column effect, the row effect and, when `reps > 1`, the interaction.",
+          "pt": "Retorna os valores-p do efeito de coluna, do efeito de linha e, quando `reps > 1`, da interação."
+        },
+        {
+          "code": "[p, tbl, stats] = anova2(x, reps, displayopt)",
+          "en": "Also returns the ANOVA table as a cell array and a structure of statistics. `displayopt` is `'on'` or `'off'`.",
+          "pt": "Retorna também a tabela ANOVA como cell array e uma estrutura de estatísticas. `displayopt` é `'on'` ou `'off'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Data matrix. Columns are the levels of the first factor; rows are the levels of the second factor, with each level repeated `reps` times in consecutive rows.",
+          "pt": "Matriz de dados. As colunas são os níveis do primeiro fator; as linhas são os níveis do segundo fator, com cada nível repetido `reps` vezes em linhas consecutivas."
+        },
+        {
+          "name": "reps",
+          "en": "Number of replicates per cell (default 1). The number of rows of `x` must be a multiple of it.",
+          "pt": "Número de repetições por célula (padrão 1). O número de linhas de `x` deve ser múltiplo dele."
+        },
+        {
+          "name": "displayopt",
+          "en": "`'on'` (default) or `'off'`.",
+          "pt": "`'on'` (padrão) ou `'off'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Row vector of p-values: columns effect, rows effect and, when `reps > 1`, the interaction.",
+          "pt": "Vetor linha de valores-p: efeito das colunas, efeito das linhas e, quando `reps > 1`, a interação."
+        },
+        {
+          "name": "tbl",
+          "en": "ANOVA table as a cell array with the rows Columns, Rows, Interaction (only with replicates), Error and Total.",
+          "pt": "Tabela ANOVA como cell array com as linhas Columns, Rows, Interaction (somente com repetições), Error e Total."
+        },
+        {
+          "name": "stats",
+          "en": "Structure of group means and sizes.",
+          "pt": "Estrutura com as médias e os tamanhos dos grupos."
+        }
+      ],
+      "description": {
+        "en": "`anova2` compares means across two crossed factors at once. A small p-value for the columns means that the column averages differ after accounting for the rows, and the same reading holds for the rows.\n\nWithout replicates (`reps = 1`) there is no way to separate interaction from error, so the table has no Interaction row and the interaction is assumed absent. With replicates the interaction is tested and tells you whether the effect of one factor depends on the level of the other.",
+        "pt": "`anova2` compara médias entre dois fatores cruzados ao mesmo tempo. Um valor-p pequeno para as colunas indica que as médias das colunas diferem depois de considerar as linhas, e a mesma leitura vale para as linhas.\n\nSem repetições (`reps = 1`) não há como separar a interação do erro, então a tabela não tem a linha Interaction e a interação é considerada ausente. Com repetições, a interação é testada e indica se o efeito de um fator depende do nível do outro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two replicates per cell",
+            "pt": "Duas repetições por célula"
+          },
+          "code": "x = [4 6 8; 5 7 9; 6 8 10; 7 9 11; 3 9 7; 2 4 8];\n[p, tbl] = anova2(x, 2, 'off');\ndisp(round(p*10000)/10000)\ndisp(tbl(:,1)')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "No replicates",
+            "pt": "Sem repetições"
+          },
+          "code": "x = [4 6 8; 5 7 11; 6 9 10; 7 8 12];\n[p, tbl] = anova2(x, 1, 'off');\ndisp(round(p*10000)/10000)\nfprintf('%.4f\\n', tbl{2,5})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "anova1",
+        "friedman",
+        "kruskalwallis",
+        "dummyvar"
+      ],
+      "notes": {
+        "en": "The ANOVA table figure is not drawn, even with `'on'`: use the outputs.",
+        "pt": "A figura da tabela ANOVA não é desenhada, mesmo com `'on'`: use as saídas."
+      }
+    },
+    "canoncorr": {
+      "summary": {
+        "en": "Canonical correlation analysis: finds linear combinations of two sets of variables that are as correlated as possible.",
+        "pt": "Análise de correlação canônica: encontra combinações lineares de dois conjuntos de variáveis que sejam o mais correlacionadas possível."
+      },
+      "syntax": [
+        {
+          "code": "[A, B] = canoncorr(X, Y)",
+          "en": "Returns the coefficients of the canonical variables of `X` and of `Y`.",
+          "pt": "Retorna os coeficientes das variáveis canônicas de `X` e de `Y`."
+        },
+        {
+          "code": "[A, B, r] = canoncorr(X, Y)",
+          "en": "Also returns the canonical correlations.",
+          "pt": "Retorna também as correlações canônicas."
+        },
+        {
+          "code": "[A, B, r, U, V, stats] = canoncorr(X, Y)",
+          "en": "Also returns the canonical scores and the test statistics for each correlation.",
+          "pt": "Retorna também os escores canônicos e as estatísticas de teste de cada correlação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix: n observations of p variables.",
+          "pt": "Matriz n por p: n observações de p variáveis."
+        },
+        {
+          "name": "Y",
+          "en": "n-by-q matrix: the same n observations of q other variables.",
+          "pt": "Matriz n por q: as mesmas n observações de outras q variáveis."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "A",
+          "en": "p-by-d coefficients that combine the columns of `X`, where d is the smaller rank of the two sets.",
+          "pt": "Coeficientes p por d que combinam as colunas de `X`, em que d é o menor posto dos dois conjuntos."
+        },
+        {
+          "name": "B",
+          "en": "q-by-d coefficients that combine the columns of `Y`.",
+          "pt": "Coeficientes q por d que combinam as colunas de `Y`."
+        },
+        {
+          "name": "r",
+          "en": "1-by-d canonical correlations, from the largest to the smallest.",
+          "pt": "Correlações canônicas 1 por d, da maior para a menor."
+        },
+        {
+          "name": "U",
+          "en": "n-by-d canonical scores of `X` (centered `X` times `A`).",
+          "pt": "Escores canônicos n por d de `X` (`X` centrado vezes `A`)."
+        },
+        {
+          "name": "V",
+          "en": "n-by-d canonical scores of `Y` (centered `Y` times `B`).",
+          "pt": "Escores canônicos n por d de `Y` (`Y` centrado vezes `B`)."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with the Wilks lambda test of each correlation: `Wilks`, `df1`, `df2`, `F`, `pF`, `chisq`, `pChisq`, `dfe` and `p`.",
+          "pt": "Estrutura com o teste lambda de Wilks de cada correlação: `Wilks`, `df1`, `df2`, `F`, `pF`, `chisq`, `pChisq`, `dfe` e `p`."
+        }
+      ],
+      "description": {
+        "en": "`canoncorr` looks for the pair of combinations, one of the columns of `X` and one of the columns of `Y`, whose correlation is highest. The next pair is the most correlated one that is uncorrelated with the first, and so on. The scores `U(:,k)` and `V(:,k)` of the same pair have correlation `r(k)`.\n\nIn `stats`, the k-th entry of `p` tests the hypothesis that the k-th and all later canonical correlations are zero. Rows with `NaN` in either matrix are left out.",
+        "pt": "`canoncorr` procura o par de combinações, uma das colunas de `X` e outra das colunas de `Y`, cuja correlação é a maior. O par seguinte é o mais correlacionado entre os que não são correlacionados com o primeiro, e assim por diante. Os escores `U(:,k)` e `V(:,k)` de um mesmo par têm correlação `r(k)`.\n\nEm `stats`, a k-ésima entrada de `p` testa a hipótese de que a k-ésima e todas as correlações canônicas seguintes são nulas. Linhas com `NaN` em qualquer das matrizes são ignoradas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Canonical correlations of two sets",
+            "pt": "Correlações canônicas de dois conjuntos"
+          },
+          "code": "t = (1:12)';\nX = [sin(t) cos(2*t) t/12];\nY = [X(:,1)+0.3*cos(3*t) X(:,2).^2+0.1*t];\n[A, B, r, U, V, st] = canoncorr(X, Y);\ndisp(round(r*10000)/10000)\ndisp(size(A))\ndisp(round(st.p*10000)/10000)\nfprintf('%.4f\\n', corr(U(:,1), V(:,1)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "corr",
+        "pca",
+        "cmdscale",
+        "regress"
+      ],
+      "notes": {
+        "en": "The signs of the canonical vectors (columns of `A`, `B`, `U` and `V`) can be the opposite of MATLAB's, because MatLivre's SVD does not follow the LAPACK sign convention. The correlations `r` and the statistics in `stats` are not affected.",
+        "pt": "Os sinais dos vetores canônicos (colunas de `A`, `B`, `U` e `V`) podem ser opostos aos do MATLAB, porque a SVD do MatLivre não segue a convenção de sinais do LAPACK. As correlações `r` e as estatísticas de `stats` não são afetadas."
+      }
+    },
+    "classify": {
+      "summary": {
+        "en": "Discriminant analysis: assigns each sample row to one of the groups of the training data, using a linear or quadratic rule.",
+        "pt": "Análise discriminante: atribui cada linha de amostra a um dos grupos dos dados de treinamento, com uma regra linear ou quadrática."
+      },
+      "syntax": [
+        {
+          "code": "class = classify(sample, training, group)",
+          "en": "Linear discriminant analysis: classifies each row of `sample` into one of the groups of `training`.",
+          "pt": "Análise discriminante linear: classifica cada linha de `sample` em um dos grupos de `training`."
+        },
+        {
+          "code": "class = classify(sample, training, group, type)",
+          "en": "Chooses the kind of discriminant function with `type`.",
+          "pt": "Escolhe o tipo de função discriminante com `type`."
+        },
+        {
+          "code": "[class, err, post] = classify(sample, training, group, type, prior)",
+          "en": "Also returns the training error rate and the posterior probabilities, with prior probabilities `prior`.",
+          "pt": "Retorna também a taxa de erro no treinamento e as probabilidades a posteriori, com probabilidades a priori `prior`."
+        },
+        {
+          "code": "[class, err, post, logp, coeff] = classify(...)",
+          "en": "Also returns the log of the density of each sample and the coefficients of the boundaries between groups.",
+          "pt": "Retorna também o logaritmo da densidade de cada amostra e os coeficientes das fronteiras entre grupos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "sample",
+          "en": "m-by-p matrix: the rows to classify.",
+          "pt": "Matriz m por p: as linhas a classificar."
+        },
+        {
+          "name": "training",
+          "en": "n-by-p matrix: the training rows, with the same columns as `sample`.",
+          "pt": "Matriz n por p: as linhas de treinamento, com as mesmas colunas de `sample`."
+        },
+        {
+          "name": "group",
+          "en": "Group of each training row: numeric vector or cell array of character vectors with n elements.",
+          "pt": "Grupo de cada linha de treinamento: vetor numérico ou cell array de vetores de caracteres com n elementos."
+        },
+        {
+          "name": "type",
+          "en": "`'linear'` (default), `'quadratic'`, `'diaglinear'`, `'diagquadratic'` or `'mahalanobis'`.",
+          "pt": "`'linear'` (padrão), `'quadratic'`, `'diaglinear'`, `'diagquadratic'` ou `'mahalanobis'`."
+        },
+        {
+          "name": "prior",
+          "en": "Prior probabilities: a vector with one value per group (they sum to 1), or `'empirical'` to use the group frequencies in `training`. Default: equal priors.",
+          "pt": "Probabilidades a priori: um vetor com um valor por grupo (somando 1), ou `'empirical'` para usar as frequências dos grupos em `training`. Padrão: probabilidades iguais."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "class",
+          "en": "Assigned group of each row of `sample`, in the same type as `group`.",
+          "pt": "Grupo atribuído a cada linha de `sample`, no mesmo tipo de `group`."
+        },
+        {
+          "name": "err",
+          "en": "Estimated error rate: the fraction of training rows that the rule misclassifies.",
+          "pt": "Taxa de erro estimada: a fração das linhas de treinamento que a regra classifica errado."
+        },
+        {
+          "name": "post",
+          "en": "m-by-k posterior probabilities: row `i` gives the probability of each of the k groups for sample `i`.",
+          "pt": "Probabilidades a posteriori m por k: a linha `i` dá a probabilidade de cada um dos k grupos para a amostra `i`."
+        },
+        {
+          "name": "logp",
+          "en": "m-by-1 logarithm of the unconditional density of each sample.",
+          "pt": "Logaritmo m por 1 da densidade incondicional de cada amostra."
+        },
+        {
+          "name": "coeff",
+          "en": "k-by-k structure array: `coeff(i,j)` holds the `type`, the two group names, `const`, `linear` and, for quadratic types, `quadratic` of the boundary between groups i and j.",
+          "pt": "Array de estruturas k por k: `coeff(i,j)` guarda o `type`, os nomes dos dois grupos, `const`, `linear` e, nos tipos quadráticos, `quadratic` da fronteira entre os grupos i e j."
+        }
+      ],
+      "description": {
+        "en": "`classify` fits a normal model to each group of the training data and gives each sample to the group with the highest posterior probability. `'linear'` uses one pooled covariance matrix for all groups, so the boundaries are straight lines or planes. `'quadratic'` uses one covariance matrix per group and gives curved boundaries.\n\nThe `diag` types assume uncorrelated variables, and `'mahalanobis'` assigns by Mahalanobis distance to each group mean. The error `err` is measured on the training rows themselves, so it is optimistic. For a model object that you can reuse, see `fitcdiscr`.",
+        "pt": "`classify` ajusta um modelo normal a cada grupo dos dados de treinamento e atribui cada amostra ao grupo de maior probabilidade a posteriori. `'linear'` usa uma única matriz de covariância combinada para todos os grupos, então as fronteiras são retas ou planos. `'quadratic'` usa uma matriz de covariância por grupo e gera fronteiras curvas.\n\nOs tipos `diag` supõem variáveis não correlacionadas, e `'mahalanobis'` atribui pela distância de Mahalanobis até a média de cada grupo. O erro `err` é medido nas próprias linhas de treinamento, então é otimista. Para um objeto de modelo reutilizável, veja `fitcdiscr`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Linear and quadratic rules",
+            "pt": "Regras linear e quadrática"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\ns = [1.2 1.5; 5 5; 3.6 3.1];\n[c, err, post] = classify(s, X, g);\ndisp(c')\nfprintf('%.4f\\n', err)\ndisp(round(post*1000)/1000)\ncq = classify(s, X, g, 'quadratic');\ndisp(cq')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Text group names and priors",
+            "pt": "Nomes de grupo em texto e probabilidades a priori"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\ngl = [repmat({'A'},6,1); repmat({'B'},6,1)];\ns = [1.2 1.5; 5 5; 3.6 3.1];\nc = classify(s, X, gl, 'linear', [0.8 0.2]);\ndisp(c')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitcdiscr",
+        "fitcnb",
+        "fitcknn",
+        "mahal",
+        "confusionmat"
+      ]
+    },
+    "fitcdiscr": {
+      "summary": {
+        "en": "Fits a discriminant analysis classifier (linear, quadratic or a diagonal or pseudo variant) and returns a model object for predicting the class of new rows.",
+        "pt": "Ajusta um classificador de análise discriminante (linear, quadrático ou variante) e retorna um objeto de modelo para prever a classe de novas linhas."
+      },
+      "syntax": [
+        {
+          "code": "mdl = fitcdiscr(X, Y)",
+          "en": "Fits a linear discriminant model to the predictors `X` and the class labels `Y`.",
+          "pt": "Ajusta um modelo discriminante linear aos preditores `X` e aos rótulos de classe `Y`."
+        },
+        {
+          "code": "mdl = fitcdiscr(X, Y, Name, Value)",
+          "en": "Sets options such as `'DiscrimType'`, `'Prior'`, `'Gamma'` or `'Delta'`.",
+          "pt": "Define opções como `'DiscrimType'`, `'Prior'`, `'Gamma'` ou `'Delta'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of predictors: one row per observation, one column per predictor.",
+          "pt": "Matriz n por p de preditores: uma linha por observação, uma coluna por preditor."
+        },
+        {
+          "name": "Y",
+          "en": "Class label of each row: numeric vector or cell array of character vectors with n elements.",
+          "pt": "Rótulo de classe de cada linha: vetor numérico ou cell array de vetores de caracteres com n elementos."
+        },
+        {
+          "name": "'DiscrimType'",
+          "en": "`'linear'` (default), `'quadratic'`, `'diaglinear'`, `'diagquadratic'`, `'pseudolinear'` or `'pseudoquadratic'`.",
+          "pt": "`'linear'` (padrão), `'quadratic'`, `'diaglinear'`, `'diagquadratic'`, `'pseudolinear'` ou `'pseudoquadratic'`."
+        },
+        {
+          "name": "'Prior'",
+          "en": "Prior probabilities of the classes: a vector, or `'empirical'` (default, the class frequencies) or `'uniform'`.",
+          "pt": "Probabilidades a priori das classes: um vetor, ou `'empirical'` (padrão, as frequências das classes) ou `'uniform'`."
+        },
+        {
+          "name": "'Gamma'",
+          "en": "Regularization of the covariance matrix, a number from 0 to 1. Default 0.",
+          "pt": "Regularização da matriz de covariância, um número de 0 a 1. Padrão 0."
+        },
+        {
+          "name": "'Delta'",
+          "en": "Linear coefficient threshold, a nonnegative number. Default 0.",
+          "pt": "Limiar dos coeficientes lineares, um número não negativo. Padrão 0."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mdl",
+          "en": "Model object of class `ClassificationDiscriminant` with properties such as `ClassNames`, `Prior`, `Mu` (class means), `Sigma` (covariance), `DiscrimType` and `Coeffs` (boundary coefficients). Use `predict`, `loss` and `resubLoss` with it.",
+          "pt": "Objeto de modelo da classe `ClassificationDiscriminant` com propriedades como `ClassNames`, `Prior`, `Mu` (médias das classes), `Sigma` (covariância), `DiscrimType` e `Coeffs` (coeficientes das fronteiras). Use `predict`, `loss` e `resubLoss` com ele."
+        }
+      ],
+      "description": {
+        "en": "`fitcdiscr` estimates the mean of every class and a covariance matrix (one shared matrix for the linear types, one per class for the quadratic types). `predict` then gives a new row to the class with the highest posterior probability, and also returns the scores (posterior probabilities) and the expected misclassification cost.\n\nThe `pseudo` types use a pseudo-inverse, which works when a predictor is constant or when predictors are perfectly correlated. `resubLoss` is the error on the training rows and is optimistic about new data.",
+        "pt": "`fitcdiscr` estima a média de cada classe e uma matriz de covariância (uma compartilhada nos tipos lineares, uma por classe nos tipos quadráticos). Em seguida, `predict` atribui uma nova linha à classe de maior probabilidade a posteriori, e também retorna os escores (probabilidades a posteriori) e o custo esperado de classificação errada.\n\nOs tipos `pseudo` usam uma pseudoinversa, o que funciona quando um preditor é constante ou quando há preditores perfeitamente correlacionados. `resubLoss` é o erro nas linhas de treinamento e é otimista para dados novos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and predict",
+            "pt": "Ajustar e prever"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcdiscr(X, g);\ns = [1.2 1.5; 5 5; 3.6 3.1];\n[lab, score] = predict(mdl, s);\ndisp(lab')\ndisp(round(score*1000)/1000)\nfprintf('%.4f\\n', resubLoss(mdl))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Quadratic type and priors",
+            "pt": "Tipo quadrático e probabilidades a priori"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcdiscr(X, g, 'DiscrimType', 'quadratic', 'Prior', [0.7 0.3]);\ndisp(mdl.DiscrimType)\ndisp(mdl.Prior)\ndisp(round(mdl.Mu*100)/100)\ndisp(predict(mdl, [3.6 3.1])')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "classify",
+        "fitcnb",
+        "fitcknn",
+        "predict",
+        "confusionmat"
+      ],
+      "notes": {
+        "en": "Not supported: automatic hyperparameter optimization (`'OptimizeHyperparameters'` is rejected) and cross-validation of the fitted model (`crossval`).",
+        "pt": "Não há suporte para: otimização automática de hiperparâmetros (`'OptimizeHyperparameters'` é rejeitado) e validação cruzada do modelo ajustado (`crossval`)."
+      }
+    },
+    "confusionmat": {
+      "summary": {
+        "en": "Builds the confusion matrix that counts how often each true class was predicted as each class.",
+        "pt": "Monta a matriz de confusão, que conta quantas vezes cada classe verdadeira foi prevista como cada classe."
+      },
+      "syntax": [
+        {
+          "code": "C = confusionmat(known, predicted)",
+          "en": "Counts the pairs of known and predicted labels.",
+          "pt": "Conta os pares de rótulos conhecidos e previstos."
+        },
+        {
+          "code": "[C, order] = confusionmat(known, predicted)",
+          "en": "Also returns the class order used for the rows and columns.",
+          "pt": "Retorna também a ordem das classes usada nas linhas e colunas."
+        },
+        {
+          "code": "C = confusionmat(known, predicted, 'Order', order)",
+          "en": "Uses the classes in `order`, in that order.",
+          "pt": "Usa as classes de `order`, nessa ordem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "known",
+          "en": "True class of each observation: numeric or logical vector, or cell array of character vectors.",
+          "pt": "Classe verdadeira de cada observação: vetor numérico ou lógico, ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "predicted",
+          "en": "Predicted class of each observation, of the same type and length as `known`.",
+          "pt": "Classe prevista de cada observação, do mesmo tipo e tamanho de `known`."
+        },
+        {
+          "name": "'Order'",
+          "en": "Classes to include and their order. Observations whose class is not in `order` are not counted.",
+          "pt": "Classes a incluir e sua ordem. Observações cuja classe não está em `order` não são contadas."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "k-by-k matrix of counts: `C(i,j)` is the number of observations whose true class is the i-th and whose predicted class is the j-th. Correct predictions are on the diagonal.",
+          "pt": "Matriz k por k de contagens: `C(i,j)` é o número de observações cuja classe verdadeira é a i-ésima e cuja classe prevista é a j-ésima. As previsões corretas ficam na diagonal."
+        },
+        {
+          "name": "order",
+          "en": "Classes in the order of the rows and columns of `C`.",
+          "pt": "Classes na ordem das linhas e colunas de `C`."
+        }
+      ],
+      "description": {
+        "en": "The confusion matrix shows not only how many predictions were wrong but which classes get mixed up. The accuracy is `trace(C)/sum(C(:))`, and dividing each row by its sum gives the recall of each class.\n\nObservations with a missing label (`NaN` or empty text) in either input are ignored. By default the classes are sorted, so numbers go in increasing order and text in alphabetical order.",
+        "pt": "A matriz de confusão mostra não só quantas previsões foram erradas, mas quais classes são confundidas entre si. A acurácia é `trace(C)/sum(C(:))`, e dividir cada linha pela sua soma dá a revocação (recall) de cada classe.\n\nObservações com rótulo ausente (`NaN` ou texto vazio) em qualquer das entradas são ignoradas. Por padrão as classes são ordenadas: números em ordem crescente e texto em ordem alfabética."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three classes",
+            "pt": "Três classes"
+          },
+          "code": "known = [1 2 1 3 3 2 1 2 3 3]';\npred  = [1 2 2 3 3 1 1 2 3 2]';\n[C, order] = confusionmat(known, pred)\nfprintf('accuracy = %.2f\\n', trace(C)/sum(C(:)))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Text labels and chosen order",
+            "pt": "Rótulos de texto e ordem escolhida"
+          },
+          "code": "known = {'cat','dog','cat','dog','dog'}';\npred  = {'cat','cat','cat','dog','dog'}';\nC = confusionmat(known, pred, 'Order', {'dog','cat'})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "perfcurve",
+        "classify",
+        "fitcdiscr",
+        "fitcknn",
+        "grp2idx"
+      ],
+      "notes": {
+        "en": "Categorical arrays (`categorical`) are not supported as input.",
+        "pt": "Arrays categóricos (`categorical`) não são aceitos como entrada."
+      }
+    },
+    "perfcurve": {
+      "summary": {
+        "en": "Computes a receiver operating characteristic (ROC) curve, or another performance curve, and the area under it from classifier scores.",
+        "pt": "Calcula uma curva ROC (característica de operação do receptor), ou outra curva de desempenho, e a área sob ela a partir dos escores de um classificador."
+      },
+      "syntax": [
+        {
+          "code": "[X, Y] = perfcurve(labels, scores, posclass)",
+          "en": "Returns the false positive rate `X` and the true positive rate `Y` for every score threshold.",
+          "pt": "Retorna a taxa de falsos positivos `X` e a taxa de verdadeiros positivos `Y` para cada limiar de escore."
+        },
+        {
+          "code": "[X, Y, T, AUC, OPTROCPT] = perfcurve(labels, scores, posclass)",
+          "en": "Also returns the thresholds, the area under the curve and the optimal operating point.",
+          "pt": "Retorna também os limiares, a área sob a curva e o ponto ótimo de operação."
+        },
+        {
+          "code": "[X, Y, T, AUC] = perfcurve(..., 'XCrit', xcrit, 'YCrit', ycrit)",
+          "en": "Plots other criteria on the axes, for example precision against recall.",
+          "pt": "Usa outros critérios nos eixos, por exemplo precisão contra revocação."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "labels",
+          "en": "True class of each observation: numeric or logical vector, or cell array of character vectors.",
+          "pt": "Classe verdadeira de cada observação: vetor numérico ou lógico, ou cell array de vetores de caracteres."
+        },
+        {
+          "name": "scores",
+          "en": "Classifier score of each observation. A higher score means a more likely positive class.",
+          "pt": "Escore do classificador para cada observação. Um escore maior indica classe positiva mais provável."
+        },
+        {
+          "name": "posclass",
+          "en": "Label that counts as the positive class.",
+          "pt": "Rótulo que conta como classe positiva."
+        },
+        {
+          "name": "'NegClass'",
+          "en": "Label or labels that count as negative. Default: all labels other than `posclass`.",
+          "pt": "Rótulo ou rótulos que contam como negativos. Padrão: todos os rótulos diferentes de `posclass`."
+        },
+        {
+          "name": "'XCrit'",
+          "en": "Criterion on the X axis. Default `'fpr'`. Others include `'tpr'`, `'reca'`, `'prec'`, `'ppv'` and `'accu'`.",
+          "pt": "Critério do eixo X. Padrão `'fpr'`. Outros incluem `'tpr'`, `'reca'`, `'prec'`, `'ppv'` e `'accu'`."
+        },
+        {
+          "name": "'YCrit'",
+          "en": "Criterion on the Y axis. Default `'tpr'`, with the same options as `'XCrit'`.",
+          "pt": "Critério do eixo Y. Padrão `'tpr'`, com as mesmas opções de `'XCrit'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Values of the X criterion, one per threshold.",
+          "pt": "Valores do critério X, um por limiar."
+        },
+        {
+          "name": "Y",
+          "en": "Values of the Y criterion, one per threshold.",
+          "pt": "Valores do critério Y, um por limiar."
+        },
+        {
+          "name": "T",
+          "en": "Score thresholds that produce the points `(X, Y)`.",
+          "pt": "Limiares de escore que produzem os pontos `(X, Y)`."
+        },
+        {
+          "name": "AUC",
+          "en": "Area under the curve. For the ROC curve, 0.5 means no better than chance and 1 means perfect separation.",
+          "pt": "Área sob a curva. Para a curva ROC, 0,5 significa nada melhor que o acaso e 1 significa separação perfeita."
+        },
+        {
+          "name": "OPTROCPT",
+          "en": "1-by-2 point of the ROC curve closest to the perfect corner (0, 1), as `[FPR TPR]`.",
+          "pt": "Ponto 1 por 2 da curva ROC mais próximo do canto perfeito (0, 1), como `[FPR TPR]`."
+        }
+      ],
+      "description": {
+        "en": "A classifier that outputs a score becomes a yes/no rule once you pick a threshold. `perfcurve` sweeps the threshold over every score in the data and records the trade-off at each one. On the ROC curve, lowering the threshold finds more true positives (higher `Y`) at the price of more false positives (higher `X`).\n\nThe area under the ROC curve is the probability that a randomly chosen positive observation gets a higher score than a randomly chosen negative one.",
+        "pt": "Um classificador que produz um escore vira uma regra sim/não quando se escolhe um limiar. `perfcurve` varre o limiar por todos os escores dos dados e registra o compromisso em cada um. Na curva ROC, reduzir o limiar encontra mais verdadeiros positivos (`Y` maior) ao custo de mais falsos positivos (`X` maior).\n\nA área sob a curva ROC é a probabilidade de que uma observação positiva escolhida ao acaso receba escore maior que uma negativa escolhida ao acaso."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "ROC curve and area",
+            "pt": "Curva ROC e área"
+          },
+          "code": "sc = [0.9 0.8 0.7 0.6 0.55 0.54 0.53 0.51 0.505 0.4 0.38 0.35 0.3 0.1]';\nlb = [1 1 0 1 1 0 1 0 0 1 0 0 0 0]';\n[X, Y, T, AUC, opt] = perfcurve(lb, sc, 1);\nfprintf('points: %d, AUC = %.4f\\n', numel(X), AUC)\ndisp(opt)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Precision against recall",
+            "pt": "Precisão contra revocação"
+          },
+          "code": "sc = [0.9 0.8 0.7 0.6 0.55 0.54 0.53 0.51 0.505 0.4 0.38 0.35 0.3 0.1]';\nlb = [1 1 0 1 1 0 1 0 0 1 0 0 0 0]';\n[R, P, T, AUC] = perfcurve(lb, sc, 1, 'XCrit', 'reca', 'YCrit', 'prec');\nfprintf('area = %.4f\\n', AUC)\ndisp(round([R(2:5) P(2:5)]*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "confusionmat",
+        "fitcdiscr",
+        "fitcknn",
+        "fitcnb",
+        "classify"
+      ],
+      "notes": {
+        "en": "In single precision the optimal operating point `OPTROCPT` can be a different one of two tied points than MATLAB picks, because MATLAB's single arithmetic rounds the tie differently. The bootstrap confidence bounds options (`'NBoot'`) are accepted but no confidence bounds are returned.",
+        "pt": "Em precisão single, o ponto ótimo `OPTROCPT` pode ser outro entre dois pontos empatados, diferente do que o MATLAB escolhe, porque a aritmética single do MATLAB arredonda o empate de outro modo. As opções de intervalos bootstrap (`'NBoot'`) são aceitas, mas nenhum intervalo de confiança é retornado."
+      }
+    },
+    "fitcnb": {
+      "summary": {
+        "en": "Fits a naive Bayes classifier, which models each predictor of each class with an independent normal distribution, and returns a model object.",
+        "pt": "Ajusta um classificador naive Bayes, que modela cada preditor de cada classe com uma distribuição normal independente, e retorna um objeto de modelo."
+      },
+      "syntax": [
+        {
+          "code": "mdl = fitcnb(X, Y)",
+          "en": "Fits a naive Bayes model to the predictors `X` and the class labels `Y`.",
+          "pt": "Ajusta um modelo naive Bayes aos preditores `X` e aos rótulos de classe `Y`."
+        },
+        {
+          "code": "mdl = fitcnb(X, Y, Name, Value)",
+          "en": "Sets options such as `'Prior'`, `'ClassNames'` or `'DistributionNames'`.",
+          "pt": "Define opções como `'Prior'`, `'ClassNames'` ou `'DistributionNames'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of predictors: one row per observation, one column per predictor.",
+          "pt": "Matriz n por p de preditores: uma linha por observação, uma coluna por preditor."
+        },
+        {
+          "name": "Y",
+          "en": "Class label of each row: numeric vector or cell array of character vectors with n elements.",
+          "pt": "Rótulo de classe de cada linha: vetor numérico ou cell array de vetores de caracteres com n elementos."
+        },
+        {
+          "name": "'Prior'",
+          "en": "Prior probabilities of the classes: a vector, or `'empirical'` (default, the class frequencies) or `'uniform'`.",
+          "pt": "Probabilidades a priori das classes: um vetor, ou `'empirical'` (padrão, as frequências das classes) ou `'uniform'`."
+        },
+        {
+          "name": "'ClassNames'",
+          "en": "Classes to use, and their order.",
+          "pt": "Classes a usar e sua ordem."
+        },
+        {
+          "name": "'DistributionNames'",
+          "en": "Distribution of the predictors. Only `'normal'` works.",
+          "pt": "Distribuição dos preditores. Somente `'normal'` funciona."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mdl",
+          "en": "Model object of class `ClassificationNaiveBayes` with properties such as `ClassNames`, `Prior`, `DistributionNames` and `DistributionParameters`. Use `predict`, `loss` and `resubLoss` with it.",
+          "pt": "Objeto de modelo da classe `ClassificationNaiveBayes` com propriedades como `ClassNames`, `Prior`, `DistributionNames` e `DistributionParameters`. Use `predict`, `loss` e `resubLoss` com ele."
+        }
+      ],
+      "description": {
+        "en": "Naive Bayes assumes that, inside each class, the predictors are independent. It estimates the mean and standard deviation of every predictor in every class; `DistributionParameters{c,j}` holds `[mean; std]` of predictor `j` in class `c`. The posterior probability of a class is the prior times the product of the normal densities of the predictors.\n\nThe independence assumption is rarely exact, but the method is fast, needs little data and often ranks classes well. A predictor with zero variance inside a class cannot be fitted and raises an error.",
+        "pt": "O naive Bayes supõe que, dentro de cada classe, os preditores são independentes. Ele estima a média e o desvio padrão de cada preditor em cada classe; `DistributionParameters{c,j}` guarda `[média; desvio]` do preditor `j` na classe `c`. A probabilidade a posteriori de uma classe é a priori vezes o produto das densidades normais dos preditores.\n\nA suposição de independência raramente é exata, mas o método é rápido, precisa de poucos dados e muitas vezes ordena bem as classes. Um preditor com variância zero dentro de uma classe não pode ser ajustado e gera um erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and predict",
+            "pt": "Ajustar e prever"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcnb(X, g);\ns = [1.2 1.5; 5 5; 3.6 3.1];\n[lab, post] = predict(mdl, s);\ndisp(lab')\ndisp(round(post*1000)/1000)\nfprintf('%.4f\\n', resubLoss(mdl))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Fitted parameters",
+            "pt": "Parâmetros ajustados"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcnb(X, g);\ndisp(mdl.ClassNames')\ndisp(mdl.Prior)\ndisp(round(mdl.DistributionParameters{2,1}'*1000)/1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitcdiscr",
+        "fitcknn",
+        "classify",
+        "confusionmat",
+        "perfcurve"
+      ],
+      "notes": {
+        "en": "Only normal distributions are supported: `'DistributionNames'` set to `'kernel'`, `'mvmn'` or `'mn'` raises an error.",
+        "pt": "Só há suporte a distribuições normais: `'DistributionNames'` igual a `'kernel'`, `'mvmn'` ou `'mn'` gera um erro."
+      }
+    },
+    "createns": {
+      "summary": {
+        "en": "Creates a nearest neighbor searcher object for a data set, a k-d tree or an exhaustive searcher depending on the distance.",
+        "pt": "Cria um objeto buscador de vizinhos mais próximos para um conjunto de dados, uma k-d tree ou um buscador exaustivo conforme a distância."
+      },
+      "syntax": [
+        {
+          "code": "ns = createns(X)",
+          "en": "Creates a searcher for the rows of `X`: a `KDTreeSearcher` with Euclidean distance.",
+          "pt": "Cria um buscador para as linhas de `X`: um `KDTreeSearcher` com distância euclidiana."
+        },
+        {
+          "code": "ns = createns(X, 'NSMethod', method)",
+          "en": "Forces `'kdtree'` or `'exhaustive'`.",
+          "pt": "Força `'kdtree'` ou `'exhaustive'`."
+        },
+        {
+          "code": "ns = createns(X, 'Distance', dist)",
+          "en": "Chooses the distance. Distances that a k-d tree cannot use give an `ExhaustiveSearcher`.",
+          "pt": "Escolhe a distância. Distâncias que uma k-d tree não pode usar geram um `ExhaustiveSearcher`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix: one row per point.",
+          "pt": "Matriz n por p: uma linha por ponto."
+        },
+        {
+          "name": "'NSMethod'",
+          "en": "`'kdtree'` or `'exhaustive'`. Default: `'kdtree'` for `'euclidean'`, `'cityblock'`, `'chebychev'` and `'minkowski'`, and `'exhaustive'` for the other distances.",
+          "pt": "`'kdtree'` ou `'exhaustive'`. Padrão: `'kdtree'` para `'euclidean'`, `'cityblock'`, `'chebychev'` e `'minkowski'`, e `'exhaustive'` para as outras distâncias."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name, such as `'euclidean'` (default), `'cityblock'`, `'chebychev'`, `'minkowski'` (with `'P'`), `'seuclidean'` (with `'Scale'`), `'mahalanobis'` (with `'Cov'`), `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` or `'jaccard'`.",
+          "pt": "Nome da distância, como `'euclidean'` (padrão), `'cityblock'`, `'chebychev'`, `'minkowski'` (com `'P'`), `'seuclidean'` (com `'Scale'`), `'mahalanobis'` (com `'Cov'`), `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` ou `'jaccard'`."
+        },
+        {
+          "name": "'BucketSize'",
+          "en": "Maximum number of points in a leaf of the k-d tree. Default 50.",
+          "pt": "Número máximo de pontos em uma folha da k-d tree. Padrão 50."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ns",
+          "en": "A `KDTreeSearcher` or `ExhaustiveSearcher` object, with properties `X`, `Distance` and `DistParameter`. Use it with `knnsearch` and `rangesearch`.",
+          "pt": "Um objeto `KDTreeSearcher` ou `ExhaustiveSearcher`, com as propriedades `X`, `Distance` e `DistParameter`. Use-o com `knnsearch` e `rangesearch`."
+        }
+      ],
+      "description": {
+        "en": "`createns` builds the object once so you can run many neighbor queries against the same data. Which kind of object you get is decided by the distance and by `'NSMethod'`.\n\nForcing `'NSMethod'` to `'kdtree'` with a distance that a k-d tree cannot use, such as `'cosine'`, raises an error that lists the valid distances.",
+        "pt": "`createns` constrói o objeto uma vez, para que você faça muitas consultas de vizinhos sobre os mesmos dados. O tipo de objeto obtido depende da distância e de `'NSMethod'`.\n\nForçar `'NSMethod'` para `'kdtree'` com uma distância que uma k-d tree não pode usar, como `'cosine'`, gera um erro que lista as distâncias válidas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Default and exhaustive searchers",
+            "pt": "Buscadores padrão e exaustivo"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = createns(X);\ndisp(class(ns))\nne = createns(X, 'Distance', 'cosine');\ndisp(class(ne))\n[idx, d] = knnsearch(ns, Y, 'K', 2);\ndisp(idx)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Choose the method",
+            "pt": "Escolher o método"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = createns(X, 'NSMethod', 'exhaustive', 'Distance', 'cityblock');\ndisp(class(ns))\ndisp(ns.Distance)\nidx = rangesearch(ns, Y, 2);\ndisp(idx{2})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "KDTreeSearcher",
+        "ExhaustiveSearcher",
+        "knnsearch",
+        "rangesearch",
+        "pdist2"
+      ]
+    },
+    "ExhaustiveSearcher": {
+      "summary": {
+        "en": "Creates a nearest neighbor searcher that compares a query with every point of the data, for any supported distance.",
+        "pt": "Cria um buscador de vizinhos mais próximos que compara a consulta com todos os pontos dos dados, para qualquer distância aceita."
+      },
+      "syntax": [
+        {
+          "code": "ns = ExhaustiveSearcher(X)",
+          "en": "Creates a searcher for the rows of `X` with Euclidean distance.",
+          "pt": "Cria um buscador para as linhas de `X` com distância euclidiana."
+        },
+        {
+          "code": "ns = ExhaustiveSearcher(X, Name, Value)",
+          "en": "Sets the distance and its parameter, for example `'Distance'`, `'P'`, `'Cov'` or `'Scale'`.",
+          "pt": "Define a distância e seu parâmetro, por exemplo `'Distance'`, `'P'`, `'Cov'` ou `'Scale'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix: one row per point.",
+          "pt": "Matriz n por p: uma linha por ponto."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name: `'euclidean'` (default), `'cityblock'`, `'chebychev'`, `'minkowski'`, `'seuclidean'`, `'mahalanobis'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` or `'jaccard'`.",
+          "pt": "Nome da distância: `'euclidean'` (padrão), `'cityblock'`, `'chebychev'`, `'minkowski'`, `'seuclidean'`, `'mahalanobis'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` ou `'jaccard'`."
+        },
+        {
+          "name": "'P'",
+          "en": "Exponent of the Minkowski distance, positive. Default 2.",
+          "pt": "Expoente da distância de Minkowski, positivo. Padrão 2."
+        },
+        {
+          "name": "'Cov'",
+          "en": "p-by-p positive definite covariance matrix for `'mahalanobis'`. Default: the covariance of `X`.",
+          "pt": "Matriz de covariância p por p positiva definida para `'mahalanobis'`. Padrão: a covariância de `X`."
+        },
+        {
+          "name": "'Scale'",
+          "en": "Vector of p positive scale values for `'seuclidean'`. Default: the standard deviations of the columns of `X`.",
+          "pt": "Vetor de p valores de escala positivos para `'seuclidean'`. Padrão: os desvios padrão das colunas de `X`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ns",
+          "en": "Object with properties `X`, `Distance` and `DistParameter` (the value of `P`, `Cov` or `Scale` that the distance uses). Query it with `knnsearch` and `rangesearch`.",
+          "pt": "Objeto com as propriedades `X`, `Distance` e `DistParameter` (o valor de `P`, `Cov` ou `Scale` que a distância usa). Consulte-o com `knnsearch` e `rangesearch`."
+        }
+      ],
+      "description": {
+        "en": "An exhaustive searcher computes the distance from the query to all `n` points. That costs time proportional to `n` per query, but it works with every distance and has no setup cost. For low-dimensional data and a Euclidean-like distance, `KDTreeSearcher` is the other choice, and `createns` picks one for you.\n\nThe object keeps its own copy of `X` and the distance settings, so the same searcher can answer many queries.",
+        "pt": "Um buscador exaustivo calcula a distância da consulta até todos os `n` pontos. Isso custa tempo proporcional a `n` por consulta, mas funciona com qualquer distância e não tem custo de preparação. Para dados de baixa dimensão e uma distância do tipo euclidiana, `KDTreeSearcher` é a outra opção, e `createns` escolhe uma por você.\n\nO objeto guarda sua própria cópia de `X` e as configurações da distância, então o mesmo buscador pode responder muitas consultas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Exhaustive search with city block distance",
+            "pt": "Busca exaustiva com distância cityblock"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = ExhaustiveSearcher(X, 'Distance', 'cityblock');\n[idx, d] = knnsearch(ns, Y, 'K', 2);\ndisp(idx)\ndisp(d)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Mahalanobis distance",
+            "pt": "Distância de Mahalanobis"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = ExhaustiveSearcher(X, 'Distance', 'mahalanobis');\ndisp(ns.Distance)\ndisp(size(ns.DistParameter))\nidx = knnsearch(ns, Y);\ndisp(idx')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "KDTreeSearcher",
+        "createns",
+        "knnsearch",
+        "rangesearch",
+        "pdist2"
+      ]
+    },
+    "fitcknn": {
+      "summary": {
+        "en": "Fits a k-nearest neighbor classifier and returns a model object that predicts the class of new rows by a vote among the closest training rows.",
+        "pt": "Ajusta um classificador de k vizinhos mais próximos e retorna um modelo que prevê a classe de novas linhas por votação entre as linhas de treinamento mais próximas."
+      },
+      "syntax": [
+        {
+          "code": "mdl = fitcknn(X, Y)",
+          "en": "Fits a model with one neighbor (`NumNeighbors = 1`).",
+          "pt": "Ajusta um modelo com um vizinho (`NumNeighbors = 1`)."
+        },
+        {
+          "code": "mdl = fitcknn(X, Y, Name, Value)",
+          "en": "Sets options such as `'NumNeighbors'`, `'Distance'`, `'DistanceWeight'`, `'Standardize'` or `'BreakTies'`.",
+          "pt": "Define opções como `'NumNeighbors'`, `'Distance'`, `'DistanceWeight'`, `'Standardize'` ou `'BreakTies'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of predictors: one row per observation.",
+          "pt": "Matriz n por p de preditores: uma linha por observação."
+        },
+        {
+          "name": "Y",
+          "en": "Class label of each row: numeric vector or cell array of character vectors with n elements.",
+          "pt": "Rótulo de classe de cada linha: vetor numérico ou cell array de vetores de caracteres com n elementos."
+        },
+        {
+          "name": "'NumNeighbors'",
+          "en": "Number of neighbors that vote, a positive integer. Default 1.",
+          "pt": "Número de vizinhos que votam, um inteiro positivo. Padrão 1."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name, such as `'euclidean'` (default), `'cityblock'`, `'chebychev'`, `'minkowski'` (with `'Exponent'`), `'seuclidean'` (with `'Scale'`), `'mahalanobis'` (with `'Cov'`) or `'cosine'`.",
+          "pt": "Nome da distância, como `'euclidean'` (padrão), `'cityblock'`, `'chebychev'`, `'minkowski'` (com `'Exponent'`), `'seuclidean'` (com `'Scale'`), `'mahalanobis'` (com `'Cov'`) ou `'cosine'`."
+        },
+        {
+          "name": "'DistanceWeight'",
+          "en": "Weight of each neighbor in the vote: `'equal'` (default), `'inverse'` or `'squaredinverse'`.",
+          "pt": "Peso de cada vizinho na votação: `'equal'` (padrão), `'inverse'` ou `'squaredinverse'`."
+        },
+        {
+          "name": "'Standardize'",
+          "en": "If true, each predictor is centered and scaled before distances are computed. Default false.",
+          "pt": "Se verdadeiro, cada preditor é centralizado e escalonado antes do cálculo das distâncias. Padrão falso."
+        },
+        {
+          "name": "'BreakTies'",
+          "en": "How a tied vote is resolved: `'smallest'` (default), `'nearest'` or `'random'`.",
+          "pt": "Como resolver um empate na votação: `'smallest'` (padrão), `'nearest'` ou `'random'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mdl",
+          "en": "Model object of class `ClassificationKNN` with properties such as `ClassNames`, `NumNeighbors`, `Distance`, `NSMethod` and `Prior`. Use `predict`, `loss`, `resubLoss` and `margin` with it.",
+          "pt": "Objeto de modelo da classe `ClassificationKNN` com propriedades como `ClassNames`, `NumNeighbors`, `Distance`, `NSMethod` e `Prior`. Use `predict`, `loss`, `resubLoss` e `margin` com ele."
+        }
+      ],
+      "description": {
+        "en": "A k-nearest neighbor classifier stores the training data. To classify a row, `predict` finds the `NumNeighbors` closest training rows and returns the class that most of them have. The scores it returns are the fraction of neighbors in each class, which is also what `DistanceWeight` changes.\n\nThe method is sensitive to the scale of the predictors: a predictor with large numbers dominates the distance, so use `'Standardize'` when the columns have different units. A very small `NumNeighbors` follows noise, and a very large one blurs class boundaries.",
+        "pt": "Um classificador de k vizinhos mais próximos guarda os dados de treinamento. Para classificar uma linha, `predict` encontra as `NumNeighbors` linhas de treinamento mais próximas e retorna a classe que a maioria delas tem. Os escores retornados são a fração de vizinhos em cada classe, que é também o que `DistanceWeight` altera.\n\nO método é sensível à escala dos preditores: um preditor com números grandes domina a distância, então use `'Standardize'` quando as colunas têm unidades diferentes. Um `NumNeighbors` muito pequeno segue o ruído, e um muito grande borra as fronteiras entre classes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Three neighbors",
+            "pt": "Três vizinhos"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcknn(X, g, 'NumNeighbors', 3);\ns = [1.2 1.5; 5 5; 3.6 3.1];\n[lab, score] = predict(mdl, s);\ndisp(lab')\ndisp(round(score*1000)/1000)\nfprintf('%.4f\\n', resubLoss(mdl))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "City block distance, standardized, weighted",
+            "pt": "Distância cityblock, padronizada e ponderada"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 3 2.5; 3.5 3; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 3.8 3.2; 4.2 4];\ng = [1 1 1 1 1 1 2 2 2 2 2 2]';\nmdl = fitcknn(X, g, 'NumNeighbors', 5, 'Distance', 'cityblock', 'Standardize', true, 'DistanceWeight', 'inverse');\ndisp(mdl.Distance)\ndisp(predict(mdl, [1.2 1.5; 5 5; 3.6 3.1])')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "knnsearch",
+        "createns",
+        "fitcdiscr",
+        "fitcnb",
+        "confusionmat"
+      ],
+      "notes": {
+        "en": "With `'BreakTies'` set to `'nearest'`, `resubLoss` can differ from MATLAB: the nearest neighbor of a training row is the row itself in MatLivre, while MATLAB breaks the tie differently on the resubstitution error (a case gave 4 errors in MATLAB and 1 in MatLivre).",
+        "pt": "Com `'BreakTies'` igual a `'nearest'`, `resubLoss` pode diferir do MATLAB: o vizinho mais próximo de uma linha de treinamento é a própria linha no MatLivre, enquanto o MATLAB resolve o empate de outro modo no erro de ressubstituição (um caso deu 4 erros no MATLAB e 1 no MatLivre)."
+      }
+    },
+    "KDTreeSearcher": {
+      "summary": {
+        "en": "Creates a nearest neighbor searcher that organizes the data in a k-d tree, for the Euclidean, city block, Chebychev and Minkowski distances.",
+        "pt": "Cria um buscador de vizinhos mais próximos que organiza os dados em uma k-d tree, para as distâncias euclidiana, cityblock, Chebychev e Minkowski."
+      },
+      "syntax": [
+        {
+          "code": "ns = KDTreeSearcher(X)",
+          "en": "Creates a searcher for the rows of `X` with Euclidean distance.",
+          "pt": "Cria um buscador para as linhas de `X` com distância euclidiana."
+        },
+        {
+          "code": "ns = KDTreeSearcher(X, Name, Value)",
+          "en": "Sets the distance and the tree leaf size, for example `'Distance'`, `'P'` or `'BucketSize'`.",
+          "pt": "Define a distância e o tamanho das folhas da árvore, por exemplo `'Distance'`, `'P'` ou `'BucketSize'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix: one row per point.",
+          "pt": "Matriz n por p: uma linha por ponto."
+        },
+        {
+          "name": "'Distance'",
+          "en": "`'euclidean'` (default), `'cityblock'`, `'chebychev'` or `'minkowski'`.",
+          "pt": "`'euclidean'` (padrão), `'cityblock'`, `'chebychev'` ou `'minkowski'`."
+        },
+        {
+          "name": "'P'",
+          "en": "Exponent of the Minkowski distance, positive. Default 2.",
+          "pt": "Expoente da distância de Minkowski, positivo. Padrão 2."
+        },
+        {
+          "name": "'BucketSize'",
+          "en": "Maximum number of points in a leaf of the tree. Default 50.",
+          "pt": "Número máximo de pontos em uma folha da árvore. Padrão 50."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ns",
+          "en": "Object with properties `X`, `Distance`, `DistParameter` (the exponent `P` for Minkowski, empty otherwise) and `BucketSize`. Query it with `knnsearch` and `rangesearch`.",
+          "pt": "Objeto com as propriedades `X`, `Distance`, `DistParameter` (o expoente `P` no caso de Minkowski, vazio nos demais) e `BucketSize`. Consulte-o com `knnsearch` e `rangesearch`."
+        }
+      ],
+      "description": {
+        "en": "A k-d tree splits the data by coordinates so that a query can skip whole groups of points that are too far away. It pays off when there are many points and few columns. With many columns an exhaustive search is often just as fast.\n\nOther distances, such as `'cosine'` or `'mahalanobis'`, cannot use a k-d tree: they raise an error that lists the valid distances. Use `ExhaustiveSearcher` for them.",
+        "pt": "Uma k-d tree divide os dados por coordenadas, de modo que uma consulta possa pular grupos inteiros de pontos longe demais. Compensa quando há muitos pontos e poucas colunas. Com muitas colunas, a busca exaustiva costuma ser tão rápida quanto.\n\nOutras distâncias, como `'cosine'` ou `'mahalanobis'`, não podem usar uma k-d tree: geram um erro que lista as distâncias válidas. Use `ExhaustiveSearcher` para elas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Build and query",
+            "pt": "Construir e consultar"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = KDTreeSearcher(X);\n[idx, d] = knnsearch(ns, Y, 'K', 2);\ndisp(idx)\ndisp(round(d*10000)/10000)\ndisp(ns.BucketSize)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Minkowski distance",
+            "pt": "Distância de Minkowski"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nns = KDTreeSearcher(X, 'Distance', 'minkowski', 'P', 1);\ndisp(ns.DistParameter)\nidx = rangesearch(ns, Y, 1.5);\ndisp(idx{1})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ExhaustiveSearcher",
+        "createns",
+        "knnsearch",
+        "rangesearch",
+        "fitcknn"
+      ]
+    },
+    "knnsearch": {
+      "summary": {
+        "en": "Finds the k nearest neighbors in a data set for each query point, and returns their indices and distances.",
+        "pt": "Encontra os k vizinhos mais próximos em um conjunto de dados para cada ponto de consulta e retorna seus índices e distâncias."
+      },
+      "syntax": [
+        {
+          "code": "idx = knnsearch(X, Y)",
+          "en": "Returns the index of the nearest row of `X` for each row of `Y`.",
+          "pt": "Retorna o índice da linha de `X` mais próxima de cada linha de `Y`."
+        },
+        {
+          "code": "[idx, d] = knnsearch(X, Y, 'K', k)",
+          "en": "Returns the `k` nearest rows and their distances.",
+          "pt": "Retorna as `k` linhas mais próximas e suas distâncias."
+        },
+        {
+          "code": "[idx, d] = knnsearch(ns, Y, ...)",
+          "en": "Searches a `KDTreeSearcher` or `ExhaustiveSearcher` object made earlier.",
+          "pt": "Busca em um objeto `KDTreeSearcher` ou `ExhaustiveSearcher` criado antes."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of data points, or a searcher object `ns`.",
+          "pt": "Matriz n por p de pontos de dados, ou um objeto buscador `ns`."
+        },
+        {
+          "name": "Y",
+          "en": "m-by-p matrix of query points, with the same columns as `X`.",
+          "pt": "Matriz m por p de pontos de consulta, com as mesmas colunas de `X`."
+        },
+        {
+          "name": "'K'",
+          "en": "Number of neighbors to find. Default 1.",
+          "pt": "Número de vizinhos a encontrar. Padrão 1."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name: `'euclidean'` (default), `'cityblock'`, `'chebychev'`, `'minkowski'` (with `'P'`), `'seuclidean'`, `'mahalanobis'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'`, `'jaccard'` or a function handle.",
+          "pt": "Nome da distância: `'euclidean'` (padrão), `'cityblock'`, `'chebychev'`, `'minkowski'` (com `'P'`), `'seuclidean'`, `'mahalanobis'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'`, `'jaccard'` ou um function handle."
+        },
+        {
+          "name": "'IncludeTies'",
+          "en": "If true, also returns neighbors tied with the k-th. Then `idx` and `d` are cell arrays with one row vector per query. Default false.",
+          "pt": "Se verdadeiro, retorna também os vizinhos empatados com o k-ésimo. Então `idx` e `d` são cell arrays com um vetor linha por consulta. Padrão falso."
+        },
+        {
+          "name": "'SortIndices'",
+          "en": "If true (default), neighbors come in increasing distance.",
+          "pt": "Se verdadeiro (padrão), os vizinhos vêm em ordem crescente de distância."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "m-by-k matrix: row `i` has the row numbers of `X` closest to `Y(i,:)`, nearest first.",
+          "pt": "Matriz m por k: a linha `i` tem os números das linhas de `X` mais próximas de `Y(i,:)`, a mais próxima primeiro."
+        },
+        {
+          "name": "d",
+          "en": "m-by-k matrix of the corresponding distances.",
+          "pt": "Matriz m por k das distâncias correspondentes."
+        }
+      ],
+      "description": {
+        "en": "`knnsearch` answers the question \"which points of `X` are the closest to this one?\". It is the building block of nearest neighbor classification, of local smoothing and of finding duplicates. Row `j` of `idx` and `d` always refers to the query `Y(j,:)`.\n\nIf `Y` is a point you also have in `X`, its own row comes back first, at distance 0. To avoid it, ask for `'K'` one larger and drop the first column.",
+        "pt": "`knnsearch` responde à pergunta \"quais pontos de `X` estão mais perto deste?\". É o bloco básico da classificação por vizinhos mais próximos, de suavizações locais e da busca de duplicatas. A linha `j` de `idx` e `d` sempre se refere à consulta `Y(j,:)`.\n\nSe `Y` é um ponto que também está em `X`, a própria linha volta primeiro, com distância 0. Para evitar isso, peça um `'K'` maior em um e descarte a primeira coluna."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Nearest and two nearest",
+            "pt": "Mais próximo e dois mais próximos"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nidx = knnsearch(X, Y);\ndisp(idx')\n[idx2, d] = knnsearch(X, Y, 'K', 2);\ndisp(idx2)\ndisp(round(d*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "City block distance",
+            "pt": "Distância cityblock"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\n[idx, d] = knnsearch(X, Y, 'K', 2, 'Distance', 'cityblock');\ndisp(idx)\ndisp(d)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "rangesearch",
+        "createns",
+        "KDTreeSearcher",
+        "ExhaustiveSearcher",
+        "pdist2"
+      ],
+      "notes": {
+        "en": "With `'Distance'` set to `'correlation'`, rows that are perfectly correlated or anti-correlated tie at distances 0 and 2 up to rounding, and MATLAB's choice among such ties can differ. With `'SortIndices'` set to `false`, the neighbors come in the search order of MatLivre, not in the order of MATLAB's k-d tree (the same set of neighbors).",
+        "pt": "Com `'Distance'` igual a `'correlation'`, linhas perfeitamente correlacionadas ou anticorrelacionadas empatam nas distâncias 0 e 2 a menos de arredondamento, e a escolha do MATLAB entre esses empates pode diferir. Com `'SortIndices'` igual a `false`, os vizinhos vêm na ordem de busca do MatLivre, não na ordem da k-d tree do MATLAB (o mesmo conjunto de vizinhos)."
+      }
+    },
+    "pdist": {
+      "summary": {
+        "en": "Computes the distances between all pairs of rows of a matrix and returns them as a row vector.",
+        "pt": "Calcula as distâncias entre todos os pares de linhas de uma matriz e as retorna como um vetor linha."
+      },
+      "syntax": [
+        {
+          "code": "D = pdist(X)",
+          "en": "Euclidean distance between every pair of rows of `X`.",
+          "pt": "Distância euclidiana entre todos os pares de linhas de `X`."
+        },
+        {
+          "code": "D = pdist(X, distance)",
+          "en": "Uses the named distance, for example `'cityblock'` or `'cosine'`.",
+          "pt": "Usa a distância indicada, por exemplo `'cityblock'` ou `'cosine'`."
+        },
+        {
+          "code": "D = pdist(X, 'minkowski', p)",
+          "en": "Minkowski distance with exponent `p`.",
+          "pt": "Distância de Minkowski com expoente `p`."
+        },
+        {
+          "code": "D = pdist(X, @distfun)",
+          "en": "Uses your own function of a row and a matrix of rows.",
+          "pt": "Usa uma função sua, de uma linha e de uma matriz de linhas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "m-by-n matrix: m observations (rows) of n variables.",
+          "pt": "Matriz m por n: m observações (linhas) de n variáveis."
+        },
+        {
+          "name": "distance",
+          "en": "`'euclidean'` (default), `'squaredeuclidean'`, `'seuclidean'`, `'mahalanobis'`, `'cityblock'`, `'minkowski'`, `'chebychev'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` or `'jaccard'`.",
+          "pt": "`'euclidean'` (padrão), `'squaredeuclidean'`, `'seuclidean'`, `'mahalanobis'`, `'cityblock'`, `'minkowski'`, `'chebychev'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` ou `'jaccard'`."
+        },
+        {
+          "name": "p",
+          "en": "Exponent of the Minkowski distance. Default 2.",
+          "pt": "Expoente da distância de Minkowski. Padrão 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Row vector of length m(m-1)/2 with the distances in the order d(1,2), d(1,3), ..., d(1,m), d(2,3), ..., d(m-1,m). Use `squareform` to turn it into an m-by-m matrix.",
+          "pt": "Vetor linha de comprimento m(m-1)/2 com as distâncias na ordem d(1,2), d(1,3), ..., d(1,m), d(2,3), ..., d(m-1,m). Use `squareform` para transformá-lo em uma matriz m por m."
+        }
+      ],
+      "description": {
+        "en": "`pdist` is the usual first step of hierarchical clustering: its output goes straight into `linkage`. Storing only the pairs above the diagonal halves the memory of a full distance matrix.\n\nThe cosine and correlation distances are not defined for a row that is all zeros (for cosine) or constant (for correlation), and then the result is `NaN`. Euclidean distance is affected by the scale of the columns, so standardize them first when they have different units.",
+        "pt": "`pdist` é o primeiro passo habitual do agrupamento hierárquico: sua saída vai direto para `linkage`. Guardar só os pares acima da diagonal reduz à metade a memória de uma matriz de distâncias completa.\n\nAs distâncias cosseno e correlação não estão definidas para uma linha toda de zeros (cosseno) ou constante (correlação), e então o resultado é `NaN`. A distância euclidiana é afetada pela escala das colunas, então padronize-as antes quando tiverem unidades diferentes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Euclidean distances and the square matrix",
+            "pt": "Distâncias euclidianas e a matriz quadrada"
+          },
+          "code": "X = [0 0; 3 4; 6 8; 0 1];\nD = pdist(X)\nD2 = squareform(D)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Other distances",
+            "pt": "Outras distâncias"
+          },
+          "code": "X = [1 2; 3 4; 6 8; 1 1];\ndisp(pdist(X, 'cityblock'))\ndisp(pdist(X, 'chebychev'))\ndisp(pdist(X, 'minkowski', 3))\ndisp(round(pdist(X, 'cosine')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist2",
+        "squareform",
+        "linkage",
+        "cluster",
+        "silhouette"
+      ]
+    },
+    "pdist2": {
+      "summary": {
+        "en": "Computes the distances between every row of one matrix and every row of another, optionally keeping only the smallest or largest ones.",
+        "pt": "Calcula as distâncias entre cada linha de uma matriz e cada linha de outra, podendo manter só as menores ou as maiores."
+      },
+      "syntax": [
+        {
+          "code": "D = pdist2(X, Y)",
+          "en": "m-by-n matrix of Euclidean distances between the rows of `X` and the rows of `Y`.",
+          "pt": "Matriz m por n de distâncias euclidianas entre as linhas de `X` e as linhas de `Y`."
+        },
+        {
+          "code": "D = pdist2(X, Y, distance)",
+          "en": "Uses the named distance. `'minkowski'` accepts the exponent as a further argument.",
+          "pt": "Usa a distância indicada. `'minkowski'` aceita o expoente como argumento seguinte."
+        },
+        {
+          "code": "[D, I] = pdist2(X, Y, distance, 'Smallest', k)",
+          "en": "Keeps, for each row of `Y`, the `k` smallest distances and the rows of `X` that give them.",
+          "pt": "Mantém, para cada linha de `Y`, as `k` menores distâncias e as linhas de `X` que as produzem."
+        },
+        {
+          "code": "[D, I] = pdist2(X, Y, distance, 'Largest', k)",
+          "en": "Keeps the `k` largest distances.",
+          "pt": "Mantém as `k` maiores distâncias."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "mx-by-p matrix.",
+          "pt": "Matriz mx por p."
+        },
+        {
+          "name": "Y",
+          "en": "my-by-p matrix, with the same number of columns as `X`.",
+          "pt": "Matriz my por p, com o mesmo número de colunas de `X`."
+        },
+        {
+          "name": "distance",
+          "en": "Distance name, as in `pdist`: `'euclidean'` (default), `'squaredeuclidean'`, `'seuclidean'`, `'mahalanobis'`, `'cityblock'`, `'minkowski'`, `'chebychev'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` or `'jaccard'`.",
+          "pt": "Nome da distância, como em `pdist`: `'euclidean'` (padrão), `'squaredeuclidean'`, `'seuclidean'`, `'mahalanobis'`, `'cityblock'`, `'minkowski'`, `'chebychev'`, `'cosine'`, `'correlation'`, `'spearman'`, `'hamming'` ou `'jaccard'`."
+        },
+        {
+          "name": "'Smallest', 'Largest'",
+          "en": "Number `k` of smallest or largest distances to keep per column of the result.",
+          "pt": "Número `k` de menores ou maiores distâncias a manter por coluna do resultado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "mx-by-my matrix with `D(i,j)` the distance from `X(i,:)` to `Y(j,:)`. With `'Smallest'` or `'Largest'` it is k-by-my.",
+          "pt": "Matriz mx por my com `D(i,j)` a distância de `X(i,:)` a `Y(j,:)`. Com `'Smallest'` ou `'Largest'`, é k por my."
+        },
+        {
+          "name": "I",
+          "en": "Row numbers of `X` that give the distances in `D`, with the same size as `D`.",
+          "pt": "Números das linhas de `X` que dão as distâncias em `D`, com o mesmo tamanho de `D`."
+        }
+      ],
+      "description": {
+        "en": "`pdist2` is `pdist` for two different sets of points. It is what you want to measure how far new observations are from a reference set, for example from a set of cluster centers.\n\nWith `'Smallest'` the result is a nearest neighbor search done by brute force. For repeated searches over the same data, a searcher made by `createns` is more convenient.",
+        "pt": "`pdist2` é o `pdist` para dois conjuntos de pontos diferentes. É o que você quer para medir a distância de novas observações até um conjunto de referência, por exemplo os centros de agrupamentos.\n\nCom `'Smallest'`, o resultado é uma busca de vizinhos mais próximos por força bruta. Para buscas repetidas sobre os mesmos dados, um buscador criado por `createns` é mais conveniente."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "All distances between two sets",
+            "pt": "Todas as distâncias entre dois conjuntos"
+          },
+          "code": "X = [0 0; 3 4; 6 8; 0 1];\nC = [0 0; 3 3];\nD = pdist2(X, C)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Two smallest distances",
+            "pt": "Duas menores distâncias"
+          },
+          "code": "X = [0 0; 3 4; 6 8; 0 1];\nC = [0 0; 3 3];\n[D, I] = pdist2(X, C, 'euclidean', 'Smallest', 2);\ndisp(D)\ndisp(I)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "pdist",
+        "knnsearch",
+        "createns",
+        "squareform",
+        "kmeans"
+      ]
+    },
+    "rangesearch": {
+      "summary": {
+        "en": "Finds all the points of a data set that lie within a given distance of each query point.",
+        "pt": "Encontra todos os pontos de um conjunto de dados que estão a uma distância dada de cada ponto de consulta."
+      },
+      "syntax": [
+        {
+          "code": "idx = rangesearch(X, Y, r)",
+          "en": "Returns, for each row of `Y`, the rows of `X` within distance `r`.",
+          "pt": "Retorna, para cada linha de `Y`, as linhas de `X` a uma distância de até `r`."
+        },
+        {
+          "code": "[idx, d] = rangesearch(X, Y, r)",
+          "en": "Also returns the distances.",
+          "pt": "Retorna também as distâncias."
+        },
+        {
+          "code": "[idx, d] = rangesearch(X, Y, r, 'Distance', dist)",
+          "en": "Uses another distance.",
+          "pt": "Usa outra distância."
+        },
+        {
+          "code": "[idx, d] = rangesearch(ns, Y, r)",
+          "en": "Searches a `KDTreeSearcher` or `ExhaustiveSearcher` object made earlier.",
+          "pt": "Busca em um objeto `KDTreeSearcher` ou `ExhaustiveSearcher` criado antes."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of data points, or a searcher object `ns`.",
+          "pt": "Matriz n por p de pontos de dados, ou um objeto buscador `ns`."
+        },
+        {
+          "name": "Y",
+          "en": "m-by-p matrix of query points.",
+          "pt": "Matriz m por p de pontos de consulta."
+        },
+        {
+          "name": "r",
+          "en": "Search radius, a nonnegative number. Points at a distance exactly `r` are included.",
+          "pt": "Raio de busca, um número não negativo. Pontos a uma distância exatamente `r` são incluídos."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name, as in `knnsearch`. Default `'euclidean'`.",
+          "pt": "Nome da distância, como em `knnsearch`. Padrão `'euclidean'`."
+        },
+        {
+          "name": "'SortIndices'",
+          "en": "If true (default), neighbors come in increasing distance.",
+          "pt": "Se verdadeiro (padrão), os vizinhos vêm em ordem crescente de distância."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "m-by-1 cell array: `idx{i}` is a row vector with the row numbers of `X` within `r` of `Y(i,:)`, empty if there are none.",
+          "pt": "Cell array m por 1: `idx{i}` é um vetor linha com os números das linhas de `X` a até `r` de `Y(i,:)`, vazio se não houver nenhuma."
+        },
+        {
+          "name": "d",
+          "en": "m-by-1 cell array with the matching distances.",
+          "pt": "Cell array m por 1 com as distâncias correspondentes."
+        }
+      ],
+      "description": {
+        "en": "Unlike `knnsearch`, `rangesearch` does not fix how many neighbors you get: a query in a crowded area returns many points and one in an empty area returns none. This makes it the right tool for density estimates and for building neighborhood graphs, as `dbscan` does.\n\nThe lists have different lengths, so the results are cell arrays.",
+        "pt": "Diferente de `knnsearch`, `rangesearch` não fixa quantos vizinhos você recebe: uma consulta em uma região densa retorna muitos pontos e uma em uma região vazia não retorna nenhum. Por isso é a ferramenta certa para estimativas de densidade e para montar grafos de vizinhança, como faz `dbscan`.\n\nAs listas têm comprimentos diferentes, então os resultados são cell arrays."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Neighbors within a radius",
+            "pt": "Vizinhos dentro de um raio"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\n[idx, d] = rangesearch(X, Y, 1.5);\ndisp(idx{1})\ndisp(round(d{1}*10000)/10000)\ndisp(idx{2})",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Chebychev distance",
+            "pt": "Distância de Chebychev"
+          },
+          "code": "X = [0 0; 1 0; 0 1; 1 1; 5 5; 6 5];\nY = [0.2 0.1; 5.5 5.2];\nidx = rangesearch(X, [0.5 0.5], 0.6, 'Distance', 'chebychev');\ndisp(idx{1})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "knnsearch",
+        "createns",
+        "dbscan",
+        "pdist2",
+        "KDTreeSearcher"
+      ]
+    },
+    "silhouette": {
+      "summary": {
+        "en": "Computes the silhouette value of each observation: how well it fits its own cluster compared with the nearest other cluster.",
+        "pt": "Calcula o valor de silhueta de cada observação: o quanto ela se ajusta ao seu agrupamento em comparação com o agrupamento vizinho mais próximo."
+      },
+      "syntax": [
+        {
+          "code": "s = silhouette(X, clust)",
+          "en": "Silhouette values using Euclidean distance.",
+          "pt": "Valores de silhueta com distância euclidiana."
+        },
+        {
+          "code": "s = silhouette(X, clust, distance)",
+          "en": "Uses another distance, for example `'euclidean'` or `'cityblock'`.",
+          "pt": "Usa outra distância, por exemplo `'euclidean'` ou `'cityblock'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix of data: one row per observation.",
+          "pt": "Matriz n por p de dados: uma linha por observação."
+        },
+        {
+          "name": "clust",
+          "en": "Cluster of each observation: numeric vector, or cell array of character vectors, with n elements.",
+          "pt": "Agrupamento de cada observação: vetor numérico, ou cell array de vetores de caracteres, com n elementos."
+        },
+        {
+          "name": "distance",
+          "en": "Distance name: `'sqeuclidean'` (default), `'euclidean'`, `'cityblock'`, `'cosine'`, `'correlation'`, `'hamming'` or `'jaccard'`, or a function handle.",
+          "pt": "Nome da distância: `'sqeuclidean'` (padrão), `'euclidean'`, `'cityblock'`, `'cosine'`, `'correlation'`, `'hamming'` ou `'jaccard'`, ou um function handle."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "n-by-1 silhouette values, from -1 to 1. Near 1 means the point is far from other clusters, near 0 means it lies between two clusters, and negative means it is probably in the wrong cluster.",
+          "pt": "Valores de silhueta n por 1, de -1 a 1. Perto de 1 significa que o ponto está longe dos outros agrupamentos, perto de 0 que está entre dois agrupamentos, e negativo que provavelmente está no agrupamento errado."
+        }
+      ],
+      "description": {
+        "en": "For each point, the silhouette compares `a`, the mean distance to the other points of its own cluster, with `b`, the smallest mean distance to the points of any other cluster. The value is `(b - a) / max(a, b)`.\n\nThe mean of `s` summarizes a whole clustering, so you can compare the result for different numbers of clusters and prefer the one with the larger mean.",
+        "pt": "Para cada ponto, a silhueta compara `a`, a distância média aos outros pontos do próprio agrupamento, com `b`, a menor distância média aos pontos de qualquer outro agrupamento. O valor é `(b - a) / max(a, b)`.\n\nA média de `s` resume um agrupamento inteiro, então dá para comparar o resultado para números diferentes de agrupamentos e preferir o de maior média."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Silhouette of three clusters",
+            "pt": "Silhueta de três agrupamentos"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4];\ng = [1 1 1 1 2 2 2 2 3 3]';\ns = silhouette(X, g);\ndisp(round(s'*1000)/1000)\nfprintf('mean = %.4f\\n', mean(s))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Other distance",
+            "pt": "Outra distância"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4];\ng = [1 1 1 1 2 2 2 2 3 3]';\ns = silhouette(X, g, 'cityblock');\nfprintf('mean = %.4f\\n', mean(s))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kmeans",
+        "linkage",
+        "cluster",
+        "dbscan",
+        "pdist"
+      ],
+      "notes": {
+        "en": "`silhouette` returns the values only: it draws no silhouette plot and has no second output (the graphics handle). Called without output arguments it prints the values.",
+        "pt": "`silhouette` retorna apenas os valores: não desenha o gráfico de silhueta e não tem segunda saída (o handle gráfico). Chamada sem argumentos de saída, ela exibe os valores."
+      }
+    },
+    "dbscan": {
+      "summary": {
+        "en": "Density-based clustering (DBSCAN): groups points that have many neighbors within a radius and marks isolated points as noise.",
+        "pt": "Agrupamento por densidade (DBSCAN): reúne pontos que têm muitos vizinhos dentro de um raio e marca pontos isolados como ruído."
+      },
+      "syntax": [
+        {
+          "code": "idx = dbscan(X, epsilon, minpts)",
+          "en": "Clusters the rows of `X` with Euclidean distance.",
+          "pt": "Agrupa as linhas de `X` com distância euclidiana."
+        },
+        {
+          "code": "[idx, corepts] = dbscan(X, epsilon, minpts)",
+          "en": "Also returns which points are core points.",
+          "pt": "Retorna também quais pontos são pontos centrais."
+        },
+        {
+          "code": "idx = dbscan(X, epsilon, minpts, 'Distance', dist)",
+          "en": "Uses another distance, with the options `'P'`, `'Cov'` or `'Scale'` when the distance needs a parameter.",
+          "pt": "Usa outra distância, com as opções `'P'`, `'Cov'` ou `'Scale'` quando a distância precisa de um parâmetro."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "n-by-p matrix: one row per observation.",
+          "pt": "Matriz n por p: uma linha por observação."
+        },
+        {
+          "name": "epsilon",
+          "en": "Neighborhood radius, a nonnegative number. Two points are neighbors if their distance is at most `epsilon`.",
+          "pt": "Raio da vizinhança, um número não negativo. Dois pontos são vizinhos se a distância entre eles é no máximo `epsilon`."
+        },
+        {
+          "name": "minpts",
+          "en": "Minimum number of points, counting the point itself, that a neighborhood needs to make its center a core point. A positive integer.",
+          "pt": "Número mínimo de pontos, contando o próprio ponto, de que uma vizinhança precisa para que seu centro seja um ponto central. Um inteiro positivo."
+        },
+        {
+          "name": "'Distance'",
+          "en": "Distance name, such as `'euclidean'` (default), `'cityblock'`, `'chebychev'`, `'minkowski'` (with `'P'`), `'mahalanobis'` (with `'Cov'`), `'seuclidean'` (with `'Scale'`) or `'cosine'`.",
+          "pt": "Nome da distância, como `'euclidean'` (padrão), `'cityblock'`, `'chebychev'`, `'minkowski'` (com `'P'`), `'mahalanobis'` (com `'Cov'`), `'seuclidean'` (com `'Scale'`) ou `'cosine'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "idx",
+          "en": "n-by-1 cluster numbers, from 1. Noise points get -1.",
+          "pt": "Números de agrupamento n por 1, a partir de 1. Pontos de ruído recebem -1."
+        },
+        {
+          "name": "corepts",
+          "en": "n-by-1 logical vector: true for core points, the points with at least `minpts` points within `epsilon` (themselves included).",
+          "pt": "Vetor lógico n por 1: verdadeiro para os pontos centrais, aqueles com ao menos `minpts` pontos a até `epsilon` (incluindo o próprio)."
+        }
+      ],
+      "description": {
+        "en": "DBSCAN does not need the number of clusters in advance. Core points that are within `epsilon` of each other join the same cluster, and non-core points close to a core point become the border of that cluster. Everything else is noise.\n\nThe result depends strongly on `epsilon`: too small and most points become noise, too large and separate clusters merge. A plot of the distance to the `minpts`-th neighbor, from `knnsearch`, helps choose it.",
+        "pt": "O DBSCAN não precisa que o número de agrupamentos seja dado de antemão. Pontos centrais a até `epsilon` uns dos outros entram no mesmo agrupamento, e pontos não centrais próximos de um ponto central formam a borda desse agrupamento. Todo o resto é ruído.\n\nO resultado depende muito de `epsilon`: pequeno demais e a maioria dos pontos vira ruído, grande demais e agrupamentos distintos se fundem. Um gráfico da distância ao `minpts`-ésimo vizinho, obtida com `knnsearch`, ajuda a escolhê-lo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two clusters and noise",
+            "pt": "Dois agrupamentos e ruído"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4; 20 20];\n[idx, core] = dbscan(X, 1.5, 3);\ndisp(idx')\ndisp(core')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Smaller minpts",
+            "pt": "Menor minpts"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4; 20 20];\nidx = dbscan(X, 1.5, 2);\ndisp(idx')\nfprintf('%d clusters, %d noise\\n', max(idx), sum(idx == -1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kmeans",
+        "silhouette",
+        "rangesearch",
+        "linkage",
+        "cluster"
+      ],
+      "notes": {
+        "en": "Only the options `'Distance'`, `'P'`, `'Cov'` and `'Scale'` are accepted: others, such as `'NSMethod'`, are rejected as invalid parameter names.",
+        "pt": "Só as opções `'Distance'`, `'P'`, `'Cov'` e `'Scale'` são aceitas: outras, como `'NSMethod'`, são rejeitadas como nomes de parâmetro inválidos."
+      }
+    },
+    "hmmdecode": {
+      "summary": {
+        "en": "Computes the posterior probability of each hidden state at every step of an observed sequence, given a hidden Markov model.",
+        "pt": "Calcula a probabilidade a posteriori de cada estado oculto em cada passo de uma sequência observada, dado um modelo oculto de Markov."
+      },
+      "syntax": [
+        {
+          "code": "PSTATES = hmmdecode(seq, TRANS, EMIS)",
+          "en": "Posterior state probabilities for the sequence `seq`.",
+          "pt": "Probabilidades a posteriori dos estados para a sequência `seq`."
+        },
+        {
+          "code": "[PSTATES, logpseq] = hmmdecode(seq, TRANS, EMIS)",
+          "en": "Also returns the log probability of the whole sequence.",
+          "pt": "Retorna também o logaritmo da probabilidade da sequência inteira."
+        },
+        {
+          "code": "[PSTATES, logpseq, FORWARD, BACKWARD, S] = hmmdecode(...)",
+          "en": "Also returns the forward and backward variables and their scale factors.",
+          "pt": "Retorna também as variáveis forward e backward e seus fatores de escala."
+        },
+        {
+          "code": "[...] = hmmdecode(seq, TRANS, EMIS, 'Symbols', symbols)",
+          "en": "Names the symbols when `seq` is a cell array of text.",
+          "pt": "Dá nomes aos símbolos quando `seq` é um cell array de texto."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "seq",
+          "en": "Observed sequence: integers from 1 to the number of symbols, or a cell array of text when `'Symbols'` is given.",
+          "pt": "Sequência observada: inteiros de 1 até o número de símbolos, ou um cell array de texto quando `'Symbols'` é informado."
+        },
+        {
+          "name": "TRANS",
+          "en": "m-by-m transition matrix: `TRANS(i,j)` is the probability of going from state i to state j. Rows add up to 1.",
+          "pt": "Matriz de transição m por m: `TRANS(i,j)` é a probabilidade de passar do estado i ao estado j. As linhas somam 1."
+        },
+        {
+          "name": "EMIS",
+          "en": "m-by-n emission matrix: `EMIS(i,k)` is the probability that state i emits symbol k. Rows add up to 1.",
+          "pt": "Matriz de emissão m por n: `EMIS(i,k)` é a probabilidade de o estado i emitir o símbolo k. As linhas somam 1."
+        },
+        {
+          "name": "'Symbols'",
+          "en": "Names of the n symbols: a numeric vector or a cell array of text. Default: `1:n`.",
+          "pt": "Nomes dos n símbolos: um vetor numérico ou um cell array de texto. Padrão: `1:n`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "PSTATES",
+          "en": "m-by-L matrix: `PSTATES(i,t)` is the probability that the model was in state i at step t, given the whole sequence. Each column adds up to 1.",
+          "pt": "Matriz m por L: `PSTATES(i,t)` é a probabilidade de o modelo estar no estado i no passo t, dada a sequência inteira. Cada coluna soma 1."
+        },
+        {
+          "name": "logpseq",
+          "en": "Natural logarithm of the probability of the sequence under the model.",
+          "pt": "Logaritmo natural da probabilidade da sequência sob o modelo."
+        },
+        {
+          "name": "FORWARD",
+          "en": "m-by-(L+1) scaled forward probabilities, the first column being the start.",
+          "pt": "Probabilidades forward escalonadas m por (L+1), com a primeira coluna sendo o início."
+        },
+        {
+          "name": "BACKWARD",
+          "en": "m-by-(L+1) scaled backward probabilities.",
+          "pt": "Probabilidades backward escalonadas m por (L+1)."
+        },
+        {
+          "name": "S",
+          "en": "1-by-(L+1) scale factors.",
+          "pt": "Fatores de escala 1 por (L+1)."
+        }
+      ],
+      "description": {
+        "en": "A hidden Markov model has states that you cannot see, which move according to `TRANS` and emit the symbols you do see according to `EMIS`. The model starts in state 1 before the first symbol. `hmmdecode` uses the forward and backward algorithms to say, for each step, how likely each state is given all of the data, before and after that step.\n\nThis is a soft answer: probabilities per step. For the single most likely path of states, use `hmmviterbi`.",
+        "pt": "Um modelo oculto de Markov tem estados que você não vê, que mudam conforme `TRANS` e emitem os símbolos que você vê conforme `EMIS`. O modelo começa no estado 1 antes do primeiro símbolo. `hmmdecode` usa os algoritmos forward e backward para dizer, em cada passo, quão provável é cada estado dados todos os dados, antes e depois daquele passo.\n\nEsta é uma resposta suave: probabilidades por passo. Para o caminho de estados único mais provável, use `hmmviterbi`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "State probabilities of a dice sequence",
+            "pt": "Probabilidades dos estados em uma sequência de dados"
+          },
+          "code": "TR = [0.9 0.1; 0.1 0.9];\nEM = [1/6 1/6 1/6 1/6 1/6 1/6; 1/10 1/10 1/10 1/10 1/10 1/2];\nseq = [1 2 6 6 6 3 4 6 6 6 2 6 6 6 1 6 5 6 6 6];\n[PS, logp] = hmmdecode(seq, TR, EM);\ndisp(size(PS))\ndisp(round(PS(:,1:4)*10000)/10000)\nfprintf('log p = %.4f\\n', logp)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Text symbols",
+            "pt": "Símbolos em texto"
+          },
+          "code": "TR = [0.5 0.5; 0.5 0.5];\nEM = [0.9 0.1; 0.2 0.8];\nPS = hmmdecode({'a','b','a'}, TR, EM, 'Symbols', {'a','b'});\ndisp(round(PS*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hmmviterbi",
+        "hmmestimate",
+        "kmeans"
+      ]
+    },
+    "hmmestimate": {
+      "summary": {
+        "en": "Estimates the transition and emission matrices of a hidden Markov model from a sequence of symbols and the known sequence of states.",
+        "pt": "Estima as matrizes de transição e de emissão de um modelo oculto de Markov a partir de uma sequência de símbolos e da sequência de estados conhecida."
+      },
+      "syntax": [
+        {
+          "code": "[TRANS, EMIS] = hmmestimate(seq, states)",
+          "en": "Maximum likelihood estimates from the counts in the data.",
+          "pt": "Estimativas de máxima verossimilhança a partir das contagens nos dados."
+        },
+        {
+          "code": "[TRANS, EMIS] = hmmestimate(seq, states, 'Pseudotransitions', PT, 'Pseudoemissions', PE)",
+          "en": "Adds pseudocounts, which avoids zero probabilities for events that were not observed.",
+          "pt": "Soma pseudocontagens, o que evita probabilidades zero para eventos que não foram observados."
+        },
+        {
+          "code": "[TRANS, EMIS] = hmmestimate(seq, states, 'Symbols', symbols)",
+          "en": "Maps numeric symbol values to the columns of `EMIS`.",
+          "pt": "Associa os valores numéricos dos símbolos às colunas de `EMIS`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "seq",
+          "en": "Observed symbols: a vector of positive integers.",
+          "pt": "Símbolos observados: um vetor de inteiros positivos."
+        },
+        {
+          "name": "states",
+          "en": "True state at each step: a vector of positive integers with the same length as `seq`.",
+          "pt": "Estado verdadeiro em cada passo: um vetor de inteiros positivos com o mesmo comprimento de `seq`."
+        },
+        {
+          "name": "'Pseudotransitions'",
+          "en": "m-by-m matrix of counts added to the transition counts.",
+          "pt": "Matriz m por m de contagens somadas às contagens de transição."
+        },
+        {
+          "name": "'Pseudoemissions'",
+          "en": "m-by-n matrix of counts added to the emission counts. It also sets the number of symbols.",
+          "pt": "Matriz m por n de contagens somadas às contagens de emissão. Também define o número de símbolos."
+        },
+        {
+          "name": "'Symbols'",
+          "en": "Numeric vector with the n symbol values. Sets the number of columns of `EMIS`.",
+          "pt": "Vetor numérico com os n valores dos símbolos. Define o número de colunas de `EMIS`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "TRANS",
+          "en": "m-by-m transition matrix: the fraction of times that state i was followed by state j.",
+          "pt": "Matriz de transição m por m: a fração de vezes em que o estado i foi seguido pelo estado j."
+        },
+        {
+          "name": "EMIS",
+          "en": "m-by-n emission matrix: the fraction of times that state i produced symbol k.",
+          "pt": "Matriz de emissão m por n: a fração de vezes em que o estado i produziu o símbolo k."
+        }
+      ],
+      "description": {
+        "en": "When you know the true states, as in a training set, the best estimate of each probability is a ratio of counts. Rows of a state that never occurred (or never had a successor) come out as zeros, because there is nothing to estimate. Pseudocounts fill them with a small prior belief.\n\nWhen the states are hidden, this function does not apply: the model parameters have to be fitted by an iterative method such as the Baum-Welch algorithm.",
+        "pt": "Quando você conhece os estados verdadeiros, como em um conjunto de treinamento, a melhor estimativa de cada probabilidade é uma razão de contagens. As linhas de um estado que nunca ocorreu (ou nunca teve sucessor) saem com zeros, porque não há o que estimar. As pseudocontagens as preenchem com uma pequena crença a priori.\n\nQuando os estados estão ocultos, esta função não se aplica: os parâmetros do modelo precisam ser ajustados por um método iterativo, como o algoritmo de Baum-Welch."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Estimate from known states",
+            "pt": "Estimar a partir de estados conhecidos"
+          },
+          "code": "seq    = [1 2 6 6 6 3 4 6 6 6 2 6 6 6 1 6 5 6 6 6];\nstates = [1 1 2 2 2 1 1 2 2 2 1 2 2 2 1 2 2 2 2 2];\n[TR, EM] = hmmestimate(seq, states);\ndisp(round(TR*10000)/10000)\ndisp(round(EM*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "With pseudocounts",
+            "pt": "Com pseudocontagens"
+          },
+          "code": "seq    = [1 2 6 6 6 3 4 6 6 6 2 6 6 6 1 6 5 6 6 6];\nstates = [1 1 2 2 2 1 1 2 2 2 1 2 2 2 1 2 2 2 2 2];\n[TR, EM] = hmmestimate(seq, states, 'Pseudotransitions', ones(2), 'Pseudoemissions', ones(2,6));\ndisp(round(TR*10000)/10000)\ndisp(all(EM(:) > 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hmmdecode",
+        "hmmviterbi",
+        "mle",
+        "hmmgenerate"
+      ],
+      "notes": {
+        "en": "`seq` must be numeric: a cell array of text symbols is rejected. The option `'Statenames'` is not supported and raises an error.",
+        "pt": "`seq` deve ser numérico: um cell array de símbolos em texto é rejeitado. A opção `'Statenames'` não é aceita e gera um erro."
+      }
+    },
+    "hmmviterbi": {
+      "summary": {
+        "en": "Finds the most likely sequence of hidden states for an observed sequence, given a hidden Markov model (Viterbi algorithm).",
+        "pt": "Encontra a sequência de estados ocultos mais provável para uma sequência observada, dado um modelo oculto de Markov (algoritmo de Viterbi)."
+      },
+      "syntax": [
+        {
+          "code": "states = hmmviterbi(seq, TRANS, EMIS)",
+          "en": "Most likely path of states for the sequence `seq`.",
+          "pt": "Caminho de estados mais provável para a sequência `seq`."
+        },
+        {
+          "code": "[states, logP] = hmmviterbi(seq, TRANS, EMIS)",
+          "en": "Also returns the log probability of that path together with the sequence.",
+          "pt": "Retorna também o logaritmo da probabilidade desse caminho junto com a sequência."
+        },
+        {
+          "code": "states = hmmviterbi(seq, TRANS, EMIS, 'Symbols', symbols, 'Statenames', names)",
+          "en": "Uses names for the symbols and for the states.",
+          "pt": "Usa nomes para os símbolos e para os estados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "seq",
+          "en": "Observed sequence: integers from 1 to the number of symbols, or a cell array of text when `'Symbols'` is given.",
+          "pt": "Sequência observada: inteiros de 1 até o número de símbolos, ou um cell array de texto quando `'Symbols'` é informado."
+        },
+        {
+          "name": "TRANS",
+          "en": "m-by-m transition matrix: `TRANS(i,j)` is the probability of going from state i to state j. Rows add up to 1.",
+          "pt": "Matriz de transição m por m: `TRANS(i,j)` é a probabilidade de passar do estado i ao estado j. As linhas somam 1."
+        },
+        {
+          "name": "EMIS",
+          "en": "m-by-n emission matrix: `EMIS(i,k)` is the probability that state i emits symbol k. Rows add up to 1.",
+          "pt": "Matriz de emissão m por n: `EMIS(i,k)` é a probabilidade de o estado i emitir o símbolo k. As linhas somam 1."
+        },
+        {
+          "name": "'Symbols'",
+          "en": "Names of the n symbols: a numeric vector or a cell array of text. Default: `1:n`.",
+          "pt": "Nomes dos n símbolos: um vetor numérico ou um cell array de texto. Padrão: `1:n`."
+        },
+        {
+          "name": "'Statenames'",
+          "en": "Cell array of m names for the states. The output is then a cell array of names.",
+          "pt": "Cell array com m nomes para os estados. A saída passa a ser um cell array de nomes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "states",
+          "en": "1-by-L most likely states (numbers, or names with `'Statenames'`).",
+          "pt": "Estados mais prováveis 1 por L (números, ou nomes com `'Statenames'`)."
+        },
+        {
+          "name": "logP",
+          "en": "Natural logarithm of the probability of the returned path and the sequence.",
+          "pt": "Logaritmo natural da probabilidade do caminho retornado e da sequência."
+        }
+      ],
+      "description": {
+        "en": "`hmmviterbi` returns the single best path through the hidden states, the one with the highest joint probability, which is not the same as picking the most likely state at each step. The model starts in state 1 before the first symbol.\n\nFor the probability of every state at every step, use `hmmdecode`. To learn `TRANS` and `EMIS` from labelled data, use `hmmestimate`.",
+        "pt": "`hmmviterbi` retorna o único melhor caminho pelos estados ocultos, o de maior probabilidade conjunta, que não é o mesmo que escolher o estado mais provável em cada passo. O modelo começa no estado 1 antes do primeiro símbolo.\n\nPara a probabilidade de cada estado em cada passo, use `hmmdecode`. Para aprender `TRANS` e `EMIS` a partir de dados rotulados, use `hmmestimate`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Most likely states of a dice sequence",
+            "pt": "Estados mais prováveis de uma sequência de dados"
+          },
+          "code": "TR = [0.9 0.1; 0.1 0.9];\nEM = [1/6 1/6 1/6 1/6 1/6 1/6; 1/10 1/10 1/10 1/10 1/10 1/2];\nseq = [1 2 6 6 6 3 4 6 6 6 2 6 6 6 1 6 5 6 6 6];\n[st, logP] = hmmviterbi(seq, TR, EM);\ndisp(st)\nfprintf('log P = %.4f\\n', logP)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Named symbols and states",
+            "pt": "Símbolos e estados com nomes"
+          },
+          "code": "TR = [0.5 0.5; 0.5 0.5];\nEM = [0.9 0.1; 0.2 0.8];\nst = hmmviterbi({'a','b','b','a'}, TR, EM, 'Symbols', {'a','b'}, 'Statenames', {'low','high'});\ndisp(st)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "hmmdecode",
+        "hmmestimate",
+        "kmeans"
+      ]
+    },
+    "cluster": {
+      "summary": {
+        "en": "Cuts a hierarchical cluster tree made by `linkage` into clusters, by a number of clusters or by a distance or inconsistency cutoff.",
+        "pt": "Corta uma árvore hierárquica de agrupamentos criada por `linkage` em agrupamentos, por número de agrupamentos ou por um limite de distância ou de inconsistência."
+      },
+      "syntax": [
+        {
+          "code": "T = cluster(Z, 'maxclust', k)",
+          "en": "Cuts the tree into at most `k` clusters.",
+          "pt": "Corta a árvore em no máximo `k` agrupamentos."
+        },
+        {
+          "code": "T = cluster(Z, 'cutoff', c)",
+          "en": "Cuts where the inconsistency coefficient exceeds `c`.",
+          "pt": "Corta onde o coeficiente de inconsistência excede `c`."
+        },
+        {
+          "code": "T = cluster(Z, 'cutoff', c, 'Criterion', 'distance')",
+          "en": "Cuts where the link distance exceeds `c`.",
+          "pt": "Corta onde a distância de ligação excede `c`."
+        },
+        {
+          "code": "T = cluster(Z, 'cutoff', c, 'Depth', d)",
+          "en": "Sets the number of levels used for the inconsistency coefficient.",
+          "pt": "Define o número de níveis usados no coeficiente de inconsistência."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "Z",
+          "en": "(m-1)-by-3 cluster tree from `linkage`, for m observations.",
+          "pt": "Árvore de agrupamentos (m-1) por 3 criada por `linkage`, para m observações."
+        },
+        {
+          "name": "'maxclust'",
+          "en": "Maximum number of clusters: a positive integer, or a vector of them.",
+          "pt": "Número máximo de agrupamentos: um inteiro positivo, ou um vetor deles."
+        },
+        {
+          "name": "'cutoff'",
+          "en": "Cutoff value, a positive number or a vector of them. Needed when `'maxclust'` is not given.",
+          "pt": "Valor de corte, um número positivo ou um vetor deles. Necessário quando `'maxclust'` não é informado."
+        },
+        {
+          "name": "'Criterion'",
+          "en": "`'inconsistent'` (default) or `'distance'`. Applies to `'cutoff'`.",
+          "pt": "`'inconsistent'` (padrão) ou `'distance'`. Vale para `'cutoff'`."
+        },
+        {
+          "name": "'Depth'",
+          "en": "Number of tree levels for the inconsistency coefficient. Default 2.",
+          "pt": "Número de níveis da árvore para o coeficiente de inconsistência. Padrão 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "m-by-1 cluster number of each observation. With a vector of cutoffs or of `'maxclust'` values it has one column per value.",
+          "pt": "Número do agrupamento de cada observação, m por 1. Com um vetor de cortes ou de valores de `'maxclust'`, tem uma coluna por valor."
+        }
+      ],
+      "description": {
+        "en": "`linkage` builds the full tree; `cluster` decides where to cut it. With `'maxclust'` the cut is placed so that there are `k` clusters, which is the usual choice when you know how many you want. With `'cutoff'` and `'Criterion'` set to `'distance'`, observations that merge below the distance `c` stay together.\n\nThe default criterion, `'inconsistent'`, compares each link with the links below it. A cutoff on the wrong scale (for example a distance value used with the inconsistency criterion) can put all observations in a single cluster, so check the number of clusters you get.",
+        "pt": "`linkage` constrói a árvore completa; `cluster` decide onde cortá-la. Com `'maxclust'`, o corte é posicionado para que haja `k` agrupamentos, que é a escolha habitual quando você sabe quantos quer. Com `'cutoff'` e `'Criterion'` igual a `'distance'`, observações que se fundem abaixo da distância `c` ficam juntas.\n\nO critério padrão, `'inconsistent'`, compara cada ligação com as ligações abaixo dela. Um corte na escala errada (por exemplo um valor de distância usado com o critério de inconsistência) pode colocar todas as observações em um único agrupamento, então confira o número de agrupamentos obtido."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Cut into three clusters",
+            "pt": "Cortar em três agrupamentos"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4];\nZ = linkage(X, 'average');\nT = cluster(Z, 'maxclust', 3);\ndisp(T')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Cut at a distance",
+            "pt": "Cortar em uma distância"
+          },
+          "code": "X = [1 1; 1.5 2; 2 1.2; 1.2 1.8; 5 5; 5.5 4.6; 4.8 5.4; 5.2 5.1; 9 1; 9.5 1.4];\nZ = linkage(X, 'average');\nT = cluster(Z, 'cutoff', 3, 'Criterion', 'distance');\ndisp(T')\ndisp(max(T))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "linkage",
+        "clusterdata",
+        "pdist",
+        "dendrogram",
+        "cophenet"
+      ]
+    }
+  }
+}

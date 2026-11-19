@@ -1,0 +1,1785 @@
+{
+  "functions": {
+    "cholcov": {
+      "summary": {
+        "en": "Factor of a covariance matrix: returns T such that T'*T equals the matrix, also when the matrix is only positive semidefinite.",
+        "pt": "Fator de uma matriz de covariância: retorna T tal que T'*T é igual à matriz, mesmo quando ela é apenas semidefinida positiva."
+      },
+      "syntax": [
+        {
+          "code": "T = cholcov(SIGMA)",
+          "en": "Factor of a symmetric positive semidefinite matrix. Errors if the matrix is not positive semidefinite.",
+          "pt": "Fator de uma matriz simétrica semidefinida positiva. Dá erro se a matriz não for semidefinida positiva."
+        },
+        {
+          "code": "[T, num] = cholcov(SIGMA)",
+          "en": "Also returns `num`, which is 0 when `SIGMA` is positive semidefinite and a positive number when it is not.",
+          "pt": "Retorna também `num`, que vale 0 quando `SIGMA` é semidefinida positiva e um número positivo quando não é."
+        },
+        {
+          "code": "[T, num] = cholcov(SIGMA, 0)",
+          "en": "Does not error for a matrix that is not positive semidefinite: `T` is empty and `num` is positive.",
+          "pt": "Não dá erro para matriz que não é semidefinida positiva: `T` fica vazio e `num` é positivo."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "SIGMA",
+          "en": "Square symmetric matrix, typically a covariance matrix.",
+          "pt": "Matriz quadrada simétrica, tipicamente uma matriz de covariância."
+        },
+        {
+          "name": "flag",
+          "en": "Pass 0 to get `num` instead of an error when `SIGMA` is not positive semidefinite.",
+          "pt": "Passe 0 para receber `num` em vez de um erro quando `SIGMA` não é semidefinida positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "T",
+          "en": "Matrix with `T'*T` equal to `SIGMA`. It has as many columns as `SIGMA` and as many rows as its rank, so it is square when `SIGMA` is positive definite.",
+          "pt": "Matriz com `T'*T` igual a `SIGMA`. Tem tantas colunas quanto `SIGMA` e tantas linhas quanto o posto dela, então é quadrada quando `SIGMA` é definida positiva."
+        },
+        {
+          "name": "num",
+          "en": "0 for a valid covariance matrix, positive otherwise.",
+          "pt": "0 para uma matriz de covariância válida, positivo caso contrário."
+        }
+      ],
+      "description": {
+        "en": "`cholcov` is a Cholesky-like factorization meant for covariance matrices. For a positive definite matrix `T` is the usual upper triangular Cholesky factor. For a singular but positive semidefinite matrix, where `chol` would fail, it still returns a factor, with fewer rows than columns.\n\nA typical use is turning independent standard normal draws `Z` into correlated draws with covariance `SIGMA`: the rows of `Z*T` have that covariance.",
+        "pt": "`cholcov` é uma fatoração do tipo Cholesky pensada para matrizes de covariância. Para uma matriz definida positiva, `T` é o fator triangular superior usual de Cholesky. Para uma matriz singular, mas semidefinida positiva, em que `chol` falharia, ela ainda retorna um fator, com menos linhas do que colunas.\n\nUm uso típico é transformar valores normais padrão independentes `Z` em valores correlacionados com covariância `SIGMA`: as linhas de `Z*T` têm essa covariância."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Factor of a covariance matrix",
+            "pt": "Fator de uma matriz de covariância"
+          },
+          "code": "S = [2 1; 1 2];\n[T, num] = cholcov(S);\ndisp(round(T*10000)/10000)\ndisp(num)\ndisp(round(T'*T*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Singular matrix",
+            "pt": "Matriz singular"
+          },
+          "code": "S = [4 2 0; 2 3 0; 0 0 0];\n[T, num] = cholcov(S);\ndisp(size(T))\ndisp(num)\ndisp(round(T'*T*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chol",
+        "corrcov",
+        "mvnrnd",
+        "cov"
+      ]
+    },
+    "corr": {
+      "summary": {
+        "en": "Linear, Spearman or Kendall correlation between the columns of one or two matrices, with p-values.",
+        "pt": "Correlação linear, de Spearman ou de Kendall entre as colunas de uma ou duas matrizes, com valores-p."
+      },
+      "syntax": [
+        {
+          "code": "rho = corr(X)",
+          "en": "Matrix of correlations between all pairs of columns of `X`.",
+          "pt": "Matriz de correlações entre todos os pares de colunas de `X`."
+        },
+        {
+          "code": "rho = corr(X, Y)",
+          "en": "Correlations between each column of `X` and each column of `Y`.",
+          "pt": "Correlações entre cada coluna de `X` e cada coluna de `Y`."
+        },
+        {
+          "code": "[rho, pval] = corr(___)",
+          "en": "Also returns the p-value of the test that each correlation is zero.",
+          "pt": "Retorna também o valor-p do teste de que cada correlação é zero."
+        },
+        {
+          "code": "[rho, pval] = corr(___, Name, Value)",
+          "en": "Options: `'type'` (`'Pearson'`, `'Spearman'`, `'Kendall'`), `'rows'` (`'all'`, `'complete'`, `'pairwise'`) and `'tail'` (`'both'`, `'right'`, `'left'`).",
+          "pt": "Opções: `'type'` (`'Pearson'`, `'Spearman'`, `'Kendall'`), `'rows'` (`'all'`, `'complete'`, `'pairwise'`) e `'tail'` (`'both'`, `'right'`, `'left'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Matrix with observations in rows and variables in columns.",
+          "pt": "Matriz com observações nas linhas e variáveis nas colunas."
+        },
+        {
+          "name": "Y",
+          "en": "Second matrix with the same number of rows as `X`.",
+          "pt": "Segunda matriz com o mesmo número de linhas de `X`."
+        },
+        {
+          "name": "'type'",
+          "en": "Kind of correlation. Default `'Pearson'`. `'Spearman'` and `'Kendall'` use ranks, so they measure monotone association.",
+          "pt": "Tipo de correlação. O padrão é `'Pearson'`. `'Spearman'` e `'Kendall'` usam postos, então medem associação monótona."
+        },
+        {
+          "name": "'rows'",
+          "en": "How to treat `NaN`: `'all'` (default) uses every row, `'complete'` drops rows with any `NaN`, `'pairwise'` drops rows separately for each pair of columns.",
+          "pt": "Como tratar `NaN`: `'all'` (padrão) usa todas as linhas, `'complete'` descarta linhas com algum `NaN`, `'pairwise'` descarta linhas separadamente para cada par de colunas."
+        },
+        {
+          "name": "'tail'",
+          "en": "Alternative hypothesis for the p-value: `'both'` (default), `'right'` (correlation greater than 0) or `'left'`.",
+          "pt": "Hipótese alternativa do valor-p: `'both'` (padrão), `'right'` (correlação maior que 0) ou `'left'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rho",
+          "en": "Correlation matrix. It is `size(X,2)`-by-`size(X,2)` for `corr(X)` and `size(X,2)`-by-`size(Y,2)` for `corr(X,Y)`.",
+          "pt": "Matriz de correlação. Tem tamanho `size(X,2)` por `size(X,2)` em `corr(X)` e `size(X,2)` por `size(Y,2)` em `corr(X,Y)`."
+        },
+        {
+          "name": "pval",
+          "en": "Matrix of p-values, the same size as `rho`.",
+          "pt": "Matriz de valores-p, do mesmo tamanho de `rho`."
+        }
+      ],
+      "description": {
+        "en": "Unlike `corrcoef`, `corr` works column by column on two matrices and can compute rank correlations. A correlation near 1 or -1 means a strong linear (or monotone, for the rank types) relationship, and near 0 means none. A small p-value is evidence that the true correlation is not zero.\n\nTwo column vectors give a scalar. A constant column has no defined correlation and gives `NaN`.",
+        "pt": "Ao contrário de `corrcoef`, `corr` trabalha coluna a coluna em duas matrizes e calcula correlações de postos. Uma correlação próxima de 1 ou -1 indica relação linear forte (ou monótona, nos tipos de postos), e próxima de 0 indica ausência de relação. Um valor-p pequeno é evidência de que a correlação verdadeira não é zero.\n\nDois vetores coluna dão um escalar. Uma coluna constante não tem correlação definida e resulta em `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Correlation matrix and one p-value",
+            "pt": "Matriz de correlação e um valor-p"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\ndisp(round(corr(A)*10000)/10000)\n[r, p] = corr(A(:,1), A(:,2));\nfprintf('%.4f %.4f\\n', r, p)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Rank correlation and missing values",
+            "pt": "Correlação de postos e valores ausentes"
+          },
+          "code": "N = [1 2; NaN 3; 4 6; 5 NaN; 7 9];\ndisp(round(corr(N, 'rows', 'pairwise')*10000)/10000)\nx = (1:6)'; y = [2 1 4 3 7 5]';\nfprintf('%.4f\\n', corr(x, y, 'type', 'Spearman'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "corrcoef",
+        "partialcorr",
+        "corrcov",
+        "tiedrank",
+        "cov"
+      ]
+    },
+    "corrcov": {
+      "summary": {
+        "en": "Converts a covariance matrix into the matching correlation matrix.",
+        "pt": "Converte uma matriz de covariância na matriz de correlação correspondente."
+      },
+      "syntax": [
+        {
+          "code": "R = corrcov(C)",
+          "en": "Correlation matrix from the covariance matrix `C`.",
+          "pt": "Matriz de correlação a partir da matriz de covariância `C`."
+        },
+        {
+          "code": "[R, sigma] = corrcov(C)",
+          "en": "Also returns the standard deviations taken from the diagonal of `C`.",
+          "pt": "Retorna também os desvios padrão obtidos da diagonal de `C`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "C",
+          "en": "Square symmetric covariance matrix with positive diagonal.",
+          "pt": "Matriz de covariância quadrada e simétrica, com diagonal positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "R",
+          "en": "Correlation matrix with ones on the diagonal, the same size as `C`.",
+          "pt": "Matriz de correlação com uns na diagonal, do mesmo tamanho de `C`."
+        },
+        {
+          "name": "sigma",
+          "en": "Column vector of standard deviations, the square roots of the diagonal of `C`.",
+          "pt": "Vetor coluna de desvios padrão, as raízes quadradas da diagonal de `C`."
+        }
+      ],
+      "description": {
+        "en": "`corrcov` divides each entry `C(i,j)` by `sigma(i)*sigma(j)`, where `sigma` is the square root of the diagonal. The covariance matrix carries the scale of the variables, the correlation matrix does not.\n\nThe input must be square and symmetric with a positive diagonal. Otherwise it errors.",
+        "pt": "`corrcov` divide cada elemento `C(i,j)` por `sigma(i)*sigma(j)`, onde `sigma` é a raiz quadrada da diagonal. A matriz de covariância carrega a escala das variáveis, a de correlação não.\n\nA entrada deve ser quadrada e simétrica, com diagonal positiva. Caso contrário, dá erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "From covariance to correlation",
+            "pt": "De covariância para correlação"
+          },
+          "code": "C = [4 2; 2 9];\n[R, s] = corrcov(C);\ndisp(round(R*10000)/10000)\ndisp(s')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cov",
+        "corr",
+        "corrcoef",
+        "cholcov"
+      ]
+    },
+    "crosstab": {
+      "summary": {
+        "en": "Contingency table: counts how often each combination of values of two or more grouping variables occurs, with a chi-square test of independence.",
+        "pt": "Tabela de contingência: conta quantas vezes cada combinação de valores de duas ou mais variáveis de agrupamento ocorre, com teste qui-quadrado de independência."
+      },
+      "syntax": [
+        {
+          "code": "table = crosstab(x1, x2)",
+          "en": "Counts for every pair of values of `x1` and `x2`.",
+          "pt": "Contagens para cada par de valores de `x1` e `x2`."
+        },
+        {
+          "code": "table = crosstab(x1, x2, x3)",
+          "en": "Three-way table of counts.",
+          "pt": "Tabela de contagens com três dimensões."
+        },
+        {
+          "code": "[table, chi2, p, labels] = crosstab(x1, x2)",
+          "en": "Also returns the chi-square statistic and p-value for independence, and the group labels.",
+          "pt": "Retorna também a estatística qui-quadrado e o valor-p de independência, e os rótulos dos grupos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x1, x2, ...",
+          "en": "Grouping variables of the same length: numeric or logical vectors, or cell arrays of character vectors.",
+          "pt": "Variáveis de agrupamento de mesmo comprimento: vetores numéricos ou lógicos, ou arrays de células com vetores de caracteres."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "en": "Array of counts with one dimension per input. Rows and columns follow the sorted distinct values of each input.",
+          "pt": "Array de contagens com uma dimensão por entrada. Linhas e colunas seguem os valores distintos de cada entrada, em ordem."
+        },
+        {
+          "name": "chi2",
+          "en": "Pearson chi-square statistic for the hypothesis that the variables are independent.",
+          "pt": "Estatística qui-quadrado de Pearson para a hipótese de que as variáveis são independentes."
+        },
+        {
+          "name": "p",
+          "en": "p-value of that test. A small value suggests the variables are associated.",
+          "pt": "Valor-p desse teste. Um valor pequeno sugere que as variáveis estão associadas."
+        },
+        {
+          "name": "labels",
+          "en": "Cell array with one column per input listing the group label of each row or column of `table`.",
+          "pt": "Array de células com uma coluna por entrada, listando o rótulo do grupo de cada linha ou coluna de `table`."
+        }
+      ],
+      "description": {
+        "en": "Use `crosstab` to see how two categorical variables relate, for example group membership against an outcome. Entry `(i,j)` of the table counts the observations that have the i-th value of the first variable and the j-th value of the second. Observations with `NaN` in any input are left out.\n\nThe chi-square test compares the counts with those expected if the variables were independent. It is unreliable when the expected counts are very small.",
+        "pt": "Use `crosstab` para ver como duas variáveis categóricas se relacionam, por exemplo grupo contra resultado. O elemento `(i,j)` da tabela conta as observações que têm o i-ésimo valor da primeira variável e o j-ésimo valor da segunda. Observações com `NaN` em alguma entrada ficam de fora.\n\nO teste qui-quadrado compara as contagens com as esperadas se as variáveis fossem independentes. Ele não é confiável quando as contagens esperadas são muito pequenas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two grouping variables",
+            "pt": "Duas variáveis de agrupamento"
+          },
+          "code": "g1 = [1 2 1 3 3 2 1 2 3 3]';\ng2 = [1 2 2 3 3 1 1 2 3 2]';\n[t, chi2, p] = crosstab(g1, g2);\ndisp(t)\nfprintf('%.4f %.4f\\n', chi2, p)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Text labels",
+            "pt": "Rótulos de texto"
+          },
+          "code": "c = {'a','b','a','c'}';\n[t, chi2, p, lab] = crosstab(c, [1 2 1 2]');\ndisp(t)\ndisp(lab(:,1)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "tabulate",
+        "grpstats",
+        "chi2cdf",
+        "histcounts"
+      ]
+    },
+    "geomean": {
+      "summary": {
+        "en": "Geometric mean: the n-th root of the product of n positive values, or equivalently the exponential of the mean of the logarithms.",
+        "pt": "Média geométrica: a raiz n-ésima do produto de n valores positivos, ou, de forma equivalente, a exponencial da média dos logaritmos."
+      },
+      "syntax": [
+        {
+          "code": "m = geomean(x)",
+          "en": "Geometric mean of a vector, or of each column of a matrix.",
+          "pt": "Média geométrica de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "m = geomean(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "m = geomean(x, 'all')",
+          "en": "Over all elements of `x`.",
+          "pt": "Sobre todos os elementos de `x`."
+        },
+        {
+          "code": "m = geomean(x, ___, 'omitnan')",
+          "en": "Ignores `NaN` values.",
+          "pt": "Ignora valores `NaN`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of non-negative values.",
+          "pt": "Array numérico de valores não negativos."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        },
+        {
+          "name": "'omitnan'",
+          "en": "Ignore `NaN`. By default a `NaN` makes the result `NaN`.",
+          "pt": "Ignora `NaN`. Por padrão, um `NaN` torna o resultado `NaN`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Geometric mean, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Média geométrica, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "The geometric mean suits quantities that combine by multiplication, such as growth factors or ratios. It is never larger than the arithmetic mean and never smaller than the harmonic mean.\n\nA zero in the data gives 0. A negative value is an error.",
+        "pt": "A média geométrica serve para grandezas que se combinam por multiplicação, como fatores de crescimento ou razões. Ela nunca é maior que a média aritmética nem menor que a média harmônica.\n\nUm zero nos dados resulta em 0. Um valor negativo causa erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Growth factors",
+            "pt": "Fatores de crescimento"
+          },
+          "code": "g = [1.10 1.25 0.90 1.05];\nfprintf('%.4f\\n', geomean(g))\nfprintf('%.4f\\n', mean(g))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Ignoring NaN",
+            "pt": "Ignorando NaN"
+          },
+          "code": "x = [1 NaN 3];\ndisp(geomean(x))\nfprintf('%.4f\\n', geomean(x, 'omitnan'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "harmmean",
+        "mean",
+        "trimmean",
+        "median"
+      ]
+    },
+    "harmmean": {
+      "summary": {
+        "en": "Harmonic mean: the number of values divided by the sum of their reciprocals.",
+        "pt": "Média harmônica: o número de valores dividido pela soma dos seus inversos."
+      },
+      "syntax": [
+        {
+          "code": "m = harmmean(x)",
+          "en": "Harmonic mean of a vector, or of each column of a matrix.",
+          "pt": "Média harmônica de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "m = harmmean(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "m = harmmean(x, 'all')",
+          "en": "Over all elements of `x`.",
+          "pt": "Sobre todos os elementos de `x`."
+        },
+        {
+          "code": "m = harmmean(x, ___, 'omitnan')",
+          "en": "Ignores `NaN` values.",
+          "pt": "Ignora valores `NaN`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of positive values.",
+          "pt": "Array numérico de valores positivos."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        },
+        {
+          "name": "'omitnan'",
+          "en": "Ignore `NaN`. By default a `NaN` makes the result `NaN`.",
+          "pt": "Ignora `NaN`. Por padrão, um `NaN` torna o resultado `NaN`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Harmonic mean, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Média harmônica, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "The harmonic mean is the right average for rates when the same distance or amount is covered at each rate, for example the average speed over equal distances. It is the smallest of the three Pythagorean means: harmonic, geometric and arithmetic.\n\nIt is meant for positive data. A zero in the data makes the result 0.",
+        "pt": "A média harmônica é a média adequada para taxas quando a mesma distância ou quantidade é percorrida em cada taxa, por exemplo a velocidade média em distâncias iguais. É a menor das três médias pitagóricas: harmônica, geométrica e aritmética.\n\nEla é pensada para dados positivos. Um zero nos dados faz o resultado ser 0."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Average speed over equal distances",
+            "pt": "Velocidade média em distâncias iguais"
+          },
+          "code": "v = [40 60];\nfprintf('%.4f\\n', harmmean(v))\nfprintf('%.4f\\n', mean(v))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Three means of one vector",
+            "pt": "Três médias de um mesmo vetor"
+          },
+          "code": "x = [1 2 4 8];\nfprintf('%.4f %.4f %.4f\\n', harmmean(x), geomean(x), mean(x))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geomean",
+        "mean",
+        "trimmean",
+        "median"
+      ]
+    },
+    "kurtosis": {
+      "summary": {
+        "en": "Kurtosis of a sample: how heavy the tails are compared with the normal distribution, for which it is 3.",
+        "pt": "Curtose de uma amostra: quão pesadas são as caudas em comparação com a distribuição normal, para a qual vale 3."
+      },
+      "syntax": [
+        {
+          "code": "k = kurtosis(x)",
+          "en": "Kurtosis of a vector, or of each column of a matrix.",
+          "pt": "Curtose de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "k = kurtosis(x, flag)",
+          "en": "`flag = 1` (default) is the biased estimate, `flag = 0` corrects for bias.",
+          "pt": "`flag = 1` (padrão) é a estimativa viesada, `flag = 0` corrige o viés."
+        },
+        {
+          "code": "k = kurtosis(x, flag, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of observations.",
+          "pt": "Array numérico de observações."
+        },
+        {
+          "name": "flag",
+          "en": "1 for the biased estimate (default), 0 for the bias-corrected one.",
+          "pt": "1 para a estimativa viesada (padrão), 0 para a corrigida do viés."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "k",
+          "en": "Kurtosis, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Curtose, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "Kurtosis is the fourth central moment divided by the squared variance. Values above 3 mean heavier tails and more outliers than a normal sample, values below 3 mean lighter tails. A single large outlier raises it a lot.\n\nThe bias-corrected form (`flag = 0`) gives `NaN` for samples that are too short, for example 3 values. A constant sample also gives `NaN`.",
+        "pt": "A curtose é o quarto momento central dividido pelo quadrado da variância. Valores acima de 3 indicam caudas mais pesadas e mais valores extremos do que uma amostra normal, valores abaixo de 3 indicam caudas mais leves. Um único valor extremo grande a aumenta bastante.\n\nA forma com correção de viés (`flag = 0`) resulta em `NaN` para amostras curtas demais, por exemplo com 3 valores. Uma amostra constante também resulta em `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Effect of an outlier",
+            "pt": "Efeito de um valor extremo"
+          },
+          "code": "y = [1 2 3 4 10];\nfprintf('%.4f\\n', kurtosis(y))\nfprintf('%.4f\\n', kurtosis(y, 0))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Rows of a matrix",
+            "pt": "Linhas de uma matriz"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\ndisp(round(kurtosis(A)*10000)/10000)\ndisp(kurtosis(A, 1, 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "skewness",
+        "moment",
+        "std",
+        "var"
+      ]
+    },
+    "mad": {
+      "summary": {
+        "en": "Mean or median absolute deviation: a measure of spread that is less sensitive to outliers than the standard deviation.",
+        "pt": "Desvio absoluto médio ou mediano: uma medida de dispersão menos sensível a valores extremos do que o desvio padrão."
+      },
+      "syntax": [
+        {
+          "code": "m = mad(x)",
+          "en": "Mean absolute deviation of a vector, or of each column of a matrix.",
+          "pt": "Desvio absoluto médio de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "m = mad(x, 1)",
+          "en": "Median absolute deviation instead.",
+          "pt": "Desvio absoluto mediano."
+        },
+        {
+          "code": "m = mad(x, flag, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "m = mad(x, flag, 'all')",
+          "en": "Over all elements of `x`.",
+          "pt": "Sobre todos os elementos de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of observations.",
+          "pt": "Array numérico de observações."
+        },
+        {
+          "name": "flag",
+          "en": "0 (default) for the mean absolute deviation about the mean, 1 for the median absolute deviation about the median.",
+          "pt": "0 (padrão) para o desvio absoluto médio em torno da média, 1 para o desvio absoluto mediano em torno da mediana."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Deviation, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Desvio, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "With `flag = 0`, `mad` is `mean(abs(x - mean(x)))`. With `flag = 1` it is `median(abs(x - median(x)))`, which barely moves when a few values are extreme. The result is not scaled to match the standard deviation.",
+        "pt": "Com `flag = 0`, `mad` é `mean(abs(x - mean(x)))`. Com `flag = 1` é `median(abs(x - median(x)))`, que quase não muda quando poucos valores são extremos. O resultado não é reescalado para coincidir com o desvio padrão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean versus median deviation",
+            "pt": "Desvio médio versus mediano"
+          },
+          "code": "y = [1 2 3 4 100];\nfprintf('%.4f\\n', mad(y))\nfprintf('%.4f\\n', mad(y, 1))\nfprintf('%.4f\\n', std(y))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Per column and over all values",
+            "pt": "Por coluna e sobre todos os valores"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\ndisp(round(mad(A)*10000)/10000)\nfprintf('%.4f\\n', mad(A, 0, 'all'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "std",
+        "var",
+        "range",
+        "iqr",
+        "median"
+      ]
+    },
+    "moment": {
+      "summary": {
+        "en": "Central moment of a given order of a sample: the mean of the deviations from the mean raised to that power.",
+        "pt": "Momento central de uma ordem dada de uma amostra: a média dos desvios em relação à média elevados a essa potência."
+      },
+      "syntax": [
+        {
+          "code": "m = moment(x, order)",
+          "en": "Central moment of the given order, for a vector or for each column of a matrix.",
+          "pt": "Momento central da ordem dada, para um vetor ou para cada coluna de uma matriz."
+        },
+        {
+          "code": "m = moment(x, order, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "m = moment(x, order, 'omitnan')",
+          "en": "Ignores `NaN` values.",
+          "pt": "Ignora valores `NaN`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of observations.",
+          "pt": "Array numérico de observações."
+        },
+        {
+          "name": "order",
+          "en": "Order of the moment, a scalar. Order 1 gives 0 and order 2 is the variance with divisor n.",
+          "pt": "Ordem do momento, um escalar. A ordem 1 dá 0 e a ordem 2 é a variância com divisor n."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Moment, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Momento, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "`moment(x, k)` computes `mean((x - mean(x)).^k)`, dividing by the number of observations. The second moment is the population variance, and the third and fourth moments are the building blocks of `skewness` and `kurtosis`.",
+        "pt": "`moment(x, k)` calcula `mean((x - mean(x)).^k)`, dividindo pelo número de observações. O segundo momento é a variância populacional, e o terceiro e o quarto momentos são a base de `skewness` e `kurtosis`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Second and third moments",
+            "pt": "Segundo e terceiro momentos"
+          },
+          "code": "y = [1 2 3 4 10];\ndisp(moment(y, 2))\ndisp(moment(y, 3))\ndisp(var(y, 1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Skewness from moments",
+            "pt": "Assimetria a partir de momentos"
+          },
+          "code": "y = [1 2 3 4 10];\ns = moment(y, 3) / moment(y, 2)^1.5;\nfprintf('%.4f %.4f\\n', s, skewness(y))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "skewness",
+        "kurtosis",
+        "var",
+        "mean"
+      ],
+      "notes": {
+        "en": "The text options `'central'` and `'absolute'` are not accepted and give an error. Only the central moment is computed.",
+        "pt": "As opções de texto `'central'` e `'absolute'` não são aceitas e dão erro. Apenas o momento central é calculado."
+      }
+    },
+    "nancov": {
+      "summary": {
+        "en": "Covariance matrix that ignores rows with missing values (NaN).",
+        "pt": "Matriz de covariância que ignora linhas com valores ausentes (NaN)."
+      },
+      "syntax": [
+        {
+          "code": "C = nancov(X)",
+          "en": "Covariance of the columns of `X`, using only rows that have no `NaN`.",
+          "pt": "Covariância das colunas de `X`, usando apenas linhas sem `NaN`."
+        },
+        {
+          "code": "C = nancov(X, 'pairwise')",
+          "en": "Uses, for each pair of columns, all rows where both are present.",
+          "pt": "Usa, para cada par de colunas, todas as linhas em que ambas estão presentes."
+        },
+        {
+          "code": "C = nancov(X, 1)",
+          "en": "Normalizes by n instead of n-1.",
+          "pt": "Normaliza por n em vez de n-1."
+        },
+        {
+          "code": "C = nancov(X, Y)",
+          "en": "Covariance of two vectors `X` and `Y`.",
+          "pt": "Covariância de dois vetores `X` e `Y`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Matrix with observations in rows and variables in columns.",
+          "pt": "Matriz com observações nas linhas e variáveis nas colunas."
+        },
+        {
+          "name": "nflag",
+          "en": "0 (default) normalizes by n-1, 1 normalizes by n.",
+          "pt": "0 (padrão) normaliza por n-1, 1 normaliza por n."
+        },
+        {
+          "name": "'pairwise' or 'complete'",
+          "en": "How to handle `NaN`. `'complete'` (default) removes rows with any `NaN`; `'pairwise'` removes them separately for each pair.",
+          "pt": "Como tratar `NaN`. `'complete'` (padrão) remove as linhas com algum `NaN`; `'pairwise'` as remove separadamente para cada par."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "C",
+          "en": "Covariance matrix, `size(X,2)` by `size(X,2)`.",
+          "pt": "Matriz de covariância, `size(X,2)` por `size(X,2)`."
+        }
+      ],
+      "description": {
+        "en": "`nancov` is a covariance for data with gaps. With the default handling only rows without any `NaN` are used, which can leave very few rows. With `'pairwise'` each entry uses as much data as possible, at the cost that the matrix may not be positive semidefinite.",
+        "pt": "`nancov` é uma covariância para dados com lacunas. No tratamento padrão, só as linhas sem nenhum `NaN` são usadas, o que pode deixar poucas linhas. Com `'pairwise'` cada elemento usa o máximo possível de dados, ao custo de a matriz poder não ser semidefinida positiva."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Complete rows versus pairwise",
+            "pt": "Linhas completas versus aos pares"
+          },
+          "code": "N = [1 2; NaN 3; 4 6; 5 NaN; 7 9];\ndisp(nancov(N))\ndisp(nancov(N, 'pairwise'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cov",
+        "corr",
+        "nanmean",
+        "nanvar"
+      ]
+    },
+    "nanmax": {
+      "summary": {
+        "en": "The largest value, ignoring NaN values.",
+        "pt": "O maior valor, ignorando valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "m = nanmax(x)",
+          "en": "Largest value of a vector, or of each column of a matrix, ignoring `NaN`.",
+          "pt": "Maior valor de um vetor ou de cada coluna de uma matriz, ignorando `NaN`."
+        },
+        {
+          "code": "m = nanmax(x, [], dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "[m, ix] = nanmax(x)",
+          "en": "Also returns the index of each result.",
+          "pt": "Retorna também o índice de cada resultado."
+        },
+        {
+          "code": "m = nanmax(x, y)",
+          "en": "Element-wise comparison of two arrays, or of an array and a scalar.",
+          "pt": "Comparação elemento a elemento de dois arrays, ou de um array e um escalar."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "y",
+          "en": "Second array of the same size, or a scalar, for the element-wise form.",
+          "pt": "Segundo array de mesmo tamanho, ou um escalar, para a forma elemento a elemento."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Pass `[]` as the second argument when you give `dim`.",
+          "pt": "Dimensão em que operar. Passe `[]` como segundo argumento quando informar `dim`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Result, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Resultado, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        },
+        {
+          "name": "ix",
+          "en": "Position of each result along the chosen dimension.",
+          "pt": "Posição de cada resultado ao longo da dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "`nanmax` works like `max`, but a `NaN` never wins: it is skipped unless the whole column is `NaN`, in which case the result is `NaN`. With two array arguments it returns, entry by entry, the largest of the two values, again preferring a number to a `NaN`.",
+        "pt": "`nanmax` funciona como `max`, mas um `NaN` nunca vence: ele é ignorado, a menos que a coluna inteira seja `NaN`, caso em que o resultado é `NaN`. Com dois arrays, retorna, elemento a elemento, o maior dos dois valores, de novo preferindo um número a um `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Ignoring missing values",
+            "pt": "Ignorando valores ausentes"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(nanmax(N))\n[m, ix] = nanmax(N);\ndisp(ix)\ndisp(nanmax(N, [], 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "max",
+        "nanmean",
+        "nanmedian",
+        "bounds"
+      ]
+    },
+    "nanmean": {
+      "summary": {
+        "en": "Mean that ignores NaN values.",
+        "pt": "Média que ignora valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "m = nanmean(x)",
+          "en": "Mean of each column of a matrix, or of a vector, ignoring `NaN`.",
+          "pt": "Média de cada coluna de uma matriz, ou de um vetor, ignorando `NaN`."
+        },
+        {
+          "code": "m = nanmean(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean of the non-`NaN` values, with the size of `x` reduced to 1 along `dim`. It is `NaN` where every value is `NaN`.",
+          "pt": "Média dos valores que não são `NaN`, com o tamanho de `x` reduzido a 1 em `dim`. Vale `NaN` onde todos os valores são `NaN`."
+        }
+      ],
+      "description": {
+        "en": "`nanmean(x)` is the same as `mean(x, 'omitnan')`: each `NaN` is dropped and the mean uses the remaining count, so columns with different numbers of missing values are averaged over different numbers of observations.",
+        "pt": "`nanmean(x)` equivale a `mean(x, 'omitnan')`: cada `NaN` é descartado e a média usa a contagem restante, então colunas com números diferentes de valores ausentes são promediadas sobre quantidades diferentes de observações."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean with gaps",
+            "pt": "Média com lacunas"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(nanmean(N))\ndisp(nanmean(N, 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nanmedian",
+        "nansum",
+        "nanstd",
+        "mean"
+      ]
+    },
+    "nanmedian": {
+      "summary": {
+        "en": "Median that ignores NaN values.",
+        "pt": "Mediana que ignora valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "m = nanmedian(x)",
+          "en": "Median of each column of a matrix, or of a vector, ignoring `NaN`.",
+          "pt": "Mediana de cada coluna de uma matriz, ou de um vetor, ignorando `NaN`."
+        },
+        {
+          "code": "m = nanmedian(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Median of the non-`NaN` values, with the size of `x` reduced to 1 along `dim`. It is `NaN` where every value is `NaN`.",
+          "pt": "Mediana dos valores que não são `NaN`, com o tamanho de `x` reduzido a 1 em `dim`. Vale `NaN` onde todos os valores são `NaN`."
+        }
+      ],
+      "description": {
+        "en": "`nanmedian(x)` is the same as `median(x, 'omitnan')`. The median is the middle value of the sorted data, or the mean of the two middle values when the count is even, computed after the `NaN` entries are removed.",
+        "pt": "`nanmedian(x)` equivale a `median(x, 'omitnan')`. A mediana é o valor central dos dados ordenados, ou a média dos dois valores centrais quando a contagem é par, calculada depois de remover as entradas `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median with gaps",
+            "pt": "Mediana com lacunas"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(nanmedian(N))\ndisp(nanmedian(N, 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nanmean",
+        "nanmax",
+        "nanmin",
+        "median"
+      ]
+    },
+    "nanmin": {
+      "summary": {
+        "en": "The smallest value, ignoring NaN values.",
+        "pt": "O menor valor, ignorando valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "m = nanmin(x)",
+          "en": "Smallest value of a vector, or of each column of a matrix, ignoring `NaN`.",
+          "pt": "Menor valor de um vetor ou de cada coluna de uma matriz, ignorando `NaN`."
+        },
+        {
+          "code": "m = nanmin(x, [], dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        },
+        {
+          "code": "[m, ix] = nanmin(x)",
+          "en": "Also returns the index of each result.",
+          "pt": "Retorna também o índice de cada resultado."
+        },
+        {
+          "code": "m = nanmin(x, y)",
+          "en": "Element-wise comparison of two arrays, or of an array and a scalar.",
+          "pt": "Comparação elemento a elemento de dois arrays, ou de um array e um escalar."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "y",
+          "en": "Second array of the same size, or a scalar, for the element-wise form.",
+          "pt": "Segundo array de mesmo tamanho, ou um escalar, para a forma elemento a elemento."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Pass `[]` as the second argument when you give `dim`.",
+          "pt": "Dimensão em que operar. Passe `[]` como segundo argumento quando informar `dim`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Result, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Resultado, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        },
+        {
+          "name": "ix",
+          "en": "Position of each result along the chosen dimension.",
+          "pt": "Posição de cada resultado ao longo da dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "`nanmin` works like `min`, but a `NaN` never wins: it is skipped unless the whole column is `NaN`, in which case the result is `NaN`. With two array arguments it returns, entry by entry, the smallest of the two values, again preferring a number to a `NaN`.",
+        "pt": "`nanmin` funciona como `min`, mas um `NaN` nunca vence: ele é ignorado, a menos que a coluna inteira seja `NaN`, caso em que o resultado é `NaN`. Com dois arrays, retorna, elemento a elemento, o menor dos dois valores, de novo preferindo um número a um `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Ignoring missing values",
+            "pt": "Ignorando valores ausentes"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(nanmin(N))\n[m, ix] = nanmin(N);\ndisp(ix)\ndisp(nanmin(N, [], 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "min",
+        "nanmean",
+        "nanmedian",
+        "bounds"
+      ]
+    },
+    "nanstd": {
+      "summary": {
+        "en": "Standard deviation that ignores NaN values.",
+        "pt": "Desvio padrão que ignora valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "s = nanstd(x)",
+          "en": "Standard deviation of each column of a matrix, or of a vector, ignoring `NaN`.",
+          "pt": "Desvio padrão de cada coluna de uma matriz, ou de um vetor, ignorando `NaN`."
+        },
+        {
+          "code": "s = nanstd(x, flag)",
+          "en": "`flag = 0` (default) normalizes by n-1, `flag = 1` by n.",
+          "pt": "`flag = 0` (padrão) normaliza por n-1, `flag = 1` por n."
+        },
+        {
+          "code": "s = nanstd(x, flag, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "flag",
+          "en": "0 to normalize by n-1 (default), 1 to normalize by n, where n counts only non-`NaN` values.",
+          "pt": "0 para normalizar por n-1 (padrão), 1 para normalizar por n, onde n conta apenas valores que não são `NaN`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Standard deviation of the non-`NaN` values, with the size of `x` reduced to 1 along `dim`.",
+          "pt": "Desvio padrão dos valores que não são `NaN`, com o tamanho de `x` reduzido a 1 em `dim`."
+        }
+      ],
+      "description": {
+        "en": "`nanstd(x)` is the same as `std(x, 'omitnan')`: it measures spread using only the values that are not `NaN`. With `flag = 0` it divides by n-1, with `flag = 1` by n.",
+        "pt": "`nanstd(x)` equivale a `std(x, 'omitnan')`: mede a dispersão usando apenas os valores que não são `NaN`. Com `flag = 0` divide por n-1, com `flag = 1` por n."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Standard deviation with gaps",
+            "pt": "Desvio padrão com lacunas"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(round(nanstd(N)*10000)/10000)\ndisp(round(nanstd(N, 1)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nanmean",
+        "nansum",
+        "nanmedian",
+        "std"
+      ]
+    },
+    "nansum": {
+      "summary": {
+        "en": "Sum that ignores NaN values.",
+        "pt": "Soma que ignora valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "s = nansum(x)",
+          "en": "Sum of each column of a matrix, or of a vector, ignoring `NaN`.",
+          "pt": "Soma de cada coluna de uma matriz, ou de um vetor, ignorando `NaN`."
+        },
+        {
+          "code": "s = nansum(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Sum of the non-`NaN` values, with the size of `x` reduced to 1 along `dim`.",
+          "pt": "Soma dos valores que não são `NaN`, com o tamanho de `x` reduzido a 1 em `dim`."
+        }
+      ],
+      "description": {
+        "en": "`nansum(x)` is the same as `sum(x, 'omitnan')`: each `NaN` counts as if it were absent. A column made only of `NaN` sums to 0, not `NaN`.",
+        "pt": "`nansum(x)` equivale a `sum(x, 'omitnan')`: cada `NaN` conta como se não existisse. Uma coluna formada só de `NaN` tem soma 0, e não `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Sum with gaps",
+            "pt": "Soma com lacunas"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(nansum(N))\ndisp(nansum(N, 2)')\ndisp(nansum([NaN NaN]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nanmean",
+        "nanstd",
+        "nanvar",
+        "sum"
+      ]
+    },
+    "nanvar": {
+      "summary": {
+        "en": "Variance that ignores NaN values.",
+        "pt": "Variância que ignora valores NaN."
+      },
+      "syntax": [
+        {
+          "code": "s = nanvar(x)",
+          "en": "Variance of each column of a matrix, or of a vector, ignoring `NaN`.",
+          "pt": "Variância de cada coluna de uma matriz, ou de um vetor, ignorando `NaN`."
+        },
+        {
+          "code": "s = nanvar(x, flag)",
+          "en": "`flag = 0` (default) normalizes by n-1, `flag = 1` by n.",
+          "pt": "`flag = 0` (padrão) normaliza por n-1, `flag = 1` por n."
+        },
+        {
+          "code": "s = nanvar(x, flag, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array, possibly with `NaN`.",
+          "pt": "Array numérico, possivelmente com `NaN`."
+        },
+        {
+          "name": "flag",
+          "en": "0 to normalize by n-1 (default), 1 to normalize by n, where n counts only non-`NaN` values.",
+          "pt": "0 para normalizar por n-1 (padrão), 1 para normalizar por n, onde n conta apenas valores que não são `NaN`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Variance of the non-`NaN` values, with the size of `x` reduced to 1 along `dim`.",
+          "pt": "Variância dos valores que não são `NaN`, com o tamanho de `x` reduzido a 1 em `dim`."
+        }
+      ],
+      "description": {
+        "en": "`nanvar(x)` is the same as `var(x, 0, dim, 'omitnan')`: it measures spread using only the values that are not `NaN`. With `flag = 0` it divides by n-1, with `flag = 1` by n.",
+        "pt": "`nanvar(x)` equivale a `var(x, 0, dim, 'omitnan')`: mede a dispersão usando apenas os valores que não são `NaN`. Com `flag = 0` divide por n-1, com `flag = 1` por n."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Variance with gaps",
+            "pt": "Variância com lacunas"
+          },
+          "code": "N = [1 NaN 3; 4 5 NaN; 7 8 9; NaN 2 1];\ndisp(round(nanvar(N)*10000)/10000)\ndisp(round(nanvar(N, 1)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nanmean",
+        "nansum",
+        "nanmedian",
+        "var"
+      ]
+    },
+    "partialcorr": {
+      "summary": {
+        "en": "Partial correlation: the correlation between variables after removing the linear effect of one or more control variables.",
+        "pt": "Correlação parcial: a correlação entre variáveis depois de remover o efeito linear de uma ou mais variáveis de controle."
+      },
+      "syntax": [
+        {
+          "code": "rho = partialcorr(X, Z)",
+          "en": "Partial correlations between the columns of `X`, controlling for `Z`.",
+          "pt": "Correlações parciais entre as colunas de `X`, controlando por `Z`."
+        },
+        {
+          "code": "rho = partialcorr(X, Y, Z)",
+          "en": "Partial correlations between columns of `X` and columns of `Y`, controlling for `Z`.",
+          "pt": "Correlações parciais entre colunas de `X` e colunas de `Y`, controlando por `Z`."
+        },
+        {
+          "code": "rho = partialcorr(X)",
+          "en": "Partial correlation of each pair of columns controlling for all the other columns.",
+          "pt": "Correlação parcial de cada par de colunas controlando por todas as outras colunas."
+        },
+        {
+          "code": "[rho, pval] = partialcorr(___, Name, Value)",
+          "en": "Also returns p-values. Options: `'Type'` (`'Pearson'`, `'Spearman'`, `'Kendall'`), `'Rows'` (`'all'`, `'complete'`, `'pairwise'`), `'Tail'` and `'Alpha'`.",
+          "pt": "Retorna também valores-p. Opções: `'Type'` (`'Pearson'`, `'Spearman'`, `'Kendall'`), `'Rows'` (`'all'`, `'complete'`, `'pairwise'`), `'Tail'` e `'Alpha'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Matrix with observations in rows and variables in columns.",
+          "pt": "Matriz com observações nas linhas e variáveis nas colunas."
+        },
+        {
+          "name": "Y",
+          "en": "Optional second matrix with the same number of rows as `X`.",
+          "pt": "Segunda matriz opcional com o mesmo número de linhas de `X`."
+        },
+        {
+          "name": "Z",
+          "en": "Control variables, with the same number of rows as `X`.",
+          "pt": "Variáveis de controle, com o mesmo número de linhas de `X`."
+        },
+        {
+          "name": "'Type'",
+          "en": "Kind of correlation, default `'Pearson'`.",
+          "pt": "Tipo de correlação, padrão `'Pearson'`."
+        },
+        {
+          "name": "'Rows'",
+          "en": "How to treat `NaN`: `'all'` (default), `'complete'` or `'pairwise'`.",
+          "pt": "Como tratar `NaN`: `'all'` (padrão), `'complete'` ou `'pairwise'`."
+        },
+        {
+          "name": "'Tail'",
+          "en": "Alternative hypothesis for the p-value: `'both'` (default), `'right'` or `'left'`.",
+          "pt": "Hipótese alternativa do valor-p: `'both'` (padrão), `'right'` ou `'left'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "rho",
+          "en": "Matrix of partial correlations.",
+          "pt": "Matriz de correlações parciais."
+        },
+        {
+          "name": "pval",
+          "en": "Matrix of p-values for the test that each partial correlation is zero.",
+          "pt": "Matriz de valores-p do teste de que cada correlação parcial é zero."
+        }
+      ],
+      "description": {
+        "en": "A partial correlation answers: how related are two variables once the part explained by the controls is removed? It is the correlation between the residuals of each variable after a linear regression on `Z`. It can differ a lot from the plain correlation when `Z` drives both variables.",
+        "pt": "Uma correlação parcial responde: qual a relação entre duas variáveis depois de retirar a parte explicada pelos controles? É a correlação entre os resíduos de cada variável após uma regressão linear em `Z`. Ela pode ser bem diferente da correlação simples quando `Z` influencia as duas variáveis."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Controlling for a third variable",
+            "pt": "Controlando por uma terceira variável"
+          },
+          "code": "x = (1:6)'; y = [2 1 4 3 7 5]'; z = [1 1 2 2 3 3]';\nfprintf('%.4f\\n', corr(x, y))\n[r, p] = partialcorr(x, y, z);\nfprintf('%.4f %.4f\\n', r, p)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "All columns controlling for the others",
+            "pt": "Todas as colunas controlando pelas outras"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\ndisp(round(partialcorr(A)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "corr",
+        "corrcoef",
+        "regress",
+        "cov"
+      ],
+      "notes": {
+        "en": "With `'Rows'` set to `'complete'` or `'pairwise'` and fewer complete rows than variables, MATLAB still returns some coefficients (from a singular covariance), while MatLivre returns `NaN`.",
+        "pt": "Com `'Rows'` igual a `'complete'` ou `'pairwise'` e menos linhas completas do que variáveis, o MATLAB ainda retorna alguns coeficientes (a partir de uma covariância singular), enquanto o MatLivre retorna `NaN`."
+      }
+    },
+    "range": {
+      "summary": {
+        "en": "Range of values: the largest minus the smallest.",
+        "pt": "Amplitude dos valores: o maior menos o menor."
+      },
+      "syntax": [
+        {
+          "code": "r = range(x)",
+          "en": "Range of a vector, or of each column of a matrix.",
+          "pt": "Amplitude de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "r = range(x, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array.",
+          "pt": "Array numérico."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "`max(x) - min(x)`, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "`max(x) - min(x)`, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "`range` is the simplest measure of spread. It depends only on the two extreme values, so a single outlier changes it a lot. `NaN` values are ignored unless every value is `NaN`.",
+        "pt": "`range` é a medida de dispersão mais simples. Depende apenas dos dois valores extremos, então um único valor atípico a altera bastante. Valores `NaN` são ignorados, a menos que todos sejam `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Range by column and by row",
+            "pt": "Amplitude por coluna e por linha"
+          },
+          "code": "A = [1 5 3; 4 9 2];\ndisp(range(A))\ndisp(range(A, 2)')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bounds",
+        "max",
+        "min",
+        "iqr",
+        "std"
+      ]
+    },
+    "skewness": {
+      "summary": {
+        "en": "Skewness of a sample: how asymmetric the distribution is around its mean.",
+        "pt": "Assimetria de uma amostra: quão assimétrica é a distribuição em torno da média."
+      },
+      "syntax": [
+        {
+          "code": "s = skewness(x)",
+          "en": "Skewness of a vector, or of each column of a matrix.",
+          "pt": "Assimetria de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "s = skewness(x, flag)",
+          "en": "`flag = 1` (default) is the biased estimate, `flag = 0` corrects for bias.",
+          "pt": "`flag = 1` (padrão) é a estimativa viesada, `flag = 0` corrige o viés."
+        },
+        {
+          "code": "s = skewness(x, flag, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array of observations.",
+          "pt": "Array numérico de observações."
+        },
+        {
+          "name": "flag",
+          "en": "1 for the biased estimate (default), 0 for the bias-corrected one.",
+          "pt": "1 para a estimativa viesada (padrão), 0 para a corrigida do viés."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "s",
+          "en": "Skewness, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Assimetria, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "Skewness is the third central moment divided by the standard deviation cubed. It is 0 for a symmetric sample, positive when the long tail points to the right, and negative when it points to the left.\n\nThe bias-corrected form (`flag = 0`) gives `NaN` for samples that are too short, for example 2 values. A constant sample also gives `NaN`.",
+        "pt": "A assimetria é o terceiro momento central dividido pelo cubo do desvio padrão. Vale 0 para uma amostra simétrica, é positiva quando a cauda longa aponta para a direita e negativa quando aponta para a esquerda.\n\nA forma com correção de viés (`flag = 0`) resulta em `NaN` para amostras curtas demais, por exemplo com 2 valores. Uma amostra constante também resulta em `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Right-skewed sample",
+            "pt": "Amostra com assimetria à direita"
+          },
+          "code": "y = [1 2 3 4 10];\nfprintf('%.4f\\n', skewness(y))\nfprintf('%.4f\\n', skewness(y, 0))\nfprintf('%.4f\\n', skewness(-y))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Per row",
+            "pt": "Por linha"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\ndisp(round(skewness(A, 1, 2)'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "kurtosis",
+        "moment",
+        "mean",
+        "median"
+      ]
+    },
+    "tabulate": {
+      "summary": {
+        "en": "Frequency table: each value, how many times it occurs and its percentage.",
+        "pt": "Tabela de frequências: cada valor, quantas vezes ocorre e o seu percentual."
+      },
+      "syntax": [
+        {
+          "code": "t = tabulate(x)",
+          "en": "Table of the values of a numeric vector `x`.",
+          "pt": "Tabela dos valores de um vetor numérico `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric or logical vector. `NaN` values are not counted.",
+          "pt": "Vetor numérico ou lógico. Valores `NaN` não são contados."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "t",
+          "en": "Numeric matrix with one row per integer from `min(x)` to `max(x)`, including integers that do not occur (count 0). Column 1 is the value, column 2 the count and column 3 the percentage of all counted values.",
+          "pt": "Matriz numérica com uma linha por inteiro de `min(x)` a `max(x)`, incluindo os que não ocorrem (contagem 0). A coluna 1 é o valor, a coluna 2 a contagem e a coluna 3 o percentual do total contado."
+        }
+      ],
+      "description": {
+        "en": "`tabulate` is a quick way to see how often each value occurs. The percentages in column 3 add up to 100. For two variables at once, use `crosstab`.",
+        "pt": "`tabulate` é uma forma rápida de ver com que frequência cada valor ocorre. Os percentuais da coluna 3 somam 100. Para duas variáveis ao mesmo tempo, use `crosstab`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Counts and percentages",
+            "pt": "Contagens e percentuais"
+          },
+          "code": "t = tabulate([1 2 2 3 3 3]);\ndisp(round(t*100)/100)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Ignoring NaN",
+            "pt": "Ignorando NaN"
+          },
+          "code": "t = tabulate([3 1 1 NaN]);\ndisp(round(t*100)/100)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "crosstab",
+        "histcounts",
+        "unique",
+        "grpstats"
+      ],
+      "notes": {
+        "en": "Only numeric vectors are supported: a cell array of text gives an error. The function returns just the table matrix (one output) and the extra outputs of the form `[table, chi2, p]` are not available.",
+        "pt": "Só vetores numéricos são aceitos: um array de células com texto dá erro. A função retorna apenas a matriz da tabela (uma saída) e as saídas extras no formato `[table, chi2, p]` não estão disponíveis."
+      }
+    },
+    "tiedrank": {
+      "summary": {
+        "en": "Ranks of the values of a sample, giving tied values the average of the ranks they span.",
+        "pt": "Postos dos valores de uma amostra, dando aos valores empatados a média dos postos que eles ocupam."
+      },
+      "syntax": [
+        {
+          "code": "r = tiedrank(x)",
+          "en": "Ranks of a vector, or of each column of a matrix.",
+          "pt": "Postos de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "[r, tieadj] = tiedrank(x)",
+          "en": "Also returns an adjustment for ties used in rank-test statistics.",
+          "pt": "Retorna também um ajuste para empates usado em estatísticas de testes de postos."
+        },
+        {
+          "code": "[r, tieadj] = tiedrank(x, tieflag)",
+          "en": "With `tieflag` true, `tieadj` has three entries instead of one.",
+          "pt": "Com `tieflag` verdadeiro, `tieadj` tem três elementos em vez de um."
+        },
+        {
+          "code": "r = tiedrank(x, tieflag, bidir)",
+          "en": "With `bidir` true, ranks count up to the middle and back down.",
+          "pt": "Com `bidir` verdadeiro, os postos sobem até o meio e depois descem."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric vector or matrix. Ranks are computed down each column.",
+          "pt": "Vetor ou matriz numérica. Os postos são calculados ao longo de cada coluna."
+        },
+        {
+          "name": "tieflag",
+          "en": "If true, return the three tie sums instead of the single adjustment. Default false.",
+          "pt": "Se verdadeiro, retorna as três somas de empates em vez do ajuste único. Padrão falso."
+        },
+        {
+          "name": "bidir",
+          "en": "If true, rank from both ends toward the middle. Default false.",
+          "pt": "Se verdadeiro, ordena a partir das duas pontas em direção ao meio. Padrão falso."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Ranks with the size of `x`. The smallest value has rank 1, and tied values share the mean of their ranks. `NaN` stays `NaN`.",
+          "pt": "Postos com o tamanho de `x`. O menor valor tem posto 1 e valores empatados compartilham a média dos seus postos. `NaN` continua `NaN`."
+        },
+        {
+          "name": "tieadj",
+          "en": "Tie adjustment, one value (or three with `tieflag`) per column.",
+          "pt": "Ajuste de empates, um valor (ou três com `tieflag`) por coluna."
+        }
+      ],
+      "description": {
+        "en": "Ranks replace the values by their order, which is the first step of rank-based methods such as Spearman correlation and the Wilcoxon and Kruskal-Wallis tests. When values tie, the average rank keeps the sum of the ranks unchanged.\n\nFor the default adjustment, `tieadj` is the sum over tied groups of `t*(t-1)*(t+1)/2`, with `t` the size of the group.",
+        "pt": "Os postos substituem os valores pela sua ordem, que é o primeiro passo de métodos baseados em postos, como a correlação de Spearman e os testes de Wilcoxon e de Kruskal-Wallis. Quando há empates, o posto médio mantém inalterada a soma dos postos.\n\nNo ajuste padrão, `tieadj` é a soma, sobre os grupos empatados, de `t*(t-1)*(t+1)/2`, com `t` o tamanho do grupo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Ranks with ties",
+            "pt": "Postos com empates"
+          },
+          "code": "x = [10 20 20 30 30 30];\n[r, adj] = tiedrank(x);\ndisp(r)\ndisp(adj)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Ranks of unordered data",
+            "pt": "Postos de dados fora de ordem"
+          },
+          "code": "disp(tiedrank([3 1 2 2]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "corr",
+        "ranksum",
+        "signrank",
+        "kruskalwallis",
+        "sort"
+      ]
+    },
+    "trimmean": {
+      "summary": {
+        "en": "Trimmed mean: the mean after discarding a percentage of the smallest and largest values.",
+        "pt": "Média aparada: a média depois de descartar uma porcentagem dos menores e dos maiores valores."
+      },
+      "syntax": [
+        {
+          "code": "m = trimmean(x, percent)",
+          "en": "Trimmed mean of a vector, or of each column of a matrix.",
+          "pt": "Média aparada de um vetor ou de cada coluna de uma matriz."
+        },
+        {
+          "code": "m = trimmean(x, percent, flag)",
+          "en": "`flag` is `'round'` (default), `'floor'` or `'weighted'` and says how a non-integer number of values to trim is handled.",
+          "pt": "`flag` é `'round'` (padrão), `'floor'` ou `'weighted'` e define como tratar um número não inteiro de valores a aparar."
+        },
+        {
+          "code": "m = trimmean(x, percent, dim)",
+          "en": "Along dimension `dim`.",
+          "pt": "Ao longo da dimensão `dim`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array. `NaN` values are ignored.",
+          "pt": "Array numérico. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "percent",
+          "en": "Total percentage of values to remove, from 0 up to but not including 100. Half comes from each end.",
+          "pt": "Porcentagem total de valores a remover, de 0 até 100 (exclusive). Metade sai de cada extremidade."
+        },
+        {
+          "name": "flag",
+          "en": "Rule for a fractional number of values to trim. Default `'round'`.",
+          "pt": "Regra para um número fracionário de valores a aparar. Padrão `'round'`."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Trimmed mean, with the size of `x` reduced to 1 along the chosen dimension.",
+          "pt": "Média aparada, com o tamanho de `x` reduzido a 1 na dimensão escolhida."
+        }
+      ],
+      "description": {
+        "en": "`trimmean(x, 40)` sorts the data, removes 20% of the values from each end and averages the rest. It sits between the mean (`percent = 0`) and the median (percentages close to 100), and resists outliers much better than the mean.\n\nThe percentage is of the total count, so for 10 values, `percent = 20` removes the single smallest and the single largest.",
+        "pt": "`trimmean(x, 40)` ordena os dados, remove 20% dos valores de cada extremidade e tira a média do resto. Fica entre a média (`percent = 0`) e a mediana (porcentagens próximas de 100) e resiste bem mais a valores atípicos do que a média.\n\nA porcentagem é sobre o total de valores, então com 10 valores, `percent = 20` remove o menor e o maior."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Resisting an outlier",
+            "pt": "Resistindo a um valor atípico"
+          },
+          "code": "x = [1 2 3 4 100];\ndisp(mean(x))\ndisp(trimmean(x, 40))\ndisp(median(x))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Per column",
+            "pt": "Por coluna"
+          },
+          "code": "A = [1 5; 2 6; 3 7; 4 8; 100 9];\ndisp(trimmean(A, 40))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mean",
+        "median",
+        "geomean",
+        "mad"
+      ]
+    },
+    "zscore": {
+      "summary": {
+        "en": "Standardizes data to z-scores: subtracts the mean and divides by the standard deviation.",
+        "pt": "Padroniza dados em escores z: subtrai a média e divide pelo desvio padrão."
+      },
+      "syntax": [
+        {
+          "code": "z = zscore(x)",
+          "en": "Standardizes a vector, or each column of a matrix.",
+          "pt": "Padroniza um vetor ou cada coluna de uma matriz."
+        },
+        {
+          "code": "z = zscore(x, flag, dim)",
+          "en": "`flag = 0` (default) uses the standard deviation with n-1, `flag = 1` with n. `dim` chooses the dimension.",
+          "pt": "`flag = 0` (padrão) usa o desvio padrão com n-1, `flag = 1` com n. `dim` escolhe a dimensão."
+        },
+        {
+          "code": "[z, mu, sigma] = zscore(x)",
+          "en": "Also returns the means and standard deviations used.",
+          "pt": "Retorna também as médias e os desvios padrão usados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Numeric array.",
+          "pt": "Array numérico."
+        },
+        {
+          "name": "flag",
+          "en": "0 for the sample standard deviation (default), 1 for the population one.",
+          "pt": "0 para o desvio padrão amostral (padrão), 1 para o populacional."
+        },
+        {
+          "name": "dim",
+          "en": "Dimension to operate along. Default: first non-singleton dimension.",
+          "pt": "Dimensão em que operar. Padrão: primeira dimensão de tamanho diferente de 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "z",
+          "en": "Standardized values, with the size of `x`.",
+          "pt": "Valores padronizados, com o tamanho de `x`."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of each column (or along `dim`).",
+          "pt": "Média de cada coluna (ou ao longo de `dim`)."
+        },
+        {
+          "name": "sigma",
+          "en": "Standard deviation of each column (or along `dim`).",
+          "pt": "Desvio padrão de cada coluna (ou ao longo de `dim`)."
+        }
+      ],
+      "description": {
+        "en": "A z-score says how many standard deviations a value is from the mean of its column. After standardizing, each column has mean 0 and standard deviation 1, so variables measured in different units become comparable. This is a common preprocessing step before clustering or PCA.\n\nA constant column has standard deviation 0. `zscore` then returns 0 for it instead of dividing by zero.",
+        "pt": "Um escore z diz quantos desvios padrão um valor está da média da sua coluna. Depois da padronização, cada coluna tem média 0 e desvio padrão 1, então variáveis medidas em unidades diferentes ficam comparáveis. É um passo comum de pré-processamento antes de agrupamento (clustering) ou PCA.\n\nUma coluna constante tem desvio padrão 0. Nesse caso `zscore` retorna 0 para ela, em vez de dividir por zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Standardize the columns",
+            "pt": "Padronizar as colunas"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\n[z, mu, sigma] = zscore(A);\ndisp(round(z*10000)/10000)\ndisp(mu)\ndisp(round(sigma*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Check the result",
+            "pt": "Conferir o resultado"
+          },
+          "code": "A = [2 4 6; 3 1 8; 5 7 2; 9 3 4; 1 6 5];\nz = zscore(A);\ndisp(round(mean(z)*10000)/10000)\ndisp(round(std(z)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mean",
+        "std",
+        "normalize",
+        "pca"
+      ]
+    }
+  }
+}

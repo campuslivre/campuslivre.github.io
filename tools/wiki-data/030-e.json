@@ -1,0 +1,1585 @@
+{
+  "functions": {
+    "betafit": {
+      "summary": {
+        "en": "Fits a beta distribution to data in the open interval (0, 1) by maximum likelihood and returns the two shape parameters with confidence intervals.",
+        "pt": "Ajusta uma distribuição beta a dados no intervalo aberto (0, 1) por máxima verossimilhança e retorna os dois parâmetros de forma com intervalos de confiança."
+      },
+      "syntax": [
+        {
+          "code": "phat = betafit(x)",
+          "en": "Returns the estimates `[a b]` of the two shape parameters.",
+          "pt": "Retorna as estimativas `[a b]` dos dois parâmetros de forma."
+        },
+        {
+          "code": "[phat, pci] = betafit(x)",
+          "en": "Also returns the 95% confidence intervals for `a` and `b`.",
+          "pt": "Retorna também os intervalos de confiança de 95% para `a` e `b`."
+        },
+        {
+          "code": "[phat, pci] = betafit(x, alpha)",
+          "en": "Uses a `100*(1-alpha)`% confidence level.",
+          "pt": "Usa um nível de confiança de `100*(1-alpha)`%."
+        },
+        {
+          "code": "[phat, pci] = betafit(x, alpha, freq)",
+          "en": "Treats `freq(i)` as the number of times `x(i)` was observed.",
+          "pt": "Trata `freq(i)` como o número de vezes que `x(i)` foi observado."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of observations, each strictly between 0 and 1.",
+          "pt": "Vetor de observações, cada uma estritamente entre 0 e 1."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the confidence intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos de confiança. O padrão é 0.05."
+        },
+        {
+          "name": "freq",
+          "en": "Vector of non-negative counts, the same length as `x`.",
+          "pt": "Vetor de contagens não negativas, com o mesmo comprimento de `x`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phat",
+          "en": "Row vector `[a b]` with the estimated shape parameters, both positive.",
+          "pt": "Vetor linha `[a b]` com os parâmetros de forma estimados, ambos positivos."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-2 matrix. The first row holds the lower limits and the second row the upper limits, one column for `a` and one for `b`.",
+          "pt": "Matriz 2 por 2. A primeira linha tem os limites inferiores e a segunda os superiores, com uma coluna para `a` e outra para `b`."
+        }
+      ],
+      "description": {
+        "en": "`betafit` finds the shape parameters `a` and `b` that make the observed data most likely under a beta distribution. The beta distribution lives on (0, 1), so it suits proportions, rates and probabilities.\n\nThe confidence intervals come from the asymptotic covariance of the estimates, so they are approximate for small samples. Use `betalike` to evaluate the log-likelihood at any parameter pair.",
+        "pt": "`betafit` encontra os parâmetros de forma `a` e `b` que tornam os dados observados os mais prováveis sob uma distribuição beta. A beta vive em (0, 1), por isso serve para proporções, taxas e probabilidades.\n\nOs intervalos de confiança vêm da covariância assintótica das estimativas, então são aproximados em amostras pequenas. Use `betalike` para calcular a log-verossimilhança em qualquer par de parâmetros."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit a beta distribution to proportions",
+            "pt": "Ajustar uma beta a proporções"
+          },
+          "code": "x = [0.1 0.25 0.3 0.45 0.5 0.62 0.7 0.81 0.9 0.35];\n[phat, pci] = betafit(x);\nfprintf('a = %.4f, b = %.4f\\n', phat);\ndisp(round(pci*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betalike",
+        "betapdf",
+        "betainv",
+        "betastat",
+        "cdf"
+      ]
+    },
+    "betainv": {
+      "summary": {
+        "en": "Inverse of the beta cumulative distribution function: returns the value x in [0, 1] whose cumulative probability is p.",
+        "pt": "Inversa da função de distribuição acumulada beta: retorna o valor x em [0, 1] cuja probabilidade acumulada é p."
+      },
+      "syntax": [
+        {
+          "code": "x = betainv(p, a, b)",
+          "en": "Quantiles of the beta distribution with shape parameters `a` and `b`.",
+          "pt": "Quantis da distribuição beta com parâmetros de forma `a` e `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "a",
+          "en": "First shape parameter, positive.",
+          "pt": "Primeiro parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Second shape parameter, positive.",
+          "pt": "Segundo parâmetro de forma, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles in [0, 1], with the size that results from expanding `p`, `a` and `b` together.",
+          "pt": "Quantis em [0, 1], com o tamanho resultante da expansão conjunta de `p`, `a` e `b`."
+        }
+      ],
+      "description": {
+        "en": "`betainv(p, a, b)` answers the question: below which value does a proportion `p` of a beta distribution lie? It undoes the beta cumulative distribution function. The inputs may be scalars or arrays of compatible sizes.\n\nUse it for percentiles and for the critical values of procedures built on the beta distribution.",
+        "pt": "`betainv(p, a, b)` responde à pergunta: abaixo de qual valor fica uma proporção `p` de uma distribuição beta? Ela desfaz a função de distribuição acumulada beta. As entradas podem ser escalares ou arrays de tamanhos compatíveis.\n\nUse para percentis e para valores críticos de procedimentos baseados na distribuição beta."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quartiles of a beta(2,3)",
+            "pt": "Quartis de uma beta(2,3)"
+          },
+          "code": "q = betainv([0.25 0.5 0.75], 2, 3);\ndisp(round(q*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betapdf",
+        "betafit",
+        "betastat",
+        "cdf",
+        "chi2inv"
+      ]
+    },
+    "betalike": {
+      "summary": {
+        "en": "Negative log-likelihood of beta data for given shape parameters, with the asymptotic covariance matrix of the estimates.",
+        "pt": "Log-verossimilhança negativa de dados beta para parâmetros de forma dados, com a matriz de covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = betalike(params, data)",
+          "en": "Negative log-likelihood at `params = [a b]`.",
+          "pt": "Log-verossimilhança negativa em `params = [a b]`."
+        },
+        {
+          "code": "[nlogL, avar] = betalike(params, data)",
+          "en": "Also returns the 2-by-2 asymptotic covariance matrix.",
+          "pt": "Retorna também a matriz de covariância assintótica 2 por 2."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Two-element vector `[a b]` of positive shape parameters.",
+          "pt": "Vetor `[a b]` de dois parâmetros de forma positivos."
+        },
+        {
+          "name": "data",
+          "en": "Vector of observations, between 0 and 1.",
+          "pt": "Vetor de observações, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Scalar negative log-likelihood. Smaller means the parameters fit the data better.",
+          "pt": "Log-verossimilhança negativa escalar. Quanto menor, melhor os parâmetros se ajustam aos dados."
+        },
+        {
+          "name": "avar",
+          "en": "2-by-2 asymptotic covariance matrix, useful for standard errors when `params` are the maximum likelihood estimates.",
+          "pt": "Matriz de covariância assintótica 2 por 2, útil para erros-padrão quando `params` são as estimativas de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`betalike` evaluates the objective that `betafit` minimizes. Use it to compare candidate parameters, to build a profile of the likelihood, or to get the covariance of the estimates at the fitted values.\n\nThe covariance is only meaningful when `params` is the maximum likelihood estimate, for example the output of `betafit`.",
+        "pt": "`betalike` calcula o objetivo que a `betafit` minimiza. Use para comparar parâmetros candidatos, montar o perfil da verossimilhança ou obter a covariância das estimativas nos valores ajustados.\n\nA covariância só faz sentido quando `params` é a estimativa de máxima verossimilhança, por exemplo a saída de `betafit`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at fitted and at other parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados e em outros"
+          },
+          "code": "x = [0.1 0.25 0.3 0.45 0.5 0.62 0.7 0.81 0.9 0.35];\nphat = betafit(x);\nfprintf('%.4f\\n', betalike(phat, x));\nfprintf('%.4f\\n', betalike([1 1], x));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betafit",
+        "betapdf",
+        "evlike",
+        "betastat"
+      ],
+      "notes": {
+        "en": "When the data contain values exactly at the boundary, the covariance uses a finite-difference derivative, so the last digit can differ (about 1e-7 relative). With single precision input, MatLivre accumulates in double precision, so results can differ at about 1e-5 relative.",
+        "pt": "Quando os dados têm valores exatamente na fronteira, a covariância usa uma derivada por diferenças finitas, então o último dígito pode diferir (cerca de 1e-7 relativo). Com entrada em precisão simples, o MatLivre acumula em precisão dupla, e os resultados podem diferir em cerca de 1e-5 relativo."
+      }
+    },
+    "betapdf": {
+      "summary": {
+        "en": "Probability density function of the beta distribution, defined on [0, 1].",
+        "pt": "Função densidade de probabilidade da distribuição beta, definida em [0, 1]."
+      },
+      "syntax": [
+        {
+          "code": "y = betapdf(x, a, b)",
+          "en": "Density at `x` for shape parameters `a` and `b`.",
+          "pt": "Densidade em `x` para os parâmetros de forma `a` e `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the density. Outside [0, 1] the density is 0.",
+          "pt": "Pontos em que a densidade é calculada. Fora de [0, 1] a densidade é 0."
+        },
+        {
+          "name": "a",
+          "en": "First shape parameter, positive.",
+          "pt": "Primeiro parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Second shape parameter, positive.",
+          "pt": "Segundo parâmetro de forma, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size that results from expanding `x`, `a` and `b` together.",
+          "pt": "Valores da densidade, com o tamanho resultante da expansão conjunta de `x`, `a` e `b`."
+        }
+      ],
+      "description": {
+        "en": "The beta density describes quantities restricted to [0, 1]. With `a = b = 1` it is flat, with `a = b > 1` it is a bump centered at 0.5, and with `a < 1` or `b < 1` it rises toward an end of the interval.\n\nThe density is not a probability: it can exceed 1. To get probabilities, use the cumulative function through `cdf`.",
+        "pt": "A densidade beta descreve grandezas restritas a [0, 1]. Com `a = b = 1` ela é plana, com `a = b > 1` forma um sino centrado em 0.5, e com `a < 1` ou `b < 1` sobe em direção a uma extremidade do intervalo.\n\nA densidade não é uma probabilidade: pode passar de 1. Para obter probabilidades, use a função acumulada por meio de `cdf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density of a beta(2,3)",
+            "pt": "Densidade de uma beta(2,3)"
+          },
+          "code": "y = betapdf([0.2 0.5 0.8], 2, 3);\ndisp(round(y*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betainv",
+        "betafit",
+        "betastat",
+        "cdf",
+        "chi2pdf"
+      ]
+    },
+    "betastat": {
+      "summary": {
+        "en": "Mean and variance of the beta distribution for given shape parameters.",
+        "pt": "Média e variância da distribuição beta para parâmetros de forma dados."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = betastat(a, b)",
+          "en": "Mean and variance for shape parameters `a` and `b`.",
+          "pt": "Média e variância para os parâmetros de forma `a` e `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "First shape parameter, positive.",
+          "pt": "Primeiro parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Second shape parameter, positive.",
+          "pt": "Segundo parâmetro de forma, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `a/(a+b)`.",
+          "pt": "Média, `a/(a+b)`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `a*b/((a+b)^2*(a+b+1))`.",
+          "pt": "Variância, `a*b/((a+b)^2*(a+b+1))`."
+        }
+      ],
+      "description": {
+        "en": "`betastat` gives the theoretical mean and variance of a beta distribution without needing data. Inputs may be arrays of the same size, and the outputs have that size.\n\nUse it to check that a fitted distribution matches the sample mean and variance.",
+        "pt": "`betastat` dá a média e a variância teóricas de uma distribuição beta sem precisar de dados. As entradas podem ser arrays de mesmo tamanho, e as saídas têm esse tamanho.\n\nUse para conferir se uma distribuição ajustada reproduz a média e a variância da amostra."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance of a beta(2,3)",
+            "pt": "Média e variância de uma beta(2,3)"
+          },
+          "code": "[m, v] = betastat(2, 3);\nfprintf('mean = %.4f, variance = %.4f\\n', m, v);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betafit",
+        "betapdf",
+        "betainv",
+        "binostat",
+        "chi2stat"
+      ]
+    },
+    "binocdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the binomial distribution: probability of at most x successes in n trials.",
+        "pt": "Função de distribuição acumulada da binomial: probabilidade de no máximo x sucessos em n tentativas."
+      },
+      "syntax": [
+        {
+          "code": "p = binocdf(x, n, prob)",
+          "en": "Probability of `x` or fewer successes.",
+          "pt": "Probabilidade de `x` ou menos sucessos."
+        },
+        {
+          "code": "p = binocdf(x, n, prob, 'upper')",
+          "en": "Upper tail: probability of more than `x` successes.",
+          "pt": "Cauda superior: probabilidade de mais de `x` sucessos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of successes. A non-integer value gives the same result as the integer below it.",
+          "pt": "Número de sucessos. Um valor não inteiro dá o mesmo resultado que o inteiro imediatamente abaixo."
+        },
+        {
+          "name": "n",
+          "en": "Number of trials, a non-negative integer.",
+          "pt": "Número de tentativas, um inteiro não negativo."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of success in each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the size that results from expanding the inputs together.",
+          "pt": "Probabilidades acumuladas, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "The binomial distribution counts successes in `n` independent trials that each succeed with probability `prob`. `binocdf(x, n, prob)` adds the probabilities of 0, 1, ..., `x` successes.\n\nThe `'upper'` option computes the upper tail directly, which keeps accuracy when that tail is very small.",
+        "pt": "A distribuição binomial conta sucessos em `n` tentativas independentes, cada uma com probabilidade de sucesso `prob`. `binocdf(x, n, prob)` soma as probabilidades de 0, 1, ..., `x` sucessos.\n\nA opção `'upper'` calcula a cauda superior diretamente, o que mantém a precisão quando essa cauda é muito pequena."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Chance of few successes in 10 trials",
+            "pt": "Chance de poucos sucessos em 10 tentativas"
+          },
+          "code": "p = binocdf(0:3, 10, 0.3);\ndisp(round(p*1e4)/1e4)\nq = binocdf(3, 10, 0.3, 'upper');\nfprintf('%.4f\\n', q);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binopdf",
+        "binoinv",
+        "binofit",
+        "binostat",
+        "binornd"
+      ]
+    },
+    "binofit": {
+      "summary": {
+        "en": "Estimates the success probability of a binomial distribution from counts and returns Clopper-Pearson confidence intervals.",
+        "pt": "Estima a probabilidade de sucesso de uma binomial a partir de contagens e retorna intervalos de confiança de Clopper-Pearson."
+      },
+      "syntax": [
+        {
+          "code": "phat = binofit(x, n)",
+          "en": "Estimate `x./n` of the success probability.",
+          "pt": "Estimativa `x./n` da probabilidade de sucesso."
+        },
+        {
+          "code": "[phat, pci] = binofit(x, n)",
+          "en": "Also returns 95% confidence intervals.",
+          "pt": "Retorna também intervalos de confiança de 95%."
+        },
+        {
+          "code": "[phat, pci] = binofit(x, n, alpha)",
+          "en": "Uses a `100*(1-alpha)`% confidence level.",
+          "pt": "Usa um nível de confiança de `100*(1-alpha)`%."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of observed successes, a non-negative integer or a vector of them.",
+          "pt": "Número de sucessos observados, um inteiro não negativo ou um vetor deles."
+        },
+        {
+          "name": "n",
+          "en": "Number of trials, a positive integer. A scalar is used for every element of `x`, otherwise the same length as `x`.",
+          "pt": "Número de tentativas, inteiro positivo. Um escalar vale para todos os elementos de `x`, senão deve ter o mesmo comprimento de `x`."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phat",
+          "en": "Estimated success probabilities, the same size as `x`.",
+          "pt": "Probabilidades de sucesso estimadas, com o mesmo tamanho de `x`."
+        },
+        {
+          "name": "pci",
+          "en": "Confidence limits. One row per element of `x`, lower limit in the first column and upper limit in the second.",
+          "pt": "Limites de confiança. Uma linha por elemento de `x`, com o limite inferior na primeira coluna e o superior na segunda."
+        }
+      ],
+      "description": {
+        "en": "`binofit` answers: given `x` successes in `n` trials, what success probability is plausible? The point estimate is `x/n`. The interval is the exact Clopper-Pearson interval, which is conservative: it covers the true value at least `100*(1-alpha)`% of the time.\n\nValues of `x` that are negative or larger than `n` are errors.",
+        "pt": "`binofit` responde: dados `x` sucessos em `n` tentativas, qual probabilidade de sucesso é plausível? A estimativa pontual é `x/n`. O intervalo é o intervalo exato de Clopper-Pearson, que é conservador: cobre o valor verdadeiro em pelo menos `100*(1-alpha)`% das vezes.\n\nValores de `x` negativos ou maiores que `n` geram erro."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Estimate with a 95% interval",
+            "pt": "Estimativa com intervalo de 95%"
+          },
+          "code": "[phat, pci] = binofit(7, 20);\nfprintf('phat = %.4f\\n', phat);\ndisp(round(pci*1e4)/1e4)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Several experiments at once",
+            "pt": "Vários experimentos de uma vez"
+          },
+          "code": "[phat, pci] = binofit([2 4], [10 10]);\ndisp(phat)\ndisp(round(pci*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binocdf",
+        "binopdf",
+        "binoinv",
+        "binostat",
+        "betafit"
+      ]
+    },
+    "binoinv": {
+      "summary": {
+        "en": "Inverse of the binomial cumulative distribution function: smallest number of successes whose cumulative probability reaches p.",
+        "pt": "Inversa da função de distribuição acumulada binomial: menor número de sucessos cuja probabilidade acumulada alcança p."
+      },
+      "syntax": [
+        {
+          "code": "x = binoinv(p, n, prob)",
+          "en": "Quantiles of the binomial distribution with `n` trials and success probability `prob`.",
+          "pt": "Quantis da distribuição binomial com `n` tentativas e probabilidade de sucesso `prob`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "n",
+          "en": "Number of trials, a non-negative integer.",
+          "pt": "Número de tentativas, um inteiro não negativo."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of success in each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Integer quantiles from 0 to `n`, with the size that results from expanding the inputs together.",
+          "pt": "Quantis inteiros de 0 a `n`, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "Because the binomial distribution is discrete, `binoinv(p, n, prob)` returns the smallest integer `x` such that `binocdf(x, n, prob) >= p`.\n\nUse it for percentiles of a count, for example the number of successes that is exceeded only 10% of the time.",
+        "pt": "Como a binomial é discreta, `binoinv(p, n, prob)` retorna o menor inteiro `x` tal que `binocdf(x, n, prob) >= p`.\n\nUse para percentis de uma contagem, por exemplo o número de sucessos que só é superado em 10% das vezes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles for 10 trials",
+            "pt": "Quantis para 10 tentativas"
+          },
+          "code": "x = binoinv([0.1 0.5 0.9], 10, 0.3);\ndisp(x)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binocdf",
+        "binopdf",
+        "binofit",
+        "binostat",
+        "binornd"
+      ]
+    },
+    "binopdf": {
+      "summary": {
+        "en": "Probability mass function of the binomial distribution: probability of exactly x successes in n trials.",
+        "pt": "Função de massa de probabilidade da binomial: probabilidade de exatamente x sucessos em n tentativas."
+      },
+      "syntax": [
+        {
+          "code": "y = binopdf(x, n, prob)",
+          "en": "Probability of exactly `x` successes.",
+          "pt": "Probabilidade de exatamente `x` sucessos."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of successes. Non-integer values and values outside 0 to `n` have probability 0.",
+          "pt": "Número de sucessos. Valores não inteiros e valores fora de 0 a `n` têm probabilidade 0."
+        },
+        {
+          "name": "n",
+          "en": "Number of trials, a non-negative integer.",
+          "pt": "Número de tentativas, um inteiro não negativo."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of success in each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, with the size that results from expanding the inputs together.",
+          "pt": "Probabilidades, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "`binopdf(x, n, prob)` equals `nchoosek(n, x) * prob^x * (1-prob)^(n-x)`, computed in a way that stays accurate for large `n`.\n\nThe probabilities for `x = 0:n` add up to 1.",
+        "pt": "`binopdf(x, n, prob)` equivale a `nchoosek(n, x) * prob^x * (1-prob)^(n-x)`, calculado de forma que se mantém precisa para `n` grande.\n\nAs probabilidades para `x = 0:n` somam 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Number of heads in 4 fair coin flips",
+            "pt": "Número de caras em 4 lançamentos de moeda honesta"
+          },
+          "code": "y = binopdf(0:4, 4, 0.5);\ndisp(y)\nfprintf('total = %.4f\\n', sum(y));",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binocdf",
+        "binoinv",
+        "binofit",
+        "binostat",
+        "binornd"
+      ]
+    },
+    "binornd": {
+      "summary": {
+        "en": "Generates random numbers from the binomial distribution.",
+        "pt": "Gera números aleatórios da distribuição binomial."
+      },
+      "syntax": [
+        {
+          "code": "r = binornd(n, prob)",
+          "en": "One random count for each element of the expanded `n` and `prob`.",
+          "pt": "Uma contagem aleatória para cada elemento de `n` e `prob` expandidos."
+        },
+        {
+          "code": "r = binornd(n, prob, sz)",
+          "en": "Array of size `sz`, a vector such as `[2 3]`.",
+          "pt": "Array de tamanho `sz`, um vetor como `[2 3]`."
+        },
+        {
+          "code": "r = binornd(n, prob, m, k)",
+          "en": "`m`-by-`k` array.",
+          "pt": "Array `m` por `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of trials, a non-negative integer.",
+          "pt": "Número de tentativas, um inteiro não negativo."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of success in each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        },
+        {
+          "name": "sz",
+          "en": "Size of the result as a vector of dimensions.",
+          "pt": "Tamanho do resultado, como vetor de dimensões."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Integers between 0 and `n`.",
+          "pt": "Inteiros entre 0 e `n`."
+        }
+      ],
+      "description": {
+        "en": "Each value is the number of successes in `n` independent trials with success probability `prob`. Without a size argument, the result has the size of `n` and `prob`.\n\nThe values change from run to run unless you fix the random seed.",
+        "pt": "Cada valor é o número de sucessos em `n` tentativas independentes com probabilidade de sucesso `prob`. Sem argumento de tamanho, o resultado tem o tamanho de `n` e `prob`.\n\nOs valores mudam a cada execução, a menos que você fixe a semente aleatória."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and range of the draws",
+            "pt": "Tamanho e faixa dos sorteios"
+          },
+          "code": "r = binornd(10, 0.3, [2 3]);\ndisp(size(r))\ndisp(all(r(:) >= 0 & r(:) <= 10))\ndisp(all(r(:) == round(r(:))))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binopdf",
+        "binocdf",
+        "binofit",
+        "binostat",
+        "evrnd"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random streams, so the numbers differ from MATLAB's even with the same seed. Sizes and ranges match.",
+        "pt": "O gerador não reproduz os fluxos de números aleatórios do MATLAB, então os valores diferem dos do MATLAB mesmo com a mesma semente. Tamanhos e faixas coincidem."
+      }
+    },
+    "binostat": {
+      "summary": {
+        "en": "Mean and variance of the binomial distribution.",
+        "pt": "Média e variância da distribuição binomial."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = binostat(n, prob)",
+          "en": "Mean and variance for `n` trials and success probability `prob`.",
+          "pt": "Média e variância para `n` tentativas e probabilidade de sucesso `prob`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of trials, a non-negative integer.",
+          "pt": "Número de tentativas, um inteiro não negativo."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of success in each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `n*prob`.",
+          "pt": "Média, `n*prob`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `n*prob*(1-prob)`.",
+          "pt": "Variância, `n*prob*(1-prob)`."
+        }
+      ],
+      "description": {
+        "en": "`binostat` returns the theoretical mean and variance of a binomial distribution. Inputs can be arrays of the same size, and the outputs have that size.\n\nCompare these values with the sample mean and variance of a count to judge whether a binomial model is reasonable.",
+        "pt": "`binostat` retorna a média e a variância teóricas de uma distribuição binomial. As entradas podem ser arrays de mesmo tamanho, e as saídas têm esse tamanho.\n\nCompare esses valores com a média e a variância amostrais de uma contagem para julgar se um modelo binomial é razoável."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance for 10 trials",
+            "pt": "Média e variância para 10 tentativas"
+          },
+          "code": "[m, v] = binostat(10, 0.3);\nfprintf('mean = %.4f, variance = %.4f\\n', m, v);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binopdf",
+        "binocdf",
+        "binofit",
+        "betastat",
+        "chi2stat"
+      ]
+    },
+    "cdf": {
+      "summary": {
+        "en": "Cumulative distribution function of a distribution chosen by name, such as 'Normal', 'Beta' or 'Binomial'.",
+        "pt": "Função de distribuição acumulada de uma distribuição escolhida pelo nome, como 'Normal', 'Beta' ou 'Binomial'."
+      },
+      "syntax": [
+        {
+          "code": "p = cdf(name, x, A)",
+          "en": "Distribution with one parameter `A`, for example `cdf('Poisson', x, lambda)`.",
+          "pt": "Distribuição com um parâmetro `A`, por exemplo `cdf('Poisson', x, lambda)`."
+        },
+        {
+          "code": "p = cdf(name, x, A, B)",
+          "en": "Distribution with two parameters, for example `cdf('Normal', x, mu, sigma)`.",
+          "pt": "Distribuição com dois parâmetros, por exemplo `cdf('Normal', x, mu, sigma)`."
+        },
+        {
+          "code": "p = cdf(name, x, A, B, C)",
+          "en": "Distribution with three parameters.",
+          "pt": "Distribuição com três parâmetros."
+        },
+        {
+          "code": "p = cdf(name, x, A, B, 'upper')",
+          "en": "Upper tail probability instead of the lower tail.",
+          "pt": "Probabilidade da cauda superior em vez da inferior."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "name",
+          "en": "Distribution name as a character vector, for example `'Normal'`, `'Beta'`, `'Binomial'`, `'Poisson'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Chi-square'`, `'t'` or `'Extreme Value'`.",
+          "pt": "Nome da distribuição como vetor de caracteres, por exemplo `'Normal'`, `'Beta'`, `'Binomial'`, `'Poisson'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Chi-square'`, `'t'` ou `'Extreme Value'`."
+        },
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the function.",
+          "pt": "Pontos em que a função é calculada."
+        },
+        {
+          "name": "A, B, C",
+          "en": "Distribution parameters, in the same order as the matching `xxxcdf` function.",
+          "pt": "Parâmetros da distribuição, na mesma ordem da função `xxxcdf` correspondente."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the size of `x` (expanded with the parameters).",
+          "pt": "Probabilidades acumuladas, com o tamanho de `x` (expandido com os parâmetros)."
+        }
+      ],
+      "description": {
+        "en": "`cdf` is a single entry point for the `xxxcdf` functions: `cdf('Normal', x, mu, sigma)` gives the same result as `normcdf(x, mu, sigma)`. It is handy when the distribution is chosen at run time, for example from a variable.\n\nAn unknown name raises an error saying that the distribution name is unrecognized.",
+        "pt": "`cdf` é uma porta de entrada única para as funções `xxxcdf`: `cdf('Normal', x, mu, sigma)` dá o mesmo resultado que `normcdf(x, mu, sigma)`. É útil quando a distribuição é escolhida em tempo de execução, por exemplo a partir de uma variável.\n\nUm nome desconhecido gera um erro dizendo que o nome da distribuição não é reconhecido."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Different distributions by name",
+            "pt": "Distribuições diferentes pelo nome"
+          },
+          "code": "disp(round(cdf('Normal', [0 1 2], 1, 2)*1e4)/1e4)\ndisp(round(cdf('Beta', 0.5, 2, 3)*1e4)/1e4)\ndisp(round(cdf('Poisson', 2, 3)*1e4)/1e4)\ndisp(round(cdf('Normal', 1.5, 0, 1, 'upper')*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binocdf",
+        "chi2cdf",
+        "evcdf",
+        "ecdf",
+        "betainv"
+      ]
+    },
+    "chi2cdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the chi-square distribution.",
+        "pt": "Função de distribuição acumulada da distribuição qui-quadrado."
+      },
+      "syntax": [
+        {
+          "code": "p = chi2cdf(x, nu)",
+          "en": "Probability that a chi-square variable with `nu` degrees of freedom is at most `x`.",
+          "pt": "Probabilidade de que uma variável qui-quadrado com `nu` graus de liberdade seja no máximo `x`."
+        },
+        {
+          "code": "p = chi2cdf(x, nu, 'upper')",
+          "en": "Upper tail probability.",
+          "pt": "Probabilidade da cauda superior."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the function, non-negative. Negative values give 0.",
+          "pt": "Pontos em que a função é calculada, não negativos. Valores negativos dão 0."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the size that results from expanding `x` and `nu` together.",
+          "pt": "Probabilidades acumuladas, com o tamanho resultante da expansão conjunta de `x` e `nu`."
+        }
+      ],
+      "description": {
+        "en": "The chi-square distribution with `nu` degrees of freedom is the distribution of a sum of `nu` squared standard normal variables. It underlies many tests, such as goodness of fit and independence tests.\n\nThe upper tail `chi2cdf(x, nu, 'upper')` is the p-value of a chi-square statistic equal to `x`. It is more accurate than `1 - chi2cdf(x, nu)` when the p-value is tiny.",
+        "pt": "A distribuição qui-quadrado com `nu` graus de liberdade é a distribuição de uma soma de `nu` normais padrão ao quadrado. Ela está por trás de muitos testes, como os de aderência e de independência.\n\nA cauda superior `chi2cdf(x, nu, 'upper')` é o valor-p de uma estatística qui-quadrado igual a `x`. É mais precisa que `1 - chi2cdf(x, nu)` quando o valor-p é minúsculo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail with 2 degrees of freedom",
+            "pt": "Caudas inferior e superior com 2 graus de liberdade"
+          },
+          "code": "p = chi2cdf([1 2 3], 2);\ndisp(round(p*1e4)/1e4)\nq = chi2cdf([1 2 3], 2, 'upper');\ndisp(round(q*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chi2inv",
+        "chi2pdf",
+        "chi2stat",
+        "cdf",
+        "betapdf"
+      ]
+    },
+    "chi2inv": {
+      "summary": {
+        "en": "Inverse of the chi-square cumulative distribution function.",
+        "pt": "Inversa da função de distribuição acumulada qui-quadrado."
+      },
+      "syntax": [
+        {
+          "code": "x = chi2inv(p, nu)",
+          "en": "Value `x` such that a chi-square variable with `nu` degrees of freedom is at most `x` with probability `p`.",
+          "pt": "Valor `x` tal que uma variável qui-quadrado com `nu` graus de liberdade é no máximo `x` com probabilidade `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, non-negative, with the size that results from expanding `p` and `nu` together.",
+          "pt": "Quantis, não negativos, com o tamanho resultante da expansão conjunta de `p` e `nu`."
+        }
+      ],
+      "description": {
+        "en": "`chi2inv` gives percentiles of the chi-square distribution. Its most common use is to obtain critical values: `chi2inv(0.95, nu)` is the value that a chi-square statistic with `nu` degrees of freedom exceeds only 5% of the time.\n\nIt is also used to build confidence intervals for a variance.",
+        "pt": "`chi2inv` dá percentis da distribuição qui-quadrado. O uso mais comum é obter valores críticos: `chi2inv(0.95, nu)` é o valor que uma estatística qui-quadrado com `nu` graus de liberdade só excede em 5% das vezes.\n\nTambém é usada para montar intervalos de confiança para uma variância."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median and 95% critical value with 3 degrees of freedom",
+            "pt": "Mediana e valor crítico de 95% com 3 graus de liberdade"
+          },
+          "code": "x = chi2inv([0.5 0.95], 3);\ndisp(round(x*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chi2cdf",
+        "chi2pdf",
+        "chi2stat",
+        "betainv",
+        "binoinv"
+      ]
+    },
+    "chi2pdf": {
+      "summary": {
+        "en": "Probability density function of the chi-square distribution.",
+        "pt": "Função densidade de probabilidade da distribuição qui-quadrado."
+      },
+      "syntax": [
+        {
+          "code": "y = chi2pdf(x, nu)",
+          "en": "Density at `x` for `nu` degrees of freedom.",
+          "pt": "Densidade em `x` para `nu` graus de liberdade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the density. Negative values give 0.",
+          "pt": "Pontos em que a densidade é calculada. Valores negativos dão 0."
+        },
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive.",
+          "pt": "Graus de liberdade, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size that results from expanding `x` and `nu` together.",
+          "pt": "Valores da densidade, com o tamanho resultante da expansão conjunta de `x` e `nu`."
+        }
+      ],
+      "description": {
+        "en": "The chi-square density is right-skewed. For `nu = 2` it is an exponential density with mean 2, and for large `nu` it looks more and more like a normal curve with mean `nu` and variance `2*nu`.\n\nThe density is not a probability. For probabilities use `chi2cdf`.",
+        "pt": "A densidade qui-quadrado é assimétrica à direita. Para `nu = 2` ela é uma densidade exponencial de média 2, e para `nu` grande se parece cada vez mais com uma curva normal de média `nu` e variância `2*nu`.\n\nA densidade não é uma probabilidade. Para probabilidades use `chi2cdf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density with 2 degrees of freedom",
+            "pt": "Densidade com 2 graus de liberdade"
+          },
+          "code": "y = chi2pdf([1 2 3], 2);\ndisp(round(y*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chi2cdf",
+        "chi2inv",
+        "chi2stat",
+        "betapdf",
+        "evpdf"
+      ]
+    },
+    "chi2stat": {
+      "summary": {
+        "en": "Mean and variance of the chi-square distribution.",
+        "pt": "Média e variância da distribuição qui-quadrado."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = chi2stat(nu)",
+          "en": "Mean and variance for `nu` degrees of freedom.",
+          "pt": "Média e variância para `nu` graus de liberdade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "nu",
+          "en": "Degrees of freedom, positive. May be an array.",
+          "pt": "Graus de liberdade, positivo. Pode ser um array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, equal to `nu`.",
+          "pt": "Média, igual a `nu`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, equal to `2*nu`.",
+          "pt": "Variância, igual a `2*nu`."
+        }
+      ],
+      "description": {
+        "en": "`chi2stat` returns the theoretical mean and variance of the chi-square distribution. When `nu` is an array, the outputs have the same size.\n\nThe result is simple (mean `nu`, variance `2*nu`), but the function is useful when you work with the same `xxxstat` interface across distributions.",
+        "pt": "`chi2stat` retorna a média e a variância teóricas da distribuição qui-quadrado. Quando `nu` é um array, as saídas têm o mesmo tamanho.\n\nO resultado é simples (média `nu`, variância `2*nu`), mas a função é útil quando você trabalha com a mesma interface `xxxstat` para várias distribuições."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance for several degrees of freedom",
+            "pt": "Média e variância para vários graus de liberdade"
+          },
+          "code": "[m, v] = chi2stat([1 2 3]);\ndisp(m)\ndisp(v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "chi2cdf",
+        "chi2inv",
+        "chi2pdf",
+        "betastat",
+        "binostat"
+      ]
+    },
+    "ecdf": {
+      "summary": {
+        "en": "Empirical cumulative distribution function of a sample, with optional survivor or cumulative hazard form, censoring, frequencies and confidence bounds.",
+        "pt": "Função de distribuição acumulada empírica de uma amostra, com formas opcionais de sobrevivência ou risco acumulado, censura, frequências e limites de confiança."
+      },
+      "syntax": [
+        {
+          "code": "[f, x] = ecdf(y)",
+          "en": "Empirical CDF `f` evaluated at the distinct sorted values `x`.",
+          "pt": "CDF empírica `f` calculada nos valores distintos ordenados `x`."
+        },
+        {
+          "code": "[f, x, flo, fup] = ecdf(y)",
+          "en": "Also returns lower and upper confidence bounds for `f`.",
+          "pt": "Retorna também os limites de confiança inferior e superior de `f`."
+        },
+        {
+          "code": "[f, x] = ecdf(y, 'Function', fun)",
+          "en": "Chooses `'cdf'` (default), `'survivor'` or `'cumulative hazard'`.",
+          "pt": "Escolhe `'cdf'` (padrão), `'survivor'` ou `'cumulative hazard'`."
+        },
+        {
+          "code": "[f, x] = ecdf(y, 'Censoring', c, 'Frequency', w, 'Alpha', a, 'Bounds', 'on')",
+          "en": "Name-value options for censored data, counts, confidence level and bounds.",
+          "pt": "Opções nome-valor para dados censurados, contagens, nível de confiança e limites."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        },
+        {
+          "name": "'Function'",
+          "en": "Which function to compute: `'cdf'`, `'survivor'` or `'cumulative hazard'`.",
+          "pt": "Qual função calcular: `'cdf'`, `'survivor'` ou `'cumulative hazard'`."
+        },
+        {
+          "name": "'Censoring'",
+          "en": "Vector the same length as `y`; 1 marks a censored observation, 0 an observed one.",
+          "pt": "Vetor com o mesmo comprimento de `y`; 1 marca uma observação censurada, 0 uma observada."
+        },
+        {
+          "name": "'Frequency'",
+          "en": "Vector of counts, the same length as `y`.",
+          "pt": "Vetor de contagens, com o mesmo comprimento de `y`."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level for the bounds. Default 0.05.",
+          "pt": "Nível de significância dos limites. O padrão é 0.05."
+        },
+        {
+          "name": "'Bounds'",
+          "en": "`'on'` to compute confidence bounds, `'off'` (default) otherwise.",
+          "pt": "`'on'` para calcular os limites de confiança, `'off'` (padrão) caso contrário."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "f",
+          "en": "Function values, a column vector. The first element is for the point before the smallest observation, so it is 0 for the CDF.",
+          "pt": "Valores da função, vetor coluna. O primeiro elemento corresponde ao ponto antes da menor observação, então vale 0 para a CDF."
+        },
+        {
+          "name": "x",
+          "en": "Column vector with the distinct sorted values of `y` where `f` is evaluated. The smallest value appears twice, at the start.",
+          "pt": "Vetor coluna com os valores distintos e ordenados de `y` onde `f` é calculada. O menor valor aparece duas vezes, no início."
+        },
+        {
+          "name": "flo, fup",
+          "en": "Lower and upper confidence bounds for `f`, the same size as `f`. The first and last entries can be NaN where no bound is defined.",
+          "pt": "Limites de confiança inferior e superior de `f`, com o mesmo tamanho de `f`. A primeira e a última entradas podem ser NaN onde não há limite definido."
+        }
+      ],
+      "description": {
+        "en": "`ecdf` builds the step function that, at each `x`, is the fraction of observations less than or equal to `x`. It needs no assumption about the distribution, so it is the usual first look at the shape of a sample, and the basis of the Kolmogorov-Smirnov test.\n\nWith censored data (for example survival times where some subjects are still alive) the function becomes the Kaplan-Meier estimate. The `'survivor'` form is `1 - f`, and `'cumulative hazard'` gives the accumulated hazard.",
+        "pt": "`ecdf` constrói a função em degraus que, em cada `x`, é a fração de observações menores ou iguais a `x`. Não exige hipótese sobre a distribuição, por isso é o primeiro olhar usual sobre a forma de uma amostra e a base do teste de Kolmogorov-Smirnov.\n\nCom dados censurados (por exemplo tempos de sobrevivência em que alguns indivíduos ainda estão vivos) a função vira a estimativa de Kaplan-Meier. A forma `'survivor'` é `1 - f`, e `'cumulative hazard'` dá o risco acumulado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Empirical CDF of a small sample",
+            "pt": "CDF empírica de uma amostra pequena"
+          },
+          "code": "y = [1 2 2 3 5 7 8];\n[f, x] = ecdf(y);\ndisp([x f])",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Survivor function with censored values",
+            "pt": "Função de sobrevivência com valores censurados"
+          },
+          "code": "y = [1 2 2 3 5 7 8];\nc = [0 0 1 0 0 1 0];\n[f, x] = ecdf(y, 'Function', 'survivor', 'Censoring', c);\ndisp(round([x f]*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "cdf",
+        "evcdf",
+        "binocdf",
+        "chi2cdf",
+        "kstest"
+      ]
+    },
+    "evcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the extreme value (minimum, Gumbel-type) distribution.",
+        "pt": "Função de distribuição acumulada da distribuição de valor extremo (mínimo, tipo Gumbel)."
+      },
+      "syntax": [
+        {
+          "code": "p = evcdf(x, mu, sigma)",
+          "en": "Probability of a value at most `x`.",
+          "pt": "Probabilidade de um valor no máximo `x`."
+        },
+        {
+          "code": "p = evcdf(x, mu, sigma, 'upper')",
+          "en": "Upper tail probability.",
+          "pt": "Probabilidade da cauda superior."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the function.",
+          "pt": "Pontos em que a função é calculada."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Cumulative probabilities, with the size that results from expanding the inputs together.",
+          "pt": "Probabilidades acumuladas, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "The extreme value distribution used here models the smallest of many values, and it has a long tail to the left. Its CDF is `1 - exp(-exp((x-mu)/sigma))`, so `evcdf(mu, mu, sigma)` is always `1 - exp(-1)`, about 0.6321.\n\nThe Weibull distribution is the same model after a log transform of the data.",
+        "pt": "A distribuição de valor extremo usada aqui modela o menor de muitos valores e tem uma cauda longa à esquerda. Sua CDF é `1 - exp(-exp((x-mu)/sigma))`, então `evcdf(mu, mu, sigma)` é sempre `1 - exp(-1)`, cerca de 0.6321.\n\nA distribuição de Weibull é o mesmo modelo após uma transformação logarítmica dos dados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail",
+            "pt": "Caudas inferior e superior"
+          },
+          "code": "p = evcdf([-1 0 1], 0, 1);\ndisp(round(p*1e4)/1e4)\nq = evcdf([-1 0 1], 0, 1, 'upper');\ndisp(round(q*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evpdf",
+        "evinv",
+        "evfit",
+        "evstat",
+        "cdf"
+      ]
+    },
+    "evfit": {
+      "summary": {
+        "en": "Fits the extreme value (minimum) distribution to data by maximum likelihood, with confidence intervals, censoring and frequencies.",
+        "pt": "Ajusta a distribuição de valor extremo (mínimo) a dados por máxima verossimilhança, com intervalos de confiança, censura e frequências."
+      },
+      "syntax": [
+        {
+          "code": "parmhat = evfit(data)",
+          "en": "Estimates `[mu sigma]`.",
+          "pt": "Estima `[mu sigma]`."
+        },
+        {
+          "code": "[parmhat, parmci] = evfit(data, alpha)",
+          "en": "Also returns `100*(1-alpha)`% confidence intervals (default `alpha` is 0.05).",
+          "pt": "Retorna também intervalos de confiança de `100*(1-alpha)`% (o padrão de `alpha` é 0.05)."
+        },
+        {
+          "code": "[parmhat, parmci] = evfit(data, alpha, censoring)",
+          "en": "Right-censored observations are marked with 1 in `censoring`.",
+          "pt": "Observações censuradas à direita são marcadas com 1 em `censoring`."
+        },
+        {
+          "code": "[parmhat, parmci] = evfit(data, alpha, censoring, freq)",
+          "en": "`freq` gives how many times each observation occurred.",
+          "pt": "`freq` dá quantas vezes cada observação ocorreu."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "censoring",
+          "en": "Vector the same length as `data`; 1 for censored, 0 for observed. Use `[]` for none.",
+          "pt": "Vetor com o mesmo comprimento de `data`; 1 para censurado, 0 para observado. Use `[]` para nenhuma."
+        },
+        {
+          "name": "freq",
+          "en": "Vector of counts, the same length as `data`.",
+          "pt": "Vetor de contagens, com o mesmo comprimento de `data`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "parmhat",
+          "en": "Row vector `[mu sigma]`, location and scale estimates.",
+          "pt": "Vetor linha `[mu sigma]`, estimativas de posição e escala."
+        },
+        {
+          "name": "parmci",
+          "en": "2-by-2 matrix. The first row holds the lower limits and the second row the upper limits, one column for `mu` and one for `sigma`.",
+          "pt": "Matriz 2 por 2. A primeira linha tem os limites inferiores e a segunda os superiores, com uma coluna para `mu` e outra para `sigma`."
+        }
+      ],
+      "description": {
+        "en": "`evfit` finds the location `mu` and scale `sigma` that make the data most likely under the extreme value distribution for minima. It is used for failure times and for the smallest value in blocks of data.\n\nCensoring lets you include observations that were only known to exceed some value. The confidence intervals are approximate and come from the asymptotic covariance, available through `evlike`.",
+        "pt": "`evfit` encontra a posição `mu` e a escala `sigma` que tornam os dados os mais prováveis sob a distribuição de valor extremo para mínimos. É usada para tempos de falha e para o menor valor em blocos de dados.\n\nA censura permite incluir observações das quais só se sabe que passaram de algum valor. Os intervalos de confiança são aproximados e vêm da covariância assintótica, disponível por meio de `evlike`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Estimates and 95% intervals",
+            "pt": "Estimativas e intervalos de 95%"
+          },
+          "code": "d = [-1.2 -0.4 0 0.3 0.8 1.1 1.5 -0.7 0.2 0.5];\n[p, ci] = evfit(d);\nfprintf('mu = %.4f, sigma = %.4f\\n', p);\ndisp(round(ci*1e4)/1e4)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "With one censored observation",
+            "pt": "Com uma observação censurada"
+          },
+          "code": "d = [-1.2 -0.4 0 0.3 0.8 1.1 1.5 -0.7 0.2 0.5];\nc = [0 0 0 0 0 0 1 0 0 0];\np = evfit(d, 0.05, c);\nfprintf('mu = %.4f, sigma = %.4f\\n', p);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evlike",
+        "evcdf",
+        "evpdf",
+        "evinv",
+        "betafit"
+      ]
+    },
+    "evinv": {
+      "summary": {
+        "en": "Inverse of the extreme value (minimum) cumulative distribution function.",
+        "pt": "Inversa da função de distribuição acumulada de valor extremo (mínimo)."
+      },
+      "syntax": [
+        {
+          "code": "x = evinv(p, mu, sigma)",
+          "en": "Quantiles for probabilities `p`.",
+          "pt": "Quantis para as probabilidades `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, between 0 and 1.",
+          "pt": "Probabilidades, entre 0 e 1."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, with the size that results from expanding the inputs together.",
+          "pt": "Quantis, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "`evinv(p, mu, sigma)` is `mu + sigma*log(-log(1-p))`. It undoes `evcdf`, and returns `-Inf` for `p = 0` and `Inf` for `p = 1`.\n\nUse it for percentiles, or to place the points of a probability plot.",
+        "pt": "`evinv(p, mu, sigma)` é `mu + sigma*log(-log(1-p))`. Ela desfaz a `evcdf` e retorna `-Inf` para `p = 0` e `Inf` para `p = 1`.\n\nUse para percentis ou para posicionar os pontos de um gráfico de probabilidade."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles of the standard form",
+            "pt": "Quantis da forma padrão"
+          },
+          "code": "x = evinv([0.1 0.5 0.9], 0, 1);\ndisp(round(x*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evcdf",
+        "evpdf",
+        "evfit",
+        "evstat",
+        "betainv"
+      ]
+    },
+    "evlike": {
+      "summary": {
+        "en": "Negative log-likelihood of data under the extreme value (minimum) distribution, with the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa de dados sob a distribuição de valor extremo (mínimo), com a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = evlike(params, data)",
+          "en": "Negative log-likelihood at `params = [mu sigma]`.",
+          "pt": "Log-verossimilhança negativa em `params = [mu sigma]`."
+        },
+        {
+          "code": "[nlogL, avar] = evlike(params, data)",
+          "en": "Also returns the 2-by-2 asymptotic covariance matrix.",
+          "pt": "Retorna também a matriz de covariância assintótica 2 por 2."
+        },
+        {
+          "code": "[nlogL, avar] = evlike(params, data, censoring, freq)",
+          "en": "Accepts censoring flags and frequencies.",
+          "pt": "Aceita indicadores de censura e frequências."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Two-element vector `[mu sigma]`, with `sigma` positive.",
+          "pt": "Vetor `[mu sigma]` de dois elementos, com `sigma` positivo."
+        },
+        {
+          "name": "data",
+          "en": "Vector of observations.",
+          "pt": "Vetor de observações."
+        },
+        {
+          "name": "censoring",
+          "en": "Optional vector; 1 marks a censored observation.",
+          "pt": "Vetor opcional; 1 marca uma observação censurada."
+        },
+        {
+          "name": "freq",
+          "en": "Optional vector of counts.",
+          "pt": "Vetor opcional de contagens."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Scalar negative log-likelihood. Smaller means a better fit.",
+          "pt": "Log-verossimilhança negativa escalar. Quanto menor, melhor o ajuste."
+        },
+        {
+          "name": "avar",
+          "en": "2-by-2 asymptotic covariance matrix of `[mu sigma]`, meaningful at the maximum likelihood estimates.",
+          "pt": "Matriz de covariância assintótica 2 por 2 de `[mu sigma]`, com sentido nas estimativas de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`evlike` evaluates the objective that `evfit` minimizes. Use it to compare parameter values, to compute likelihood-based statistics, or to get the covariance of the estimates.\n\nThe covariance uses the data and the parameters you pass, so give it the fitted values from `evfit` to get standard errors.",
+        "pt": "`evlike` calcula o objetivo que a `evfit` minimiza. Use para comparar valores de parâmetros, calcular estatísticas baseadas na verossimilhança ou obter a covariância das estimativas.\n\nA covariância usa os dados e os parâmetros que você passa, então forneça os valores ajustados por `evfit` para obter erros-padrão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood and covariance at the fitted values",
+            "pt": "Verossimilhança e covariância nos valores ajustados"
+          },
+          "code": "d = [-1.2 -0.4 0 0.3 0.8 1.1 1.5 -0.7 0.2 0.5];\np = evfit(d);\n[nl, av] = evlike(p, d);\nfprintf('%.4f\\n', nl);\ndisp(round(av*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evfit",
+        "evpdf",
+        "evcdf",
+        "betalike"
+      ]
+    },
+    "evpdf": {
+      "summary": {
+        "en": "Probability density function of the extreme value (minimum) distribution.",
+        "pt": "Função densidade de probabilidade da distribuição de valor extremo (mínimo)."
+      },
+      "syntax": [
+        {
+          "code": "y = evpdf(x, mu, sigma)",
+          "en": "Density at `x`.",
+          "pt": "Densidade em `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate the density.",
+          "pt": "Pontos em que a densidade é calculada."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, with the size that results from expanding the inputs together.",
+          "pt": "Valores da densidade, com o tamanho resultante da expansão conjunta das entradas."
+        }
+      ],
+      "description": {
+        "en": "The density is `exp(z - exp(z))/sigma` with `z = (x-mu)/sigma`. It is skewed to the left, with a long tail toward small values.\n\nThe density is not a probability. For probabilities use `evcdf`.",
+        "pt": "A densidade é `exp(z - exp(z))/sigma` com `z = (x-mu)/sigma`. Ela é assimétrica à esquerda, com cauda longa em direção a valores pequenos.\n\nA densidade não é uma probabilidade. Para probabilidades use `evcdf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density of the standard form",
+            "pt": "Densidade da forma padrão"
+          },
+          "code": "y = evpdf([-1 0 1], 0, 1);\ndisp(round(y*1e4)/1e4)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evcdf",
+        "evinv",
+        "evfit",
+        "evstat",
+        "chi2pdf"
+      ]
+    },
+    "evrnd": {
+      "summary": {
+        "en": "Generates random numbers from the extreme value (minimum) distribution.",
+        "pt": "Gera números aleatórios da distribuição de valor extremo (mínimo)."
+      },
+      "syntax": [
+        {
+          "code": "r = evrnd(mu, sigma)",
+          "en": "One random value for each element of the expanded `mu` and `sigma`.",
+          "pt": "Um valor aleatório para cada elemento de `mu` e `sigma` expandidos."
+        },
+        {
+          "code": "r = evrnd(mu, sigma, sz)",
+          "en": "Array of size `sz`, a vector such as `[2 3]`.",
+          "pt": "Array de tamanho `sz`, um vetor como `[2 3]`."
+        },
+        {
+          "code": "r = evrnd(mu, sigma, m, k)",
+          "en": "`m`-by-`k` array.",
+          "pt": "Array `m` por `k`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "sz",
+          "en": "Size of the result as a vector of dimensions.",
+          "pt": "Tamanho do resultado, como vetor de dimensões."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random values, in the requested size.",
+          "pt": "Valores aleatórios, no tamanho pedido."
+        }
+      ],
+      "description": {
+        "en": "The values follow the distribution described by `evpdf` and `evcdf`. Without a size argument, the result has the size of `mu` and `sigma`.\n\nThe values change from run to run unless you fix the random seed.",
+        "pt": "Os valores seguem a distribuição descrita por `evpdf` e `evcdf`. Sem argumento de tamanho, o resultado tem o tamanho de `mu` e `sigma`.\n\nOs valores mudam a cada execução, a menos que você fixe a semente aleatória."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and validity of the draws",
+            "pt": "Tamanho e validade dos sorteios"
+          },
+          "code": "r = evrnd(0, 1, [2 3]);\ndisp(size(r))\ndisp(all(isfinite(r(:))))\nq = evrnd(0, 1, 2, 3);\ndisp(size(q))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evpdf",
+        "evcdf",
+        "evinv",
+        "evfit",
+        "binornd"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random streams, so the numbers differ from MATLAB's even with the same seed. Sizes and ranges match.",
+        "pt": "O gerador não reproduz os fluxos de números aleatórios do MATLAB, então os valores diferem dos do MATLAB mesmo com a mesma semente. Tamanhos e faixas coincidem."
+      }
+    },
+    "evstat": {
+      "summary": {
+        "en": "Mean and variance of the extreme value (minimum) distribution.",
+        "pt": "Média e variância da distribuição de valor extremo (mínimo)."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = evstat(mu, sigma)",
+          "en": "Mean and variance for location `mu` and scale `sigma`.",
+          "pt": "Média e variância para a posição `mu` e a escala `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `mu - sigma*gamma`, where gamma is Euler's constant (about 0.5772).",
+          "pt": "Média, `mu - sigma*gamma`, em que gamma é a constante de Euler (cerca de 0.5772)."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `sigma^2*pi^2/6`.",
+          "pt": "Variância, `sigma^2*pi^2/6`."
+        }
+      ],
+      "description": {
+        "en": "`evstat` returns the theoretical mean and variance. Because the distribution is skewed to the left, the mean lies below `mu`.\n\nInputs can be arrays of the same size, and the outputs have that size.",
+        "pt": "`evstat` retorna a média e a variância teóricas. Como a distribuição é assimétrica à esquerda, a média fica abaixo de `mu`.\n\nAs entradas podem ser arrays de mesmo tamanho, e as saídas têm esse tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance of the standard form",
+            "pt": "Média e variância da forma padrão"
+          },
+          "code": "[m, v] = evstat(0, 1);\nfprintf('mean = %.4f, variance = %.4f\\n', m, v);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "evfit",
+        "evpdf",
+        "evcdf",
+        "betastat",
+        "chi2stat"
+      ]
+    }
+  }
+}

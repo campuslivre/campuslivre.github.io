@@ -1,0 +1,1976 @@
+{
+  "functions": {
+    "signtest": {
+      "summary": {
+        "en": "Sign test for a paired sample or for a median: tests whether the median of the differences, or of one sample, equals zero or a given value.",
+        "pt": "Teste do sinal para amostras pareadas ou para a mediana: testa se a mediana das diferenças, ou de uma amostra, é zero ou um valor dado."
+      },
+      "syntax": [
+        {
+          "code": "p = signtest(x)",
+          "en": "Tests whether the median of `x` is zero.",
+          "pt": "Testa se a mediana de `x` é zero."
+        },
+        {
+          "code": "p = signtest(x, m)",
+          "en": "Tests whether the median of `x` equals the scalar `m`.",
+          "pt": "Testa se a mediana de `x` é igual ao escalar `m`."
+        },
+        {
+          "code": "[p, h, stats] = signtest(x, y, 'Name', Value)",
+          "en": "Paired test of `x` against `y`, with options `'alpha'`, `'tail'` and `'method'`.",
+          "pt": "Teste pareado de `x` contra `y`, com as opções `'alpha'`, `'tail'` e `'method'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample vector, or the first member of a pair.",
+          "pt": "Vetor da amostra, ou o primeiro elemento do par."
+        },
+        {
+          "name": "y",
+          "en": "Second sample, same length as `x`, or a scalar median to compare against. Default 0.",
+          "pt": "Segunda amostra, com o mesmo tamanho de `x`, ou uma mediana escalar de comparação. O padrão é 0."
+        },
+        {
+          "name": "'alpha'",
+          "en": "Significance level, between 0 and 1. Default 0.05.",
+          "pt": "Nível de significância, entre 0 e 1. O padrão é 0.05."
+        },
+        {
+          "name": "'tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        },
+        {
+          "name": "'method'",
+          "en": "`'exact'` uses the binomial distribution; `'approximate'` uses the normal approximation.",
+          "pt": "`'exact'` usa a distribuição binomial; `'approximate'` usa a aproximação normal."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "h",
+          "en": "0 when the null hypothesis is not rejected at level `alpha`, 1 when it is.",
+          "pt": "0 quando a hipótese nula não é rejeitada no nível `alpha`, 1 quando é."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `sign` (the test statistic, the count of positive differences) and `zval` (the z statistic, `NaN` for the exact method).",
+          "pt": "Estrutura com `sign` (a estatística do teste, a contagem de diferenças positivas) e `zval` (a estatística z, `NaN` no método exato)."
+        }
+      ],
+      "description": {
+        "en": "The sign test uses only the sign of each difference, so it makes no assumption about the distribution of the data. Pairs with a `NaN` are left out.\n\nUnder the null hypothesis the number of positive differences follows a binomial distribution with probability 0.5. A small `p` means the data lean too far to one side for that to be plausible. Use `signrank` when the sizes of the differences also matter.",
+        "pt": "O teste do sinal usa apenas o sinal de cada diferença, então não supõe nenhuma distribuição para os dados. Pares com `NaN` ficam de fora.\n\nSob a hipótese nula, o número de diferenças positivas segue uma distribuição binomial com probabilidade 0.5. Um `p` pequeno indica que os dados se inclinam demais para um lado para que isso seja plausível. Use `signrank` quando o tamanho das diferenças também importar."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Paired sign test",
+            "pt": "Teste do sinal pareado"
+          },
+          "code": "x = [3 5 2 8 7 6 9 4];\ny = [2 3 4 5 5 3 6 2];\n[p, h, s] = signtest(x, y);\nfprintf('p = %.4f, h = %d, sign = %d\\n', p, h, s.sign)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Normal approximation, one-sided",
+            "pt": "Aproximação normal, unilateral"
+          },
+          "code": "x = [3 5 2 8 7 6 9 4];\ny = [2 3 4 5 5 3 6 2];\n[p, h, s] = signtest(x, y, 'method', 'approximate', 'tail', 'right');\nfprintf('p = %.4f, z = %.4f\\n', p, s.zval)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "signrank",
+        "ttest",
+        "ranksum",
+        "binocdf"
+      ]
+    },
+    "vartest": {
+      "summary": {
+        "en": "Chi-square test that the variance of a normal sample equals a given value, with a confidence interval for the variance.",
+        "pt": "Teste qui-quadrado de que a variância de uma amostra normal é igual a um valor dado, com intervalo de confiança para a variância."
+      },
+      "syntax": [
+        {
+          "code": "h = vartest(x, v)",
+          "en": "Tests whether the variance of `x` equals `v`.",
+          "pt": "Testa se a variância de `x` é igual a `v`."
+        },
+        {
+          "code": "[h, p, ci, stats] = vartest(x, v)",
+          "en": "Also returns the p-value, a confidence interval for the variance and the test statistics.",
+          "pt": "Retorna também o valor-p, um intervalo de confiança para a variância e as estatísticas do teste."
+        },
+        {
+          "code": "[h, p, ci, stats] = vartest(x, v, 'Name', Value)",
+          "en": "Sets `'Alpha'`, `'Tail'` or `'Dim'`.",
+          "pt": "Define `'Alpha'`, `'Tail'` ou `'Dim'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample vector. For a matrix, each column is tested separately.",
+          "pt": "Vetor da amostra. Para uma matriz, cada coluna é testada separadamente."
+        },
+        {
+          "name": "v",
+          "en": "Hypothesized variance, a positive scalar.",
+          "pt": "Variância hipotética, um escalar positivo."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        },
+        {
+          "name": "'Dim'",
+          "en": "Dimension along which to test a matrix.",
+          "pt": "Dimensão ao longo da qual testar uma matriz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "0 when the null hypothesis is kept, 1 when it is rejected.",
+          "pt": "0 quando a hipótese nula é mantida, 1 quando é rejeitada."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "ci",
+          "en": "Confidence interval for the variance, as a column of lower and upper limits.",
+          "pt": "Intervalo de confiança para a variância, em uma coluna com os limites inferior e superior."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `chisqstat` (the statistic) and `df` (degrees of freedom).",
+          "pt": "Estrutura com `chisqstat` (a estatística) e `df` (graus de liberdade)."
+        }
+      ],
+      "description": {
+        "en": "The statistic is `(n-1)*s^2/v`, compared with a chi-square distribution with `n-1` degrees of freedom. The test is sensitive to departures from normality, so check the data first.\n\nThe interval `ci` is for the variance, not the standard deviation: take square roots of its limits if you want one for the standard deviation.",
+        "pt": "A estatística é `(n-1)*s^2/v`, comparada com uma distribuição qui-quadrado com `n-1` graus de liberdade. O teste é sensível a desvios da normalidade, então verifique os dados antes.\n\nO intervalo `ci` é para a variância, não para o desvio padrão: tire a raiz quadrada dos limites se quiser um intervalo para o desvio padrão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Is the variance equal to 1?",
+            "pt": "A variância é igual a 1?"
+          },
+          "code": "a = [4.1 5.2 3.8 6.0 5.5 4.7 5.9 4.4];\n[h, p, ci, st] = vartest(a, 1);\nfprintf('h = %d, p = %.4f, chi2 = %.4f, df = %d\\n', h, p, st.chisqstat, st.df)\nfprintf('ci = [%.4f %.4f]\\n', ci)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One-sided test",
+            "pt": "Teste unilateral"
+          },
+          "code": "a = [4.1 5.2 3.8 6.0 5.5 4.7 5.9 4.4];\n[h, p] = vartest(a, 1, 'Tail', 'right', 'Alpha', 0.1);\nfprintf('h = %d, p = %.4f\\n', h, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "vartest2",
+        "ttest",
+        "ztest",
+        "chi2cdf",
+        "var"
+      ]
+    },
+    "vartest2": {
+      "summary": {
+        "en": "F test that two normal samples have the same variance, with a confidence interval for the ratio of variances.",
+        "pt": "Teste F de que duas amostras normais têm a mesma variância, com intervalo de confiança para a razão das variâncias."
+      },
+      "syntax": [
+        {
+          "code": "h = vartest2(x, y)",
+          "en": "Tests whether `x` and `y` have equal variances.",
+          "pt": "Testa se `x` e `y` têm variâncias iguais."
+        },
+        {
+          "code": "[h, p, ci, stats] = vartest2(x, y)",
+          "en": "Also returns the p-value, an interval for `var(x)/var(y)` and the test statistics.",
+          "pt": "Retorna também o valor-p, um intervalo para `var(x)/var(y)` e as estatísticas do teste."
+        },
+        {
+          "code": "[h, p, ci, stats] = vartest2(x, y, 'Name', Value)",
+          "en": "Sets `'Alpha'`, `'Tail'` or `'Dim'`.",
+          "pt": "Define `'Alpha'`, `'Tail'` ou `'Dim'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "Sample vectors, which may have different lengths. Matrices must have the same size and are compared column by column.",
+          "pt": "Vetores de amostras, que podem ter tamanhos diferentes. Matrizes devem ter o mesmo tamanho e são comparadas coluna a coluna."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        },
+        {
+          "name": "'Dim'",
+          "en": "Dimension along which to test matrices.",
+          "pt": "Dimensão ao longo da qual testar matrizes."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "0 when equal variances are not rejected, 1 when they are.",
+          "pt": "0 quando a igualdade das variâncias não é rejeitada, 1 quando é."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "ci",
+          "en": "Confidence interval for the ratio `var(x)/var(y)`.",
+          "pt": "Intervalo de confiança para a razão `var(x)/var(y)`."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `fstat` (the ratio of sample variances) and the degrees of freedom `df1` and `df2`.",
+          "pt": "Estrutura com `fstat` (a razão das variâncias amostrais) e os graus de liberdade `df1` e `df2`."
+        }
+      ],
+      "description": {
+        "en": "The statistic is the ratio of the two sample variances, compared with an F distribution whose degrees of freedom are the sample sizes minus one. Like `vartest`, it assumes both samples are normal and is sensitive to outliers.",
+        "pt": "A estatística é a razão das duas variâncias amostrais, comparada com uma distribuição F cujos graus de liberdade são os tamanhos das amostras menos um. Como `vartest`, supõe que as duas amostras sejam normais e é sensível a valores atípicos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Compare two spreads",
+            "pt": "Comparar duas dispersões"
+          },
+          "code": "a = [4.1 5.2 3.8 6.0 5.5 4.7 5.9 4.4];\nb = [3.9 4.1 4.0 4.3 3.8 4.2 4.0 4.1];\n[h, p, ci, st] = vartest2(a, b);\nfprintf('h = %d, p = %.4f, F = %.4f\\n', h, p, st.fstat)\nfprintf('ci = [%.4f %.4f]\\n', ci)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "vartest",
+        "ttest2",
+        "fcdf",
+        "var"
+      ]
+    },
+    "ztest": {
+      "summary": {
+        "en": "Z test for the mean of a sample when the standard deviation of the population is known, with a confidence interval for the mean.",
+        "pt": "Teste z para a média de uma amostra quando o desvio padrão da população é conhecido, com intervalo de confiança para a média."
+      },
+      "syntax": [
+        {
+          "code": "h = ztest(x, m, sigma)",
+          "en": "Tests whether the mean of `x` equals `m`, given the population standard deviation `sigma`.",
+          "pt": "Testa se a média de `x` é igual a `m`, dado o desvio padrão populacional `sigma`."
+        },
+        {
+          "code": "[h, p, ci, zval] = ztest(x, m, sigma)",
+          "en": "Also returns the p-value, a confidence interval for the mean and the z statistic.",
+          "pt": "Retorna também o valor-p, um intervalo de confiança para a média e a estatística z."
+        },
+        {
+          "code": "[h, p, ci, zval] = ztest(x, m, sigma, 'Name', Value)",
+          "en": "Sets `'Alpha'`, `'Tail'` or `'Dim'`.",
+          "pt": "Define `'Alpha'`, `'Tail'` ou `'Dim'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample vector. For a matrix, each column is tested separately.",
+          "pt": "Vetor da amostra. Para uma matriz, cada coluna é testada separadamente."
+        },
+        {
+          "name": "m",
+          "en": "Hypothesized mean.",
+          "pt": "Média hipotética."
+        },
+        {
+          "name": "sigma",
+          "en": "Known standard deviation of the population, a positive scalar.",
+          "pt": "Desvio padrão populacional conhecido, um escalar positivo."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0.05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`."
+        },
+        {
+          "name": "'Dim'",
+          "en": "Dimension along which to test a matrix.",
+          "pt": "Dimensão ao longo da qual testar uma matriz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "0 when the null hypothesis is kept, 1 when it is rejected.",
+          "pt": "0 quando a hipótese nula é mantida, 1 quando é rejeitada."
+        },
+        {
+          "name": "p",
+          "en": "p-value.",
+          "pt": "Valor-p."
+        },
+        {
+          "name": "ci",
+          "en": "Confidence interval for the mean, as a column of lower and upper limits.",
+          "pt": "Intervalo de confiança para a média, em uma coluna com os limites inferior e superior."
+        },
+        {
+          "name": "zval",
+          "en": "Value of the z statistic, `(mean(x) - m) / (sigma / sqrt(n))`.",
+          "pt": "Valor da estatística z, `(mean(x) - m) / (sigma / sqrt(n))`."
+        }
+      ],
+      "description": {
+        "en": "`ztest` assumes `sigma` is a known constant. When you only have the sample standard deviation, use `ttest`, which accounts for that extra uncertainty.\n\nA large `abs(zval)` means the sample mean is far from `m` measured in standard errors. The one-sided options test whether the mean is greater (`'right'`) or smaller (`'left'`) than `m`.",
+        "pt": "`ztest` supõe que `sigma` seja uma constante conhecida. Quando você só tem o desvio padrão amostral, use `ttest`, que considera essa incerteza adicional.\n\nUm `abs(zval)` grande significa que a média amostral está longe de `m`, medida em erros padrão. As opções unilaterais testam se a média é maior (`'right'`) ou menor (`'left'`) que `m`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Test a mean with known sigma",
+            "pt": "Testar uma média com sigma conhecido"
+          },
+          "code": "a = [4.1 5.2 3.8 6.0 5.5 4.7 5.9 4.4];\n[h, p, ci, z] = ztest(a, 5, 1);\nfprintf('h = %d, p = %.4f, z = %.4f\\n', h, p, z)\nfprintf('ci = [%.4f %.4f]\\n', ci)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Left-tailed test",
+            "pt": "Teste unilateral à esquerda"
+          },
+          "code": "a = [4.1 5.2 3.8 6.0 5.5 4.7 5.9 4.4];\n[h, p] = ztest(a, 5, 1, 'Tail', 'left');\nfprintf('h = %d, p = %.4f\\n', h, p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ttest",
+        "vartest",
+        "signtest",
+        "normcdf"
+      ]
+    },
+    "mnpdf": {
+      "summary": {
+        "en": "Probability mass function of the multinomial distribution: the probability of observing given counts in each category.",
+        "pt": "Função de massa de probabilidade da distribuição multinomial: a probabilidade de observar contagens dadas em cada categoria."
+      },
+      "syntax": [
+        {
+          "code": "y = mnpdf(x, prob)",
+          "en": "Probability of each row of counts `x` for category probabilities `prob`.",
+          "pt": "Probabilidade de cada linha de contagens `x` para as probabilidades de categoria `prob`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Counts, a vector or a matrix with one observation per row and one column per category. Entries must be non-negative integers.",
+          "pt": "Contagens, um vetor ou uma matriz com uma observação por linha e uma coluna por categoria. As entradas devem ser inteiros não negativos."
+        },
+        {
+          "name": "prob",
+          "en": "Probability of each category, a vector with as many elements as `x` has columns. It should sum to one.",
+          "pt": "Probabilidade de cada categoria, um vetor com tantos elementos quanto as colunas de `x`. Deve somar um."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Column vector of probabilities, one per row of `x`.",
+          "pt": "Vetor coluna de probabilidades, uma por linha de `x`."
+        }
+      ],
+      "description": {
+        "en": "The multinomial distribution generalizes the binomial one to more than two categories. For `n` trials, where `n = sum(x)` in each row, `mnpdf` gives the chance that category `i` appears exactly `x(i)` times.\n\nThe value is `n! / prod(x!) * prod(prob.^x)`.",
+        "pt": "A distribuição multinomial generaliza a binomial para mais de duas categorias. Para `n` tentativas, em que `n = sum(x)` em cada linha, `mnpdf` dá a chance de a categoria `i` aparecer exatamente `x(i)` vezes.\n\nO valor é `n! / prod(x!) * prod(prob.^x)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Counts from 4 trials in 3 categories",
+            "pt": "Contagens de 4 tentativas em 3 categorias"
+          },
+          "code": "p = [0.2 0.5 0.3];\ny = mnpdf([1 2 1; 0 0 4], p);\ndisp(round(y' * 10000) / 10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "binopdf",
+        "mvnpdf",
+        "mvtpdf",
+        "randsample"
+      ]
+    },
+    "mvnpdf": {
+      "summary": {
+        "en": "Probability density function of the multivariate normal distribution, evaluated at the rows of a matrix.",
+        "pt": "Função densidade de probabilidade da distribuição normal multivariada, avaliada nas linhas de uma matriz."
+      },
+      "syntax": [
+        {
+          "code": "y = mvnpdf(x)",
+          "en": "Standard multivariate normal: zero mean and identity covariance.",
+          "pt": "Normal multivariada padrão: média zero e covariância identidade."
+        },
+        {
+          "code": "y = mvnpdf(x, mu)",
+          "en": "Mean `mu` and identity covariance.",
+          "pt": "Média `mu` e covariância identidade."
+        },
+        {
+          "code": "y = mvnpdf(x, mu, sigma)",
+          "en": "Mean `mu` and covariance matrix `sigma`.",
+          "pt": "Média `mu` e matriz de covariância `sigma`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points, an `n`-by-`d` matrix with one point per row.",
+          "pt": "Pontos, uma matriz `n` por `d` com um ponto por linha."
+        },
+        {
+          "name": "mu",
+          "en": "Mean vector with `d` elements. Default zeros.",
+          "pt": "Vetor de médias com `d` elementos. O padrão é zeros."
+        },
+        {
+          "name": "sigma",
+          "en": "`d`-by-`d` symmetric positive definite covariance matrix. Default identity.",
+          "pt": "Matriz de covariância `d` por `d`, simétrica e definida positiva. O padrão é a identidade."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Column vector with the density at each row of `x`.",
+          "pt": "Vetor coluna com a densidade em cada linha de `x`."
+        }
+      ],
+      "description": {
+        "en": "The density integrates to one over the whole space. It is not a probability: a value can exceed one when the covariance is small.\n\nOff-diagonal entries of `sigma` set the correlation between coordinates. A positive covariance stretches the density along the line where the two coordinates grow together.",
+        "pt": "A densidade integra um em todo o espaço. Ela não é uma probabilidade: um valor pode ser maior que um quando a covariância é pequena.\n\nAs entradas fora da diagonal de `sigma` definem a correlação entre as coordenadas. Uma covariância positiva alonga a densidade ao longo da reta em que as duas coordenadas crescem juntas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bivariate normal with correlated coordinates",
+            "pt": "Normal bivariada com coordenadas correlacionadas"
+          },
+          "code": "x = [0 0; 1 1];\nmu = [0 0];\nS = [1 0.5; 0.5 2];\ny = mvnpdf(x, mu, S);\ndisp(round(y' * 10000) / 10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Standard case at the origin",
+            "pt": "Caso padrão na origem"
+          },
+          "code": "fprintf('%.4f %.4f\\n', mvnpdf([0 0]), 1/(2*pi))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mvtpdf",
+        "normpdf",
+        "mnpdf",
+        "mahal"
+      ]
+    },
+    "mvtpdf": {
+      "summary": {
+        "en": "Probability density function of the multivariate Student t distribution, evaluated at the rows of a matrix.",
+        "pt": "Função densidade de probabilidade da distribuição t de Student multivariada, avaliada nas linhas de uma matriz."
+      },
+      "syntax": [
+        {
+          "code": "y = mvtpdf(x, c, df)",
+          "en": "Density at each row of `x` for correlation matrix `c` and `df` degrees of freedom.",
+          "pt": "Densidade em cada linha de `x` para a matriz de correlação `c` e `df` graus de liberdade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points, an `n`-by-`d` matrix with one point per row.",
+          "pt": "Pontos, uma matriz `n` por `d` com um ponto por linha."
+        },
+        {
+          "name": "c",
+          "en": "`d`-by-`d` symmetric positive definite correlation matrix.",
+          "pt": "Matriz de correlação `d` por `d`, simétrica e definida positiva."
+        },
+        {
+          "name": "df",
+          "en": "Degrees of freedom, a positive scalar.",
+          "pt": "Graus de liberdade, um escalar positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Column vector with the density at each row of `x`.",
+          "pt": "Vetor coluna com a densidade em cada linha de `x`."
+        }
+      ],
+      "description": {
+        "en": "The multivariate t has heavier tails than the multivariate normal, so extreme points are more likely. As `df` grows, the density approaches that of `mvnpdf` with zero mean and covariance `c`.\n\nAll three inputs are required: calling `mvtpdf` with only `x` and `c` raises an error in MatLivre.",
+        "pt": "A t multivariada tem caudas mais pesadas que a normal multivariada, então pontos extremos são mais prováveis. Quando `df` cresce, a densidade se aproxima da de `mvnpdf` com média zero e covariância `c`.\n\nAs três entradas são obrigatórias: chamar `mvtpdf` só com `x` e `c` gera um erro no MatLivre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at two points",
+            "pt": "Densidade em dois pontos"
+          },
+          "code": "x = [0 0; 1 1];\nc = [1 0.5; 0.5 2];\ny = mvtpdf(x, c, 5);\ndisp(round(y' * 10000) / 10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One degree of freedom at the origin",
+            "pt": "Um grau de liberdade na origem"
+          },
+          "code": "fprintf('%.4f\\n', mvtpdf([0 0], eye(2), 1))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "mvnpdf",
+        "tpdf",
+        "mnpdf"
+      ]
+    },
+    "combnk": {
+      "summary": {
+        "en": "Lists all combinations of k elements chosen from a vector, one combination per row.",
+        "pt": "Lista todas as combinações de k elementos escolhidos de um vetor, uma combinação por linha."
+      },
+      "syntax": [
+        {
+          "code": "c = combnk(v, k)",
+          "en": "All combinations of `k` elements of `v`.",
+          "pt": "Todas as combinações de `k` elementos de `v`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v",
+          "en": "Numeric vector or character vector of elements to choose from.",
+          "pt": "Vetor numérico ou de caracteres com os elementos a escolher."
+        },
+        {
+          "name": "k",
+          "en": "Number of elements in each combination, an integer from 0 to `numel(v)`.",
+          "pt": "Número de elementos de cada combinação, um inteiro de 0 a `numel(v)`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "c",
+          "en": "Matrix with `nchoosek(numel(v), k)` rows and `k` columns. Each row is one combination.",
+          "pt": "Matriz com `nchoosek(numel(v), k)` linhas e `k` colunas. Cada linha é uma combinação."
+        }
+      ],
+      "description": {
+        "en": "Order inside a combination does not matter, so `[1 2]` and `[2 1]` count once. The number of rows grows quickly, so check `nchoosek(n, k)` before calling on a large vector.\n\nFor a character vector the result is a character matrix, so `combnk('abc', 2)` returns the rows `ab`, `ac` and `bc`.",
+        "pt": "A ordem dentro de uma combinação não importa, então `[1 2]` e `[2 1]` contam uma vez só. O número de linhas cresce rápido, então confira `nchoosek(n, k)` antes de chamar com um vetor grande.\n\nPara um vetor de caracteres, o resultado é uma matriz de caracteres, então `combnk('abc', 2)` retorna as linhas `ab`, `ac` e `bc`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Pairs from four numbers",
+            "pt": "Pares de quatro números"
+          },
+          "code": "c = combnk(1:4, 2);\ndisp(size(c))\ndisp(sortrows(c))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Combinations of letters",
+            "pt": "Combinações de letras"
+          },
+          "code": "disp(combnk('abc', 2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "nchoosek",
+        "randsample",
+        "datasample",
+        "perms"
+      ],
+      "notes": {
+        "en": "For some large inputs with `k = n-2` (for example `combnk(1:17, 15)`), the rows come out in a different order than in MATLAB. The set of rows is the same.",
+        "pt": "Para algumas entradas grandes com `k = n-2` (por exemplo `combnk(1:17, 15)`), as linhas saem em uma ordem diferente da do MATLAB. O conjunto de linhas é o mesmo."
+      }
+    },
+    "datasample": {
+      "summary": {
+        "en": "Draws a random sample of rows (or another dimension) from data, with or without replacement and optionally with weights.",
+        "pt": "Sorteia uma amostra aleatória de linhas (ou de outra dimensão) dos dados, com ou sem reposição e opcionalmente com pesos."
+      },
+      "syntax": [
+        {
+          "code": "y = datasample(data, k)",
+          "en": "Draws `k` observations from `data`, with replacement.",
+          "pt": "Sorteia `k` observações de `data`, com reposição."
+        },
+        {
+          "code": "y = datasample(data, k, dim)",
+          "en": "Samples along dimension `dim` instead of the first.",
+          "pt": "Sorteia ao longo da dimensão `dim` em vez da primeira."
+        },
+        {
+          "code": "[y, idx] = datasample(___, 'Name', Value)",
+          "en": "Also returns the indices drawn. Options: `'Replace'` and `'Weights'`.",
+          "pt": "Retorna também os índices sorteados. Opções: `'Replace'` e `'Weights'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Vector or matrix to sample from. For a matrix, whole rows are drawn by default.",
+          "pt": "Vetor ou matriz de onde sortear. Para uma matriz, linhas inteiras são sorteadas por padrão."
+        },
+        {
+          "name": "k",
+          "en": "Number of observations to draw.",
+          "pt": "Número de observações a sortear."
+        },
+        {
+          "name": "'Replace'",
+          "en": "`true` (default) draws with replacement; `false` draws each observation at most once, so `k` cannot exceed the number of observations.",
+          "pt": "`true` (padrão) sorteia com reposição; `false` sorteia cada observação no máximo uma vez, então `k` não pode exceder o número de observações."
+        },
+        {
+          "name": "'Weights'",
+          "en": "Vector of non-negative weights, one per observation, giving the relative chance of each.",
+          "pt": "Vetor de pesos não negativos, um por observação, com a chance relativa de cada uma."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "The sampled observations.",
+          "pt": "As observações sorteadas."
+        },
+        {
+          "name": "idx",
+          "en": "Indices of the sampled observations in `data`.",
+          "pt": "Índices das observações sorteadas em `data`."
+        }
+      ],
+      "description": {
+        "en": "Use `datasample` to build bootstrap resamples (with replacement) or random subsets such as a training and a test set (without replacement). A row vector input gives a row vector output.\n\nCall `rng` first if you need to repeat a run in the same program.",
+        "pt": "Use `datasample` para criar reamostras bootstrap (com reposição) ou subconjuntos aleatórios, como conjuntos de treino e de teste (sem reposição). Uma entrada em vetor linha dá uma saída em vetor linha.\n\nChame `rng` antes se precisar repetir uma execução no mesmo programa."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Draw without replacement",
+            "pt": "Sorteio sem reposição"
+          },
+          "code": "d = datasample(1:10, 4, 'Replace', false);\nfprintf('size %d x %d, distinct %d\\n', size(d), numel(unique(d)))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Rows of a matrix and their indices",
+            "pt": "Linhas de uma matriz e seus índices"
+          },
+          "code": "A = [1 2; 3 4; 5 6];\n[d, idx] = datasample(A, 2);\ndisp(size(d))\ndisp(isequal(d, A(idx, :)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "randsample",
+        "randperm",
+        "bootstrp",
+        "combnk"
+      ],
+      "notes": {
+        "en": "Results come from MatLivre's own random stream, so the numbers do not match those MATLAB gives for the same seed. Without replacement, when `k` is more than a fifth of the number of observations, the draw also differs from MATLAB's for a given seed (a known limit).",
+        "pt": "Os resultados vêm do gerador de números aleatórios do próprio MatLivre, então os números não coincidem com os do MATLAB para a mesma semente. Sem reposição, quando `k` é maior que um quinto do número de observações, o sorteio também difere do MATLAB para uma mesma semente (um limite conhecido)."
+      }
+    },
+    "jackknife": {
+      "summary": {
+        "en": "Jackknife estimates of a statistic: the value of a function recomputed with each observation left out in turn.",
+        "pt": "Estimativas jackknife de uma estatística: o valor de uma função recalculado deixando cada observação de fora, uma de cada vez."
+      },
+      "syntax": [
+        {
+          "code": "jackstat = jackknife(jackfun, x)",
+          "en": "Applies `jackfun` to `x` with each row left out.",
+          "pt": "Aplica `jackfun` a `x` deixando cada linha de fora."
+        },
+        {
+          "code": "jackstat = jackknife(jackfun, x1, x2)",
+          "en": "Several data arguments with the same number of rows are passed to `jackfun`, all with the same row removed.",
+          "pt": "Vários argumentos de dados com o mesmo número de linhas são passados a `jackfun`, todos com a mesma linha removida."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "jackfun",
+          "en": "Function handle (or name) that takes the data and returns a statistic, either a scalar or a row vector.",
+          "pt": "Handle de função (ou nome) que recebe os dados e retorna uma estatística, escalar ou vetor linha."
+        },
+        {
+          "name": "x",
+          "en": "Data. Each row is one observation.",
+          "pt": "Dados. Cada linha é uma observação."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "jackstat",
+          "en": "Matrix with one row per left-out observation and one column per element of the statistic.",
+          "pt": "Matriz com uma linha por observação deixada de fora e uma coluna por elemento da estatística."
+        }
+      ],
+      "description": {
+        "en": "A jackknife replicate is the statistic computed on the sample without observation `i`. The spread of the replicates is the basis of jackknife estimates of bias and variance: for example, the standard error of the statistic is `sqrt((n-1)/n * sum((jackstat - mean(jackstat)).^2))`.\n\nUnlike a bootstrap, the result is deterministic: there are exactly `n` replicates.",
+        "pt": "Uma réplica jackknife é a estatística calculada na amostra sem a observação `i`. A dispersão das réplicas é a base das estimativas jackknife de viés e de variância: por exemplo, o erro padrão da estatística é `sqrt((n-1)/n * sum((jackstat - mean(jackstat)).^2))`.\n\nDiferente do bootstrap, o resultado é determinístico: há exatamente `n` réplicas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Leave-one-out means",
+            "pt": "Médias deixando um de fora"
+          },
+          "code": "x = [2 4 6 8 10 15];\nj = jackknife(@mean, x);\ndisp(j')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Two statistics at once",
+            "pt": "Duas estatísticas de uma vez"
+          },
+          "code": "x = [2 4 6 8 10 15];\nj = jackknife(@(z) [mean(z) var(z)], x);\ndisp(size(j))\ndisp(j(1, :))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "bootstrp",
+        "datasample",
+        "std",
+        "var"
+      ]
+    },
+    "randsample": {
+      "summary": {
+        "en": "Random sample of integers from 1 to n or of the elements of a vector, with or without replacement and optionally with weights.",
+        "pt": "Amostra aleatória de inteiros de 1 a n ou dos elementos de um vetor, com ou sem reposição e opcionalmente com pesos."
+      },
+      "syntax": [
+        {
+          "code": "y = randsample(n, k)",
+          "en": "`k` distinct integers from `1:n`, without replacement.",
+          "pt": "`k` inteiros distintos de `1:n`, sem reposição."
+        },
+        {
+          "code": "y = randsample(population, k)",
+          "en": "`k` elements of the vector `population`, without replacement.",
+          "pt": "`k` elementos do vetor `population`, sem reposição."
+        },
+        {
+          "code": "y = randsample(n, k, replace)",
+          "en": "With `replace` true, draws with replacement.",
+          "pt": "Com `replace` verdadeiro, sorteia com reposição."
+        },
+        {
+          "code": "y = randsample(n, k, true, w)",
+          "en": "Draws with replacement using weights `w`.",
+          "pt": "Sorteia com reposição usando os pesos `w`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Positive integer: the population is `1:n`.",
+          "pt": "Inteiro positivo: a população é `1:n`."
+        },
+        {
+          "name": "population",
+          "en": "Numeric vector to sample from.",
+          "pt": "Vetor numérico de onde sortear."
+        },
+        {
+          "name": "k",
+          "en": "Number of values to draw. Without replacement it cannot exceed the population size.",
+          "pt": "Quantidade de valores a sortear. Sem reposição, não pode exceder o tamanho da população."
+        },
+        {
+          "name": "replace",
+          "en": "`true` to draw with replacement, `false` (default) without.",
+          "pt": "`true` para sortear com reposição, `false` (padrão) sem reposição."
+        },
+        {
+          "name": "w",
+          "en": "Non-negative weights, one per population element, proportional to the chance of each.",
+          "pt": "Pesos não negativos, um por elemento da população, proporcionais à chance de cada um."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Column vector with the `k` sampled values.",
+          "pt": "Vetor coluna com os `k` valores sorteados."
+        }
+      ],
+      "description": {
+        "en": "`randsample(n, k)` is a quick way to pick a random subset of indices, for example to split data into training and test parts. Sampling with replacement is the basis of the bootstrap.\n\nWith a weight vector, an element with weight 2 is twice as likely to be drawn as one with weight 1. Weights are only compared with each other.",
+        "pt": "`randsample(n, k)` é um jeito rápido de escolher um subconjunto aleatório de índices, por exemplo para dividir os dados em treino e teste. Sortear com reposição é a base do bootstrap.\n\nCom um vetor de pesos, um elemento de peso 2 tem o dobro da chance de ser sorteado de um de peso 1. Os pesos só são comparados entre si."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Four distinct indices",
+            "pt": "Quatro índices distintos"
+          },
+          "code": "r = randsample(10, 4);\nfprintf('size %d x %d, distinct %d, in range %d\\n', size(r), numel(unique(r)), all(r >= 1 & r <= 10))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Weighted draw with replacement",
+            "pt": "Sorteio com pesos e com reposição"
+          },
+          "code": "r = randsample(5, 6, true, [0 0 1 0 0]);\ndisp(r')",
+          "silent": false
+        }
+      ],
+      "see": [
+        "datasample",
+        "randperm",
+        "combnk",
+        "bootstrp"
+      ],
+      "notes": {
+        "en": "Results come from MatLivre's own random stream, so the numbers do not match those MATLAB gives for the same seed. Weights together with sampling without replacement are not supported and raise an error. A character vector as `population` returns character codes as a double column, not characters.",
+        "pt": "Os resultados vêm do gerador de números aleatórios do próprio MatLivre, então os números não coincidem com os do MATLAB para a mesma semente. Pesos junto com sorteio sem reposição não são suportados e geram um erro. Um vetor de caracteres como `population` retorna os códigos dos caracteres em uma coluna do tipo double, não caracteres."
+      }
+    },
+    "fitglm": {
+      "summary": {
+        "en": "Fits a generalized linear regression model (normal, binomial, Poisson, gamma, inverse Gaussian) to a predictor matrix and a response.",
+        "pt": "Ajusta um modelo de regressão linear generalizado (normal, binomial, Poisson, gama, normal inversa) a uma matriz de preditores e a uma resposta."
+      },
+      "syntax": [
+        {
+          "code": "mdl = fitglm(X, y)",
+          "en": "Linear model with an intercept and a normal response.",
+          "pt": "Modelo linear com intercepto e resposta normal."
+        },
+        {
+          "code": "mdl = fitglm(X, y, modelspec)",
+          "en": "Chooses the terms: `'constant'`, `'linear'`, `'interactions'`, `'purequadratic'` or `'quadratic'`.",
+          "pt": "Escolhe os termos: `'constant'`, `'linear'`, `'interactions'`, `'purequadratic'` ou `'quadratic'`."
+        },
+        {
+          "code": "mdl = fitglm(X, y, modelspec, 'Distribution', dist)",
+          "en": "Sets the response distribution of the model.",
+          "pt": "Define a distribuição da resposta do modelo."
+        },
+        {
+          "code": "mdl = fitglm(___, 'Link', link, 'Intercept', tf)",
+          "en": "Sets the link function and whether to include an intercept.",
+          "pt": "Define a função de ligação e se o intercepto é incluído."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "`n`-by-`p` matrix of predictors, one row per observation.",
+          "pt": "Matriz `n` por `p` de preditores, uma linha por observação."
+        },
+        {
+          "name": "y",
+          "en": "Response vector with `n` elements. For `'binomial'` it can also be an `n`-by-2 matrix `[successes trials]`.",
+          "pt": "Vetor de resposta com `n` elementos. Para `'binomial'`, pode ser também uma matriz `n` por 2 `[sucessos tentativas]`."
+        },
+        {
+          "name": "'Distribution'",
+          "en": "`'normal'` (default), `'binomial'`, `'poisson'`, `'gamma'` or `'inverse gaussian'`.",
+          "pt": "`'normal'` (padrão), `'binomial'`, `'poisson'`, `'gamma'` ou `'inverse gaussian'`."
+        },
+        {
+          "name": "'Link'",
+          "en": "Link function name such as `'identity'`, `'log'`, `'logit'`, `'probit'` or `'reciprocal'`. Each distribution has a default.",
+          "pt": "Nome da função de ligação, como `'identity'`, `'log'`, `'logit'`, `'probit'` ou `'reciprocal'`. Cada distribuição tem um padrão."
+        },
+        {
+          "name": "'Intercept'",
+          "en": "`true` (default) includes a constant term.",
+          "pt": "`true` (padrão) inclui um termo constante."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mdl",
+          "en": "Fitted model object. Useful properties: `Coefficients` (with `Estimate`, `SE`, `tStat`, `pValue`), `Deviance`, `Dispersion`, `LogLikelihood`, `Fitted`, `Residuals`, `NumCoefficients`, `Distribution`, `Link`. Use `predict(mdl, Xnew)` and `coefCI(mdl)` on it.",
+          "pt": "Objeto do modelo ajustado. Propriedades úteis: `Coefficients` (com `Estimate`, `SE`, `tStat`, `pValue`), `Deviance`, `Dispersion`, `LogLikelihood`, `Fitted`, `Residuals`, `NumCoefficients`, `Distribution`, `Link`. Use `predict(mdl, Xnew)` e `coefCI(mdl)` com ele."
+        }
+      ],
+      "description": {
+        "en": "A generalized linear model relates the mean of the response to a linear combination of the predictors through a link function. With a binomial response and the default logit link it is logistic regression; with a Poisson response and a log link it models counts.\n\nRead `Coefficients.Estimate` on the scale of the link (for logit, log odds) and compare `Deviance` between models of the same data.",
+        "pt": "Um modelo linear generalizado relaciona a média da resposta a uma combinação linear dos preditores por meio de uma função de ligação. Com resposta binomial e a ligação logit padrão, é a regressão logística; com resposta de Poisson e ligação log, modela contagens.\n\nLeia `Coefficients.Estimate` na escala da ligação (no logit, log da razão de chances) e compare `Deviance` entre modelos dos mesmos dados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Logistic regression",
+            "pt": "Regressão logística"
+          },
+          "code": "x = (1:8)';\nyb = [0 0 0 1 0 1 1 1]';\nm = fitglm(x, yb, 'Distribution', 'binomial');\nfprintf('%.4f\\n', m.Coefficients.Estimate)\nfprintf('deviance %.4f\\n', m.Deviance)\ndisp(round(predict(m, [2; 7]) * 10000) / 10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Poisson regression for counts",
+            "pt": "Regressão de Poisson para contagens"
+          },
+          "code": "x = (1:8)';\nyc = [1 0 2 1 3 2 4 3]';\nm = fitglm(x, yc, 'Distribution', 'poisson');\nfprintf('%.4f\\n', m.Coefficients.Estimate)\ndisp(m.Link.Name)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitlm",
+        "glmval",
+        "predict",
+        "coefCI",
+        "regress"
+      ],
+      "notes": {
+        "en": "Only matrix input is supported: table input and formula strings such as `'y ~ x1'` raise an error, and so does the `'Weights'` option. For a binomial response given as `[successes trials]`, the `SSR` property differs from MATLAB (its definition was not recovered). With a Poisson response and the identity link, the coefficients differ from MATLAB at about 1e-6 because MATLAB stops the iteration one step earlier.",
+        "pt": "Só há suporte para entrada em matriz: entrada em tabela e fórmulas como `'y ~ x1'` geram erro, assim como a opção `'Weights'`. Para uma resposta binomial dada como `[sucessos tentativas]`, a propriedade `SSR` difere do MATLAB (a definição não foi recuperada). Com resposta de Poisson e ligação identidade, os coeficientes diferem do MATLAB em cerca de 1e-6, porque o MATLAB para a iteração um passo antes."
+      }
+    },
+    "glmval": {
+      "summary": {
+        "en": "Evaluates the predicted mean response of a generalized linear model from its coefficients, a predictor matrix and a link function.",
+        "pt": "Avalia a resposta média prevista de um modelo linear generalizado a partir dos coeficientes, de uma matriz de preditores e de uma função de ligação."
+      },
+      "syntax": [
+        {
+          "code": "yhat = glmval(b, X, link)",
+          "en": "Predicted mean response for each row of `X`.",
+          "pt": "Resposta média prevista para cada linha de `X`."
+        },
+        {
+          "code": "yhat = glmval(b, X, link, 'Name', Value)",
+          "en": "Options: `'constant'`, `'size'`, `'offset'`.",
+          "pt": "Opções: `'constant'`, `'size'`, `'offset'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Coefficient vector. With the default constant term, the first element is the intercept.",
+          "pt": "Vetor de coeficientes. Com o termo constante padrão, o primeiro elemento é o intercepto."
+        },
+        {
+          "name": "X",
+          "en": "`n`-by-`p` matrix of predictors.",
+          "pt": "Matriz `n` por `p` de preditores."
+        },
+        {
+          "name": "link",
+          "en": "Link name: `'identity'`, `'log'`, `'logit'`, `'probit'`, `'comploglog'`, `'loglog'` or `'reciprocal'`.",
+          "pt": "Nome da ligação: `'identity'`, `'log'`, `'logit'`, `'probit'`, `'comploglog'`, `'loglog'` ou `'reciprocal'`."
+        },
+        {
+          "name": "'constant'",
+          "en": "`'on'` (default) if `b` has an intercept as its first element, `'off'` if not.",
+          "pt": "`'on'` (padrão) se `b` tem um intercepto como primeiro elemento, `'off'` se não."
+        },
+        {
+          "name": "'size'",
+          "en": "Number of trials, to scale the result for binomial counts.",
+          "pt": "Número de tentativas, para escalar o resultado em contagens binomiais."
+        },
+        {
+          "name": "'offset'",
+          "en": "Vector added to the linear predictor.",
+          "pt": "Vetor somado ao preditor linear."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "yhat",
+          "en": "Column vector of predicted means, one per row of `X`.",
+          "pt": "Vetor coluna das médias previstas, uma por linha de `X`."
+        }
+      ],
+      "description": {
+        "en": "`glmval` computes the linear predictor `b(1) + X*b(2:end)`, then applies the inverse of the link. With the `'logit'` link the result is a probability between 0 and 1; with `'log'` it is `exp` of the predictor.\n\nUse the coefficients from `mdl.Coefficients.Estimate` of a model made by `fitglm`, or from your own fit, with the same link that produced them.",
+        "pt": "`glmval` calcula o preditor linear `b(1) + X*b(2:end)` e aplica a inversa da ligação. Com a ligação `'logit'`, o resultado é uma probabilidade entre 0 e 1; com `'log'`, é `exp` do preditor.\n\nUse os coeficientes de `mdl.Coefficients.Estimate` de um modelo feito por `fitglm`, ou de um ajuste seu, com a mesma ligação que os produziu."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probabilities from a logistic model",
+            "pt": "Probabilidades de um modelo logístico"
+          },
+          "code": "x = (1:8)';\nyb = [0 0 0 1 0 1 1 1]';\nm = fitglm(x, yb, 'Distribution', 'binomial');\np = glmval(m.Coefficients.Estimate, [2; 7], 'logit');\ndisp(round(p * 10000) / 10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Log link and no intercept",
+            "pt": "Ligação log e sem intercepto"
+          },
+          "code": "disp(round(glmval([0.5; 0.2], [1; 2; 3], 'log') * 10000) / 10000)\ndisp(glmval(0.2, [1; 2; 3], 'identity', 'constant', 'off'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitglm",
+        "predict",
+        "glmfit",
+        "logit"
+      ],
+      "notes": {
+        "en": "Only the predicted means are returned. The confidence bounds that MATLAB gives as extra outputs when a `stats` structure is passed are not computed.",
+        "pt": "Apenas as médias previstas são retornadas. Os limites de confiança que o MATLAB devolve como saídas extras quando uma estrutura `stats` é passada não são calculados."
+      }
+    },
+    "fitlm": {
+      "summary": {
+        "en": "Fits a linear regression model by least squares to a predictor matrix and a response, with a choice of terms.",
+        "pt": "Ajusta um modelo de regressão linear por mínimos quadrados a uma matriz de preditores e a uma resposta, com escolha dos termos."
+      },
+      "syntax": [
+        {
+          "code": "mdl = fitlm(X, y)",
+          "en": "Linear model with an intercept and one term per column of `X`.",
+          "pt": "Modelo linear com intercepto e um termo por coluna de `X`."
+        },
+        {
+          "code": "mdl = fitlm(X, y, modelspec)",
+          "en": "Chooses the terms: `'constant'`, `'linear'`, `'interactions'`, `'purequadratic'` or `'quadratic'`.",
+          "pt": "Escolhe os termos: `'constant'`, `'linear'`, `'interactions'`, `'purequadratic'` ou `'quadratic'`."
+        },
+        {
+          "code": "mdl = fitlm(___, 'Intercept', tf)",
+          "en": "Leaves out the intercept when `tf` is `false`.",
+          "pt": "Omite o intercepto quando `tf` é `false`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "`n`-by-`p` matrix of predictors, one row per observation.",
+          "pt": "Matriz `n` por `p` de preditores, uma linha por observação."
+        },
+        {
+          "name": "y",
+          "en": "Response vector with `n` elements.",
+          "pt": "Vetor de resposta com `n` elementos."
+        },
+        {
+          "name": "modelspec",
+          "en": "Which terms to include. Default `'linear'`.",
+          "pt": "Quais termos incluir. O padrão é `'linear'`."
+        },
+        {
+          "name": "'Intercept'",
+          "en": "`true` (default) includes a constant term.",
+          "pt": "`true` (padrão) inclui um termo constante."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mdl",
+          "en": "Fitted model object. Useful properties: `Coefficients` (with `Estimate`, `SE`, `tStat`, `pValue`), `Rsquared.Ordinary`, `Rsquared.Adjusted`, `RMSE`, `DFE`, `Residuals`, `Fitted`, `CoefficientCovariance`. Use `predict(mdl, Xnew)` and `coefCI(mdl)` on it.",
+          "pt": "Objeto do modelo ajustado. Propriedades úteis: `Coefficients` (com `Estimate`, `SE`, `tStat`, `pValue`), `Rsquared.Ordinary`, `Rsquared.Adjusted`, `RMSE`, `DFE`, `Residuals`, `Fitted`, `CoefficientCovariance`. Use `predict(mdl, Xnew)` e `coefCI(mdl)` com ele."
+        }
+      ],
+      "description": {
+        "en": "`fitlm` returns an object that keeps everything about the fit, not only the coefficients. A small `pValue` for a coefficient means the data are hard to explain if that coefficient were zero; `Rsquared.Ordinary` is the share of the variance of `y` that the model explains.\n\nUse `'interactions'` or `'quadratic'` to add products or squares of the predictors. For a quick fit that returns only numbers, `regress` is lighter.",
+        "pt": "`fitlm` devolve um objeto que guarda tudo sobre o ajuste, não só os coeficientes. Um `pValue` pequeno para um coeficiente significa que os dados seriam difíceis de explicar se esse coeficiente fosse zero; `Rsquared.Ordinary` é a parcela da variância de `y` que o modelo explica.\n\nUse `'interactions'` ou `'quadratic'` para acrescentar produtos ou quadrados dos preditores. Para um ajuste rápido que devolve só números, `regress` é mais leve."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Straight line fit",
+            "pt": "Ajuste de uma reta"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nm = fitlm(x, y);\nfprintf('intercept %.4f, slope %.4f\\n', m.Coefficients.Estimate)\nfprintf('R2 %.4f, RMSE %.4f\\n', m.Rsquared.Ordinary, m.RMSE)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Prediction and confidence intervals",
+            "pt": "Previsão e intervalos de confiança"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nm = fitlm(x, y);\ndisp(round(predict(m, [9; 10]) * 1000) / 1000)\ndisp(round(coefCI(m) * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitglm",
+        "regress",
+        "predict",
+        "coefCI",
+        "robustfit"
+      ],
+      "notes": {
+        "en": "Only matrix input is supported. Table input, formula strings such as `'y ~ x1'` and the options `'Weights'`, `'robustopts'` and `'ResponseVar'` raise an error; categorical predictors, rank-deficient designs and the `anova` method are not available either.",
+        "pt": "Só há suporte para entrada em matriz. Entrada em tabela, fórmulas como `'y ~ x1'` e as opções `'Weights'`, `'robustopts'` e `'ResponseVar'` geram erro; preditores categóricos, projetos de posto deficiente e o método `anova` também não estão disponíveis."
+      }
+    },
+    "linhyptest": {
+      "summary": {
+        "en": "Tests a linear hypothesis H*b = c about estimated coefficients, given their covariance, and returns a p-value.",
+        "pt": "Testa uma hipótese linear H*b = c sobre coeficientes estimados, dada a sua covariância, e retorna um valor-p."
+      },
+      "syntax": [
+        {
+          "code": "p = linhyptest(b, covb, c, h)",
+          "en": "Chi-square test of `h*b = c`.",
+          "pt": "Teste qui-quadrado de `h*b = c`."
+        },
+        {
+          "code": "[p, t, r] = linhyptest(b, covb, c, h, dfe)",
+          "en": "F test using `dfe` error degrees of freedom; also returns the statistic and the rank.",
+          "pt": "Teste F com `dfe` graus de liberdade do erro; retorna também a estatística e o posto."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "b",
+          "en": "Vector of `p` estimated coefficients.",
+          "pt": "Vetor de `p` coeficientes estimados."
+        },
+        {
+          "name": "covb",
+          "en": "`p`-by-`p` covariance matrix of the estimates.",
+          "pt": "Matriz de covariância `p` por `p` das estimativas."
+        },
+        {
+          "name": "c",
+          "en": "Vector (or scalar) of hypothesized values, one per row of `h`.",
+          "pt": "Vetor (ou escalar) de valores hipotéticos, um por linha de `h`."
+        },
+        {
+          "name": "h",
+          "en": "Hypothesis matrix with `p` columns. Each row is one linear combination of the coefficients.",
+          "pt": "Matriz de hipótese com `p` colunas. Cada linha é uma combinação linear dos coeficientes."
+        },
+        {
+          "name": "dfe",
+          "en": "Error degrees of freedom. If omitted, a chi-square test is used instead of an F test.",
+          "pt": "Graus de liberdade do erro. Se omitido, usa-se um teste qui-quadrado em vez de um teste F."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the hypothesis.",
+          "pt": "Valor-p da hipótese."
+        },
+        {
+          "name": "t",
+          "en": "Test statistic: chi-square without `dfe`, F with it.",
+          "pt": "Estatística do teste: qui-quadrado sem `dfe`, F com ele."
+        },
+        {
+          "name": "r",
+          "en": "Rank of `h`, the number of independent restrictions tested.",
+          "pt": "Posto de `h`, o número de restrições independentes testadas."
+        }
+      ],
+      "description": {
+        "en": "With `h = [1 -1]` and `c = 0` you test whether two coefficients are equal; with `h = eye(p)` and `c = zeros(p,1)` you test whether all of them are zero. A small `p` means the data contradict the hypothesis.\n\nThe coefficients and their covariance come from a fitted model, for example `mdl.Coefficients.Estimate` and `mdl.CoefficientCovariance`, with `mdl.DFE` as `dfe`.",
+        "pt": "Com `h = [1 -1]` e `c = 0`, você testa se dois coeficientes são iguais; com `h = eye(p)` e `c = zeros(p,1)`, testa se todos são zero. Um `p` pequeno indica que os dados contradizem a hipótese.\n\nOs coeficientes e sua covariância vêm de um modelo ajustado, por exemplo `mdl.Coefficients.Estimate` e `mdl.CoefficientCovariance`, com `mdl.DFE` como `dfe`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Test that two coefficients are equal",
+            "pt": "Testar se dois coeficientes são iguais"
+          },
+          "code": "b = [1; 2];\nC = [1 0.2; 0.2 2];\n[p, t, r] = linhyptest(b, C, 0, [1 -1]);\nfprintf('p = %.4f, chi2 = %.4f, rank = %d\\n', p, t, r)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Test a fitted line against intercept 0 and slope 2",
+            "pt": "Testar uma reta ajustada contra intercepto 0 e inclinação 2"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nm = fitlm(x, y);\n[p, t, r] = linhyptest(m.Coefficients.Estimate, m.CoefficientCovariance, [0; 2], eye(2), m.DFE);\nfprintf('p = %.4f, F = %.4f, rank = %d\\n', p, t, r)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitlm",
+        "coefCI",
+        "regress",
+        "fcdf"
+      ]
+    },
+    "polyconf": {
+      "summary": {
+        "en": "Evaluates a fitted polynomial at new points and gives confidence half-widths for the fitted curve or for new observations.",
+        "pt": "Avalia um polinômio ajustado em novos pontos e fornece meias-larguras de confiança para a curva ajustada ou para novas observações."
+      },
+      "syntax": [
+        {
+          "code": "y = polyconf(p, x)",
+          "en": "Values of the polynomial `p` at `x`.",
+          "pt": "Valores do polinômio `p` em `x`."
+        },
+        {
+          "code": "[y, delta] = polyconf(p, x, S)",
+          "en": "Also returns the half-width `delta` of a 95 percent interval.",
+          "pt": "Retorna também a meia-largura `delta` de um intervalo de 95 por cento."
+        },
+        {
+          "code": "[y, delta] = polyconf(p, x, S, 'Name', Value)",
+          "en": "Options such as `'alpha'` and `'predopt'`.",
+          "pt": "Opções como `'alpha'` e `'predopt'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Polynomial coefficients, highest power first, as returned by `polyfit`.",
+          "pt": "Coeficientes do polinômio, da maior potência para a menor, como retornados por `polyfit`."
+        },
+        {
+          "name": "x",
+          "en": "Points at which to evaluate.",
+          "pt": "Pontos em que avaliar."
+        },
+        {
+          "name": "S",
+          "en": "Structure returned as the second output of `polyfit`.",
+          "pt": "Estrutura retornada como segunda saída de `polyfit`."
+        },
+        {
+          "name": "'alpha'",
+          "en": "Significance level for the interval. Default 0.05.",
+          "pt": "Nível de significância do intervalo. O padrão é 0.05."
+        },
+        {
+          "name": "'predopt'",
+          "en": "`'observation'` (default) gives an interval for a new observation; `'curve'` gives one for the fitted curve itself.",
+          "pt": "`'observation'` (padrão) dá um intervalo para uma nova observação; `'curve'` dá um para a própria curva ajustada."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Polynomial values, same size as `x`.",
+          "pt": "Valores do polinômio, com o mesmo tamanho de `x`."
+        },
+        {
+          "name": "delta",
+          "en": "Half-width of the confidence interval at each `x`: the interval is `y - delta` to `y + delta`.",
+          "pt": "Meia-largura do intervalo de confiança em cada `x`: o intervalo vai de `y - delta` a `y + delta`."
+        }
+      ],
+      "description": {
+        "en": "An observation interval is wider than a curve interval because it also includes the scatter of the data around the curve. Both widen as `x` moves away from the data used in the fit.\n\nCall `polyfit` with two outputs first to get `S`, then pass the coefficients and `S` to `polyconf`.",
+        "pt": "Um intervalo para observação é mais largo que um intervalo para a curva, porque inclui também a dispersão dos dados em torno da curva. Ambos se alargam quando `x` se afasta dos dados usados no ajuste.\n\nChame `polyfit` com duas saídas primeiro para obter `S` e passe os coeficientes e `S` para `polyconf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Prediction intervals for a line",
+            "pt": "Intervalos de previsão para uma reta"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\n[p, S] = polyfit(x, y, 1);\n[yh, d] = polyconf(p, [9 10], S);\ndisp(round([yh; d] * 1000) / 1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Interval for the curve only, at 90 percent",
+            "pt": "Intervalo só para a curva, a 90 por cento"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\n[p, S] = polyfit(x, y, 1);\n[yh, d] = polyconf(p, [9 10], S, 'alpha', 0.1, 'predopt', 'curve');\ndisp(round(d * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "polyfit",
+        "polyval",
+        "fitlm",
+        "predict"
+      ]
+    },
+    "regress": {
+      "summary": {
+        "en": "Multiple linear regression by least squares, returning coefficients, their confidence intervals, residuals and summary statistics.",
+        "pt": "Regressão linear múltipla por mínimos quadrados, que retorna coeficientes, seus intervalos de confiança, resíduos e estatísticas-resumo."
+      },
+      "syntax": [
+        {
+          "code": "b = regress(y, X)",
+          "en": "Least-squares coefficients.",
+          "pt": "Coeficientes de mínimos quadrados."
+        },
+        {
+          "code": "[b, bint, r, rint, stats] = regress(y, X)",
+          "en": "Also returns coefficient intervals, residuals, residual intervals and model statistics.",
+          "pt": "Retorna também intervalos dos coeficientes, resíduos, intervalos dos resíduos e estatísticas do modelo."
+        },
+        {
+          "code": "[___] = regress(y, X, alpha)",
+          "en": "Uses the confidence level `100*(1-alpha)` percent.",
+          "pt": "Usa o nível de confiança `100*(1-alpha)` por cento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Response column vector with `n` elements.",
+          "pt": "Vetor coluna de resposta com `n` elementos."
+        },
+        {
+          "name": "X",
+          "en": "`n`-by-`p` design matrix. Include a column of ones if you want an intercept.",
+          "pt": "Matriz de projeto `n` por `p`. Inclua uma coluna de uns se quiser um intercepto."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "`p`-by-1 coefficient estimates.",
+          "pt": "Estimativas dos coeficientes, `p` por 1."
+        },
+        {
+          "name": "bint",
+          "en": "`p`-by-2 confidence intervals for the coefficients, lower and upper limits.",
+          "pt": "Intervalos de confiança dos coeficientes, `p` por 2, limites inferior e superior."
+        },
+        {
+          "name": "r",
+          "en": "`n`-by-1 residuals, `y - X*b`.",
+          "pt": "Resíduos `n` por 1, `y - X*b`."
+        },
+        {
+          "name": "rint",
+          "en": "`n`-by-2 intervals for the residuals. An interval that excludes zero flags a possible outlier.",
+          "pt": "Intervalos `n` por 2 para os resíduos. Um intervalo que exclui o zero indica um possível valor atípico."
+        },
+        {
+          "name": "stats",
+          "en": "Row vector `[R2, F, p, s2]`: the R-squared, the F statistic of the regression, its p-value and the estimate of the error variance.",
+          "pt": "Vetor linha `[R2, F, p, s2]`: o R-quadrado, a estatística F da regressão, seu valor-p e a estimativa da variância do erro."
+        }
+      ],
+      "description": {
+        "en": "`regress` does not add an intercept for you: build `X = [ones(n,1) x]`. The F statistic and R-squared then compare your model with one that has only the constant.\n\nFor a richer object with predictions and diagnostics, use `fitlm`.",
+        "pt": "`regress` não acrescenta o intercepto por você: monte `X = [ones(n,1) x]`. A estatística F e o R-quadrado comparam então seu modelo com um que tem apenas a constante.\n\nPara um objeto mais completo, com previsões e diagnósticos, use `fitlm`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Line fit with intervals",
+            "pt": "Ajuste de reta com intervalos"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nX = [ones(8, 1) x];\n[b, bint, r, rint, st] = regress(y, X);\ndisp(round(b' * 10000) / 10000)\ndisp(round(bint * 1000) / 1000)\nfprintf('R2 %.4f\\n', st(1))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "90 percent intervals",
+            "pt": "Intervalos de 90 por cento"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\n[b, bint] = regress(y, [ones(8, 1) x], 0.1);\ndisp(round(bint * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitlm",
+        "robustfit",
+        "ridge",
+        "polyfit",
+        "linhyptest"
+      ],
+      "notes": {
+        "en": "With single precision inputs the result is computed in double precision and rounded to single, so it can differ from MATLAB's own single arithmetic at about 1e-5.",
+        "pt": "Com entradas em precisão simples, o resultado é calculado em precisão dupla e arredondado para simples, então pode diferir da aritmética simples do próprio MATLAB em cerca de 1e-5."
+      }
+    },
+    "robustfit": {
+      "summary": {
+        "en": "Robust linear regression with iteratively reweighted least squares, which reduces the influence of outliers on the fit.",
+        "pt": "Regressão linear robusta por mínimos quadrados reponderados iterativamente, que reduz a influência de valores atípicos no ajuste."
+      },
+      "syntax": [
+        {
+          "code": "b = robustfit(X, y)",
+          "en": "Robust coefficients with an intercept added as the first element.",
+          "pt": "Coeficientes robustos, com um intercepto acrescentado como primeiro elemento."
+        },
+        {
+          "code": "[b, stats] = robustfit(X, y)",
+          "en": "Also returns a structure of fit statistics.",
+          "pt": "Retorna também uma estrutura com estatísticas do ajuste."
+        },
+        {
+          "code": "b = robustfit(X, y, wfun, tune, const)",
+          "en": "Chooses the weight function, its tuning constant, and whether to add the intercept (`'on'` or `'off'`).",
+          "pt": "Escolhe a função de peso, sua constante de ajuste, e se o intercepto é acrescentado (`'on'` ou `'off'`)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "`n`-by-`p` predictor matrix, without a column of ones.",
+          "pt": "Matriz de preditores `n` por `p`, sem coluna de uns."
+        },
+        {
+          "name": "y",
+          "en": "Response vector with `n` elements.",
+          "pt": "Vetor de resposta com `n` elementos."
+        },
+        {
+          "name": "wfun",
+          "en": "Weight function name: `'bisquare'` (default), `'andrews'`, `'cauchy'`, `'fair'`, `'huber'`, `'logistic'`, `'ols'`, `'talwar'`, `'welsch'`, or a function handle of the scaled residuals.",
+          "pt": "Nome da função de peso: `'bisquare'` (padrão), `'andrews'`, `'cauchy'`, `'fair'`, `'huber'`, `'logistic'`, `'ols'`, `'talwar'`, `'welsch'`, ou um handle de função dos resíduos padronizados."
+        },
+        {
+          "name": "tune",
+          "en": "Tuning constant of the weight function. Empty selects its default.",
+          "pt": "Constante de ajuste da função de peso. Vazio seleciona o padrão."
+        },
+        {
+          "name": "const",
+          "en": "`'on'` (default) adds an intercept, `'off'` does not.",
+          "pt": "`'on'` (padrão) acrescenta um intercepto, `'off'` não."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Coefficient vector, with the intercept first when `const` is `'on'`.",
+          "pt": "Vetor de coeficientes, com o intercepto primeiro quando `const` é `'on'`."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with fields such as `s` (robust scale estimate), `w` (final weights, near 0 for outliers), `resid`, `se`, `t`, `p`, `covb` and `dfe`.",
+          "pt": "Estrutura com campos como `s` (estimativa robusta de escala), `w` (pesos finais, perto de 0 para valores atípicos), `resid`, `se`, `t`, `p`, `covb` e `dfe`."
+        }
+      ],
+      "description": {
+        "en": "Ordinary least squares lets one extreme point drag the line toward it. `robustfit` repeatedly refits with weights that shrink for points with large residuals, so such points count less. Look at `stats.w` to see which observations were downweighted.\n\nThe intercept is added automatically; do not include a column of ones in `X`.",
+        "pt": "Os mínimos quadrados ordinários deixam um ponto extremo puxar a reta na sua direção. `robustfit` reajusta várias vezes com pesos que diminuem para pontos com resíduos grandes, de modo que eles contam menos. Veja `stats.w` para saber quais observações tiveram o peso reduzido.\n\nO intercepto é acrescentado automaticamente; não inclua uma coluna de uns em `X`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "One outlier, robust and ordinary fits",
+            "pt": "Um valor atípico, ajuste robusto e ordinário"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 40]';\nb = robustfit(x, y);\nb0 = [ones(8, 1) x] \\ y;\ndisp(round(b' * 1000) / 1000)\ndisp(round(b0' * 1000) / 1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Weights from the fit",
+            "pt": "Pesos do ajuste"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 40]';\n[b, s] = robustfit(x, y);\ndisp(round(s.w' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "regress",
+        "fitlm",
+        "ridge",
+        "polyfit"
+      ],
+      "notes": {
+        "en": "With single precision inputs MATLAB iterates in single precision and MatLivre in double, so results agree only to about 1e-5 relative.",
+        "pt": "Com entradas em precisão simples, o MATLAB itera em precisão simples e o MatLivre em precisão dupla, então os resultados concordam só até cerca de 1e-5 relativo."
+      }
+    },
+    "x2fx": {
+      "summary": {
+        "en": "Converts a matrix of predictors into a design matrix for a chosen model: linear, interaction, quadratic or a custom term matrix.",
+        "pt": "Converte uma matriz de preditores em uma matriz de projeto para um modelo escolhido: linear, com interações, quadrático ou uma matriz de termos personalizada."
+      },
+      "syntax": [
+        {
+          "code": "D = x2fx(X)",
+          "en": "Linear model with a constant column.",
+          "pt": "Modelo linear com uma coluna constante."
+        },
+        {
+          "code": "D = x2fx(X, model)",
+          "en": "`model` is `'linear'`, `'interaction'`, `'quadratic'`, `'purequadratic'` or a terms matrix.",
+          "pt": "`model` é `'linear'`, `'interaction'`, `'quadratic'`, `'purequadratic'` ou uma matriz de termos."
+        },
+        {
+          "code": "[D, model] = x2fx(X, model)",
+          "en": "Also returns the terms matrix that was used.",
+          "pt": "Retorna também a matriz de termos usada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "`n`-by-`p` matrix of predictors.",
+          "pt": "Matriz de preditores `n` por `p`."
+        },
+        {
+          "name": "model",
+          "en": "Model name, or a terms matrix with one row per term and one column per predictor, whose entries are the exponents. A row of zeros is the constant.",
+          "pt": "Nome do modelo, ou matriz de termos com uma linha por termo e uma coluna por preditor, cujas entradas são os expoentes. Uma linha de zeros é a constante."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "D",
+          "en": "Design matrix with one column per term, ready for `regress` or `\\`.",
+          "pt": "Matriz de projeto com uma coluna por termo, pronta para `regress` ou `\\`."
+        },
+        {
+          "name": "model",
+          "en": "The terms matrix describing the columns of `D`.",
+          "pt": "A matriz de termos que descreve as colunas de `D`."
+        }
+      ],
+      "description": {
+        "en": "`'linear'` gives a constant and each predictor. `'interaction'` adds the products of pairs. `'purequadratic'` adds the squares. `'quadratic'` has all of those. The column order follows the terms matrix.\n\nA custom terms matrix such as `[0 0; 1 0; 0 1; 1 1]` means: constant, first predictor, second predictor, and their product.",
+        "pt": "`'linear'` dá a constante e cada preditor. `'interaction'` acrescenta os produtos de pares. `'purequadratic'` acrescenta os quadrados. `'quadratic'` tem tudo isso. A ordem das colunas segue a matriz de termos.\n\nUma matriz de termos personalizada como `[0 0; 1 0; 0 1; 1 1]` significa: constante, primeiro preditor, segundo preditor e o produto entre eles."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Interaction model for two predictors",
+            "pt": "Modelo com interação para dois preditores"
+          },
+          "code": "X = [1 2; 3 4; 5 6];\nD = x2fx(X, 'interaction')",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Quadratic model and its terms matrix",
+            "pt": "Modelo quadrático e sua matriz de termos"
+          },
+          "code": "X = [1 2; 3 4; 5 6];\n[D, m] = x2fx(X, 'quadratic');\ndisp(D)\ndisp(m)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "regress",
+        "fitlm",
+        "dummyvar",
+        "ridge"
+      ]
+    },
+    "ridge": {
+      "summary": {
+        "en": "Ridge regression: linear regression with a penalty on the size of the coefficients, for one or several ridge parameters.",
+        "pt": "Regressão ridge: regressão linear com uma penalidade sobre o tamanho dos coeficientes, para um ou vários parâmetros ridge."
+      },
+      "syntax": [
+        {
+          "code": "b = ridge(y, X, k)",
+          "en": "Coefficients for each ridge parameter in `k`, on the scale of standardized predictors.",
+          "pt": "Coeficientes para cada parâmetro ridge em `k`, na escala de preditores padronizados."
+        },
+        {
+          "code": "b = ridge(y, X, k, scaled)",
+          "en": "With `scaled` 0, returns coefficients restored to the original scale of `X`, with the intercept as the first row.",
+          "pt": "Com `scaled` igual a 0, retorna coeficientes restaurados à escala original de `X`, com o intercepto na primeira linha."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Response vector with `n` elements.",
+          "pt": "Vetor de resposta com `n` elementos."
+        },
+        {
+          "name": "X",
+          "en": "`n`-by-`p` predictor matrix, without a column of ones.",
+          "pt": "Matriz de preditores `n` por `p`, sem coluna de uns."
+        },
+        {
+          "name": "k",
+          "en": "Ridge parameter, a non-negative scalar or a vector of values. `k = 0` is ordinary least squares.",
+          "pt": "Parâmetro ridge, um escalar não negativo ou um vetor de valores. `k = 0` é o método de mínimos quadrados ordinários."
+        },
+        {
+          "name": "scaled",
+          "en": "1 (default) for coefficients of standardized predictors, 0 for the original scale. Other values raise an error.",
+          "pt": "1 (padrão) para coeficientes de preditores padronizados, 0 para a escala original. Outros valores geram erro."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "One column of coefficients per value of `k`: `p` rows when `scaled` is 1, `p+1` rows (intercept first) when it is 0.",
+          "pt": "Uma coluna de coeficientes por valor de `k`: `p` linhas quando `scaled` é 1, `p+1` linhas (intercepto primeiro) quando é 0."
+        }
+      ],
+      "description": {
+        "en": "When predictors are strongly correlated, ordinary least squares gives unstable coefficients. Increasing `k` shrinks them toward zero and stabilizes the fit, at the cost of some bias. Plotting each row of `b` against `k` (a ridge trace) shows how fast they settle.\n\nThe penalty depends on the scale of each predictor, so with `scaled` equal to 1 the columns of `X` are standardized first.",
+        "pt": "Quando os preditores são fortemente correlacionados, os mínimos quadrados ordinários dão coeficientes instáveis. Aumentar `k` os encolhe em direção a zero e estabiliza o ajuste, ao custo de algum viés. Traçar cada linha de `b` contra `k` (um traço ridge) mostra a rapidez com que se estabilizam.\n\nA penalidade depende da escala de cada preditor, então com `scaled` igual a 1 as colunas de `X` são padronizadas antes."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Coefficients for several ridge parameters",
+            "pt": "Coeficientes para vários parâmetros ridge"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nX = [x x.^2/10];\nb = ridge(y, X, [0 0.5 2]);\ndisp(round(b * 1000) / 1000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Original scale with intercept",
+            "pt": "Escala original com intercepto"
+          },
+          "code": "x = (1:8)';\ny = [2.1 3.9 6.2 7.8 10.1 12.2 13.8 16.1]';\nX = [x x.^2/10];\nb = ridge(y, X, 1, 0);\ndisp(round(b' * 1000) / 1000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "regress",
+        "fitlm",
+        "robustfit",
+        "pca"
+      ]
+    },
+    "leverage": {
+      "summary": {
+        "en": "Leverage of each observation in a linear regression: the diagonal of the hat matrix, which shows how much each point pulls on its own fit.",
+        "pt": "Alavancagem de cada observação em uma regressão linear: a diagonal da matriz chapéu, que mostra o quanto cada ponto puxa o próprio ajuste."
+      },
+      "syntax": [
+        {
+          "code": "h = leverage(X)",
+          "en": "Leverage for a model with a constant and a linear term per column of `X`.",
+          "pt": "Alavancagem para um modelo com constante e um termo linear por coluna de `X`."
+        },
+        {
+          "code": "h = leverage(X, model)",
+          "en": "Leverage for the model `'constant'`, `'linear'`, `'interaction'`, `'quadratic'` or `'purequadratic'`.",
+          "pt": "Alavancagem para o modelo `'constant'`, `'linear'`, `'interaction'`, `'quadratic'` ou `'purequadratic'`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "`n`-by-`p` matrix of predictors.",
+          "pt": "Matriz de preditores `n` por `p`."
+        },
+        {
+          "name": "model",
+          "en": "Model to build the design matrix from, as in `x2fx`. Default `'linear'`.",
+          "pt": "Modelo a partir do qual montar a matriz de projeto, como em `x2fx`. O padrão é `'linear'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "`n`-by-1 vector of leverages, each between 0 and 1.",
+          "pt": "Vetor `n` por 1 de alavancagens, cada uma entre 0 e 1."
+        }
+      ],
+      "description": {
+        "en": "The leverages sum to the number of coefficients in the model. A common rule of thumb flags observations whose leverage is above twice the average, `2*p/n`, as high-leverage points: they sit far from the other predictor values and can change the fit a lot.\n\nLeverage depends only on `X`, not on the response `y`.",
+        "pt": "As alavancagens somam o número de coeficientes do modelo. Uma regra prática comum marca observações com alavancagem acima do dobro da média, `2*p/n`, como pontos de alta alavancagem: ficam longe dos outros valores dos preditores e podem mudar bastante o ajuste.\n\nA alavancagem depende apenas de `X`, não da resposta `y`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Leverage of points on a line",
+            "pt": "Alavancagem de pontos em uma reta"
+          },
+          "code": "x = (1:8)';\nh = leverage(x);\ndisp(round(h' * 10000) / 10000)\nfprintf('sum %.4f\\n', sum(h))",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Quadratic model",
+            "pt": "Modelo quadrático"
+          },
+          "code": "x = (1:8)';\nh = leverage(x, 'quadratic');\ndisp(round(h' * 10000) / 10000)\nfprintf('sum %.4f\\n', sum(h))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "regress",
+        "fitlm",
+        "x2fx",
+        "robustfit"
+      ]
+    },
+    "statget": {
+      "summary": {
+        "en": "Reads one option from a statistics options structure made by `statset`, with a default when the option is empty or missing.",
+        "pt": "Lê uma opção de uma estrutura de opções de estatística criada por `statset`, com um valor padrão quando a opção está vazia ou ausente."
+      },
+      "syntax": [
+        {
+          "code": "v = statget(options, name)",
+          "en": "Value of the option `name`.",
+          "pt": "Valor da opção `name`."
+        },
+        {
+          "code": "v = statget(options, name, default)",
+          "en": "Returns `default` when the option is empty.",
+          "pt": "Retorna `default` quando a opção está vazia."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "options",
+          "en": "Options structure from `statset`.",
+          "pt": "Estrutura de opções gerada por `statset`."
+        },
+        {
+          "name": "name",
+          "en": "Option name, such as `'TolX'`, `'MaxIter'` or `'Display'`.",
+          "pt": "Nome da opção, como `'TolX'`, `'MaxIter'` ou `'Display'`."
+        },
+        {
+          "name": "default",
+          "en": "Value to return if the option is empty.",
+          "pt": "Valor a retornar se a opção estiver vazia."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "v",
+          "en": "The option value, or `default` (or `[]`) if it is empty.",
+          "pt": "O valor da opção, ou `default` (ou `[]`) se estiver vazia."
+        }
+      ],
+      "description": {
+        "en": "Functions that fit models by iteration take an options structure. Inside such a function, `statget` is the safe way to read an option, because an option you did not set is empty and `statget` then falls back to the default you give.\n\nAn empty `options` (`[]`) is accepted and behaves as if every option were unset.",
+        "pt": "Funções que ajustam modelos por iteração recebem uma estrutura de opções. Dentro delas, `statget` é a forma segura de ler uma opção, pois uma opção que você não definiu fica vazia e `statget` usa o padrão que você fornecer.\n\nUm `options` vazio (`[]`) é aceito e se comporta como se nenhuma opção estivesse definida."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Read set and unset options",
+            "pt": "Ler opções definidas e não definidas"
+          },
+          "code": "o = statset('TolX', 1e-3, 'MaxIter', 50);\nfprintf('%g\\n', statget(o, 'TolX'))\nfprintf('%d\\n', statget(o, 'MaxIter'))\nfprintf('%s\\n', statget(o, 'Display', 'off'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "statset",
+        "optimset",
+        "fitnlm",
+        "normfit"
+      ]
+    },
+    "statset": {
+      "summary": {
+        "en": "Creates or updates an options structure for statistics functions that iterate, such as the tolerance and maximum number of iterations.",
+        "pt": "Cria ou atualiza uma estrutura de opções para funções estatísticas iterativas, como a tolerância e o número máximo de iterações."
+      },
+      "syntax": [
+        {
+          "code": "options = statset",
+          "en": "Structure with all options empty.",
+          "pt": "Estrutura com todas as opções vazias."
+        },
+        {
+          "code": "options = statset('Name', Value, ...)",
+          "en": "Sets the named options.",
+          "pt": "Define as opções indicadas."
+        },
+        {
+          "code": "options = statset(oldopts, 'Name', Value, ...)",
+          "en": "Copies `oldopts` and changes the named options.",
+          "pt": "Copia `oldopts` e altera as opções indicadas."
+        },
+        {
+          "code": "options = statset('fname')",
+          "en": "Default options of the function named `fname`.",
+          "pt": "Opções padrão da função de nome `fname`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "'Display'",
+          "en": "Amount of output: `'off'`, `'final'` or `'iter'`.",
+          "pt": "Quantidade de saída: `'off'`, `'final'` ou `'iter'`."
+        },
+        {
+          "name": "'MaxIter'",
+          "en": "Maximum number of iterations.",
+          "pt": "Número máximo de iterações."
+        },
+        {
+          "name": "'MaxFunEvals'",
+          "en": "Maximum number of function evaluations.",
+          "pt": "Número máximo de avaliações da função."
+        },
+        {
+          "name": "'TolX'",
+          "en": "Termination tolerance on the parameters.",
+          "pt": "Tolerância de parada sobre os parâmetros."
+        },
+        {
+          "name": "'TolFun'",
+          "en": "Termination tolerance on the objective function.",
+          "pt": "Tolerância de parada sobre a função objetivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "options",
+          "en": "Structure with the fields `Display`, `MaxFunEvals`, `MaxIter`, `TolBnd`, `TolFun`, `TolTypeFun`, `TolX`, `TolTypeX`, `GradObj`, `Jacobian`, `DerivStep`, `FunValCheck`, `Robust`, `RobustWgtFun`, `WgtFun`, `Tune`, `UseParallel`, `UseSubstreams`, `Streams` and `OutputFcn`. Unset ones are empty.",
+          "pt": "Estrutura com os campos `Display`, `MaxFunEvals`, `MaxIter`, `TolBnd`, `TolFun`, `TolTypeFun`, `TolX`, `TolTypeX`, `GradObj`, `Jacobian`, `DerivStep`, `FunValCheck`, `Robust`, `RobustWgtFun`, `WgtFun`, `Tune`, `UseParallel`, `UseSubstreams`, `Streams` e `OutputFcn`. As não definidas ficam vazias."
+        }
+      ],
+      "description": {
+        "en": "Pass the result as the options argument of a fitting function, for example `gpfit(x, [], statset('TolX', 1e-3))`. Options you leave empty fall back to each function's own default.\n\nUse `statget` to read a value back with a default.",
+        "pt": "Passe o resultado como argumento de opções de uma função de ajuste, por exemplo `gpfit(x, [], statset('TolX', 1e-3))`. As opções deixadas vazias usam o padrão de cada função.\n\nUse `statget` para ler um valor de volta com um padrão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Set options and change one",
+            "pt": "Definir opções e alterar uma"
+          },
+          "code": "o = statset('TolX', 1e-3, 'MaxIter', 50);\no2 = statset(o, 'Display', 'iter');\nfprintf('%g %d %s\\n', o2.TolX, o2.MaxIter, o2.Display)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Empty by default",
+            "pt": "Vazia por padrão"
+          },
+          "code": "o = statset();\ndisp(isempty(o.MaxIter))\ndisp(numel(fieldnames(o)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "statget",
+        "optimset",
+        "gpfit",
+        "evfit"
+      ]
+    },
+    "betacdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the beta distribution, with shape parameters a and b, on the interval from 0 to 1.",
+        "pt": "Função de distribuição acumulada da distribuição beta, com parâmetros de forma a e b, no intervalo de 0 a 1."
+      },
+      "syntax": [
+        {
+          "code": "p = betacdf(x, a, b)",
+          "en": "Probability that a beta random variable is at most `x`.",
+          "pt": "Probabilidade de que uma variável aleatória beta seja menor ou igual a `x`."
+        },
+        {
+          "code": "p = betacdf(x, a, b, 'upper')",
+          "en": "Upper tail, the probability of exceeding `x`.",
+          "pt": "Cauda superior, a probabilidade de exceder `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points at which to evaluate, between 0 and 1. Values below 0 give 0 and values above 1 give 1.",
+          "pt": "Pontos em que avaliar, entre 0 e 1. Valores abaixo de 0 dão 0 e valores acima de 1 dão 1."
+        },
+        {
+          "name": "a",
+          "en": "First shape parameter, positive.",
+          "pt": "Primeiro parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Second shape parameter, positive.",
+          "pt": "Segundo parâmetro de forma, positivo."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, with the size of the inputs after scalar expansion.",
+          "pt": "Probabilidades, com o tamanho das entradas após a expansão de escalares."
+        }
+      ],
+      "description": {
+        "en": "The beta distribution describes quantities restricted to the interval from 0 to 1, such as proportions and probabilities. With `a = b = 1` it is the uniform distribution on that interval, so `betacdf(x, 1, 1)` equals `x`.\n\n`x`, `a` and `b` may be arrays of the same size, or scalars that are expanded to match. `'upper'` gives the upper tail, `1 - p`.",
+        "pt": "A distribuição beta descreve grandezas restritas ao intervalo de 0 a 1, como proporções e probabilidades. Com `a = b = 1`, é a distribuição uniforme nesse intervalo, então `betacdf(x, 1, 1)` é igual a `x`.\n\n`x`, `a` e `b` podem ser arrays do mesmo tamanho, ou escalares que são expandidos para combinar. `'upper'` dá a cauda superior, `1 - p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "CDF at several points",
+            "pt": "CDF em vários pontos"
+          },
+          "code": "p = betacdf([0 0.25 0.5 0.75 1], 2, 3);\ndisp(round(p * 10000) / 10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Upper tail",
+            "pt": "Cauda superior"
+          },
+          "code": "p = betacdf(0.5, 2, 3, 'upper');\nfprintf('%.4f\\n', p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "betapdf",
+        "betainv",
+        "betastat",
+        "betarnd",
+        "betafit"
+      ]
+    }
+  }
+}

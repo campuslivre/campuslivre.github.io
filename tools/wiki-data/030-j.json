@@ -1,0 +1,1067 @@
+{
+  "functions": {
+    "unidpdf": {
+      "summary": {
+        "en": "Probability mass function of the discrete uniform distribution on the integers 1 to n.",
+        "pt": "Função de massa de probabilidade da distribuição uniforme discreta nos inteiros de 1 a n."
+      },
+      "syntax": [
+        {
+          "code": "y = unidpdf(x, n)",
+          "en": "Probability of each value in `x` when the outcome is equally likely among 1, 2, ..., `n`.",
+          "pt": "Probabilidade de cada valor de `x` quando o resultado é igualmente provável entre 1, 2, ..., `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values where the mass function is evaluated.",
+          "pt": "Valores nos quais a função de massa é calculada."
+        },
+        {
+          "name": "n",
+          "en": "Maximum value, a positive integer. Can be an array of the same size as `x`.",
+          "pt": "Valor máximo, um inteiro positivo. Pode ser um array do mesmo tamanho de `x`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probability of each element of `x`: `1/n` for integers from 1 to `n`, and 0 elsewhere. Same size as `x`.",
+          "pt": "Probabilidade de cada elemento de `x`: `1/n` para inteiros de 1 a `n` e 0 nos demais. Mesmo tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "The discrete uniform distribution models a fair die or a random pick among `n` labelled items. Every integer from 1 to `n` has probability `1/n`.\n\nValues that are not integers, or that fall outside 1 to `n`, get probability 0.",
+        "pt": "A distribuição uniforme discreta modela um dado justo ou a escolha ao acaso entre `n` itens numerados. Cada inteiro de 1 a `n` tem probabilidade `1/n`.\n\nValores que não são inteiros, ou que ficam fora de 1 a `n`, recebem probabilidade 0."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fair six-sided die",
+            "pt": "Dado justo de seis faces"
+          },
+          "code": "x = [0 2.5 3 7];\ny = unidpdf(x, 6);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unidcdf",
+        "unidinv",
+        "unidstat",
+        "unidrnd",
+        "unifpdf"
+      ]
+    },
+    "unidrnd": {
+      "summary": {
+        "en": "Generates random integers from 1 to n, each equally likely.",
+        "pt": "Gera inteiros aleatórios de 1 a n, todos com a mesma probabilidade."
+      },
+      "syntax": [
+        {
+          "code": "r = unidrnd(n)",
+          "en": "One random integer from 1 to `n`.",
+          "pt": "Um inteiro aleatório de 1 a `n`."
+        },
+        {
+          "code": "r = unidrnd(n, m, k)",
+          "en": "An `m`-by-`k` array of random integers.",
+          "pt": "Um array `m` por `k` de inteiros aleatórios."
+        },
+        {
+          "code": "r = unidrnd(n, sz)",
+          "en": "An array whose size is given by the vector `sz`.",
+          "pt": "Um array cujo tamanho é dado pelo vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Maximum value, a positive integer. An array gives a different maximum for each element.",
+          "pt": "Valor máximo, um inteiro positivo. Um array dá um máximo diferente para cada elemento."
+        },
+        {
+          "name": "m, k",
+          "en": "Number of rows and columns of the result.",
+          "pt": "Número de linhas e colunas do resultado."
+        },
+        {
+          "name": "sz",
+          "en": "Size vector, for example `[2 3]`.",
+          "pt": "Vetor de tamanho, por exemplo `[2 3]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random integers between 1 and `n`.",
+          "pt": "Inteiros aleatórios entre 1 e `n`."
+        }
+      ],
+      "description": {
+        "en": "`unidrnd` simulates draws from the discrete uniform distribution, such as rolling a die with `n` faces. With an array `n`, each element of the result uses its own maximum.\n\nResults change from run to run unless you fix the generator state before calling.",
+        "pt": "`unidrnd` simula sorteios da distribuição uniforme discreta, como lançar um dado de `n` faces. Com `n` em forma de array, cada elemento do resultado usa o seu próprio máximo.\n\nOs resultados mudam a cada execução, a menos que você fixe o estado do gerador antes da chamada."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Ten rolls of a die",
+            "pt": "Dez lançamentos de um dado"
+          },
+          "code": "r = unidrnd(6, 1, 10);\ndisp(size(r))\ndisp(all(r >= 1 & r <= 6 & r == round(r)))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unidpdf",
+        "unidcdf",
+        "unidstat",
+        "unifrnd",
+        "randi"
+      ],
+      "notes": {
+        "en": "The generator uses MatLivre's own random stream, so the values do not match the ones MATLAB produces for the same seed. Only the distribution is the same.",
+        "pt": "O gerador usa o fluxo de números aleatórios próprio do MatLivre, então os valores não coincidem com os que o MATLAB produz para a mesma semente. Só a distribuição é a mesma."
+      }
+    },
+    "unidstat": {
+      "summary": {
+        "en": "Mean and variance of the discrete uniform distribution on the integers 1 to n.",
+        "pt": "Média e variância da distribuição uniforme discreta nos inteiros de 1 a n."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = unidstat(n)",
+          "en": "Mean and variance for maximum value `n`.",
+          "pt": "Média e variância para o valor máximo `n`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Maximum value, a positive integer. Can be an array.",
+          "pt": "Valor máximo, um inteiro positivo. Pode ser um array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `(n+1)/2`.",
+          "pt": "Média, `(n+1)/2`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `(n^2-1)/12`.",
+          "pt": "Variância, `(n^2-1)/12`."
+        }
+      ],
+      "description": {
+        "en": "Use `unidstat` to get the theoretical mean and variance of a fair die or similar uniform pick without simulating. Both outputs have the same size as `n`.",
+        "pt": "Use `unidstat` para obter a média e a variância teóricas de um dado justo ou de um sorteio uniforme parecido, sem simular. As duas saídas têm o mesmo tamanho de `n`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fair die",
+            "pt": "Dado justo"
+          },
+          "code": "[m, v] = unidstat(6);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unidpdf",
+        "unidcdf",
+        "unidinv",
+        "unidrnd",
+        "unifstat"
+      ]
+    },
+    "unifpdf": {
+      "summary": {
+        "en": "Probability density function of the continuous uniform distribution on the interval from a to b.",
+        "pt": "Função densidade de probabilidade da distribuição uniforme contínua no intervalo de a até b."
+      },
+      "syntax": [
+        {
+          "code": "y = unifpdf(x, a, b)",
+          "en": "Density at `x` for the uniform distribution on [`a`, `b`].",
+          "pt": "Densidade em `x` para a distribuição uniforme em [`a`, `b`]."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the density is evaluated.",
+          "pt": "Pontos nos quais a densidade é calculada."
+        },
+        {
+          "name": "a",
+          "en": "Lower limit of the interval.",
+          "pt": "Limite inferior do intervalo."
+        },
+        {
+          "name": "b",
+          "en": "Upper limit of the interval, greater than `a`.",
+          "pt": "Limite superior do intervalo, maior que `a`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density at each element of `x`: `1/(b-a)` inside the interval, 0 outside.",
+          "pt": "Densidade em cada elemento de `x`: `1/(b-a)` dentro do intervalo e 0 fora."
+        }
+      ],
+      "description": {
+        "en": "The uniform distribution gives the same density to every point between `a` and `b`. The density is the constant `1/(b-a)` there and 0 everywhere else.\n\n`x`, `a` and `b` can be arrays of the same size, or scalars that are expanded. If `a` is greater than `b` the result is `NaN`.",
+        "pt": "A distribuição uniforme dá a mesma densidade a todos os pontos entre `a` e `b`. A densidade é a constante `1/(b-a)` nesse intervalo e 0 fora dele.\n\n`x`, `a` e `b` podem ser arrays do mesmo tamanho, ou escalares que são expandidos. Se `a` for maior que `b`, o resultado é `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density on [0, 2]",
+            "pt": "Densidade em [0, 2]"
+          },
+          "code": "y = unifpdf([-1 0.5 3], 0, 2);\ndisp(y)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifcdf",
+        "unifinv",
+        "unifstat",
+        "unifit",
+        "unifrnd"
+      ]
+    },
+    "unifcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the continuous uniform distribution on the interval from a to b.",
+        "pt": "Função de distribuição acumulada da distribuição uniforme contínua no intervalo de a até b."
+      },
+      "syntax": [
+        {
+          "code": "p = unifcdf(x, a, b)",
+          "en": "Probability that a uniform variable on [`a`, `b`] is at most `x`.",
+          "pt": "Probabilidade de que uma variável uniforme em [`a`, `b`] seja no máximo `x`."
+        },
+        {
+          "code": "p = unifcdf(x, a, b, 'upper')",
+          "en": "Upper tail probability, 1 minus the cumulative probability.",
+          "pt": "Probabilidade da cauda superior, 1 menos a probabilidade acumulada."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated.",
+          "pt": "Pontos nos quais a função é calculada."
+        },
+        {
+          "name": "a",
+          "en": "Lower limit of the interval.",
+          "pt": "Limite inferior do intervalo."
+        },
+        {
+          "name": "b",
+          "en": "Upper limit of the interval, greater than `a`.",
+          "pt": "Limite superior do intervalo, maior que `a`."
+        },
+        {
+          "name": "'upper'",
+          "en": "Returns the upper tail instead of the lower tail.",
+          "pt": "Retorna a cauda superior em vez da inferior."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probability at each element of `x`: 0 below `a`, 1 above `b`, and `(x-a)/(b-a)` in between.",
+          "pt": "Probabilidade em cada elemento de `x`: 0 abaixo de `a`, 1 acima de `b` e `(x-a)/(b-a)` entre os dois."
+        }
+      ],
+      "description": {
+        "en": "The cumulative probability of a uniform variable grows linearly from 0 at `a` to 1 at `b`. With `'upper'` you get the complementary probability directly.\n\nScalars and arrays can be mixed, as long as the array arguments have the same size.",
+        "pt": "A probabilidade acumulada de uma variável uniforme cresce linearmente de 0 em `a` até 1 em `b`. Com `'upper'` você obtém diretamente a probabilidade complementar.\n\nEscalares e arrays podem ser misturados, desde que os arrays tenham o mesmo tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail",
+            "pt": "Cauda inferior e superior"
+          },
+          "code": "p = unifcdf([-1 0.5 3], 0, 2);\ndisp(p)\ndisp(unifcdf(0.5, 0, 2, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifpdf",
+        "unifinv",
+        "unifstat",
+        "unifit",
+        "unifrnd"
+      ]
+    },
+    "unifinv": {
+      "summary": {
+        "en": "Inverse of the uniform cumulative distribution: the value with a given cumulative probability on the interval from a to b.",
+        "pt": "Inversa da distribuição acumulada uniforme: o valor com dada probabilidade acumulada no intervalo de a até b."
+      },
+      "syntax": [
+        {
+          "code": "x = unifinv(p, a, b)",
+          "en": "Quantile of the uniform distribution on [`a`, `b`] for probability `p`.",
+          "pt": "Quantil da distribuição uniforme em [`a`, `b`] para a probabilidade `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1.",
+          "pt": "Probabilidades entre 0 e 1."
+        },
+        {
+          "name": "a",
+          "en": "Lower limit of the interval.",
+          "pt": "Limite inferior do intervalo."
+        },
+        {
+          "name": "b",
+          "en": "Upper limit of the interval, greater than `a`.",
+          "pt": "Limite superior do intervalo, maior que `a`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantile `a + p*(b-a)` for each element of `p`. `NaN` where `p` is outside [0, 1].",
+          "pt": "Quantil `a + p*(b-a)` para cada elemento de `p`. `NaN` onde `p` está fora de [0, 1]."
+        }
+      ],
+      "description": {
+        "en": "`unifinv` answers the question: below which value does a fraction `p` of the uniform distribution lie? It is the inverse of `unifcdf`, so `p = 0` gives `a`, `p = 1` gives `b` and `p = 0.5` gives the midpoint.",
+        "pt": "`unifinv` responde à pergunta: abaixo de qual valor fica a fração `p` da distribuição uniforme? É a inversa de `unifcdf`, então `p = 0` dá `a`, `p = 1` dá `b` e `p = 0.5` dá o ponto médio."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quartiles on [2, 6]",
+            "pt": "Quartis em [2, 6]"
+          },
+          "code": "x = unifinv([0 0.25 0.5 0.75 1], 2, 6);\ndisp(x)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifcdf",
+        "unifpdf",
+        "unifstat",
+        "unifit",
+        "unifrnd"
+      ]
+    },
+    "unifit": {
+      "summary": {
+        "en": "Fits a uniform distribution to data: estimates the lower and upper limits and their confidence intervals.",
+        "pt": "Ajusta uma distribuição uniforme aos dados: estima os limites inferior e superior e seus intervalos de confiança."
+      },
+      "syntax": [
+        {
+          "code": "[ahat, bhat] = unifit(data)",
+          "en": "Estimated lower and upper limits.",
+          "pt": "Limites inferior e superior estimados."
+        },
+        {
+          "code": "[ahat, bhat, aci, bci] = unifit(data)",
+          "en": "Also returns confidence intervals for both limits.",
+          "pt": "Retorna também intervalos de confiança para os dois limites."
+        },
+        {
+          "code": "[ahat, bhat, aci, bci] = unifit(data, alpha)",
+          "en": "Uses the confidence level `100*(1-alpha)` percent.",
+          "pt": "Usa o nível de confiança de `100*(1-alpha)` por cento."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Sample. For a matrix, each column is fitted separately.",
+          "pt": "Amostra. Para uma matriz, cada coluna é ajustada separadamente."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "ahat",
+          "en": "Lower limit estimate: the smallest value in `data`.",
+          "pt": "Estimativa do limite inferior: o menor valor de `data`."
+        },
+        {
+          "name": "bhat",
+          "en": "Upper limit estimate: the largest value in `data`.",
+          "pt": "Estimativa do limite superior: o maior valor de `data`."
+        },
+        {
+          "name": "aci",
+          "en": "Confidence interval for the lower limit, as a 2-by-1 column `[lower; upper]` (one column per data column).",
+          "pt": "Intervalo de confiança do limite inferior, como coluna 2 por 1 `[inferior; superior]` (uma coluna por coluna de dados)."
+        },
+        {
+          "name": "bci",
+          "en": "Confidence interval for the upper limit, in the same layout.",
+          "pt": "Intervalo de confiança do limite superior, no mesmo formato."
+        }
+      ],
+      "description": {
+        "en": "The maximum likelihood estimates of a uniform distribution are the sample minimum and maximum, so `unifit` returns exactly those. The confidence intervals account for the fact that the true limits can lie outside the observed range.\n\nThe estimates are biased toward a narrower interval, especially for small samples. Treat them as the observed range, not as a guarantee of the true limits.",
+        "pt": "As estimativas de máxima verossimilhança de uma distribuição uniforme são o mínimo e o máximo da amostra, e é isso que `unifit` retorna. Os intervalos de confiança levam em conta que os limites verdadeiros podem ficar fora do intervalo observado.\n\nAs estimativas tendem a um intervalo mais estreito, principalmente em amostras pequenas. Trate-as como o intervalo observado, não como garantia dos limites verdadeiros."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Limits of a small sample",
+            "pt": "Limites de uma amostra pequena"
+          },
+          "code": "x = [2.1 3.5 4.8 5.2 3.3 2.9 4.1 5.9];\n[a, b, aci, bci] = unifit(x);\ndisp([a b])\ndisp(round(aci'*10000)/10000)\ndisp(round(bci'*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifpdf",
+        "unifcdf",
+        "unifinv",
+        "unifstat",
+        "unifrnd"
+      ]
+    },
+    "unifrnd": {
+      "summary": {
+        "en": "Generates random numbers from the continuous uniform distribution on the interval from a to b.",
+        "pt": "Gera números aleatórios da distribuição uniforme contínua no intervalo de a até b."
+      },
+      "syntax": [
+        {
+          "code": "r = unifrnd(a, b)",
+          "en": "One random number between `a` and `b`.",
+          "pt": "Um número aleatório entre `a` e `b`."
+        },
+        {
+          "code": "r = unifrnd(a, b, m, k)",
+          "en": "An `m`-by-`k` array of random numbers.",
+          "pt": "Um array `m` por `k` de números aleatórios."
+        },
+        {
+          "code": "r = unifrnd(a, b, sz)",
+          "en": "An array whose size is given by the vector `sz`.",
+          "pt": "Um array cujo tamanho é dado pelo vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Lower limit of the interval. An array gives a different limit for each element.",
+          "pt": "Limite inferior do intervalo. Um array dá um limite diferente para cada elemento."
+        },
+        {
+          "name": "b",
+          "en": "Upper limit of the interval, greater than `a`.",
+          "pt": "Limite superior do intervalo, maior que `a`."
+        },
+        {
+          "name": "m, k",
+          "en": "Number of rows and columns of the result.",
+          "pt": "Número de linhas e colunas do resultado."
+        },
+        {
+          "name": "sz",
+          "en": "Size vector, for example `[2 3]`.",
+          "pt": "Vetor de tamanho, por exemplo `[2 3]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random numbers between `a` and `b`.",
+          "pt": "Números aleatórios entre `a` e `b`."
+        }
+      ],
+      "description": {
+        "en": "`unifrnd` draws numbers that are equally likely anywhere in the interval. It is `a + (b-a)*rand` with the sizes handled for you.\n\nResults change from run to run unless you fix the generator state before calling.",
+        "pt": "`unifrnd` sorteia números igualmente prováveis em qualquer ponto do intervalo. Equivale a `a + (b-a)*rand`, com os tamanhos tratados por você.\n\nOs resultados mudam a cada execução, a menos que você fixe o estado do gerador antes da chamada."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Samples on [2, 6]",
+            "pt": "Amostras em [2, 6]"
+          },
+          "code": "r = unifrnd(2, 6, 3, 4);\ndisp(size(r))\ndisp(all(r(:) >= 2 & r(:) <= 6))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifpdf",
+        "unifcdf",
+        "unifinv",
+        "unifit",
+        "rand"
+      ],
+      "notes": {
+        "en": "The generator uses MatLivre's own random stream, so the values do not match the ones MATLAB produces for the same seed. Only the distribution is the same.",
+        "pt": "O gerador usa o fluxo de números aleatórios próprio do MatLivre, então os valores não coincidem com os que o MATLAB produz para a mesma semente. Só a distribuição é a mesma."
+      }
+    },
+    "unifstat": {
+      "summary": {
+        "en": "Mean and variance of the continuous uniform distribution on the interval from a to b.",
+        "pt": "Média e variância da distribuição uniforme contínua no intervalo de a até b."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = unifstat(a, b)",
+          "en": "Mean and variance for the interval [`a`, `b`].",
+          "pt": "Média e variância para o intervalo [`a`, `b`]."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Lower limit of the interval. Can be an array.",
+          "pt": "Limite inferior do intervalo. Pode ser um array."
+        },
+        {
+          "name": "b",
+          "en": "Upper limit of the interval, greater than `a`. Can be an array.",
+          "pt": "Limite superior do intervalo, maior que `a`. Pode ser um array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `(a+b)/2`.",
+          "pt": "Média, `(a+b)/2`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `(b-a)^2/12`.",
+          "pt": "Variância, `(b-a)^2/12`."
+        }
+      ],
+      "description": {
+        "en": "Use `unifstat` to get the theoretical mean and variance of a uniform distribution without simulating. Both outputs have the same size as the inputs.",
+        "pt": "Use `unifstat` para obter a média e a variância teóricas de uma distribuição uniforme sem simular. As duas saídas têm o mesmo tamanho das entradas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Interval from 2 to 6",
+            "pt": "Intervalo de 2 a 6"
+          },
+          "code": "[m, v] = unifstat(2, 6);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "unifpdf",
+        "unifcdf",
+        "unifinv",
+        "unifit",
+        "unidstat"
+      ]
+    },
+    "wblpdf": {
+      "summary": {
+        "en": "Probability density function of the Weibull distribution with scale a and shape b.",
+        "pt": "Função densidade de probabilidade da distribuição de Weibull com escala a e forma b."
+      },
+      "syntax": [
+        {
+          "code": "y = wblpdf(x, a, b)",
+          "en": "Density at `x` for scale `a` and shape `b`.",
+          "pt": "Densidade em `x` para escala `a` e forma `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated, nonnegative.",
+          "pt": "Pontos nos quais a função é calculada, não negativos."
+        },
+        {
+          "name": "a",
+          "en": "Scale parameter, positive. Default 1.",
+          "pt": "Parâmetro de escala, positivo. O padrão é 1."
+        },
+        {
+          "name": "b",
+          "en": "Shape parameter, positive. Default 1.",
+          "pt": "Parâmetro de forma, positivo. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density at each element of `x`. Zero for negative `x`.",
+          "pt": "Densidade em cada elemento de `x`. Zero para `x` negativo."
+        }
+      ],
+      "description": {
+        "en": "The Weibull distribution is widely used for lifetimes and failure times. The scale `a` stretches the distribution along the axis, and the shape `b` controls how the failure rate changes: below 1 it falls with time, equal to 1 it is constant (the exponential case), above 1 it rises.\n\nParameters and `x` can be arrays of the same size, or scalars that are expanded.",
+        "pt": "A distribuição de Weibull é muito usada para tempos de vida e de falha. A escala `a` estica a distribuição ao longo do eixo, e a forma `b` controla como a taxa de falha muda: abaixo de 1 ela cai com o tempo, igual a 1 é constante (o caso exponencial) e acima de 1 ela cresce.\n\nOs parâmetros e `x` podem ser arrays do mesmo tamanho, ou escalares que são expandidos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density for scale 2 and shape 1.5",
+            "pt": "Densidade para escala 2 e forma 1.5"
+          },
+          "code": "y = wblpdf([-1 0.5 1 2], 2, 1.5);\ndisp(round(y*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblcdf",
+        "wblinv",
+        "wblstat",
+        "wblfit",
+        "wblrnd"
+      ]
+    },
+    "wblcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the Weibull distribution with scale a and shape b.",
+        "pt": "Função de distribuição acumulada da distribuição de Weibull com escala a e forma b."
+      },
+      "syntax": [
+        {
+          "code": "p = wblcdf(x, a, b)",
+          "en": "Probability that a Weibull variable is at most `x`.",
+          "pt": "Probabilidade de que uma variável de Weibull seja no máximo `x`."
+        },
+        {
+          "code": "p = wblcdf(x, a, b, 'upper')",
+          "en": "Upper tail probability, the chance of lasting beyond `x`.",
+          "pt": "Probabilidade da cauda superior, a chance de durar além de `x`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Points where the function is evaluated, nonnegative.",
+          "pt": "Pontos nos quais a função é calculada, não negativos."
+        },
+        {
+          "name": "a",
+          "en": "Scale parameter, positive. Default 1.",
+          "pt": "Parâmetro de escala, positivo. O padrão é 1."
+        },
+        {
+          "name": "b",
+          "en": "Shape parameter, positive. Default 1.",
+          "pt": "Parâmetro de forma, positivo. O padrão é 1."
+        },
+        {
+          "name": "'upper'",
+          "en": "Returns the upper tail instead of the lower tail.",
+          "pt": "Retorna a cauda superior em vez da inferior."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probability at each element of `x`: `1 - exp(-(x/a)^b)`, or the upper tail `exp(-(x/a)^b)`.",
+          "pt": "Probabilidade em cada elemento de `x`: `1 - exp(-(x/a)^b)`, ou a cauda superior `exp(-(x/a)^b)`."
+        }
+      ],
+      "description": {
+        "en": "`wblcdf` gives the fraction of items that fail by time `x`. The upper tail is the survival function, the fraction still working at `x`.\n\nAt `x = a` the cumulative probability is `1 - exp(-1)`, about 0.6321, whatever the shape.",
+        "pt": "`wblcdf` dá a fração de itens que falham até o tempo `x`. A cauda superior é a função de sobrevivência, a fração que ainda funciona em `x`.\n\nEm `x = a` a probabilidade acumulada é `1 - exp(-1)`, cerca de 0.6321, qualquer que seja a forma."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Failure and survival probability",
+            "pt": "Probabilidade de falha e de sobrevivência"
+          },
+          "code": "p = wblcdf([0.5 1 2], 2, 1.5);\ndisp(round(p*10000)/10000)\ndisp(round(wblcdf(2, 2, 1.5, 'upper')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblpdf",
+        "wblinv",
+        "wblstat",
+        "wblfit",
+        "wbllike"
+      ]
+    },
+    "wblinv": {
+      "summary": {
+        "en": "Inverse of the Weibull cumulative distribution: the value with a given cumulative probability.",
+        "pt": "Inversa da distribuição acumulada de Weibull: o valor com dada probabilidade acumulada."
+      },
+      "syntax": [
+        {
+          "code": "x = wblinv(p, a, b)",
+          "en": "Quantile of the Weibull distribution for probability `p`.",
+          "pt": "Quantil da distribuição de Weibull para a probabilidade `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1.",
+          "pt": "Probabilidades entre 0 e 1."
+        },
+        {
+          "name": "a",
+          "en": "Scale parameter, positive. Default 1.",
+          "pt": "Parâmetro de escala, positivo. O padrão é 1."
+        },
+        {
+          "name": "b",
+          "en": "Shape parameter, positive. Default 1.",
+          "pt": "Parâmetro de forma, positivo. O padrão é 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantile `a*(-log(1-p))^(1/b)` for each element of `p`. `NaN` where `p` is outside [0, 1].",
+          "pt": "Quantil `a*(-log(1-p))^(1/b)` para cada elemento de `p`. `NaN` onde `p` está fora de [0, 1]."
+        }
+      ],
+      "description": {
+        "en": "`wblinv` tells you the time by which a given fraction of items has failed. For example `p = 0.5` gives the median lifetime.\n\nIt is the inverse of `wblcdf`: `wblinv(wblcdf(x,a,b),a,b)` returns `x`.",
+        "pt": "`wblinv` informa o tempo até o qual uma dada fração dos itens já falhou. Por exemplo, `p = 0.5` dá a mediana do tempo de vida.\n\nÉ a inversa de `wblcdf`: `wblinv(wblcdf(x,a,b),a,b)` retorna `x`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median and 10th and 90th percentiles",
+            "pt": "Mediana e percentis 10 e 90"
+          },
+          "code": "x = wblinv([0.1 0.5 0.9], 2, 1.5);\ndisp(round(x*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblcdf",
+        "wblpdf",
+        "wblstat",
+        "wblfit",
+        "wblrnd"
+      ]
+    },
+    "wblstat": {
+      "summary": {
+        "en": "Mean and variance of the Weibull distribution with scale a and shape b.",
+        "pt": "Média e variância da distribuição de Weibull com escala a e forma b."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = wblstat(a, b)",
+          "en": "Mean and variance for scale `a` and shape `b`.",
+          "pt": "Média e variância para escala `a` e forma `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Scale parameter, positive. Can be an array.",
+          "pt": "Parâmetro de escala, positivo. Pode ser um array."
+        },
+        {
+          "name": "b",
+          "en": "Shape parameter, positive. Can be an array.",
+          "pt": "Parâmetro de forma, positivo. Pode ser um array."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `a*gamma(1+1/b)`.",
+          "pt": "Média, `a*gamma(1+1/b)`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `a^2*(gamma(1+2/b) - gamma(1+1/b)^2)`.",
+          "pt": "Variância, `a^2*(gamma(1+2/b) - gamma(1+1/b)^2)`."
+        }
+      ],
+      "description": {
+        "en": "Use `wblstat` to get the theoretical mean and variance of a Weibull distribution without simulating. Both outputs have the same size as the inputs.",
+        "pt": "Use `wblstat` para obter a média e a variância teóricas de uma distribuição de Weibull sem simular. As duas saídas têm o mesmo tamanho das entradas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = wblstat(2, 1.5);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblpdf",
+        "wblcdf",
+        "wblinv",
+        "wblfit",
+        "gamma"
+      ]
+    },
+    "wblrnd": {
+      "summary": {
+        "en": "Generates random numbers from the Weibull distribution with scale a and shape b.",
+        "pt": "Gera números aleatórios da distribuição de Weibull com escala a e forma b."
+      },
+      "syntax": [
+        {
+          "code": "r = wblrnd(a, b)",
+          "en": "One random number.",
+          "pt": "Um número aleatório."
+        },
+        {
+          "code": "r = wblrnd(a, b, m, k)",
+          "en": "An `m`-by-`k` array of random numbers.",
+          "pt": "Um array `m` por `k` de números aleatórios."
+        },
+        {
+          "code": "r = wblrnd(a, b, sz)",
+          "en": "An array whose size is given by the vector `sz`.",
+          "pt": "Um array cujo tamanho é dado pelo vetor `sz`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Scale parameter, positive. An array gives a different parameter for each element.",
+          "pt": "Parâmetro de escala, positivo. Um array dá um parâmetro diferente para cada elemento."
+        },
+        {
+          "name": "b",
+          "en": "Shape parameter, positive.",
+          "pt": "Parâmetro de forma, positivo."
+        },
+        {
+          "name": "m, k",
+          "en": "Number of rows and columns of the result.",
+          "pt": "Número de linhas e colunas do resultado."
+        },
+        {
+          "name": "sz",
+          "en": "Size vector, for example `[2 3]`.",
+          "pt": "Vetor de tamanho, por exemplo `[2 3]`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Positive random numbers from the Weibull distribution.",
+          "pt": "Números aleatórios positivos da distribuição de Weibull."
+        }
+      ],
+      "description": {
+        "en": "`wblrnd` simulates lifetimes or failure times that follow a Weibull distribution, for example to test a fitting routine with data whose true parameters you know.\n\nResults change from run to run unless you fix the generator state before calling.",
+        "pt": "`wblrnd` simula tempos de vida ou de falha que seguem uma distribuição de Weibull, por exemplo para testar uma rotina de ajuste com dados cujos parâmetros verdadeiros você conhece.\n\nOs resultados mudam a cada execução, a menos que você fixe o estado do gerador antes da chamada."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Simulated lifetimes",
+            "pt": "Tempos de vida simulados"
+          },
+          "code": "r = wblrnd(2, 1.5, 2, 5);\ndisp(size(r))\ndisp(all(r(:) > 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblpdf",
+        "wblcdf",
+        "wblinv",
+        "wblfit",
+        "exprnd"
+      ],
+      "notes": {
+        "en": "The generator uses MatLivre's own random stream, so the values do not match the ones MATLAB produces for the same seed. Only the distribution is the same.",
+        "pt": "O gerador usa o fluxo de números aleatórios próprio do MatLivre, então os valores não coincidem com os que o MATLAB produz para a mesma semente. Só a distribuição é a mesma."
+      }
+    },
+    "wblfit": {
+      "summary": {
+        "en": "Fits a Weibull distribution to data by maximum likelihood, with confidence intervals and optional censoring.",
+        "pt": "Ajusta uma distribuição de Weibull aos dados por máxima verossimilhança, com intervalos de confiança e censura opcional."
+      },
+      "syntax": [
+        {
+          "code": "phat = wblfit(x)",
+          "en": "Estimated scale and shape as `[a b]`.",
+          "pt": "Escala e forma estimadas como `[a b]`."
+        },
+        {
+          "code": "[phat, pci] = wblfit(x)",
+          "en": "Also returns 95 percent confidence intervals.",
+          "pt": "Retorna também intervalos de confiança de 95 por cento."
+        },
+        {
+          "code": "[phat, pci] = wblfit(x, alpha)",
+          "en": "Uses the confidence level `100*(1-alpha)` percent.",
+          "pt": "Usa o nível de confiança de `100*(1-alpha)` por cento."
+        },
+        {
+          "code": "phat = wblfit(x, alpha, censoring, freq)",
+          "en": "Handles right-censored observations and frequencies.",
+          "pt": "Trata observações censuradas à direita e frequências."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of positive data.",
+          "pt": "Vetor de dados positivos."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05."
+        },
+        {
+          "name": "censoring",
+          "en": "Vector of the same size as `x`: 1 for a censored observation, 0 for an observed one.",
+          "pt": "Vetor do mesmo tamanho de `x`: 1 para observação censurada, 0 para observada."
+        },
+        {
+          "name": "freq",
+          "en": "Vector of counts, how many times each element of `x` occurs.",
+          "pt": "Vetor de contagens, quantas vezes cada elemento de `x` ocorre."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phat",
+          "en": "Row vector `[a b]` with the scale and shape estimates.",
+          "pt": "Vetor linha `[a b]` com as estimativas de escala e forma."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-2 matrix. The first column is the interval for the scale, the second for the shape; the first row holds the lower limits and the second the upper limits.",
+          "pt": "Matriz 2 por 2. A primeira coluna é o intervalo da escala, a segunda o da forma; a primeira linha tem os limites inferiores e a segunda os superiores."
+        }
+      ],
+      "description": {
+        "en": "`wblfit` finds the scale and shape that make the data most likely under a Weibull model. A shape near 1 suggests a constant failure rate, above 1 a failure rate that grows with age.\n\nUse `censoring` for tests that ended before every item failed: those items are known only to have lasted at least as long as recorded.",
+        "pt": "`wblfit` encontra a escala e a forma que tornam os dados mais prováveis sob um modelo de Weibull. Uma forma próxima de 1 sugere taxa de falha constante, e acima de 1 uma taxa de falha que cresce com a idade.\n\nUse `censoring` para ensaios que terminaram antes de todos os itens falharem: desses itens se sabe apenas que duraram pelo menos o tempo registrado."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit with confidence intervals",
+            "pt": "Ajuste com intervalos de confiança"
+          },
+          "code": "w = [1.2 2.3 0.8 3.1 1.9 2.7 1.5 2.2];\n[p, ci] = wblfit(w);\nfprintf('%.4f %.4f\\n', p)\ndisp(round(ci*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Last observation censored",
+            "pt": "Última observação censurada"
+          },
+          "code": "w = [1.2 2.3 0.8 3.1 1.9 2.7 1.5 2.2];\np = wblfit(w, 0.05, [0 0 0 0 0 0 0 1]);\nfprintf('%.4f %.4f\\n', p)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wbllike",
+        "wblpdf",
+        "wblcdf",
+        "wblrnd",
+        "gamfit"
+      ]
+    },
+    "wbllike": {
+      "summary": {
+        "en": "Negative log-likelihood of a Weibull model for the data, with the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa de um modelo de Weibull para os dados, com a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nll = wbllike(params, data)",
+          "en": "Negative log-likelihood at `params = [a b]`.",
+          "pt": "Log-verossimilhança negativa em `params = [a b]`."
+        },
+        {
+          "code": "[nll, avar] = wbllike(params, data)",
+          "en": "Also returns the approximate covariance matrix.",
+          "pt": "Retorna também a matriz de covariância aproximada."
+        },
+        {
+          "code": "[nll, avar] = wbllike(params, data, censoring, freq)",
+          "en": "With censored observations and frequencies.",
+          "pt": "Com observações censuradas e frequências."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Two-element vector `[a b]`: scale and shape, both positive.",
+          "pt": "Vetor de dois elementos `[a b]`: escala e forma, ambas positivas."
+        },
+        {
+          "name": "data",
+          "en": "Vector of nonnegative observations.",
+          "pt": "Vetor de observações não negativas."
+        },
+        {
+          "name": "censoring",
+          "en": "Vector of the same size as `data`: 1 for censored, 0 for observed.",
+          "pt": "Vetor do mesmo tamanho de `data`: 1 para censurada, 0 para observada."
+        },
+        {
+          "name": "freq",
+          "en": "Vector of counts for each observation.",
+          "pt": "Vetor de contagens de cada observação."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nll",
+          "en": "Negative log-likelihood. Smaller means the parameters explain the data better.",
+          "pt": "Log-verossimilhança negativa. Quanto menor, melhor os parâmetros explicam os dados."
+        },
+        {
+          "name": "avar",
+          "en": "2-by-2 approximate covariance matrix of the scale and shape estimates, from the inverse of the information matrix at `params`.",
+          "pt": "Matriz de covariância aproximada 2 por 2 das estimativas de escala e forma, obtida da inversa da matriz de informação em `params`."
+        }
+      ],
+      "description": {
+        "en": "`wbllike` evaluates how well a given Weibull model fits the data, which is useful to compare candidate parameters or to build likelihood ratio tests. At the maximum likelihood estimates from `wblfit` the value is the smallest possible.\n\nThe covariance is meaningful when `params` are the fitted estimates.",
+        "pt": "`wbllike` avalia o quanto um modelo de Weibull dado se ajusta aos dados, o que serve para comparar parâmetros candidatos ou montar testes da razão de verossimilhanças. Nas estimativas de máxima verossimilhança de `wblfit` o valor é o menor possível.\n\nA covariância faz sentido quando `params` são as estimativas ajustadas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at the fitted parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados"
+          },
+          "code": "w = [1.2 2.3 0.8 3.1 1.9 2.7 1.5 2.2];\np = wblfit(w);\n[nll, avar] = wbllike(p, w);\nfprintf('%.4f\\n', nll)\ndisp(round(avar*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "wblfit",
+        "wblpdf",
+        "wblcdf",
+        "gamlike",
+        "explike"
+      ]
+    }
+  }
+}

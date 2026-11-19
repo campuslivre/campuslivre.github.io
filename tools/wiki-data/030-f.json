@@ -1,0 +1,1555 @@
+{
+  "functions": {
+    "expcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the exponential distribution with mean mu.",
+        "pt": "Função de distribuição acumulada da distribuição exponencial com média mu."
+      },
+      "syntax": [
+        {
+          "code": "p = expcdf(x)",
+          "en": "Standard case, `mu = 1`.",
+          "pt": "Caso padrão, `mu = 1`."
+        },
+        {
+          "code": "p = expcdf(x, mu)",
+          "en": "Exponential distribution with mean `mu`.",
+          "pt": "Distribuição exponencial com média `mu`."
+        },
+        {
+          "code": "p = expcdf(x, mu, 'upper')",
+          "en": "Upper tail probability `P(X > x)`, accurate for large `x`.",
+          "pt": "Probabilidade da cauda superior `P(X > x)`, precisa para `x` grande."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the CDF. Any size.",
+          "pt": "Valores nos quais calcular a CDF. Qualquer tamanho."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the distribution, positive. A scalar or an array that matches the size of `x`.",
+          "pt": "Média da distribuição, positiva. Um escalar ou uma matriz compatível com o tamanho de `x`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, same size as `x`. For `x < 0` the value is 0.",
+          "pt": "Probabilidades, com o tamanho de `x`. Para `x < 0` o valor é 0."
+        }
+      ],
+      "description": {
+        "en": "The exponential distribution describes waiting times between independent events that occur at a constant rate. `expcdf(x, mu)` returns `1 - exp(-x/mu)` for `x >= 0`, the probability that the waiting time is at most `x`.\n\nWith `'upper'` the function returns `exp(-x/mu)` directly, which avoids the loss of precision of `1 - p` when `p` is close to 1.",
+        "pt": "A distribuição exponencial descreve tempos de espera entre eventos independentes que ocorrem a uma taxa constante. `expcdf(x, mu)` retorna `1 - exp(-x/mu)` para `x >= 0`, a probabilidade de o tempo de espera ser no máximo `x`.\n\nCom `'upper'` a função retorna `exp(-x/mu)` diretamente, o que evita a perda de precisão de `1 - p` quando `p` está perto de 1."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail",
+            "pt": "Cauda inferior e superior"
+          },
+          "code": "x = [0.5 1 2];\ndisp(round(expcdf(x, 2)*10000)/10000)\ndisp(round(expcdf(x, 2, 'upper')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "exppdf",
+        "expinv",
+        "expfit",
+        "expstat",
+        "gamcdf"
+      ],
+      "notes": {
+        "en": "The form that also returns confidence bounds for the probability (`[p,pLo,pUp] = ...` with a covariance matrix) is not available here: it errors with `Too many input arguments`.",
+        "pt": "A forma que também retorna limites de confiança para a probabilidade (`[p,pLo,pUp] = ...` com uma matriz de covariância) não está disponível: dá o erro `Too many input arguments`."
+      }
+    },
+    "expfit": {
+      "summary": {
+        "en": "Fits an exponential distribution to data: returns the maximum likelihood estimate of the mean and its confidence interval.",
+        "pt": "Ajusta uma distribuição exponencial aos dados: retorna a estimativa de máxima verossimilhança da média e seu intervalo de confiança."
+      },
+      "syntax": [
+        {
+          "code": "muhat = expfit(x)",
+          "en": "Estimate of the mean from the data in `x`.",
+          "pt": "Estimativa da média a partir dos dados em `x`."
+        },
+        {
+          "code": "[muhat, muci] = expfit(x, alpha)",
+          "en": "Also returns a `100*(1-alpha)%` confidence interval for the mean.",
+          "pt": "Também retorna um intervalo de confiança de `100*(1-alpha)%` para a média."
+        },
+        {
+          "code": "[muhat, muci] = expfit(x, alpha, censoring, freq)",
+          "en": "Handles right-censored observations and observation counts.",
+          "pt": "Trata observações censuradas à direita e contagens de observações."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample of non-negative values. For a matrix, each column is fitted separately.",
+          "pt": "Amostra de valores não negativos. Para uma matriz, cada coluna é ajustada separadamente."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the interval. Default 0.05.",
+          "pt": "Nível de significância do intervalo. O padrão é 0.05."
+        },
+        {
+          "name": "censoring",
+          "en": "Same size as `x`: 1 for a right-censored observation, 0 for an observed one. Use `[]` for none.",
+          "pt": "Do tamanho de `x`: 1 para observação censurada à direita, 0 para observada. Use `[]` se não houver."
+        },
+        {
+          "name": "freq",
+          "en": "Same size as `x`: how many times each value occurs.",
+          "pt": "Do tamanho de `x`: quantas vezes cada valor ocorre."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "muhat",
+          "en": "Estimated mean. Without censoring it is the sample mean.",
+          "pt": "Média estimada. Sem censura é a média amostral."
+        },
+        {
+          "name": "muci",
+          "en": "Confidence interval for the mean, a 2-by-1 vector (lower bound first) for a vector input.",
+          "pt": "Intervalo de confiança da média, um vetor 2 por 1 (limite inferior primeiro) para entrada vetorial."
+        }
+      ],
+      "description": {
+        "en": "`expfit` computes the maximum likelihood estimate of the exponential mean. For uncensored data this is the sample mean. With censoring, the estimate is the total observed time divided by the number of uncensored observations.\n\nThe confidence interval is based on the chi-square distribution, so it is not symmetric around `muhat`.",
+        "pt": "`expfit` calcula a estimativa de máxima verossimilhança da média exponencial. Para dados sem censura é a média amostral. Com censura, a estimativa é o tempo total observado dividido pelo número de observações não censuradas.\n\nO intervalo de confiança usa a distribuição qui-quadrado, por isso não é simétrico em torno de `muhat`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and 90% interval",
+            "pt": "Média e intervalo de 90%"
+          },
+          "code": "x = [0.8 1.2 2.5 0.4 3.1 1.9 0.7 2.2];\n[m, ci] = expfit(x, 0.1);\nfprintf('%.4f\\n', m)\ndisp(round(ci'*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "One censored observation",
+            "pt": "Uma observação censurada"
+          },
+          "code": "x = [1 2 3 4];\nm = expfit(x, 0.05, [0 0 0 1]);\nfprintf('%.4f\\n', m)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "explike",
+        "expcdf",
+        "expstat",
+        "fitdist",
+        "gamfit"
+      ]
+    },
+    "expinv": {
+      "summary": {
+        "en": "Inverse CDF (quantile function) of the exponential distribution with mean mu.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição exponencial com média mu."
+      },
+      "syntax": [
+        {
+          "code": "x = expinv(p)",
+          "en": "Standard case, `mu = 1`.",
+          "pt": "Caso padrão, `mu = 1`."
+        },
+        {
+          "code": "x = expinv(p, mu)",
+          "en": "Quantiles for the exponential distribution with mean `mu`.",
+          "pt": "Quantis da distribuição exponencial com média `mu`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1. Any size.",
+          "pt": "Probabilidades entre 0 e 1. Qualquer tamanho."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the distribution, positive.",
+          "pt": "Média da distribuição, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as `p`: the value that is not exceeded with probability `p`.",
+          "pt": "Quantis, com o tamanho de `p`: o valor que não é excedido com probabilidade `p`."
+        }
+      ],
+      "description": {
+        "en": "`expinv(p, mu)` returns `-mu*log(1-p)`. It is the inverse of `expcdf`, so `expcdf(expinv(p, mu), mu)` gives back `p`. The median of an exponential distribution is `mu*log(2)`, which is `expinv(0.5, mu)`.",
+        "pt": "`expinv(p, mu)` retorna `-mu*log(1-p)`. É a inversa de `expcdf`, então `expcdf(expinv(p, mu), mu)` devolve `p`. A mediana de uma distribuição exponencial é `mu*log(2)`, que é `expinv(0.5, mu)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles and the median",
+            "pt": "Quantis e a mediana"
+          },
+          "code": "p = [0.1 0.5 0.9];\ndisp(round(expinv(p, 2)*10000)/10000)\nfprintf('%.4f\\n', 2*log(2))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "expcdf",
+        "exppdf",
+        "expstat",
+        "exprnd",
+        "gaminv"
+      ]
+    },
+    "explike": {
+      "summary": {
+        "en": "Negative log-likelihood of an exponential distribution with a given mean for the data, and the asymptotic variance of the mean estimate.",
+        "pt": "Log-verossimilhança negativa de uma distribuição exponencial com uma média dada para os dados, e a variância assintótica da estimativa da média."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = explike(mu, x)",
+          "en": "Negative log-likelihood of `x` for mean `mu`.",
+          "pt": "Log-verossimilhança negativa de `x` para a média `mu`."
+        },
+        {
+          "code": "[nlogL, avar] = explike(mu, x)",
+          "en": "Also returns the asymptotic variance of the estimate.",
+          "pt": "Também retorna a variância assintótica da estimativa."
+        },
+        {
+          "code": "[nlogL, avar] = explike(mu, x, censoring, freq)",
+          "en": "Handles censored observations and counts.",
+          "pt": "Trata observações censuradas e contagens."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the exponential distribution (scalar, positive).",
+          "pt": "Média da distribuição exponencial (escalar, positiva)."
+        },
+        {
+          "name": "x",
+          "en": "Sample of non-negative values.",
+          "pt": "Amostra de valores não negativos."
+        },
+        {
+          "name": "censoring",
+          "en": "Optional. 1 for a right-censored observation, 0 for an observed one.",
+          "pt": "Opcional. 1 para observação censurada à direita, 0 para observada."
+        },
+        {
+          "name": "freq",
+          "en": "Optional. Number of times each value occurs.",
+          "pt": "Opcional. Número de vezes que cada valor ocorre."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative log-likelihood. Smaller means the data are more probable under `mu`.",
+          "pt": "Log-verossimilhança negativa. Menor significa que os dados são mais prováveis sob `mu`."
+        },
+        {
+          "name": "avar",
+          "en": "Asymptotic variance of the mean estimate, `mu^2` divided by the number of uncensored observations. It is meaningful when `mu` is the maximum likelihood estimate.",
+          "pt": "Variância assintótica da estimativa da média, `mu^2` dividido pelo número de observações não censuradas. Faz sentido quando `mu` é a estimativa de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`explike` evaluates the exponential log-likelihood at a mean you supply; it does not fit anything. Use it to compare candidate values of `mu`, or to build likelihood-ratio tests. The value at `mu = mean(x)` is the minimum, and equals the negative log-likelihood of the fit from `expfit`.",
+        "pt": "`explike` calcula a log-verossimilhança exponencial em uma média que você fornece; não ajusta nada. Use para comparar valores candidatos de `mu` ou para montar testes de razão de verossimilhança. O valor em `mu = mean(x)` é o mínimo e é igual à log-verossimilhança negativa do ajuste de `expfit`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at the fitted mean",
+            "pt": "Verossimilhança na média ajustada"
+          },
+          "code": "x = [0.8 1.2 2.5 0.4 3.1 1.9 0.7 2.2];\nmu = expfit(x);\n[nl, av] = explike(mu, x);\nfprintf('%.4f %.4f\\n', nl, av)\nfprintf('%.4f\\n', explike(2, x))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "expfit",
+        "exppdf",
+        "expcdf",
+        "gamlike"
+      ]
+    },
+    "exppdf": {
+      "summary": {
+        "en": "Probability density function of the exponential distribution with mean mu.",
+        "pt": "Função densidade de probabilidade da distribuição exponencial com média mu."
+      },
+      "syntax": [
+        {
+          "code": "y = exppdf(x)",
+          "en": "Standard case, `mu = 1`.",
+          "pt": "Caso padrão, `mu = 1`."
+        },
+        {
+          "code": "y = exppdf(x, mu)",
+          "en": "Density for the exponential distribution with mean `mu`.",
+          "pt": "Densidade da distribuição exponencial com média `mu`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the density. Any size.",
+          "pt": "Valores nos quais calcular a densidade. Qualquer tamanho."
+        },
+        {
+          "name": "mu",
+          "en": "Mean of the distribution, positive.",
+          "pt": "Média da distribuição, positiva."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as `x`. Zero for `x < 0`.",
+          "pt": "Valores da densidade, com o tamanho de `x`. Zero para `x < 0`."
+        }
+      ],
+      "description": {
+        "en": "The density is `exp(-x/mu)/mu` for `x >= 0`. It is largest at `x = 0`, where it equals `1/mu`, and decreases steadily. Densities are not probabilities: integrate them over an interval, or use `expcdf`, to get a probability.",
+        "pt": "A densidade é `exp(-x/mu)/mu` para `x >= 0`. É máxima em `x = 0`, onde vale `1/mu`, e decresce continuamente. Densidades não são probabilidades: integre-as em um intervalo, ou use `expcdf`, para obter uma probabilidade."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at three points",
+            "pt": "Densidade em três pontos"
+          },
+          "code": "x = [0 1 2];\ndisp(round(exppdf(x, 2)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "expcdf",
+        "expinv",
+        "exprnd",
+        "gampdf"
+      ]
+    },
+    "exprnd": {
+      "summary": {
+        "en": "Generates random numbers from the exponential distribution with mean mu.",
+        "pt": "Gera números aleatórios da distribuição exponencial com média mu."
+      },
+      "syntax": [
+        {
+          "code": "r = exprnd(mu)",
+          "en": "One random number.",
+          "pt": "Um número aleatório."
+        },
+        {
+          "code": "r = exprnd(mu, n)",
+          "en": "An `n`-by-`n` matrix.",
+          "pt": "Uma matriz `n` por `n`."
+        },
+        {
+          "code": "r = exprnd(mu, m, n)",
+          "en": "An `m`-by-`n` matrix. More size arguments, or a size vector `[m n]`, also work.",
+          "pt": "Uma matriz `m` por `n`. Mais argumentos de tamanho, ou um vetor `[m n]`, também funcionam."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean of the distribution, positive. A scalar or an array.",
+          "pt": "Média da distribuição, positiva. Um escalar ou uma matriz."
+        },
+        {
+          "name": "m, n",
+          "en": "Size of the result.",
+          "pt": "Tamanho do resultado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random values, all non-negative.",
+          "pt": "Valores aleatórios, todos não negativos."
+        }
+      ],
+      "description": {
+        "en": "`exprnd` draws values whose long-run average is `mu`. Use it to simulate waiting times or to build Monte Carlo experiments. Call `rng` first if you need a repeatable sequence within MatLivre.",
+        "pt": "`exprnd` sorteia valores cuja média de longo prazo é `mu`. Use para simular tempos de espera ou montar experimentos de Monte Carlo. Chame `rng` antes se precisar de uma sequência repetível dentro do MatLivre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and range of a sample",
+            "pt": "Tamanho e faixa de uma amostra"
+          },
+          "code": "rng(1);\nr = exprnd(2, 3, 4);\ndisp(size(r))\ndisp(all(r(:) >= 0))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "expcdf",
+        "expinv",
+        "exppdf",
+        "gamstat",
+        "random"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random streams: the same seed gives different numbers than in MATLAB. Only sizes and distribution properties match. The `'single'` class option is not accepted.",
+        "pt": "O gerador não reproduz os fluxos aleatórios do MATLAB: a mesma semente dá números diferentes. Só os tamanhos e as propriedades da distribuição coincidem. A opção de classe `'single'` não é aceita."
+      }
+    },
+    "expstat": {
+      "summary": {
+        "en": "Mean and variance of the exponential distribution with mean mu.",
+        "pt": "Média e variância da distribuição exponencial com média mu."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = expstat(mu)",
+          "en": "Mean and variance for each value of `mu`.",
+          "pt": "Média e variância para cada valor de `mu`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "mu",
+          "en": "Mean parameter, positive. A scalar or an array.",
+          "pt": "Parâmetro de média, positivo. Um escalar ou uma matriz."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, equal to `mu`.",
+          "pt": "Média, igual a `mu`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, equal to `mu^2`.",
+          "pt": "Variância, igual a `mu^2`."
+        }
+      ],
+      "description": {
+        "en": "For the exponential distribution the standard deviation equals the mean, so the variance is `mu^2`. `expstat` applies this to every element of `mu` and returns arrays of the same size.",
+        "pt": "Na distribuição exponencial o desvio padrão é igual à média, então a variância é `mu^2`. `expstat` aplica isso a cada elemento de `mu` e retorna matrizes do mesmo tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = expstat([1 2 3]);\ndisp(m)\ndisp(v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "expfit",
+        "expcdf",
+        "gamstat",
+        "fstat"
+      ]
+    },
+    "fcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the F distribution with v1 and v2 degrees of freedom.",
+        "pt": "Função de distribuição acumulada da distribuição F com v1 e v2 graus de liberdade."
+      },
+      "syntax": [
+        {
+          "code": "p = fcdf(x, v1, v2)",
+          "en": "Lower tail probability `P(X <= x)`.",
+          "pt": "Probabilidade da cauda inferior `P(X <= x)`."
+        },
+        {
+          "code": "p = fcdf(x, v1, v2, 'upper')",
+          "en": "Upper tail probability `P(X > x)`, the form used for p-values.",
+          "pt": "Probabilidade da cauda superior `P(X > x)`, a forma usada em valores-p."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the CDF. Any size.",
+          "pt": "Valores nos quais calcular a CDF. Qualquer tamanho."
+        },
+        {
+          "name": "v1",
+          "en": "Numerator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do numerador, positivos."
+        },
+        {
+          "name": "v2",
+          "en": "Denominator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do denominador, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, same size as `x`.",
+          "pt": "Probabilidades, com o tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "The F distribution is the ratio of two scaled chi-square variables. It appears in analysis of variance and in tests that compare two variances. Given an observed F statistic, `fcdf(F, v1, v2, 'upper')` is the p-value of the one-sided test.",
+        "pt": "A distribuição F é a razão entre duas variáveis qui-quadrado escaladas. Aparece na análise de variância e em testes que comparam duas variâncias. Dada uma estatística F observada, `fcdf(F, v1, v2, 'upper')` é o valor-p do teste unilateral."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail",
+            "pt": "Cauda inferior e superior"
+          },
+          "code": "x = [0.5 1 2];\ndisp(round(fcdf(x, 3, 10)*10000)/10000)\ndisp(round(fcdf(x, 3, 10, 'upper')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fpdf",
+        "finv",
+        "fstat",
+        "chi2cdf",
+        "anova1"
+      ]
+    },
+    "finv": {
+      "summary": {
+        "en": "Inverse CDF (quantile function) of the F distribution with v1 and v2 degrees of freedom.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição F com v1 e v2 graus de liberdade."
+      },
+      "syntax": [
+        {
+          "code": "x = finv(p, v1, v2)",
+          "en": "Quantiles of the F distribution.",
+          "pt": "Quantis da distribuição F."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1.",
+          "pt": "Probabilidades entre 0 e 1."
+        },
+        {
+          "name": "v1",
+          "en": "Numerator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do numerador, positivos."
+        },
+        {
+          "name": "v2",
+          "en": "Denominator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do denominador, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as `p`.",
+          "pt": "Quantis, com o tamanho de `p`."
+        }
+      ],
+      "description": {
+        "en": "`finv(0.95, v1, v2)` is the critical value of an F test at the 5% level: an observed F statistic above it rejects the null hypothesis. `finv` is the inverse of `fcdf`.",
+        "pt": "`finv(0.95, v1, v2)` é o valor crítico de um teste F ao nível de 5%: uma estatística F observada acima dele rejeita a hipótese nula. `finv` é a inversa de `fcdf`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Median and 95% critical value",
+            "pt": "Mediana e valor crítico de 95%"
+          },
+          "code": "disp(round(finv([0.5 0.95], 3, 10)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fcdf",
+        "fpdf",
+        "fstat",
+        "chi2inv",
+        "tinv"
+      ]
+    },
+    "fitdist": {
+      "summary": {
+        "en": "Fits a probability distribution to a column of data and returns a distribution object with the estimated parameters.",
+        "pt": "Ajusta uma distribuição de probabilidade a uma coluna de dados e retorna um objeto de distribuição com os parâmetros estimados."
+      },
+      "syntax": [
+        {
+          "code": "pd = fitdist(x, distname)",
+          "en": "Fits the named distribution by maximum likelihood.",
+          "pt": "Ajusta a distribuição indicada por máxima verossimilhança."
+        },
+        {
+          "code": "pd = fitdist(x, distname, 'Frequency', f)",
+          "en": "Each value in `x` is counted `f` times.",
+          "pt": "Cada valor de `x` é contado `f` vezes."
+        },
+        {
+          "code": "pd = fitdist(x, distname, 'Censoring', c)",
+          "en": "Marks right-censored observations (supported for some distributions).",
+          "pt": "Marca observações censuradas à direita (aceito para algumas distribuições)."
+        },
+        {
+          "code": "list = fitdist()",
+          "en": "Lists the distribution names that can be fitted.",
+          "pt": "Lista os nomes de distribuição que podem ser ajustados."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Column vector of data. `NaN` values are ignored.",
+          "pt": "Vetor coluna de dados. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "distname",
+          "en": "Name of the distribution, such as `'Normal'`, `'Lognormal'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Beta'`, `'Poisson'`, `'Binomial'`, `'NegativeBinomial'`, `'Rayleigh'`, `'ExtremeValue'`, `'GeneralizedExtremeValue'` or `'GeneralizedPareto'`.",
+          "pt": "Nome da distribuição, como `'Normal'`, `'Lognormal'`, `'Exponential'`, `'Gamma'`, `'Weibull'`, `'Beta'`, `'Poisson'`, `'Binomial'`, `'NegativeBinomial'`, `'Rayleigh'`, `'ExtremeValue'`, `'GeneralizedExtremeValue'` ou `'GeneralizedPareto'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pd",
+          "en": "Distribution object. Its properties include the parameters by name (for example `pd.a` and `pd.b` for a gamma fit), `ParameterValues`, `ParameterNames`, `ParameterDescription` and `ParameterCovariance`.",
+          "pt": "Objeto de distribuição. Suas propriedades incluem os parâmetros pelo nome (por exemplo `pd.a` e `pd.b` em um ajuste gama), `ParameterValues`, `ParameterNames`, `ParameterDescription` e `ParameterCovariance`."
+        }
+      ],
+      "description": {
+        "en": "`fitdist` estimates the parameters of the chosen family and wraps the result in an object. The object can be queried with functions such as `mean(pd)`, `std(pd)`, `pdf(pd, x)`, `cdf(pd, x)`, `icdf(pd, p)` and `paramci(pd)`, so you do not have to remember which parameter order each family uses.\n\nTo build a distribution with parameters you choose instead of fitting, use `makedist`.",
+        "pt": "`fitdist` estima os parâmetros da família escolhida e embrulha o resultado em um objeto. O objeto pode ser consultado com funções como `mean(pd)`, `std(pd)`, `pdf(pd, x)`, `cdf(pd, x)`, `icdf(pd, p)` e `paramci(pd)`, então você não precisa lembrar a ordem dos parâmetros de cada família.\n\nPara criar uma distribuição com parâmetros que você escolhe, em vez de ajustar, use `makedist`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Gamma fit and queries",
+            "pt": "Ajuste gama e consultas"
+          },
+          "code": "y = [0.8 1.2 2.5 0.4 3.1 1.9 0.7 2.2 1.1 1.6]';\npd = fitdist(y, 'Gamma');\ndisp(round(pd.ParameterValues*10000)/10000)\nfprintf('%.4f\\n', mean(pd))\nfprintf('%.4f\\n', cdf(pd, 2))\ndisp(round(paramci(pd)*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Counts with Frequency",
+            "pt": "Contagens com Frequency"
+          },
+          "code": "y = [1 2 3 4]';\npd = fitdist(y, 'Poisson', 'Frequency', [4 3 2 1]');\ndisp(pd.lambda)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "makedist",
+        "gamfit",
+        "expfit",
+        "normfit",
+        "paramci"
+      ],
+      "notes": {
+        "en": "Only the options `'Frequency'`, `'Censoring'` and `'NTrials'` are accepted: `'By'`, `'Alpha'` and `'Options'` give `Invalid parameter name`. The families `'Kernel'`, `'Nakagami'` and the others not listed in the inputs are not available (`Distribution name ... is unrecognized`), and `'Uniform'` is not fittable. Censored fits error for the gamma distribution (`Censored gamma fits are not supported`) and for the normal distribution. `random(pd, ...)` with a fitted object errors; use the family's own generator, such as `gamrnd`.",
+        "pt": "Só as opções `'Frequency'`, `'Censoring'` e `'NTrials'` são aceitas: `'By'`, `'Alpha'` e `'Options'` dão `Invalid parameter name`. As famílias `'Kernel'`, `'Nakagami'` e as demais não listadas nas entradas não estão disponíveis (`Distribution name ... is unrecognized`), e `'Uniform'` não é ajustável. Ajustes com censura dão erro para a distribuição gama (`Censored gamma fits are not supported`) e para a normal. `random(pd, ...)` com um objeto ajustado dá erro; use o gerador da própria família, como `gamrnd`."
+      }
+    },
+    "fpdf": {
+      "summary": {
+        "en": "Probability density function of the F distribution with v1 and v2 degrees of freedom.",
+        "pt": "Função densidade de probabilidade da distribuição F com v1 e v2 graus de liberdade."
+      },
+      "syntax": [
+        {
+          "code": "y = fpdf(x, v1, v2)",
+          "en": "Density of the F distribution.",
+          "pt": "Densidade da distribuição F."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the density. Any size.",
+          "pt": "Valores nos quais calcular a densidade. Qualquer tamanho."
+        },
+        {
+          "name": "v1",
+          "en": "Numerator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do numerador, positivos."
+        },
+        {
+          "name": "v2",
+          "en": "Denominator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do denominador, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as `x`. Zero for `x < 0`.",
+          "pt": "Valores da densidade, com o tamanho de `x`. Zero para `x < 0`."
+        }
+      ],
+      "description": {
+        "en": "The F density is defined for `x >= 0` and is skewed to the right. The shape depends on both degrees of freedom. Use `fcdf` for probabilities and `finv` for critical values.",
+        "pt": "A densidade F é definida para `x >= 0` e é assimétrica à direita. A forma depende dos dois graus de liberdade. Use `fcdf` para probabilidades e `finv` para valores críticos."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at three points",
+            "pt": "Densidade em três pontos"
+          },
+          "code": "x = [0.5 1 2];\ndisp(round(fpdf(x, 3, 10)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fcdf",
+        "finv",
+        "fstat",
+        "chi2pdf"
+      ]
+    },
+    "fstat": {
+      "summary": {
+        "en": "Mean and variance of the F distribution with v1 and v2 degrees of freedom.",
+        "pt": "Média e variância da distribuição F com v1 e v2 graus de liberdade."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = fstat(v1, v2)",
+          "en": "Mean and variance for each pair of degrees of freedom.",
+          "pt": "Média e variância para cada par de graus de liberdade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "v1",
+          "en": "Numerator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do numerador, positivos."
+        },
+        {
+          "name": "v2",
+          "en": "Denominator degrees of freedom, positive.",
+          "pt": "Graus de liberdade do denominador, positivos."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `v2/(v2-2)` when `v2 > 2`, otherwise `NaN`.",
+          "pt": "Média, `v2/(v2-2)` quando `v2 > 2`, senão `NaN`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, finite only when `v2 > 4`, otherwise `NaN`.",
+          "pt": "Variância, finita apenas quando `v2 > 4`, senão `NaN`."
+        }
+      ],
+      "description": {
+        "en": "The mean of the F distribution depends only on the denominator degrees of freedom, and it exists only when `v2 > 2`. The variance exists when `v2 > 4`. For smaller `v2` the corresponding output is `NaN`.",
+        "pt": "A média da distribuição F depende apenas dos graus de liberdade do denominador e só existe quando `v2 > 2`. A variância existe quando `v2 > 4`. Para `v2` menor, a saída correspondente é `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Moments for F(3, 10)",
+            "pt": "Momentos de F(3, 10)"
+          },
+          "code": "[m, v] = fstat(3, 10);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fcdf",
+        "fpdf",
+        "finv",
+        "expstat"
+      ]
+    },
+    "gamcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the gamma distribution with shape a and scale b.",
+        "pt": "Função de distribuição acumulada da distribuição gama com forma a e escala b."
+      },
+      "syntax": [
+        {
+          "code": "p = gamcdf(x, a)",
+          "en": "Gamma distribution with scale 1.",
+          "pt": "Distribuição gama com escala 1."
+        },
+        {
+          "code": "p = gamcdf(x, a, b)",
+          "en": "Gamma distribution with shape `a` and scale `b`.",
+          "pt": "Distribuição gama com forma `a` e escala `b`."
+        },
+        {
+          "code": "p = gamcdf(x, a, b, 'upper')",
+          "en": "Upper tail probability `P(X > x)`.",
+          "pt": "Probabilidade da cauda superior `P(X > x)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the CDF. Any size.",
+          "pt": "Valores nos quais calcular a CDF. Qualquer tamanho."
+        },
+        {
+          "name": "a",
+          "en": "Shape parameter, positive.",
+          "pt": "Parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive. The mean of the distribution is `a*b`.",
+          "pt": "Parâmetro de escala, positivo. A média da distribuição é `a*b`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, same size as `x`. Zero for `x <= 0`.",
+          "pt": "Probabilidades, com o tamanho de `x`. Zero para `x <= 0`."
+        }
+      ],
+      "description": {
+        "en": "The gamma distribution models positive, right-skewed quantities such as waiting times until the `a`-th event. With `a = 1` it reduces to the exponential distribution with mean `b`.\n\n`gamcdf` is the regularized incomplete gamma function evaluated at `x/b`.",
+        "pt": "A distribuição gama modela quantidades positivas e assimétricas à direita, como o tempo de espera até o `a`-ésimo evento. Com `a = 1` ela se reduz à distribuição exponencial com média `b`.\n\n`gamcdf` é a função gama incompleta regularizada calculada em `x/b`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Probabilities and the exponential case",
+            "pt": "Probabilidades e o caso exponencial"
+          },
+          "code": "x = [1 2 3];\ndisp(round(gamcdf(x, 2, 1.5)*10000)/10000)\ndisp(round(gamcdf(x, 1, 2)*10000)/10000)\ndisp(round(expcdf(x, 2)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gampdf",
+        "gaminv",
+        "gamfit",
+        "gamstat",
+        "expcdf"
+      ],
+      "notes": {
+        "en": "The form that also returns confidence bounds for the probability (`[p,pLo,pUp] = ...` with a covariance matrix) is not available here: it errors with `Too many input arguments`.",
+        "pt": "A forma que também retorna limites de confiança para a probabilidade (`[p,pLo,pUp] = ...` com uma matriz de covariância) não está disponível: dá o erro `Too many input arguments`."
+      }
+    },
+    "gamfit": {
+      "summary": {
+        "en": "Fits a gamma distribution to data: maximum likelihood estimates of shape and scale with their confidence intervals.",
+        "pt": "Ajusta uma distribuição gama aos dados: estimativas de máxima verossimilhança de forma e escala com seus intervalos de confiança."
+      },
+      "syntax": [
+        {
+          "code": "phat = gamfit(x)",
+          "en": "Estimates `[a b]` from the data.",
+          "pt": "Estima `[a b]` a partir dos dados."
+        },
+        {
+          "code": "[phat, pci] = gamfit(x, alpha)",
+          "en": "Also returns `100*(1-alpha)%` confidence intervals.",
+          "pt": "Também retorna intervalos de confiança de `100*(1-alpha)%`."
+        },
+        {
+          "code": "[phat, pci] = gamfit(x, alpha, censoring, freq)",
+          "en": "Observation counts through `freq` (censoring is not supported, see the note).",
+          "pt": "Contagens de observações por `freq` (censura não é aceita, veja a nota)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Vector of positive data.",
+          "pt": "Vetor de dados positivos."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level for the intervals. Default 0.05. Use `[]` for the default.",
+          "pt": "Nível de significância dos intervalos. O padrão é 0.05. Use `[]` para o padrão."
+        },
+        {
+          "name": "censoring",
+          "en": "Censoring vector. Pass `[]` (no censoring).",
+          "pt": "Vetor de censura. Passe `[]` (sem censura)."
+        },
+        {
+          "name": "freq",
+          "en": "Number of times each value of `x` occurs.",
+          "pt": "Número de vezes que cada valor de `x` ocorre."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "phat",
+          "en": "Row vector `[a b]` of shape and scale estimates.",
+          "pt": "Vetor linha `[a b]` com as estimativas de forma e escala."
+        },
+        {
+          "name": "pci",
+          "en": "2-by-2 matrix: first row the lower bounds, second row the upper bounds, one column per parameter.",
+          "pt": "Matriz 2 por 2: primeira linha com os limites inferiores, segunda com os superiores, uma coluna por parâmetro."
+        }
+      ],
+      "description": {
+        "en": "The gamma maximum likelihood equations have no closed form, so `gamfit` solves them numerically. The estimates satisfy `a*b = mean(x)`: the fitted mean equals the sample mean.\n\nThe intervals come from the asymptotic normal approximation, so they are less reliable for very small samples.",
+        "pt": "As equações de máxima verossimilhança da gama não têm forma fechada, então `gamfit` as resolve numericamente. As estimativas satisfazem `a*b = mean(x)`: a média ajustada é igual à média amostral.\n\nOs intervalos vêm da aproximação normal assintótica, por isso são menos confiáveis em amostras muito pequenas."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Fit and intervals",
+            "pt": "Ajuste e intervalos"
+          },
+          "code": "y = [0.8 1.2 2.5 0.4 3.1 1.9 0.7 2.2 1.1 1.6];\n[ph, ci] = gamfit(y);\ndisp(round(ph*10000)/10000)\ndisp(round(ci*10000)/10000)\nfprintf('%.4f %.4f\\n', ph(1)*ph(2), mean(y))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gamlike",
+        "gamcdf",
+        "gamstat",
+        "fitdist",
+        "expfit"
+      ],
+      "notes": {
+        "en": "Censored data (a non-empty `censoring` argument) is not implemented and errors. With single-precision input the iteration is done in double precision, so the result can differ from MATLAB's by about 1e-6 in relative terms.",
+        "pt": "Dados censurados (um argumento `censoring` não vazio) não são implementados e dão erro. Com entrada em precisão simples a iteração é feita em precisão dupla, então o resultado pode diferir do MATLAB em cerca de 1e-6 em termos relativos."
+      }
+    },
+    "gaminv": {
+      "summary": {
+        "en": "Inverse CDF (quantile function) of the gamma distribution with shape a and scale b.",
+        "pt": "Função de distribuição acumulada inversa (função quantil) da distribuição gama com forma a e escala b."
+      },
+      "syntax": [
+        {
+          "code": "x = gaminv(p, a)",
+          "en": "Gamma distribution with scale 1.",
+          "pt": "Distribuição gama com escala 1."
+        },
+        {
+          "code": "x = gaminv(p, a, b)",
+          "en": "Gamma distribution with shape `a` and scale `b`.",
+          "pt": "Distribuição gama com forma `a` e escala `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probabilities between 0 and 1.",
+          "pt": "Probabilidades entre 0 e 1."
+        },
+        {
+          "name": "a",
+          "en": "Shape parameter, positive.",
+          "pt": "Parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive. The mean of the distribution is `a*b`.",
+          "pt": "Parâmetro de escala, positivo. A média da distribuição é `a*b`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Quantiles, same size as `p`.",
+          "pt": "Quantis, com o tamanho de `p`."
+        }
+      ],
+      "description": {
+        "en": "`gaminv` inverts `gamcdf` numerically. It is useful for confidence limits and for finding thresholds, for example the value that a gamma-distributed quantity exceeds only 5% of the time is `gaminv(0.95, a, b)`.",
+        "pt": "`gaminv` inverte `gamcdf` numericamente. É útil para limites de confiança e para encontrar limiares, por exemplo o valor que uma grandeza com distribuição gama excede só em 5% das vezes é `gaminv(0.95, a, b)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles and round trip",
+            "pt": "Quantis e ida e volta"
+          },
+          "code": "p = [0.1 0.5 0.9];\nx = gaminv(p, 2, 1.5);\ndisp(round(x*10000)/10000)\ndisp(round(gamcdf(x, 2, 1.5)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gamcdf",
+        "gampdf",
+        "gamstat",
+        "gamfit",
+        "expinv"
+      ]
+    },
+    "gamlike": {
+      "summary": {
+        "en": "Negative log-likelihood of a gamma distribution with given parameters for the data, and the asymptotic covariance of the estimates.",
+        "pt": "Log-verossimilhança negativa de uma distribuição gama com parâmetros dados para os dados, e a covariância assintótica das estimativas."
+      },
+      "syntax": [
+        {
+          "code": "nlogL = gamlike(params, x)",
+          "en": "Negative log-likelihood of `x` for `params = [a b]`.",
+          "pt": "Log-verossimilhança negativa de `x` para `params = [a b]`."
+        },
+        {
+          "code": "[nlogL, acov] = gamlike(params, x)",
+          "en": "Also returns the asymptotic covariance matrix.",
+          "pt": "Também retorna a matriz de covariância assintótica."
+        },
+        {
+          "code": "[nlogL, acov] = gamlike(params, x, censoring, freq)",
+          "en": "Handles censoring and counts (see the note).",
+          "pt": "Trata censura e contagens (veja a nota)."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "params",
+          "en": "Two-element vector `[a b]` of shape and scale.",
+          "pt": "Vetor com dois elementos `[a b]`, forma e escala."
+        },
+        {
+          "name": "x",
+          "en": "Vector of positive data.",
+          "pt": "Vetor de dados positivos."
+        },
+        {
+          "name": "censoring",
+          "en": "Optional. 1 for right-censored, 0 for observed.",
+          "pt": "Opcional. 1 para censurada à direita, 0 para observada."
+        },
+        {
+          "name": "freq",
+          "en": "Optional. Number of times each value occurs.",
+          "pt": "Opcional. Número de vezes que cada valor ocorre."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "nlogL",
+          "en": "Negative log-likelihood. Smaller means a better fit.",
+          "pt": "Log-verossimilhança negativa. Menor significa melhor ajuste."
+        },
+        {
+          "name": "acov",
+          "en": "2-by-2 asymptotic covariance of `[a b]`. It is meaningful when `params` are the maximum likelihood estimates.",
+          "pt": "Covariância assintótica 2 por 2 de `[a b]`. Faz sentido quando `params` são as estimativas de máxima verossimilhança."
+        }
+      ],
+      "description": {
+        "en": "`gamlike` evaluates the log-likelihood at parameters you supply; use `gamfit` to estimate them. Comparing the value at the fitted parameters with the value at other parameters shows how much better the fit is.",
+        "pt": "`gamlike` calcula a log-verossimilhança em parâmetros que você fornece; use `gamfit` para estimá-los. Comparar o valor nos parâmetros ajustados com o valor em outros parâmetros mostra quanto o ajuste melhora."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Likelihood at fitted and other parameters",
+            "pt": "Verossimilhança nos parâmetros ajustados e em outros"
+          },
+          "code": "y = [0.8 1.2 2.5 0.4 3.1 1.9 0.7 2.2 1.1 1.6];\nph = gamfit(y);\n[nl, ac] = gamlike(ph, y);\nfprintf('%.4f\\n', nl)\nfprintf('%.4f\\n', gamlike([2 1.5], y))\ndisp(round(ac*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gamfit",
+        "gampdf",
+        "gamcdf",
+        "explike"
+      ],
+      "notes": {
+        "en": "With censored data the covariance output is `NaN`, because it needs derivatives of the incomplete gamma function that are not implemented. The negative log-likelihood itself is still returned.",
+        "pt": "Com dados censurados a saída de covariância é `NaN`, pois exige derivadas da função gama incompleta que não estão implementadas. A log-verossimilhança negativa continua sendo retornada."
+      }
+    },
+    "gampdf": {
+      "summary": {
+        "en": "Probability density function of the gamma distribution with shape a and scale b.",
+        "pt": "Função densidade de probabilidade da distribuição gama com forma a e escala b."
+      },
+      "syntax": [
+        {
+          "code": "y = gampdf(x, a)",
+          "en": "Gamma distribution with scale 1.",
+          "pt": "Distribuição gama com escala 1."
+        },
+        {
+          "code": "y = gampdf(x, a, b)",
+          "en": "Gamma distribution with shape `a` and scale `b`.",
+          "pt": "Distribuição gama com forma `a` e escala `b`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the density. Any size.",
+          "pt": "Valores nos quais calcular a densidade. Qualquer tamanho."
+        },
+        {
+          "name": "a",
+          "en": "Shape parameter, positive.",
+          "pt": "Parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive. The mean of the distribution is `a*b`.",
+          "pt": "Parâmetro de escala, positivo. A média da distribuição é `a*b`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Density values, same size as `x`. Zero for `x < 0`.",
+          "pt": "Valores da densidade, com o tamanho de `x`. Zero para `x < 0`."
+        }
+      ],
+      "description": {
+        "en": "The density is `x^(a-1) * exp(-x/b) / (b^a * gamma(a))` for `x > 0`. With `a < 1` it is unbounded near zero, with `a = 1` it is exponential, and with `a > 1` it rises to a peak at `(a-1)*b` and then decays.",
+        "pt": "A densidade é `x^(a-1) * exp(-x/b) / (b^a * gamma(a))` para `x > 0`. Com `a < 1` ela é ilimitada perto de zero, com `a = 1` é exponencial e com `a > 1` sobe até um pico em `(a-1)*b` e depois decai."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Density at three points",
+            "pt": "Densidade em três pontos"
+          },
+          "code": "x = [1 2 3];\ndisp(round(gampdf(x, 2, 1.5)*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gamcdf",
+        "gaminv",
+        "gamfit",
+        "gamstat",
+        "exppdf"
+      ]
+    },
+    "gamstat": {
+      "summary": {
+        "en": "Mean and variance of the gamma distribution with shape a and scale b.",
+        "pt": "Média e variância da distribuição gama com forma a e escala b."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = gamstat(a, b)",
+          "en": "Mean and variance for each pair `(a, b)`.",
+          "pt": "Média e variância para cada par `(a, b)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "a",
+          "en": "Shape parameter, positive.",
+          "pt": "Parâmetro de forma, positivo."
+        },
+        {
+          "name": "b",
+          "en": "Scale parameter, positive. The mean of the distribution is `a*b`.",
+          "pt": "Parâmetro de escala, positivo. A média da distribuição é `a*b`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `a*b`.",
+          "pt": "Média, `a*b`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `a*b^2`.",
+          "pt": "Variância, `a*b^2`."
+        }
+      ],
+      "description": {
+        "en": "`gamstat` returns the moments directly from the formulas, without simulation. Both inputs can be arrays of the same size, and the outputs have that size.",
+        "pt": "`gamstat` retorna os momentos diretamente pelas fórmulas, sem simulação. As duas entradas podem ser matrizes de mesmo tamanho, e as saídas têm esse tamanho."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = gamstat(2, 1.5);\nfprintf('%.4f %.4f\\n', m, v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gamfit",
+        "gamcdf",
+        "gampdf",
+        "expstat"
+      ]
+    },
+    "geocdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the geometric distribution: the number of failures before the first success.",
+        "pt": "Função de distribuição acumulada da distribuição geométrica: o número de fracassos antes do primeiro sucesso."
+      },
+      "syntax": [
+        {
+          "code": "y = geocdf(x, p)",
+          "en": "Lower tail probability `P(X <= x)`.",
+          "pt": "Probabilidade da cauda inferior `P(X <= x)`."
+        },
+        {
+          "code": "y = geocdf(x, p, 'upper')",
+          "en": "Upper tail probability `P(X > x)`.",
+          "pt": "Probabilidade da cauda superior `P(X > x)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of failures, non-negative integers. Non-integer values are floored.",
+          "pt": "Número de fracassos, inteiros não negativos. Valores não inteiros são arredondados para baixo."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success on each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, same size as `x`.",
+          "pt": "Probabilidades, com o tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "The geometric distribution here counts failures before the first success in independent trials, so its support starts at 0. The cumulative probability is `1 - (1-p)^(floor(x)+1)`.",
+        "pt": "A distribuição geométrica aqui conta os fracassos antes do primeiro sucesso em tentativas independentes, então o suporte começa em 0. A probabilidade acumulada é `1 - (1-p)^(floor(x)+1)`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Lower and upper tail",
+            "pt": "Cauda inferior e superior"
+          },
+          "code": "x = [0 1 2 5];\ndisp(geocdf(x, 0.3))\ndisp(geocdf(x, 0.3, 'upper'))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geopdf",
+        "geoinv",
+        "geostat",
+        "geornd",
+        "nbincdf"
+      ]
+    },
+    "geoinv": {
+      "summary": {
+        "en": "Inverse CDF of the geometric distribution: the smallest number of failures whose cumulative probability reaches y.",
+        "pt": "CDF inversa da distribuição geométrica: o menor número de fracassos cuja probabilidade acumulada alcança y."
+      },
+      "syntax": [
+        {
+          "code": "x = geoinv(y, p)",
+          "en": "Quantiles of the geometric distribution with success probability `p`.",
+          "pt": "Quantis da distribuição geométrica com probabilidade de sucesso `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "y",
+          "en": "Cumulative probabilities between 0 and 1.",
+          "pt": "Probabilidades acumuladas entre 0 e 1."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success on each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x",
+          "en": "Integer quantiles (numbers of failures), same size as `y`.",
+          "pt": "Quantis inteiros (números de fracassos), com o tamanho de `y`."
+        }
+      ],
+      "description": {
+        "en": "Because the distribution is discrete, `geoinv` returns an integer: the smallest `x` with `geocdf(x, p) >= y`. For example, it tells you how many failures you can expect to see before a success with a given confidence.",
+        "pt": "Como a distribuição é discreta, `geoinv` retorna um inteiro: o menor `x` com `geocdf(x, p) >= y`. Por exemplo, diz quantos fracassos esperar antes de um sucesso com uma dada confiança."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Quantiles",
+            "pt": "Quantis"
+          },
+          "code": "y = [0.1 0.5 0.9];\ndisp(geoinv(y, 0.3))\ndisp(geocdf(geoinv(y, 0.3), 0.3))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geocdf",
+        "geopdf",
+        "geostat",
+        "geornd"
+      ]
+    },
+    "geopdf": {
+      "summary": {
+        "en": "Probability mass function of the geometric distribution: the probability of x failures before the first success.",
+        "pt": "Função de massa de probabilidade da distribuição geométrica: a probabilidade de x fracassos antes do primeiro sucesso."
+      },
+      "syntax": [
+        {
+          "code": "y = geopdf(x, p)",
+          "en": "Probability of exactly `x` failures before the first success.",
+          "pt": "Probabilidade de exatamente `x` fracassos antes do primeiro sucesso."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Number of failures, non-negative integers. Non-integer values give 0.",
+          "pt": "Número de fracassos, inteiros não negativos. Valores não inteiros dão 0."
+        },
+        {
+          "name": "p",
+          "en": "Probability of success on each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "y",
+          "en": "Probabilities, same size as `x`.",
+          "pt": "Probabilidades, com o tamanho de `x`."
+        }
+      ],
+      "description": {
+        "en": "The probability of `x` failures followed by a success is `p*(1-p)^x`. It is largest at `x = 0` and falls by the factor `1-p` at each step.",
+        "pt": "A probabilidade de `x` fracassos seguidos de um sucesso é `p*(1-p)^x`. É máxima em `x = 0` e diminui pelo fator `1-p` a cada passo."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "First few probabilities",
+            "pt": "Primeiras probabilidades"
+          },
+          "code": "x = [0 1 2 5];\ndisp(geopdf(x, 0.3))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geocdf",
+        "geoinv",
+        "geostat",
+        "geornd",
+        "nbinpdf"
+      ]
+    },
+    "geornd": {
+      "summary": {
+        "en": "Generates random numbers from the geometric distribution (number of failures before the first success).",
+        "pt": "Gera números aleatórios da distribuição geométrica (número de fracassos antes do primeiro sucesso)."
+      },
+      "syntax": [
+        {
+          "code": "r = geornd(p)",
+          "en": "One random number.",
+          "pt": "Um número aleatório."
+        },
+        {
+          "code": "r = geornd(p, m, n)",
+          "en": "An `m`-by-`n` matrix. A size vector `[m n]` also works.",
+          "pt": "Uma matriz `m` por `n`. Um vetor de tamanho `[m n]` também funciona."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probability of success on each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        },
+        {
+          "name": "m, n",
+          "en": "Size of the result.",
+          "pt": "Tamanho do resultado."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "r",
+          "en": "Random non-negative integers.",
+          "pt": "Inteiros não negativos aleatórios."
+        }
+      ],
+      "description": {
+        "en": "Each value is the number of failures observed before the first success when every trial succeeds with probability `p`. Use `rng` before the call for a repeatable sequence inside MatLivre.",
+        "pt": "Cada valor é o número de fracassos observados antes do primeiro sucesso quando cada tentativa tem probabilidade `p` de sucesso. Use `rng` antes da chamada para uma sequência repetível dentro do MatLivre."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Size and type of a sample",
+            "pt": "Tamanho e tipo de uma amostra"
+          },
+          "code": "rng(1);\nr = geornd(0.3, 2, 5);\ndisp(size(r))\ndisp(all(r(:) >= 0 & r(:) == round(r(:))))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geocdf",
+        "geopdf",
+        "geostat",
+        "exprnd",
+        "random"
+      ],
+      "notes": {
+        "en": "The generator does not reproduce MATLAB's random streams: the same seed gives different numbers than in MATLAB. Only sizes and distribution properties match. The `'single'` class option is not accepted.",
+        "pt": "O gerador não reproduz os fluxos aleatórios do MATLAB: a mesma semente dá números diferentes. Só os tamanhos e as propriedades da distribuição coincidem. A opção de classe `'single'` não é aceita."
+      }
+    },
+    "geostat": {
+      "summary": {
+        "en": "Mean and variance of the geometric distribution (number of failures before the first success).",
+        "pt": "Média e variância da distribuição geométrica (número de fracassos antes do primeiro sucesso)."
+      },
+      "syntax": [
+        {
+          "code": "[m, v] = geostat(p)",
+          "en": "Mean and variance for each value of `p`.",
+          "pt": "Média e variância para cada valor de `p`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "p",
+          "en": "Probability of success on each trial, between 0 and 1.",
+          "pt": "Probabilidade de sucesso em cada tentativa, entre 0 e 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "m",
+          "en": "Mean, `(1-p)/p`.",
+          "pt": "Média, `(1-p)/p`."
+        },
+        {
+          "name": "v",
+          "en": "Variance, `(1-p)/p^2`.",
+          "pt": "Variância, `(1-p)/p^2`."
+        }
+      ],
+      "description": {
+        "en": "With `p = 0.25` you expect on average 3 failures before the first success. `geostat` applies the formulas to every element of `p`.",
+        "pt": "Com `p = 0.25` espera-se em média 3 fracassos antes do primeiro sucesso. `geostat` aplica as fórmulas a cada elemento de `p`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Mean and variance",
+            "pt": "Média e variância"
+          },
+          "code": "[m, v] = geostat([0.25 0.5]);\ndisp(m)\ndisp(v)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "geocdf",
+        "geopdf",
+        "geornd",
+        "nbinstat"
+      ]
+    },
+    "gevcdf": {
+      "summary": {
+        "en": "Cumulative distribution function of the generalized extreme value distribution with shape k, scale sigma and location mu.",
+        "pt": "Função de distribuição acumulada da distribuição de valores extremos generalizada com forma k, escala sigma e posição mu."
+      },
+      "syntax": [
+        {
+          "code": "p = gevcdf(x)",
+          "en": "Standard case: `k = 0`, `sigma = 1`, `mu = 0` (Gumbel).",
+          "pt": "Caso padrão: `k = 0`, `sigma = 1`, `mu = 0` (Gumbel)."
+        },
+        {
+          "code": "p = gevcdf(x, k, sigma, mu)",
+          "en": "General case.",
+          "pt": "Caso geral."
+        },
+        {
+          "code": "p = gevcdf(x, k, sigma, mu, 'upper')",
+          "en": "Upper tail probability `P(X > x)`.",
+          "pt": "Probabilidade da cauda superior `P(X > x)`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Values at which to evaluate the CDF. Any size.",
+          "pt": "Valores nos quais calcular a CDF. Qualquer tamanho."
+        },
+        {
+          "name": "k",
+          "en": "Shape parameter. `k = 0` is the Gumbel case, `k > 0` has a heavy right tail, `k < 0` has a bounded upper end.",
+          "pt": "Parâmetro de forma. `k = 0` é o caso de Gumbel, `k > 0` tem cauda direita pesada, `k < 0` tem extremo superior limitado."
+        },
+        {
+          "name": "sigma",
+          "en": "Scale parameter, positive.",
+          "pt": "Parâmetro de escala, positivo."
+        },
+        {
+          "name": "mu",
+          "en": "Location parameter.",
+          "pt": "Parâmetro de posição."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "Probabilities, same size as `x` (scalar parameters expand to it).",
+          "pt": "Probabilidades, com o tamanho de `x` (parâmetros escalares são expandidos)."
+        }
+      ],
+      "description": {
+        "en": "The generalized extreme value distribution models the maximum (or minimum) of many values, for example the largest yearly flood or wind speed. It joins the Gumbel, Fréchet and Weibull families under one parameter `k`.\n\nFor `k ~= 0` the support is bounded on one side: for `k > 0` it is `x > mu - sigma/k`, and for `k < 0` it is `x < mu - sigma/k`.",
+        "pt": "A distribuição de valores extremos generalizada modela o máximo (ou mínimo) de muitos valores, por exemplo a maior cheia ou a maior velocidade do vento do ano. Ela reúne as famílias de Gumbel, Fréchet e Weibull em um só parâmetro `k`.\n\nPara `k ~= 0` o suporte é limitado de um lado: para `k > 0` é `x > mu - sigma/k` e para `k < 0` é `x < mu - sigma/k`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Gumbel and a heavier tail",
+            "pt": "Gumbel e uma cauda mais pesada"
+          },
+          "code": "x = [-1 0 1 2];\ndisp(round(gevcdf(x)*10000)/10000)\ndisp(round(gevcdf(x, 0.2, 1, 0)*10000)/10000)\ndisp(round(gevcdf(x, 0.2, 1, 0, 'upper')*10000)/10000)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "gevfit",
+        "gevpdf",
+        "gevinv",
+        "evcdf",
+        "gpcdf"
+      ],
+      "notes": {
+        "en": "The form that also returns confidence bounds for the probability (`[p,pLo,pUp] = ...` with a covariance matrix) is not available here: it errors with `Too many input arguments`.",
+        "pt": "A forma que também retorna limites de confiança para a probabilidade (`[p,pLo,pUp] = ...` com uma matriz de covariância) não está disponível: dá o erro `Too many input arguments`."
+      }
+    }
+  }
+}
