@@ -1,0 +1,1068 @@
+{
+  "functions": {
+    "jbtest": {
+      "summary": {
+        "en": "Jarque-Bera test of whether a sample comes from a normal distribution, based on its skewness and kurtosis.",
+        "pt": "Teste de Jarque-Bera para verificar se uma amostra vem de uma distribuição normal, com base na assimetria e na curtose."
+      },
+      "syntax": [
+        {
+          "code": "h = jbtest(x)",
+          "en": "Tests the vector `x` at the 5% level and returns 1 when normality is rejected.",
+          "pt": "Testa o vetor `x` ao nível de 5% e retorna 1 quando a normalidade é rejeitada."
+        },
+        {
+          "code": "h = jbtest(x, alpha)",
+          "en": "Uses the significance level `alpha` instead of 0.05.",
+          "pt": "Usa o nível de significância `alpha` em vez de 0,05."
+        },
+        {
+          "code": "[h, p, jbstat, critval] = jbtest(x, alpha)",
+          "en": "Also returns the p-value, the test statistic and the critical value.",
+          "pt": "Retorna também o valor-p, a estatística do teste e o valor crítico."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample, a numeric vector. `NaN` values are ignored.",
+          "pt": "Amostra, um vetor numérico. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "alpha",
+          "en": "Significance level, a scalar between 0 and 1. Default 0.05.",
+          "pt": "Nível de significância, um escalar entre 0 e 1. O padrão é 0,05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 when the null hypothesis of normality is rejected at level `alpha`, 0 otherwise.",
+          "pt": "1 quando a hipótese nula de normalidade é rejeitada ao nível `alpha`, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test. It is looked up in a table, so it stays between 0.001 and 0.5 and a warning is printed outside that range.",
+          "pt": "Valor-p do teste. Ele é obtido de uma tabela, então fica entre 0,001 e 0,5, e um aviso é exibido fora desse intervalo."
+        },
+        {
+          "name": "jbstat",
+          "en": "Jarque-Bera statistic, which grows as the skewness and the excess kurtosis move away from zero.",
+          "pt": "Estatística de Jarque-Bera, que cresce quando a assimetria e a curtose em excesso se afastam de zero."
+        },
+        {
+          "name": "critval",
+          "en": "Critical value for the chosen `alpha` and the sample size. Normality is rejected when `jbstat` is larger than it.",
+          "pt": "Valor crítico para o `alpha` escolhido e o tamanho da amostra. A normalidade é rejeitada quando `jbstat` é maior que ele."
+        }
+      ],
+      "description": {
+        "en": "The Jarque-Bera statistic combines the sample skewness and kurtosis, which are fixed for a normal distribution (0 and 3). A large statistic means the sample is too skewed or too heavy-tailed to be normal.\n\nThe test is meant for samples of reasonable size. For small samples the p-value and the critical value come from a table that depends on the sample size.",
+        "pt": "A estatística de Jarque-Bera combina a assimetria e a curtose da amostra, que são fixas para a distribuição normal (0 e 3). Uma estatística grande indica que a amostra é assimétrica ou de caudas pesadas demais para ser normal.\n\nO teste é indicado para amostras de tamanho razoável. Em amostras pequenas, o valor-p e o valor crítico vêm de uma tabela que depende do tamanho da amostra."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normality test of a sample with two high values",
+            "pt": "Teste de normalidade de uma amostra com dois valores altos"
+          },
+          "code": "x = [2.1 3.4 2.9 4.8 3.3 2.7 3.1 2.8 3.6 3.0 2.5 3.9 4.1 2.2 3.5 6.2 2.6 3.8 3.7 3.0 3.4 5.5];\n[h, p, jb, cv] = jbtest(x);\nfprintf('h = %d, p = %.4f\\n', h, p);\nfprintf('JB = %.4f, critical value = %.4f\\n', jb, cv);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "lillietest",
+        "chi2gof",
+        "kstest",
+        "skewness",
+        "kurtosis"
+      ]
+    },
+    "lillietest": {
+      "summary": {
+        "en": "Lilliefors test of whether a sample comes from a normal, exponential or extreme value distribution with parameters estimated from the data.",
+        "pt": "Teste de Lilliefors para verificar se uma amostra vem de uma distribuição normal, exponencial ou de valor extremo, com parâmetros estimados dos dados."
+      },
+      "syntax": [
+        {
+          "code": "h = lillietest(x)",
+          "en": "Tests normality of `x` at the 5% level.",
+          "pt": "Testa a normalidade de `x` ao nível de 5%."
+        },
+        {
+          "code": "h = lillietest(x, 'Alpha', alpha)",
+          "en": "Uses the significance level `alpha`.",
+          "pt": "Usa o nível de significância `alpha`."
+        },
+        {
+          "code": "h = lillietest(x, 'Distr', dist)",
+          "en": "Tests against `'normal'`, `'exponential'` or `'extreme value'` (`'ev'`).",
+          "pt": "Testa contra `'normal'`, `'exponential'` ou `'extreme value'` (`'ev'`)."
+        },
+        {
+          "code": "[h, p, kstat, critval] = lillietest(x, ...)",
+          "en": "Also returns the p-value, the statistic and the critical value.",
+          "pt": "Retorna também o valor-p, a estatística e o valor crítico."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample, a numeric vector. `NaN` values are ignored.",
+          "pt": "Amostra, um vetor numérico. Valores `NaN` são ignorados."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level, a scalar between 0 and 1. Default 0.05.",
+          "pt": "Nível de significância, um escalar entre 0 e 1. O padrão é 0,05."
+        },
+        {
+          "name": "'Distr'",
+          "en": "Distribution to test: `'normal'` (default), `'exponential'` or `'ev'`/`'extreme value'`.",
+          "pt": "Distribuição a testar: `'normal'` (padrão), `'exponential'` ou `'ev'`/`'extreme value'`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 when the null hypothesis is rejected at level `alpha`, 0 otherwise.",
+          "pt": "1 quando a hipótese nula é rejeitada ao nível `alpha`, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test. It comes from a table, so it stays between 0.001 and 0.5 and a warning is printed outside that range.",
+          "pt": "Valor-p do teste. Ele vem de uma tabela, então fica entre 0,001 e 0,5, e um aviso é exibido fora desse intervalo."
+        },
+        {
+          "name": "kstat",
+          "en": "Test statistic: the largest distance between the empirical distribution and the fitted one.",
+          "pt": "Estatística do teste: a maior distância entre a distribuição empírica e a distribuição ajustada."
+        },
+        {
+          "name": "critval",
+          "en": "Critical value for the chosen `alpha`. The null hypothesis is rejected when `kstat` is larger than it.",
+          "pt": "Valor crítico para o `alpha` escolhido. A hipótese nula é rejeitada quando `kstat` é maior que ele."
+        }
+      ],
+      "description": {
+        "en": "The Lilliefors test is a variant of the Kolmogorov-Smirnov test for the case where the parameters of the reference distribution are estimated from the sample itself, which makes the ordinary Kolmogorov-Smirnov critical values too lenient.\n\nA small p-value is evidence that the sample does not follow the chosen distribution. Use `'Distr'` to compare the same sample against more than one candidate.",
+        "pt": "O teste de Lilliefors é uma variante do teste de Kolmogorov-Smirnov para o caso em que os parâmetros da distribuição de referência são estimados da própria amostra, o que torna os valores críticos do teste de Kolmogorov-Smirnov comum permissivos demais.\n\nUm valor-p pequeno é evidência de que a amostra não segue a distribuição escolhida. Use `'Distr'` para comparar a mesma amostra com mais de uma candidata."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal and exponential fit of a skewed sample",
+            "pt": "Ajuste normal e exponencial de uma amostra assimétrica"
+          },
+          "code": "x = 2.^((1:25)/4);\n[h1, p1] = lillietest(x);\n[h2, p2] = lillietest(x, 'Distr', 'exp');\nfprintf('normal: h = %d, p = %.4f\\n', h1, p1);\nfprintf('exponential: h = %d, p = %.4f\\n', h2, p2);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "jbtest",
+        "kstest",
+        "chi2gof",
+        "adtest",
+        "normplot"
+      ],
+      "notes": {
+        "en": "Only the normal, exponential and extreme value distributions are accepted; other names such as `'logn'` raise an error. For single precision input the p-value is computed in double precision and rounded, so it can differ from MATLAB by about 1e-5.",
+        "pt": "Só as distribuições normal, exponencial e de valor extremo são aceitas; outros nomes, como `'logn'`, geram erro. Para entrada em precisão simples, o valor-p é calculado em precisão dupla e arredondado, então pode diferir do MATLAB em cerca de 1e-5."
+      }
+    },
+    "dwtest": {
+      "summary": {
+        "en": "Durbin-Watson test for first-order autocorrelation in the residuals of a linear regression.",
+        "pt": "Teste de Durbin-Watson para autocorrelação de primeira ordem nos resíduos de uma regressão linear."
+      },
+      "syntax": [
+        {
+          "code": "p = dwtest(r, X)",
+          "en": "Returns the p-value for the residual vector `r` of a regression with design matrix `X`.",
+          "pt": "Retorna o valor-p para o vetor de resíduos `r` de uma regressão com matriz de projeto `X`."
+        },
+        {
+          "code": "[p, dw] = dwtest(r, X)",
+          "en": "Also returns the Durbin-Watson statistic.",
+          "pt": "Retorna também a estatística de Durbin-Watson."
+        },
+        {
+          "code": "[p, dw] = dwtest(r, X, method)",
+          "en": "Chooses `'exact'` or `'approximate'` for the p-value.",
+          "pt": "Escolhe `'exact'` ou `'approximate'` para o valor-p."
+        },
+        {
+          "code": "[p, dw] = dwtest(r, X, 'Method', method, 'Tail', tail)",
+          "en": "Sets the method and the alternative hypothesis with name-value pairs.",
+          "pt": "Define o método e a hipótese alternativa com pares nome-valor."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "r",
+          "en": "Residuals of the regression, a vector with one value per observation, in time order.",
+          "pt": "Resíduos da regressão, um vetor com um valor por observação, em ordem temporal."
+        },
+        {
+          "name": "X",
+          "en": "Design matrix of the regression, with one row per observation. Include a column of ones if the model has an intercept.",
+          "pt": "Matriz de projeto da regressão, com uma linha por observação. Inclua uma coluna de uns se o modelo tiver intercepto."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'exact'` or `'approximate'`. The default is `'exact'` for fewer than 400 observations and `'approximate'` otherwise.",
+          "pt": "`'exact'` ou `'approximate'`. O padrão é `'exact'` com menos de 400 observações e `'approximate'` caso contrário."
+        },
+        {
+          "name": "'Tail'",
+          "en": "Alternative hypothesis: `'both'` (default), `'right'` for positive autocorrelation or `'left'` for negative autocorrelation.",
+          "pt": "Hipótese alternativa: `'both'` (padrão), `'right'` para autocorrelação positiva ou `'left'` para autocorrelação negativa."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "dw",
+          "en": "Durbin-Watson statistic, between 0 and 4. Values near 2 mean no first-order autocorrelation, values near 0 mean positive autocorrelation and values near 4 mean negative autocorrelation.",
+          "pt": "Estatística de Durbin-Watson, entre 0 e 4. Valores perto de 2 indicam ausência de autocorrelação de primeira ordem, valores perto de 0 indicam autocorrelação positiva e valores perto de 4 indicam autocorrelação negativa."
+        }
+      ],
+      "description": {
+        "en": "Ordinary least squares assumes the errors are not correlated with each other. The Durbin-Watson statistic compares each residual with the previous one, so it is only meaningful when the observations are in a natural order such as time.\n\nPass the residuals and the same design matrix used in the fit, because the null distribution of the statistic depends on `X`.",
+        "pt": "Os mínimos quadrados ordinários supõem que os erros não são correlacionados entre si. A estatística de Durbin-Watson compara cada resíduo com o anterior, então só faz sentido quando as observações têm uma ordem natural, como o tempo.\n\nPasse os resíduos e a mesma matriz de projeto usada no ajuste, pois a distribuição da estatística sob a hipótese nula depende de `X`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Residuals with a leftover trend",
+            "pt": "Resíduos com uma tendência restante"
+          },
+          "code": "t = (1:20)';\ny = 2 + 0.5*t + sin(0.7*t);\nX = [ones(20,1) t];\nr = y - X*(X\\y);\n[p, dw] = dwtest(r, X);\nfprintf('dw = %.4f, p = %.2g\\n', dw, p);",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Residuals that alternate in sign",
+            "pt": "Resíduos que alternam de sinal"
+          },
+          "code": "t = (1:20)';\ne = [0.3 -0.2 0.4 -0.5 0.1 -0.3 0.5 -0.1 0.2 -0.4 0.3 -0.2 0.4 -0.3 0.1 -0.5 0.2 0.3 -0.2 0.1]';\nX = [ones(20,1) t];\ny = 2 + 0.5*t + e;\nr = y - X*(X\\y);\n[p, dw] = dwtest(r, X, 'approximate');\nfprintf('dw = %.4f, p = %.4f\\n', dw, p);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitlm",
+        "regress",
+        "corrcoef",
+        "glmfit",
+        "runstest"
+      ]
+    },
+    "chi2gof": {
+      "summary": {
+        "en": "Chi-square goodness-of-fit test: compares the counts of a sample in bins with the counts expected from a distribution, normal by default.",
+        "pt": "Teste qui-quadrado de aderência: compara as contagens de uma amostra em classes com as contagens esperadas de uma distribuição, a normal por padrão."
+      },
+      "syntax": [
+        {
+          "code": "h = chi2gof(x)",
+          "en": "Tests whether `x` follows a normal distribution whose mean and standard deviation are estimated from `x`.",
+          "pt": "Testa se `x` segue uma distribuição normal cuja média e desvio padrão são estimados de `x`."
+        },
+        {
+          "code": "[h, p, stats] = chi2gof(x, 'nbins', n)",
+          "en": "Uses `n` bins and also returns the p-value and a structure with the details.",
+          "pt": "Usa `n` classes e retorna também o valor-p e uma estrutura com os detalhes."
+        },
+        {
+          "code": "[h, p, stats] = chi2gof(x, 'cdf', f, 'nparams', k)",
+          "en": "Tests against the distribution with cumulative function `f`, where `k` parameters were estimated from the data.",
+          "pt": "Testa contra a distribuição com função acumulada `f`, em que `k` parâmetros foram estimados dos dados."
+        },
+        {
+          "code": "[h, p, stats] = chi2gof(x, 'edges', e, 'expected', ex)",
+          "en": "Uses your own bin edges and expected counts.",
+          "pt": "Usa suas próprias bordas de classe e contagens esperadas."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Sample, a numeric vector.",
+          "pt": "Amostra, um vetor numérico."
+        },
+        {
+          "name": "'nbins'",
+          "en": "Number of bins. Chosen automatically when omitted. Give only one of `'nbins'`, `'ctrs'` and `'edges'`.",
+          "pt": "Número de classes. É escolhido automaticamente se omitido. Informe apenas um entre `'nbins'`, `'ctrs'` e `'edges'`."
+        },
+        {
+          "name": "'ctrs'",
+          "en": "Bin centers.",
+          "pt": "Centros das classes."
+        },
+        {
+          "name": "'edges'",
+          "en": "Bin edges, in increasing order.",
+          "pt": "Bordas das classes, em ordem crescente."
+        },
+        {
+          "name": "'cdf'",
+          "en": "Hypothesized cumulative distribution: a function handle, or a cell array such as `{@normcdf, 4.5, 3.5}` with the function followed by its parameters.",
+          "pt": "Distribuição acumulada hipotética: um identificador de função, ou um arranjo de células como `{@normcdf, 4.5, 3.5}` com a função seguida de seus parâmetros."
+        },
+        {
+          "name": "'expected'",
+          "en": "Expected counts per bin, as an alternative to `'cdf'`.",
+          "pt": "Contagens esperadas por classe, como alternativa a `'cdf'`."
+        },
+        {
+          "name": "'nparams'",
+          "en": "Number of distribution parameters estimated from the data. It lowers the degrees of freedom. Needed with a function handle in `'cdf'`.",
+          "pt": "Número de parâmetros da distribuição estimados dos dados. Ele reduz os graus de liberdade. Necessário com um identificador de função em `'cdf'`."
+        },
+        {
+          "name": "'emin'",
+          "en": "Minimum expected count per bin. Bins below it are merged with neighbors. Default 5; use 0 to disable merging.",
+          "pt": "Contagem esperada mínima por classe. Classes abaixo dela são unidas às vizinhas. O padrão é 5; use 0 para desativar a união."
+        },
+        {
+          "name": "'alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 when the null hypothesis that the data follow the distribution is rejected, 0 otherwise. It is 0 with `p = NaN` when there are no degrees of freedom left.",
+          "pt": "1 quando a hipótese nula de que os dados seguem a distribuição é rejeitada, 0 caso contrário. Vale 0 com `p = NaN` quando não restam graus de liberdade."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `chi2stat` (the statistic), `df` (degrees of freedom), `edges`, `O` (observed counts) and `E` (expected counts).",
+          "pt": "Estrutura com `chi2stat` (a estatística), `df` (graus de liberdade), `edges`, `O` (contagens observadas) e `E` (contagens esperadas)."
+        }
+      ],
+      "description": {
+        "en": "The test splits the data into bins, counts how many observations fall in each and compares those counts with the counts the hypothesized distribution would give. A large chi-square statistic, and so a small p-value, means the data do not fit.\n\nBins with a small expected count make the test unreliable, so neighbors are merged until each expected count reaches `'emin'`. The degrees of freedom are the number of bins minus 1 minus `'nparams'`; if too few bins remain, the test cannot be done and `p` is `NaN`.",
+        "pt": "O teste divide os dados em classes, conta quantas observações caem em cada uma e compara essas contagens com as que a distribuição hipotética daria. Uma estatística qui-quadrado grande, e portanto um valor-p pequeno, indica que os dados não se ajustam.\n\nClasses com contagem esperada pequena tornam o teste pouco confiável, então vizinhas são unidas até que cada contagem esperada alcance `'emin'`. Os graus de liberdade são o número de classes menos 1 menos `'nparams'`; se restarem poucas classes, o teste não pode ser feito e `p` é `NaN`."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Normal fit with estimated parameters",
+            "pt": "Ajuste normal com parâmetros estimados"
+          },
+          "code": "z = 4.5 + 3.5*norminv(((1:80) - 0.5)/80);\n[h, p, st] = chi2gof(z);\nfprintf('h = %d, p = %.4f, df = %d\\n', h, p, st.df);\ndisp(st.O)\ndisp(round(st.E*100)/100)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Known distribution and chosen bin edges",
+            "pt": "Distribuição conhecida e bordas de classe escolhidas"
+          },
+          "code": "z = 4.5 + 3.5*norminv(((1:80) - 0.5)/80);\nf = @(t) normcdf(t, 4.5, 3.5);\n[h, p, st] = chi2gof(z, 'edges', [-20 0 3 6 9 30], 'cdf', f, 'nparams', 0);\nfprintf('h = %d, p = %.4f, df = %d\\n', h, p, st.df);\ndisp(st.O)",
+          "silent": false
+        }
+      ],
+      "see": [
+        "jbtest",
+        "lillietest",
+        "kstest",
+        "histcounts",
+        "normcdf"
+      ]
+    },
+    "vartestn": {
+      "summary": {
+        "en": "Tests whether several groups have the same variance (Bartlett by default, or one of the Levene-type tests).",
+        "pt": "Testa se vários grupos têm a mesma variância (Bartlett por padrão, ou um dos testes do tipo Levene)."
+      },
+      "syntax": [
+        {
+          "code": "p = vartestn(x)",
+          "en": "Tests the columns of the matrix `x` as groups and returns the p-value.",
+          "pt": "Testa as colunas da matriz `x` como grupos e retorna o valor-p."
+        },
+        {
+          "code": "p = vartestn(x, group)",
+          "en": "Tests the vector `x` split by the labels in `group`.",
+          "pt": "Testa o vetor `x` dividido pelos rótulos em `group`."
+        },
+        {
+          "code": "[p, stats] = vartestn(x, group, 'TestType', type, 'Display', 'off')",
+          "en": "Chooses the test and returns a structure with the statistic and degrees of freedom.",
+          "pt": "Escolhe o teste e retorna uma estrutura com a estatística e os graus de liberdade."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x",
+          "en": "Data: a matrix whose columns are groups, or a vector when `group` is given.",
+          "pt": "Dados: uma matriz cujas colunas são grupos, ou um vetor quando `group` é informado."
+        },
+        {
+          "name": "group",
+          "en": "Group labels, one per element of the vector `x`.",
+          "pt": "Rótulos dos grupos, um para cada elemento do vetor `x`."
+        },
+        {
+          "name": "'TestType'",
+          "en": "`'Bartlett'` (default), `'LeveneQuadratic'`, `'LeveneAbsolute'`, `'BrownForsythe'` or `'OBrien'`.",
+          "pt": "`'Bartlett'` (padrão), `'LeveneQuadratic'`, `'LeveneAbsolute'`, `'BrownForsythe'` ou `'OBrien'`."
+        },
+        {
+          "name": "'Display'",
+          "en": "`'on'` or `'off'`. In MatLivre neither draws a figure or prints a table.",
+          "pt": "`'on'` ou `'off'`. No MatLivre nenhum dos dois desenha figura nem imprime tabela."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "p",
+          "en": "p-value of the test of equal variances.",
+          "pt": "Valor-p do teste de variâncias iguais."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with the test statistic and its degrees of freedom. For `'Bartlett'` the fields are `chisqstat` and `df`.",
+          "pt": "Estrutura com a estatística do teste e seus graus de liberdade. Para `'Bartlett'` os campos são `chisqstat` e `df`."
+        }
+      ],
+      "description": {
+        "en": "Many tests, such as the analysis of variance, assume the groups have the same variance. `vartestn` checks that assumption. A small p-value means at least one group has a different variance.\n\nBartlett's test is the most powerful when the data are normal but is sensitive to departures from normality. The Levene-type options, in particular `'BrownForsythe'`, are more robust when the data are not normal.",
+        "pt": "Muitos testes, como a análise de variância, supõem que os grupos têm a mesma variância. `vartestn` verifica essa suposição. Um valor-p pequeno indica que pelo menos um grupo tem variância diferente.\n\nO teste de Bartlett é o mais poderoso quando os dados são normais, mas é sensível a desvios da normalidade. As opções do tipo Levene, em especial `'BrownForsythe'`, são mais robustas quando os dados não são normais."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Bartlett test on three groups",
+            "pt": "Teste de Bartlett em três grupos"
+          },
+          "code": "d = [1.2 1.5 1.1 1.4 1.3 2.5 3.1 1.9 2.8 3.4 1.0 1.05 0.95 1.1 0.9]';\ng = [1 1 1 1 1 2 2 2 2 2 3 3 3 3 3]';\n[p, s] = vartestn(d, g, 'Display', 'off');\nfprintf('Bartlett: chi2 = %.4f, df = %d, p = %.4f\\n', s.chisqstat, s.df, p);\np2 = vartestn(d, g, 'TestType', 'BrownForsythe', 'Display', 'off');\nfprintf('Brown-Forsythe: p = %.4f\\n', p2);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "vartest",
+        "vartest2",
+        "barttest",
+        "anova1",
+        "ansaribradley"
+      ],
+      "notes": {
+        "en": "With `'Display'` set to `'on'` no table or figure is produced; only the outputs are returned.",
+        "pt": "Com `'Display'` igual a `'on'`, nenhuma tabela ou figura é produzida; apenas as saídas são retornadas."
+      }
+    },
+    "ansaribradley": {
+      "summary": {
+        "en": "Ansari-Bradley two-sample test that two samples come from distributions with the same dispersion, with no assumption of normality about the shape.",
+        "pt": "Teste de Ansari-Bradley para duas amostras: verifica se elas vêm de distribuições com a mesma dispersão, sem supor normalidade."
+      },
+      "syntax": [
+        {
+          "code": "h = ansaribradley(x, y)",
+          "en": "Tests at the 5% level that `x` and `y` have the same dispersion.",
+          "pt": "Testa ao nível de 5% se `x` e `y` têm a mesma dispersão."
+        },
+        {
+          "code": "[h, p, stats] = ansaribradley(x, y, 'Tail', tail)",
+          "en": "Sets the alternative hypothesis and returns the p-value and statistics.",
+          "pt": "Define a hipótese alternativa e retorna o valor-p e as estatísticas."
+        },
+        {
+          "code": "[h, p, stats] = ansaribradley(x, y, 'Alpha', alpha, 'Method', method)",
+          "en": "Sets the significance level and uses `'exact'` or `'approximate'` for the p-value.",
+          "pt": "Define o nível de significância e usa `'exact'` ou `'approximate'` para o valor-p."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "x, y",
+          "en": "The two samples, numeric vectors that can have different lengths.",
+          "pt": "As duas amostras, vetores numéricos que podem ter comprimentos diferentes."
+        },
+        {
+          "name": "'Alpha'",
+          "en": "Significance level. Default 0.05.",
+          "pt": "Nível de significância. O padrão é 0,05."
+        },
+        {
+          "name": "'Tail'",
+          "en": "`'both'` (default), `'right'` or `'left'`. With `'right'` the alternative is that `x` has a larger dispersion than `y`.",
+          "pt": "`'both'` (padrão), `'right'` ou `'left'`. Com `'right'`, a alternativa é que `x` tem dispersão maior que `y`."
+        },
+        {
+          "name": "'Method'",
+          "en": "`'exact'` or `'approximate'` (normal approximation) for the p-value.",
+          "pt": "`'exact'` ou `'approximate'` (aproximação normal) para o valor-p."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "h",
+          "en": "1 when the hypothesis of equal dispersion is rejected, 0 otherwise.",
+          "pt": "1 quando a hipótese de dispersão igual é rejeitada, 0 caso contrário."
+        },
+        {
+          "name": "p",
+          "en": "p-value of the test.",
+          "pt": "Valor-p do teste."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `W`, the Ansari-Bradley statistic, and `Wstar`, its standardized version.",
+          "pt": "Estrutura com `W`, a estatística de Ansari-Bradley, e `Wstar`, sua versão padronizada."
+        }
+      ],
+      "description": {
+        "en": "The test ranks the combined sample from both ends toward the middle, so that the most extreme values get the lowest scores. If one sample is more spread out, its extreme values collect low scores and the statistic moves away from what equal dispersion would give.\n\nIt assumes both samples have the same median, or that it was subtracted beforehand. It is a rank test, so it does not require the data to be normal.",
+        "pt": "O teste ordena a amostra combinada das duas pontas em direção ao meio, de modo que os valores mais extremos recebem os menores escores. Se uma amostra é mais dispersa, seus valores extremos acumulam escores baixos e a estatística se afasta do que se esperaria com dispersão igual.\n\nEle supõe que as duas amostras têm a mesma mediana, ou que ela foi subtraída antes. É um teste de postos, então não exige que os dados sejam normais."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Two samples with different spread",
+            "pt": "Duas amostras com dispersões diferentes"
+          },
+          "code": "a = [-1.2 0.3 0.8 -0.4 1.1 -0.9 0.2 0.5 -0.1 0.7 -0.6 0.0];\nb = [-3.1 2.8 -2.2 3.5 -1.9 2.4 -3.3 1.7 2.9 -2.6 3.0 -2.0];\n[h, p, st] = ansaribradley(a, b);\nfprintf('h = %d, p = %.2g\\n', h, p);\nfprintf('W = %d, W* = %.4f\\n', st.W, st.Wstar);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "vartest2",
+        "vartestn",
+        "ranksum",
+        "kstest2",
+        "signrank"
+      ]
+    },
+    "glmfit": {
+      "summary": {
+        "en": "Fits a generalized linear model (normal, binomial, Poisson, gamma or inverse Gaussian response) and returns the coefficients, the deviance and statistics.",
+        "pt": "Ajusta um modelo linear generalizado (resposta normal, binomial, Poisson, gama ou gaussiana inversa) e retorna os coeficientes, a deviância e estatísticas."
+      },
+      "syntax": [
+        {
+          "code": "b = glmfit(X, y)",
+          "en": "Fits a linear regression with normal response and an intercept.",
+          "pt": "Ajusta uma regressão linear com resposta normal e intercepto."
+        },
+        {
+          "code": "b = glmfit(X, y, distr)",
+          "en": "Fits the model for the response distribution `distr`, with the default link of that distribution.",
+          "pt": "Ajusta o modelo para a distribuição de resposta `distr`, com a ligação padrão dessa distribuição."
+        },
+        {
+          "code": "[b, dev, stats] = glmfit(X, y, distr, 'link', link)",
+          "en": "Chooses the link function and returns the deviance and a structure of statistics.",
+          "pt": "Escolhe a função de ligação e retorna a deviância e uma estrutura de estatísticas."
+        },
+        {
+          "code": "[b, dev, stats] = glmfit(X, [k n], 'binomial')",
+          "en": "Binomial model with `k` successes out of `n` trials per row.",
+          "pt": "Modelo binomial com `k` sucessos em `n` tentativas por linha."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Predictors, a matrix with one row per observation and one column per variable. Do not include a column of ones: the intercept is added automatically.",
+          "pt": "Preditores, uma matriz com uma linha por observação e uma coluna por variável. Não inclua uma coluna de uns: o intercepto é adicionado automaticamente."
+        },
+        {
+          "name": "y",
+          "en": "Response, a column vector. For `'binomial'` it can also be a two-column matrix `[k n]`.",
+          "pt": "Resposta, um vetor coluna. Para `'binomial'` pode ser também uma matriz de duas colunas `[k n]`."
+        },
+        {
+          "name": "distr",
+          "en": "`'normal'` (default), `'binomial'`, `'poisson'`, `'gamma'` or `'inverse gaussian'`.",
+          "pt": "`'normal'` (padrão), `'binomial'`, `'poisson'`, `'gamma'` ou `'inverse gaussian'`."
+        },
+        {
+          "name": "'link'",
+          "en": "Link function, for example `'identity'`, `'log'`, `'logit'` or `'probit'`. Each distribution has its own default.",
+          "pt": "Função de ligação, por exemplo `'identity'`, `'log'`, `'logit'` ou `'probit'`. Cada distribuição tem seu padrão."
+        },
+        {
+          "name": "'constant'",
+          "en": "`'on'` (default) to include an intercept or `'off'` to fit without it.",
+          "pt": "`'on'` (padrão) para incluir um intercepto ou `'off'` para ajustar sem ele."
+        },
+        {
+          "name": "'estdisp'",
+          "en": "`'on'` to estimate the dispersion parameter for the binomial and Poisson models, where it is otherwise fixed at 1.",
+          "pt": "`'on'` para estimar o parâmetro de dispersão nos modelos binomial e de Poisson, em que ele é fixo em 1."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "b",
+          "en": "Coefficient estimates. The first is the intercept when `'constant'` is on.",
+          "pt": "Estimativas dos coeficientes. O primeiro é o intercepto quando `'constant'` está ativado."
+        },
+        {
+          "name": "dev",
+          "en": "Deviance of the fit, a measure of lack of fit that is smaller for better fits.",
+          "pt": "Deviância do ajuste, uma medida de falta de ajuste que é menor para ajustes melhores."
+        },
+        {
+          "name": "stats",
+          "en": "Structure with `beta`, `dfe`, `sfit`, `s`, `estdisp`, `covb`, `se` (standard errors), `coeffcorr`, `t`, `p` (p-values of the coefficients), and the residuals `resid`, `residp`, `residd`, `resida`, plus the weights `wts`.",
+          "pt": "Estrutura com `beta`, `dfe`, `sfit`, `s`, `estdisp`, `covb`, `se` (erros padrão), `coeffcorr`, `t`, `p` (valores-p dos coeficientes), os resíduos `resid`, `residp`, `residd`, `resida` e os pesos `wts`."
+        }
+      ],
+      "description": {
+        "en": "A generalized linear model relates the mean of the response to a linear combination of the predictors through a link function, and lets the response follow a distribution other than the normal. Use `'binomial'` for yes/no or proportion data, `'poisson'` for counts and `'gamma'` for positive, skewed values.\n\nThe fit is found by iteratively reweighted least squares. The `p` field of `stats` tests each coefficient against zero.",
+        "pt": "Um modelo linear generalizado relaciona a média da resposta a uma combinação linear dos preditores por meio de uma função de ligação e permite que a resposta siga uma distribuição diferente da normal. Use `'binomial'` para dados de sim/não ou proporções, `'poisson'` para contagens e `'gamma'` para valores positivos e assimétricos.\n\nO ajuste é obtido por mínimos quadrados reponderados iterativamente. O campo `p` de `stats` testa cada coeficiente contra zero."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Logistic regression",
+            "pt": "Regressão logística"
+          },
+          "code": "X = (1:12)'/3;\ny = [0 0 0 1 0 0 1 0 1 1 1 1]';\n[b, dev, s] = glmfit(X, y, 'binomial');\nfprintf('b = %.4f %.4f\\n', b);\nfprintf('deviance = %.4f\\n', dev);\nfprintf('se = %.4f %.4f\\n', s.se);",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Poisson regression for counts",
+            "pt": "Regressão de Poisson para contagens"
+          },
+          "code": "X = (1:12)'/3;\ny = [1 0 2 1 3 2 4 3 6 5 8 9]';\n[b, dev] = glmfit(X, y, 'poisson');\nfprintf('b = %.4f %.4f\\n', b);\nfprintf('deviance = %.4f\\n', dev);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fitglm",
+        "glmval",
+        "fitlm",
+        "regress",
+        "mnrfit"
+      ],
+      "notes": {
+        "en": "The `'weights'` and `'offset'` options are not implemented and raise an error. With the identity link in a Poisson model the coefficients can differ from MATLAB by about 1e-6, because MATLAB stops the iteration one step earlier. For single precision input the fit is computed in double precision and rounded, so results can differ at about 1e-5.",
+        "pt": "As opções `'weights'` e `'offset'` não estão implementadas e geram erro. Com a ligação identidade em um modelo de Poisson, os coeficientes podem diferir do MATLAB em cerca de 1e-6, pois o MATLAB interrompe a iteração um passo antes. Para entrada em precisão simples, o ajuste é calculado em precisão dupla e arredondado, então os resultados podem diferir em cerca de 1e-5."
+      }
+    },
+    "capability": {
+      "summary": {
+        "en": "Process capability indices (Cp, Cpk and others) and the fraction of output inside the specification limits, assuming normal data.",
+        "pt": "Índices de capacidade do processo (Cp, Cpk e outros) e a fração da produção dentro dos limites de especificação, supondo dados normais."
+      },
+      "syntax": [
+        {
+          "code": "S = capability(data, specs)",
+          "en": "Computes the indices of the process from the measurements `data` and the limits `specs`.",
+          "pt": "Calcula os índices do processo a partir das medições `data` e dos limites `specs`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "data",
+          "en": "Measurements of the quality characteristic, a numeric vector.",
+          "pt": "Medições da característica de qualidade, um vetor numérico."
+        },
+        {
+          "name": "specs",
+          "en": "Two-element vector `[lower upper]` with the lower and upper specification limits.",
+          "pt": "Vetor de dois elementos `[inferior superior]` com os limites de especificação inferior e superior."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "S",
+          "en": "Structure with `mu` (mean), `sigma` (standard deviation), `P` (probability of being inside the limits), `Pl` and `Pu` (probabilities below the lower and above the upper limit), and the indices `Cp`, `Cpl`, `Cpu` and `Cpk`.",
+          "pt": "Estrutura com `mu` (média), `sigma` (desvio padrão), `P` (probabilidade de ficar dentro dos limites), `Pl` e `Pu` (probabilidades abaixo do limite inferior e acima do superior) e os índices `Cp`, `Cpl`, `Cpu` e `Cpk`."
+        }
+      ],
+      "description": {
+        "en": "`Cp` is the width of the specification interval divided by six standard deviations of the process, so it measures how well the process spread fits the limits when the process is centered. `Cpl` and `Cpu` are the distances from the mean to each limit divided by three standard deviations, and `Cpk` is the smaller of the two, so it also penalizes a process that is off center.\n\nThe probabilities come from a normal distribution with the sample mean and standard deviation. A common rule of thumb is that `Cpk` of at least 1.33 is capable.",
+        "pt": "`Cp` é a largura do intervalo de especificação dividida por seis desvios padrão do processo, então mede quão bem a dispersão do processo cabe nos limites quando o processo está centrado. `Cpl` e `Cpu` são as distâncias da média a cada limite divididas por três desvios padrão, e `Cpk` é o menor dos dois, penalizando também um processo descentrado.\n\nAs probabilidades vêm de uma distribuição normal com a média e o desvio padrão da amostra. Uma regra prática comum é que `Cpk` igual ou maior que 1,33 indica um processo capaz."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Capability of a process slightly off center",
+            "pt": "Capacidade de um processo levemente descentrado"
+          },
+          "code": "d = [9.8 10.1 10.0 9.9 10.2 10.05 9.95 10.1 9.85 10.0 10.15 9.9]';\ns = capability(d, [9.9 10.6]);\nfprintf('mu = %.4f, sigma = %.4f\\n', s.mu, s.sigma);\nfprintf('Cp = %.4f, Cpl = %.4f, Cpu = %.4f, Cpk = %.4f\\n', s.Cp, s.Cpl, s.Cpu, s.Cpk);\nfprintf('P inside = %.4f, below = %.4f\\n', s.P, s.Pl);",
+          "silent": false
+        }
+      ],
+      "see": [
+        "controlrules",
+        "normcdf",
+        "histfit",
+        "normplot",
+        "std"
+      ],
+      "notes": {
+        "en": "For single precision input the result is computed in double precision. MATLAB takes the standard deviation in single arithmetic, so `Cp` can differ from this by about 1e-7.",
+        "pt": "Para entrada em precisão simples, o resultado é calculado em precisão dupla. O MATLAB calcula o desvio padrão em aritmética simples, então `Cp` pode diferir daqui em cerca de 1e-7."
+      }
+    },
+    "hist3": {
+      "summary": {
+        "en": "Two-dimensional histogram: counts how many points of an n-by-2 data matrix fall in each cell of a grid.",
+        "pt": "Histograma bidimensional: conta quantos pontos de uma matriz de dados n por 2 caem em cada célula de uma grade."
+      },
+      "syntax": [
+        {
+          "code": "N = hist3(X)",
+          "en": "Counts the points of `X` in a 10-by-10 grid.",
+          "pt": "Conta os pontos de `X` em uma grade de 10 por 10."
+        },
+        {
+          "code": "N = hist3(X, [nx ny])",
+          "en": "Uses `nx` bins for the first column and `ny` for the second.",
+          "pt": "Usa `nx` classes para a primeira coluna e `ny` para a segunda."
+        },
+        {
+          "code": "[N, C] = hist3(X, 'Ctrs', ctrs)",
+          "en": "Uses the bin centers in the cell array `ctrs` and also returns the centers.",
+          "pt": "Usa os centros de classe do arranjo de células `ctrs` e retorna também os centros."
+        },
+        {
+          "code": "N = hist3(X, 'Edges', edges)",
+          "en": "Uses the bin edges in the cell array `edges`.",
+          "pt": "Usa as bordas de classe do arranjo de células `edges`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "X",
+          "en": "Data, a matrix with two columns: the first gives the row position and the second the column position of each point.",
+          "pt": "Dados, uma matriz com duas colunas: a primeira define a linha e a segunda a coluna de cada ponto."
+        },
+        {
+          "name": "nbins",
+          "en": "Two-element vector with the number of bins in each direction. Default `[10 10]`.",
+          "pt": "Vetor de dois elementos com o número de classes em cada direção. O padrão é `[10 10]`."
+        },
+        {
+          "name": "'Ctrs'",
+          "en": "Cell array `{cx, cy}` of bin centers for each column.",
+          "pt": "Arranjo de células `{cx, cy}` com os centros de classe de cada coluna."
+        },
+        {
+          "name": "'Edges'",
+          "en": "Cell array `{ex, ey}` of bin edges for each column.",
+          "pt": "Arranjo de células `{ex, ey}` com as bordas de classe de cada coluna."
+        },
+        {
+          "name": "'Nbins'",
+          "en": "Same as the vector form: number of bins per column.",
+          "pt": "O mesmo que a forma com vetor: número de classes por coluna."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "N",
+          "en": "Matrix of counts. `N(i,j)` is the number of points in the i-th bin of the first column and the j-th bin of the second.",
+          "pt": "Matriz de contagens. `N(i,j)` é o número de pontos na i-ésima classe da primeira coluna e na j-ésima classe da segunda."
+        },
+        {
+          "name": "C",
+          "en": "Cell array `{cx, cy}` with the bin centers used for each column.",
+          "pt": "Arranjo de células `{cx, cy}` com os centros de classe usados em cada coluna."
+        }
+      ],
+      "description": {
+        "en": "`hist3` is the two-variable version of a histogram. It shows where pairs of values are concentrated, which helps to see the joint behavior of two variables that a separate histogram of each would hide.\n\nBy default the range of each column is split into equal bins. Use `'Ctrs'` or `'Edges'` to control the grid exactly.",
+        "pt": "`hist3` é a versão com duas variáveis de um histograma. Ele mostra onde os pares de valores se concentram, o que ajuda a ver o comportamento conjunto de duas variáveis que um histograma separado de cada uma esconderia.\n\nPor padrão, a faixa de cada coluna é dividida em classes iguais. Use `'Ctrs'` ou `'Edges'` para controlar a grade com exatidão."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Counts on a fixed grid of centers",
+            "pt": "Contagens em uma grade fixa de centros"
+          },
+          "code": "X = [1 1; 1 2; 2 2; 2 3; 3 3; 3 3; 4 1; 4 4; 5 5; 2 2];\nN = hist3(X, 'Ctrs', {[1 3 5], [1 3 5]});\ndisp(N)\nfprintf('total = %d\\n', sum(N(:)));",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Number of bins and the resulting centers",
+            "pt": "Número de classes e os centros resultantes"
+          },
+          "code": "X = [1 1; 1 2; 2 2; 2 3; 3 3; 3 3; 4 1; 4 4; 5 5; 2 2];\n[N, C] = hist3(X, [2 3]);\ndisp(N)\ndisp(C{1})\ndisp(C{2})",
+          "silent": false
+        }
+      ],
+      "see": [
+        "histcounts2",
+        "histogram2",
+        "hist",
+        "histcounts",
+        "scatterhist"
+      ]
+    },
+    "controlrules": {
+      "summary": {
+        "en": "Applies Western Electric and Nelson run rules to a control chart and flags the points that break each rule.",
+        "pt": "Aplica as regras de execução de Western Electric e de Nelson a um gráfico de controle e marca os pontos que violam cada regra."
+      },
+      "syntax": [
+        {
+          "code": "R = controlrules(rules, x, cl, se)",
+          "en": "Returns a logical matrix marking the points of `x` that violate each rule.",
+          "pt": "Retorna uma matriz lógica marcando os pontos de `x` que violam cada regra."
+        },
+        {
+          "code": "[R, names] = controlrules(rules, x, cl, se)",
+          "en": "Also returns the names of the rules, one per column of `R`.",
+          "pt": "Retorna também os nomes das regras, um por coluna de `R`."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "rules",
+          "en": "A rule name or a cell array of names: `'we1'` to `'we10'` (Western Electric), `'n1'` to `'n8'` (Nelson), or `'we'` and `'n'` for the whole set.",
+          "pt": "Um nome de regra ou um arranjo de células com nomes: `'we1'` a `'we10'` (Western Electric), `'n1'` a `'n8'` (Nelson), ou `'we'` e `'n'` para o conjunto inteiro."
+        },
+        {
+          "name": "x",
+          "en": "Plotted values of the chart, a vector (for example sample means).",
+          "pt": "Valores marcados no gráfico, um vetor (por exemplo, médias amostrais)."
+        },
+        {
+          "name": "cl",
+          "en": "Center line, a scalar or a vector with the same length as `x`.",
+          "pt": "Linha central, um escalar ou um vetor com o mesmo comprimento de `x`."
+        },
+        {
+          "name": "se",
+          "en": "Standard error of the plotted values, a scalar or a vector with the same length as `x`. The control limits are `cl` plus or minus multiples of `se`.",
+          "pt": "Erro padrão dos valores marcados, um escalar ou um vetor com o mesmo comprimento de `x`. Os limites de controle são `cl` mais ou menos múltiplos de `se`."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "R",
+          "en": "Logical matrix with one row per point and one column per rule. An entry is true where the point violates the rule.",
+          "pt": "Matriz lógica com uma linha por ponto e uma coluna por regra. Uma entrada é verdadeira onde o ponto viola a regra."
+        },
+        {
+          "name": "names",
+          "en": "Cell array with the name of the rule of each column.",
+          "pt": "Arranjo de células com o nome da regra de cada coluna."
+        }
+      ],
+      "description": {
+        "en": "A point beyond three standard errors is the classic signal that a process is out of control (`'we1'`), but patterns inside the limits matter too: for example eight points in a row on the same side of the center line (`'we4'`) or two out of three points beyond two standard errors (`'we2'`). `'we1'` to `'we4'` watch the upper side and `'we5'` to `'we8'` the lower side.\n\nThe output tells you which points to investigate. `NaN` values in `x`, `cl` or `se` are never flagged.",
+        "pt": "Um ponto além de três erros padrão é o sinal clássico de que um processo está fora de controle (`'we1'`), mas padrões dentro dos limites também importam: por exemplo, oito pontos seguidos do mesmo lado da linha central (`'we4'`) ou dois de três pontos além de dois erros padrão (`'we2'`). As regras `'we1'` a `'we4'` observam o lado superior e `'we5'` a `'we8'` o lado inferior.\n\nA saída indica quais pontos investigar. Valores `NaN` em `x`, `cl` ou `se` nunca são marcados."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Western Electric rules on a short series",
+            "pt": "Regras de Western Electric em uma série curta"
+          },
+          "code": "x = [10.1 9.9 10.0 10.2 9.8 10.0 11.8 10.1 10.3 10.4 10.5 10.6 10.7 10.8 10.9 9.9 9.8 9.7 9.6 9.5 9.4 9.3 10.0];\n[R, names] = controlrules({'we1', 'we2', 'we4'}, x, 10, 0.3);\nfor j = 1:size(R, 2)\n  fprintf('%s: %s\\n', names{j}, mat2str(find(R(:, j))'));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "controlchart",
+        "capability",
+        "xbarplot",
+        "schart",
+        "ewmaplot"
+      ]
+    },
+    "fracfact": {
+      "summary": {
+        "en": "Two-level fractional factorial design built from generator words, with an optional table of which effects are confounded.",
+        "pt": "Planejamento fatorial fracionado de dois níveis construído a partir de palavras geradoras, com uma tabela opcional dos efeitos confundidos."
+      },
+      "syntax": [
+        {
+          "code": "X = fracfact(gen)",
+          "en": "Returns the design matrix for the generators in the text `gen`.",
+          "pt": "Retorna a matriz do planejamento para os geradores no texto `gen`."
+        },
+        {
+          "code": "[X, conf] = fracfact(gen)",
+          "en": "Also returns a table of terms, generators and confounding.",
+          "pt": "Retorna também uma tabela de termos, geradores e confundimento."
+        },
+        {
+          "code": "[X, conf] = fracfact(gen, 'FactorNames', names, 'MaxInt', k)",
+          "en": "Names the factors and lists interactions up to order `k` in the table.",
+          "pt": "Dá nomes aos fatores e lista interações até a ordem `k` na tabela."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "gen",
+          "en": "Text with the generator of each factor, separated by spaces. A letter is a basic factor, and a word such as `abc` is a factor whose levels are the product of those columns. A minus sign flips the signs.",
+          "pt": "Texto com o gerador de cada fator, separados por espaços. Uma letra é um fator básico, e uma palavra como `abc` é um fator cujos níveis são o produto dessas colunas. Um sinal de menos inverte os sinais."
+        },
+        {
+          "name": "'FactorNames'",
+          "en": "Cell array with one name per factor, used in the confounding table. Default `X1`, `X2`, and so on.",
+          "pt": "Arranjo de células com um nome por fator, usado na tabela de confundimento. O padrão é `X1`, `X2` e assim por diante."
+        },
+        {
+          "name": "'MaxInt'",
+          "en": "Highest interaction order listed in the confounding table. Default 2.",
+          "pt": "Maior ordem de interação listada na tabela de confundimento. O padrão é 2."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Design matrix with one row per run and one column per generator, coded as -1 (low level) and +1 (high level).",
+          "pt": "Matriz do planejamento com uma linha por corrida e uma coluna por gerador, codificada como -1 (nível baixo) e +1 (nível alto)."
+        },
+        {
+          "name": "conf",
+          "en": "Cell array with columns Term, Generator and Confounding. Terms that share a generator cannot be told apart in this design.",
+          "pt": "Arranjo de células com as colunas Term, Generator e Confounding. Termos que compartilham um gerador não podem ser distinguidos neste planejamento."
+        }
+      ],
+      "description": {
+        "en": "A full factorial with many factors needs a large number of runs. A fractional design runs only a part of them by defining some factors as products of others. For example `'a b c abc'` has four factors in eight runs, because the fourth factor is the product of the first three.\n\nThe price is confounding: effects that have the same generator are mixed together in the estimates. The second output shows which ones, so that you can check that the important effects are not confounded with each other.",
+        "pt": "Um fatorial completo com muitos fatores exige um grande número de corridas. Um planejamento fracionado executa apenas uma parte delas, definindo alguns fatores como produtos de outros. Por exemplo, `'a b c abc'` tem quatro fatores em oito corridas, porque o quarto fator é o produto dos três primeiros.\n\nO custo é o confundimento: efeitos que têm o mesmo gerador ficam misturados nas estimativas. A segunda saída mostra quais são, para que você verifique se os efeitos importantes não estão confundidos entre si."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Four factors in eight runs",
+            "pt": "Quatro fatores em oito corridas"
+          },
+          "code": "X = fracfact('a b c abc');\ndisp(X)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Confounding of a three-factor design in four runs",
+            "pt": "Confundimento de um planejamento de três fatores em quatro corridas"
+          },
+          "code": "[X, conf] = fracfact('a b ab', 'FactorNames', {'A', 'B', 'C'});\ndisp(size(X))\ndisp(conf(:, [1 3]))",
+          "silent": false
+        }
+      ],
+      "see": [
+        "ccdesign",
+        "fullfact",
+        "ff2n",
+        "bbdesign",
+        "rowexch"
+      ]
+    },
+    "ccdesign": {
+      "summary": {
+        "en": "Central composite design for a response surface: factorial points, axial (star) points and center points, with optional blocks.",
+        "pt": "Planejamento composto central para superfície de resposta: pontos fatoriais, pontos axiais (estrela) e pontos centrais, com blocos opcionais."
+      },
+      "syntax": [
+        {
+          "code": "X = ccdesign(n)",
+          "en": "Circumscribed design for `n` factors, from 2 to 26.",
+          "pt": "Planejamento circunscrito para `n` fatores, de 2 a 26."
+        },
+        {
+          "code": "X = ccdesign(n, 'type', type)",
+          "en": "Chooses `'circumscribed'`, `'inscribed'` or `'faced'`.",
+          "pt": "Escolhe `'circumscribed'`, `'inscribed'` ou `'faced'`."
+        },
+        {
+          "code": "X = ccdesign(n, 'center', c, 'fraction', f)",
+          "en": "Sets the number of center points and the fraction of the factorial part.",
+          "pt": "Define o número de pontos centrais e a fração da parte fatorial."
+        },
+        {
+          "code": "[X, blocks] = ccdesign(n, ...)",
+          "en": "Also returns the block of each run.",
+          "pt": "Retorna também o bloco de cada corrida."
+        }
+      ],
+      "inputs": [
+        {
+          "name": "n",
+          "en": "Number of factors, an integer from 2 to 26.",
+          "pt": "Número de fatores, um inteiro de 2 a 26."
+        },
+        {
+          "name": "'type'",
+          "en": "`'circumscribed'` (default): star points lie outside the cube. `'inscribed'`: the design is scaled so the star points lie at -1 and +1. `'faced'`: star points lie on the faces of the cube.",
+          "pt": "`'circumscribed'` (padrão): os pontos estrela ficam fora do cubo. `'inscribed'`: o planejamento é escalado para que os pontos estrela fiquem em -1 e +1. `'faced'`: os pontos estrela ficam nas faces do cubo."
+        },
+        {
+          "name": "'center'",
+          "en": "Number of center points, or `'uniform'` or `'orthogonal'` to pick a number with that property. Default is a number chosen for the design.",
+          "pt": "Número de pontos centrais, ou `'uniform'` ou `'orthogonal'` para escolher um número com essa propriedade. O padrão é um número escolhido para o planejamento."
+        },
+        {
+          "name": "'fraction'",
+          "en": "Number of times the factorial part is halved: 0 for a full factorial (default), 1 for a half fraction, and so on.",
+          "pt": "Número de vezes que a parte fatorial é dividida ao meio: 0 para o fatorial completo (padrão), 1 para meia fração, e assim por diante."
+        },
+        {
+          "name": "'blocksize'",
+          "en": "Largest number of runs allowed in a block.",
+          "pt": "Maior número de corridas permitido em um bloco."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "X",
+          "en": "Design matrix with one row per run and one column per factor. Rows are the factorial points, then the star points, then the center points.",
+          "pt": "Matriz do planejamento com uma linha por corrida e uma coluna por fator. As linhas são os pontos fatoriais, depois os pontos estrela e depois os pontos centrais."
+        },
+        {
+          "name": "blocks",
+          "en": "Column vector with the block number of each run.",
+          "pt": "Vetor coluna com o número do bloco de cada corrida."
+        }
+      ],
+      "description": {
+        "en": "A central composite design lets you fit a quadratic model, which a two-level factorial cannot, by adding star points on each axis and center points to the factorial corners. Use it to find an optimum of a response in several factors.\n\nFor the circumscribed type the star points are at a distance from the center equal to the fourth root of the number of factorial runs, which makes the design rotatable.",
+        "pt": "Um planejamento composto central permite ajustar um modelo quadrático, o que um fatorial de dois níveis não consegue, ao acrescentar pontos estrela em cada eixo e pontos centrais aos vértices do fatorial. Use-o para encontrar o ótimo de uma resposta em vários fatores.\n\nNo tipo circunscrito, os pontos estrela ficam a uma distância do centro igual à raiz quarta do número de corridas fatoriais, o que torna o planejamento rotacionável."
+      },
+      "examples": [
+        {
+          "title": {
+            "en": "Design for two factors",
+            "pt": "Planejamento para dois fatores"
+          },
+          "code": "X = ccdesign(2);\nfprintf('%d runs, %d factors\\n', size(X));\ndisp(round(X(1:8, :)*10000)/10000)",
+          "silent": false
+        },
+        {
+          "title": {
+            "en": "Types of design for three factors",
+            "pt": "Tipos de planejamento para três fatores"
+          },
+          "code": "for t = {'circumscribed', 'inscribed', 'faced'}\n  X = ccdesign(3, 'type', t{1});\n  fprintf('%s: %d runs, largest value %.4f\\n', t{1}, size(X, 1), max(X(:)));\nend",
+          "silent": false
+        }
+      ],
+      "see": [
+        "fracfact",
+        "bbdesign",
+        "fullfact",
+        "x2fx",
+        "rsmdemo"
+      ],
+      "notes": {
+        "en": "Only some combinations of number of factors and `'fraction'` are available; an unsupported one raises an error, for example `ccdesign(4, 'fraction', 1)` or `ccdesign(3, 'fraction', 1)`.",
+        "pt": "Apenas algumas combinações de número de fatores e `'fraction'` estão disponíveis; uma combinação não suportada gera erro, por exemplo `ccdesign(4, 'fraction', 1)` ou `ccdesign(3, 'fraction', 1)`."
+      }
+    }
+  }
+}
